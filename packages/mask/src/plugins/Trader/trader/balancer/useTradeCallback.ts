@@ -65,9 +65,9 @@ export function useTradeCallback(
 
         // balancer use a different address for the native token
         const inputTokenAddress =
-            trade.inputToken.type === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
+            trade.inputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
-            trade.outputToken.type === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+            trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
         const tx =
             trade.strategy === TradeStrategy.ExactIn
@@ -87,9 +87,9 @@ export function useTradeCallback(
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === SchemaType.Native)
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === SchemaType.Native)
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash

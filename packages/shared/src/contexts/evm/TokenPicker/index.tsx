@@ -6,11 +6,13 @@ import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo,
 import { PickTokenOptions, SelectTokenDialog } from './SelectTokenDialog'
 
 interface ContextOptions {
-    pickToken: (options: PickTokenOptions) => Promise<FungibleToken<ChainId, SchemaType> | null>
+    pickToken: (
+        options: PickTokenOptions,
+    ) => Promise<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20> | null>
 }
 const TokenPickerContext = createContext<ContextOptions>(null!)
 
-type PickerDeferTuple = DeferTuple<FungibleToken<ChainId, SchemaType> | null>
+type PickerDeferTuple = DeferTuple<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20> | null>
 
 interface Task {
     id: number
@@ -31,7 +33,10 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
     const contextValue = useMemo(() => {
         return {
             pickToken: (options: PickTokenOptions) => {
-                const [promise, resolve, reject] = defer<FungibleToken<ChainId, SchemaType> | null>()
+                const [promise, resolve, reject] = defer<FungibleToken<
+                    ChainId,
+                    SchemaType.Native | SchemaType.ERC20
+                > | null>()
                 id += 1
                 const newTask: Task = { id, promise, resolve, reject, pickerOptions: options }
                 setTasks((list) => [...list, newTask])

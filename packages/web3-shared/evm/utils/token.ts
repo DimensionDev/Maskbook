@@ -21,7 +21,7 @@ export function isNativeTokenSymbol(symbol: string) {
 
 export function createNativeToken(chainId: ChainId) {
     const nativeCurrency = chainResolver.nativeCurrency(chainId)
-    return createFungibleToken(
+    return createFungibleToken<ChainId, SchemaType.Native>(
         chainId,
         SchemaType.Native,
         getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS ?? ZERO_ADDRESS,
@@ -40,7 +40,15 @@ export function createERC20Token(
     decimals = 0,
     logoURI?: string,
 ) {
-    return createFungibleToken(chainId, SchemaType.ERC20, address, name, symbol, decimals, logoURI)
+    return createFungibleToken<ChainId, SchemaType.ERC20>(
+        chainId,
+        SchemaType.ERC20,
+        address,
+        name,
+        symbol,
+        decimals,
+        logoURI,
+    )
 }
 
 export const createERC20Tokens = createFungibleTokensFromConstants(getEnumAsArray(ChainId), SchemaType.ERC20, Token)

@@ -3,7 +3,7 @@ import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@
 import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
-import type { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import {
     createNativeToken,
@@ -20,7 +20,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
-import { FungibleToken, isZero, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero, multipliedBy, NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
@@ -125,7 +125,7 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     gasPrice?: string
     onConfirm: () => void
     onClose?: () => void
-    wallet?: Wallet
+    wallet?: Wallet | null
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {

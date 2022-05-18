@@ -1,17 +1,17 @@
 import { memo, useMemo, useState } from 'react'
-import { useAsyncFn, useLocation } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-// import { Typography } from '@mui/material'
-// import { useI18N } from '../../../../../utils'
+import { Typography } from '@mui/material'
+import { useI18N } from '../../../../../utils'
+import { useWallet } from '@masknet/plugin-infra/web3'
 // import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
 // import Services from '../../../../service'
-// import { PopupRoutes } from '@masknet/shared-base'
-// import { useTitle } from '../../../hook/useTitle'
-// import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
+import { PopupRoutes } from '@masknet/shared-base'
+import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -83,92 +83,88 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const SignRequest = memo(() => {
-    return <></>
-    // const { t } = useI18N()
-    // const location = useLocation()
-    // const routeLocation = useRouteLocation()
-    // const navigate = useNavigate()
-    // const { classes } = useStyles()
-    // const { value } = useUnconfirmedRequest()
-    // const wallet = useWallet()
-    // const [transferError, setTransferError] = useState(false)
+    const { t } = useI18N()
+    const routeLocation = useRouteLocation()
+    const navigate = useNavigate()
+    const { classes } = useStyles()
+    const { value } = useUnconfirmedRequest()
+    const wallet = useWallet()
+    const [transferError, setTransferError] = useState(false)
 
-    // const selectedWallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
+    const { data, address } = useMemo(() => {
+        if (
+            value?.computedPayload?.type === EthereumRpcType.SIGN ||
+            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+        ) {
+            let message = value.computedPayload.data
+            try {
+                message = toUtf8(value.computedPayload.data)
+            } catch (error) {
+                console.log(error)
+            }
+            return {
+                address: value.computedPayload.to,
+                data: message,
+            }
+        }
+        return {
+            address: '',
+            data: '',
+        }
+    }, [value])
 
-    // const { data, address } = useMemo(() => {
-    //     if (
-    //         value?.computedPayload?.type === EthereumRpcType.SIGN ||
-    //         value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
-    //     ) {
-    //         let message = value.computedPayload.data
-    //         try {
-    //             message = toUtf8(value.computedPayload.data)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //         return {
-    //             address: value.computedPayload.to,
-    //             data: message,
-    //         }
-    //     }
-    //     return {
-    //         address: '',
-    //         data: '',
-    //     }
-    // }, [value])
+    const [{ loading }, handleConfirm] = useAsyncFn(async () => {
+        const goBack = new URLSearchParams(routeLocation.search).get('goBack')
 
-    // const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-    //     const goBack = new URLSearchParams(routeLocation.search).get('goBack')
+        if (value) {
+            try {
+                await Services.Ethereum.confirmRequest(value.payload, !!goBack)
+                navigate(-1)
+            } catch (error_) {
+                setTransferError(true)
+            }
+        }
+    }, [value, routeLocation.search])
 
-    //     if (value) {
-    //         try {
-    //             await Services.Ethereum.confirmRequest(value.payload, !!goBack)
-    //             navigate(-1)
-    //         } catch (error_) {
-    //             setTransferError(true)
-    //         }
-    //     }
-    // }, [value, routeLocation.search, selectedWallet])
+    const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
+        if (!value) return
+        await Services.Ethereum.rejectRequest(value.payload)
+        navigate(PopupRoutes.Wallet, { replace: true })
+    }, [value])
 
-    // const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-    //     if (!value) return
-    //     await Services.Ethereum.rejectRequest(value.payload)
-    //     navigate(PopupRoutes.Wallet, { replace: true })
-    // }, [value])
+    useTitle(t('popups_wallet_signature_request_title'))
 
-    // useTitle(t('popups_wallet_signature_request_title'))
-
-    // return (
-    //     <main className={classes.container}>
-    //         <div className={classes.info}>
-    //             <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
-    //             <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
-    //             <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-    //                 {address}
-    //             </Typography>
-    //         </div>
-    //         <Typography className={classes.secondary} style={{ marginTop: 20 }}>
-    //             {t('popups_wallet_signature_request_message')}:
-    //         </Typography>
-    //         <Typography className={classes.message}>{data}</Typography>
-    //         {transferError ? (
-    //             <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
-    //         ) : null}
-    //         <div className={classes.controller}>
-    //             <LoadingButton
-    //                 loading={rejectLoading}
-    //                 variant="contained"
-    //                 className={classes.button}
-    //                 style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
-    //                 onClick={handleReject}>
-    //                 {t('cancel')}
-    //             </LoadingButton>
-    //             <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
-    //                 {t('confirm')}
-    //             </LoadingButton>
-    //         </div>
-    //     </main>
-    // )
+    return (
+        <main className={classes.container}>
+            <div className={classes.info}>
+                <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
+                <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
+                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+                    {address}
+                </Typography>
+            </div>
+            <Typography className={classes.secondary} style={{ marginTop: 20 }}>
+                {t('popups_wallet_signature_request_message')}:
+            </Typography>
+            <Typography className={classes.message}>{data}</Typography>
+            {transferError ? (
+                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+            ) : null}
+            <div className={classes.controller}>
+                <LoadingButton
+                    loading={rejectLoading}
+                    variant="contained"
+                    className={classes.button}
+                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
+                    onClick={handleReject}>
+                    {t('cancel')}
+                </LoadingButton>
+                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
+                    {t('confirm')}
+                </LoadingButton>
+            </div>
+        </main>
+    )
 })
 
 export default SignRequest

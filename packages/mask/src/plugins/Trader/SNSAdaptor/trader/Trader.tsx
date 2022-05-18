@@ -97,7 +97,7 @@ export function Trader(props: TraderProps) {
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
-                token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
+                token: createERC20Token(chainId, coin.contract_address, coin.name, coin.symbol, coin.decimals),
             })
         },
         [chainId],
@@ -116,7 +116,7 @@ export function Trader(props: TraderProps) {
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
-            inputToken?.type === SchemaType.Native &&
+            inputToken?.schema === SchemaType.Native &&
             coin.symbol === inputToken.symbol
         ) {
             dispatchTradeStore({
@@ -137,9 +137,9 @@ export function Trader(props: TraderProps) {
                 ? createERC20Token(
                       chainId,
                       defaultInputCoin.contract_address,
-                      defaultInputCoin.decimals,
                       defaultInputCoin.name,
                       defaultInputCoin.symbol,
+                      defaultInputCoin.decimals,
                   )
                 : undefined,
         })
@@ -166,7 +166,7 @@ export function Trader(props: TraderProps) {
     )
 
     useEffect(() => {
-        if (!inputToken || inputToken.type === SchemaType.Native || !inputTokenBalance_ || loadingInputTokenBalance) {
+        if (!inputToken || inputToken.schema === SchemaType.Native || !inputTokenBalance_ || loadingInputTokenBalance) {
             return
         }
         dispatchTradeStore({
@@ -178,7 +178,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         if (
             !outputToken ||
-            outputToken.type === SchemaType.Native ||
+            outputToken.schema === SchemaType.Native ||
             !outputTokenBalance_ ||
             loadingOutputTokenBalance
         ) {

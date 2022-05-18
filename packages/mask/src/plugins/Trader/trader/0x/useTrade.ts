@@ -1,8 +1,9 @@
 import {
+    ChainId,
     chainResolver,
-    FungibleTokenDetailed,
     isNativeTokenAddress,
     NetworkType,
+    SchemaType,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -14,7 +15,7 @@ import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -47,8 +48,8 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapQuoteResponse | null> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

@@ -1,6 +1,4 @@
 import { useAsync } from 'react-use'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const ENV = {
     production: 'https://api.transak.com/api/v2/currencies/crypto-currencies',
@@ -10,7 +8,7 @@ const ENV = {
 
 const URL = ENV[process.env.NODE_ENV]
 
-export function useTransakAllowanceCoin(token: FungibleToken<ChainId, SchemaType>): boolean {
+export function useTransakAllowanceCoin(token: { address?: string; symbol: string }): boolean {
     return useAsync(async () => {
         if (token.address) {
             const allowanceList = await fetch(URL, { method: 'GET' })

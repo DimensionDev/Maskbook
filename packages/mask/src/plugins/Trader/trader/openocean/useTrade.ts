@@ -1,7 +1,8 @@
 import { first } from 'lodash-unified'
 import {
-    FungibleTokenDetailed,
+    ChainId,
     isNativeTokenAddress,
+    SchemaType,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
@@ -13,14 +14,14 @@ import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapOOData | null> {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()

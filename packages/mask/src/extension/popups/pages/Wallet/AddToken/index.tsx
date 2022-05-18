@@ -4,9 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useNavigate } from 'react-router-dom'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
+import { useBlockedFungibleTokens } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     header: {
@@ -43,9 +42,7 @@ const AddToken = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-
-    // const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
+    const blackList = useBlockedFungibleTokens()
 
     useTitle(t('add_token'))
 
@@ -53,7 +50,10 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} />
+                <ERC20TokenList
+                    FixedSizeListProps={{ height: 340, itemSize: 54 }}
+                    blacklist={blackList.map((x) => x.address)}
+                />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>

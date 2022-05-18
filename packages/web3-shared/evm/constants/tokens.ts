@@ -4,9 +4,13 @@ import { createFungibleTokensFromConstants, FungibleToken } from '@masknet/web3-
 import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types'
 import { chainResolver } from '../utils'
 
-export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<FungibleToken<ChainId, SchemaType>[]>>
+export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<FungibleToken<ChainId, SchemaType.ERC20>[]>>
 
-const createERC20Tokens = createFungibleTokensFromConstants(getEnumAsArray(ChainId), SchemaType.ERC20, Token)
+const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainId, SchemaType.ERC20>(
+    getEnumAsArray(ChainId),
+    SchemaType.ERC20,
+    Token,
+)
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USC Coin', 'USDC', 6)
 export const USDCe = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDCe', 6)

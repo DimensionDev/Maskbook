@@ -113,9 +113,14 @@ export interface TradeContext {
     INIT_CODE_HASH?: string
     ROUTER_CONTRACT_ADDRESS?: string
     FACTORY_CONTRACT_ADDRESS?: string
-    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, FungibleToken<ChainId, SchemaType.ERC20>[]>>
-    AGAINST_TOKENS?: ChainIdOptionalRecord<FungibleToken<ChainId, SchemaType.ERC20>[]>
-    CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, FungibleToken<ChainId, SchemaType.ERC20>[]>>
+    SPENDER_CONTRACT_ADDRESS?: string
+    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<
+        Record<string, FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>[]>
+    >
+    AGAINST_TOKENS?: ChainIdOptionalRecord<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>[]>
+    CUSTOM_TOKENS?: ChainIdOptionalRecord<
+        Record<string, FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>[]>
+    >
 }
 
 export interface TradeInfo {

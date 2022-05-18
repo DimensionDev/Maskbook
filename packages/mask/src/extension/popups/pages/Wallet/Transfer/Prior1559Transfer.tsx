@@ -254,7 +254,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
-            const gasPrice = new BigNumber(gasOptions.options.fast.suggestedMaxFeePerGas)
+            const gasPrice = new BigNumber(gasOptions.fast.suggestedMaxFeePerGas)
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId, web3State])

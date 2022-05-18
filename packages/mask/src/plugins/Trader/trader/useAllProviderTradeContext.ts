@@ -1,12 +1,13 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useReducer, useState } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed'
 import { createContainer } from 'unstated-next'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AllProviderTradeState {
     inputAmount: string
-    inputToken?: FungibleTokenDetailed
-    outputToken?: FungibleTokenDetailed
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     inputTokenBalance: string
     outputTokenBalance: string
 }
@@ -22,11 +23,11 @@ export enum AllProviderTradeActionType {
 export type AllProviderSwapAction =
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-          token?: FungibleTokenDetailed
+          token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
       }
     | {
           type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
-          token?: FungibleTokenDetailed
+          token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
       }
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT

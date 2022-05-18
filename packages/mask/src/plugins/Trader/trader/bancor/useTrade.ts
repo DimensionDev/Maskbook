@@ -1,15 +1,15 @@
 import {
-    FungibleTokenDetailed,
     useTokenConstants,
     useTraderConstants,
     ChainId,
     isNativeTokenAddress,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import { SwapBancorRequest, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
@@ -17,8 +17,8 @@ export function useTrade(
     strategy: TradeStrategy,
     inputAmountWei: string,
     outputAmountWei: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapBancorRequest | null> {
     const slippageSetting = useSlippageTolerance()

@@ -123,3 +123,51 @@ export async function getSwaps(
         routes,
     }
 }
+
+export async function fetchTokenPrices(address: string, duration: number, size: number) {
+    // // use the first pool sorted by swap count (desc)
+    // const pools = await fetchLBP_PoolsByTokenAddress(address)
+    // const pool = first(pools)
+    // if (!pool) return []
+    //
+    // // create timestamps by given duration and size
+    // const timestamps = getFutureTimestamps(pool.createTime, duration, size)
+    //
+    // // expand timestamps to block numbers
+    // const blockNumbers = await fetchBlockNumbersByTimestamps(timestamps)
+    // if (!blockNumbers.length) return []
+    //
+    // // fetch the token prices in the pool
+    // const prices = await fetchLBP_PoolTokenPrices(
+    //     pool.id,
+    //     address,
+    //     blockNumbers.map((x) => x.blockNumber),
+    // )
+    //
+    // // compose the result as timestamp and price pairs
+    // return prices.map((x, i) => ({
+    //     timestamp: timestamps[i],
+    //     blockNumber: x.blockNumber,
+    //     price: Number.parseFloat(x.price),
+    // }))
+}
+
+export async function fetchPoolTokens(address: string, duration: number, size: number) {
+    // use the first pool sorted by swap count (desc)
+    // const pools = await fetchLBP_PoolsByTokenAddress(address)
+    // const pool = first(pools)
+    // if (!pool) return []
+    //
+    // // create timestamps by given duration and size
+    // const timestamps = getFutureTimestamps(pool.createTime, duration, size)
+    //
+    // // expand timestamps to block numbers
+    // const blockNumbers = await fetchBlockNumbersByTimestamps(timestamps)
+    // if (!blockNumbers.length) return []
+    //
+    // const poolTokens = await fetchLBP_PoolTokens(
+    //     pool.id,
+    //     blockNumbers.map((x) => x.blockNumber),
+    // )
+    // return []
+}

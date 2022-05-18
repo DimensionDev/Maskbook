@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../Wallet/messages'
 import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
@@ -11,7 +10,7 @@ import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useNativeTokenPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -112,6 +111,7 @@ interface GasPrior1559SettingsProps {
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { GasOptions } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
         const { t } = useI18N()
@@ -120,13 +120,13 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
 
         // #region Get gas options from debank
         const { value: gasOptions } = useAsync(async () => {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (!response) return { slow: 0, standard: 0, fast: 0 }
+            const response = await GasOptions?.getGasOptions?.(chainId)
+            if (!response) return { slow: 0, normal: 0, fast: 0 }
 
             return {
-                slow: response.data.slow.price,
-                standard: response.data.normal.price,
-                fast: response.data.fast.price,
+                slow: response.slow.suggestedMaxFeePerGas,
+                normal: response.normal.suggestedMaxFeePerGas,
+                fast: response.fast.suggestedMaxFeePerGas,
             }
         }, [chainId])
         // #endregion
@@ -135,7 +135,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             () => [
                 {
                     title: t('plugin_trader_gas_setting_standard'),
-                    gasPrice: gasOptions?.standard ?? 0,
+                    gasPrice: gasOptions?.normal ?? 0,
                 },
                 {
                     title: t('plugin_trader_gas_setting_fast'),
@@ -166,7 +166,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         useUpdateEffect(() => {
             if (!(gasConfig?.gasPrice && gasOptions)) return
             const gasPrice = new BigNumber(gasConfig.gasPrice)
-            if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
+            if (gasPrice.isEqualTo(gasOptions.normal)) setOption(0)
             else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
             else {
                 setCustomGasPrice(formatWeiToGwei(gasPrice).toString())

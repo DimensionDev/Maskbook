@@ -7,6 +7,7 @@ import {
     TokenType,
 } from '../specs'
 import type { Constants } from './types'
+import { chain } from 'lodash-unified'
 
 export function createFungibleToken<ChainId, SchemaType>(
     chainId: ChainId,
@@ -117,21 +118,22 @@ export function createFungibleTokensFromConstants<T extends Constants<string>, C
         symbol: string | ((chainId: ChainId) => string),
         decimals: number | ((chainId: ChainId) => number),
     ) => {
-        return chainIds.reduce((accumulator, { key: chainName, value: chainId }) => {
-            const evaluator = <R>(f: ((chainId: ChainId) => R) | R): R =>
-                // @ts-ignore
-                typeof f === 'function' ? f(chainId as ChainId) : f
+        return chain(chainIds)
+            .keyBy('value')
+            .mapValues<FungibleToken<ChainId, SchemaType>>(({ key: chainName, value: chainId }) => {
+                const evaluator = <R>(f: ((chainId: ChainId) => R) | R): R =>
+                    // @ts-ignore
+                    typeof f === 'function' ? f(chainId as ChainId) : f
 
-            accumulator[chainId] = createFungibleToken<ChainId, SchemaType>(
-                chainId,
-                schema,
-                constants[key][chainName as 'Mainnet'] ?? '',
-                evaluator(name),
-                evaluator(symbol),
-                evaluator(decimals),
-            )
-
-            return accumulator
-        }, {} as Record<ChainId, FungibleToken<ChainId, SchemaType>>)
+                return createFungibleToken<ChainId, SchemaType>(
+                    chainId,
+                    schema,
+                    constants[key][chainName as 'Mainnet'] ?? '',
+                    evaluator(name),
+                    evaluator(symbol),
+                    evaluator(decimals),
+                )
+            })
+            .value()
     }
 }

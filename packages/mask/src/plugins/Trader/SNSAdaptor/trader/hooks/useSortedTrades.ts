@@ -15,9 +15,13 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
         tradeState: [{ outputToken }],
     } = AllProviderTradeContext.useContainer()
 
-    const outputTokenPrice = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, outputToken?.address.toLowerCase(), {
-        chainId,
-    })
+    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(
+        NetworkPluginID.PLUGIN_EVM,
+        outputToken?.address.toLowerCase(),
+        {
+            chainId,
+        },
+    )
 
     return useMemo(() => {
         if (outputToken && nativeToken && (outputTokenPrice || nativeTokenPrice)) {
@@ -38,7 +42,7 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         const finalPrice = new BigNumber(
                             formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
                         )
-                            .times(outputToken.type !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 
                         return {

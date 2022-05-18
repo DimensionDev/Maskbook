@@ -4,8 +4,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { SchemaType, formatBalance, formatPercentage, ChainId } from '@masknet/web3-shared-evm'
-import { FungibleToken, isLessThan, NetworkPluginID, rightShift, Wallet } from '@masknet/web3-shared-base'
+import { ChainId, formatBalance, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, isLessThan, rightShift, Wallet, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -172,7 +172,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 })
 
 export interface AllTradeFormProps {
-    wallet?: Wallet
+    wallet?: Wallet | null
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType>
     outputToken?: FungibleToken<ChainId, SchemaType>

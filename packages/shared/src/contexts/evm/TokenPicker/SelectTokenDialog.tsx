@@ -54,7 +54,7 @@ export interface PickTokenOptions {
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
     open: boolean
-    onSelect?(token: FungibleToken<ChainId, SchemaType>): void
+    onSelect?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
     onClose?(): void
 }
 
