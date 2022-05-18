@@ -10,8 +10,8 @@
     }
   },
   "devDependencies": {
-    "@rollup/plugin-sucrase": "^4.0.3",
-    "rollup": "^2.72.0",
+    "@rollup/plugin-sucrase": "^4.0.4",
+    "rollup": "^2.73.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "scripts": {
