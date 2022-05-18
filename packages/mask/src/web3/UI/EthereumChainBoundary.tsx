@@ -35,14 +35,6 @@ import { WalletIcon } from '@masknet/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    button: {
-        backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
-        width: 254,
-        '&,&:hover': {
-            background: theme.palette.maskColor.dark,
-        },
-    },
     action: {
         textAlign: 'center',
         margin: theme.spacing(1),
@@ -246,18 +238,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 isBorderColorNotDefault
                             />
                         }
-                        sx={
-                            props.switchButtonStyle ?? {
-                                backgroundColor: theme.palette.maskColor.dark,
-                                width: '100%',
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: theme.palette.maskColor.dark,
-                                },
-                                padding: 1,
-                                margin: 0,
-                            }
-                        }
+                        sx={props.switchButtonStyle}
                         style={{ borderRadius: 10 }}
                         init={
                             <span>

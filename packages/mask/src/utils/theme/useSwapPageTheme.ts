@@ -26,6 +26,7 @@ export function useSwapPageTheme() {
                 Object.assign(theme.palette[color], colorSchema[color])
             }
         })
+        theme.palette.maskColor = colorSchema.maskColor
         theme.palette.divider = colorSchema.divider
         theme.palette.secondaryDivider = colorSchema.secondaryDivider
         theme.components = theme.components || {}
