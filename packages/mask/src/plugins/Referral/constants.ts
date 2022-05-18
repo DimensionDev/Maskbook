@@ -29,4 +29,4 @@ export const errors = {
 }
 
 // set DISABLE_PLUGIN = false to test it
-export const DISABLE_PLUGIN = false
+export const DISABLE_PLUGIN = true

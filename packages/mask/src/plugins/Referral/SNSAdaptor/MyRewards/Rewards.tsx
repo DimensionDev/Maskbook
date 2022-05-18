@@ -115,8 +115,14 @@ export function Rewards({
                 let claimed = new BigNumber(0)
 
                 for (const reward of rewardTokenRewards) {
-                    totalRewards = totalRewards.plus(new BigNumber(formatUnits(reward.rewardValue)))
-                    claimed = claimed.plus(new BigNumber(reward.claimed ? formatUnits(reward.rewardValue) : 0))
+                    totalRewards = totalRewards.plus(
+                        new BigNumber(formatUnits(reward.rewardValue, reward.rewardToken?.decimals)),
+                    )
+                    claimed = claimed.plus(
+                        new BigNumber(
+                            reward.claimed ? formatUnits(reward.rewardValue, reward.rewardToken?.decimals) : 0,
+                        ),
+                    )
                 }
 
                 const claimable = totalRewards.minus(claimed).toNumber()

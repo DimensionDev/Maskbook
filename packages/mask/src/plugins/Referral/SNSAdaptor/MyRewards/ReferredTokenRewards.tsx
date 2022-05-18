@@ -34,7 +34,9 @@ export function ReferredTokenRewards({ rewards }: ReferredTokenRewardsProps) {
             {referredTokenRewards.map(([referredTokenDefn, rewards]) => {
                 let totalRewards = new BigNumber(0)
                 for (const reward of rewards) {
-                    totalRewards = totalRewards.plus(new BigNumber(formatUnits(reward.rewardValue)))
+                    totalRewards = totalRewards.plus(
+                        new BigNumber(formatUnits(reward.rewardValue, reward.rewardToken?.decimals)),
+                    )
                 }
 
                 return (
