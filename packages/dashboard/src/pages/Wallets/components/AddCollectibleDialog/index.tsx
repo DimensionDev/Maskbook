@@ -1,15 +1,13 @@
-import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { FormEvent, memo, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PluginServices } from '../../../../API'
-import { useNonFungibleTokenContract, useWallet } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection, useWallet, useChainId } from '@masknet/plugin-infra/web3'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -29,10 +27,9 @@ enum FormErrorType {
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const [address, setAddress] = useState('')
-    const { value: contractDetailed, loading: contractDetailLoading } = useNonFungibleTokenContract(
-        NetworkPluginID.PLUGIN_EVM,
-        address,
-    )
+    const [tokenId, setTokenId] = useState('')
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     return null
 
@@ -44,7 +41,9 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     //     const tokenInDB = await PluginServices.Wallet.getToken(SchemaType.ERC721, address, tokenId)
     //     if (tokenInDB) throw new Error(FormErrorType.Added)
 
-    //     const tokenDetailed = await erc721TokenDetailedCallback()
+    //     const tokenDetailed = await connection?.getNonFungibleToken(address ?? '', tokenId, {
+    //         chainId,
+    //     })
 
     //     if (
     //         (tokenDetailed && !isSameAddress(tokenDetailed.info.owner, wallet.address)) ||

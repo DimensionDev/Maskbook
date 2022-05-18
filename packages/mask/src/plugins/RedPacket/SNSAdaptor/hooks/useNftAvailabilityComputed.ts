@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { compact } from 'lodash-unified'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { isSameAddress, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { NftRedPacketJSONPayload, RedPacketStatus } from '../../types'
 import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'
 
@@ -33,7 +33,7 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
         const isExpired = availability.expired
         const isClaimed = availability.isClaimed
         const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-        const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+        const parsedChainId = chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
 
         const isSameChain = parsedChainId === chainId
         const isPasswordValid = !!payload.password && payload.password !== 'PASSWORD INVALID'

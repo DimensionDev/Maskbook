@@ -172,7 +172,7 @@ class Connection implements EVM_Connection {
 
         // ERC20
         const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
-        const tx = await contract?.methods.transfer(recipient, toHex(amount))
+        const tx = contract?.methods.transfer(recipient, toHex(amount))
         return sendTransaction(contract, tx)
     }
     async transferNonFungibleToken(
@@ -184,7 +184,7 @@ class Connection implements EVM_Connection {
     ): Promise<string> {
         // ERC721
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
-        const tx = await contract?.methods.transferFrom(this.account, recipient, tokenId)
+        const tx = contract?.methods.transferFrom(this.account, recipient, tokenId)
         return sendTransaction(contract, tx)
     }
 
@@ -241,7 +241,7 @@ class Connection implements EVM_Connection {
         return createERC721Contract(
             this.chainId,
             address,
-            name ?? 'Unknow Tokenn',
+            name ?? 'Unknown Token',
             symbol ?? 'UNKNOWN',
             owner,
             balance as unknown as number,
@@ -255,7 +255,7 @@ class Connection implements EVM_Connection {
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
-        return createERC721Collection(this.chainId, address, name ?? 'Unknow Tokenn', '')
+        return createERC721Collection(this.chainId, address, name ?? 'Unknown Token', '')
     }
     async switchChain(options?: EVM_Web3ConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
@@ -332,11 +332,11 @@ class Connection implements EVM_Connection {
             this.chainId,
             address,
             id,
-            createERC721Metadata(this.chainId, name ?? 'Unknow Tokenn', symbol ?? 'UNKNOWN'),
+            createERC721Metadata(this.chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN'),
             createERC721Contract(
                 this.chainId,
                 address,
-                name ?? 'Unknow Tokenn',
+                name ?? 'Unknown Token',
                 symbol ?? 'UNKNOWN',
                 owner,
                 balance as unknown as number,
