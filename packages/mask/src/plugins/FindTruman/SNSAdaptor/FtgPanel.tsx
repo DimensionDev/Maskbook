@@ -1,4 +1,4 @@
-import { formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
@@ -146,7 +146,7 @@ function FtgItem(props: { ftg: FtgInfo }) {
                 </Typography>
                 <FtgInfoRow
                     title={t('plugin_find_truman_dialog_ftg_info_token')}
-                    value={formatNFT_TokenId(ftg.tokenId, 2)}
+                    value={formatTokenId(ftg.tokenId, 2)}
                 />
                 <FtgInfoRow title={t('plugin_find_truman_dialog_ftg_info_blockchain')} value="Ethereum" />
                 <FtgInfoRow title={t('plugin_find_truman_dialog_ftg_info_standard')} value="ERC721 Enumerable" />

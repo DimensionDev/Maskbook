@@ -3,12 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { FindTruman_Const } from '../constants'
 import { FindTrumanContext } from '../context'
+import { useAccount } from '@masknet/plugin-infra/src/web3'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void
