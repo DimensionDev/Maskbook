@@ -34,7 +34,7 @@ export enum ChainId {
     BSC = 56,
     BSCT = 97,
 
-    // okex
+    // OKEX
     OKEX = 66,
 
     // Matic
