@@ -8,7 +8,7 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
+import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -23,7 +23,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -111,6 +111,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttonWrapper: {
         marginTop: 0,
+        display: 'flex',
     },
     loadingBox: {
         borderRadius: theme.spacing(1),
@@ -436,14 +437,20 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </div>
                 </Card>
             ) : availability.isClaimedAll || availability.isCompleted ? null : (
-                <Grid container spacing={2} className={classes.buttonWrapper}>
-                    <Grid item xs={availability.isClaimed ? 12 : 6}>
-                        <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">
+                <Box className={classes.buttonWrapper}>
+                    <Box sx={{ flex: 1, padding: 1.5 }}>
+                        <Button
+                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            className={classes.button}
+                            fullWidth
+                            onClick={onShare}
+                            size="large"
+                            variant="contained">
                             {t('share')}
                         </Button>
-                    </Grid>
+                    </Box>
                     {availability.isClaimed ? null : (
-                        <Grid item xs={6}>
+                        <Box sx={{ flex: 1, padding: 1.5 }}>
                             <EthereumChainBoundary chainId={payload.chainId}>
                                 <EthereumWalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
@@ -463,9 +470,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     </ActionButton>
                                 </EthereumWalletConnectedBoundary>
                             </EthereumChainBoundary>
-                        </Grid>
+                        </Box>
                     )}
-                </Grid>
+                </Box>
             )}
         </div>
     )
