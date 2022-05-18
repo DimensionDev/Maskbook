@@ -93,7 +93,7 @@ export function OperationFooter({
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     classes={{
-                        connectWallet: classes.connectWallet,
+                        button: classes.walletButton,
                     }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (

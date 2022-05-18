@@ -81,9 +81,18 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        marginTop: '0 !important',
-        minHeight: 38,
-        height: 38,
+        minHeight: 40,
+        height: 40,
+
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        margin: '0 !important',
     },
     footer: {
         display: 'flex',

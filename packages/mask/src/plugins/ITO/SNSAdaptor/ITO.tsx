@@ -185,7 +185,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 35,
         '&:hover': {
             background: 'none',
+            borderColor: '#fff !important',
         },
+        background: 'none',
     },
     loadingWrap: {
         display: 'flex',
@@ -916,12 +918,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             <Typography variant="body1" className={classes.loadingITO}>
                 {t('loading_failed')}
             </Typography>
-            <ActionButton
-                onClick={retryPoolPayload}
-                variant="outlined"
-                size="large"
-                color="primary"
-                className={classes.loadingITO_Button}>
+            <ActionButton onClick={retryPoolPayload} variant="outlined" className={classes.loadingITO_Button}>
                 {t('try_again')}
             </ActionButton>
         </Card>
