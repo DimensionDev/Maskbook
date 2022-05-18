@@ -108,10 +108,6 @@
     "user_guide_tip_1": "点击这里快速访问主要功能。",
     "user_guide_tip_2": "点击这里连接您的钱包。您可以在此选择网络或更改您的钱包。",
     "user_guide_tip_3": "点击这里快速开始。",
-    "create_persona": "创建身份",
-    "connect_persona": "连接身份",
-    "please_create_persona": "请创建身份",
-    "please_connect_persona": "请连接身份",
     "mask_network": "Mask Network",
     "import": "导入",
     "no_search_result": "没有任何结果。",
@@ -556,6 +552,8 @@
     "plugin_ito_your_refund_amount": "退回 {{amount}} {{symbol}}.",
     "plugin_ito_unlock_in_advance": "提前解锁",
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} 已兑换",
+    "plugin_ito_qualification_loading": "资格认证中…",
+    "plugin_ito_qualification_failed": "钱包地址不在列表内。",
     "plugin_ito_congratulations": "祝贺您！",
     "plugin_ito_out_of_stock_hit": "祝您下次好运",
     "plugin_ito_claim_success_share": "我刚刚用 @{{account}} 来交换${{symbol}}，参加了 @{{user}}的 #ITO。 安装mask.io并开始您的初次推特优惠！ \n {{link}}",
@@ -884,5 +882,6 @@
     "nft_button_add_collectible": "添加收藏品",
     "nft_avatar": "NFT 头像",
     "web3_tab_hint": "未发现任何地址。",
-    "nft_button_set_avatar": "设置 NFT 头像"
+    "nft_button_set_avatar": "设置 NFT 头像",
+    "popups_wallet_unsupported_network": "不支持的网络类型"
 }
