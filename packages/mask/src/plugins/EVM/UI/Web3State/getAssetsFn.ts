@@ -136,13 +136,13 @@ export const getFungibleAssetsFn =
 
         const tokenUnavailableFromDebankResults = (await Promise.allSettled(allRequest))
             .map((x) => (x.status === 'fulfilled' ? x.value : null))
-            .filter((x) => Boolean(x)) as {
+            .filter((x) => Boolean(x)) as Array<{
             chainId: ChainId
             balance: string
             price: PriceRecord
-        }[]
+        }>
 
-        const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
+        const nativeTokens: Array<Web3Plugin.Asset<Web3Plugin.FungibleToken>> = networks
             .filter(
                 (t) =>
                     t.isMainnet &&

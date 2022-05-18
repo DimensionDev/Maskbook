@@ -12,9 +12,9 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword = '',
-    additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = EMPTY_LIST,
+    additionalTokens: Array<ERC20TokenDetailed | NativeTokenDetailed> = EMPTY_LIST,
     targetChainId?: ChainId,
-): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {
+): AsyncStateRetry<Array<ERC20TokenDetailed | NativeTokenDetailed>> {
     // #region fetch token lists
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId

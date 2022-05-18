@@ -16,10 +16,10 @@ const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 type InternalItem = {
     name: string
-    parameters: {
+    parameters: Array<{
         name: string
         type: string
-    }[]
+    }>
 }
 
 const ABI_MAP: Map<string, InternalItem> = new Map()

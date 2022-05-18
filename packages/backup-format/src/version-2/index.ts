@@ -322,7 +322,7 @@ interface BackupJSONFileVersion2 {
         privateKey?: JsonWebKey
         localKey?: JsonWebKey
         nickname?: string
-        linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
+        linkedProfiles: Array<[/** ProfileIdentifier.toText() */ string, LinkedProfileDetails]>
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
@@ -345,7 +345,7 @@ interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: JsonWebKey
-        recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
+        recipients: 'everyone' | Array<[/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }]>
         /** @deprecated */
         recipientGroups: never[]
         foundAt: number // Unix timestamp

@@ -3,7 +3,7 @@ import type { IDBPSafeTransaction } from '../../../background/database/utils/ope
 
 export async function queryTransactionPaged<
     DBType extends DBSchema,
-    TxStores extends StoreNames<DBType>[],
+    TxStores extends Array<StoreNames<DBType>>,
     Mode extends 'readonly' | 'readwrite',
     RecordType extends IDBPCursorWithValueIteratorValue<DBType, TxStores, TxStores[0], unknown>['value'],
 >(

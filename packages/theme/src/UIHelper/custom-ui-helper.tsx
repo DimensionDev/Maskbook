@@ -11,7 +11,7 @@ export function useStylesExtends<InternalKeys extends string, OverwrittenKeys ex
     return mergeClasses(defaultStyles.classes, configOverwrite.classes, props.classes) as any
 }
 
-export function mergeClasses(...args: (Partial<ClassNameMap<string>> | undefined)[]): Partial<ClassNameMap<string>> {
+export function mergeClasses(...args: Array<Partial<ClassNameMap<string>> | undefined>): Partial<ClassNameMap<string>> {
     args = args.filter(Boolean)
     if (args.length === 1) return args[0]!
     const result = {} as Partial<ClassNameMap<string>>
