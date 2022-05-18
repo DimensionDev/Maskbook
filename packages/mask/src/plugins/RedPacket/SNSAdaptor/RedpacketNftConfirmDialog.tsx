@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
     },
     buttonWrapper: {
-        marginTop: 16,
+        marginTop: 0,
     },
     button: {
         minHeight: 36,

@@ -17,6 +17,7 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -78,7 +79,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { asset, events, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {
         if (!asset.value || asset.error) return
@@ -266,7 +267,11 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <ActionBar />
+            <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
+                <EthereumChainBoundary chainId={expectChainId ?? chainId}>
+                    <ActionBar />
+                </EthereumChainBoundary>
+            </Box>
         </>
     )
 }

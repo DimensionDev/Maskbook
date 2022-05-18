@@ -184,7 +184,6 @@
     "plugin_wallet_switch_network_under_going": "切換至 {{network}} 中",
     "plugin_wallet_not_available_on": "{{network}} 不可用",
     "plugin_wallet_connect_wallet": "連接錢包",
-    "plugin_wallet_connect_wallet_tip": "請連接你的錢包",
     "plugin_red_packet_display_name": "插件：紅包",
     "plugin_red_packet_claimed": "已認領",
     "plugin_red_packet_erc20_tab_title": "代幣",
@@ -361,8 +360,6 @@
     "plugin_ito_list_table_got": "餘額",
     "plugin_ito_list_button_send": "送出",
     "plugin_ito_withdraw": "提取",
-    "plugin_ito_qualification_loading": "驗證資格…",
-    "plugin_ito_qualification_failed": "錢包地址不在清單上。",
     "plugin_ito_withdrawn": "已提取",
     "plugin_ito_your_swapped_amount": "你交換了 {{amount}} {{symbol}}",
     "plugin_ito_your_claimed_amount": "你認領了 {{amount}} {{symbol}}",
@@ -515,7 +512,6 @@
     "plugin_dhedge_buy_token": "取得 {{symbol}}",
     "plugin_dhedge_enter_an_amount": "輸入一個金額",
     "plugin_dhedge_insufficient_balance": "{{symbol}} 餘額不足",
-    "plugin_dhedge_loading": "讀取中…",
     "plugin_dhedge_pool_not_found": "錯誤的池地址！",
     "plugin_dhedge_smt_wrong": "出錯了！"
 }

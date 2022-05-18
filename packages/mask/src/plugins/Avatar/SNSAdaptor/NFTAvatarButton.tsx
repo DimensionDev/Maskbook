@@ -2,6 +2,7 @@ import { GearSettingsIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
+import { ApplicationSmallIcon } from '../assets/application'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -10,11 +11,10 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 9999,
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
-        border: '1px solid',
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
-        color: theme.palette.mode === 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
+        color: theme.palette.text.primary,
         cursor: 'pointer',
     },
     icon: {
@@ -25,10 +25,11 @@ const useStyles = makeStyles()((theme) => ({
     text: {
         display: 'flex',
         alignItems: 'center',
+        marginLeft: 4,
     },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root'> {
+interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
     showSetting?: boolean
 }
@@ -40,9 +41,9 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
 
     return (
         <div className={classes.root} onClick={onClick}>
+            <ApplicationSmallIcon />
             <Typography variant="body1" className={classes.text}>
-                &#x1F525;
-                <span style={{ marginLeft: 4 }}>{t('nft_avatar')}</span>
+                <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
                 {props.showSetting ? <GearSettingsIcon className={classes.icon} /> : null}
             </Typography>
         </div>

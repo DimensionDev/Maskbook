@@ -78,6 +78,7 @@ export function useV3BestTradeExactIn(
         }
         const { bestRoute, amountOut } = quotesResults
             .filter((x) => x.succeed)
+            // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
                     currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null },
@@ -198,6 +199,7 @@ export function useV3BestTradeExactOut(
         }
         const { bestRoute, amountIn } = quotesResults
             .filter((x) => x.succeed)
+            // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
                     currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null },

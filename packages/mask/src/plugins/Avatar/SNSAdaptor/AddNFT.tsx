@@ -1,10 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { Button, DialogContent, Typography } from '@mui/material'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType} from '@masknet/web3-shared-evm'
+import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
 import { useAccount } from '@masknet/plugin-infra/web3'
@@ -20,6 +19,13 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        display: 'block',
+        width: '100%',
+        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
+        alignItems: 'center',
+        padding: theme.spacing(1),
+        boxSizing: 'border-box',
+        borderRadius: 8,
     },
     message: {
         '&:before': {
@@ -30,18 +36,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface AddNFTProps {
+    account?: string
     onClose: () => void
-    onAddClick: (token: ERC721TokenDetailed) => void
+    chainId?: ChainId
+    onAddClick?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     open: boolean
+    title?: string
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick } = props
+    const { onClose, open, onAddClick, title, chainId, account } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -53,14 +62,18 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        createNFT(address, tokenId)
-            .then((token) => {
-                if (!token || !isSameAddress(token?.info.owner, account)) {
+        createNFT(address, tokenId, chainId)
+            .then(async (token) => {
+                if (chainId && token && token.contractDetailed.chainId !== chainId) {
+                    setMessage('chain does not match.')
+                    return
+                }
+                if (!token || !isSameAddress(token?.info.owner, account ?? _account)) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
-
-                onAddClick(token)
+                await WalletRPC.addToken(token)
+                onAddClick?.(token)
                 handleClose()
             })
             .catch((error) => setMessage(t('nft_owner_hint')))
@@ -81,19 +94,31 @@ export function AddNFT(props: AddNFTProps) {
     }
 
     return (
-        <InjectedDialog title={t('nft_add_dialog_title')} open={open} onClose={handleClose}>
+        <InjectedDialog
+            title={title ?? t('nft_add_dialog_title')}
+            open={open}
+            onClose={handleClose}
+            titleBarIconStyle="close">
             <DialogContent>
                 <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
                     {t('nft_add_button_label')}
                 </Button>
                 <div className={classes.input}>
-                    <InputBox label="Input Contract Address" onChange={(address) => onAddressChange(address)} />
+                    <InputBase
+                        sx={{ width: '100%' }}
+                        placeholder="Input Contract Address"
+                        onChange={(e) => onAddressChange(e.target.value)}
+                    />
                 </div>
                 <div className={classes.input}>
-                    <InputBox label="Token ID" onChange={(tokenId) => onTokenIdChange(tokenId)} />
+                    <InputBase
+                        sx={{ width: '100%' }}
+                        placeholder="Token ID"
+                        onChange={(e) => onTokenIdChange(e.target.value)}
+                    />
                 </div>
                 {message ? (
-                    <Typography color="error" className={classes.message}>
+                    <Typography color="error" className={classes.message} fontSize={12}>
                         {message}
                     </Typography>
                 ) : null}

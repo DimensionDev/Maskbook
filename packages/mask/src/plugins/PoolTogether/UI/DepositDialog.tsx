@@ -288,7 +288,7 @@ export function DepositDialog() {
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
                                     {t('plugin_pooltogether_odds_value', {
-                                        value: odds.toLocaleString(),
+                                        value: odds,
                                         period: getPrizePeriod(t, prizePeriodSeconds),
                                     })}
                                 </Typography>

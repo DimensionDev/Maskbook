@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -15,6 +15,9 @@ import { DrawResultDialog } from './DrawResultDialog'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -48,6 +51,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const theme = useTheme()
 
     const {
         boxId,
@@ -148,16 +153,26 @@ export function PreviewCard(props: PreviewCardProps) {
 
     if (boxState === BoxState.UNKNOWN)
         return (
-            <Box>
-                <Skeleton animation="wave" variant="rectangular" width="100%" height={36} />
-                <Skeleton animation="wave" variant="rectangular" width="100%" height={300} sx={{ marginTop: 2 }} />
+            <Box sx={{ display: 'flex', padding: 2, justifyContent: 'center', alignItems: 'center' }}>
+                <CircularProgress />
             </Box>
         )
     if (boxState === BoxState.ERROR)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retryBoxInfo}>
+                <Typography color="error">Something went wrong.</Typography>
+                <Button
+                    sx={{
+                        margin: 1.125,
+                        width: 254,
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: 'white',
+                        '&:.hover': {
+                            backgroundColor: theme.palette.maskColor.dark,
+                        },
+                    }}
+                    size="small"
+                    onClick={retryBoxInfo}>
                     Retry
                 </Button>
             </Box>
@@ -165,8 +180,19 @@ export function PreviewCard(props: PreviewCardProps) {
     if (boxState === BoxState.NOT_FOUND || !boxInfo)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Failed to load box.</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retryMaskBoxInfo}>
+                <Typography color="error">Failed to load box.</Typography>
+                <Button
+                    sx={{
+                        margin: 1.125,
+                        width: 254,
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: 'white',
+                        '&:.hover': {
+                            backgroundColor: theme.palette.maskColor.dark,
+                        },
+                    }}
+                    size="small"
+                    onClick={retryMaskBoxInfo}>
                     Retry
                 </Button>
             </Box>
@@ -190,47 +216,62 @@ export function PreviewCard(props: PreviewCardProps) {
     }
 
     return (
-        <Box>
-            <AbstractTab height="" {...tabProps} state={state} />
-            <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
-                <ActionButton
-                    size="medium"
-                    fullWidth
-                    variant="contained"
-                    disabled={boxState !== BoxState.READY}
-                    onClick={() => setOpenDrawDialog(true)}>
-                    {(() => {
-                        return boxState === BoxState.READY && paymentTokenAddress ? (
-                            <>
-                                {boxStateMessage} (
-                                {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
-                                {paymentTokenDetailed?.symbol}/Time)
-                            </>
-                        ) : (
-                            boxStateMessage
-                        )
-                    })()}
-                </ActionButton>
-            </EthereumWalletConnectedBoundary>
-            <DrawDialog
-                boxInfo={boxInfo}
-                open={openDrawDialog}
-                drawing={drawing}
-                onClose={() => {
-                    setOpenBoxTransactionOverrides(null)
-                    setOpenDrawDialog(false)
-                }}
-                onSubmit={onDraw}
-            />
-            <DrawResultDialog
-                boxInfo={boxInfo}
-                contractDetailed={contractDetailed}
-                open={openDrawResultDialog}
-                onClose={() => {
-                    refreshLastPurchasedTokenIds()
-                    setOpenDrawResultDialog(false)
-                }}
-            />
-        </Box>
+        <>
+            <Box>
+                <AbstractTab height="" {...tabProps} state={state} />
+
+                <DrawDialog
+                    boxInfo={boxInfo}
+                    open={openDrawDialog}
+                    drawing={drawing}
+                    onClose={() => {
+                        setOpenBoxTransactionOverrides(null)
+                        setOpenDrawDialog(false)
+                    }}
+                    onSubmit={onDraw}
+                />
+                <DrawResultDialog
+                    boxInfo={boxInfo}
+                    contractDetailed={contractDetailed}
+                    open={openDrawResultDialog}
+                    onClose={() => {
+                        refreshLastPurchasedTokenIds()
+                        setOpenDrawResultDialog(false)
+                    }}
+                />
+            </Box>
+            <Box style={{ padding: 12 }}>
+                <EthereumChainBoundary chainId={chainId}>
+                    <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
+                        <ActionButton
+                            size="medium"
+                            fullWidth
+                            variant="contained"
+                            sx={{
+                                backgroundColor: theme.palette.maskColor.dark,
+                                color: 'white',
+                                width: '100%',
+                                '&:hover': {
+                                    background: theme.palette.maskColor.dark,
+                                },
+                            }}
+                            disabled={boxState !== BoxState.READY}
+                            onClick={() => setOpenDrawDialog(true)}>
+                            {(() => {
+                                return boxState === BoxState.READY && paymentTokenAddress ? (
+                                    <>
+                                        {boxStateMessage} (
+                                        {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
+                                        {paymentTokenDetailed?.symbol}/Time)
+                                    </>
+                                ) : (
+                                    boxStateMessage
+                                )
+                            })()}
+                        </ActionButton>
+                    </EthereumWalletConnectedBoundary>
+                </EthereumChainBoundary>
+            </Box>
+        </>
     )
 }
