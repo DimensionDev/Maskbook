@@ -387,6 +387,8 @@
     "plugin_ito_your_refund_amount": "返還 {{amount}} {{symbol}}。",
     "plugin_ito_unlock_in_advance": "預先解鎖",
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} 已交換",
+    "plugin_ito_qualification_loading": "驗證資格…",
+    "plugin_ito_qualification_failed": "錢包地址不在清單上。",
     "plugin_ito_congratulations": "恭喜！",
     "plugin_ito_out_of_stock_hit": "祝你下次好運",
     "plugin_ito_claim_success_share": "我剛剛參與了 @{{user}} 在 @{{account}} 發起的 #ITO 以換取 ${{symbol}}。 安裝 mask.io 開始你自己的 Initial Twitter Offering！ \n {{link}}",
