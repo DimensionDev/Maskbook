@@ -28,10 +28,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: !DISABLE_PLUGIN
         ? {
               label: (
-                  <PluginI18NFieldRender
-                      field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
-                      pluginID={base.ID}
-                  />
+                  <>
+                      <ReferralFarmsIcon style={{ width: 16, height: 16, marginRight: '4px' }} />
+                      <PluginI18NFieldRender
+                          field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
+                          pluginID={base.ID}
+                      />
+                  </>
               ),
               dialog: ReferralDialog,
           }
