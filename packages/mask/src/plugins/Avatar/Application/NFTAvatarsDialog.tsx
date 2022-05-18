@@ -3,11 +3,11 @@ import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

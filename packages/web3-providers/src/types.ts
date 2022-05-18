@@ -2,12 +2,7 @@ import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type {
-    NextIDAction,
-    NextIDStoragePayload,
-    NextIDPayload,
-    NextIDPlatform,
-} from '@masknet/shared-base'
+import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 import type {
     Transaction,
     FungibleAsset,

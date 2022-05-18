@@ -51,17 +51,17 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 {
                     title: t('popups_wallet_gas_fee_settings_low'),
                     gasOption: GasOptionType.SLOW,
-                    content: gasOptions?.options[GasOptionType.SLOW],
+                    content: gasOptions?.[GasOptionType.SLOW],
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_medium'),
                     gasOption: GasOptionType.NORMAL,
-                    content: gasOptions?.options[GasOptionType.NORMAL],
+                    content: gasOptions?.[GasOptionType.NORMAL],
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_high'),
                     gasOption: GasOptionType.FAST,
-                    content: gasOptions?.options[GasOptionType.FAST],
+                    content: gasOptions?.[GasOptionType.FAST],
                 },
             ],
             [gasOptions],
@@ -158,18 +158,13 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (
-                isLessThan(
-                    maxPriorityFeePerGas,
-                    gasOptions?.options[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0,
-                )
-            )
+            if (isLessThan(maxPriorityFeePerGas, gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0))
                 return t('wallet_transfer_error_max_priority_gas_fee_too_low')
             if (
                 isGreaterThan(
                     maxPriorityFeePerGas,
                     multipliedBy(
-                        gasOptions?.options[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
+                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxPriorityFeePerGas ?? 0,
                         HIGH_FEE_WARNING_MULTIPLIER,
                     ),
                 )
@@ -180,13 +175,13 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         const maxFeeGasHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
+            if (isLessThan(maxFeePerGas, gasOptions?.[GasOptionType.SLOW].estimatedBaseFee ?? 0))
                 return t('wallet_transfer_error_max_fee_too_low')
             if (
                 isGreaterThan(
                     maxFeePerGas,
                     multipliedBy(
-                        gasOptions?.options[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
+                        gasOptions?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0,
                         HIGH_FEE_WARNING_MULTIPLIER,
                     ),
                 )

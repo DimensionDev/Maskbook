@@ -5,7 +5,7 @@ import ActionButton, { ActionButtonProps } from '../../extension/options-page/Da
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useNativeTokenBalance, useWeb3State } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId, useNativeTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
 // import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,9 +46,9 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const nativeTokenBalance = useNativeTokenBalance(NetworkPluginID.PLUGIN_EVM)
     const { RiskWarning } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    // #region remote controlled confirm risk warning
-    const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
-    // #endregion
+    // // #region remote controlled confirm risk warning
+    // const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
+    // // #endregion
 
     // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -69,17 +69,17 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
             </ActionButton>
         )
 
-    if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
-        return (
-            <ActionButton
-                className={classNames(classes.button, classes.connectWallet)}
-                fullWidth
-                variant="contained"
-                onClick={openRiskWarningDialog}
-                {...props.ActionButtonProps}>
-                {t('plugin_wallet_confirm_risk_warning')}
-            </ActionButton>
-        )
+    // if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
+    //     return (
+    //         <ActionButton
+    //             className={classNames(classes.button, classes.connectWallet)}
+    //             fullWidth
+    //             variant="contained"
+    //             onClick={openRiskWarningDialog}
+    //             {...props.ActionButtonProps}>
+    //             {t('plugin_wallet_confirm_risk_warning')}
+    //         </ActionButton>
+    //     )
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (

@@ -8,7 +8,8 @@ import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -33,7 +34,7 @@ export function ActionBar(props: ActionBarProps) {
     const { classes } = useStyles()
     const { asset, assetOrder } = CollectibleState.useContainer()
     const assets = asset.value
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const {
         open: openCheckoutDialog,

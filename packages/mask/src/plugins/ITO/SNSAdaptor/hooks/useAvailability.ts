@@ -4,7 +4,11 @@ import { useITOConstants } from '@masknet/web3-shared-evm'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 import { useAccount, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 
-export function useAvailability(id: string, contractAddress: string, options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>) {
+export function useAvailability(
+    id: string,
+    contractAddress: string,
+    options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
+) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM, options?.account)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, options?.chainId)
 

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'

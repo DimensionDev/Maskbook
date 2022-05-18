@@ -96,7 +96,7 @@ export interface Identity {
 }
 
 export interface SocialIdentity {
-    identifier: ProfileIdentifier
+    identifier?: ProfileIdentifier
     avatar?: string
     bio?: string
     nickname?: string

@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
-import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { Web3Helper } from '../web3-helpers'
 
 interface Web3Context<T extends NetworkPluginID> {
@@ -12,7 +12,7 @@ interface Web3Context<T extends NetworkPluginID> {
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
-const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>({})
+const PluginWeb3Context = createContext<Web3Context<NetworkPluginID>>(EMPTY_OBJECT)
 
 const PluginsWeb3Context = createContext<Record<NetworkPluginID, Web3Helper.Web3State<NetworkPluginID>>>(null!)
 

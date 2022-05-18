@@ -14,7 +14,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const parsedChainId = chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const asyncResult = useAvailability(payload.rpid, payload.contract_version, {
         account: account,
-        chainId: parsedChainId
+        chainId: parsedChainId,
     })
 
     const result = asyncResult

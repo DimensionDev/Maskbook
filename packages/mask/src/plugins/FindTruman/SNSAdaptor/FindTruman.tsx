@@ -21,7 +21,8 @@ import CompletionCard from './CompletionCard'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -141,7 +142,7 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         postType,
         clueId,

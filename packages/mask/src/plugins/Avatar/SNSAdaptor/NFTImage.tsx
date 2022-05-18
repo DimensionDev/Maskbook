@@ -38,12 +38,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTImageProps {
     showBadge?: boolean
-    token: NonFungibleToken<ChainId, SchemaType.ERC721>
-    selectedToken?: NonFungibleToken<ChainId, SchemaType.ERC721>
-    onChange: (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => void
+    token: NonFungibleToken<ChainId, SchemaType>
+    selectedToken?: NonFungibleToken<ChainId, SchemaType>
+    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
 }
 
-function isSameNFT(a: NonFungibleToken<ChainId, SchemaType.ERC721>, b?: NonFungibleToken<ChainId, SchemaType.ERC721>) {
+function isSameNFT(a: NonFungibleToken<ChainId, SchemaType>, b?: NonFungibleToken<ChainId, SchemaType>) {
     return isSameAddress(a.address, b?.address) && a.chainId === b?.chainId && a.tokenId === b?.tokenId
 }
 

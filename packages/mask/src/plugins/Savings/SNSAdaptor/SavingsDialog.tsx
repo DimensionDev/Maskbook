@@ -100,7 +100,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
             ...chunk(detailedAaveTokens, 2).map(
-                (pair) => new AAVEProtocol(pair as [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]),
+                (pair) =>
+                    new AAVEProtocol(pair as [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]),
             ),
         ],
         [chainId, detailedAaveTokens, tab],

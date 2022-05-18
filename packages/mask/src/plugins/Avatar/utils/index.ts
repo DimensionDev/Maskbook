@@ -1,16 +1,6 @@
 import { first, isNull } from 'lodash-unified'
-import {
-    ChainId,
-    NonFungibleAssetProvider,
-    formatBalance,
-    createContract,
-    createWeb3,
-    getERC721ContractDetailed,
-    getERC721TokenDetailedFromChain,
-    ERC721TokenDetailed,
-    getERC721TokenAssetFromChain,
-} from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '../../EVM/messages'
+import { ChainId, NonFungibleAssetProvider, formatBalance, createContract } from '@masknet/web3-shared-evm'
+// import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice, NextIDProof, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { ZERO } from '@masknet/web3-shared-base'

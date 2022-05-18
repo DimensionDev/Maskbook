@@ -1,18 +1,14 @@
-import {
-    ChainId,
-    isSameAddress,
-    safeNonPayableTransactionCall,
-    useAccount,
-    useERC721TokenContract,
-} from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 import { getNFTByOpensea } from '../utils'
 import { usePersonas } from './usePersonas'
 
 export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
-    const ERC721Contract = useERC721TokenContract(address, chainId ?? ChainId.Mainnet)
+    const ERC721Contract = useERC721TokenContract(chainId ?? ChainId.Mainnet, address)
     return useAsyncRetry(async () => {
         if (!ERC721Contract || !tokenId) return
         const nft = await getNFTByOpensea(address, tokenId)
@@ -28,7 +24,6 @@ export function useTokenOwner(address: string, tokenId: string, chainId?: ChainI
 }
 
 export function useCheckTokenOwner(userId: string, owner?: string) {
-    const account = useAccount()
     const { value: persona, loading } = usePersonas(userId)
     const { value: address, loading: loadingAddress } = useAsyncRetry(
         () => PluginNFTAvatarRPC.getAddress(userId, activatedSocialNetworkUI.networkIdentifier),

@@ -11,11 +11,7 @@ import {
     useAllowTestnet,
     useProviderType,
 } from '@masknet/plugin-infra/web3'
-import {
-    ChainId,
-    chainResolver,
-    ProviderType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import ActionButton, {
@@ -117,7 +113,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             // // read the chain detailed from the built-in chain list
             // const chainDetailedCAIP = getChainDetailedCAIP(expectedChainId)
             // if (!chainDetailedCAIP) throw new Error('Unknown network type.')
-
             // // if mask wallet was used it can switch network automatically
             // if (providerType === ProviderType.MaskWallet) {
             //     await WalletRPC.updateAccount({
@@ -125,7 +120,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             //     })
             //     return
             // }
-
             // if (!networkType) return
             // try {
             //     const overrides = {
@@ -141,7 +135,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             //             ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
             //             : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             //     ])
-
             //     // recheck
             //     const chainIdHex = await Services.Ethereum.getChainId(overrides)
             //     if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')

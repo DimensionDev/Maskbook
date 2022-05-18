@@ -16,7 +16,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { useChainId } from '@masknet/plugin-infra/src/web3'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useTabsStyles = makeStyles()((theme) => ({
