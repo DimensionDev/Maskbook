@@ -8,7 +8,7 @@ import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -33,7 +33,6 @@ export function ActionBar(props: ActionBarProps) {
     const { classes } = useStyles()
     const { asset, assetOrder } = CollectibleState.useContainer()
     const assets = asset.value
-    const chainId = useChainId()
 
     const {
         open: openCheckoutDialog,
@@ -50,7 +49,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <EthereumChainBoundary chainId={chainId}>
+            <EthereumChainBoundary chainId={ChainId.Mainnet}>
                 {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
                     <ActionButton
                         className={classes.button}
