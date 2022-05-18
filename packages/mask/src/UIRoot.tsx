@@ -37,8 +37,7 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
     const pluginID = useValueRef(pluginIDSettings)
     const PluginsWeb3State = useAllPluginsWeb3State()
 
-    // TODO:
-    // migrate EVM plugin
+    // TODO: migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     return compose(
