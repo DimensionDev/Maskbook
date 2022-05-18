@@ -19,7 +19,7 @@ async function nativeImpl(identifiers: IdentifierWithAvatar[]): Promise<Map<Iden
 }
 const indexedDBImpl = memoizePromise(
     async function (identifiers: IdentifierWithAvatar[]): Promise<Map<IdentifierWithAvatar, string>> {
-        const promises: Promise<unknown>[] = []
+        const promises: Array<Promise<unknown>> = []
 
         const map = new Map<IdentifierWithAvatar, string>()
         const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')

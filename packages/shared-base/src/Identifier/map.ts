@@ -7,10 +7,10 @@ import { PostIVIdentifier as D } from './post-iv'
 type I<T> = Iterable<readonly [string, T]>
 
 // you're free to add a new overload...
-export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: typeof A[]): Map<A, T>
-export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: typeof B[]): Map<B, T>
-export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: typeof C[]): Map<C, T>
-export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: typeof D[]): Map<D, T>
+export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: Array<typeof A>): Map<A, T>
+export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: Array<typeof B>): Map<B, T>
+export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: Array<typeof C>): Map<C, T>
+export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: Array<typeof D>): Map<D, T>
 export function convertRawMapToIdentifierMap<T>(it: I<T>, ...of: unknown[]): Map<Identifier, T> {
     const hasProfileIdentifier = of.includes(A)
     const hasECKeyIdentifier = of.includes(B)

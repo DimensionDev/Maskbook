@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -11,7 +10,19 @@ import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWallet
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        marginTop: theme.spacing(1.5),
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        margin: 0,
+    },
+    grid: {
+        justifyContent: 'center',
+        padding: 8,
     },
 }))
 
@@ -21,6 +32,7 @@ export interface EthereumWalletConnectedBoundaryProps
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
+    startIcon?: React.ReactNode
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
@@ -45,64 +57,53 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!account)
         return (
-            <Grid container>
-                <ActionButton
-                    className={classNames(classes.button, classes.connectWallet)}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={openSelectProviderDialog}
-                    {...props.ActionButtonProps}>
-                    {t('plugin_wallet_connect_a_wallet')}
-                </ActionButton>
-            </Grid>
+            <ActionButton
+                startIcon={props.startIcon}
+                className={classNames(classes.button, classes.connectWallet)}
+                fullWidth
+                variant="contained"
+                onClick={openSelectProviderDialog}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_connect_a_wallet')}
+            </ActionButton>
         )
 
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
         return (
-            <Grid container>
-                <ActionButton
-                    className={classNames(classes.button, classes.connectWallet)}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={openRiskWarningDialog}
-                    {...props.ActionButtonProps}>
-                    {t('plugin_wallet_confirm_risk_warning')}
-                </ActionButton>
-            </Grid>
+            <ActionButton
+                className={classNames(classes.button, classes.connectWallet)}
+                fullWidth
+                variant="contained"
+                onClick={openRiskWarningDialog}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_confirm_risk_warning')}
+            </ActionButton>
         )
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
-            <Grid container>
-                <ActionButton
-                    className={classNames(classes.button, classes.gasFeeButton)}
-                    disabled={!nativeTokenBalance.error}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    onClick={nativeTokenBalance.retry}
-                    {...props.ActionButtonProps}>
-                    {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
-                </ActionButton>
-            </Grid>
+            <ActionButton
+                className={classNames(classes.button, classes.gasFeeButton)}
+                disabled={!nativeTokenBalance.error}
+                fullWidth
+                variant="contained"
+                onClick={nativeTokenBalance.retry}
+                {...props.ActionButtonProps}>
+                {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+            </ActionButton>
         )
 
     if (!chainIdValid && !offChain)
         return (
-            <Grid container>
-                <ActionButton
-                    className={classNames(classes.button, classes.invalidButton)}
-                    disabled
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    {...props.ActionButtonProps}>
-                    {t('plugin_wallet_invalid_network')}
-                </ActionButton>
-            </Grid>
+            <ActionButton
+                className={classNames(classes.button, classes.invalidButton)}
+                disabled
+                fullWidth
+                variant="contained"
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_invalid_network')}
+            </ActionButton>
         )
 
-    return <Grid container>{children}</Grid>
+    return <>{children}</>
 }

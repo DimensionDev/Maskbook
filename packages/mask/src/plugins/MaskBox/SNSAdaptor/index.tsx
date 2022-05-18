@@ -4,7 +4,6 @@ import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Trans } from 'react-i18next'
 import { parseURL } from '@masknet/shared-base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
@@ -34,6 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <MaskBoxIcon />
             const name = <Trans i18nKey="plugin_mask_box_name" />
+            const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -41,6 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title={name}
                             disabled={disabled}
+                            iconFilterColor={iconFilterColor}
                             icon={icon}
                             onClick={() => openWindow('https://box.mask.io/#/')}
                         />
@@ -52,6 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: <Trans i18nKey="plugin_mask_box_description" />,
                 category: 'dapp',
+                iconFilterColor,
                 name,
             }
         })(),
@@ -70,10 +72,8 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (shouldNotRender) return null
 
     return (
-        <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-            <Context.Provider initialState={{ boxId, hashRoot }}>
-                <PreviewCard />
-            </Context.Provider>
-        </EthereumChainBoundary>
+        <Context.Provider initialState={{ boxId, hashRoot }}>
+            <PreviewCard />
+        </Context.Provider>
     )
 }

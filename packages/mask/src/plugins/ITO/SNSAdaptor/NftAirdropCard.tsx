@@ -159,13 +159,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NftAirdropCardProps {
-    campaignInfos: {
+    campaignInfos: Array<{
         campaignInfo: CampaignInfo
         claimableInfo: {
             claimable: boolean
             claimed: boolean
         }
-    }[]
+    }>
     loading: boolean
     retry: () => void
 }

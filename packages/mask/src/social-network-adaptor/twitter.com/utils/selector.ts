@@ -217,7 +217,7 @@ export const postsContentSelector = () =>
 export const postAvatarsContentSelector = () =>
     querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
 
-const base = querySelector<HTMLScriptElement>('#react-root + script')
+const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
 const bio = /"description":"(.*?)"/
@@ -254,6 +254,9 @@ export const searchSelfNicknameSelector = () => {
         ].join(),
     )
 }
+
+export const searchWatcherAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="SideNav_AccountSwitcher_Button"] img')
 
 export const searchSelfAvatarSelector = () => {
     return querySelector<HTMLImageElement>(

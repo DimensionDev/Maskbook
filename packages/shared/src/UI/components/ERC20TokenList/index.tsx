@@ -115,7 +115,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         assetsLoading,
         assets
             .map((x) => x.token.address)
-            .sort((a, b) => a.localeCompare('en-US', b))
+            .sort((a, b) => a.localeCompare(b, 'en-US'))
             .join(),
     ])
 
