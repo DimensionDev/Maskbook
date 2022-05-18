@@ -71,7 +71,6 @@ const useStyles = makeStyles()((theme) => {
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 16,
             width: '100%',
-            height: 200,
             overflowY: 'auto',
             background: theme.palette.background.default,
             borderRadius: 12,
