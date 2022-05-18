@@ -103,7 +103,7 @@ export function bufToHexString(buffer: Uint8Array, start?: number, end?: number)
         return ''
     }
 
-    // Force coercion to uint32. This will also coerce falsey/NaN values to 0.
+    // Force coercion to uint32. This will also coerce false/NaN values to 0.
     // eslint-disable-next-line no-bitwise
     end >>>= 0
     // eslint-disable-next-line no-bitwise
