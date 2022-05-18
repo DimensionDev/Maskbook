@@ -51,9 +51,12 @@ function resolveLastRecognizedIdentityInner(
 ) {
     const assign = async () => {
         await delay(5000)
-        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
-        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+        const { collect } = recognizeDesktop()
+        const dataFromScript = collect()
+        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
+        const handle =
+            searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
+        const nickname = (searchSelfNicknameSelector().evaluate()?.textContent?.trim() || dataFromScript.nickname) ?? ''
 
         if (handle) {
             ref.value = {
