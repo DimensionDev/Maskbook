@@ -7,12 +7,12 @@ import {
     useReverseAddress,
     useWallet,
     useWeb3State,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
@@ -106,9 +106,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
+    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -182,7 +181,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         </Link>
                         <Link
                             className={classes.link}
-                            href={Others?.resolveAddressLink?.(chainId, account) ?? ''}
+                            href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">

@@ -76,14 +76,8 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         updateWallet: WalletRPC.updateWallet,
         removeWallet: WalletRPC.removeWallet,
 
-        // shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
-        // pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
-        shiftUnconfirmedRequest() {
-            return null!
-        },
-        pushUnconfirmedRequest() {
-            return null!
-        },
+        shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
+        pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
     }
 }
 

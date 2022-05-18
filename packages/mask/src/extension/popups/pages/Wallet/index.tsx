@@ -45,17 +45,17 @@ export default function Wallet() {
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
-        // if (
-        //     [
-        //         PopupRoutes.ContractInteraction,
-        //         PopupRoutes.WalletSignRequest,
-        //         PopupRoutes.GasSetting,
-        //         PopupRoutes.Unlock,
-        //     ].some((item) => item === location.pathname)
-        // )
-        //     return
-        // const payload = await WalletRPC.topUnconfirmedRequest()
-        // if (!payload) return
+        if (
+            [
+                PopupRoutes.ContractInteraction,
+                PopupRoutes.WalletSignRequest,
+                PopupRoutes.GasSetting,
+                PopupRoutes.Unlock,
+            ].some((item) => item === location.pathname)
+        )
+            return
+        const payload = await WalletRPC.topUnconfirmedRequest()
+        if (!payload) return
         // const computedPayload = await Services.Ethereum.getComputedPayload(payload)
         // const value = {
         //     payload,
