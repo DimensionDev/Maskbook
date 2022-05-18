@@ -34,6 +34,9 @@ export enum ChainId {
     BSC = 56,
     BSCT = 97,
 
+    // okex
+    OKEX = 66,
+
     // Matic
     Matic = 137,
     Mumbai = 80001,

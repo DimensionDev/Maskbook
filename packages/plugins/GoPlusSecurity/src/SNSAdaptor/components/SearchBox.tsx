@@ -45,6 +45,7 @@ const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 function getChainName(chain?: SecurityAPI.SupportedChain) {
     if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
     if (chain.id === ChainId.BSC) return getChainDetailed(ChainId.BSC)?.shortName.toUpperCase() ?? chain.name
+    if (chain.id === ChainId.OKEX) return chain.name
     return getChainDetailed(chain.id)?.chain ?? chain.name
 }
 
