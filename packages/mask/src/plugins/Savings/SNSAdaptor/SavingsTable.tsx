@@ -8,7 +8,7 @@ import { ChainId, formatBalance, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
-import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3, useFungibleAssets } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -107,10 +107,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: assets, loading: getAssetsLoading } = useAssets(
-        protocols.map((x) => x.bareToken),
-        chainId,
-    )
+    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
@@ -178,8 +175,8 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                         <FormattedBalance
                                             value={
                                                 tab === TabType.Deposit
-                                                    ? assets.find((x) =>
-                                                          isSameAddress(x.token.address, protocol.bareToken.address),
+                                                    ? assets!.find((x) =>
+                                                          isSameAddress(x.address, protocol.bareToken.address),
                                                       )?.balance
                                                     : protocol.balance
                                             }
