@@ -440,6 +440,8 @@
     "plugin_ito_your_refund_amount": "{{amount}} {{symbol}} 반환하기",
     "plugin_ito_unlock_in_advance": "미리 언락하기",
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} 스왑됨",
+    "plugin_ito_qualification_loading": "자격 인증...",
+    "plugin_ito_qualification_failed": "이 월렛 주소는 리스트에 없습니다.",
     "plugin_ito_congratulations": "축하합니다!",
     "plugin_ito_out_of_stock_hit": "다음에 운이 더 좋으시길 바랍니다",
     "plugin_ito_claim_success_share": "제가 @{{account}} 로 @{{user}}'s #ITO에 참여하여 ${{symbol}} 스왑을 했습니다. Mask.io를 설치하고 자기만의 ITO를 시작하세요! \n {{link}}",
@@ -684,7 +686,6 @@
     "plugin_furucombo_rewards": "보상",
     "plugin_furucombo_invest": "투자",
     "plugin_furucombo_pool_not_found": "무효한 풀 주소.",
-    "plugin_furucombo_smt_wrong": "오류가 발생합니다!",
     "plugin_furucombo_head_pools": "풀(Pools)",
     "plugin_furucombo_head_action": "행동",
     "popups_welcome": "환영합니다",
@@ -745,5 +746,6 @@
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
     "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
-    "nft_button_set_avatar": "NFT 아바타 설정"
+    "nft_button_set_avatar": "NFT 아바타 설정",
+    "popups_wallet_unsupported_network": "지원되지 않는 네트워크"
 }
