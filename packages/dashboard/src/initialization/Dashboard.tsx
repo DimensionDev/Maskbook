@@ -30,8 +30,7 @@ export default function DashboardRoot() {
     const pluginID = usePluginID()
     const PluginsWeb3State = useAllPluginsWeb3State()
 
-    // TODO:
-    // migrate EVM plugin
+    // TODO: migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     // #region theme
