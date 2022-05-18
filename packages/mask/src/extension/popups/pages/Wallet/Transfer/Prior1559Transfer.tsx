@@ -146,7 +146,7 @@ const useStyles = makeStyles()({
 
 export interface Prior1559TransferProps {
     selectedAsset?: Asset
-    otherWallets: { name: string; address: string }[]
+    otherWallets: Array<{ name: string; address: string }>
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
 

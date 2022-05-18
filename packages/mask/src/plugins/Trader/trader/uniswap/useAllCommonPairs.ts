@@ -24,8 +24,8 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
         return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
     }, [chainId, chainIdValid, tokenA?.address, tokenB?.address])
 
-    const basePairs: [Token, Token][] = useMemo(
-        () => flatMap(bases, (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])),
+    const basePairs: Array<[Token, Token]> = useMemo(
+        () => flatMap(bases, (base): Array<[Token, Token]> => bases.map((otherBase) => [base, otherBase])),
         [bases],
     )
 
@@ -73,7 +73,7 @@ export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Curr
     // only pass along valid pairs, non-duplicated pairs
     const allPairs_ = useMemo(() => {
         const filtered = new Map<string, Pair>()
-        for (const [state, pair] of allPairs as [PairState.EXISTS, Pair][]) {
+        for (const [state, pair] of allPairs as Array<[PairState.EXISTS, Pair]>) {
             // filter out invalid pairs
             if (state !== PairState.EXISTS) continue
             if (!pair) continue

@@ -58,10 +58,10 @@ export interface Creator {
 export interface Meta {
     name: string
     description: string
-    attributes: {
+    attributes: Array<{
         key: string
         value: string
-    }[]
+    }>
     image?: {
         meta: {
             PREVIEW: {

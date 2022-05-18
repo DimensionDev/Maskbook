@@ -76,11 +76,11 @@ export interface SwapQuoteResponse {
 export interface SwapValidationErrorResponse {
     code: number
     reason: string
-    validationErrors: {
+    validationErrors: Array<{
         code: number
         field: string
         reason: string
-    }[]
+    }>
 }
 
 export interface SwapServerErrorResponse {

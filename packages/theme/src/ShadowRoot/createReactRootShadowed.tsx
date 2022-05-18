@@ -20,7 +20,7 @@ export interface CreateRenderInShadowRootHostConfig {
      *
      * ! This is not a security boundary !
      */
-    preventEventPropagationList: (keyof HTMLElementEventMap)[]
+    preventEventPropagationList: Array<keyof HTMLElementEventMap>
     wrapJSX?(jsx: React.ReactChild): React.ReactChild
 }
 export interface ReactRootShadowed {
