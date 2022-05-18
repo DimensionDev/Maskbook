@@ -38,7 +38,7 @@ const getPersonaQueryURL = (platform: string, identity: string) =>
         identity,
     })
 
-const geyExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
+const getExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
     urlcat(BASE_URL, '/v1/proof/exists', {
         platform,
         identity,
@@ -81,7 +81,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
-        const cacheKeyOfExistedBinding = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         deleteCache(cacheKeyOfQueryPersona)
         deleteCache(cacheKeyOfExistedBinding)
 
@@ -107,7 +107,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
         if (!platform && !identity) return false
 
-        const url = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)
 
         return result.map(() => true).unwrapOr(false)
