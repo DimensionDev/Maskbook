@@ -1,15 +1,16 @@
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/public-api'
 import { useCallback } from 'react'
-import { WalletRPC } from '../messages'
 
 export function useRemoveRecentTransaction() {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return useCallback(
         async (hash: string) => {
-            if (!account || !hash) return
-            return WalletRPC.removeRecentTransaction(chainId, account, hash)
+            if (!account || !hash || !Transaction) return
+            return Transaction.removeTransaction?.(chainId, account, hash)
         },
         [chainId, account],
     )
