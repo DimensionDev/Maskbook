@@ -423,7 +423,7 @@ export namespace SecurityAPI {
     }
 
     export interface SupportedChain {
-        id: ChainId
+        id: ChainId | number
         name: string
     }
 
