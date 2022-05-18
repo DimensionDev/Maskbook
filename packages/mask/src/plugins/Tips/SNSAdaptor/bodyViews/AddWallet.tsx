@@ -1,7 +1,7 @@
 import { BindingProof, NextIDAction, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, NetworkType, ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { memo, useCallback } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -41,13 +41,14 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
         providerType,
     }
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
-    const { Others } = useWeb3State() ?? {}
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
     const isBound = bindings.some((x) => isSameAddress(x.identity, wallet.account))
 
     const walletName = () => {
-        if (isNotEvm) return `${resolveProviderName(providerType)} Wallet`
+        if (isNotEvm && providerType) return `${Others?.providerResolver.providerName(providerType)} Wallet`
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
         if (![wallet.providerType, providerType].includes(ProviderType.MaskWallet))
             return `${resolveProviderName(wallet.providerType ?? providerType)} Wallet`

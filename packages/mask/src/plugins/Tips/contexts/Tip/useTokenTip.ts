@@ -1,6 +1,6 @@
-import { rightShift, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useTokenConstants, useTokenTransferCallback } from '@masknet/web3-shared-evm'
-import { GasConfig } from '@masknet/web3-shared-evm'
+import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { FungibleToken, isSameAddress, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, GasConfig, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { TipTuple } from './type'
 

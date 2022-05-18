@@ -3,8 +3,9 @@ import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
-import { NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -54,19 +55,19 @@ interface WalletSwitchProps {
     index: number
 }
 
+const resolveNetworkName = (pluginId: NetworkPluginID) => {
+    const walletNameByNetwork = {
+        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
+        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+    }
+    return walletNameByNetwork[pluginId]
+}
 export function WalletSwitch({ type, address, isPublic, chainId, index, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { Utils } = useWeb3State() ?? {}
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const resolveNetworkName = () => {
-        const walletNameByNetwork = {
-            [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
-            [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
-            [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
-        }
-        return walletNameByNetwork[type]
-    }
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(index, e.target.checked)
     }
@@ -74,16 +75,16 @@ export function WalletSwitch({ type, address, isPublic, chainId, index, onChange
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{resolveNetworkName()}</Typography>
+                    <Typography className={classes.accountName}>{resolveNetworkName(type)}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
-                        <FormattedAddress address={address} size={4} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Typography>
 
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, address) ?? ''}
+                        href={Others?.explorerResolver.addressLink(chainId, address) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

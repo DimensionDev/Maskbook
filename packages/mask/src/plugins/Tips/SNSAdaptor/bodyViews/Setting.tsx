@@ -3,8 +3,8 @@ import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { WalletSwitch } from '../components/WalletSwitch'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

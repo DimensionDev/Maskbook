@@ -1,8 +1,8 @@
 import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { NetworkPluginID } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
@@ -94,6 +94,7 @@ interface Props extends BoxProps {
 
 export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     const t = useI18N()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
@@ -106,9 +107,8 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
         setTipType,
     } = useTip()
     const [isValid, validateMessage] = useTipValidate()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const selectRef = useRef(null)
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,

@@ -1,7 +1,8 @@
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/public-api'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, formatEthereumAddress, isSameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
@@ -98,8 +99,8 @@ export function WalletItem({
     const { classes } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
-    const { value: domain } = useReverseAddress(address)
-    const { Utils } = useWeb3State() ?? {}
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) ?? {}
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
@@ -111,13 +112,13 @@ export function WalletItem({
         undefined,
         t.tip_copy_success_of_wallet_addr(),
     )
-    const wallets = useWallets()
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
     const walletName = useMemo(() => {
-        if (domain && Utils?.formatDomainName) {
-            return Utils.formatDomainName(domain)
+        if (domain && Others?.formatDomainName) {
+            return Others.formatDomainName(domain)
         }
-        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
+        const currentWallet = wallets.find((x) => Others?.isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
     }, [address, domain, fallbackName])

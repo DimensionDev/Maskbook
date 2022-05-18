@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/public-api'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
 import {
@@ -11,7 +11,6 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
@@ -30,6 +29,8 @@ import WalletsView from './bodyViews/Wallets'
 import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
+import { useAccount } from '@masknet/plugin-infra/web3'
+
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
@@ -102,8 +103,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
     const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
     const { showSnackbar } = useCustomSnackbar()
-    const account = useAccount()
-    const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
 
     const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
         setShowAlert(true)

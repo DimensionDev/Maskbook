@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { WalletItem } from './WalletItem'
-import type { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

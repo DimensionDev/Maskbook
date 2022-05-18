@@ -1,8 +1,8 @@
-import { useChainId, useWeb3State, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, formatNFT_TokenId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -143,7 +143,7 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                     <ShadowRootTooltip
                         classes={{ tooltip: classes.tooltip }}
                         key={token.tokenId}
-                        title={`${token.contract?.name} ${formatNFT_TokenId(token.tokenId, 2)}`}
+                        title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
                         placement="top"
                         arrow>
                         <ListItem
