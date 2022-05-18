@@ -1,7 +1,7 @@
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 
 const PluginRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (x) => x.SearchResultBox,
 )
 

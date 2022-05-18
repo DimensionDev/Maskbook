@@ -39,6 +39,17 @@ const useTabsStyles = makeStyles()((theme) => ({
     tabPanel: {
         marginTop: `${theme.spacing(2)} !important`,
     },
+    button: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        margin: '0 !important',
+    },
 }))
 
 export interface PreviewCardProps {}
@@ -239,7 +250,9 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
             <Box style={{ padding: 12 }}>
                 <EthereumChainBoundary chainId={chainId}>
-                    <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
+                    <EthereumWalletConnectedBoundary
+                        ActionButtonProps={{ size: 'medium' }}
+                        classes={{ button: tabClasses.button }}>
                         <ActionButton
                             size="medium"
                             fullWidth
