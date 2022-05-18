@@ -78,11 +78,8 @@ function resolveLastRecognizedIdentityInner(
                 attributeFilter: ['src'],
             })
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
+        cancel.addEventListener('abort', () => watcher.stopWatch(), { signal: cancel })
     }
 
     assign()
@@ -152,11 +149,8 @@ function resolveCurrentVisitingIdentityInner(
                 attributeFilter: ['src', 'content'],
             })
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
+        cancel.addEventListener('abort', () => watcher.stopWatch(), { signal: cancel })
     }
 
     assign()
