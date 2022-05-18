@@ -61,9 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'unset',
     },
     progress: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        padding: theme.spacing(1),
+        padding: 12,
     },
 }))
 
@@ -106,7 +104,11 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }, [_pools, maskPool])
 
     if (loading || loadingMask) {
-        return <CircularProgress className={classes.progress} color="primary" size={15} />
+        return (
+            <Box className={classes.progress}>
+                <CircularProgress />
+            </Box>
+        )
     }
 
     if (error || errorMask) {
