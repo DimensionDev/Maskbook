@@ -8,7 +8,6 @@ import {
     useNetworkDescriptors,
     useCurrentWeb3NetworkPluginID,
     useWeb3State,
-    Web3Plugin,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { CurrencyType, FungibleAsset, NetworkPluginID, pow10, toFixed } from '@masknet/web3-shared-base'

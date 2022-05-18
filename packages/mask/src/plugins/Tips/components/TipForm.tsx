@@ -1,8 +1,9 @@
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -93,7 +94,6 @@ interface Props extends BoxProps {
 
 export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
     const t = useI18N()
-    const currentChainId = useChainId()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
@@ -106,9 +106,10 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
         setTipType,
     } = useTip()
     const [isValid, validateMessage] = useTipValidate()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const selectRef = useRef(null)
-    const account = useAccount()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
@@ -146,7 +147,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                         }}>
                         {recipientAddresses.map((address) => (
                             <MenuItem key={address} value={address}>
-                                {Utils?.formatDomainName?.(address) || address}
+                                {Others?.formatDomainName?.(address) || address}
                             </MenuItem>
                         ))}
                     </Select>

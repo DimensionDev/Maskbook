@@ -1,7 +1,7 @@
-import { useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra/web3'
+import { useAccount, useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
@@ -60,7 +60,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     const { erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const selectedPairs: TipNFTKeyPair[] = useMemo(
         () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
         [erc721TokenId, erc721TokenId],

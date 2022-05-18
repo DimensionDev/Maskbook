@@ -21,11 +21,13 @@ import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { CollectibleTab } from '../types'
 import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
-import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -124,7 +126,7 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     // #region sync with settings
