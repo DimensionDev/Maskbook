@@ -159,7 +159,7 @@ export function SwapDialog(props: SwapDialogProps) {
         pickToken,
         exchangeTokens
             .map((x) => x.address)
-            .sort((a, b) => a.localeCompare('en-US', b))
+            .sort((a, b) => a.localeCompare(b, 'en-US'))
             .join(),
     ])
     // #endregion
