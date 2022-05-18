@@ -21,7 +21,7 @@ export function useERC20TokensDetailedFromTokenLists(
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
     const { value: tokensFromList = EMPTY_LIST, ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
-        [chainId, lists?.sort((a, b) => a.localeCompare('en-US', b)).join()],
+        [chainId, lists?.sort((a, b) => a.localeCompare(b, 'en-US')).join()],
     )
     // #endregion
     // #region fuse
