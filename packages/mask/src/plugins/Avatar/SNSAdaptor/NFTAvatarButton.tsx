@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         cursor: 'pointer',
     },
-    icon: {
+    setIcon: {
         width: 14,
         height: 14,
         marginLeft: 2,
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
+interface NFTAvatarButtonProps extends withClasses<'root' | 'text' | 'icon'> {
     onClick: () => void
     showSetting?: boolean
 }
@@ -41,10 +41,10 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
 
     return (
         <div className={classes.root} onClick={onClick}>
-            <ApplicationSmallIcon />
+            <ApplicationSmallIcon className={classes.icon} />
             <Typography variant="body1" className={classes.text}>
                 <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
-                {props.showSetting ? <GearSettingsIcon className={classes.icon} /> : null}
+                {props.showSetting ? <GearSettingsIcon className={classes.setIcon} /> : null}
             </Typography>
         </div>
     )
