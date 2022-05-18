@@ -27,7 +27,7 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
         super(context, defaultValue, subscriptions)
     }
 
-    async getFungibleTokens(chainId: ChainId) {
+    override async getFungibleTokens(chainId: ChainId) {
         return []
     }
 }

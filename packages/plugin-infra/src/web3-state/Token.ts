@@ -37,7 +37,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('persistent', defaultValue)
+        const { storage } = context.createKVStorage('persistent', 'Token', defaultValue)
         this.storage = storage
 
         if (this.subscriptions.account) {

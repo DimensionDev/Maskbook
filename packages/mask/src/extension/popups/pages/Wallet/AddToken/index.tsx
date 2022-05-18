@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ERC20TokenList } from '@masknet/shared'
+import { FungibleTokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hook/useTitle'
@@ -50,10 +50,7 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList
-                    FixedSizeListProps={{ height: 340, itemSize: 54 }}
-                    blacklist={blackList.map((x) => x.address)}
-                />
+                <FungibleTokenList blacklist={blackList.map((x) => x.address)} FixedSizeListProps={{ height: 340, itemSize: 54 }} />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { ERC20TokenList } from '@masknet/shared'
+import { FungibleTokenList } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -19,7 +19,7 @@ export const SelectTokenDialog = memo<SelectTokenDialogProps>(({ open, onClose, 
     return (
         <MaskDialog maxWidth="md" open={open} title={t.wallets_add_token()} onClose={onClose}>
             <DialogContent>
-                <ERC20TokenList onSelect={onSelect} />
+                <FungibleTokenList onSelect={onSelect} />
             </DialogContent>
         </MaskDialog>
     )

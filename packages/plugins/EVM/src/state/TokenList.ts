@@ -28,9 +28,9 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
         super(context, defaultValue, subscriptions)
     }
 
-    async getTokensList(type: 'fungible' | 'nonFungible', chainId: ChainId) {
-        const tokenListCached = await super.getTokenList(type, chainId)
-        if (tokenListCached) return tokenListCached
+    override async getTokens(type: 'fungible' | 'nonFungible', chainId: ChainId) {
+        const tokenListCached = await super.getTokens(type, chainId)
+        if (tokenListCached.length) return tokenListCached
 
         const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
         super.setTokenList(
@@ -38,6 +38,6 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
             chainId,
             await TokenListAPI.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS),
         )
-        return super.getTokenList(type, chainId)
+        return super.getTokens(type, chainId)
     }
 }

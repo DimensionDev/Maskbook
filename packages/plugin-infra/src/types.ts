@@ -127,7 +127,11 @@ export namespace Plugin.Shared {
         walletPrimary: Subscription<Wallet | null>
 
         /** A lightweight K/V storage used to store some simple data. */
-        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+        createKVStorage<T extends object>(
+            type: 'memory' | 'persistent',
+            name: string,
+            defaultValues: T,
+        ): ScopedStorage<T>
 
         /** Native platform type */
         nativeType?: 'Android' | 'iOS'

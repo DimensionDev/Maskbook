@@ -1,5 +1,5 @@
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
-import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
+import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
@@ -89,7 +89,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             onClose={onClose}
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                <ERC20TokenList
+                <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSelect}
                     tokens={tokens ?? []}

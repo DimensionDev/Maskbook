@@ -21,7 +21,7 @@ export class RiskWarningState implements Web3RiskWarningState {
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', {
+        const { storage } = this.context.createKVStorage('memory', 'RiskWarning', {
             value: {},
         })
 

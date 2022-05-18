@@ -7,6 +7,6 @@ import { useCurrentWeb3NetworkAccount } from './Context'
 export function useAccount<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const { Provider } = useWeb3State<T>(pluginID)
     const currentAccount = useCurrentWeb3NetworkAccount(pluginID)
-    const defautlAccount = useSubscription<string>(Provider?.account ?? UNDEIFNED)
+    const defautlAccount = useSubscription(Provider?.account ?? UNDEIFNED)
     return expectedAccount ?? currentAccount ?? defautlAccount ?? ''
 }

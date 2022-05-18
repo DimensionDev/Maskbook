@@ -58,13 +58,13 @@ export class TokenList extends TokenListState<ChainId, SchemaType> {
         ]
     }
 
-    async getTokensList(type: 'fungible' | 'nonFungible', chainId: ChainId) {
+    override async getTokens(type: 'fungible' | 'nonFungible', chainId: ChainId) {
         if (type === 'nonFungible') throw new Error('Not implmented yet.')
 
-        const tokenListCached = await super.getTokenList('fungible', chainId)
+        const tokenListCached = await super.getTokens('fungible', chainId)
         if (tokenListCached) return tokenListCached
 
         super.setTokenList('fungible', chainId, this.composeFungibleTokenList(chainId))
-        return super.getTokenList('fungible', chainId)
+        return super.getTokens('fungible', chainId)
     }
 }

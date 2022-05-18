@@ -24,7 +24,7 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', {
+        const { storage } = this.context.createKVStorage('persistent', 'AddressBook', {
             value: defaultValue,
         })
         this.storage = storage.value

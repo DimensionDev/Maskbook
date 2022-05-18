@@ -1,38 +1,34 @@
 import { memo, useMemo, useState } from 'react'
-import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-unified'
-import type {
-    // Asset,
-    ChainId,
-    // FungibleTokenDetailed,
-    // isValidAddress,
-    // makeSortAssertFn,
-    // useAssetsByTokenList,
-    // useERC20TokenDetailed,
-    // useERC20TokensDetailedFromTokenLists,
-    // useTokenListConstants,
-    // useNativeTokenDetailed,
-    // useTrustedERC20Tokens,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleToken,
+    useFungibleTokens,
+    useFungibleTokensFromTokenList,
+    useNativeToken,
+    useTrustedFungibleTokens,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
+import { currySameAddress, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['token.address', 'token.symbol', 'token.name']
 
-export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
-    targetChainId?: ChainId
+export interface FungibleTokenListProps extends withClasses<'list' | 'placeholder'> {
+    chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: FungibleToken<ChainId, SchemaType>[]
+    tokens?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>[]
     selectedTokens?: string[]
     disableSearch?: boolean
-    onSelect?(token: FungibleToken<ChainId, SchemaType> | null): void
+    onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
 }
@@ -45,53 +41,67 @@ const Placeholder = memo(({ message, height }: { message: string; height?: numbe
     </Stack>
 ))
 
-export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
-    return <></>
-    // const t = useSharedI18N()
-    // const account = useAccount()
-    // const currentChainId = useChainId()
-    // const chainId = props.targetChainId ?? currentChainId
-    // const trustedERC20Tokens = useTrustedERC20Tokens()
-    // const { value: nativeToken } = useNativeTokenDetailed(chainId)
-    // const [keyword, setKeyword] = useState('')
+export const FungibleTokenList = memo<FungibleTokenListProps>((props) => {
+    const {
+        whitelist: includeTokens,
+        blacklist: excludeTokens = [],
+        tokens = [],
+        onSelect,
+        FixedSizeListProps,
+        selectedTokens = [],
+    } = props
 
-    // const {
-    //     whitelist: includeTokens,
-    //     blacklist: excludeTokens = [],
-    //     tokens = [],
-    //     onSelect,
-    //     FixedSizeListProps,
-    //     selectedTokens = [],
-    // } = props
+    const t = useSharedI18N()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const account = useAccount()
+    const chainId = useChainId(pluginID, props.chainId)
+    const trustedERC20Tokens = useTrustedFungibleTokens()
+    // const { value: nativeToken } = useNativeToken(pluginID, {
+    //     chainId,
+    // })
 
-    // const { ERC20 } = useTokenListConstants(chainId)
-    // const { value: erc20TokensDetailed = EMPTY_LIST, loading: erc20TokensDetailedLoading } =
-    //     useERC20TokensDetailedFromTokenLists(
-    //         ERC20,
-    //         keyword,
-    //         nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
-    //         chainId,
-    //     )
+    const fungibleTokens = useFungibleTokensFromTokenList(
+        pluginID,
+        // ERC20,
+        // keyword,
+        // nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
+        // chainId,
+    )
 
-    // // #region add token by address
-    // const matchedTokenAddress = useMemo(() => {
-    //     if (!keyword || !isValidAddress(keyword) || erc20TokensDetailedLoading) return
-    //     return keyword
-    // }, [keyword, erc20TokensDetailedLoading])
+    // #region add token by address
+    const [keyword, setKeyword] = useState('')
+    const matchedTokenAddress = useMemo(() => {
+        if (!keyword || !Others?.isValidAddress(keyword)) return
+        return keyword
+    }, [keyword, fungibleTokens])
 
-    // const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
-    // // #endregion
+    const { value: searchedToken, loading: searchedTokenLoading } = useFungibleToken(
+        pluginID,
+        matchedTokenAddress ?? '',
+    )
+    // #endregion
 
-    // const filteredTokens = erc20TokensDetailed.filter(
-    //     (token) =>
-    //         (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
-    //         (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
-    // )
+    const filteredFungibleTokens = fungibleTokens.filter(
+        (token) =>
+            (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
+            (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
+    )
 
-    // const renderTokens = uniqBy(
-    //     [...tokens, ...filteredTokens, ...(searchedToken ? [searchedToken] : EMPTY_LIST)],
-    //     (x) => x.address.toLowerCase(),
-    // )
+    const renderTokens = uniqBy(
+        [...tokens, ...filteredFungibleTokens, ...(searchedToken ? [searchedToken] : EMPTY_LIST)],
+        (x) => x.address.toLowerCase(),
+    )
+
+    console.log({
+        keyword,
+        trustedERC20Tokens,
+        filteredFungibleTokens,
+        renderTokens,
+        searchedToken,
+        fungibleTokens,
+        matchedTokenAddress,
+    })
 
     // const {
     //     value: assets,
@@ -99,7 +109,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     //     error: assetsError,
     //     retry: retryLoadAsset,
     // } = useAssetsByTokenList(
-    //     renderTokens.filter((x) => isValidAddress(x.address)),
+    //     renderTokens.filter((x) => Others?.isValidAddress(x.address)),
     //     chainId,
     // )
 
@@ -119,8 +129,10 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     //         .join(),
     // ])
 
+    return null
+
     // const getPlaceHolder = () => {
-    //     if (erc20TokensDetailedLoading || assetsLoading)
+    //     if (renderTokens.length === 0)
     //         return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
     //     if (searchedTokenLoading)
     //         return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
@@ -130,7 +142,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     // }
 
     // return (
-    //     <SearchableList<Asset>
+    //     <SearchableList<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     //         SearchFieldProps={{
     //             placeholder: t.erc20_token_list_placeholder(),
     //             ...props.SearchTextFieldProps,

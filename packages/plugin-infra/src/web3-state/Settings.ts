@@ -14,7 +14,7 @@ export class SettingsState implements Web3SettingsState {
     public currencyType?: Subscription<CurrencyType>
 
     constructor(context: Plugin.Shared.SharedContext) {
-        const { storage } = context.createKVStorage('memory', {
+        const { storage } = context.createKVStorage('memory', 'Settings', {
             currencyType: CurrencyType.USD,
         })
         this.storage = storage

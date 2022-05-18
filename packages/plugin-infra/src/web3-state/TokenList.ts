@@ -29,7 +29,7 @@ export class TokenListState<
             chainId?: Subscription<ChainId>
         },
     ) {
-        const { storage } = context.createKVStorage('memory', {
+        const { storage } = context.createKVStorage('memory', 'TokenList', {
             value: defaultValue,
         })
         this.storage = storage.value
@@ -37,20 +37,39 @@ export class TokenListState<
         if (this.subscriptions.chainId) {
             this.fungibleTokens = mapSubscription(
                 mergeSubscription<[ChainId, TokenLists]>(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, tokenLists]) => tokenLists.fungibleTokens[chainId] as FungibleToken<ChainId, SchemaType>[],
+                ([chainId, tokenLists]) => {
+                    console.log({
+                        chainId,
+                        tokenLists,
+                    })
+                    return tokenLists.fungibleTokens[chainId] as FungibleToken<ChainId, SchemaType>[]
+                },
             )
             this.nonFungibleTokens = mapSubscription(
                 mergeSubscription<[ChainId, TokenLists]>(this.subscriptions.chainId, this.storage.subscription),
-                ([chainId, tokenLists]) =>
-                    tokenLists.nonFungibleTokens[chainId] as NonFungibleToken<ChainId, SchemaType>[],
+                ([chainId, tokenLists]) => {
+                    console.log({
+                        chainId,
+                        tokenLists,
+                    })
+                    return tokenLists.nonFungibleTokens[chainId] as NonFungibleToken<ChainId, SchemaType>[]
+                },
             )
         }
     }
 
-    async getTokenList(type: 'fungible' | 'nonFungible', chainId: ChainId) {
+    async getTokens(type: 'fungible' | 'nonFungible', chainId: ChainId) {
         if (type === 'fungible')
             return this.storage.value.fungibleTokens[chainId] as FungibleToken<ChainId, SchemaType>[]
         return this.storage.value.nonFungibleTokens[chainId] as NonFungibleToken<ChainId, SchemaType>[]
+    }
+
+    getFungibleTokens(chainId: ChainId) {
+        return this.getTokens('fungible', chainId) as Promise<FungibleToken<ChainId, SchemaType>[]>
+    }
+
+    getNonFungibleTokens(chainId: ChainId) {
+        return this.getTokens('nonFungible', chainId) as Promise<NonFungibleToken<ChainId, SchemaType>[]>
     }
 
     protected setTokenList(

@@ -36,7 +36,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', {
+        const { storage } = this.context.createKVStorage('persistent', 'Transaction', {
             value: defaultValue,
         })
         this.storage = storage.value
