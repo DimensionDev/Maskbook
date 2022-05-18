@@ -128,7 +128,6 @@ export function PluginProviderRender({
                                     key={network.ID}
                                     onClick={() => {
                                         setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
-                                        console.log(network.ID)
                                         setUndeterminedNetworkID(network.ID)
                                     }}>
                                     <ShadowRootTooltip title={network.name} placement="top">
