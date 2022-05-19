@@ -80,13 +80,13 @@ export class AAVEProtocol implements SavingsProtocol {
             })
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         id: string
                         name: string
                         decimals: number
                         underlyingAsset: string
                         liquidityRate: number
-                    }[]
+                    }>
                 }
             } = await response.json()
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
@@ -132,11 +132,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         aToken: {
                             id: string
                         }
-                    }[]
+                    }>
                 }
             } = await response.json()
 
