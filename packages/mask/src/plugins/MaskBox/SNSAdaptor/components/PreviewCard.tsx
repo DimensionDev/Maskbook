@@ -249,10 +249,11 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId}>
+                <EthereumChainBoundary chainId={chainId} renderInTimeline>
                     <EthereumWalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}>
+                        classes={{ button: tabClasses.button }}
+                        renderInTimeline>
                         <ActionButton
                             size="medium"
                             fullWidth

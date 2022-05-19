@@ -128,7 +128,7 @@ export function Snapshot() {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId} />
+                <EthereumChainBoundary chainId={chainId} renderInTimeline />
             </Box>
         </>
     )

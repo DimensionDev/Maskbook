@@ -12,6 +12,16 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         marginTop: theme.spacing(1.5),
     },
+    timeline: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+    },
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
@@ -21,10 +31,11 @@ export interface EthereumWalletConnectedBoundaryProps
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
+    renderInTimeline?: boolean
 }
 
 export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, renderInTimeline = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -43,11 +54,15 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     )
     // #endregion
 
+    // TODO: will remove  this and extract new boundary for timeline
+    const buttonClass = classNames(
+        classNames(classes.button, classes.connectWallet, renderInTimeline ? classes.timeline : null),
+    )
     if (!account)
         return (
             <ActionButton
                 startIcon={props.startIcon}
-                className={classNames(classes.button, classes.connectWallet)}
+                className={buttonClass}
                 fullWidth
                 variant="contained"
                 onClick={openSelectProviderDialog}
@@ -59,7 +74,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
         return (
             <ActionButton
-                className={classNames(classes.button, classes.connectWallet)}
+                className={buttonClass}
                 fullWidth
                 variant="contained"
                 onClick={openRiskWarningDialog}
@@ -71,7 +86,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
-                className={classNames(classes.button, classes.gasFeeButton)}
+                className={buttonClass}
                 disabled={!nativeTokenBalance.error}
                 fullWidth
                 variant="contained"
@@ -83,12 +98,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!chainIdValid && !offChain)
         return (
-            <ActionButton
-                className={classNames(classes.button, classes.invalidButton)}
-                disabled
-                fullWidth
-                variant="contained"
-                {...props.ActionButtonProps}>
+            <ActionButton className={buttonClass} disabled fullWidth variant="contained" {...props.ActionButtonProps}>
                 {t('plugin_wallet_invalid_network')}
             </ActionButton>
         )
