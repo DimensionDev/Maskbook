@@ -619,8 +619,6 @@
     "plugin_collectible_invalid_reserve_price": "无效底标价格",
     "plugin_collectible_place_a_bid": "出价",
     "plugin_collectible_make_an_offer": "发出报价",
-    "plugin_collectible_approved_by_open_sea": "通过勾选此框，我确认此收藏品尚未被 OpenSea 审核或批准。",
-    "plugin_collectible_legal_text": "通过勾选此框，我同意OpenSea的 <terms>服务条款</terms>。",
     "plugin_cryptoartai_description_title": "描述",
     "plugin_cryptoartai_edition": "版本：",
     "plugin_cryptoartai_activity_type": "类型",

@@ -462,8 +462,6 @@
     "plugin_collectible_invalid_reserve_price": "錯誤的底標價格",
     "plugin_collectible_place_a_bid": "出價",
     "plugin_collectible_make_an_offer": "商議價格",
-    "plugin_collectible_approved_by_open_sea": "通過勾選此框，我確認此收藏品未經 OpenSea 審查。",
-    "plugin_collectible_legal_text": "通過勾選此框，我同意 OpenSea 的 <terms>使用者條約</terms>。",
     "plugin_cryptoartai_description_title": "描述",
     "plugin_cryptoartai_operator": "執行者",
     "plugin_cryptoartai_activity_type": "類型",
