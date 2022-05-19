@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Typography, Theme, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
@@ -59,13 +59,13 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
+    renderInTimeline?: boolean
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
     const theme = useTheme()
-
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
@@ -162,6 +162,26 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!isChainMatched) await switchToChain()
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
 
+    // TODO: will remove this and extract new boundary for timeline
+    const buttonProps = useMemo(() => {
+        return {
+            ...(props.renderInTimeline
+                ? {
+                      variant: 'contained',
+                      fullWidth: true,
+                      sx: {
+                          backgroundColor: theme.palette.maskColor.dark,
+                          color: theme.palette.maskColor.white,
+                          '&:hover': {
+                              backgroundColor: theme.palette.maskColor.dark,
+                          },
+                      },
+                  }
+                : {}),
+            ...props.ActionButtonPromiseProps,
+        } as Partial<ActionButtonPromiseProps>
+    }, [props.ActionButtonPromiseProps, props.renderInTimeline])
+
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
@@ -182,11 +202,13 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
-                        startIcon={<PluginWalletConnectIcon />}
+                        fullWidth
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
                         sx={{ marginTop: 1.5 }}
-                        onClick={openSelectProviderDialog}>
+                        onClick={openSelectProviderDialog}
+                        {...buttonProps}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -228,7 +250,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             />
                         }
                         sx={props.switchButtonStyle}
-                        style={{ borderRadius: 10 }}
                         init={
                             <span>
                                 {t('plugin_wallet_connect_network', {
@@ -246,7 +267,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         executor={onSwitchChain}
                         completeOnClick={onSwitchChain}
                         failedOnClick="use executor"
-                        {...props.ActionButtonPromiseProps}
+                        fullWidth
+                        {...buttonProps}
                     />
                 ) : null}
             </>,
@@ -274,7 +296,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         />
                     }
                     sx={props.switchButtonStyle}
-                    style={{ borderRadius: 10, paddingTop: 11, paddingBottom: 11 }}
                     init={
                         <span>
                             {t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
@@ -288,7 +309,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
-                    {...props.ActionButtonPromiseProps}
+                    fullWidth
+                    {...buttonProps}
                 />
             ) : null}
         </>,
