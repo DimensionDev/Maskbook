@@ -6,7 +6,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 import type { ReferralMetaData } from '../types'
 import { base } from '../base'
-import { META_KEY, DISABLE_PLUGIN } from '../constants'
+import { META_KEY } from '../constants'
 import { referralMetadataReader } from '../helpers'
 
 import { FarmPost } from './FarmPost'
@@ -25,20 +25,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [META_KEY, (meta: ReferralMetaData) => `Refer Farm of '${meta.referral_token_name}' from ${meta.sender}`],
     ]),
-    CompositionDialogEntry: !DISABLE_PLUGIN
-        ? {
-              label: (
-                  <>
-                      <ReferralFarmsIcon style={{ width: 16, height: 16, marginRight: '4px' }} />
-                      <PluginI18NFieldRender
-                          field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
-                          pluginID={base.ID}
-                      />
-                  </>
-              ),
-              dialog: ReferralDialog,
-          }
-        : undefined,
+    CompositionDialogEntry: {
+        label: (
+            <>
+                <ReferralFarmsIcon style={{ width: 16, height: 16, marginRight: '4px' }} />
+                <PluginI18NFieldRender
+                    field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
+                    pluginID={base.ID}
+                />
+            </>
+        ),
+        dialog: ReferralDialog,
+    },
     GlobalInjection: function Component() {
         return <SelectToken />
     },
@@ -53,7 +51,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <>
                             <ApplicationEntry
-                                disabled={DISABLE_PLUGIN || disabled}
+                                disabled={disabled}
                                 icon={icon}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 onClick={() =>
