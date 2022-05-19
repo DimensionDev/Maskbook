@@ -8,7 +8,7 @@ import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { FindTruman_Const } from '../constants'
 import { FindTrumanContext } from '../context'
-import { useAccount } from '@masknet/plugin-infra/src/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void

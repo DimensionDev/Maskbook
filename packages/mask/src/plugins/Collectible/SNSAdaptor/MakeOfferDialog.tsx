@@ -30,7 +30,7 @@ import type { Coin } from '../../Trader/types'
 import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/src/web3'
+import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
