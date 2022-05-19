@@ -73,7 +73,11 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        color: theme.palette.mode === 'dark' ? 'white' : 'black',
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
         width: '100%',
     },
 }))
@@ -172,13 +176,8 @@ export function PreviewCard(props: PreviewCardProps) {
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <Button
-                        variant="outlined"
                         fullWidth
                         className={classes.button}
-                        style={{
-                            lineHeight: 0,
-                            padding: 19,
-                        }}
                         target="_blank"
                         rel="noopener noreferrer"
                         href={urlcat('https://gitcoin.co', grant.url)}>

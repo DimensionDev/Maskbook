@@ -136,7 +136,7 @@ export function Collectible(props: CollectibleProps) {
                             target="_blank"
                             rel="noopener noreferrer">
                             <Avatar
-                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
+                                src={assetSource?.owner[0]?.ownerAvatar ?? assetSource?.creator?.avatarPath ?? ''}
                             />
                         </Link>
                     }

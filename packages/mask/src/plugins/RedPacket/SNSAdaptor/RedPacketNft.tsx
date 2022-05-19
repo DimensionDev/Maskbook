@@ -81,14 +81,8 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        minHeight: 40,
-        height: 40,
-
         backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
-        fontSize: 14,
-        fontWeight: 700,
-        width: '100%',
         '&:hover': {
             backgroundColor: theme.palette.maskColor.dark,
         },
@@ -444,7 +438,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             className={classes.button}
                             fullWidth
                             onClick={onShare}
-                            size="large"
                             variant="contained">
                             {t('share')}
                         </Button>
