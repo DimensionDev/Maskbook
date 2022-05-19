@@ -247,6 +247,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             <WalletIcon
                                 networkIcon={networkDescriptor?.icon} // switch the icon to meet design
                                 isBorderColorNotDefault
+                                size={18}
                             />
                         }
                         sx={props.switchButtonStyle}
