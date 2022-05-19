@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/src/web3-types'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants'
 
