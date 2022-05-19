@@ -74,6 +74,10 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
         body: {
             padding: theme.spacing(0),
         },
+        providerBy: {
+            marginRight: theme.spacing(0.5),
+            color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
+        },
     }
 })
 
