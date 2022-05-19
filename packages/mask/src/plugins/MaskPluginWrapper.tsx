@@ -74,19 +74,6 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
         body: {
             padding: theme.spacing(0),
         },
-        button: {
-            backgroundColor: theme.palette.maskColor.dark,
-            color: 'white',
-            width: 254,
-            '&,&:hover': {
-                background: theme.palette.maskColor.dark,
-            },
-            borderRadius: 9999,
-        },
-        providerBy: {
-            marginRight: theme.spacing(0.5),
-            color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
-        },
     }
 })
 

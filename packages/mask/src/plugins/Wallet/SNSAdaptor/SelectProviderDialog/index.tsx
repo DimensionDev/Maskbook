@@ -19,6 +19,7 @@ import { WalletMessages, WalletRPC } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -70,7 +71,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         async (result?: Web3Plugin.ConnectionResult) => {
             if (result)
                 await WalletRPC.updateAccount(result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>)
-
             if (undeterminedNetwork?.type === networkType) {
                 pluginIDSettings.value = undeterminedPluginID
             }
@@ -79,6 +79,12 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         },
         [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard],
     )
+
+    useUpdateEffect(() => {
+        if (undeterminedNetwork?.type === networkType) {
+            pluginIDSettings.value = undeterminedPluginID
+        }
+    }, [undeterminedNetwork?.type, networkType])
 
     // not available for the native app
     if (hasNativeAPI) return null
