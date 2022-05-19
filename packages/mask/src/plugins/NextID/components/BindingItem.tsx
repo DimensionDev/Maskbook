@@ -22,7 +22,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     copy: {
         fontSize: 16,
-        stroke: theme.palette.text.primary,
         cursor: 'pointer',
     },
     address: {

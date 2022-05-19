@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import { formatPersonaPublicKey, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
 import { CopyIcon } from '@masknet/icons'
 import { truncate } from 'lodash-unified'
@@ -112,7 +112,7 @@ export function ProfileInList(props: ProfileInListProps) {
         (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
         [props],
     )
-    const textToHighlight = formatPersonaPublicKey(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 4)
+    const textToHighlight = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
     return (
         <ListItem
             disabled={props.disabled}
