@@ -4,7 +4,7 @@ import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 interface StorageValue {
-    addedTokens: NonFungibleToken<number, string>[]
+    addedTokens: NonFungibleToken<ChainId, SchemaType>[]
 }
 
 export const storageDefaultValue = {

@@ -65,7 +65,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
         [erc721TokenId, erc721TokenId],
     )
-    const { Asset } = useWeb3PluginState()
+    const { Asset } = useWeb3PluginState(NetworkPluginID.PLUGIN_EVM)
 
     const networkDescriptor = useNetworkDescriptor()
 
@@ -77,7 +77,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     }, 10000)
 
     const [{ value = { data: EMPTY_LIST }, loading }, fetchTokens] = useAsyncFn(async () => {
-        const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 }, undefined, networkDescriptor)
+        const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 })
         return result
     }, [account, Asset?.getNonFungibleAssets, networkDescriptor])
 
@@ -85,21 +85,22 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         fetchTokens()
     }, [fetchTokens])
 
-    useEffect(() => {
-        const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(fetchTokens)
-        const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
-            setGuessLoading(info.done)
-            if (!info.done) {
-                fetchTokens()
-            }
-        })
-        return () => {
-            unsubscribeTokens()
-            unsubscribeSocket()
-        }
-    }, [fetchTokens])
+    // TODO
+    // useEffect(() => {
+    //     const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(fetchTokens)
+    //     const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
+    //         setGuessLoading(info.done)
+    //         if (!info.done) {
+    //             fetchTokens()
+    //         }
+    //     })
+    //     return () => {
+    //         unsubscribeTokens()
+    //         unsubscribeSocket()
+    //     }
+    // }, [fetchTokens])
 
-    const fetchedTokens = value?.data ?? EMPTY_LIST
+    const fetchedTokens = value.data
 
     const tokens = useMemo(() => {
         return uniqWith(fetchedTokens, (v1, v2) => {

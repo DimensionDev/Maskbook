@@ -2,7 +2,7 @@ import { BindingProof, NextIDAction, NextIDPlatform, PersonaInformation } from '
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,6 +17,7 @@ import {
     useProviderType,
     useReverseAddress,
     useWallet,
+    useWeb3Connection,
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
@@ -42,16 +43,17 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
-    const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+    const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
     const isBound = bindings.some((x) => isSameAddress(x.identity, wallet.account))
 
     const walletName = () => {
         if (isNotEvm && providerType) return `${Others?.providerResolver.providerName(providerType)} Wallet`
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
-        if (![wallet.providerType, providerType].includes(ProviderType.MaskWallet))
-            return `${resolveProviderName(wallet.providerType ?? providerType)} Wallet`
+        if (providerType && ![wallet.providerType, providerType].includes(ProviderType.MaskWallet))
+            return `${Others?.providerResolver.providerName(wallet.providerType ?? providerType)} Wallet`
         return wallet.name ?? 'Wallet'
     }
 
@@ -90,7 +92,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona || !wallet.account) return false
         try {
-            const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
+            const walletSig = await connection?.signMessage(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
@@ -110,7 +112,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             showSnackbar(t.tip_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
-    }, [currentPersona?.identifier, payload, signature])
+    }, [currentPersona?.identifier, payload, signature, connection])
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {
         try {
             if (walletSignState) {

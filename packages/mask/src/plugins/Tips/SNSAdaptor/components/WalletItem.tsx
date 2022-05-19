@@ -154,7 +154,7 @@ export function WalletItem({
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
-                        <FormattedAddress address={address} size={4} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Typography>
                     <Link
                         className={classes.link}
@@ -169,7 +169,7 @@ export function WalletItem({
                     </Link>
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(ChainId.Mainnet, address) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(ChainId.Mainnet, address) ?? ''}
                         target="_blank"
                         title={t.view_on_explorer()}
                         rel="noopener noreferrer">
