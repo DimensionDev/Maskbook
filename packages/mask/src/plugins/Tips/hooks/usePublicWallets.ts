@@ -27,7 +27,7 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
             if (!kv.val.proofs.length) return null
             const tipWallets = first(
                 kv.val.proofs.map((x) =>
-                    x.content[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum),
+                    x.content?.[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum),
                 ),
             )
             if (!tipWallets) return EMPTY_LIST
