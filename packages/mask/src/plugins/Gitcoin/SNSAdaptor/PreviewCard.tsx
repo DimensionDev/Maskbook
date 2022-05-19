@@ -185,7 +185,9 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Button>
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
-                    <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+                    <EthereumChainBoundary
+                        chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}
+                        renderInTimeline>
                         <Button
                             variant="contained"
                             fullWidth
