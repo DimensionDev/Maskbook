@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet, ChainId } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
@@ -119,6 +119,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
+            marginBottom: '12px',
             backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -405,7 +406,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
 
                     <Box className={classes.card}>
-                        <Stack justifyContent="space-between" direction="row">
+                        <Box>
                             <SelectTokenChip
                                 classes={{
                                     chip: classes.selectedTokenChip,
@@ -427,7 +428,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
                                 <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
                             )}
-                        </Stack>
+                        </Box>
 
                         {trades.filter((item) => !!item.value).length >= 1 ? (
                             <>

@@ -46,6 +46,7 @@
     "token_info_contract_creator": "Contract Creator",
     "token_info_contract_owner": "Contract Owner",
     "token_info_total_supply": "Total Supply",
+    "token_info_market_cap": "Market Cap",
     "default_placeholder": "Note: Scams detections might not be 100% guaranteed.",
     "not_found_tip_title": "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:",
     "not_found_tip_network_error": "1. Make sure network is working;",

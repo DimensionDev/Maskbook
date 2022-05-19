@@ -17,6 +17,7 @@ interface TokenCardProps {
     tokenSecurity: TokenSecurity
     tokenInfo?: ERC721ContractDetailed
     tokenPrice?: PriceRecord
+    tokenMarketCap?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -60,7 +61,7 @@ function resolveGoLabLink(chainId: ChainId, address: string) {
     return urlcat('https://gopluslabs.io/token-security/:chainId/:address', { chainId, address })
 }
 
-export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice }) => {
+export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
     const t = useSharedI18N()
     const theme = useTheme()
@@ -171,7 +172,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Collapse in={!isCollapse}>
-                    <TokenPanel tokenSecurity={tokenSecurity} securityMessageLevel={securityMessageLevel} />
+                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap} />
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>

@@ -436,6 +436,16 @@ export namespace SecurityAPI {
     }
 }
 
+export namespace TokenAPI {
+    export interface tokenInfo {
+        id: string
+        market_cap: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<tokenInfo>
+    }
+}
+
 export namespace TwitterBaseAPI {
     export interface NFTContainer {
         has_nft_avatar: boolean

@@ -221,8 +221,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </div>
                 }
                 subheader={
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography component="p" variant="body1">
+                    <Stack>
+                        <Typography component="p" variant="body1" marginBottom="8px">
                             {market ? (
                                 <>
                                     {typeof coin.market_cap_rank === 'number' ? (

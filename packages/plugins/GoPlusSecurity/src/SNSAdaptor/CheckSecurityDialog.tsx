@@ -3,7 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsync, useAsyncFn } from 'react-use'
-import { GoPlusLabs, TokenPrice } from '@masknet/web3-providers'
+import { GoPlusLabs, TokenPrice, TokenView } from '@masknet/web3-providers'
 import { Searching } from './components/Searching'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
@@ -70,6 +70,11 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         const platformId = getCoinGeckoPlatformId(value.chainId)
         return TokenPrice.getTokenPrices(platformId, [value.contract], CurrencyType.USD)
     }, [value])
+
+    const { value: tokenMarketCapInfo } = useAsync(async () => {
+        if (!value?.token_symbol) return
+        return TokenView.getTokenInfo(value.token_symbol)
+    }, [value])
     return (
         <InjectedDialog title={t.__plugin_name()} classes={{ paper: classes.paperRoot }} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -89,6 +94,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 tokenInfo={contractDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice?.[value?.contract]}
+                                tokenMarketCap={tokenMarketCapInfo?.market_cap}
                             />
                         )}
                         {!error && !searching && !loadingToken && !value && (

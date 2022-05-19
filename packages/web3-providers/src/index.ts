@@ -12,6 +12,7 @@ import { TokenPriceAPI } from './token-price'
 import { InstagramAPI } from './instagram'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
+import { TokenViewAPI } from './tokenview'
 
 export * from './types'
 export * from './hooks'
@@ -29,6 +30,7 @@ export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
+export const TokenView = new TokenViewAPI()
 
 export const TokenList = new TokenListAPI()
 export const TokenPrice = new TokenPriceAPI()

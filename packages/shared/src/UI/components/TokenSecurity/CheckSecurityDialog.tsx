@@ -7,7 +7,7 @@ import { Center, TokenSecurity } from './components/Common'
 import { CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { Searching } from './components/Searching'
 import { useAsync } from 'react-use'
-import { TokenPrice } from '@masknet/web3-providers'
+import { TokenPrice, TokenView } from '@masknet/web3-providers'
 import { InjectedDialog } from '../../../contexts'
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,6 +58,11 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         const platformId = getCoinGeckoPlatformId(tokenSecurity.chainId)
         return TokenPrice.getTokenPrices(platformId, [tokenSecurity.contract], CurrencyType.USD)
     }, [tokenSecurity])
+    const { value: tokenMarketCapInfo } = useAsync(async () => {
+        if (!tokenSecurity?.token_symbol) return
+        return TokenView.getTokenInfo(tokenSecurity.token_symbol)
+    }, [tokenSecurity])
+
     return (
         <InjectedDialog classes={{ paper: classes.paperRoot }} title={t.check_security()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -73,6 +78,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 tokenInfo={contractDetailed}
                                 tokenPrice={tokenPrice?.[tokenSecurity?.contract]}
                                 tokenSecurity={tokenSecurity}
+                                tokenMarketCap={tokenMarketCapInfo?.market_cap}
                             />
                         )}
                     </Stack>

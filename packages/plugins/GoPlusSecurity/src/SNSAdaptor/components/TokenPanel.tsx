@@ -1,5 +1,5 @@
 import { Link, Stack, Tooltip, Typography } from '@mui/material'
-import type { SecurityMessageLevel, TokenSecurity } from './Common'
+import type { TokenSecurity } from './Common'
 import { useI18N } from '../../locales'
 import React from 'react'
 import { useTheme } from '@mui/system'
@@ -46,10 +46,10 @@ function formatTotalSupply(total?: number) {
 
 interface TokenPanelProps {
     tokenSecurity: TokenSecurity
-    securityMessageLevel: SecurityMessageLevel
+    tokenMarketCap?: string
 }
 
-export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLevel }: TokenPanelProps, ref) => {
+export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
     const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -150,6 +150,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
+                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : '--'}
                     </Stack>
                 </Stack>
             </Stack>
