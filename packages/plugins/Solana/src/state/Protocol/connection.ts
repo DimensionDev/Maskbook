@@ -210,6 +210,26 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
+    confirmRequest?:
+        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
+        | undefined
+    rejectRequest?:
+        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
+        | undefined
+    replaceRequest(
+        hash: string,
+        config: Transaction,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
+    cancelRequest(
+        hash: string,
+        config: Transaction,
+        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ): Promise<void> {
+        throw new Error('Method not implemented.')
+    }
 }
 
 export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom) {

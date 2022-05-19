@@ -97,7 +97,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }
-                    targetChainId={chainId}
+                    chainId={chainId}
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     FixedSizeListProps={{
