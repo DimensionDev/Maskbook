@@ -1,4 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { CYBERCONNECT_PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
