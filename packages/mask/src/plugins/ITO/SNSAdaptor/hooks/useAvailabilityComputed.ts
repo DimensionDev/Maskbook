@@ -12,8 +12,8 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_Paylo
     const asyncResult = useAvailability(
         payload.pid,
         payload.contract_address,
-        payload.seller.address,
         payload.chain_id ?? chainId,
+        payload.seller.address,
     )
     const { value: availability, loading: loadingITO } = asyncResult
     const qualificationAddress =
