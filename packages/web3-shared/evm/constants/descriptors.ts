@@ -302,6 +302,7 @@ export const PROVIDER_DESCRIPTORS: ProviderDescriptor<ChainId, ProviderType>[] =
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
             supportedEnhancebleSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',

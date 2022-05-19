@@ -127,7 +127,6 @@ const SelectWallet = memo(() => {
                 state: {
                     chainId,
                     account: selected,
-                    networkType: getNetworkTypeFromChainId(chainId),
                     providerType: ProviderType.MaskWallet,
                 },
             })

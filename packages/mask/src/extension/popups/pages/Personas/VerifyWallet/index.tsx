@@ -6,7 +6,6 @@ import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
@@ -15,7 +14,7 @@ import { useI18N } from '../../../../../utils'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
 import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/plugin-infra/src/web3'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
