@@ -39,6 +39,7 @@ export function DraggableDiv({
                 cancel="p, h1, input, button, address"
                 handle="nav"
                 {...DraggableProps}
+                // @ts-expect-error @types/react 18
                 children={<div {...props} ref={ref} className={classes.paper} />}
             />
         </div>
