@@ -65,7 +65,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.background.modalTitle,
+            background: theme.palette.maskColor.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
