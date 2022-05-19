@@ -281,6 +281,7 @@
     "plugin_wallet_approve_all_nft": "Unlock {{symbol}}",
     "plugin_wallet_approve_all_nft_successfully": "Unlock {{symbol}} successfully",
     "plugin_wallet_connect_a_wallet": "Connect wallet",
+    "plugin_wallet_confirm_risk_warning": "Confirm Risk Warning",
     "plugin_wallet_no_gas_fee": "No Gas Fee",
     "plugin_wallet_update_gas_fee": "Updating Gas Fee…",
     "plugin_wallet_invalid_network": "Invalid Network",
@@ -1065,6 +1066,7 @@
     "plugin_valuables_name": "Valuables",
     "plugin_valuables_description": "Buy & sell tweets autographed by their original creators.",
     "popups_wallet_unsupported_network": "Unsupported network type",
+    "popups_wallet_no_wallet": "No wallet found",
     "plugin_default_title": "Default",
     "plugin_provider_by": "Provided by",
     "plugin_enables": "Enable plugins"

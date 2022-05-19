@@ -61,6 +61,14 @@ export declare namespace Web3Helper {
         }
     }
 
+    export type Web3ProviderDescriptor<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : ProviderDescriptor<Definition[T]['ChainId'], Definition[T]['ProviderType']>
+
+    export type Web3NetworkDescriptor<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : NetworkDescriptor<Definition[T]['ChainId'], Definition[T]['NetworkType']>
+
     export type Web3<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3']
 
     export type Web3ProviderState<T extends NetworkPluginID = never> = T extends never

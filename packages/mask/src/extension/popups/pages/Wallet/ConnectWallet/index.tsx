@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { memo, useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { useMount } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
@@ -9,13 +9,16 @@ import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
+    useWeb3State,
     useWeb3UI,
+    Web3Helper,
     Web3Plugin,
 } from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PopupContext } from '../../../hook/usePopupContext'
 import { NetworkDescriptor, NetworkPluginID, ProviderDescriptor } from '@masknet/web3-shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -66,14 +69,20 @@ const ConnectWalletPage = memo(() => {
     // connect to ethereum mainnet
     const network = getRegisteredWeb3Networks().find(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM && x.chainId === ChainId.Mainnet,
-    )
+    ) as Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM> | undefined
     const providers = getRegisteredWeb3Providers().filter(
         (x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM,
-    )
-    const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
+    ) as Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>[]
+
+    const { Provider, Protocol, Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const Web3UI = useWeb3UI(NetworkPluginID.PLUGIN_EVM)
+    const { ProviderIconClickBait } = Web3UI.SelectProviderDialog ?? {}
 
     const onClick = useCallback(
-        (network: NetworkDescriptor<ChainId, NetworkType>, provider: ProviderDescriptor<ChainId, ProviderType>) => {
+        (
+            network: Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>,
+            provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
+        ) => {
             if (provider.type !== ProviderType.MaskWallet) return
             navigate(
                 urlcat(PopupRoutes.SelectWallet, {
@@ -86,12 +95,22 @@ const ConnectWalletPage = memo(() => {
 
     const onSubmit = useCallback(
         async (
-            network: NetworkDescriptor<ChainId, NetworkType>,
+            network: Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>,
             provider: ProviderDescriptor<ChainId, ProviderType>,
-            result?: Web3Plugin.ConnectionResult,
         ) => {
+            if (!(await Provider?.isReady(provider.type))) {
+                const downloadLink = Others?.providerResolver.providerDownloadLink(provider.type)
+                if (downloadLink) openWindow(downloadLink)
+                return
+            }
+
+            const connection = await Protocol?.getConnection?.({
+                chainId: network.chainId,
+                providerType: provider.type,
+            })
+
             navigate(PopupRoutes.VerifyWallet, {
-                state: result,
+                state: await connection?.connect(),
             })
         },
         [],
@@ -104,6 +123,20 @@ const ConnectWalletPage = memo(() => {
     })
     if (!network) return null
 
+    const createProvider = (
+        provider: Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>,
+        options?: {
+            onClick: () => void
+        },
+    ) => {
+        return (
+            <div className={classes.walletItem} onClick={options?.onClick}>
+                <img src={provider.icon.toString()} className={classes.walletIcon} />
+                <Typography className={classes.walletName}>{provider.name}</Typography>
+            </div>
+        )
+    }
+
     return (
         <div className={classes.box}>
             <div className={classes.container}>
@@ -113,18 +146,15 @@ const ConnectWalletPage = memo(() => {
                             key={provider.ID}
                             network={network}
                             provider={provider}
-                            onClick={onClick}
-                            onSubmit={onSubmit}>
-                            <div className={classes.walletItem}>
-                                <img src={provider.icon.toString()} className={classes.walletIcon} />
-                                <Typography className={classes.walletName}>{provider.name}</Typography>
-                            </div>
+                            onClick={onClick}>
+                            {createProvider(provider)}
                         </ProviderIconClickBait>
                     ) : (
-                        <div className={classes.walletItem} key={provider.ID}>
-                            <img src={provider.icon.toString()} className={classes.walletIcon} />
-                            <Typography className={classes.walletName}>{provider.name}</Typography>
-                        </div>
+                        <React.Fragment key={provider.ID}>
+                            {createProvider(provider, {
+                                onClick: () => onClick(network, provider),
+                            })}
+                        </React.Fragment>
                     )
                 })}
             </div>

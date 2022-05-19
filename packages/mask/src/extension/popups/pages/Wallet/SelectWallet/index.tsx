@@ -1,16 +1,24 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
-import { useAccount, useChainIdValid, useWallets, getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainIdValid,
+    useWallets,
+    getRegisteredWeb3Networks,
+    Web3Helper,
+    useChainId,
+} from '@masknet/plugin-infra/web3'
 import { ChainIcon } from '@masknet/shared'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     content: {
@@ -81,29 +89,51 @@ const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
+    const navigate = useNavigate()
 
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-    ) as NetworkDescriptor<ChainId, NetworkType>[]
+    ) as Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>[]
 
+    const search = new URLSearchParams(location.search)
+    // The previous page is popup page
+    const isPopup = search.get('popup')
+    // The opener need to switch to specific chain
+    const chainIdSearched = search.get('chainId')
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(
+        NetworkPluginID.PLUGIN_EVM,
+        chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
+    )
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM).filter((x) => x.hasStoredKeyInfo)
 
     const [selected, setSelected] = useState(account)
 
-    const search = new URLSearchParams(location.search)
-
-    const chainIdSearched = search.get('chainId')
-    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
     const currentNetwork = networks.find((x) => x.chainId === chainId)
 
     const handleCancel = useCallback(async () => {
-        await WalletRPC.selectMaskAccount([])
-        await Services.Helper.removePopupWindow()
-    }, [])
+        if (isPopup) {
+            navigate(-1)
+        } else {
+            await WalletRPC.selectMaskAccount([])
+            await Services.Helper.removePopupWindow()
+        }
+    }, [isPopup])
 
     const handleConfirm = useCallback(async () => {
+        if (isPopup) {
+            navigate(PopupRoutes.VerifyWallet, {
+                state: {
+                    chainId,
+                    account: selected,
+                    networkType: getNetworkTypeFromChainId(chainId),
+                    providerType: ProviderType.MaskWallet,
+                },
+            })
+            return
+        }
+
         await WalletRPC.updateMaskAccount({
             chainId,
             account: selected,
@@ -112,11 +142,19 @@ const SelectWallet = memo(() => {
             await WalletRPC.selectMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected])
+    }, [chainId, selected, isPopup])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
+
+    if (!wallets.length) {
+        return (
+            <div className={classes.placeholder}>
+                <Typography>{t('popups_wallet_no_wallet')}</Typography>
+            </div>
+        )
+    }
 
     return chainId && chainIdValid ? (
         <>
