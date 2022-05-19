@@ -7,7 +7,6 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import {
     createNativeToken,
-    formatBalance,
     formatEthereumAddress,
     formatPercentage,
     formatUSD,
@@ -20,7 +19,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
-import { FungibleToken, isZero, multipliedBy, NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero, multipliedBy, NetworkPluginID, formatBalance, Wallet } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'

@@ -9,9 +9,8 @@ import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } 
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
-    formatBalance,
     TransactionStateType,
     SchemaType,
     FungibleTokenDetailed,

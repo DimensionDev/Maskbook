@@ -5,7 +5,8 @@ import React from 'react'
 import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { formatCurrency, formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
+import { formatCurrency } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

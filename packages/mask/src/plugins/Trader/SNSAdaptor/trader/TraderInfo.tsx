@@ -1,18 +1,12 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import {
-    createNativeToken,
-    formatBalance,
-    formatPercentage,
-    formatUSD,
-    formatWeiToEther,
-} from '@masknet/web3-shared-evm'
+import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
-import { multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
 import { BestTradeIcon, TriangleWarning } from '@masknet/icons'

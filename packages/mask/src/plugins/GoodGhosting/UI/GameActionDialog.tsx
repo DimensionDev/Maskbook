@@ -2,12 +2,12 @@ import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/mate
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
-import { FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({

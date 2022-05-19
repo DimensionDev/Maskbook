@@ -1,12 +1,5 @@
 import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import {
-    ChainId,
-    SchemaType,
-    formatBalance,
-    chainResolver,
-    networkResolver,
-    NetworkType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -24,7 +17,7 @@ import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })

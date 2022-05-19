@@ -7,7 +7,7 @@ import { formatAmountPostfix } from '../utils'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
 
 const DIGIT_LENGTH = 18
 

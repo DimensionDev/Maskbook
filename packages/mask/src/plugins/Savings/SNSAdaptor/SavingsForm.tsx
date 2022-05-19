@@ -10,13 +10,13 @@ import {
     NetworkPluginID,
     ZERO,
     isSameAddress,
+    formatBalance,
+    formatCurrency,
 } from '@masknet/web3-shared-base'
 import {
     createContract,
     createERC20Token,
     SchemaType,
-    formatBalance,
-    formatCurrency,
     getAaveConstants,
     TransactionStateType,
     TransactionState,

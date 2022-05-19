@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { OthersState } from '@masknet/plugin-infra/web3'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { formatBalance, formatCurrency, formatDomainName } from '@masknet/web3-shared-evm'
+import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
@@ -32,7 +32,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isSameAddress = isSameAddress
 
     override formatAddress = formatAddress
-    override formatCurrency = formatCurrency
-    override formatBalance = formatBalance
     override formatDomainName = formatDomainName
 }

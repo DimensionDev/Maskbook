@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
-import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
+import { TransactionStateType } from '@masknet/web3-shared-evm'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -17,7 +17,7 @@ import { WalletMessages } from '../../../Wallet/messages'
 import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {

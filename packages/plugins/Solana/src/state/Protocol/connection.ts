@@ -23,16 +23,12 @@ class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
-    getBlock(
-        no: number,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<BlockResponse> {
+
+    getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse> {
         throw new Error('Method not implemented.')
     }
 
-    async connect(
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<Account<ChainId>> {
+    async connect(options?: SolanaWeb3ConnectionOptions): Promise<Account<ChainId>> {
         return {
             account: '',
             chainId: ChainId.Mainnet,
@@ -42,7 +38,7 @@ class Connection implements BaseConnection {
             )),
         }
     }
-    async disconnect(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<void> {
+    async disconnect(options?: SolanaWeb3ConnectionOptions): Promise<void> {
         await Web3StateSettings.value.Provider?.disconect(options?.providerType ?? this.providerType)
     }
     transferFungibleToken(
@@ -50,7 +46,7 @@ class Connection implements BaseConnection {
         recipient: string,
         amount: string,
         memo?: string,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -59,51 +55,58 @@ class Connection implements BaseConnection {
         tokenId: string,
         amount: string,
         recipient: string,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getGasPrice(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<string> {
+    getGasPrice(options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getSchemaType(
-        address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
-    ): Promise<SchemaType> {
+    getSchemaType(address: string, options?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
         address: string,
         id: string,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlockTimestamp(options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Promise<number> {
+    getBlockTimestamp(options?: SolanaWeb3ConnectionOptions): Promise<number> {
         throw new Error('Method not implemented.')
     }
-    switchChain?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
-    getNativeToken(options?: SolanaWeb3ConnectionOptions | undefined): Promise<FungibleToken<ChainId, SchemaType>> {
+    switchChain?: ((options?: SolanaWeb3ConnectionOptions) => Promise<void>) | undefined
+    getNativeToken(options?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions | undefined): Promise<string> {
+    getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions | undefined): Promise<string> {
+    getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions | undefined): Promise<string> {
+    getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getCode(address: string, options?: SolanaWeb3ConnectionOptions | undefined): Promise<string> {
+    getFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: SolanaWeb3ConnectionOptions,
+    ): Promise<Record<string, string>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: SolanaWeb3ConnectionOptions,
+    ): Promise<Record<string, string>> {
+        throw new Error('Method not implemented.')
+    }
+    getCode(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
@@ -176,7 +179,7 @@ class Connection implements BaseConnection {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
 
-    callTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions | undefined): Promise<string> {
+    callTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
@@ -196,14 +199,14 @@ class Connection implements BaseConnection {
 
     getFungibleToken(
         address: string,
-        options?: SolanaWeb3ConnectionOptions | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleToken(
         address: string,
         id: string,
-        options?: SolanaWeb3ConnectionOptions | undefined,
+        options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }

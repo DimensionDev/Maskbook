@@ -1,14 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-import { FungibleToken, isGreaterThan, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, isGreaterThan, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
-import {
-    SchemaType,
-    formatBalance,
-    formatEthereumAddress,
-    explorerResolver,
-    useITOConstants,
-    ChainId,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { usePickToken } from '@masknet/shared'

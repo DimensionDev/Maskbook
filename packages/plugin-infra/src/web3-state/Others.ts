@@ -4,8 +4,6 @@ import {
     createExplorerResolver,
     createNetworkResolver,
     createProviderResolver,
-    formatBalance,
-    formatCurrency,
     isSameAddress,
     NetworkDescriptor,
     ProviderDescriptor,
@@ -55,9 +53,6 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
 
     isSameAddress = isSameAddress
 
-    formatCurrency = formatCurrency
-    formatBalance = formatBalance
-
     isValidChain(chainId: ChainId, testnet = false): boolean {
         return this.options.chainDescriptors.find((x) => x.chainId === chainId)?.network === 'mainnet' || testnet
     }
@@ -74,7 +69,6 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
     formatTokenId(id?: string | undefined, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }
-
     formatDomainName(domain?: string | undefined, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }

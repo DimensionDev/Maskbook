@@ -4,10 +4,9 @@ import BigNumber from 'bignumber.js'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { useI18N } from '../../utils'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -82,7 +81,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const { t } = useI18N()
 
     const classes = useStylesExtends(useStyles(), props)
-    const { Others } = useWeb3State()
 
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -101,6 +99,11 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
     // #endregion
+
+    console.log({
+        balance,
+        fBalance: formatBalance(balance, 18),
+    })
 
     return (
         <TextField
@@ -146,7 +149,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     value={balance}
                                     decimals={token.decimals}
                                     significant={6}
-                                    formatter={Others?.formatBalance}
+                                    formatter={formatBalance}
                                 />
                             </Typography>
                         ) : null}
@@ -172,8 +175,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                             .dividedBy(maxAmountShares)
                                             .decimalPlaces(0, 1)
                                         onAmountChange(
-                                            Others?.formatBalance?.(amount, token.decimals, maxAmountSignificant) ??
-                                                '0',
+                                            formatBalance(amount, token.decimals, maxAmountSignificant) ?? '0',
                                         )
                                     }}
                                     {...MaxChipProps}

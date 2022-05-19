@@ -1,4 +1,3 @@
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
 import { useI18N, useMenu } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
@@ -6,7 +5,8 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
-import { FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 
 export interface SelectTokenPanelProps {
     amount: string

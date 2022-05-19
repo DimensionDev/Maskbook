@@ -1,5 +1,6 @@
 import { FungibleToken, scale10 } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
 
 export function getTokenAmountDescription(
     amount = '0',

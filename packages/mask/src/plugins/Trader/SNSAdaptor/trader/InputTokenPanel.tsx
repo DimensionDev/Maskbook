@@ -1,6 +1,6 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import { isZeroAddress, formatBalance, formatCurrency, SchemaType } from '@masknet/web3-shared-evm'
+import { isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, FormattedCurrency } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -8,7 +8,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {

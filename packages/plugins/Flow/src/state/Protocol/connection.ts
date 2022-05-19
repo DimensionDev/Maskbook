@@ -18,16 +18,11 @@ import { Web3StateSettings } from '../../settings'
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    getBlock(
-        no: number,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<BlockObject> {
+    getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject> {
         throw new Error('Method not implemented.')
     }
 
-    async connect(
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<Account<ChainId>> {
+    async connect(options?: FlowConnectionOptions): Promise<Account<ChainId>> {
         return {
             account: '',
             chainId: ChainId.Mainnet,
@@ -37,32 +32,29 @@ class Connection implements BaseConnection {
             )),
         }
     }
-    async disconnect(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<void> {
+    async disconnect(options?: FlowConnectionOptions): Promise<void> {
         await Web3StateSettings.value.Provider?.disconect(options?.providerType ?? this.providerType)
     }
-    getGasPrice(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<string> {
+    getGasPrice(options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getSchemaType(
-        address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<SchemaType> {
+    getSchemaType(address: string, options?: FlowConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
         address: string,
         id: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+        options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+        options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlockTimestamp(options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined): Promise<number> {
+    getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
         throw new Error('Method not implemented.')
     }
     transferFungibleToken(
@@ -70,7 +62,7 @@ class Connection implements BaseConnection {
         recipient: string,
         amount: string,
         memo?: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+        options?: FlowConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -79,36 +71,35 @@ class Connection implements BaseConnection {
         recipient: string,
         tokenId: string,
         amount: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
+        options?: FlowConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNativeToken(
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<FungibleToken<ChainId, SchemaType>> {
+    getNativeToken(options?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    getNativeTokenBalance(
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<string> {
+    getNativeTokenBalance(options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleTokenBalance(
-        address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<string> {
+    getFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleTokenBalance(
-        address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<string> {
+    getNonFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getCode(
-        address: string,
-        options?: ConnectionOptions<ChainId, ProviderType, MutateOptions> | undefined,
-    ): Promise<string> {
+    getFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: FlowConnectionOptions,
+    ): Promise<Record<string, string>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: FlowConnectionOptions,
+    ): Promise<Record<string, string>> {
+        throw new Error('Method not implemented.')
+    }
+    getCode(address: string, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 

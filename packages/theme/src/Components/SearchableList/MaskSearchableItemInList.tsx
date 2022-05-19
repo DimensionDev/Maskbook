@@ -3,7 +3,7 @@ import React from 'react'
 interface FixSizeListItemProps<T> extends React.PropsWithChildren<{}> {
     data: {
         dataSet: T[]
-        onSelect: any
+        onSelect: (data: T) => void
     }
     index: number
     style: any

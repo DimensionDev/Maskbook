@@ -4,8 +4,15 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, formatBalance, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, isLessThan, rightShift, Wallet, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    FungibleToken,
+    isLessThan,
+    formatBalance,
+    NetworkPluginID,
+    rightShift,
+    Wallet,
+} from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'

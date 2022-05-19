@@ -14,7 +14,7 @@ import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { formatBalance, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
+import { TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
@@ -23,7 +23,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     snsId: string

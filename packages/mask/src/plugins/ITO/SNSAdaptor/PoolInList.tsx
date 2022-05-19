@@ -1,12 +1,6 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import {
-    SchemaType,
-    formatBalance,
-    TransactionStateType,
-    useTokenConstants,
-    chainResolver,
-} from '@masknet/web3-shared-evm'
-import { isZero, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { SchemaType, TransactionStateType, useTokenConstants, chainResolver } from '@masknet/web3-shared-evm'
+import { isZero, formatBalance, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,

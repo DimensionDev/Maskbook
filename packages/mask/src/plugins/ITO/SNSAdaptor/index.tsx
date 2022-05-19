@@ -2,7 +2,7 @@ import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-scr
 import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -15,7 +15,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({

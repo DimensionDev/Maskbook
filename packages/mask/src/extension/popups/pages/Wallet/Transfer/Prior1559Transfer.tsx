@@ -3,14 +3,7 @@ import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    formatBalance,
-    formatGweiToWei,
-    formatWeiToGwei,
-    formatEthereumAddress,
-    ChainId,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToGwei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isZero,
     isGreaterThan,
@@ -18,8 +11,10 @@ import {
     multipliedBy,
     rightShift,
     isSameAddress,
+    formatBalance,
     NetworkPluginID,
     FungibleAsset,
+    GasOptionType,
 } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -254,7 +249,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
-            const gasPrice = new BigNumber(gasOptions.fast.suggestedMaxFeePerGas)
+            const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId, web3State])

@@ -3,7 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } 
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { TransactionStateType, formatBalance } from '@masknet/web3-shared-evm'
+import { TransactionStateType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -17,7 +17,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

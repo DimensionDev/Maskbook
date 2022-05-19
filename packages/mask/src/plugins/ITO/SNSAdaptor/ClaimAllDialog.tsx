@@ -13,15 +13,8 @@ import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import {
-    formatBalance,
-    TransactionStateType,
-    explorerResolver,
-    SchemaType,
-    useITOConstants,
-    ChainId,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { TransactionStateType, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'

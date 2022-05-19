@@ -1,4 +1,4 @@
-import { formatBalance, TransactionStateType, DAI, explorerResolver } from '@masknet/web3-shared-evm'
+import { TransactionStateType, DAI, explorerResolver } from '@masknet/web3-shared-evm'
 import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -8,7 +8,7 @@ import type { GoodGhostingInfo } from '../types'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
 import { isGameActionError } from '../utils'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({

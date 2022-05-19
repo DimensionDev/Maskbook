@@ -557,6 +557,10 @@ export interface Connection<
     getFungibleTokenBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
     /** Get non-fungible token balance */
     getNonFungibleTokenBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
+    /** Get fungible token balance */
+    getFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
+    /** Get non-fungible token balance */
+    getNonFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
     /** Get the currently connected account. */
     getAccount(options?: Web3ConnectionOptions): Promise<string>
     /** Get the currently chain id. */
@@ -843,8 +847,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
 
     // #region data formatting
     formatAddress(address: string, size?: number): string
-    formatBalance(value: BigNumber.Value, decimals?: number, significant?: number): string
-    formatCurrency(value: BigNumber.Value, currency?: string): string
     formatDomainName(domain?: string, size?: number): string
     formatTokenId(id?: string, size?: number): string
     // #endregion

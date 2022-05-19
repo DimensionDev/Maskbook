@@ -10,7 +10,15 @@ import {
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { CurrencyType, FungibleAsset, NetworkPluginID, pow10, toFixed } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    formatBalance,
+    formatCurrency,
+    FungibleAsset,
+    NetworkPluginID,
+    pow10,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
@@ -105,13 +113,13 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{toFixed(Others?.formatBalance?.(asset.balance, asset.decimals) ?? '', 6)}</Typography>
+                <Typography>{toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
                         ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
-                            ? Others?.formatCurrency?.(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
+                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
                             : '<0.000001'
                         : '-'}
                 </Typography>
@@ -124,7 +132,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         <FormattedCurrency
                             value={getTokenUSDValue(asset.value).toFixed(2)}
                             sign="$"
-                            formatter={Others?.formatCurrency}
+                            formatter={formatCurrency}
                         />
                     )}
                 </Typography>

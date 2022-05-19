@@ -8,11 +8,11 @@ import {
     ZERO,
     FungibleToken,
     currySameAddress,
+    formatBalance,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,
-    formatBalance,
     isNativeTokenAddress,
     explorerResolver,
     TransactionStateType,

@@ -1,16 +1,15 @@
-import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { useCallback, useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { currySameAddress, FungibleAsset, FungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
+import { LoadingIcon } from '@masknet/icons'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
-import { some } from 'lodash-unified'
-import { useCallback, useMemo } from 'react'
-import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'
 import { LoadingAnimation } from '../LoadingAnimation'
-import BigNumber from 'bignumber.js'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -66,29 +65,25 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const getERC20TokenListItem =
-    (
-        addedTokens: FungibleToken<ChainId, SchemaType.ERC20>[],
-        externalTokens: FungibleToken<ChainId, SchemaType.ERC20>[],
-        info: {
-            from: 'search' | 'defaultList'
-            inList: boolean
-        },
-        selectedTokens: string[],
-        loadingAsset: boolean,
-        account?: string,
+export const getFungibleTokenItem =
+    <T extends NetworkPluginID>(
+        source: 'personal' | 'offcial' | 'external',
+        selected = false,
+        loading = true,
+        balance = '0',
+        account = '',
     ) =>
-    ({ data, onSelect }: MaskSearchableListItemProps<FungibleAsset<ChainId, SchemaType>>) => {
+    ({
+        data: token,
+        onSelect,
+    }: MaskSearchableListItemProps<
+        FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+    >) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
-        // const [, addERC20Token] = useAddERC20TokenCallback()
-        // const [, trustERC20Token] = useTrustERC20TokenCallback()
-        const token = data
 
         if (!token) return null
-        const { address, name, symbol, logoURL } = token
-        const isNotAdded = some(externalTokens, (t: any) => isSameAddress(address, t.address))
-        const isAdded = some(addedTokens, (t: any) => isSameAddress(address, t.address))
+        const { address, name, symbol, decimals, logoURL } = token
 
         const onImport = useCallback(
             async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,22 +97,18 @@ export const getERC20TokenListItem =
 
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation()
-            onSelect(data)
+            onSelect(token)
         }
 
         const action = useMemo(() => {
-            return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                data.balance === null ? null : (
-                    <span>
-                        {loadingAsset ? (
-                            <LoadingAnimation />
-                        ) : (
-                            Number.parseFloat(
-                                new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
-                            )
-                        )}
-                    </span>
-                )
+            return source === 'external' ? (
+                <span>
+                    {loading ? (
+                        <LoadingAnimation />
+                    ) : (
+                        Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
+                    )}
+                </span>
             ) : (
                 <MaskLoadingButton
                     variant="contained"
@@ -130,7 +121,7 @@ export const getERC20TokenListItem =
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [info, isNotAdded, isAdded, data.balance])
+        }, [balance, decimals, loading])
 
         return (
             <ListItem
@@ -138,19 +129,19 @@ export const getERC20TokenListItem =
                 button
                 className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}
-                disabled={selectedTokens.some(currySameAddress(address))}>
+                disabled={selected}>
                 <ListItemIcon>
                     <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
                     <Typography
-                        className={classNames(classes.primary, isNotAdded ? classes.import : '')}
+                        className={classNames(classes.primary, source === 'external' ? classes.import : '')}
                         color="textPrimary"
                         component="span">
                         <span className={classes.symbol}>{symbol}</span>
                         <span className={`${classes.name} dashboard token-list-symbol`}>
                             {name}
-                            {isAdded && <span> &bull; Added By User</span>}
+                            {source === 'personal' && <span> &bull; Added By User</span>}
                         </span>
                     </Typography>
                     <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">

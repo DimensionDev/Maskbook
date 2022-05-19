@@ -3,7 +3,6 @@ import {
     addGasMargin,
     ChainId,
     explorerResolver,
-    formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
@@ -11,6 +10,7 @@ import {
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
+    formatBalance,
     FungibleAsset,
     GasOptionType,
     isGreaterThan,

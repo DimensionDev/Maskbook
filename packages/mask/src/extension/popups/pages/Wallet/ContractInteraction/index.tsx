@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { formatBalance, formatCurrency, formatGweiToWei, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
@@ -17,7 +17,15 @@ import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Walle
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { useReverseAddress, useWeb3State, useChainId, useNetworkType } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, leftShift, NetworkPluginID, pow10, ZERO } from '@masknet/web3-shared-base'
+import {
+    formatBalance,
+    formatCurrency,
+    isGreaterThan,
+    leftShift,
+    NetworkPluginID,
+    pow10,
+    ZERO,
+} from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
 

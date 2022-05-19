@@ -1,14 +1,16 @@
 import { first } from 'lodash-unified'
 import Web3 from 'web3'
-import { AbiItem, toHex } from 'web3-utils'
+import { AbiItem, numberToHex, toHex } from 'web3-utils'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
 import type { ERC165 } from '@masknet/web3-contracts/types/ERC165'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import {
     ChainId,
     EthereumMethodType,
@@ -28,6 +30,8 @@ import {
     createERC721Metadata,
     createERC721Collection,
     createWeb3Provider,
+    useEthereumConstants,
+    getEthereumConstants,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -275,6 +279,58 @@ class Connection implements EVM_Connection {
     async getNonFungibleTokenBalance(address: string, options?: EVM_Web3ConnectionOptions): Promise<string> {
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
         return contract?.methods.balanceOf(this.account).call() ?? '0'
+    }
+
+    async getFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: EVM_Web3ConnectionOptions,
+    ): Promise<Record<string, string>> {
+        if (!listOfAddress.length) return {}
+
+        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(this.chainId)
+        const contract = await this.getWeb3Contract<BalanceChecker>(
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+            options,
+        )
+        const result = await contract?.methods.balances([this.account], listOfAddress).call({
+            // cannot check the sender's balance in the same contract
+            from: undefined,
+            chainId: numberToHex(options?.chainId ?? this.chainId),
+        })
+
+        if (result?.length) {
+            console.log({
+                result,
+                listOfAddress,
+                entries: listOfAddress.map<[string, string]>((x, i) => [x, result[i]]),
+            })
+        }
+
+        if (result?.length !== listOfAddress.length) return {}
+        return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
+    }
+
+    async getNonFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: EVM_Web3ConnectionOptions,
+    ): Promise<Record<string, string>> {
+        if (!listOfAddress.length) return {}
+
+        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(this.chainId)
+        const contract = await this.getWeb3Contract<BalanceChecker>(
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+            options,
+        )
+        const result = await contract?.methods.balances([this.account], listOfAddress).call({
+            // cannot check the sender's balance in the same contract
+            from: undefined,
+            chainId: numberToHex(options?.chainId ?? this.chainId),
+        })
+
+        if (result?.length !== listOfAddress.length) return {}
+        return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }
 
     getNativeToken(options?: EVM_Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {

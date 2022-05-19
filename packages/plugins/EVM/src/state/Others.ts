@@ -5,8 +5,6 @@ import {
     isValidDomain,
     isValidAddress,
     ChainId,
-    formatBalance,
-    formatCurrency,
     formatEthereumAddress,
     formatDomainName,
     ProviderType,
@@ -36,7 +34,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId
-    override formatCurrency = formatCurrency
-    override formatBalance = formatBalance
     override formatDomainName = formatDomainName
 }

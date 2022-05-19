@@ -1,6 +1,5 @@
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
-    formatBalance,
     formatEthereumAddress,
     isNativeTokenAddress,
     explorerResolver,
@@ -8,7 +7,7 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'

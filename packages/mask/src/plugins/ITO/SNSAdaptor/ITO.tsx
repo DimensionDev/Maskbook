@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-    formatBalance,
     formatEthereumAddress,
     TransactionStateType,
     useTokenConstants,
@@ -16,6 +15,7 @@ import {
     isGreaterThan,
     NetworkPluginID,
     isSameAddress,
+    formatBalance,
     currySameAddress,
     FungibleToken,
 } from '@masknet/web3-shared-base'
@@ -27,7 +27,6 @@ import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
-import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'

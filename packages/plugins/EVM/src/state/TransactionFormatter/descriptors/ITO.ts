@@ -1,6 +1,6 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, getITOConstants } from '@masknet/web3-shared-evm'
+import { TransactionContext, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
+import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import type { TransactionDescriptor } from '../types'
 

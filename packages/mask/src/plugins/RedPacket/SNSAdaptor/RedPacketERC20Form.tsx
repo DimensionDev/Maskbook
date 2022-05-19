@@ -6,8 +6,9 @@ import {
     multipliedBy,
     NetworkPluginID,
     rightShift,
+    formatBalance,
 } from '@masknet/web3-shared-base'
-import { SchemaType, formatBalance, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'

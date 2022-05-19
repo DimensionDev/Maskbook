@@ -1,14 +1,8 @@
 import { useMemo } from 'react'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-
-import {
-    ChainId,
-    formatBalance,
-    NonFungibleAssetProvider,
-    resolveAddressLinkOnExplorer,
-} from '@masknet/web3-shared-evm'
-import { isOne, isZero } from '@masknet/web3-shared-base'
+import { ChainId, NonFungibleAssetProvider, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { isOne, isZero, formatBalance } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'

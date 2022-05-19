@@ -1,6 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { FungibleToken, isZero } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'

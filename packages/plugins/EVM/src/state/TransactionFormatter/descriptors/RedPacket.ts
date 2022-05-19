@@ -1,8 +1,8 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, formatBalance, getNftRedPacketConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getNftRedPacketConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
-import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
+import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 
 export class RedPacketDescriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {

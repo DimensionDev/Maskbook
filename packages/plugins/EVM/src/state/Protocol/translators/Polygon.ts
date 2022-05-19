@@ -1,4 +1,4 @@
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context } from '../types'
 import { Base } from './Base'
 
@@ -8,6 +8,8 @@ export class Polygon extends Base {
 
         // the current version of metamask doesn't support polygon with EIP1559
         if (context.providerType !== ProviderType.MetaMask) return
+
+        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
         const config = {
             ...context.config,

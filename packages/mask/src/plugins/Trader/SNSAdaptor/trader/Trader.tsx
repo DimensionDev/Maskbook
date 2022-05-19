@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC20Token,
     createNativeToken,
     SchemaType,
-    formatBalance,
     TransactionStateType,
     useTokenConstants,
     UST,

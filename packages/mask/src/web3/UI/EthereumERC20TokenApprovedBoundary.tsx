@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 import { Grid, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, formatBalance, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({

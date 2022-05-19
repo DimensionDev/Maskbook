@@ -1,6 +1,5 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/base'
-import { formatBalance } from '@masknet/web3-shared-evm'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PoolTogetherTrophy } from '@masknet/icons'
@@ -11,7 +10,7 @@ import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '..
 import { CountdownView } from './CountdownView'
 import { NetworkView } from './NetworkView'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

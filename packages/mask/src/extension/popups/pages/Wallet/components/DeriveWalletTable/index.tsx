@@ -14,10 +14,10 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
-import { formatBalance, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../../utils'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     header: {

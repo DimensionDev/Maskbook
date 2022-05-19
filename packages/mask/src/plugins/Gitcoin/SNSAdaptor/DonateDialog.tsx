@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import {
     useAccount,
@@ -62,7 +62,6 @@ export function DonateDialog(props: DonateDialogProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants(chainId)
 
@@ -109,9 +108,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareText = token
         ? [
-              `I just donated ${title} with ${Others?.formatBalance(amount, token.decimals)} ${cashTag}${
-                  token.symbol
-              }. ${
+              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
                   isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                       ? `Follow @${
                             isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
@@ -141,7 +138,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             shareText,
             state: donateState,
-            summary: `Donating ${Others?.formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
+            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
     // #endregion

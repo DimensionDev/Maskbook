@@ -1,5 +1,5 @@
-import { SchemaType, formatAmount, formatBalance, useITOConstants } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { SchemaType, formatAmount, useITOConstants } from '@masknet/web3-shared-evm'
+import { formatBalance, isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'

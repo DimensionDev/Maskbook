@@ -1,4 +1,4 @@
-import { createContract, formatBalance } from '@masknet/web3-shared-evm'
+import { createContract } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 import { PluginPooltogetherRPC } from '../messages'
@@ -6,7 +6,7 @@ import PoolTogetherPrizeStrategyABI from '@masknet/web3-contracts/abis/PoolToget
 import type { PoolTogetherPrizeStrategy } from '@masknet/web3-contracts/types/PoolTogetherPrizeStrategy'
 import type { AbiItem } from 'web3-utils'
 import { useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 export function usePools() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

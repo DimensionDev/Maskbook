@@ -8,7 +8,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -86,7 +86,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         // )
     }, [])
 
-    const onSwap = useCallback((token: FungibleToken<number, string>) => {
+    const onSwap = useCallback((token: FungibleAsset<number, string>) => {
         // openSwapDialog({
         //     open: true,
         //     traderProps: {
@@ -102,7 +102,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     }, [])
 
     const onSend = useCallback(
-        (token: FungibleToken<number, string>) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        (token: FungibleAsset<number, string>) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
         [],
     )
 
@@ -171,11 +171,9 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                         <TableBody>
                             {dataSource
                                 .sort((first, second) => {
-                                    const firstValue = new BigNumber(
-                                        Others?.formatBalance?.(first.balance, first.decimals) ?? '',
-                                    )
+                                    const firstValue = new BigNumber(formatBalance(first.balance, first.decimals) ?? '')
                                     const secondValue = new BigNumber(
-                                        Others?.formatBalance?.(second.balance, second.decimals) ?? '',
+                                        formatBalance(second.balance, second.decimals) ?? '',
                                     )
 
                                     if (firstValue.isEqualTo(secondValue)) return 0
@@ -184,8 +182,8 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                                 })
                                 .map((asset, index) => (
                                     <FungibleTokenTableRow
-                                        onSend={() => onSend(asset.token)}
-                                        onSwap={() => onSwap(asset.token)}
+                                        onSend={() => onSend(asset)}
+                                        onSwap={() => onSwap(asset)}
                                         asset={asset}
                                         key={index}
                                     />

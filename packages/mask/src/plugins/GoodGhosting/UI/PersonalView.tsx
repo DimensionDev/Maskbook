@@ -1,4 +1,4 @@
-import { explorerResolver, formatBalance, formatEthereumAddress, TransactionStateType } from '@masknet/web3-shared-evm'
+import { explorerResolver, formatEthereumAddress, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Grid, Typography, Button, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
