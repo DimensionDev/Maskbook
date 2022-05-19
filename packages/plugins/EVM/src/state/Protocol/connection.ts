@@ -334,7 +334,7 @@ class Connection implements EVM_Connection {
     }
 
     getNativeToken(options?: EVM_Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
-        const token = createNativeToken(options?.chainId ?? ChainId.Mainnet)
+        const token = createNativeToken(options?.chainId ?? this.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return Promise.resolve(token)
     }

@@ -100,11 +100,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     )
     // #endregion
 
-    console.log({
-        balance,
-        fBalance: formatBalance(balance, 18),
-    })
-
     return (
         <TextField
             className={classes.root}
