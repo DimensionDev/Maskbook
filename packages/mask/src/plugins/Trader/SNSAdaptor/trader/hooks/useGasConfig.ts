@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAsync } from 'react-use'
 import { GasOptionConfig, formatGweiToWei, ChainId } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/public-api'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 // TODO: support multiple chain
 export function useGasConfig(chainId: ChainId) {

@@ -50,7 +50,10 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <FungibleTokenList blacklist={blackList.map((x) => x.address)} FixedSizeListProps={{ height: 340, itemSize: 54 }} />
+                <FungibleTokenList
+                    blacklist={blackList.map((x) => x.address)}
+                    FixedSizeListProps={{ height: 340, itemSize: 54 }}
+                />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>

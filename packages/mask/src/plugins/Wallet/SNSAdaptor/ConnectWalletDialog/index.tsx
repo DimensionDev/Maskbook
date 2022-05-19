@@ -8,7 +8,6 @@ import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
-import { currentNetworkSettings } from '../../settings'
 import { pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({

@@ -4,13 +4,18 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI'
-import { getRegisteredWeb3Networks, useAccount, useChainId, useWallet } from '@masknet/plugin-infra/web3'
+import {
+    getRegisteredWeb3Networks,
+    useAccount,
+    useChainId,
+    useProviderType,
+    useWallet,
+} from '@masknet/plugin-infra/web3'
 import { Flags } from '../../../../../../../shared'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -26,11 +31,11 @@ const useStyles = makeStyles()({
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
 
+    const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const navigate = useNavigate()
-    const providerType = useValueRef(currentProviderSettings)
+    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
 
     const networks = getRegisteredWeb3Networks().filter(
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,

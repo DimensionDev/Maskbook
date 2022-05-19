@@ -1,7 +1,6 @@
-import { getTrendingConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-unified'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 
 const TokenFields = `
   fragment TokenFields on Token {
@@ -88,8 +87,8 @@ export type Bundle = {
     ethPrice: number
 }
 
-async function fetchFromUniswapV2Subgraph<T>(query: string) {
-    const subgraphURL = getTrendingConstants(currentChainIdSettings.value).UNISWAP_V2_SUBGRAPH_URL
+async function fetchFromUniswapV2Subgraph<T>(chainId: ChainId, query: string) {
+    const subgraphURL = getTrendingConstants(chainId).UNISWAP_V2_SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
@@ -106,16 +105,19 @@ async function fetchFromUniswapV2Subgraph<T>(query: string) {
  * Fetch Ether price of given block
  * @param blockNumber if don't give, will return latest price
  */
-export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
+export async function fetchEtherPriceByBlockNumber(chainId: ChainId, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         bundles: Bundle[]
-    }>(`
+    }>(
+        chainId,
+        `
         query bundles {
             bundles(where: { id: 1 } ${blockNumber ? `block: { number: ${blockNumber} }` : ''}) {
                 ethPrice
             }
         }
-    `)
+    `,
+    )
     if (!data?.bundles) return
     return first(data.bundles)?.ethPrice
 }
@@ -124,7 +126,7 @@ export async function fetchEtherPriceByBlockNumber(blockNumber?: string) {
  * Fetch Ether price of list of blocks
  * @param blockNumbers
  */
-export async function fetchEtherPricesByBlockNumbers(blockNumbers: Array<string | undefined>) {
+export async function fetchEtherPricesByBlockNumbers(chainId: ChainId, blockNumbers: Array<string | undefined>) {
     const queries = blockNumbers.map((x) => {
         return `
             b${x}: bundle(id: "1", ${x ? `block: { number: ${x} }` : ''}) {
@@ -132,11 +134,14 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: Array<string 
             }
         `
     })
-    const data = await fetchFromUniswapV2Subgraph<Record<string, Bundle>>(`
+    const data = await fetchFromUniswapV2Subgraph<Record<string, Bundle>>(
+        chainId,
+        `
         query bundles {
             ${queries.join('\n')}
         }
-    `)
+    `,
+    )
 
     const result: Record<string, number | undefined> = {}
     if (!data) return result
@@ -151,7 +156,7 @@ export async function fetchEtherPricesByBlockNumbers(blockNumbers: Array<string 
  * Fetches tokens for an array of symbols (case-sensitive).
  * @param keyword
  */
-export async function fetchTokensByKeyword(keyword: string) {
+export async function fetchTokensByKeyword(chainId: ChainId, keyword: string) {
     // thegraph does not support case-insensitive searching
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]
@@ -162,7 +167,9 @@ export async function fetchTokensByKeyword(keyword: string) {
         symbol: string
         decimals: number
     }
-    const data = await fetchFromUniswapV2Subgraph<{ tokens: Token[] }>(`
+    const data = await fetchFromUniswapV2Subgraph<{ tokens: Token[] }>(
+        chainId,
+        `
         query tokens {
             tokens (where: { symbol_in: ${stringify(listOfKeywords)} }, orderBy: tradeVolume, orderDirection: desc) {
                 id
@@ -171,14 +178,15 @@ export async function fetchTokensByKeyword(keyword: string) {
                 decimals
             }
         }
-    `)
+    `,
+    )
     return data?.tokens ?? []
 }
 
 /**
  * Fetch the daily token data.
  */
-export async function fetchTokenDayData(address: string, date: Date) {
+export async function fetchTokenDayData(chainId: ChainId, address: string, date: Date) {
     const utcTimestamp = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
     const data = await fetchFromUniswapV2Subgraph<{
         data: {
@@ -194,7 +202,9 @@ export async function fetchTokenDayData(address: string, date: Date) {
                 dailyVolumeUSD: number
             }[]
         }
-    }>(`
+    }>(
+        chainId,
+        `
         {
             tokenDayDatas(first: 1000, orderBy: date, date: ${utcTimestamp}, where: { token: ${address} }) {
                 id
@@ -208,7 +218,8 @@ export async function fetchTokenDayData(address: string, date: Date) {
                 dailyVolumeUSD
             }
         }
-    `)
+    `,
+    )
     return first(data?.data.tokenDayData)
 }
 
@@ -217,12 +228,14 @@ export async function fetchTokenDayData(address: string, date: Date) {
  * @param address
  * @param blockNumber
  */
-export async function fetchTokenData(address: string, blockNumber?: string) {
+export async function fetchTokenData(chainId: ChainId, address: string, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         tokens: Token[]
         pairs0: Pair[]
         pairs1: Pair[]
-    }>(`
+    }>(
+        chainId,
+        `
         ${TokenFields}
         ${PairFields}
         query tokens {
@@ -236,7 +249,8 @@ export async function fetchTokenData(address: string, blockNumber?: string) {
                 ...PairFields
             }
         }
-    `)
+    `,
+    )
 
     return {
         token: first(data?.tokens),
@@ -248,10 +262,11 @@ export async function fetchTokenData(address: string, blockNumber?: string) {
  * fetch pairs bulk data
  * @param pairList
  */
-export async function fetchPairsBulk(pairList: string[]) {
+export async function fetchPairsBulk(chainId: ChainId, pairList: string[]) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
     }>(
+        chainId,
         `
            ${PairFields}
            query pairs {
@@ -272,10 +287,12 @@ export async function fetchPairsBulk(pairList: string[]) {
  * @param pairs
  * @param blockNumber
  */
-export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: string) {
+export async function fetchPairsHistoricalBulk(chainId: ChainId, pairs: string[], blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
-    }>(`
+    }>(
+        chainId,
+        `
             ${PairFields}
             query pairs {
                 pairs(first: 200, where: { id_in: ${stringify(
@@ -284,7 +301,8 @@ export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: st
                     ...PairFields
                 }
             }
-    `)
+    `,
+    )
 
     return data?.pairs ?? []
 }
@@ -294,17 +312,20 @@ export async function fetchPairsHistoricalBulk(pairs: string[], blockNumber?: st
  * @param pairAddress
  * @param blockNumber
  */
-export async function fetchPairData(pairAddress: string, blockNumber?: string) {
+export async function fetchPairData(chainId: ChainId, pairAddress: string, blockNumber?: string) {
     const data = await fetchFromUniswapV2Subgraph<{
         pairs: Pair[]
-    }>(`
+    }>(
+        chainId,
+        `
          ${PairFields}
          query pairs {
             pairs(${blockNumber ? `block : {number: ${blockNumber}}` : ''} where: { id: "${pairAddress}"} ) {
                 ...PairFields
             }
         }
-    `)
+    `,
+    )
 
     return first(data?.pairs)
 }
@@ -316,6 +337,7 @@ export async function fetchPairData(pairAddress: string, blockNumber?: string) {
  * @param skipCount
  */
 export async function fetchPricesByBlocks(
+    chainId: ChainId,
     tokenAddress: string,
     blocks: { blockNumber?: string; timestamp: number }[],
     skipCount = 50,
@@ -340,12 +362,15 @@ export async function fetchPricesByBlocks(
             `,
             )
 
-            return fetchFromUniswapV2Subgraph<Record<string, { ethPrice?: string; derivedETH?: string }>>(`
+            return fetchFromUniswapV2Subgraph<Record<string, { ethPrice?: string; derivedETH?: string }>>(
+                chainId,
+                `
                 query blocks {
                     ${queries}
                     ${blockQueries}
                 }
-            `)
+            `,
+            )
         }),
     )
 

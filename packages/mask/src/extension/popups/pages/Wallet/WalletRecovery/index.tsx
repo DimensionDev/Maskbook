@@ -4,7 +4,7 @@ import { PageHeader } from '../components/PageHeader'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
@@ -19,7 +19,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, ProviderType } from '@masknet/public-api'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     container: {

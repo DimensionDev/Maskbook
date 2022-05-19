@@ -8,18 +8,7 @@ import {
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
-import { currentDataProviderSettings } from '../../plugins/Trader/settings'
-import {
-    currentAccountSettings,
-    currentNetworkSettings,
-    currentProviderSettings,
-    currentChainIdSettings,
-    currentFungibleAssetDataProviderSettings,
-    currentNonFungibleAssetDataProviderSettings,
-    currentGasOptionsSettings,
-    currentTokenPricesSettings,
-} from '../../plugins/Wallet/settings'
-import { Flags, MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared'
 import { queryPersonasDB } from '../../../background/database/persona/db'
 
 export * from '../../../background/services/settings'
@@ -38,29 +27,6 @@ function create<T>(settings: InternalSettings<T>) {
 export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
-export const [getChainId, setChainId] = create(currentChainIdSettings)
-export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
-export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
-export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
-// export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getTrendingDataSource, setTrendingDataSource] = create(currentProviderSettings)
-export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
-
-export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
-
-export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
-
-export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
-    currentFungibleAssetDataProviderSettings,
-)
-
-export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
-    currentNonFungibleAssetDataProviderSettings,
-)
-
-export async function getWalletAllowTestChain() {
-    return Flags.wallet_allow_testnet
-}
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
     await currentPersonaIdentifier.readyPromise

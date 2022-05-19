@@ -1,8 +1,7 @@
 import { EVMChainsIcon, SolanaIcon, FlowIcon } from '@masknet/icons'
 import type { OverridableComponent } from '@mui/material/OverridableComponent'
 import type { SvgIconTypeMap } from '@mui/material'
-import { NetworkPluginID } from '@masknet/public-api'
-
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 export interface SupportedNetworkMap {
     name: string
     icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>

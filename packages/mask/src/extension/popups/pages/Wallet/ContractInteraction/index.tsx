@@ -32,13 +32,13 @@ import {
     formatCurrency,
     isGreaterThan,
     leftShift,
+    NetworkPluginID,
     pow10,
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
-import { NetworkPluginID } from '@masknet/public-api'
 
 const useStyles = makeStyles()(() => ({
     container: {

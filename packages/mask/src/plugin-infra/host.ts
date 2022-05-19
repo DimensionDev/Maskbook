@@ -15,7 +15,7 @@ import {
 } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../../shared'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
-import { currentChainIdSettings, currentMaskWalletAccountSettings } from '../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings, currentMaskWalletChainIdSettings } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
@@ -43,7 +43,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         closePopupWindow: Services.Helper.removePopupWindow,
 
         account: createSubscriptionFromValueRef(currentMaskWalletAccountSettings),
-        chainId: createSubscriptionFromValueRef(currentChainIdSettings),
+        chainId: createSubscriptionFromValueRef(currentMaskWalletChainIdSettings),
 
         currentPersona: createSubscriptionFromAsync(
             Services.Settings.getCurrentPersonaIdentifier,

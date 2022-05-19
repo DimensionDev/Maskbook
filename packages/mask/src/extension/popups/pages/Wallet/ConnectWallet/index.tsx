@@ -4,7 +4,7 @@ import { useMount } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { ExtensionSite, PopupRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import {
@@ -94,8 +94,13 @@ const ConnectWalletPage = memo(() => {
                 providerType: provider.type,
             })
 
+            const account = await connection?.connect()
+
             navigate(PopupRoutes.VerifyWallet, {
-                state: await connection?.connect(),
+                state: {
+                    ...account,
+                    providerType: provider.type,
+                },
             })
         },
         [],

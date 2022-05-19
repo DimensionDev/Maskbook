@@ -2,23 +2,16 @@ import * as bip39 from 'bip39'
 import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { first } from 'lodash-unified'
 import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
 import { fromHex, toHex } from '@masknet/shared-base'
-import { isSameAddress, currySameAddress } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { LegacyWalletRecordOutDB } from './helpers'
-import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import { hasNativeAPI } from '../../../../shared/native-rpc'
-// import { getAccounts } from '../../../extension/background-script/EthereumService'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
-    const address = currentAccountSettings.value
-    if (a.address === address) return -1
-    if (b.address === address) return 1
     if (a.updatedAt > b.updatedAt) return -1
     if (a.updatedAt < b.updatedAt) return 1
     if (a.createdAt > b.createdAt) return -1
@@ -26,44 +19,10 @@ function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
     return 0
 }
 
-function createWalletRecord(address: string, name: string): LegacyWalletRecord {
-    const now = new Date()
-    return {
-        address,
-        name,
-        erc20_token_whitelist: new Set(),
-        erc20_token_blacklist: new Set(),
-        erc721_token_whitelist: new Set(),
-        erc721_token_blacklist: new Set(),
-        erc1155_token_whitelist: new Set(),
-        erc1155_token_blacklist: new Set(),
-        mnemonic: [],
-        passphrase: '',
-        createdAt: now,
-        updatedAt: now,
-    }
-}
-
-export async function gatLegacyWallet(address: string = currentAccountSettings.value) {
-    const wallets = await getLegacyWallets()
-    return wallets.find(currySameAddress(address))
-}
-
-export async function getLegacyWallets(provider?: ProviderType) {
-    if (hasNativeAPI) {
-        // const accounts = await getAccounts()
-        const accounts: string[] = []
-        const address = first(accounts) ?? ''
-        if (!address) return []
-        return [createWalletRecord(address, 'Mask Network')]
-    }
-
+export async function getLegacyWallets() {
+    if (hasNativeAPI) return []
     const wallets = await getAllWalletRecords()
-    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-    if (provider === currentProviderSettings.value)
-        return wallets.filter(currySameAddress(currentAccountSettings.value))
-    if (provider) return []
-    return wallets
+    return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
 }
 
 export async function getLegacyWalletRecords() {

@@ -1,7 +1,7 @@
 import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/public-api'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'

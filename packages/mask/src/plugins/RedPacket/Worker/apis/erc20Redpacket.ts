@@ -10,7 +10,6 @@ import {
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 import type { RedPacketJSONPayload } from '../../types'
 
 const TOKEN_FIELDS = `
@@ -73,8 +72,8 @@ type RedpacketFromSubgraphType = {
     txid: string
 }
 
-async function fetchFromRedPacketSubgraph<T>(query: string) {
-    const { SUBGRAPH_URL } = getRedPacketConstants(currentChainIdSettings.value)
+async function fetchFromRedPacketSubgraph<T>(chainId: ChainId, query: string) {
+    const { SUBGRAPH_URL } = getRedPacketConstants(chainId)
     if (!SUBGRAPH_URL) return null
     try {
         const response = await fetch(SUBGRAPH_URL, {
@@ -91,27 +90,33 @@ async function fetchFromRedPacketSubgraph<T>(query: string) {
     }
 }
 
-export async function getRedPacketTxid(rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+export async function getRedPacketTxid(chainId: ChainId, rpid: string) {
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+        chainId,
+        `
     {
         redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
             txid
         }
     }
-    `)
+    `,
+    )
     return first(data?.redPackets)?.txid
 }
 
-export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(currentChainIdSettings.value)
+export async function getRedPacketHistory(chainId: ChainId, address: string) {
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
 
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+        chainId,
+        `
     {
         redPackets (where: { creator: "${address.toLowerCase()}" }) {
             ${RED_PACKET_FIELDS}
         }
     }
-    `)
+    `,
+    )
 
     if (!data?.redPackets) return []
 

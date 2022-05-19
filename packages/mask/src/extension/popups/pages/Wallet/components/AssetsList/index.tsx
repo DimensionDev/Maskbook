@@ -9,7 +9,7 @@ import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { isNaN } from 'lodash-unified'
-import type { formatBalance, FungibleAsset } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleAsset } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     list: {

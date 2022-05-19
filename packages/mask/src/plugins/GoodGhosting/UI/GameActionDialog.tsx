@@ -2,7 +2,7 @@ import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/mate
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'
