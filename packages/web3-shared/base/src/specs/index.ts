@@ -1,4 +1,3 @@
-import type BigNumber from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
@@ -68,11 +67,11 @@ export enum TransactionDescriptorType {
     TRANSFER = 'transfer',
     /** A transaction to operate state mutations. */
     INTERACTION = 'interaction',
-    /** A transaction to depoly programs. */
+    /** A transaction to deploy programs. */
     DEPLOYMENT = 'deployment',
     /** A transaction to cancel a previous transaction. */
     CANCEL = 'cancel',
-    /** A transaction to modify a previous trasnaction. */
+    /** A transaction to modify a previous transaction. */
     RETRY = 'retry', // speed up
 }
 
@@ -610,6 +609,14 @@ export interface Connection<
     connect(options?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(options?: Web3ConnectionOptions): Promise<void>
+    /** Confirm request */
+    confirmRequest?: (options?: Web3ConnectionOptions) => Promise<void>
+    /** Reject request */
+    rejectRequest?: (options?: Web3ConnectionOptions) => Promise<void>
+    /** Replace request */
+    replaceRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
+    /** Cancel request */
+    cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
 export interface SettingsState {

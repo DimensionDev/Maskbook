@@ -694,9 +694,19 @@
     "popups_wallet_gas_fee_settings_max_priority_fee": "최대 우선 가스비",
     "popups_wallet_gas_fee_settings_max_fee": "최대 가스비",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "최소한 가스비는 {{limit}} 입니다",
+    "popups_wallet_signature_request": "서명",
+    "popups_wallet_signature_request_message": "메시지",
+    "popups_wallet_contract_interaction": "컨트렉트 인터액션",
+    "popups_wallet_contract_interaction_transfer": "전송",
+    "popups_wallet_contract_interaction_gas_fee": "기스비",
+    "popups_wallet_contract_interaction_edit": "수정",
+    "popups_wallet_contract_interaction_total": "총액",
     "popups_wallet_unlock_wallet": "월렛 언락",
     "popups_wallet_unlock_error_password": "잘못된 비밀번호",
+    "popups_wallet_activity_to_address": "받는 주소: {{address}}",
+    "popups_wallet_transfer_error_tip": "네트워크 연결 실패나 컨트렉트 오류때문에 발송 거래가 실패되었습니다.",
     "popups_wallet_transactions_pending": "대기중...",
+    "popups_wallet_re_send": "다시 보내기",
     "popups_wallet_choose_token": "토큰 선택",
     "popups_wallet_gas_price": "가스 가격",
     "popups_missing_parameter_caption": "이 페이지를 닫아세요.",
@@ -707,5 +717,6 @@
     "popups_persona_persona_name_exists": "이미 존재된 페르소나입니다",
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
-    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다."
+    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
+    "popups_wallet_unsupported_network": "지원되지 않는 네트워크"
 }
