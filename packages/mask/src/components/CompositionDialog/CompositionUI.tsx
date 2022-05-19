@@ -39,6 +39,8 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 0,
         width: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
         display: 'flex',
         padding: '14px 16px',
         boxSizing: 'border-box',
@@ -47,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: theme.palette.background.paper,
         boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
-        transform: 'translateX(-16px)',
     },
     between: {
         justifyContent: 'space-between',
