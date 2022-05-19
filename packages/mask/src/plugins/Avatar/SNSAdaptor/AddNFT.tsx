@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
@@ -7,7 +6,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { createNFT } from '../utils'
 import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -72,7 +71,6 @@ export function AddNFT(props: AddNFTProps) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
-                await WalletRPC.addToken(token)
                 onAddClick?.(token)
                 handleClose()
             })

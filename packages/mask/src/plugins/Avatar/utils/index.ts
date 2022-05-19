@@ -1,9 +1,9 @@
 import { first, isNull } from 'lodash-unified'
-import { ChainId, NonFungibleAssetProvider, createContract } from '@masknet/web3-shared-evm'
-// import { EVM_RPC } from '../../EVM/messages'
+import { ChainId, NonFungibleAssetProvider, createContract, SchemaType } from '@masknet/web3-shared-evm'
+import { EVM_RPC } from '@masknet/plugin-evm'
 import Services from '../../../extension/service'
-import { getOrderUnitPrice, NextIDProof, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
-import { ZERO, formatBalance } from '@masknet/web3-shared-base'
+import { getOrderUnitPrice, NextIDProof, NextIDStorage } from '@masknet/web3-providers'
+import { ZERO, formatBalance, NonFungibleTokenEvent, NonFungibleToken } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
@@ -13,10 +13,10 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { AbiItem } from 'web3-utils'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 
-// function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
-//     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
-//     return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
-// }
+function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
+    if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
+    return formatBalance(lastSale.price.usd, lastSale.paymentToken.decimals)
+}
 
 export async function getNFTByOpensea(address: string, tokenId: string) {
     const asset = await EVM_RPC.getAsset({
@@ -60,13 +60,11 @@ export async function getNFT(address: string, tokenId: string) {
 }
 
 export async function getNFTByChain(
+    web3: Web3,
     address: string,
     tokenId: string,
     chainId: ChainId,
-): Promise<ERC721TokenDetailed | undefined> {
-    const web3 = createWeb3(Services.Ethereum.request, () => ({
-        chainId,
-    }))
+): Promise<NonFungibleToken<ChainId, SchemaType> | undefined> {
     const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
     if (!contract) return
 
