@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/public-api'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
 import {
@@ -30,6 +29,7 @@ import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface TipsEntranceDialogProps {
     open: boolean

@@ -10,7 +10,14 @@ import {
     multipliedBy,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { SchemaType, formatWeiToEther, TransactionStateType, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    formatWeiToEther,
+    NetworkType,
+    TransactionStateType,
+    ChainId,
+    explorerResolver,
+} from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -39,7 +46,6 @@ import {
     useNativeToken,
     useNativeTokenPrice,
 } from '@masknet/plugin-infra/web3'
-import { NetworkType } from '@masknet/public-api'
 import { RightIcon } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 

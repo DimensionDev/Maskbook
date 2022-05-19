@@ -1,6 +1,6 @@
 import { useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/public-api'
 import { usePickToken } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'

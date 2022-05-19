@@ -5,7 +5,7 @@ import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/public-api'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {

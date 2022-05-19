@@ -10,7 +10,6 @@ import type {
 import type { ChainId, NonFungibleAssetProvider, SchemaType, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -214,13 +213,13 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
 
 export function CollectibleList(props: CollectibleListProps) {
     const { address, collectibles, error, loading, retry } = props
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
 
     return (
         <CollectibleListUI
             classes={classes}
-            provider={provider}
+            // TODO: create currentNonFungibleAssetDataProviderSettings for collectible plugin
+            // provider={}
             collectibles={collectibles}
             loading={loading}
             collectiblesRetry={retry}

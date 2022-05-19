@@ -218,50 +218,6 @@ export enum SupportedLanguages {
     jaJP = 'ja-JP',
 }
 
-/**
- * Keep updating to packages/web3-shared/evm/types/index.ts
- */
-export enum NetworkType {
-    Ethereum = 'Ethereum',
-    Binance = 'Binance',
-    Polygon = 'Polygon',
-    Arbitrum = 'Arbitrum',
-    xDai = 'xDai',
-    Celo = 'Celo',
-    Fantom = 'Fantom',
-    Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
-    Boba = 'Boba',
-    Fuse = 'Fuse',
-    Metis = 'Metis',
-    Optimistic = 'Optimistic',
-    Harmony = 'Harmony',
-    Conflux = 'Conflux',
-}
-
-export enum ProviderType {
-    MaskWallet = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-    Fortmatic = 'Fortmatic',
-    Coin98 = 'Coin98',
-    MathWallet = 'MathWallet',
-    WalletLink = 'WalletLink',
-    CustomNetwork = 'CustomNetwork',
-}
-
-export enum FungibleAssetProvider {
-    ZERION = 'Zerion',
-    DEBANK = 'Debank',
-}
-
-export enum NonFungibleAssetProvider {
-    OPENSEA = 'OpenSea',
-    RARIBLE = 'Rarible',
-    NFTSCAN = 'NFTScan',
-    ZORA = 'Zora',
-}
-
 export interface PriceRecord {
     [currency: string]: number
 }
@@ -269,10 +225,4 @@ export interface PriceRecord {
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
     [token: string]: PriceRecord
-}
-
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-    PLUGIN_SOLANA = 'com.mask.solana',
 }

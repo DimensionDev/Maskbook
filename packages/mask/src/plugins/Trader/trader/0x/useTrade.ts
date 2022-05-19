@@ -11,9 +11,8 @@ import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapQuoteResponse, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
-import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
+import { useAccount, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -53,6 +52,7 @@ export function useTrade(
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapQuoteResponse | null> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
 
@@ -67,10 +67,10 @@ export function useTrade(
             if (outputAmount === '0' && !isExactIn) return null
 
             const sellToken = isNativeTokenAddress(inputToken)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? currentNetworkSettings.value)
+                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken)
-                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? currentNetworkSettings.value)
+                ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
                 {
@@ -83,11 +83,12 @@ export function useTrade(
                     slippagePercentage: slippage,
                     affiliateAddress: ZRX_AFFILIATE_ADDRESS,
                 },
-                chainResolver.chainNetworkType(targetChainId) ?? currentNetworkSettings.value,
+                chainResolver.chainNetworkType(targetChainId) ?? networkType,
             )
         },
         [
             NATIVE_TOKEN_ADDRESS,
+            networkType,
             account,
             strategy,
             inputAmount,

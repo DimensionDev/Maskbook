@@ -10,7 +10,6 @@ import {
     useNativeToken,
     useNativeTokenPrice,
 } from '@masknet/plugin-infra/web3'
-import { NetworkType } from '@masknet/public-api'
 import { FormattedAddress, TokenAmountPanel, usePickToken } from '@masknet/shared'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import {
@@ -33,6 +32,7 @@ import {
     chainResolver,
     explorerResolver,
     isValidAddress,
+    NetworkType,
 } from '@masknet/web3-shared-evm'
 import TuneIcon from '@mui/icons-material/Tune'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'

@@ -624,6 +624,8 @@ export interface SettingsState {
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
     currencyType?: Subscription<CurrencyType>
+    /** The gas options type */
+    gasOptionType?: Subscription<GasOptionType>
 }
 export interface AddressBookState<ChainId> {
     /** The tracked addresses of currently chosen sub-network */

@@ -5,8 +5,7 @@ import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/public-api'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,

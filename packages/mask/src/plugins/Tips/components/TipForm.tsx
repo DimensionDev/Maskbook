@@ -1,8 +1,8 @@
 import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkPluginID } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,

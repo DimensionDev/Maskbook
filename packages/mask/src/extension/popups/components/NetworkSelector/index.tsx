@@ -3,10 +3,16 @@ import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, useAccount, useChainId, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
-import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import {
+    getRegisteredWeb3Networks,
+    useAccount,
+    useChainId,
+    Web3Helper,
+    useWeb3State,
+    useProviderType,
+} from '@masknet/plugin-infra/web3'
+import { currentMaskWalletAccountSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -58,7 +64,7 @@ export const NetworkSelector = memo(() => {
     const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const providerType = useValueRef(currentProviderSettings)
+    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             if (providerType === ProviderType.MaskWallet) {

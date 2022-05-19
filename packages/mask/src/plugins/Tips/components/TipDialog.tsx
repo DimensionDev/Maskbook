@@ -28,8 +28,7 @@ import { TipType } from '../types'
 import { ConfirmModal } from './common/ConfirmModal'
 import { AddDialog } from './AddDialog'
 import { TipForm } from './TipForm'
-import { NetworkPluginID } from '@masknet/public-api'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

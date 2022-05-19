@@ -1,28 +1,18 @@
-import type {
-    Appearance,
-    LanguageOptions,
-    NetworkType,
-    ProviderType,
-    FungibleAssetProvider,
-    NonFungibleAssetProvider,
-    NetworkPluginID,
-} from '@masknet/public-api'
+import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
+
+enum NetworkPluginID {
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
+    PLUGIN_SOLANA = 'com.mask.solana',
+}
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     pluginIDSettings: NetworkPluginID
     languageSettings: LanguageOptions
-    currentChainIdSettings: number
-    // currentTokenPricesSettings: CryptoPrice
-    // currentDataProviderSettings: DataProvider
-    currentProviderSettings: ProviderType
-    currentNetworkSettings: NetworkType
-    currentAccountSettings: string
-    currentFungibleAssetDataProviderSettings: FungibleAssetProvider
-    currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
 }
 

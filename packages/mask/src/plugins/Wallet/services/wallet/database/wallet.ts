@@ -2,10 +2,9 @@ import { omit } from 'lodash-unified'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
-import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db'
-import { currentMaskWalletAccountSettings, currentAccountSettings, currentProviderSettings } from '../../../settings'
+import { currentMaskWalletAccountSettings } from '../../../settings'
 import type { WalletRecord } from '../type'
 
 function WalletRecordOutDB(record: WalletRecord) {
@@ -52,25 +51,18 @@ export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInf
     return has
 }
 
-export async function getWallets(provider?: ProviderType) {
+export async function getWallets() {
     const wallets = (await asyncIteratorToArray(PluginDB.iterate('wallet'))).map((x) => x.value)
-    const address =
-        provider === ProviderType.MaskWallet ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
 
-    wallets.sort((a, z) => {
-        if (isSameAddress(a.address, address)) return -1
-        if (isSameAddress(z.address, address)) return 1
-        if (a.updatedAt > z.updatedAt) return -1
-        if (a.updatedAt < z.updatedAt) return 1
-        if (a.createdAt > z.createdAt) return -1
-        if (a.createdAt < z.createdAt) return 1
-        return 0
-    })
-    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x.storedKeyInfo).map(WalletRecordOutDB)
-    if (provider === currentProviderSettings.value)
-        return wallets.filter(currySameAddress(address)).map(WalletRecordOutDB)
-    if (provider) return []
-    return wallets.map(WalletRecordOutDB)
+    return wallets
+        .sort((a, z) => {
+            if (a.updatedAt > z.updatedAt) return -1
+            if (a.updatedAt < z.updatedAt) return 1
+            if (a.createdAt > z.createdAt) return -1
+            if (a.createdAt < z.createdAt) return 1
+            return 0
+        })
+        .map(WalletRecordOutDB)
 }
 
 export async function addWallet(
