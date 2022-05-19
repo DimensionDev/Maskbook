@@ -7,13 +7,13 @@ import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
 import { WalletHeader } from './components/WalletHeader'
-import { useWallet } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -41,7 +41,8 @@ export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
@@ -56,26 +57,31 @@ export default function Wallet() {
             return
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
-        // const computedPayload = await Services.Ethereum.getComputedPayload(payload)
-        // const value = {
-        //     payload,
-        //     computedPayload,
-        // }
-        // if (value?.computedPayload) {
-        //     switch (value.computedPayload.type) {
-        //         case EthereumRpcType.SIGN:
-        //         case EthereumRpcType.SIGN_TYPED_DATA:
-        //             navigate(PopupRoutes.WalletSignRequest, { replace: true })
-        //             break
-        //         case EthereumRpcType.CONTRACT_INTERACTION:
-        //         case EthereumRpcType.SEND_ETHER:
-        //             navigate(PopupRoutes.ContractInteraction, { replace: true })
-        //             break
-        //         default:
-        //             break
-        //     }
-        // }
-    }, [location.search, location.pathname])
+        const computedPayload = getPayloadConfig(payload)
+        if (!computedPayload) return
+
+        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
+
+        if (
+            formatterTransaction &&
+            [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
+                formatterTransaction.type,
+            )
+        ) {
+            navigate(PopupRoutes.ContractInteraction, { replace: true })
+        }
+
+        if (computedPayload) {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SIGN:
+                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
+                    break
+                default:
+                    break
+            }
+        }
+    }, [location.search, location.pathname, chainId])
 
     useEffect(() => {
         if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return

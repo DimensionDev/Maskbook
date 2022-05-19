@@ -112,10 +112,6 @@ export const Prior1559GasSetting = memo(() => {
 
     // #region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
-        // const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-        //
-        // if (!response) return null
-
         const gasOptions = await GasOptions?.getGasOptions?.(chainId)
         if (!gasOptions) return null
         return {
@@ -150,10 +146,10 @@ export const Prior1559GasSetting = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
-            return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
+            return new BigNumber(value?.formatterTransaction?._tx.gas ?? 0).toNumber()
         }
         return 0
     }, [value])
@@ -161,11 +157,11 @@ export const Prior1559GasSetting = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return web3?.eth.estimateGas(value.computedPayload._tx) ?? 0
+                return web3?.eth.estimateGas(value.formatterTransaction._tx) ?? 0
             } catch {
                 return 0
             }
@@ -207,17 +203,17 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-            value?.computedPayload?.type === TransactionDescriptorType.INTERACTION
+            value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+            value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
             // if rpc payload contain gas price, set it to default values
-            if (value?.computedPayload._tx.gasPrice) {
-                const minGasPrice = minGasPriceOfChain[chainId]
+            if (value?.formatterTransaction._tx.gasPrice) {
+                const minGasPrice = minGasPriceOfChain[chainId as ChainId]
                 // if the gas price in payload is lower than minimum value
-                if (minGasPrice && isLessThan(value.computedPayload._tx.gasPrice as number, minGasPrice)) {
+                if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice as number, minGasPrice)) {
                     setValue('gasPrice', formatWeiToGwei(minGasPrice).toString())
                 }
-                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
+                setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }

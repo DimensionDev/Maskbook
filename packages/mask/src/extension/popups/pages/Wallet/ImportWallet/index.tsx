@@ -112,8 +112,6 @@ const useStyles = makeStyles()({
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    // const chainId = useChainId()
-    // const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')

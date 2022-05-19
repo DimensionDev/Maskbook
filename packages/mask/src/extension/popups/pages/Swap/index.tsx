@@ -10,8 +10,8 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
 import { useChainId, useReverseAddress, useTransactions, useWallet } from '@masknet/plugin-infra/web3'
-// import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
-// import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
+import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -99,11 +99,11 @@ export default function SwapPage() {
                             <Typography variant="h1" className={classes.title}>
                                 {t('plugin_trader_swap')}
                             </Typography>
-                            {/* <TargetChainIdContext.Provider>
+                            <TargetChainIdContext.Provider>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
-                            </TargetChainIdContext.Provider> */}
+                            </TargetChainIdContext.Provider>
                         </main>
                     </div>
                 </div>

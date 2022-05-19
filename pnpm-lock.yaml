@@ -327,7 +327,6 @@ importers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
-      '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
       '@ethersproject/abi': ^5.4.0
@@ -474,7 +473,6 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_5owzivba7saavwcb3imbrcsadu
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
-      '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0

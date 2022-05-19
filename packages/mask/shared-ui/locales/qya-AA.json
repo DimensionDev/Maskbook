@@ -892,6 +892,7 @@
     "wallet_verify_empty_alert": "crwdns16408:0crwdne16408:0",
     "wallet_verify_persona_sign_intro": "crwdns16316:0crwdne16316:0",
     "waller_verify_wallet_sign_intro": "crwdns16318:0crwdne16318:0",
+    "popups_wallet_disconnect_success": "crwdns16334:0crwdne16334:0",
     "popups_add_wallet": "crwdns16320:0crwdne16320:0",
     "popups_verify_persona_sign_success": "crwdns16564:0crwdne16564:0",
     "popups_verify_persona_sign_failed": "crwdns16566:0crwdne16566:0",

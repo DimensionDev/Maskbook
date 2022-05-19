@@ -17,7 +17,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { NameService } = useWeb3State()
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
     const navigate = useNavigate()
     const location = useLocation()
@@ -31,7 +31,7 @@ const ConnectedWallets = memo(() => {
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
-                    const domain = await NameService?.reverse?.(NetworkPluginID.PLUGIN_EVM, x.identity)
+                    const domain = await NameService?.reverse?.(chainId, x.identity)
 
                     if (domain)
                         return {
@@ -67,7 +67,7 @@ const ConnectedWallets = memo(() => {
                 return x
             })
             .reverse()
-    }, [wallets, NameService, proofs])
+    }, [wallets, NameService, proofs, chainId])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: ConnectedWalletInfo) => {

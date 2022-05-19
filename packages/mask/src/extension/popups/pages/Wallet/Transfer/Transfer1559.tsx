@@ -12,7 +12,6 @@ import {
 import {
     formatBalance,
     FungibleAsset,
-    GasOptionType,
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThan,

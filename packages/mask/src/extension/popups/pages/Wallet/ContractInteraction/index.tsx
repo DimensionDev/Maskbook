@@ -310,7 +310,7 @@ const ContractInteraction = memo(() => {
         .times(nativeTokenPrice ?? 0)
         .plus(tokenValueUSD)
         .toString()
-    //
+
     console.log('DEBUG: ContractInteraction')
     console.log({
         amount,

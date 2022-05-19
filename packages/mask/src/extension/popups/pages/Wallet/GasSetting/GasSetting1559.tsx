@@ -151,10 +151,10 @@ export const GasSetting1559 = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
-            return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
+            return new BigNumber(value?.formatterTransaction?._tx.gas ?? 0).toNumber()
         }
         return 0
     }, [value])
@@ -164,16 +164,16 @@ export const GasSetting1559 = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
                 if (!web3) return 0
                 return web3.eth.estimateGas({
-                    data: value.computedPayload._tx.data,
-                    from: value.computedPayload._tx.from,
-                    to: value.computedPayload._tx.to,
-                    value: value.computedPayload._tx.value,
+                    data: value.formatterTransaction._tx.data,
+                    from: value.formatterTransaction._tx.from,
+                    to: value.formatterTransaction._tx.to,
+                    value: value.formatterTransaction._tx.value,
                 })
             } catch {
                 setGetGasLimitError(true)
@@ -233,20 +233,27 @@ export const GasSetting1559 = memo(() => {
     // #region If the payload type be TRANSFER or INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === TransactionDescriptorType.TRANSFER ||
-            value?.computedPayload?.type === TransactionDescriptorType.INTERACTION
+            value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+            value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
             if (
-                value?.computedPayload?.type === TransactionDescriptorType.INTERACTION &&
-                !['transfer', 'transferFrom', 'approve'].includes(value?.computedPayload.name)
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
+                value?.transactionContext?.name &&
+                !['transfer', 'transferFrom', 'approve'].includes(value?.transactionContext?.name)
             ) {
                 setOption(1)
-            } else if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
+            } else if (
+                value?.formatterTransaction._tx.maxFeePerGas &&
+                value?.formatterTransaction._tx.maxPriorityFeePerGas
+            ) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(toFixed(value.computedPayload._tx.maxPriorityFeePerGas), 'gwei'),
+                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas as string), 'gwei'),
                 )
-                setValue('maxFeePerGas', fromWei(toFixed(value.computedPayload._tx.maxFeePerGas), 'gwei'))
+                setValue(
+                    'maxFeePerGas',
+                    fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas as string), 'gwei'),
+                )
             } else {
                 setOption(1)
             }
