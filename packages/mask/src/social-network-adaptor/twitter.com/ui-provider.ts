@@ -84,7 +84,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
