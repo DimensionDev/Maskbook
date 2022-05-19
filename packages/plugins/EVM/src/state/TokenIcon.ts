@@ -10,6 +10,7 @@ import {
 
 export class TokenIcon implements TokenIconState<ChainId> {
     constructor(context: Plugin.Shared.SharedContext) {}
+
     async getFungibleTokenIconURLs(chainId: ChainId, address: string) {
         const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(chainId)
         const checkSummedAddress = formatEthereumAddress(address)

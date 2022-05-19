@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-unified'
-import { ChainId, chainResolver, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, createNativeToken, formatEthereumAddress, SchemaType } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
     TokenType,
@@ -25,7 +25,7 @@ export function formatAssets(data: WalletTokenRecord[]): FungibleAsset<ChainId, 
             ...list,
             {
                 id: address,
-                address: address,
+                address: formatEthereumAddress(address),
                 chainId: chainIdFromChain,
                 type: TokenType.Fungible,
                 schema: SchemaType.ERC20,

@@ -1,6 +1,5 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
@@ -8,18 +7,28 @@ import {
     useAccount,
     useChainId,
     useCurrentWeb3NetworkPluginID,
+    useFungibleAssets,
     useFungibleToken,
     useFungibleTokensBalance,
     useFungibleTokensFromTokenList,
+    useNativeToken,
     useTrustedFungibleTokens,
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { currySameAddress, FungibleToken, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    createFungibleToken,
+    CurrencyType,
+    currySameAddress,
+    formatBalance,
+    FungibleToken,
+    isSameAddress,
+    NetworkPluginID,
+} from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
 
 const DEFAULT_LIST_HEIGHT = 300
-const SEARCH_KEYS = ['token.address', 'token.symbol', 'token.name']
+const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID> extends withClasses<'list' | 'placeholder'> {
     pluginID?: T
@@ -58,25 +67,13 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
-    const { Others } = useWeb3State() as Web3Helper.Web3State<T>
+    const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
     const fungibleTokens = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()
 
-    // #region add token by address
-    const [keyword, setKeyword] = useState('')
-    const searchedTokenAddress = useMemo(() => {
-        if (!keyword || !Others?.isValidAddress(keyword)) return
-        return keyword
-    }, [keyword])
-
-    const { value: searchedToken, loading: searchedTokenLoading } = useFungibleToken(
-        pluginID,
-        searchedTokenAddress ?? '',
-    )
-    // #endregion
-
+    const nativeToken = Others?.chainResolver.nativeCurrency(chainId)
     const allFungibleTokens = uniqBy(
-        [...tokens, ...fungibleTokens, ...trustedFungibleTokens, ...(searchedToken ? [searchedToken] : EMPTY_LIST)],
+        [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
         (x) => x.address.toLowerCase(),
     )
 
@@ -91,51 +88,101 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         filteredFungibleTokens.map((x) => x.address),
     )
 
-    console.log({
-        keyword,
-        trustedFungibleTokens,
-        filteredFungibleTokens,
-        fungibleTokensBalance,
-        searchedToken,
-        fungibleTokens,
+    const { value: fungibleAssets = [], loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
+    const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
+
+    const sortedFungibleTokens = filteredFungibleTokens.sort((a, b) => {
+        // tokens belong to the current chain
+        if (a.chainId !== b.chainId) {
+            if (a.chainId === chainId) return -1
+            if (b.chainId === chainId) return 1
+        }
+
+        // native token
+        if (isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))) return -1
+        if (isSameAddress(b.address, Others?.getNativeTokenAddress(b.chainId))) return 1
+
+        // usd value
+        const aValueInUSD = Number.parseFloat(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
+        const bValueInUSD = Number.parseFloat(fungibleAssetsTable[b.address]?.value?.[CurrencyType.USD] ?? '0')
+        if (aValueInUSD > bValueInUSD) return -1
+        if (aValueInUSD < bValueInUSD) return 1
+
+        // balance
+        const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+        const bBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[b.address] ?? '0', b.decimals))
+
+        if (aBalance > bBalance) return -1
+        if (aBalance < bBalance) return 1
+
+        // mask token
+        if (isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
+        if (isSameAddress(b.address, Others?.getMaskTokenAddress(b.chainId))) return 1
+
+        // alphabet
+        if ((a.name ?? '') < (b.name ?? '')) return -1
+        if ((a.name ?? '') > (b.name ?? '')) return 1
+
+        return 0
     })
 
-    // const getPlaceHolder = () => {
-    //     if (renderTokens.length === 0)
-    //         return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
-    //     if (searchedTokenLoading)
-    //         return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
-    //     if (!renderAssets.length)
-    //         return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
-    //     return null
-    // }
+    // #region add token by address
+    const [keyword, setKeyword] = useState('')
+    const searchedTokenAddress =
+        Others?.isValidAddress(keyword) && !sortedFungibleTokens.some((x) => isSameAddress(x.address, keyword))
+            ? keyword
+            : ''
+
+    const { value: searchedToken, loading: searchedTokenLoading } = useFungibleToken(pluginID, searchedTokenAddress)
+    // #endregion
+
+    const getPlaceholder = () => {
+        if (Object.keys(fungibleTokensBalance).length === 0 || fungibleTokensBalanceLoading)
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
+        if (searchedTokenLoading)
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
+        if (searchedTokenAddress && !searchedToken)
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
+        return null
+    }
 
     return (
         <SearchableList<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
             onSelect={(token) => onSelect?.(token)}
             onSearch={setKeyword}
-            data={filteredFungibleTokens}
+            data={
+                searchedToken &&
+                isSameAddress(searchedToken.address, searchedTokenAddress) &&
+                !sortedFungibleTokens.find((x) => isSameAddress(x.address, searchedTokenAddress))
+                    ? [searchedToken]
+                    : sortedFungibleTokens
+            }
             searchKey={SEARCH_KEYS}
             disableSearch={!!props.disableSearch}
             itemRender={getFungibleTokenItem<T>(
-                'personal',
-                false,
-                false,
-                '1000',
                 account,
-                // trustedFungibleTokens,
-                // searchedToken ? [searchedToken] : [],
-                // searchedToken
-                //     ? [...tokens, ...erc20TokensDetailed].find((x) => isSameAddress(x.address, searchedToken.address))
-                //         ? { from: 'search', inList: true }
-                //         : { from: 'search', inList: false }
-                //     : { from: 'defaultList', inList: true },
-                // selectedTokens,
-                // assetsLoading,
-                // account,
+                (address) => {
+                    if (isSameAddress(nativeToken?.address, address)) return 'offcial'
+
+                    const inOffcialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
+                    if (inOffcialList) return 'offcial'
+
+                    const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
+                    if (inPersonaList) return 'personal'
+
+                    return 'external'
+                },
+                (address) => fungibleTokensBalance[address] ?? '0',
+                (address) => selectedTokens.some((x) => isSameAddress(x, address)),
+                (address) => fungibleTokensBalanceLoading || fungibleAssetsLoading,
+                async (
+                    token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+                ) => {
+                    await Token?.addToken?.(token)
+                    await Token?.trustToken?.(account, token)
+                },
             )}
-            // placeholder={getPlaceHolder()}
-            // placeholder="Test"
+            placeholder={getPlaceholder()}
             FixedSizeListProps={FixedSizeListProps}
             SearchFieldProps={{
                 placeholder: t.erc20_token_list_placeholder(),

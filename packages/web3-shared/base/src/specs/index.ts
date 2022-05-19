@@ -863,6 +863,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     getDefaultNetworkType(): NetworkType
     getZeroAddress(chainId?: ChainId): string
     getNativeTokenAddress(chainId?: ChainId): string
+    getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     // #endregion
 }

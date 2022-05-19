@@ -415,7 +415,7 @@ export namespace TokenListBaseAPI {
         name: string
         symbol: string
         decimals: number
-        logoURL?: string
+        logoURI?: string
     }
 
     export interface TokenList<ChainId> {

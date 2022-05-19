@@ -29,6 +29,7 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
             providerDescriptors: ProviderDescriptor<ChainId, ProviderType>[]
         },
     ) {}
+
     getDefaultChainId(): ChainId {
         throw new Error('Method not implemented.')
     }
@@ -46,6 +47,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
     }
     getNativeTokenAddress(chainId?: ChainId | undefined): string {
         return this.options.defaultAddress
+    }
+    getMaskTokenAddress(chainId?: ChainId | undefined): string | undefined {
+        return
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale

@@ -14,6 +14,7 @@ import {
     getZerionConstants,
     SchemaType,
     networkResolver,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import {
     SocketRequestAssetScope,
@@ -74,7 +75,7 @@ export function formatAssets(
             name: asset.name ?? 'Unknown Token',
             symbol: asset.symbol,
             decimals: asset.decimals,
-            address,
+            address: formatEthereumAddress(address),
             logoURI: asset.icon_url,
             balance: quantity,
             price: {

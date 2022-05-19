@@ -67,11 +67,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export const getFungibleTokenItem =
     <T extends NetworkPluginID>(
-        source: 'personal' | 'offcial' | 'external',
-        selected = false,
-        loading = true,
-        balance = '0',
-        account = '',
+        account: string,
+        getSource: (address: string) => 'personal' | 'offcial' | 'external',
+        getBalance: (address: string) => string,
+        isSelected: (address: string) => boolean,
+        isLoading: (address: string) => boolean,
+        importToken: (
+            token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+        ) => Promise<void>,
     ) =>
     ({
         data: token,
@@ -85,14 +88,21 @@ export const getFungibleTokenItem =
         if (!token) return null
         const { address, name, symbol, decimals, logoURL } = token
 
+        const { source, balance, selected, loading } = useMemo(() => {
+            return {
+                source: getSource(address),
+                balance: getBalance(address),
+                selected: isSelected(address),
+                loading: isLoading(address),
+            }
+        }, [address, getSource, getBalance, isSelected, isLoading])
+
         const onImport = useCallback(
             async (event: React.MouseEvent<HTMLButtonElement>) => {
                 event.stopPropagation()
-                if (!token || !account) return
-                // await addERC20Token(token as FungibleToken<ChainId, SchemaType.ERC20>)
-                // await trustERC20Token(account, token as FungibleToken<ChainId, SchemaType.ERC20>)
+                if (token) importToken(token)
             },
-            [token, account],
+            [token, importToken],
         )
 
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
@@ -101,7 +111,7 @@ export const getFungibleTokenItem =
         }
 
         const action = useMemo(() => {
-            return source === 'external' ? (
+            return source !== 'external' ? (
                 <span>
                     {loading ? (
                         <LoadingAnimation />

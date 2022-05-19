@@ -77,7 +77,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
     }
 
     private async addOrRemoveToken(token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
-        if (this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
+        if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
         const address = this.options.formatAddress(token.address)
         const tokens: Token<ChainId, SchemaType>[] =
@@ -105,7 +105,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
     }
 
     private async blockOrUnblockToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'trust' | 'block') {
-        if (this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
+        if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
         const address_ = this.options.formatAddress(address)
         const blocked =

@@ -1,4 +1,4 @@
-import { first, groupBy } from 'lodash-unified'
+import { first, groupBy, uniqBy } from 'lodash-unified'
 import { memoizePromise } from '@dimensiondev/kit'
 import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
@@ -34,7 +34,7 @@ async function fetchCommonERC20TokensFromTokenList(
             type: TokenType.Fungible,
             schema: SchemaType.ERC20,
             ...x,
-            logoURL: x.logoURL,
+            logoURL: x.logoURI,
         }))
 }
 
@@ -65,17 +65,11 @@ export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaTy
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
                     .sort((a, b) => b.weight - a.weight)
                     .flatMap((x) => x.tokens)
-                const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
 
-                return Object.values(groupedToken).map((tokenList) => {
-                    const logoURLs = tokenList
-                        .map((token) => token.logoURL)
-                        .flat()
-                        .filter((token) => !!token) as string[]
+                return uniqBy(tokens, (x) => x.address.toLowerCase()).map((token) => {
                     return {
-                        ...tokenList[0],
-                        ...{ address: formatEthereumAddress(tokenList[0].address) },
-                        ...{ logoURL: first(logoURLs) },
+                        ...token,
+                        address: formatEthereumAddress(token.address),
                     }
                 })
             },
