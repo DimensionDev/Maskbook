@@ -6,9 +6,8 @@ import type { NetworkPluginID } from '../web3-types'
 type HasRequirement = { enableRequirement: Plugin.Shared.Definition['enableRequirement'] }
 
 function checkPluginAvailable(plugin: HasRequirement, pluginId: NetworkPluginID, chainId: number) {
-    const supportedChainIds = plugin.enableRequirement.web3?.[pluginId]?.supportedChainIds
-    if (!supportedChainIds) return true
-    return supportedChainIds.includes(chainId)
+    /* don't check web3 at timeline */
+    return true
 }
 
 export function useAvailablePlugins<T extends HasRequirement>(plugins: T[]) {
