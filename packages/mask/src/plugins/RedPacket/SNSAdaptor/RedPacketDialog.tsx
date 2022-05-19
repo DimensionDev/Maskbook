@@ -15,7 +15,11 @@ import {
 import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
@@ -95,8 +99,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname
+    const lastRecognized = useLastRecognizedIdentity()
+    const senderName =
+        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
