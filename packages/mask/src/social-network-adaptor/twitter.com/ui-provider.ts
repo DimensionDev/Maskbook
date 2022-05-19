@@ -61,11 +61,11 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         },
         dialogTitle: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.background.modalTitle,
+            background: theme.palette.maskColor.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -84,7 +84,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',

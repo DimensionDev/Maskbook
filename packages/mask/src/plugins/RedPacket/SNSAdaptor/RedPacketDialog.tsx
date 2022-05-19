@@ -240,7 +240,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 670
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
 
     const tabProps: AbstractTabProps = {
         tabs: [
