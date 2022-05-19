@@ -1,5 +1,6 @@
 import { makeStyles, useTabs } from '@masknet/theme'
-import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
 import { Application_NFT_LIST_PAGE, SUPPORTED_CHAIN_IDS } from '../constants'
@@ -33,9 +34,9 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
 interface NFTListProps {
     address: string
     tokenInfo?: TokenInfo
-    onSelect: (token: ERC721TokenDetailed) => void
+    onSelect: (token: NonFungibleToken<ChainId, SchemaType>) => void
     onChangePage?: (page: Application_NFT_LIST_PAGE) => void
-    tokens?: ERC721TokenDetailed[]
+    tokens?: NonFungibleToken<ChainId, SchemaType>[]
     children?: React.ReactElement
 }
 
@@ -89,7 +90,7 @@ export function NFTList(props: NFTListProps) {
             {SUPPORTED_CHAIN_IDS.map((x, i) => (
                 <TabPanel key={i} value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon} className={classes.tabPanel}>
                     <NFTListPage
-                        tokens={tokens.filter((y) => y.contractDetailed.chainId === x) ?? []}
+                        tokens={tokens.filter((y) => y.chainId === x) ?? []}
                         tokenInfo={tokenInfo}
                         chainId={x}
                         address={address}

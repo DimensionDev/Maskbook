@@ -30,7 +30,6 @@ import {
     createERC721Metadata,
     createERC721Collection,
     createWeb3Provider,
-    useEthereumConstants,
     getEthereumConstants,
 } from '@masknet/web3-shared-evm'
 import {

@@ -13,8 +13,8 @@ import { PluginNFTAvatarRPC } from '../messages'
 import { PLUGIN_ID, RSS3_KEY_SNS } from '../constants'
 import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
-import { NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
