@@ -95,14 +95,13 @@ function Content() {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
-                            ? v.choices.reduce((acc, choice, i) => {
-                                  return (
-                                      acc +
-                                      (i === 0 ? '' : ', ') +
-                                      (!isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '') +
-                                      choice.name
-                                  )
-                              }, '')
+                            ? v.choices
+                                  .flatMap((choice, index) => [
+                                      index === 0 ? '' : ', ',
+                                      !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                      choice.name,
+                                  ])
+                                  .join('')
                             : null
                     return (
                         <ListItem className={classes.listItem} key={v.address}>

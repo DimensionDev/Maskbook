@@ -8,6 +8,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
+import { GearIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -19,6 +20,7 @@ const useStyles = makeStyles()((theme) => {
         settingIcon: {
             height: 24,
             width: 24,
+            fill: theme.palette.text.primary,
             cursor: 'pointer',
         },
     }
@@ -42,22 +44,13 @@ export function ApplicationBoardDialog() {
         })
     }, [])
 
-    const SettingIconDarkModeUrl = new URL('./assets/settings_dark_mode.png', import.meta.url).toString()
-    const SettingIconLightModeUrl = new URL('./assets/settings_light_mode.png', import.meta.url).toString()
-
     return (
         <InjectedDialog
             open={open}
             maxWidth="sm"
             onClose={closeDialog}
             title={t('applications')}
-            titleTail={
-                <img
-                    src={theme.palette.mode === 'dark' ? SettingIconDarkModeUrl : SettingIconLightModeUrl}
-                    className={classes.settingIcon}
-                    onClick={() => setOpenSettings(true)}
-                />
-            }>
+            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
                 {openSettings ? (

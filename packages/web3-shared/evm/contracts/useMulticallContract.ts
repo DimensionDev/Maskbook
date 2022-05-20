@@ -7,5 +7,5 @@ import type { ChainId } from '../types'
 
 export function useMulticallContract(chainId?: ChainId) {
     const { MULTICALL_ADDRESS } = useEthereumConstants(chainId)
-    return useContract<Multicall>(MULTICALL_ADDRESS, MulticallABI as AbiItem[])
+    return useContract<Multicall>(MULTICALL_ADDRESS, MulticallABI as AbiItem[], chainId)
 }

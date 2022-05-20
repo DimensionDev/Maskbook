@@ -20,6 +20,7 @@ function useCollectibleState(token?: Token) {
         setTabIndex,
         offers,
         events,
+        chainId: token?.chainId,
     }
 }
 

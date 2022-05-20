@@ -1,21 +1,13 @@
-import { Box, Chip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import AddIcon from '@mui/icons-material/Add'
 import { useEffect, useState } from 'react'
-import { difference } from 'lodash-unified'
-import { useI18N } from '../../../utils'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { ProfileInformation as Profile, EMPTY_LIST, NextIDPlatform, ECKeyIdentifier } from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { EMPTY_LIST } from '@masknet/shared-base'
-
-const useStyles = makeStyles()({
-    root: {
-        display: 'inline-flex',
-        flexWrap: 'wrap',
-    },
-})
+import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
+import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
+import { cloneDeep, uniqBy } from 'lodash-unified'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -23,40 +15,67 @@ export interface SelectRecipientsUIProps {
     disabled?: boolean
     hideSelectAll?: boolean
     hideSelectNone?: boolean
+    open: boolean
+    onClose(): void
     onSetSelected(selected: Profile[]): void
+}
+const resolveNextIDPlatform = (value: string) => {
+    if (isValidAddress(value)) return NextIDPlatform.Ethereum
+    if (value.length >= 44) return NextIDPlatform.NextID
+    if (/^\w{1,15}$/.test(value)) return NextIDPlatform.Twitter
+    return
+}
+
+const resolveValueToSearch = (value: string) => {
+    if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
+    return value.toLowerCase()
 }
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
+    const { items, selected, onSetSelected, open, onClose } = props
     const { t } = useI18N()
-    const { classes } = useStyles()
-    const { items, selected, onSetSelected } = props
+    const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
+    const type = resolveNextIDPlatform(valueToSearch)
+    const value = resolveValueToSearch(valueToSearch)
+    const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
+        type ?? NextIDPlatform.NextID,
+        value,
+    )
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
-    const [open, setOpen] = useState(false)
+    const searchedList = uniqBy(
+        profileItems?.concat(NextIDItems) ?? [],
+        ({ linkedPersona }) => linkedPersona?.publicKeyAsHex,
+    )
 
     useEffect(() => void (open && items.request()), [open, items.request])
-
     return (
-        <Box className={classes.root}>
-            <Chip
-                label={t('post_dialog__select_specific_e2e_target_title', {
-                    selected: new Set(selected.map((x) => x.identifier)).size,
-                })}
-                avatar={<AddIcon />}
-                disabled={props.disabled || profileItems?.length === 0}
-                onClick={() => setOpen(true)}
-            />
-            <SelectRecipientsDialogUI
-                open={open}
-                items={profileItems || EMPTY_LIST}
-                selected={profileItems?.filter((x) => selected.includes(x)) || EMPTY_LIST}
-                disabled={false}
-                submitDisabled={false}
-                onSubmit={() => setOpen(false)}
-                onClose={() => setOpen(false)}
-                onSelect={(item) => onSetSelected([...selected, item])}
-                onDeselect={(item) => onSetSelected(difference(selected, [item]))}
-            />
-        </Box>
+        <SelectRecipientsDialogUI
+            searchEmptyText={valueToSearch ? t('wallet_search_no_result') : undefined}
+            loading={searchLoading}
+            onSearch={(v: string) => {
+                setValueToSearch(v)
+            }}
+            open={open}
+            items={searchedList || EMPTY_LIST}
+            selected={
+                searchedList?.filter((x) =>
+                    selected.some((i) => i.linkedPersona?.publicKeyAsHex === x.linkedPersona?.publicKeyAsHex),
+                ) || EMPTY_LIST
+            }
+            disabled={false}
+            submitDisabled={false}
+            onSubmit={onClose}
+            onClose={onClose}
+            onSelect={(item) => onSetSelected([...selected, item])}
+            onDeselect={(item) => {
+                onSetSelected(
+                    cloneDeep(selected).filter(
+                        (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
+                    ),
+                )
+            }}
+        />
     )
 }

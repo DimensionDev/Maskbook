@@ -22,7 +22,7 @@ import { useAsyncRetry } from 'react-use'
 const useStyles = makeStyles()({
     root: {
         flex: 1,
-        padding: '24px 26px 0px',
+        padding: '24px 26px 0',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, 140px)',
         gridGap: '20px',

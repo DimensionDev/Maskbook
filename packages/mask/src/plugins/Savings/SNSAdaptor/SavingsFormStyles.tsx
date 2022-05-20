@@ -11,7 +11,7 @@ export const useStyles = makeStyles()((theme, props) => ({
         margin: '0 0 10px 0',
     },
     inputTextField: {
-        padding: '15px 10px 0px 10px',
+        padding: '15px 10px 0 10px',
         fontSize: '18px',
     },
     maxChip: {
@@ -50,7 +50,7 @@ export const useStyles = makeStyles()((theme, props) => ({
         padding: '13px 0',
         borderRadius: 24,
         height: 'auto',
-        marginTop: '0px !important',
+        marginTop: '0 !important',
     },
     disabledButton: {
         fontSize: 18,

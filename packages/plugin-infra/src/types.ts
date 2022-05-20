@@ -244,6 +244,8 @@ export namespace Plugin.SNSAdaptor {
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as plugin wrapper page */
+        wrapperProps?: PluginWrapperProps
         /**
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
@@ -333,6 +335,8 @@ export namespace Plugin.SNSAdaptor {
 
         description?: I18NFieldOrReactNode
 
+        iconFilterColor?: string
+
         tutorialLink?: string
         /**
          * Does the application listed in the DAPP list
@@ -348,6 +352,12 @@ export namespace Plugin.SNSAdaptor {
             description: React.ReactNode
             backgroundGradient: string
         }
+    }
+
+    export interface PluginWrapperProps {
+        icon?: React.ReactNode
+        title?: string
+        backgroundGradient?: string
     }
 
     export interface ProfileIdentity {

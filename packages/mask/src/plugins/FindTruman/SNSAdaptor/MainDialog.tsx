@@ -94,7 +94,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                             </Typography>
                             <Grid container spacing={2}>
                                 <Grid item sm={6} xs={12}>
-                                    <Box sx={{ padding: '0' }}>
+                                    <Box sx={{ padding: 0 }}>
                                         <Typography variant="body1" color="text.primary" gutterBottom>
                                             {t('plugin_find_truman_status_puzzle')}
                                         </Typography>
@@ -119,7 +119,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                     </Box>
                                 </Grid>
                                 <Grid item sm={6} xs={12}>
-                                    <Box sx={{ padding: '0' }}>
+                                    <Box sx={{ padding: 0 }}>
                                         <Typography variant="body1" color="text.primary" gutterBottom>
                                             {t('plugin_find_truman_status_poll')}
                                         </Typography>

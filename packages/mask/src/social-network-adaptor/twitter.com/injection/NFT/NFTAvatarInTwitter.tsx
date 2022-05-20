@@ -6,7 +6,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
@@ -16,6 +15,7 @@ import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/Ra
 import { trim } from 'lodash-unified'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
+import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -52,7 +52,11 @@ function NFTAvatarInTwitter() {
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
-    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.TWITTER)
+    const { value: _avatar } = usePersonaNFTAvatar(
+        identity.identifier?.userId ?? '',
+        getAvatarId(identity.avatar ?? ''),
+        RSS3_KEY_SNS.TWITTER,
+    )
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -158,7 +162,7 @@ function NFTAvatarInTwitter() {
                     animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
                     box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
                     transition: none;
-                    border: 0px solid #00f8ff;
+                    border: 0 solid #00f8ff;
                 }
             `
                 rainBowElement.current = linkDom.firstElementChild.nextElementSibling
@@ -196,7 +200,7 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId))
         }
 
         linkParentDom.addEventListener('click', handler)

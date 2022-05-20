@@ -94,7 +94,7 @@ async function e2e_v37(
     target: EncryptTargetE2E,
     io: EncryptIO,
 ): Promise<[PayloadWellFormed.EndToEndEncryption, EncryptResult['e2e']]> {
-    const { authorPublic, postIV: postIV, postKeyEncoded } = context
+    const { authorPublic, postIV, postKeyEncoded } = context
     const authorPublicKey = await authorPublic
     if (!authorPublicKey.some) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
 

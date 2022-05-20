@@ -24,6 +24,7 @@ to {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
             },
+            width: '100%',
         },
         header: {
             display: 'flex',
@@ -44,7 +45,6 @@ to {
             flexWrap: 'wrap',
         },
         footer: {
-            paddingTop: theme.spacing(2),
             width: '100%',
             display: 'flex',
             gap: theme.spacing(2),

@@ -263,7 +263,13 @@ export function resolveCollectibleLink(
     }
 }
 
-export function resolveOpenSeaLink(address: string, tokenId: string) {
+export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: ChainId) {
+    if (chainId === ChainId.Matic) {
+        return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    }
     return urlcat('https://opensea.io/assets/:address/:tokenId', {
         address,
         tokenId,

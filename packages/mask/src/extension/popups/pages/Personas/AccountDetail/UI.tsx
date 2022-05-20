@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()(() => ({
     container: {
-        padding: '8px 16px 0px 16px',
+        padding: '8px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
