@@ -111,13 +111,12 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.list.push({
                 input: `./${path}/src/locales/en-US.json`,
                 output: `./${path}/src/locales/i18n_generated`,
-                parser: 'i18next',
+                parser: { type: 'i18next', contextSeparator: '$', pluralSeparator: '_' },
                 generator: {
                     type: 'i18next/react-hooks',
                     hooks: 'useI18N',
                     namespace: pluginID,
                     trans: 'Translate',
-                    sourceMap: 'inline',
                 },
             })
         })
