@@ -17,6 +17,5 @@ export function useCollectibles() {
             tokenId: x.id,
         } as NonFungibleToken<ChainId, SchemaType>
     })
-    console.log(assets)
     return { collectibles, error, retry, loading }
 }
