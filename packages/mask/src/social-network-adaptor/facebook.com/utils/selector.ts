@@ -88,6 +88,7 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+    /* cspell:disable-next-line */
     querySelector<E>('#ssrb_left_rail_start')
         .closest(1)
         .querySelector('h2')
