@@ -30,7 +30,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface TransactionIconProps {
     type?: string
-    transactionType: string
+    transactionType?: string
     address: string
     failed: boolean
 }
@@ -53,7 +53,7 @@ export interface TransactionIconUIProps {
     isRedPacket: boolean
     isFailed: boolean
     type?: string
-    transactionType: string
+    transactionType?: string
 }
 
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, type, transactionType }) => {
