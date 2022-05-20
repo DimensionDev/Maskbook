@@ -228,7 +228,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     decimals: 0,
                 },
                 side: OrderSide.Buy,
-                quantity: 1,
+                quantity: order.value,
                 expiredAt: 0,
             }
         })
