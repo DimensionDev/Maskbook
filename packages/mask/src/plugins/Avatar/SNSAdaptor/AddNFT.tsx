@@ -49,7 +49,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -61,7 +61,7 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        const token = await connection?.getNonFungibleToken(address, tokenId)
+        const token = await connection?.getNonFungibleToken(address, tokenId, { chainId })
         if (token) {
             if (chainId && token && token.contract?.chainId !== chainId) {
                 setMessage('chain does not match.')
@@ -74,7 +74,7 @@ export function AddNFT(props: AddNFTProps) {
             onAddClick?.(token)
             handleClose()
         }
-    }, [tokenId, address, onAddClick, onClose, connection])
+    }, [tokenId, address, onAddClick, onClose, connection, chainId])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

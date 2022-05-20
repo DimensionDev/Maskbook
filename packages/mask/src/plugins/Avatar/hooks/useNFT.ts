@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const NFTCache = new Map<string, Promise<NFT | undefined>>()
 export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
         let f = NFTCache.get(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`)

@@ -7,7 +7,7 @@ import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useAsyncRetry(async () => {
         if (!address || !tokenId || !connection) return
         const token = await connection.getNonFungibleToken(address, tokenId, { chainId })
