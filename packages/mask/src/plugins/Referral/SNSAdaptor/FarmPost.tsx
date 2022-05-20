@@ -202,9 +202,6 @@ export function FarmPost(props: FarmPostProps) {
                                 />
                             ))}
                         </Grid>
-                        <Typography marginTop="24px" variant="body2">
-                            {t.create_by()} <b>@realMaskNetwork</b>
-                        </Typography>
                     </>
                 )}
             </Card>
