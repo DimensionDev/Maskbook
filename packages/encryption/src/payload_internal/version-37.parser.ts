@@ -95,7 +95,7 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
         if (typeof algr === 'number') {
             if (algr in EC_KeyCurveEnum) {
                 if (algr === EC_KeyCurveEnum.secp256k1) {
-                    pubKey = decompressSecp256k1KeyRaw(pubKey)
+                    pubKey = await decompressSecp256k1KeyRaw(pubKey)
                 }
                 const key = await importEC(pubKey, algr)
                 if (key.err) return key
