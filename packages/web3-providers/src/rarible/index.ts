@@ -1,11 +1,14 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-unified'
+import { compact, first } from 'lodash-unified'
 import {
     createLookupTableResolver,
     CurrencyType,
     HubOptions,
     NonFungibleAsset,
     NonFungibleToken,
+    NonFungibleTokenEvent,
+    NonFungibleTokenOrder,
+    OrderSide,
     TokenType,
 } from '@masknet/web3-shared-base'
 import {
@@ -17,7 +20,14 @@ import {
     createERC721Contract,
     createERC721Collection,
 } from '@masknet/web3-shared-evm'
-import type { RaribleNFTItemMapResponse, RaribleProfileResponse } from './types'
+import {
+    Ownership,
+    RaribleEventType,
+    RaribleHistory,
+    RaribleNFTItemMapResponse,
+    RaribleOfferResponse,
+    RaribleProfileResponse,
+} from './types'
 import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { isProxyENV } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
@@ -185,151 +195,142 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 
-    // async getOffers(
-    //     tokenAddress: string,
-    //     tokenId: string,
-    //     { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    // ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
-    //     const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
-    //     const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
-    //         method: 'POST',
-    //         body: JSON.stringify({ size: 20 }),
-    //         headers: { 'content-type': 'application/json' },
-    //     })
-    //     const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
-    //     return orders.map((order): NonFungibleTokenOrder<ChainId, SchemaType> => {
-    //         const ownerInfo = profiles.find((owner) => owner.id === order.maker)
-    //         return {
-    //             created_time: order.updateDate,
-    //             current_price: order.buyPriceEth,
-    //             current_bounty: order.fee,
-    //             payment_token: order.token,
-    //             listing_time: 0,
-    //             side: OrderSide.Buy,
-    //             quantity: '1',
-    //             expiration_time: 0,
-    //             order_hash: order.signature,
-    //             approved_on_chain: false,
-    //             maker_account: {
-    //                 user: { username: ownerInfo?.name ?? '' },
-    //                 address: ownerInfo?.id ?? '',
-    //                 profile_img_url: resolveIPFSLinkFromURL(ownerInfo?.image ?? ''),
-    //                 link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
-    //             },
-    //         }
-    //     })
-    // }
+    async getOffers(
+        tokenAddress: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+    ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
+        const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
+        const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
+            method: 'POST',
+            body: JSON.stringify({ size: 20 }),
+            headers: { 'content-type': 'application/json' },
+        })
+        const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
+        return orders.map((order): NonFungibleTokenOrder<ChainId, SchemaType> => {
+            const ownerInfo = profiles.find((owner) => owner.id === order.maker)
+            return {
+                id: order.tokenId,
+                chainId: ChainId.Mainnet,
+                asset_permalink: '',
+                createdAt: Number(order.updateDate),
+                price: {
+                    usd: order.buyPrice.toString(),
+                },
+                paymentToken: {
+                    name: order.token,
+                    id: order.tokenId,
+                    type: TokenType.NonFungible,
+                    chainId,
+                    address: tokenAddress,
+                    // schema: SchemaType.ERC721,
+                    // symbol: '1',
+                    decimals: 0,
+                },
+                side: OrderSide.Buy,
+                quantity: 1,
+                expiredAt: 0,
+            }
+        })
+    }
 
-    // async getListings(
-    //     tokenAddress: string,
-    //     tokenId: string,
-    //     { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    // ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
-    //     const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
-    //     const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, requestPath)
-    //     const listings = assets.filter((x) => x.selling)
-    //     const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
-    //     return listings.map((asset): NonFungibleTokenOrder<ChainId, SchemaType> => {
-    //         const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
-    //         return {
-    //             created_time: asset.date,
-    //             approved_on_chain: false,
-    //             current_price: asset.priceEth,
-    //             payment_token: asset.token,
-    //             listing_time: 0,
-    //             side: OrderSide.Buy,
-    //             quantity: '1',
-    //             expiration_time: 0,
-    //             order_hash: asset.signature,
-    //             maker_account: {
-    //                 user: { username: ownerInfo?.name ?? '' },
-    //                 address: ownerInfo?.id ?? '',
-    //                 profile_img_url: resolveIPFSLinkFromURL(ownerInfo?.image ?? ''),
-    //                 link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
-    //             },
-    //         }
-    //     })
-    // }
+    async getListings(
+        tokenAddress: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+    ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
+        const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
+        const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, requestPath)
+        const listings = assets.filter((x) => x.selling)
+        const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
+        return listings.map((asset): NonFungibleTokenOrder<ChainId, SchemaType> => {
+            const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
+            return {
+                id: asset.tokenId,
+                chainId: ChainId.Mainnet,
+                asset_permalink: '',
+                createdAt: Number(asset.date ?? 0),
+                price: {
+                    usd: asset.price,
+                },
+                paymentToken: {
+                    name: asset.token,
+                    id: asset.tokenId,
+                    decimals: 0,
+                    chainId: ChainId.Mainnet,
+                    // symbol: '1',
+                    // schema: SchemaType.ERC721,
+                    address: tokenAddress,
+                    type: TokenType.NonFungible,
+                },
+                side: OrderSide.Buy,
+                quantity: asset.value,
+                expiredAt: 0,
+            }
+        })
+    }
 
-    // async getOrders(
-    //     tokenAddress: string,
-    //     tokenId: string,
-    //     side: OrderSide,
-    //     opts: HubOptions<ChainId> = {},
-    // ) {
-    //     switch (side) {
-    //         case OrderSide.Buy:
-    //             return this.getOffers(tokenAddress, tokenId, opts)
-    //         case OrderSide.Sell:
-    //             return this.getListings(tokenAddress, tokenId, opts)
-    //         default:
-    //             return []
-    //     }
-    // }
+    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide, opts: HubOptions<ChainId> = {}) {
+        switch (side) {
+            case OrderSide.Buy:
+                return this.getOffers(tokenAddress, tokenId, opts)
+            case OrderSide.Sell:
+                return this.getListings(tokenAddress, tokenId, opts)
+            default:
+                return []
+        }
+    }
 
-    // async getHistory(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenEvent<ChainId, SchemaType>[]> {
-    //     const response = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, '/activity', {
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
-    //             filter: {
-    //                 '@type': 'by_item',
-    //                 address: tokenAddress,
-    //                 tokenId,
-    //             },
-    //             size: 100,
-    //         }),
-    //         headers: {
-    //             'content-type': 'application/json',
-    //         },
-    //     })
+    async getHistory(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenEvent<ChainId, SchemaType>[]> {
+        const response = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, '/activity', {
+            method: 'POST',
+            body: JSON.stringify({
+                // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
+                filter: {
+                    '@type': 'by_item',
+                    address: tokenAddress,
+                    tokenId,
+                },
+                size: 100,
+            }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
 
-    //     const histories = response.filter((x) => Object.values(RaribleEventType).includes(x['@type']))
-    //     const profiles = await getProfilesFromRarible(
-    //         compact([
-    //             ...histories.map((history) => history.owner),
-    //             ...histories.map((history) => history.buyer),
-    //             ...histories.map((history) => history.from),
-    //         ]),
-    //     )
+        const histories = response.filter((x) => Object.values(RaribleEventType).includes(x['@type']))
+        const profiles = await getProfilesFromRarible(
+            compact([
+                ...histories.map((history) => history.owner),
+                ...histories.map((history) => history.buyer),
+                ...histories.map((history) => history.from),
+            ]),
+        )
 
-    //     return histories.map((history) => {
-    //         const ownerInfo = profiles.find((profile) => profile.id === history.owner)
-    //         const fromInfo = profiles.find((profile) => profile.id === history.buyer || profile.id === history.from)
-    //         return {
-    //             id: history.id,
-    //             eventType: history['@type'],
-    //             timestamp: history.date.getTime() ?? 0,
-    //             price: {
-    //                 quantity: '1',
-    //                 price: history.price,
-    //                 asset: {
-    //                     id: fromInfo?.id,
-    //                     decimals: 0,
-    //                     image_url: fromInfo?.image,
-    //                     image_original_url: '',
-    //                     image_preview_url: '',
-    //                     asset_contract: {
-    //                         symbol: fromInfo?.type,
-    //                     },
-    //                     permalink: '',
-    //                 },
-    //             },
-    //             accountPair: {
-    //                 from: {
-    //                     username: fromInfo?.name,
-    //                     address: fromInfo?.id,
-    //                     imageUrl: fromInfo?.image,
-    //                     link: '',
-    //                 },
-    //                 to: {
-    //                     username: ownerInfo?.name,
-    //                     address: ownerInfo?.id,
-    //                     imageUrl: ownerInfo?.image,
-    //                     link: '',
-    //                 },
-    //             },
-    //         } as NonFungibleTokenEvent<ChainId, SchemaType>
-    //     })
-    // }
+        return histories.map((history) => {
+            const ownerInfo = profiles.find((profile) => profile.id === history.owner)
+            const fromInfo = profiles.find((profile) => profile.id === history.buyer || profile.id === history.from)
+            return {
+                id: history.id,
+                chainId: ChainId.Mainnet,
+                type: history['@type'],
+                asset_permalink: '',
+                quantity: Number(history.value),
+                timestamp: history.date.getTime() ?? 0,
+                hash: history.transactionHash,
+                from: {
+                    username: fromInfo?.name,
+                    address: fromInfo?.id,
+                    imageUrl: fromInfo?.image,
+                    link: '',
+                },
+                to: {
+                    username: ownerInfo?.name,
+                    address: ownerInfo?.id,
+                    imageUrl: ownerInfo?.image,
+                    link: '',
+                },
+            } as NonFungibleTokenEvent<ChainId, SchemaType>
+        })
+    }
 }
