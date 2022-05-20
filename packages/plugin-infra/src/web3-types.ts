@@ -35,7 +35,7 @@ export declare namespace Web3Plugin {
             Web3,
         > {
             AddressBook?: AddressBookState<ChainId>
-            Hub?: HubState<ChainId, SchemaType, GasOption, Transaction>
+            Hub?: HubState<ChainId, SchemaType, GasOption>
             IdentityService?: IdentityServiceState
             NameService?: NameServiceState<ChainId>
             RiskWarning?: RiskWarningState
