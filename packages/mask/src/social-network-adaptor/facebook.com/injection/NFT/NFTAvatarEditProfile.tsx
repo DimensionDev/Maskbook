@@ -2,8 +2,8 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
 import { useLayoutEffect, useState } from 'react'
-// import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { makeStyles } from '@masknet/theme'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())
@@ -72,6 +72,5 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
 
     const { classes } = useStyles(style)
 
-    return null
-    // return <NFTAvatarButton classes={classes} onClick={openNFTAvatarSettingDialog} showSetting={false} />
+    return <NFTAvatarButton classes={classes} onClick={openNFTAvatarSettingDialog} showSetting={false} />
 }

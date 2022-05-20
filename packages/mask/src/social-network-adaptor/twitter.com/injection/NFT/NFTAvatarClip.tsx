@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
 import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
-// import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
+import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector'
 
@@ -74,13 +74,12 @@ function NFTAvatarClipInTwitter() {
 
     if (isZero(size) || !twitterId) return null
 
-    return null
-    // return (
-    //     <NFTAvatarClip
-    //         screenName={twitterId}
-    //         width={size}
-    //         height={size}
-    //         classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-    //     />
-    // )
+    return (
+        <NFTAvatarClip
+            screenName={twitterId}
+            width={size}
+            height={size}
+            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+        />
+    )
 }

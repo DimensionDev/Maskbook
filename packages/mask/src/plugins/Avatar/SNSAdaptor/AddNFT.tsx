@@ -1,13 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { createNFT } from '../utils'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -51,6 +49,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -62,22 +61,20 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        createNFT(address, tokenId, chainId)
-            .then(async (token) => {
-                if (chainId && token && token.contractDetailed.chainId !== chainId) {
-                    setMessage('chain does not match.')
-                    return
-                }
-                if (!token || !isSameAddress(token?.info.owner, account ?? _account)) {
-                    setMessage(t('nft_owner_hint'))
-                    return
-                }
-                await WalletRPC.addToken(token)
-                onAddClick?.(token)
-                handleClose()
-            })
-            .catch((error) => setMessage(t('nft_owner_hint')))
-    }, [tokenId, address, onAddClick, onClose])
+        const token = await connection?.getNonFungibleToken(address, tokenId, { chainId })
+        if (token) {
+            if (chainId && token && token.contract?.chainId !== chainId) {
+                setMessage('chain does not match.')
+                return
+            }
+            if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
+                setMessage(t('nft_owner_hint'))
+                return
+            }
+            onAddClick?.(token)
+            handleClose()
+        }
+    }, [tokenId, address, onAddClick, onClose, connection, chainId])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

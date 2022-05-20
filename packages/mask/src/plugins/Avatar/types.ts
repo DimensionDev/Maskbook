@@ -1,4 +1,5 @@
-import type { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
     userId: string
@@ -6,6 +7,7 @@ export interface AvatarMetaDB {
     address: string
     avatarId: string
     chainId?: ChainId
+    schema?: SchemaType
 }
 
 export interface NFT {
@@ -19,7 +21,7 @@ export interface NFT {
 
 export interface SelectTokenInfo {
     account: string
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType>
     image: string
 }
 
