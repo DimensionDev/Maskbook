@@ -7,8 +7,8 @@ import type {
     LinkedProfileDetails,
     RelationRecord,
     MobilePostRecord,
-} from './types'
-import type { ProfileIdentifier_string } from './web'
+} from './types/index.js'
+import type { ProfileIdentifier_string } from './web.js'
 
 /**
  * APIs that both Android and iOS implements and have the same API signature
