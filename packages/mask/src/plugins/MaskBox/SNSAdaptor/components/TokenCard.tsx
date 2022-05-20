@@ -1,9 +1,9 @@
-import { memo } from 'react'
 import { useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, NonFungibleAssetProvider, SchemaType } from '@masknet/web3-shared-evm'
-import { Typography, CircularProgress } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
+import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenCardProps {
     tokenId: string
-    contractDetailed: NonFungibleToken<ChainId, SchemaType>
+    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType>
     renderOrder: number
 }
 

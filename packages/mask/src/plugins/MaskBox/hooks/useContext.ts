@@ -33,11 +33,10 @@ import {
 import {
     useAccount,
     useBalance,
-    useChainId,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokens,
-    useNonFungibleToken,
+    useNonFungibleTokenContract,
 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
@@ -45,13 +44,12 @@ import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
-    const [rootHash, setRootHash] = useState(initialState?.hashRoot || '')
+    const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -236,7 +234,10 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region the erc721 contract detailed
-    const { value: contractDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, maskBoxInfo?.nft_address)
+    const { value: contractDetailed } = useNonFungibleTokenContract(
+        NetworkPluginID.PLUGIN_EVM,
+        maskBoxInfo?.nft_address,
+    )
     // #endregion
 
     // #region the payment count
