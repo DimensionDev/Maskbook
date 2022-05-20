@@ -10,6 +10,7 @@ import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -146,8 +147,9 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
             </Card>
             <Box style={{ padding: 12 }}>
                 <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
-                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
                 />
             </Box>
         </>

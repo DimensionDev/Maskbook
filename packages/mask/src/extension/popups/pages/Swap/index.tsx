@@ -9,7 +9,7 @@ import { SwapBox } from './SwapBox'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
-import { useChainId, useReverseAddress, useTransactions, useWallet } from '@masknet/plugin-infra/web3'
+import { useChainId, useReverseAddress, useRecentTransactions, useWallet } from '@masknet/plugin-infra/web3'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -69,7 +69,7 @@ export default function SwapPage() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const theme = useSwapPageTheme()
-    const pendingTransactions = useTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
+    const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,

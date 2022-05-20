@@ -8,8 +8,9 @@ import type {
     Pageable,
     GasOptionType,
     CurrencyType,
+    Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType, Transaction } from '@masknet/web3-shared-solana'
+import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
 import type { SolanaHub } from './types'
 
@@ -96,11 +97,11 @@ class Hub implements SolanaHub {
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
-    getLatestTransactions(
+    getTransactions(
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Transaction[]> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 

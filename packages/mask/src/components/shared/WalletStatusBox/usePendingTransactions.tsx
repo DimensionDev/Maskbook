@@ -1,4 +1,8 @@
-import { useClearTransactionsCallback, useRemoveTransactionCallback, useTransactions } from '@masknet/plugin-infra/web3'
+import {
+    useClearTransactionsCallback,
+    useRemoveTransactionCallback,
+    useRecentTransactions,
+} from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
@@ -32,7 +36,7 @@ export function usePendingTransactions() {
     const { t } = useI18N()
 
     // #region recent pending transactions
-    const pendingTransactions = useTransactions(undefined, TransactionStatusType.NOT_DEPEND)
+    const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
 
     // frozenTxes would not be reactive to pendingTransactions,
     // it would be recreated then the list shows up.

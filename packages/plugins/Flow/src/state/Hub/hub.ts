@@ -9,8 +9,9 @@ import type {
     NonFungibleAsset,
     Pageable,
     GasOptionType,
+    Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, getTokenConstants, SchemaType, Transaction } from '@masknet/web3-shared-flow'
+import { ChainId, GasOption, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { createFungibleToken } from '../../helpers'
 import { FlowRPC } from '../../messages'
 import type { FlowHub } from './types'
@@ -124,11 +125,11 @@ class Hub implements FlowHub {
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
-    getLatestTransactions(
+    getTransactions(
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Transaction[]> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
