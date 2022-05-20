@@ -79,7 +79,7 @@ function registerPostCollectorInner(
         },
         (info: PostInfo) => info.author.getCurrentValue(),
     )
-    const watcher = new IntervalWatcher(postsContentSelector())
+    new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -134,8 +134,7 @@ function registerPostCollectorInner(
             const tweetId = postIdParser(tweetNode)
             return `${parentTweetId}/${tweetId}`
         })
-    watcher.startWatch(250)
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch(250, cancel)
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {

@@ -14,15 +14,16 @@ const appearsWith = '[data-testid="new-post-button"]'
 export function Entry() {
     const [display, setDisplay] = useState(!!document.querySelector(appearsWith))
     useEffect(() => {
+        const abortController = new AbortController()
+
         const watch = new MutationObserverWatcher(
             new LiveSelector().querySelector(appearsWith).enableSingleMode(),
-        ).startWatch({
-            childList: true,
-            subtree: true,
-        })
-        watch.addListener('onAdd', () => setDisplay(true))
-        watch.addListener('onRemove', () => setDisplay(false))
-        return () => watch.stopWatch()
+        ).startWatch({ childList: true, subtree: true }, abortController.signal)
+
+        watch.addListener('onAdd', () => setDisplay(true), { signal: abortController.signal })
+        watch.addListener('onRemove', () => setDisplay(false), { signal: abortController.signal })
+
+        return () => abortController.abort()
     })
     if (!display) return null
     return (

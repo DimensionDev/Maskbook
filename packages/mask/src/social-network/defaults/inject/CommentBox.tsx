@@ -42,7 +42,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {
-        if (!current.comment?.commentBoxSelector) return noop
+        if (!current.comment?.commentBoxSelector) return
         const commentBoxWatcher = new MutationObserverWatcher(
             current.comment.commentBoxSelector.clone(),
             document.body,
@@ -59,6 +59,5 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             return root.destroy
         })
         startWatch(commentBoxWatcher, signal)
-        return () => commentBoxWatcher.stopWatch()
     }
 }
