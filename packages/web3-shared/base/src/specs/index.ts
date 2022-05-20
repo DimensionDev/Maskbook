@@ -59,6 +59,7 @@ export enum SourceType {
     RSS3 = 'RSS3',
     Zora = 'zora',
     OpenSea = 'opensea',
+    Rarible = 'rarible',
     NFTScan = 'NFTScan',
 }
 
@@ -269,7 +270,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     /** permalink of asset */
     asset_permalink: string
     /** token amount */
-    quantity: number
+    quantity: string
     /** transaction hash */
     hash?: string
     /** buy or sell */
@@ -294,9 +295,11 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** token type */
     type: string
     /** permalink of asset */
-    asset_permalink: string
+    assetPermalink?: string
+    /** symbol of asset */
+    assetSymbol?: string
     /** token amount */
-    quantity: number
+    quantity: string
     /** transaction hash */
     hash?: string
     /** the account make the order */

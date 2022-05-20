@@ -12,21 +12,25 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { UnreviewedWarning } from './UnreviewedWarning'
-import { useI18N } from '../../../utils'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { UnreviewedWarning } from '../UnreviewedWarning'
+import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { PluginCollectibleRPC } from '../messages'
-import { PluginTraderMessages } from '../../Trader/messages'
+import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { PluginCollectibleRPC } from '../../messages'
+import { PluginTraderMessages } from '../../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
-import type { useAsset } from '../../EVM/hooks/useAsset'
-import type { useAssetOrder } from '../hooks/useAssetOrder'
-import type { Coin } from '../../Trader/types'
-import { isGreaterThan, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import type { Coin } from '../../../Trader/types'
+import {
+    CurrencyType,
+    isGreaterThan,
+    NetworkPluginID,
+    NonFungibleAsset,
+    NonFungibleTokenOrder,
+} from '@masknet/web3-shared-base'
+import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -57,15 +61,15 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface CheckoutDialogProps {
-    asset?: ReturnType<typeof useAsset>
-    order: ReturnType<typeof useAssetOrder>
+    asset?: NonFungibleAsset<ChainId, SchemaType>
+    order?: NonFungibleTokenOrder<ChainId, SchemaType>
     open: boolean
     onClose: () => void
 }
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
-    const { asset, open, onClose, order } = props
-    const isVerified = asset?.value?.is_verified ?? false
+    const { asset, order, open, onClose } = props
+    const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -73,21 +77,17 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
-    const { token, balance } = useFungibleTokenWatched({
-        type: EthereumTokenType.Native,
-        address: order.value?.paymentTokenContract?.address ?? '',
-    })
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, order?.paymentToken?.address ?? '')
     const onCheckout = useCallback(async () => {
-        if (!asset?.value) return
-        if (!asset.value.token_id || !asset.value.token_address) return
-        if (!order.value) return
+        if (!asset?.tokenId || !asset.address) return
+        if (!order) return
 
         await PluginCollectibleRPC.fulfillOrder({
-            order: order.value,
+            assetOrder,
             accountAddress: account,
             recipientAddress: account,
         })
-    }, [asset?.value, account, order?.value])
+    }, [account, asset, order])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -108,14 +108,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     }, [token.value, openSwapDialog])
 
     const validationMessage = useMemo(() => {
-        if (isGreaterThan(order?.value?.basePrice ?? 0, balance.value ?? 0)) {
+        if (isGreaterThan(order?.price?.[CurrencyType.USD] ?? 0, balance.value ?? 0)) {
             setInsufficientBalance(true)
             return t('plugin_collectible_insufficient_balance')
         }
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
         if (!isVerified && !ToS_Checked) return t('plugin_collectible_check_tos_document')
         return ''
-    }, [isVerified, unreviewedChecked, ToS_Checked, order.value])
+    }, [isVerified, unreviewedChecked, ToS_Checked, order])
 
     return (
         <InjectedDialog title={t('plugin_collectible_checkout')} open={open} onClose={onClose}>
@@ -197,15 +197,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.isOrderWeth || insufficientBalance ? (
+                                {insufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
                                         onClick={onConvertClick}>
-                                        {insufficientBalance
-                                            ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
-                                            : t('plugin_collectible_convert_eth')}
+                                        {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
                                     </ActionButton>
                                 ) : null}
                             </Box>

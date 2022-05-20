@@ -1,14 +1,21 @@
 import { useMemo } from 'react'
+import urlcat from 'urlcat'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, NonFungibleAssetProvider, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import { isOne, isZero, formatBalance } from '@masknet/web3-shared-base'
+import { ChainId, explorerResolver, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    isOne,
+    isZero,
+    formatBalance,
+    NonFungibleTokenOrder,
+    SourceType,
+    CurrencyType,
+} from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
-import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface IRowProps {
-    order: NonFungibleTokenAPI.AssetOrder
+    order: NonFungibleTokenOrder<ChainId, SchemaType>
     isDifferenceToken?: boolean
     acceptable?: boolean
 }
@@ -57,24 +64,21 @@ interface IRowProps {
 export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
-    const address = order.maker_account?.user?.username || order.maker_account?.address || ''
+    const address = order.maker?.nickname || order.maker?.address || ''
 
     const link = useMemo(() => {
-        return provider === NonFungibleAssetProvider.OPENSEA
+        return provider === SourceType.OpenSea
             ? urlcat('https://opensea.io/accounts/:address', { address })
-            : order.maker_account?.link
+            : order.maker?.link
     }, [order, provider, address])
 
     return (
         <TableRow>
             <TableCell>
                 <Link href={link} title={address} target="_blank" className={classes.account} rel="noopener noreferrer">
-                    <Avatar src={order.maker_account?.profile_img_url} className={classes.avatar} />
+                    <Avatar src={order.maker?.avatarURL} className={classes.avatar} />
                     <Typography className={classes.accountName}>
-                        <Account
-                            address={order.maker_account?.address}
-                            username={order.maker_account?.user?.username}
-                        />
+                        <Account address={order.maker?.address} username={order.maker?.nickname} />
                     </Typography>
                 </Link>
             </TableCell>
@@ -83,27 +87,30 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             <>
-                                {provider === NonFungibleAssetProvider.OPENSEA ? (
+                                {provider === SourceType.OpenSea ? (
                                     <Link
-                                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                        href={explorerResolver.addressLink(
+                                            ChainId.Mainnet,
+                                            order.paymentToken?.address ?? '',
+                                        )}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={classes.tokenLink}>
-                                        {order.payment_token_contract?.image_url && (
+                                        {order.paymentToken?.logoURL && (
                                             <img
-                                                src={order.payment_token_contract.image_url}
+                                                src={order.paymentToken.logoURL}
                                                 className={classes.token}
-                                                alt={order.payment_token_contract?.symbol}
+                                                alt={order.paymentToken?.symbol}
                                             />
                                         )}
                                     </Link>
                                 ) : null}
                                 {getOrderUnitPrice(
-                                    order.current_price,
-                                    order.payment_token_contract?.decimals,
+                                    order.price?.[CurrencyType.USD],
+                                    order.paymentToken?.decimals,
                                     order.quantity,
                                 )}{' '}
-                                {order.payment_token_contract?.symbol}
+                                {order.paymentToken?.symbol}
                             </>
                         </Typography>
                     </TableCell>
@@ -121,37 +128,38 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                 <>
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
-                            {provider === NonFungibleAssetProvider.OPENSEA ? (
+                            {provider === SourceType.OpenSea ? (
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                    href={explorerResolver.addressLink(
+                                        ChainId.Mainnet,
+                                        order.paymentToken?.address ?? '',
+                                    )}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
-                                    {order.payment_token_contract?.image_url ? (
+                                    {order.paymentToken?.logoURL ? (
                                         <img
-                                            src={order.payment_token_contract.image_url}
+                                            src={order.paymentToken.logoURL}
                                             className={classes.token}
-                                            alt={order.payment_token_contract?.symbol}
+                                            alt={order.paymentToken?.symbol}
                                         />
                                     ) : null}
                                 </Link>
                             ) : null}
                             {getOrderUnitPrice(
-                                order.current_price,
-                                order.payment_token_contract?.decimals,
+                                order.price?.[CurrencyType.USD],
+                                order.paymentToken?.decimals,
                                 order.quantity,
                             )?.toString()}{' '}
-                            {provider === NonFungibleAssetProvider.OPENSEA
-                                ? order.payment_token_contract?.symbol ?? ''
-                                : 'ETH'}
+                            {provider === SourceType.OpenSea ? order.paymentToken?.symbol ?? '' : 'ETH'}
                         </Typography>
                     </TableCell>
-                    {provider === NonFungibleAssetProvider.OPENSEA ? (
+                    {provider === SourceType.OpenSea ? (
                         <TableCell>
                             <Typography className={classes.content}>
-                                {order.expiration_time &&
-                                    !isZero(order.expiration_time) &&
-                                    formatDistanceToNow(new Date(order.expiration_time * 1000), {
+                                {order.expiredAt &&
+                                    !isZero(order.expiredAt) &&
+                                    formatDistanceToNow(new Date(order.expiredAt * 1000), {
                                         addSuffix: true,
                                     })}
                             </Typography>

@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import { DialogContent, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
-import { useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-unified'
-import type { useAsset } from '../../EVM/hooks/useAsset'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,19 +25,17 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PostListingDialogProps {
-    asset?: ReturnType<typeof useAsset>
+    asset?: NonFungibleAsset<ChainId, SchemaType>
     open: boolean
     onClose: () => void
 }
 
 export function PostListingDialog(props: PostListingDialogProps) {
     const { asset, open, onClose } = props
-    const paymentTokens = asset?.value?.offer_payment_tokens ?? []
-    const selectedPaymentToken = first(paymentTokens)
+    const paymentTokens = asset?.auction?.offerTokens ?? []
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const tokenWatched = useFungibleTokenWatched(selectedPaymentToken)
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
@@ -63,18 +60,11 @@ export function PostListingDialog(props: PostListingDialogProps) {
                     {tabs}
                 </Tabs>
                 {tabIndex === 0 ? (
-                    <ListingByPriceCard
-                        asset={asset}
-                        tokenWatched={tokenWatched}
-                        paymentTokens={paymentTokens}
-                        open={open}
-                        onClose={onClose}
-                    />
+                    <ListingByPriceCard asset={asset} paymentTokens={paymentTokens} open={open} onClose={onClose} />
                 ) : null}
                 {tabIndex === 1 ? (
                     <ListingByHighestBidCard
                         asset={asset}
-                        tokenWatched={tokenWatched}
                         paymentTokens={paymentTokens}
                         open={open}
                         onClose={onClose}

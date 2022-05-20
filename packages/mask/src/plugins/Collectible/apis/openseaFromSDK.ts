@@ -1,12 +1,13 @@
+import Web3 from 'web3'
 import { OpenSeaPort } from 'opensea-js'
-import { ChainId, createExternalProvider } from '@masknet/web3-shared-evm'
-import { request } from '../../../extension/background-script/EthereumService'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, ReferrerAddress } from '../constants'
 
 function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     return new OpenSeaPort(
-        createExternalProvider(request),
+        new Web3(),
+        // createExternalProvider(request),
         {
             networkName: resolveOpenSeaNetwork(chainId),
             apiKey: OpenSeaAPI_Key,

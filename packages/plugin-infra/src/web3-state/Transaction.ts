@@ -48,14 +48,8 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
                     this.subscriptions.account,
                     this.storage.subscription,
                 ),
-                ([chainId, account, transactionStorage]) => {
-                    console.log({
-                        chainId,
-                        account,
-                        transactionStorage,
-                    })
-                    return transactionStorage[chainId][this.options.formatAddress(account)] ?? []
-                },
+                ([chainId, account, transactionStorage]) =>
+                    transactionStorage[chainId][this.options.formatAddress(account)] ?? [],
             )
         }
     }

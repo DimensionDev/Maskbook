@@ -2,25 +2,20 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleTokenWatched,
-    isNativeTokenAddress,
-    useAccount,
-} from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { isZero, isGreaterThan, NetworkPluginID, FungibleToken, NonFungibleAsset } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../utils'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import { PluginCollectibleRPC } from '../messages'
-import { toAsset } from '../helpers'
+import { useI18N } from '../../../../utils'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
+import { PluginCollectibleRPC } from '../../messages'
+import { toAsset } from '../../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
-import type { useAsset } from '../../EVM/hooks'
-import { isWyvernSchemaName } from '../utils'
+import { first } from 'lodash-unified'
+import { isWyvernSchemaName } from '../../utils'
+import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,18 +46,20 @@ const useStyles = makeStyles()((theme) => {
 export interface ListingByPriceCardProps {
     open: boolean
     onClose: () => void
-    asset?: ReturnType<typeof useAsset>
-    tokenWatched: FungibleTokenWatched
-    paymentTokens: FungibleTokenDetailed[]
+    asset?: NonFungibleAsset<ChainId, SchemaType>
+    paymentTokens: FungibleToken<ChainId, SchemaType>[]
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
-    const { asset, tokenWatched, paymentTokens, open, onClose } = props
-    const { amount, token, balance, setAmount, setToken } = tokenWatched
+    const { asset, paymentTokens, open, onClose } = props
+    const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        first(paymentTokens)?.address,
+    )
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [scheduleTime, setScheduleTime] = useState(new Date())
     const [expirationTime, setExpirationTime] = useState(new Date())
@@ -96,16 +93,15 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     ])
 
     const onPostListing = useCallback(async () => {
-        if (!asset?.value) return
-        if (!asset.value.token_id || !asset.value.token_address) return
+        if (!asset) return
+        if (!asset.id || !asset.address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        const schemaName = asset.value.asset_contract?.schemaName
+        if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
+                tokenId: asset.tokenId,
+                tokenAddress: asset.address,
+                schemaName: isWyvernSchemaName(asset.schema) ? asset.schema : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
@@ -115,7 +111,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
             buyerAddress: privacyChecked ? buyerAddress : undefined,
         })
     }, [
-        asset?.value,
+        asset,
         token,
         amount,
         account,
@@ -142,10 +138,10 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as FungibleTokenDetailed}
+                    token={token.value}
                     disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
-                    onTokenChange={setToken}
+                    onTokenChange={(x) => setAddress(x.address)}
                     TokenAmountPanelProps={{
                         label: endingPriceChecked
                             ? t('plugin_collectible_starting_price')
@@ -170,8 +166,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         amount={endingAmount}
                         balance={balance.value ?? '0'}
                         onAmountChange={setEndingAmount}
-                        token={token.value as FungibleTokenDetailed}
-                        onTokenChange={setToken}
+                        token={token.value}
+                        onTokenChange={(x) => setAddress(x.address)}
                         TokenAmountPanelProps={{
                             label: t('plugin_collectible_ending_price'),
                             disableToken: true,

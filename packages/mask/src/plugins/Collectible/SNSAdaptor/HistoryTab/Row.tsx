@@ -1,17 +1,13 @@
+import { useMemo } from 'react'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import LinkIcon from '@mui/icons-material/Link'
 import { FormattedBalance } from '@masknet/shared'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { formatBalance } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { CurrencyType, formatBalance, NonFungibleTokenEvent, SourceType } from '@masknet/web3-shared-base'
 import { formatElapsed } from '../../../Wallet/formatter'
-import { useMemo } from 'react'
 import { CollectibleState } from '../../hooks/useCollectibleState'
-import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
-import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
-import type { OpenSeaAssetEventType } from '../../types/opensea'
-import type { RaribleEventType } from '../../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,7 +39,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props {
-    event: NonFungibleTokenAPI.History
+    event: NonFungibleTokenEvent<ChainId, SchemaType>
     isDifferenceToken?: boolean
 }
 
@@ -52,12 +48,12 @@ export function Row({ event, isDifferenceToken }: Props) {
     const { provider } = CollectibleState.useContainer()
 
     const unitPrice = useMemo(() => {
-        if (provider === NonFungibleAssetProvider.RARIBLE || !isDifferenceToken || !event.price) return null
+        if (provider === SourceType.Rarible || !isDifferenceToken || !event.price) return null
 
         return getOrderUnitPrice(
-            event.price.price ?? 0,
-            event.price.paymentToken?.decimals,
-            event.price.quantity,
+            event.price?.[CurrencyType.USD] ?? '0',
+            event.paymentToken?.decimals,
+            event.quantity,
         )?.toString()
     }, [event, isDifferenceToken, provider])
 
@@ -65,36 +61,31 @@ export function Row({ event, isDifferenceToken }: Props) {
         <TableRow>
             <TableCell>
                 <Typography className={classes.content} variant="body2">
-                    {provider === NonFungibleAssetProvider.OPENSEA
-                        ? resolveOpenSeaAssetEventType(
-                              event.eventType as OpenSeaAssetEventType,
-                              event.accountPair.from?.username,
-                          )
-                        : resolveRaribleAssetEventType(event.eventType as RaribleEventType)}
+                    {event.type}
                 </Typography>
             </TableCell>
             {isDifferenceToken ? (
                 <>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
-                            {event.price?.paymentToken?.image_url && (
-                                <Link href={event.price.asset?.permalink} target="_blank" rel="noopener noreferrer">
+                            {event.paymentToken?.logoURL && (
+                                <Link href={event.assetPermalink} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src={event.price.paymentToken.image_url}
+                                        src={event.paymentToken.logoURL}
                                         className={classes.token}
-                                        alt={event.price.asset?.asset_contract.symbol}
+                                        alt={event.assetPermalink}
                                     />
                                 </Link>
                             )}
                             {unitPrice}
-                            {event.price?.paymentToken?.symbol}
+                            {event.paymentToken?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
                             <FormattedBalance
-                                value={event.price?.quantity ?? 0}
-                                decimals={event.price?.asset?.decimals ?? 0}
+                                value={event.quantity ?? 0}
+                                decimals={event.paymentToken?.decimals ?? 0}
                                 formatter={formatBalance}
                             />
                         </Typography>
@@ -103,58 +94,46 @@ export function Row({ event, isDifferenceToken }: Props) {
             ) : (
                 <TableCell>
                     <Typography className={classes.content} variant="body2">
-                        {event.price && provider === NonFungibleAssetProvider.OPENSEA
-                            ? formatBalance(event.price.quantity, event.price?.asset?.decimals ?? 0)
-                            : event.price?.quantity ?? ''}
+                        {event.price && provider === SourceType.OpenSea
+                            ? formatBalance(event.quantity, event.paymentToken?.decimals ?? 0)
+                            : event.quantity ?? ''}
                     </Typography>
                 </TableCell>
             )}
             <TableCell>
-                {event.accountPair.from && (
+                {event.from && (
                     <Link
-                        href={event.accountPair.from.link}
-                        title={event.accountPair.from.username ?? event.accountPair.from.address ?? ''}
+                        href={event.from.link}
+                        title={event.from.nickname ?? event.from.address ?? ''}
                         target="_blank"
                         className={classes.account}
                         rel="noopener noreferrer">
-                        <Avatar src={event.accountPair.from.imageUrl} className={classes.avatar} />
+                        <Avatar src={event.from.avatarURL} className={classes.avatar} />
                         <Typography className={classes.accountName} variant="body2">
-                            <Account
-                                username={event.accountPair.from.username}
-                                address={event.accountPair.from.address?.slice(2, 8)}
-                            />
+                            <Account username={event.from.nickname} address={event.from.address?.slice(2, 8)} />
                         </Typography>
                     </Link>
                 )}
             </TableCell>
             <TableCell>
-                {event.accountPair.to && (
+                {event.to && (
                     <Link
-                        href={event.accountPair.to.link}
-                        title={event.accountPair.to.username ?? event.accountPair.to.address ?? ''}
+                        href={event.to.link}
+                        title={event.to.nickname ?? event.to.address ?? ''}
                         target="_blank"
                         className={classes.account}
                         rel="noopener noreferrer">
-                        <Avatar src={event.accountPair.to.imageUrl} className={classes.avatar} />
+                        <Avatar src={event.to.avatarURL} className={classes.avatar} />
                         <Typography className={classes.accountName} variant="body2">
-                            <Account username={event.accountPair.to.username} address={event.accountPair.to.address} />
+                            <Account username={event.to.nickname} address={event.to.address} />
                         </Typography>
                     </Link>
                 )}
             </TableCell>
             <TableCell className={classes.relativeTime}>
-                {event.transactionBlockExplorerLink ? (
-                    <Link href={event.transactionBlockExplorerLink} target="_blank" rel="noopener noreferrer">
-                        <Typography className={classes.content} variant="body2">
-                            {formatElapsed(event.timestamp)}
-                            <LinkIcon fontSize="inherit" />
-                        </Typography>
-                    </Link>
-                ) : (
-                    <Typography className={classes.content} color="primary" variant="body2">
-                        {formatElapsed(event.timestamp)}
-                    </Typography>
-                )}
+                <Typography className={classes.content} color="primary" variant="body2">
+                    {formatElapsed(event.timestamp)}
+                </Typography>
             </TableCell>
         </TableRow>
     )

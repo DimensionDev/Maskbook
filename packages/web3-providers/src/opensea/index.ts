@@ -166,7 +166,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
                 chainId,
                 asset_permalink: asset.opensea_link,
                 hash: x.order_hash,
-                quantity: Number.parseInt(x.quantity, 10),
+                quantity: x.quantity,
                 createdAt: x.created_time ? getUnixTime(new Date(x.created_time)) : undefined,
                 expiredAt: x.expiration_time,
                 side: x.side,
@@ -223,8 +223,8 @@ function createNFTHistory(chainId: ChainId, event: OpenSeaAssetEvent): NonFungib
         id: event.id,
         chainId,
         type: event.event_type,
-        asset_permalink: event.asset.permalink,
-        quantity: Number.parseInt(event.quantity, 10),
+        assetPermalink: event.asset.permalink,
+        quantity: event.quantity,
         hash: event.transaction?.transaction_hash,
         timestamp: new Date(`${event.created_date}Z`).getTime(),
         price: {
@@ -253,7 +253,7 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
         chainId,
         asset_permalink: order.asset.opensea_link,
         hash: order.order_hash,
-        quantity: Number.parseInt(order.quantity, 10),
+        quantity: order.quantity,
         side: order.side,
         maker: {
             address: order.maker.address,

@@ -3,7 +3,6 @@ import type { NonFungibleAsset, NetworkPluginID } from '@masknet/web3-shared-bas
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from '../entry-web3'
 import { useWeb3Hub } from './useWeb3Hub'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useNonFungibleAsset<T extends NetworkPluginID>(
     pluginID?: T,
@@ -20,7 +19,7 @@ export function useNonFungibleAsset<T extends NetworkPluginID>(
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!address || !id || !hub) return EMPTY_LIST
+        if (!address || !id || !hub) return
         return (hub.getNonFungibleAsset as GetNonFungibleAsset)(address, id)
     }, [address, account, id, hub])
 }

@@ -1,25 +1,20 @@
+import { first } from 'lodash-unified'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleTokenWatched,
-    isNativeTokenAddress,
-    useAccount,
-} from '@masknet/web3-shared-evm'
-import { isZero, isLessThan } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { isZero, isLessThan, NetworkPluginID, NonFungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../utils'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import { PluginCollectibleRPC } from '../messages'
-import { toAsset } from '../helpers'
+import { useI18N } from '../../../../utils'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
+import { PluginCollectibleRPC } from '../../messages'
+import { toAsset } from '../../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
-import type { useAsset } from '../../EVM/hooks'
-import { isWyvernSchemaName } from '../utils'
+import { isWyvernSchemaName } from '../../utils'
+import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -42,18 +37,20 @@ const useStyles = makeStyles()((theme) => ({
 export interface ListingByHighestBidCardProps {
     open: boolean
     onClose: () => void
-    asset?: ReturnType<typeof useAsset>
-    tokenWatched: FungibleTokenWatched
-    paymentTokens: FungibleTokenDetailed[]
+    asset?: NonFungibleAsset<ChainId, SchemaType>
+    paymentTokens: FungibleToken<ChainId, SchemaType>[]
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
-    const { asset, tokenWatched, paymentTokens, open, onClose } = props
-    const { amount, token, balance, setAmount, setToken } = tokenWatched
+    const { asset, paymentTokens, open, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        first(paymentTokens)?.address,
+    )
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
@@ -67,16 +64,15 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     }, [amount, reservePrice, expirationDateTime])
 
     const onPostListing = useCallback(async () => {
-        if (!asset?.value) return
-        if (!asset.value.token_id || !asset.value.token_address) return
+        if (!asset) return
+        if (!asset.tokenId || !asset.address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.ERC20) return
-        const schemaName = asset.value.asset_contract?.schemaName
+        if (token.value.schema !== SchemaType.ERC20) return
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
+                tokenId: asset.tokenId,
+                tokenAddress: asset.address,
+                schemaName: isWyvernSchemaName(asset.schema) ? asset.schema : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
@@ -85,7 +81,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             waitForHighestBid: true,
             paymentTokenAddress: token.value.address, // english auction must be erc20 token
         })
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
+    }, [asset, token, amount, account, reservePrice, expirationDateTime])
 
     useEffect(() => {
         setAmount('')
@@ -99,10 +95,10 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <SelectTokenAmountPanel
                     amount={amount}
                     balance={balance.value ?? '0'}
-                    token={token.value as FungibleTokenDetailed}
+                    token={token.value}
                     disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
-                    onTokenChange={setToken}
+                    onTokenChange={(x) => setAddress(x.address)}
                     TokenAmountPanelProps={{
                         classes: {
                             root: classes.panel,
@@ -122,8 +118,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
-                    token={token.value as FungibleTokenDetailed}
-                    onTokenChange={setToken}
+                    token={token.value}
+                    onTokenChange={(x) => setAddress(x.address)}
                     TokenAmountPanelProps={{
                         classes: {
                             root: classes.panel,

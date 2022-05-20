@@ -1,4 +1,4 @@
-import { ReactElement, useCallback } from 'react'
+import type { ReactElement } from 'react'
 import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -20,14 +20,14 @@ import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { CollectibleTab } from '../types'
 import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
-import { ActionBar } from './ActionBar'
+import { ActionBar } from './OpenSea/ActionBar'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -129,22 +129,22 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    // #region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
-    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setProvider(option.value as NonFungibleAssetProvider)
-    }, [])
-    // #endregion
+    // // #region sync with settings
+    // const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
+    // const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
+    //     setProvider(option.value as NonFungibleAssetProvider)
+    // }, [])
+    // // #endregion
 
-    // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(
-        provider,
-        setProvider,
-        getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
-        resolveCollectibleProviderName,
-        true,
-    )
-    // #endregion
+    // // #region provider switcher
+    // const CollectibleProviderSwitcher = useSwitcher(
+    //     provider,
+    //     setProvider,
+    //     getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
+    //     resolveCollectibleProviderName,
+    //     true,
+    // )
+    // // #endregion
 
     if (!asset.value || !token)
         return (
@@ -153,7 +153,7 @@ export function Collectible(props: CollectibleProps) {
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
-                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
+                    {/* <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box> */}
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button
                             variant="contained"
@@ -193,21 +193,23 @@ export function Collectible(props: CollectibleProps) {
         return tabMap[tabIndex] || null
     }
 
+    console.log('DEBUG: asset')
+    console.log({
+        asset,
+    })
+
     const _asset = asset.value
-    const endDate = _asset.end_time
+    const endDate = _asset.auction?.endAt
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
                 <CardHeader
                     avatar={
                         <LinkingAvatar
-                            href={_asset.collectionLinkUrl}
-                            title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
+                            href={_asset.link ?? ''}
+                            title={_asset.owner?.nickname ?? _asset.owner?.address ?? ''}
                             src={
-                                _asset.collection?.image_url ??
-                                _asset.creator?.profile_img_url ??
-                                _asset.owner?.profile_img_url ??
-                                ''
+                                _asset.collection?.iconURL ?? _asset.creator?.avatarURL ?? _asset.owner?.avatarURL ?? ''
                             }
                         />
                     }
@@ -224,34 +226,37 @@ export function Collectible(props: CollectibleProps) {
                                         token.tokenId,
                                         provider,
                                     )}>
-                                    {_asset.name ?? ''}
+                                    {_asset.metadata?.name ?? ''}
                                 </Link>
                             ) : (
-                                _asset.name ?? ''
+                                _asset.metadata?.name ?? ''
                             )}
-                            {_asset.safelist_request_status === 'verified' ? (
+                            {_asset.collection?.verified ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }
                     subheader={
                         <>
-                            {_asset.description ? (
+                            {_asset.metadata?.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown classes={{ root: classes.markdown }} content={_asset.description} />
+                                        <Markdown
+                                            classes={{ root: classes.markdown }}
+                                            content={_asset.metadata.description}
+                                        />
                                     </Typography>
                                 </Box>
                             ) : null}
 
-                            {_asset?.current_price ? (
+                            {_asset?.price?.[CurrencyType.USD] ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: _asset?.current_price,
-                                                symbol: _asset?.current_symbol,
+                                                price: _asset?.price[CurrencyType.USD],
+                                                symbol: CurrencyType.USD,
                                             }}
                                         />
                                     </Typography>
@@ -275,19 +280,13 @@ export function Collectible(props: CollectibleProps) {
                         }}>
                         {tabs}
                     </Tabs>
-                    <Paper className={classes.body}>
-                        {(asset.loading && (
-                            <div className={classes.loading}>
-                                <LoadingAnimation />
-                            </div>
-                        )) || <>{renderTab(tabIndex)}</>}
-                    </Paper>
+                    <Paper className={classes.body}>{renderTab(tabIndex)}</Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
                     {/* flex to make foot menu right */}
                     <div />
                     <div className={classes.footMenu}>
-                        <FootnoteMenu
+                        {/* <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
                                     <>
@@ -301,7 +300,7 @@ export function Collectible(props: CollectibleProps) {
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}
-                        />
+                        /> */}
                         <ArrowDropDownIcon />
                     </div>
                 </CardActions>
@@ -315,7 +314,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === NonFungibleAssetProvider.OPENSEA ? <ActionBar /> : null}
+            {provider === SourceType.OpenSea ? <ActionBar /> : null}
         </>
     )
 }

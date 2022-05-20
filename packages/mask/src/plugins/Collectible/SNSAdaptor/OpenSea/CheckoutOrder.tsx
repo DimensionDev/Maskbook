@@ -1,12 +1,13 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Image } from '../../../components/shared/Image'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { ERC20TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
-import { resolveAssetLinkOnCurrentProvider } from '../pipes'
-import { useI18N } from '../../../utils'
+import { Image } from '../../../../components/shared/Image'
+import { CurrencyType, formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { resolveAssetLinkOnCurrentProvider } from '../../pipes'
+import { useI18N } from '../../../../utils'
 import type { Order } from 'opensea-js/lib/types'
-import { CollectibleState } from '../hooks/useCollectibleState'
+import { CollectibleState } from '../../hooks/useCollectibleState'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -20,18 +21,18 @@ const useStyles = makeStyles()((theme) => ({
 
 export function CheckoutOrder() {
     const { t } = useI18N()
-    const { token, asset, assetOrder, provider } = CollectibleState.useContainer()
-    const order = assetOrder?.value ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const { token, asset, provider } = CollectibleState.useContainer()
+    const order = asset?.value?.auction ?? asset?.value?.desktopOrder
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     if (!asset?.value || !token) return null
     if (!order) return null
 
-    const price = (order as Order).currentPrice ?? asset.value.current_price
+    const price = (order as Order).currentPrice ?? asset.value.price?.[CurrencyType.USD]
     const getPrice = () => {
         if (!price) return 'error'
-        const decimal = asset.value?.response_.collection.payment_tokens.find((item: ERC20TokenDetailed) => {
-            return item.symbol === asset.value?.current_symbol
+        const decimal = asset.value?.find((item: FungibleToken<ChainId, SchemaType>) => {
+            return item.symbol === asset.value?.metadata?.symbol
         })?.decimals
         if (!decimal) return 'error'
         return formatBalance(price, decimal) ?? 'error'
@@ -49,9 +50,9 @@ export function CheckoutOrder() {
                 <TableRow>
                     <TableCell>
                         <div className={classes.itemInfo}>
-                            <Image height={80} width={80} src={asset.value?.image_url ?? ''} />
+                            <Image height={80} width={80} src={asset.value?.metadata?.imageURL ?? ''} />
                             <div className={classes.texts}>
-                                <Typography>{asset.value.collection_name ?? ''}</Typography>
+                                <Typography>{asset.value.collection?.name ?? ''}</Typography>
                                 {token.contractAddress && token.tokenId ? (
                                     <Link
                                         color="primary"
@@ -63,17 +64,17 @@ export function CheckoutOrder() {
                                             token.tokenId,
                                             provider,
                                         )}>
-                                        <Typography>{asset.value.name ?? ''}</Typography>
+                                        <Typography>{asset.value.metadata?.name ?? ''}</Typography>
                                     </Link>
                                 ) : (
-                                    <Typography>{asset.value.name ?? ''}</Typography>
+                                    <Typography>{asset.value.metadata?.name ?? ''}</Typography>
                                 )}
                             </div>
                         </div>
                     </TableCell>
                     <TableCell align="right">
                         <Typography>
-                            {getPrice()} {asset.value.current_symbol}
+                            {getPrice()} {asset.value.metadata?.symbol}
                         </Typography>
                     </TableCell>
                 </TableRow>
@@ -83,7 +84,7 @@ export function CheckoutOrder() {
                     </TableCell>
                     <TableCell align="right">
                         <Typography>
-                            {getPrice()} {asset.value.current_symbol}
+                            {getPrice()} {asset.value.metadata?.symbol}
                         </Typography>
                     </TableCell>
                 </TableRow>
