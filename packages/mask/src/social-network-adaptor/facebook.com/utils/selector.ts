@@ -88,7 +88,11 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="LeftRail"] li:nth-child(2)')
+    querySelector<E>('#ssrb_left_rail_start')
+        .closest(1)
+        .querySelector('h2')
+        .closest(1)
+        .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
