@@ -66,7 +66,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
-    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
+    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
     onBalanceChange?: (balance: number) => void
     contract: NonFungibleTokenContract<ChainId, SchemaType> | null | undefined
 }
@@ -87,12 +87,12 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         contractDetailed: {
             chainId,
             address: x.address,
-            name: x.name,
-            symbol: x.symbol,
+            name: x.metadata?.name,
+            symbol: x.metadata?.symbol,
             schema: SchemaType.ERC721,
-            logoURL: x.logoURL,
+            logoURL: x.metadata?.imageURL,
         } as NonFungibleTokenContract<ChainId, SchemaType>,
-        balance: x.balance,
+        balance: x.contract?.balance,
     }))
 
     const { t } = useI18N()
