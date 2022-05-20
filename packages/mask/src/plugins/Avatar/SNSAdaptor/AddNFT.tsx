@@ -62,6 +62,7 @@ export function AddNFT(props: AddNFTProps) {
 
         createNFT(address, tokenId, chainId)
             .then(async (token) => {
+                console.log(token)
                 if (chainId && token && token.contractDetailed.chainId !== chainId) {
                     setMessage('chain does not match.')
                     return
