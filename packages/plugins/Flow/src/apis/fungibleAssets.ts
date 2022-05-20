@@ -1,6 +1,6 @@
 import { ChainId, createClient, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { CoinGecko } from '@masknet/web3-providers'
-import { FungibleAsset, Pagination, CurrencyType, Pageable, rightShift } from '@masknet/web3-shared-base'
+import { FungibleAsset, CurrencyType, Pageable, rightShift, HubOptions } from '@masknet/web3-shared-base'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 
 async function getTokenBalance(
@@ -124,7 +124,7 @@ async function getAssetTether(chainId: ChainId, account: string) {
 export async function getFungibleAssets(
     chainId: ChainId,
     address: string,
-    pagination?: Pagination,
+    options?: HubOptions<ChainId>,
 ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
         getAssetFLOW(chainId, address),

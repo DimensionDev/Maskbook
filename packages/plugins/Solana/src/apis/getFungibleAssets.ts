@@ -1,4 +1,4 @@
-import { FungibleAsset, CurrencyType, Pageable, Web3Pagination } from '@masknet/web3-shared-base'
+import { FungibleAsset, CurrencyType, Pageable, HubOptions } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
 import { TokenListProvider } from '@solana/spl-token-registry'
@@ -73,11 +73,11 @@ async function getSplTokenList(chainId: ChainId, account: string) {
 
 export async function getFungibleAssets(
     address: string,
-    pagination?: Web3Pagination<ChainId>,
+    options?: HubOptions<ChainId>,
 ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(pagination?.chainId ?? ChainId.Mainnet, address).then((x) => [x]),
-        getSplTokenList(pagination?.chainId ?? ChainId.Mainnet, address),
+        getSolanaBalance(options?.chainId ?? ChainId.Mainnet, address).then((x) => [x]),
+        getSplTokenList(options?.chainId ?? ChainId.Mainnet, address),
     ])
     const assets = allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))

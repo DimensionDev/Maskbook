@@ -17,7 +17,10 @@ export class Base implements Translator {
                 config.gas = BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
 
             // add gas price
-            const options = await Web3StateSettings.value.GasOptions?.getGasOptions?.(context.chainId)
+            const hub = await Web3StateSettings.value.Hub?.getHub?.({
+                chainId: context.chainId,
+            })
+            const options = await hub?.getGasOptions?.(context.chainId)
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
 
             if (chainResolver.isSupport(context.chainId, 'EIP1559')) {

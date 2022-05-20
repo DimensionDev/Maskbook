@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
-import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageFailOver } from '../../../hooks'
 import { useAsyncRetry } from 'react-use'
@@ -28,10 +28,10 @@ export function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name, AvatarProps, classes } = props
 
     const chainId = useChainId() as Web3Helper.ChainIdAll
-    const { TokenIcon } = useWeb3State(props.networkPluginID) as Web3Helper.Web3StateAll
+    const hub = useWeb3Hub(props.networkPluginID) as Web3Helper.Web3HubAll
 
     const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
-        const logoURLs = await TokenIcon?.getFungibleTokenIconURLs?.(props.chainId ?? chainId, address)
+        const logoURLs = await hub?.getFungibleTokenIconURLs?.(props.chainId ?? chainId, address)
         return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
     }, [chainId, props.chainId, address, logoURL, TokenIcon])
 

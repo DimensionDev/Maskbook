@@ -1,5 +1,5 @@
 import { Connection } from '@metaplex/js'
-import { NonFungibleAsset, NonFungibleToken, Pageable, TokenType, Web3Pagination } from '@masknet/web3-shared-base'
+import { HubOptions, NonFungibleAsset, NonFungibleToken, Pageable, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
@@ -86,9 +86,9 @@ async function getNftList(chainId: ChainId, account: string): Promise<NonFungibl
 
 export async function getNonFungibleAssets(
     address: string,
-    pagination?: Web3Pagination<ChainId>,
+    options?: HubOptions<ChainId>,
 ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-    const tokens = await getNftList(pagination?.chainId ?? ChainId.Mainnet, address)
+    const tokens = await getNftList(options?.chainId ?? ChainId.Mainnet, address)
 
     return {
         currentPage: 0,

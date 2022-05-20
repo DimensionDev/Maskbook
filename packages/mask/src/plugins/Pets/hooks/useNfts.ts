@@ -7,8 +7,10 @@ import {
     NonFungibleTokenContract,
     transform,
     NonFungibleAsset,
+    Constant,
+    Constants,
 } from '@masknet/web3-shared-base'
-import { resolveIPFSLink, Constant, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { resolveIPFSLink, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
 import type { User, FilterContract } from '../types'
@@ -41,7 +43,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                 const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.address))
                 if (!sameNFT) continue
                 const isPunk = isSameAddress(NFT.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
-                if (isPunk) {
+                if (isPunk && NFT.metadata) {
                     NFT.metadata.imageURL = Punk3D.url
                 }
                 const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') || isPunk
@@ -63,7 +65,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     return nfts
 }
 
-export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
+export function useNFTsExtra(configNFTs: Record<string, Constants> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
     const [retry, setRetry] = useState(0)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -73,7 +75,7 @@ export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
         if (retry > 2) return
         let requests = []
         if (!extra.length) {
-            requests = initContracts.map((nft) => OpenSea.getContract(nft.contract, chainId))
+            requests = initContracts.map((nft) => OpenSea.getContract(nft.contract, { chainId }))
         } else {
             // openSea api request should not immediately
             await delay(3000)
@@ -81,7 +83,7 @@ export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
                 if (nft.symbol && nft.name !== 'Unknown Token') {
                     return Promise.resolve(nft)
                 }
-                return OpenSea.getContract(initContracts[index].contract, chainId)
+                return OpenSea.getContract(initContracts[index].contract, { chainId })
             })
         }
         const lists: NonFungibleTokenContract<ChainId, SchemaType>[] = await Promise.all(requests)

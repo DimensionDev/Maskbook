@@ -41,7 +41,6 @@ export enum TransactionStatusCode {
 }
 
 export type Web3 = typeof import('@blocto/fcl')
-// export type Web3 = never
 export type Web3Provider = {}
 export type Signature = CompositeSignature[]
 export type GasOption = never

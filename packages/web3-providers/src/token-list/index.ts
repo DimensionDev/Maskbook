@@ -1,4 +1,4 @@
-import { first, groupBy, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { memoizePromise } from '@dimensiondev/kit'
 import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'

@@ -26,6 +26,7 @@ import {
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -68,7 +69,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
     const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
-    const fungibleTokens = useFungibleTokensFromTokenList()
+    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()
 
     const nativeToken = Others?.chainResolver.nativeCurrency(chainId)

@@ -50,6 +50,7 @@ import {
     useWallet,
     useWeb3State,
     useWeb3Connection,
+    useGasOptions,
 } from '@masknet/plugin-infra/web3'
 import { AccountItem } from './AccountItem'
 import { TransferAddressError } from '../type'
@@ -194,7 +195,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const { Others, GasOptions } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
     const navigate = useNavigate()
@@ -206,7 +207,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         chainId: nativeToken?.chainId,
     })
 
-    const { value: estimateGasFees } = useAsync(async () => GasOptions?.getGasOptions?.(chainId), [chainId])
+    const { value: estimateGasFees } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
     const schema = useMemo(() => {
         return zod

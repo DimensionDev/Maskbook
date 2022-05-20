@@ -19,7 +19,7 @@ export function useWeb3Connection<T extends NetworkPluginID>(
 
     const { value: connection = null } = useAsyncRetry(async () => {
         if (!Protocol?.getConnection) return
-        return (Protocol.getConnection as GetConnection)({
+        return (Protocol.getConnection as GetConnection)?.({
             account,
             chainId,
             providerType,

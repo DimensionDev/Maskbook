@@ -1,6 +1,8 @@
 import type {
     Connection,
     ConnectionOptions,
+    Hub,
+    HubOptions,
     NetworkDescriptor,
     NetworkPluginID,
     ProtocolState,
@@ -106,7 +108,17 @@ export declare namespace Web3Helper {
               Definition[T]['TransactionSignature'],
               Definition[T]['Web3']
           >
-
+    export type Web3HubOptions<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : HubOptions<Definition[T]['ChainId']>
+    export type Web3Hub<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : Hub<
+              Definition[T]['ChainId'],
+              Definition[T]['SchemaType'],
+              Definition[T]['GasOption'],
+              Definition[T]['Transaction']
+          >
     export type Web3State<T extends NetworkPluginID = never> = T extends never
         ? never
         : Web3Plugin.ObjectCapabilities.Capabilities<
@@ -161,6 +173,12 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],
         Definition[NetworkPluginID]['Web3']
+    >
+    export type Web3HubAll = Hub<
+        Definition[NetworkPluginID]['ChainId'],
+        Definition[NetworkPluginID]['SchemaType'],
+        Definition[NetworkPluginID]['GasOption'],
+        Definition[NetworkPluginID]['Transaction']
     >
 
     export type Web3StateAll = Web3Plugin.ObjectCapabilities.Capabilities<

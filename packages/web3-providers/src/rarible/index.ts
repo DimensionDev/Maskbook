@@ -3,10 +3,10 @@ import { first } from 'lodash-unified'
 import {
     createLookupTableResolver,
     CurrencyType,
+    HubOptions,
     NonFungibleAsset,
     NonFungibleToken,
     TokenType,
-    Web3Pagination,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -156,7 +156,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
     }
 
-    async getTokens(from: string, { page = 0, size = 50 }: Web3Pagination<ChainId> = {}) {
+    async getTokens(from: string, { page = 0, size = 50 }: HubOptions<ChainId> = {}) {
         const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
             owner: from,
             size,
@@ -188,7 +188,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     // async getOffers(
     //     tokenAddress: string,
     //     tokenId: string,
-    //     { chainId = ChainId.Mainnet }: Web3Pagination<ChainId> = {},
+    //     { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     // ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
     //     const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
     //     const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
@@ -223,7 +223,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     // async getListings(
     //     tokenAddress: string,
     //     tokenId: string,
-    //     { chainId = ChainId.Mainnet }: Web3Pagination<ChainId> = {},
+    //     { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     // ): Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]> {
     //     const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
     //     const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, requestPath)
@@ -255,7 +255,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     //     tokenAddress: string,
     //     tokenId: string,
     //     side: OrderSide,
-    //     opts: Web3Pagination<ChainId> = {},
+    //     opts: HubOptions<ChainId> = {},
     // ) {
     //     switch (side) {
     //         case OrderSide.Buy:

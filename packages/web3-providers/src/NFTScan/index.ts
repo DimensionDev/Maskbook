@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { Web3Pagination } from '@masknet/web3-shared-base'
+import type { HubOptions } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC721Contract,
@@ -96,7 +96,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 }: Web3Pagination<ChainId> = {}) {
+    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number

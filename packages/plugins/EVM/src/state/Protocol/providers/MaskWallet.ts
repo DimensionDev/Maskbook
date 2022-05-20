@@ -7,7 +7,7 @@ import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
-const { RPC_URLS = [], RPC_WEIGHTS = [] } = getRPCConstants(ChainId.Mainnet)
+const { RPC_WEIGHTS = [] } = getRPCConstants(ChainId.Mainnet)
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     private id = 0

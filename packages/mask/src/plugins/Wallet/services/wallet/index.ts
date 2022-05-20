@@ -5,7 +5,7 @@ import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { encodeText } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Transaction, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import type { Transaction, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as sdk from './maskwallet'
@@ -32,13 +32,13 @@ export { isLocked, lockWallet, unlockWallet } from './locker'
 
 export async function getWallet(address?: string) {
     if (hasNativeAPI) {
-        const wallets = await getWallets(ProviderType.MaskWallet)
+        const wallets = await getWallets()
         return wallets.find((x) => isSameAddress(x.address, address))
     }
     return database.getWallet(address)
 }
 
-export async function getWallets(providerType?: ProviderType): Promise<
+export async function getWallets(): Promise<
     (Omit<WalletRecord, 'type'> & {
         configurable: boolean
         hasStoredKeyInfo: boolean
@@ -46,8 +46,6 @@ export async function getWallets(providerType?: ProviderType): Promise<
     })[]
 > {
     // if (hasNativeAPI) {
-    //     if (providerType && providerType !== ProviderType.MaskWallet) return []
-
     //     // read wallet from rpc
     //     const accounts = await EVM_RPC.getAccounts()
     //     const address = first(accounts) ?? ''
@@ -68,7 +66,7 @@ export async function getWallets(providerType?: ProviderType): Promise<
     //         },
     //     ]
     // }
-    return database.getWallets(providerType)
+    return database.getWallets()
 }
 
 export function createMnemonicWords() {
@@ -79,7 +77,7 @@ export async function getWalletPrimary() {
     if (hasNativeAPI) return null
     return (
         first(
-            (await database.getWallets(ProviderType.MaskWallet))
+            (await database.getWallets())
                 .filter((x) => x.storedKeyInfo?.type === api.StoredKeyType.Mnemonic)
                 .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime()),
         ) ?? null

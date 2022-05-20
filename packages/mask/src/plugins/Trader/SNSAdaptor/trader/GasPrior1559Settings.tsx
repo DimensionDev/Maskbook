@@ -10,8 +10,14 @@ import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useChainId, useFungibleToken, useNativeTokenPrice, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    useChainId,
+    useFungibleToken,
+    useGasOptions,
+    useNativeTokenPrice,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -111,7 +117,7 @@ interface GasPrior1559SettingsProps {
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-        const { GasOptions } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+        const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
         const { t } = useI18N()
@@ -119,27 +125,24 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const [customGasPrice, setCustomGasPrice] = useState('0')
 
         // #region Get gas options from debank
-        const { value: gasOptions } = useAsync(async () => {
-            const response = await GasOptions?.getGasOptions?.(chainId)
-            if (!response) return { slow: 0, normal: 0, fast: 0 }
-
+        const gasOptions = useMemo(() => {
             return {
-                slow: response.slow.suggestedMaxFeePerGas,
-                normal: response.normal.suggestedMaxFeePerGas,
-                fast: response.fast.suggestedMaxFeePerGas,
+                slow: gasOptions_?.[GasOptionType.SLOW].suggestedMaxFeePerGas ?? 0,
+                standard: gasOptions_?.[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0,
+                fast: gasOptions_?.[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
             }
-        }, [chainId])
+        }, [chainId, gasOptions_])
         // #endregion
 
         const options = useMemo(
             () => [
                 {
                     title: t('plugin_trader_gas_setting_standard'),
-                    gasPrice: gasOptions?.normal ?? 0,
+                    gasPrice: gasOptions?.standard,
                 },
                 {
                     title: t('plugin_trader_gas_setting_fast'),
-                    gasPrice: gasOptions?.fast ?? 0,
+                    gasPrice: gasOptions?.fast,
                 },
                 {
                     title: t('plugin_trader_gas_setting_custom'),
@@ -166,7 +169,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         useUpdateEffect(() => {
             if (!(gasConfig?.gasPrice && gasOptions)) return
             const gasPrice = new BigNumber(gasConfig.gasPrice)
-            if (gasPrice.isEqualTo(gasOptions.normal)) setOption(0)
+            if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
             else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
             else {
                 setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
