@@ -29,7 +29,6 @@ import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/sha
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
-import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
@@ -51,7 +50,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '600px !important',
+            width: '612px !important',
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
@@ -62,11 +61,11 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         },
         dialogTitle: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.background.modalTitle,
+            background: theme.palette.maskColor.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -85,7 +84,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -179,7 +177,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,

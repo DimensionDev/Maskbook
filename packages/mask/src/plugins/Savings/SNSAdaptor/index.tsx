@@ -13,6 +13,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SavingsIcon />
             const name = <Trans i18nKey="plugin_savings" />
+            const iconFilterColor = 'rgba(255, 83, 146, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -22,6 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 {...EntryComponentProps}
                                 title={name}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
@@ -32,6 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 7,
                 icon,
                 name,
+                iconFilterColor,
             }
         })(),
     ],

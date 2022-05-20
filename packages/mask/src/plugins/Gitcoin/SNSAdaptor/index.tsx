@@ -10,7 +10,6 @@ import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
@@ -55,11 +54,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     usePluginWrapper(true)
-    return (
-        <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
-            <PreviewCard id={id} />
-        </EthereumChainBoundary>
-    )
+    return <PreviewCard id={id} />
 }
 
 export default sns

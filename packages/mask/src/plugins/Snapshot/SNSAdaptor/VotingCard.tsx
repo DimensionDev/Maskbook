@@ -10,9 +10,9 @@ import { PluginSnapshotRPC } from '../messages'
 import { SnapshotCard } from './SnapshotCard'
 import { useProposal } from './hooks/useProposal'
 import { usePower } from './hooks/usePower'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => {
             margin: `${theme.spacing(1)} auto`,
         },
         choiceButton: {
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
             transitionDuration: '0s !important',
             '&:hover': {
                 border: '2px solid rgb(29, 161, 242) !important',
@@ -31,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
         buttonActive: {
             border: '2px solid rgb(29, 161, 242)',
             backgroundColor: 'transparent',
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
         },
     }
 })
@@ -46,6 +48,8 @@ export function VotingCard() {
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+
+    const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
         () => {
@@ -69,29 +73,30 @@ export function VotingCard() {
 
     return (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            {choices.map((choiceText, i) => (
-                <Button
-                    key={i}
-                    onClick={() => setChoice(i + 1)}
-                    className={classNames([
-                        classes.button,
-                        classes.choiceButton,
-                        ...(choice === i + 1 ? [classes.buttonActive] : []),
-                    ])}
-                    variant="outlined">
-                    {choiceText}
-                </Button>
-            ))}
-            <EthereumWalletConnectedBoundary
-                classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain>
-                <Button
-                    className={classes.button}
-                    disabled={choice === 0 || !account || !power}
-                    onClick={() => setOpen(true)}>
-                    {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
-                </Button>
-            </EthereumWalletConnectedBoundary>
+            {account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                <>
+                    {choices.map((choiceText, i) => (
+                        <Button
+                            key={i}
+                            onClick={() => setChoice(i + 1)}
+                            className={classNames([
+                                classes.button,
+                                classes.choiceButton,
+                                ...(choice === i + 1 ? [classes.buttonActive] : []),
+                            ])}
+                            variant="outlined">
+                            {choiceText}
+                        </Button>
+                    ))}
+
+                    <Button
+                        className={classes.button}
+                        disabled={choice === 0 || !account || !power}
+                        onClick={() => setOpen(true)}>
+                        {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                    </Button>
+                </>
+            ) : null}
             <VoteConfirmDialog
                 open={open}
                 loading={loading}

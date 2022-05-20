@@ -3,14 +3,14 @@ import { ChainId, createERC20Tokens, createNativeToken, FungibleTokenDetailed } 
 export const SAVINGS_PLUGIN_NAME = 'Savings'
 export const SAVINGS_PLUGIN_ID = 'com.savings'
 
-export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
+export const LDO_PAIRS: Array<[FungibleTokenDetailed, FungibleTokenDetailed]> = [
     [
         createNativeToken(ChainId.Mainnet),
         createERC20Tokens('LDO_stETH_ADDRESS', 'Liquid staked Ether 2.0', 'stETH', 18)[ChainId.Mainnet],
     ],
 ]
 
-export const AAVE_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
+export const AAVE_PAIRS: Array<[FungibleTokenDetailed, FungibleTokenDetailed]> = [
     [
         createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)[ChainId.Mainnet],
         createERC20Tokens('aUSDT_ADDRESS', 'Aave Interest bearing USDT', 'aUSDT', 6)[ChainId.Mainnet],

@@ -300,9 +300,9 @@ export function useIPRegion(): AsyncStateRetry<Region> {
     return useAsyncRetry(IPGeoResolver)
 }
 
-export function useRegionList(): Array<Region> {
+export function useRegionList(): Region[] {
     // TODO return name by i18n
-    return regions as Array<Region>
+    return regions as Region[]
 }
 
 export function useRegionSelect(initRegionCodes?: RegionCode[]) {

@@ -62,7 +62,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     token_type?: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: FungibleTokenDetailed
     token_address?: string
-    claimers?: { address: string; name: string }[]
+    claimers?: Array<{ address: string; name: string }>
     total_remaining?: string
 }
 
@@ -126,10 +126,10 @@ export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_ran
     chain_id: number
     message: string
     token_ids: string[]
-    claimers: {
+    claimers: Array<{
         name: string
         address: string
-    }[]
+    }>
     creator: {
         name: string
         address: string

@@ -299,10 +299,10 @@ export async function updatePersonaDB(
         else nextLinkedProfiles = nextRecord.linkedProfiles
     }
     if (howToMerge.explicitUndefinedField === 'ignore') {
-        for (const _key in nextRecord) {
-            const key = _key as keyof typeof nextRecord
+        const keys = Object.keys(nextRecord) as Array<keyof typeof nextRecord>
+        for (const key of keys) {
             if (nextRecord[key] === undefined) {
-                delete nextRecord[key as keyof typeof nextRecord]
+                delete nextRecord[key]
             }
         }
     }

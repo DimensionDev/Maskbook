@@ -159,13 +159,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NftAirdropCardProps {
-    campaignInfos: {
+    campaignInfos: Array<{
         campaignInfo: CampaignInfo
         claimableInfo: {
             claimable: boolean
             claimed: boolean
         }
-    }[]
+    }>
     loading: boolean
     retry: () => void
 }
@@ -186,12 +186,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const currentChainId = useChainId()
     const { classes } = useStyles()
 
-    const claimableCount = campaignInfos
-        ? campaignInfos.reduce((acc, cur) => {
-              if (cur.claimableInfo.claimable) return acc + 1
-              return acc
-          }, 0)
-        : 0
+    const claimableCount = campaignInfos?.filter((info) => info.claimableInfo.claimable).length ?? 0
 
     useEffect(() => {
         setCheckAddress('')

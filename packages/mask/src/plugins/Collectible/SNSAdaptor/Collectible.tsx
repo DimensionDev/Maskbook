@@ -1,6 +1,6 @@
 import { ReactElement, useCallback } from 'react'
 import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
-            marginBottom: 12,
         },
         content: {
             width: '100%',
@@ -141,24 +140,35 @@ export function Collectible(props: CollectibleProps) {
         setProvider,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
+        true,
     )
     // #endregion
 
     if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
+                <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
-                {CollectibleProviderSwitcher}
-                <Button
-                    color="primary"
-                    size="small"
-                    variant="text"
-                    onClick={() => asset.retry()}
-                    sx={{ marginTop: 1.5 }}>
-                    Refresh
-                </Button>
+                <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
+                    <Box sx={{ flex: 1, padding: 1 }}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            onClick={() => asset.retry()}
+                            sx={{
+                                marginTop: 1,
+                                backgroundColor: MaskColorVar.textPluginColor,
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: MaskColorVar.textPluginColor,
+                                },
+                            }}>
+                            Refresh
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
         )
     const tabs = [
