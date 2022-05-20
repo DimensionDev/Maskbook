@@ -2,7 +2,12 @@ import type { Subscription } from 'use-subscription'
 import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { createChainResolver, createExplorerResolver, createNetworkResolver, createProviderResolver } from '../utils'
+import type {
+    createChainResolver,
+    createExplorerResolver,
+    createNetworkResolver,
+    createProviderResolver,
+} from '../utils'
 
 export interface Pagination {
     /** The item size of each page. */
@@ -559,7 +564,10 @@ export interface Connection<
     /** Get fungible token balance */
     getFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
     /** Get non-fungible token balance */
-    getNonFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
+    getNonFungibleTokensBalance(
+        listOfAddress: string[],
+        options?: Web3ConnectionOptions,
+    ): Promise<Record<string, string>>
     /** Get the currently connected account. */
     getAccount(options?: Web3ConnectionOptions): Promise<string>
     /** Get the currently chain id. */
@@ -592,9 +600,21 @@ export interface Connection<
         options?: Web3ConnectionOptions,
     ): Promise<boolean>
     /** Transfer fungible token to */
-    transferFungibleToken(address: string, recipient: string, amount: string, memo?: string, options?: Web3ConnectionOptions): Promise<string>
+    transferFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        memo?: string,
+        options?: Web3ConnectionOptions,
+    ): Promise<string>
     /** Transfer non-fungible token to */
-    transferNonFungibleToken(address: string, recipient: string, tokenId: string, amount: string, options?: Web3ConnectionOptions): Promise<string>
+    transferNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        amount: string,
+        options?: Web3ConnectionOptions,
+    ): Promise<string>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, options?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -659,13 +679,9 @@ export interface AssetState<ChainId, SchemaType> {
         pagination?: Web3Pagination<ChainId>,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get all fungible assets of given account. */
-    getAllFungibleAssets?: (
-        address: string,
-    ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
+    getAllFungibleAssets?: (address: string) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
     /** Get all non-fungible assets of given account. */
-    getAllNonFungibleAssets?: (
-        address: string,
-    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
+    getAllNonFungibleAssets?: (address: string) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
 }
 export interface IdentityServiceState {
     /** Find all social addresses related to given social identity. */
@@ -704,7 +720,12 @@ export interface TokenPriceState<ChainId> {
     /** get price of a fungible token */
     getFungibleTokenPrice?: (chainId: ChainId, address: string, currencyType?: CurrencyType) => Promise<number>
     /** get price of a non-fungible token */
-    getNonFungibleTokenPrice?: (chainId: ChainId, address: string, tokenId: string, currencyType?: CurrencyType) => Promise<number>
+    getNonFungibleTokenPrice?: (
+        chainId: ChainId,
+        address: string,
+        tokenId: string,
+        currencyType?: CurrencyType,
+    ) => Promise<number>
 }
 export interface TokenIconState<ChainId> {
     /** get token icon urls of fungible token */
@@ -751,10 +772,7 @@ export interface TransactionState<ChainId, Transaction> {
 }
 export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     /** Step 1: Create a transaction formatting context. */
-    createContext: (
-        chainId: ChainId,
-        transaction: Transaction,
-    ) => Promise<TransactionContext<ChainId, Parameters>>
+    createContext: (chainId: ChainId, transaction: Transaction) => Promise<TransactionContext<ChainId, Parameters>>
     /** Step 2: Create a transaction descriptor */
     createDescriptor: (
         chainId: ChainId,
@@ -841,10 +859,10 @@ export interface WalletState {
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     // #region resolvers
-    chainResolver: ReturnType<typeof createChainResolver<ChainId, SchemaType, NetworkType>>
-    explorerResolver: ReturnType<typeof createExplorerResolver<ChainId, SchemaType, NetworkType>>
-    providerResolver: ReturnType<typeof createProviderResolver<ChainId, ProviderType>>
-    networkResovler: ReturnType<typeof createNetworkResolver<ChainId, NetworkType>>
+    chainResolver: ReturnType<typeof createChainResolver>
+    explorerResolver: ReturnType<typeof createExplorerResolver>
+    providerResolver: ReturnType<typeof createProviderResolver>
+    networkResovler: ReturnType<typeof createNetworkResolver>
     // #endregion
 
     // #region validators
