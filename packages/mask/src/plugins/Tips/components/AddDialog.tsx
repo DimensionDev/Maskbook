@@ -54,9 +54,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [contractAddress, setContractAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
-    const s = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const Token = s.Token
-    s.Asset?.getFungibleAssets
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const web3Connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
     const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)

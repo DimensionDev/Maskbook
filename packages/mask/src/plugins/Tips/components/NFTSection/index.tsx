@@ -1,4 +1,4 @@
-import { useAccount, useNetworkDescriptor, useWeb3State as useWeb3PluginState } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -6,8 +6,7 @@ import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
-import { useAsyncFn, useTimeoutFn } from 'react-use'
-import { WalletMessages } from '../../../Wallet/messages'
+import { useTimeoutFn } from 'react-use'
 import { useTip } from '../../contexts'
 import { useI18N } from '../../locales'
 import type { TipNFTKeyPair } from '../../types'
@@ -60,15 +59,10 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     const { erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const selectedPairs: TipNFTKeyPair[] = useMemo(
         () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
         [erc721TokenId, erc721TokenId],
     )
-    const { Asset } = useWeb3PluginState(NetworkPluginID.PLUGIN_EVM)
-
-    const networkDescriptor = useNetworkDescriptor()
-
     // Cannot get the loading status of fetching via websocket
     // loading status of `useAsyncRetry` is not the real status
     const [guessLoading, setGuessLoading] = useState(true)
@@ -76,31 +70,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         setGuessLoading(false)
     }, 10000)
 
-    const [{ value = { data: EMPTY_LIST }, loading }, fetchTokens] = useAsyncFn(async () => {
-        const result = await Asset?.getNonFungibleAssets?.(account, { page: 0 })
-        return result
-    }, [account, Asset?.getNonFungibleAssets, networkDescriptor])
-
-    useEffect(() => {
-        fetchTokens()
-    }, [fetchTokens])
-
-    // TODO
-    // useEffect(() => {
-    //     const unsubscribeTokens = WalletMessages.events.erc721TokensUpdated.on(fetchTokens)
-    //     const unsubscribeSocket = WalletMessages.events.socketMessageUpdated.on((info) => {
-    //         setGuessLoading(info.done)
-    //         if (!info.done) {
-    //             fetchTokens()
-    //         }
-    //     })
-    //     return () => {
-    //         unsubscribeTokens()
-    //         unsubscribeSocket()
-    //     }
-    // }, [fetchTokens])
-
-    const fetchedTokens = value.data
+    const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const tokens = useMemo(() => {
         return uniqWith(fetchedTokens, (v1, v2) => {

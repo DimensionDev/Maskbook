@@ -190,7 +190,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         } else {
             setDialog({
                 open: true,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
             })
         }
     }, [account])
