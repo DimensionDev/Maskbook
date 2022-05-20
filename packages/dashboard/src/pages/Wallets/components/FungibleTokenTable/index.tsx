@@ -7,9 +7,11 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { formatBalance, FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentWeb3NetworkPluginID, useFungibleAssets, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { PluginMessages } from '../../../../API'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -64,7 +66,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         loading: fungibleAssetsLoading,
         error: fungibleAssetsError,
     } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-    // const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     useEffect(() => {
         // PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
@@ -72,23 +74,36 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         // )
     }, [])
 
-    const onSwap = useCallback((token: FungibleAsset<number, string>) => {
-        // openSwapDialog({
-        //     open: true,
-        //     traderProps: {
-        //         defaultInputCoin: {
-        //             id: token.id,
-        //             name: token.name || '',
-        //             symbol: token.symbol || '',
-        //             contract_address: token.address,
-        //             decimals: token.decimals,
-        //         },
-        //     },
-        // })
-    }, [])
+    const onSwap = useCallback(
+        (
+            token: FungibleAsset<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => {
+            openSwapDialog({
+                open: true,
+                traderProps: {
+                    defaultInputCoin: {
+                        id: token.id,
+                        name: token.name || '',
+                        symbol: token.symbol || '',
+                        contract_address: token.address,
+                        decimals: token.decimals,
+                    },
+                },
+            })
+        },
+        [],
+    )
 
     const onSend = useCallback(
-        (token: FungibleAsset<number, string>) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        (
+            token: FungibleAsset<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
         [],
     )
 
@@ -110,8 +125,18 @@ export interface TokenTableUIProps {
         Web3Helper.Definition[NetworkPluginID]['ChainId'],
         Web3Helper.Definition[NetworkPluginID]['SchemaType']
     >[]
-    onSwap(token: FungibleToken<number, string>): void
-    onSend(token: FungibleToken<number, string>): void
+    onSwap(
+        token: FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
+    onSend(
+        token: FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
 }
 
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {

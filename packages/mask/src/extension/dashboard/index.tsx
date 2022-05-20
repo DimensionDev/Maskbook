@@ -11,11 +11,13 @@ import { createPluginHost, createSharedContext } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { status } from '../../setup.ui'
+import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTraderMessages } from '../../plugins/Trader/messages'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
-    // Swap: PluginTraderMessages,
-    // Transak: PluginTransakMessages,
+    Swap: PluginTraderMessages,
+    Transak: PluginTransakMessages,
     // Pets: PluginPetMessages,
 }
 const rpc: DashboardPluginServices = {

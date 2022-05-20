@@ -27,11 +27,11 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: theme.palette.maskColor?.dark,
         color: 'white',
         width: 254,
         '&,&:hover': {
-            background: theme.palette.maskColor.dark,
+            background: theme.palette.maskColor?.dark,
         },
     },
     action: {
@@ -147,11 +147,11 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
                         sx={{
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                             width: '100%',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: theme.palette.maskColor.dark,
+                                backgroundColor: theme.palette.maskColor?.dark,
                             },
                             margin: 0,
                             lineHeight: 0,
@@ -189,11 +189,11 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     }
                     sx={
                         props.ActionButtonPromiseProps?.sx ?? {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                             width: '100%',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: theme.palette.maskColor.dark,
+                                backgroundColor: theme.palette.maskColor?.dark,
                             },
                             padding: 1,
                             margin: 0,

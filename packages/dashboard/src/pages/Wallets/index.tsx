@@ -9,10 +9,12 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { DashboardRoutes, EMPTY_LIST, relativeRouteOf } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { PluginMessages } from '../../API'
 import { PageFrame } from '../../components/PageFrame'
 import { useDashboardI18N } from '../../locales'
 import { Assets } from './components/Assets'
@@ -49,8 +51,8 @@ function Wallets() {
         networkDescriptor ?? null,
     )
 
-    // const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    // const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
@@ -103,10 +105,8 @@ function Wallets() {
                     <Balance
                         balance={balance}
                         onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
-                        // onBuy={openBuyDialog}
-                        // onSwap={openSwapDialog}
-                        onBuy={() => {}}
-                        onSwap={() => {}}
+                        onBuy={openBuyDialog}
+                        onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
                         networks={renderNetworks}
                         selectedNetwork={selectedNetwork}
