@@ -4,7 +4,6 @@ import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -86,8 +85,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
-        const tokenType = token!.schema === SchemaType.Native ? 0 : 1
+        const tokenType = token!.schema
         const tokenAddress = token!.schema === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
+
         if (!tokenAddress) {
             return null
         }
@@ -110,7 +110,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             return null
         }
 
-        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
+        const params = Object.values(
+            omit({ ...paramsObj, tokenType: paramsObj.tokenType - 1 }, ['token']),
+        ) as MethodParameters
 
         let gasError: Error | null = null
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
@@ -135,13 +137,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const redPacketContract = useRedPacketContract(chainId, version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
-
     const transactionHashRef = useRef<string>()
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
-
         if (!token || !redPacketContract || !createParams) {
             setCreateState({
                 type: TransactionStateType.UNKNOWN,
@@ -175,27 +175,17 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             value,
             gas,
         }
-
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             redPacketContract.methods
                 .create_red_packet(...params)
-                .send(config as PayableTx)
+                .send(config)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                     setCreateState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                     transactionHashRef.current = hash
-                })
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     setCreateState({

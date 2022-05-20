@@ -9,16 +9,8 @@ import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } 
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
-import { NetworkPluginID, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
-import {
-    TransactionStateType,
-    SchemaType,
-    FungibleTokenDetailed,
-    useFungibleTokenDetailed,
-    useTokenConstants,
-    ERC20TokenDetailed,
-    NativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { TransactionStateType, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -27,7 +19,7 @@ import { useRefundCallback } from './hooks/useRefundCallback'
 import { WalletMessages } from '../../Wallet/messages'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -195,7 +187,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         history.contract_version,
         account,
@@ -204,15 +195,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? SchemaType.Native : SchemaType.ERC20,
-        tokenAddress ?? '',
-    )
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
         ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
-    } as ERC20TokenDetailed | NativeTokenDetailed
+    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
     // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -242,7 +230,13 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
+        if (canSend)
+            onSelect(
+                removeUselessSendParams({
+                    ...history,
+                    token: historyToken as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                }),
+            )
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
     // #region password lost tips
@@ -265,7 +259,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURL={historyToken?.logoURI}
+                    logoURL={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
@@ -389,6 +383,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
     return {
         ...omit(payload, ['block_number', 'claimers']),
-        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+        token: omit(payload.token, ['logoURI']) as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     }
 }

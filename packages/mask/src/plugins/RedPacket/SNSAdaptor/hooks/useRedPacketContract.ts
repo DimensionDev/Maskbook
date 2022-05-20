@@ -16,7 +16,7 @@ export function useRedPacketContract(chainId: ChainId, version: number) {
         HAPPY_RED_PACKET_ADDRESS_V2: addressV2,
         HAPPY_RED_PACKET_ADDRESS_V3: addressV3,
         HAPPY_RED_PACKET_ADDRESS_V4: addressV4,
-    } = useRedPacketConstants()
+    } = useRedPacketConstants(chainId)
     const v1 = useContract<HappyRedPacketV1>(chainId, addressV1, HappyRedPacketV1ABI as AbiItem[])
     const v2 = useContract<HappyRedPacketV2>(chainId, addressV2, HappyRedPacketV2ABI as AbiItem[])
     const v3 = useContract<HappyRedPacketV3>(chainId, addressV3, HappyRedPacketV3ABI as AbiItem[])

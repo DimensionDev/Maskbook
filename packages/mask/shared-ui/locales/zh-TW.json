@@ -162,6 +162,7 @@
     "plugin_wallet_approve_all_nft": "解鎖 {{symbol}}",
     "plugin_wallet_approve_all_nft_successfully": "解鎖 {{symbol}} 成功",
     "plugin_wallet_connect_a_wallet": "連接到錢包",
+    "plugin_wallet_confirm_risk_warning": "風險警告確認",
     "plugin_wallet_no_gas_fee": "沒有 Gas 費用",
     "plugin_wallet_update_gas_fee": "正在更新 Gas 費用…",
     "plugin_wallet_invalid_network": "錯誤的網路",

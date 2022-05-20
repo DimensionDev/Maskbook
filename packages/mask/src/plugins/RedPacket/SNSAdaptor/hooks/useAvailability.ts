@@ -1,21 +1,20 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { EVM_Connection } from '@masknet/plugin-evm'
+import { useAccount, useChainId, Web3Helper, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useRedPacketContract } from './useRedPacketContract'
+import { checkAvailability } from '../utils/checkAvailability'
 
 export function useAvailability(
     id: string,
-    version: number,
+    contract_address: string,
     options?: Web3Helper.Web3ConnectionOptions<NetworkPluginID.PLUGIN_EVM>,
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM, options?.account)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, options?.chainId)
-    const redPacketContract = useRedPacketContract(chainId, version)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection | null
+
     return useAsyncRetry(async () => {
-        if (!id || !redPacketContract) return null
-        return redPacketContract.methods.check_availability(id).call({
-            // check availability is ok w/o account
-            from: account,
-        })
-    }, [id, account, chainId])
+        if (!id || !connection) return null
+        return checkAvailability(id, account, contract_address, chainId, connection)
+    }, [id, account, chainId, connection])
 }

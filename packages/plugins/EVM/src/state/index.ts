@@ -60,3 +60,5 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         Others: new Others(context),
     }
 }
+
+export * from './Protocol/types'

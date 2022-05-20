@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
@@ -66,7 +66,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
-    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
+    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
     onBalanceChange?: (balance: number) => void
     contract: NonFungibleTokenContract<ChainId, SchemaType> | null | undefined
 }

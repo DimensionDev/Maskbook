@@ -1,7 +1,6 @@
-import { ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
-import type { RedPacketRecord } from '../types'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types'
 import * as subgraph from './apis/subgraph'
-import * as chain from './apis/chain'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
@@ -16,16 +15,7 @@ export async function discoverRedPacket(record: RedPacketRecord) {
     database.addRedPacket(record)
 }
 
-export async function getRedPacketHistory(address: string, chainId: ChainId, endBlock: number) {
-    const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT } = getRedPacketConstants(chainId)
-
-    const redpacketsFromChain = await chain.getRedPacketHistory(
-        chainId,
-        HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT,
-        endBlock,
-        address,
-    )
-
+export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPacketJSONPayloadFromChain[]) {
     // #region Inject password from database
     const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromChain.map((x) => x.txid))
     return redpacketsFromChain.map((x) => {

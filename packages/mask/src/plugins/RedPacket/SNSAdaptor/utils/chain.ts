@@ -2,12 +2,12 @@ import urlcat from 'urlcat'
 import type BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import type { EVM_Connection } from '@masknet/plugin-evm'
 import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { checkAvailability } from './checkAvailability'
-// import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -16,6 +16,7 @@ export async function getRedPacketHistory(
     startBlock: number | undefined,
     endBlock: number,
     senderAddress: string,
+    connection: EVM_Connection,
 ) {
     const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
@@ -114,13 +115,11 @@ export async function getRedPacketHistory(
 
     const eventLogResponse = await Promise.allSettled(
         payloadList.map(async (payload) => {
-            const result = await EVM_RPC.getTransactionReceipt(payload.txid)
-
+            const result = await connection.getTransactionReceipt(payload.txid)
             if (!result) return null
 
             const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
             if (!log) return null
-
             const eventParams = interFace.decodeEventLog(
                 'CreationSuccess',
                 log.data,
@@ -131,11 +130,16 @@ export async function getRedPacketHistory(
             payload.creation_time = eventParams.creation_time.toNumber() * 1000
 
             // 4. retrieve `claimers` and `total_remaining`
+            // const r = await redPacketContract.methods.check_availability(payload.rpid).call({
+            //     from: payload.sender.address,
+            // })
+
             const data = await checkAvailability(
                 payload.rpid,
                 payload.sender.address,
                 payload.contract_address,
                 chainId,
+                connection,
             )
 
             payload.claimers = Array.from({ length: data.claimed }).map(() => ({ address: '', name: '' }))

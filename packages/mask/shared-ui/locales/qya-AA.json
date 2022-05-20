@@ -283,6 +283,7 @@
     "plugin_wallet_approve_all_nft": "crwdns7933:0{{symbol}}crwdne7933:0",
     "plugin_wallet_approve_all_nft_successfully": "crwdns7935:0{{symbol}}crwdne7935:0",
     "plugin_wallet_connect_a_wallet": "crwdns4591:0crwdne4591:0",
+    "plugin_wallet_confirm_risk_warning": "crwdns4593:0crwdne4593:0",
     "plugin_wallet_no_gas_fee": "crwdns4595:0crwdne4595:0",
     "plugin_wallet_update_gas_fee": "crwdns4597:0crwdne4597:0",
     "plugin_wallet_invalid_network": "crwdns4599:0crwdne4599:0",

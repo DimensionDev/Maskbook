@@ -30,7 +30,6 @@ import {
     createERC721Metadata,
     createERC721Collection,
     createWeb3Provider,
-    useEthereumConstants,
     getEthereumConstants,
 } from '@masknet/web3-shared-evm'
 import {
@@ -53,7 +52,7 @@ import type { BaseContract } from '@masknet/web3-contracts/types/types'
 const EMPTY_STRING = () => Promise.resolve('')
 const ZERO = () => Promise.resolve(0)
 
-function isUniversalMethod(method: EthereumMethodType) {
+export function isReadOnlyMethod(method: EthereumMethodType) {
     return [
         EthereumMethodType.ETH_GET_CODE,
         EthereumMethodType.ETH_GAS_PRICE,
@@ -112,7 +111,7 @@ class Connection implements EVM_Connection {
                                     break
                                 default:
                                     const web3Provider = await Providers[
-                                        isUniversalMethod(context.method) ? ProviderType.MaskWallet : this.providerType
+                                        isReadOnlyMethod(context.method) ? ProviderType.MaskWallet : this.providerType
                                     ].createWeb3Provider(this.chainId)
 
                                     // send request and set result in the context

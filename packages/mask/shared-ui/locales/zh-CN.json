@@ -248,6 +248,7 @@
     "plugin_wallet_approve_all_nft": "解锁 {{symbol}}",
     "plugin_wallet_approve_all_nft_successfully": "解锁 {{symbol}} 成功",
     "plugin_wallet_connect_a_wallet": "连接钱包",
+    "plugin_wallet_confirm_risk_warning": "确认风险提示",
     "plugin_wallet_no_gas_fee": "不够Gas费用",
     "plugin_wallet_update_gas_fee": "Gas费用更新中…",
     "plugin_wallet_invalid_network": "网络无效",

@@ -1,14 +1,21 @@
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { EVM_Connection } from '@masknet/plugin-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedpacketAvailability } from '../../types'
 
 const interFace = new Interface(REDPACKET_ABI)
 
 // red-packet contract readonly method, read it no matter on whatever chains you are.
-export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
+export async function checkAvailability(
+    pid: string,
+    from: string,
+    to: string,
+    chainId: ChainId,
+    connection: EVM_Connection,
+) {
     const callData = interFace.encodeFunctionData('check_availability', [pid])
-    const data = await EVM_RPC.call(
+    const data = await connection.callTransaction(
         {
             to,
             from,

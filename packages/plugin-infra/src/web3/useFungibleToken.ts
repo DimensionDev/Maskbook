@@ -17,6 +17,6 @@ export function useFungibleToken<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!connection) return
-        return (connection?.getFungibleToken as GetFungibleToken)(address ?? '')
+        return (connection?.getFungibleToken as GetFungibleToken)(address ?? '', options)
     }, [address, connection])
 }

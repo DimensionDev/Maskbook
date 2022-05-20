@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Typography, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
@@ -42,11 +41,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { value: histories, loading, retry } = useRedPacketHistory(account, chainId)
-
-    useEffect(() => {
-        retry()
-    }, [chainId])
+    const { value: histories, loading } = useRedPacketHistory(account, chainId)
 
     if (loading) {
         return (

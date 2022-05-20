@@ -58,6 +58,10 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     total_remaining?: string
 }
 
+export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {
+    token_address: string
+}
+
 export interface RedpacketAvailability {
     token_address: string
     balance: string

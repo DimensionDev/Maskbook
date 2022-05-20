@@ -8,7 +8,7 @@ import {
     rightShift,
     formatBalance,
 } from '@masknet/web3-shared-base'
-import { SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
@@ -91,18 +91,20 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     // #region select token
-    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<
         FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20> | undefined
     >(origin?.token)
+
     const pickToken = usePickToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
+            chainId,
         })
-        if (picked) setToken(picked)
-    }, [pickToken, token?.address])
+        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
+    }, [pickToken, token?.address, chainId])
     // #endregion
 
     // #region packet settings
@@ -140,7 +142,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
     useEffect(() => {
-        setToken(nativeTokenDetailed)
+        setToken(nativeTokenDetailed as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
     }, [chainId, nativeTokenDetailed])
 
     useEffect(() => {
@@ -149,8 +151,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type ?? SchemaType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         token?.address ?? '',
+        { chainId },
     )
     // #endregion
 
@@ -177,7 +180,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             name: senderName,
             message: message || t('plugin_red_packet_best_wishes'),
             shares: shares || 0,
-            token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
+            token: token
+                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                : undefined,
             total: totalAmount.toFixed(),
         }),
         [isRandom, senderName, message, t('plugin_red_packet_best_wishes'), shares, token, totalAmount],

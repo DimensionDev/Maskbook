@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useNetworkType, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -66,8 +66,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
-
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -82,7 +82,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state])
 
-    const { address: publicKey, privateKey } = useMemo(() => web3?.eth.accounts.create(), [web3])
+    const { address: publicKey, privateKey } = useMemo(
+        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
+        [web3],
+    )!
 
     const currentIdentity = useCurrentIdentity()
 
@@ -100,7 +103,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await EVM_RPC.personalSign(Web3Utils.sha3(payload.sender.message) ?? '', account)
+                    if (!connection) return
+                    payload.password = await connection.signMessage(
+                        Web3Utils.sha3(payload.sender.message) ?? '',
+                        'personaSign',
+                        { account },
+                    )
                     payload.password = payload.password!.slice(2)
                 }
             }
@@ -112,7 +120,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             onClose()
             closeApplicationBoardDialog()
         },
-        [onClose, chainId, senderName],
+        [onClose, chainId, senderName, connection],
     )
 
     // #region blocking

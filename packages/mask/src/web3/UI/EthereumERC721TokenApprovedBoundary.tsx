@@ -36,7 +36,7 @@ const useStyles = makeStyles()(() => ({
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
     owner: string | undefined
-    contractDetailed: NonFungibleToken<ChainId, SchemaType> | undefined
+    contractDetailed: NonFungibleToken<ChainId, SchemaType.ERC721> | undefined
     validationMessage?: string
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps

@@ -108,7 +108,7 @@ class RequestContext implements Context {
         if (!this.config || !config) return
         this._requestArguments = {
             method: this.method,
-            params: [config],
+            params: [config, 'latest'],
         }
     }
 

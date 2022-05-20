@@ -78,7 +78,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { onBack, settings, onCreate, onClose } = props
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
@@ -102,7 +101,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={explorerResolver.fungibleTokenLink(settings?.token!)}
+                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
