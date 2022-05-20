@@ -1,10 +1,9 @@
 import type { TradeInfo } from '../../../types'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { MINIMUM_AMOUNT } from '../../../constants'
 import BigNumber from 'bignumber.js'
-import { formatBalance } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 

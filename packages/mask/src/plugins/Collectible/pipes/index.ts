@@ -1,6 +1,6 @@
 import { identity } from 'lodash-unified'
 import { Network } from 'opensea-js'
-import { ChainId, createLookupTableResolver, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import {
     NullAddress,
     RaribleRopstenUserURL,
@@ -11,6 +11,7 @@ import {
 } from '../constants'
 import { OpenSeaAssetEventType, RaribleEventType } from '../types'
 import urlcat from 'urlcat'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 
 export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
     switch (eventType) {

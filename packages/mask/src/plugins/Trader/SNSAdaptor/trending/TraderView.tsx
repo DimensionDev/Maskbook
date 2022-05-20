@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N, useSettingsSwitcher } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -22,6 +22,8 @@ import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
 import { useChainIdValid, useFungibleToken, useNetworkType } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { setStorage } from '../../storage'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -106,7 +108,6 @@ export function TraderView(props: TraderViewProps) {
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-
     // #region track network type
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => setTabIndex(0), [networkType])
@@ -150,13 +151,25 @@ export function TraderView(props: TraderViewProps) {
     })
     // #endregion
 
-    // #region current data provider switcher
-    const DataProviderSwitcher = useSettingsSwitcher(
-        currentDataProviderSettings,
-        dataProviders,
-        resolveDataProviderName,
-    )
-    // #endregion
+    // // #region current data provider switcher
+    const DataProviderSwitcher = useMemo(() => {
+        if (dataProviders.length === 0) return
+        if (typeof dataProvider === 'undefined') return dataProviders[0]
+        const indexOf = dataProviders.indexOf(dataProvider)
+        if (indexOf === -1) return
+        const nextOption = indexOf === dataProviders.length - 1 ? dataProviders[0] : dataProviders[indexOf + 1]
+
+        return (
+            <ActionButton
+                sx={{ marginTop: 1 }}
+                color="primary"
+                variant="contained"
+                onClick={() => setStorage(nextOption)}>
+                Switch to {resolveDataProviderName(nextOption)}
+            </ActionButton>
+        )
+    }, [dataProvider, resolveDataProviderName])
+    // // #endregion
 
     // #region api ready callback
     useEffect(() => {

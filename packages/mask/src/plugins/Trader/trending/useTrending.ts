@@ -16,7 +16,7 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     } = useAsync(async () => {
         if (!keyword) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingByKeyword(keyword, tagType, currency, dataProvider)
+        return PluginTraderRPC.getCoinTrendingByKeyword(chainId, keyword, tagType, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, keyword])
     const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
     const coin = {
@@ -48,7 +48,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingById(id, currency, dataProvider)
+        return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, id])
 
     const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)

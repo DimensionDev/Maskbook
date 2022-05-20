@@ -9,6 +9,6 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 export function useAvailableDataProviders(type?: TagType, keyword?: string): AsyncState<DataProvider[]> {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return useAsync(async () => {
-        return PluginTraderRPC.getAvailableDataProviders(type, keyword)
+        return PluginTraderRPC.getAvailableDataProviders(chainId, type, keyword)
     }, [chainId, type, keyword])
 }

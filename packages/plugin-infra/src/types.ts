@@ -385,7 +385,12 @@ export namespace Plugin.SNSAdaptor {
          */
         enhanceTag?: {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
-            onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
+            onHover?: (
+                kind: 'cash' | 'hash',
+                content: string,
+                event: React.MouseEvent<HTMLAnchorElement>,
+                chainId: ChainId,
+            ) => () => void
         }
     }
 

@@ -98,7 +98,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = (await uniswapAPI.getAllCoinsByKeyword(keyword)).filter(
+            const coins = (await uniswapAPI.getAllCoinsByKeyword(chainId, keyword)).filter(
                 (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
             if (coins.length) {
@@ -343,7 +343,7 @@ async function getCoinTrending(
                 }
             return trending
         case DataProvider.UNISWAP_INFO:
-            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(id)
+            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(chainId, id)
             return {
                 currency,
                 dataProvider: DataProvider.UNISWAP_INFO,
@@ -402,6 +402,7 @@ export async function getCoinTrendingByKeyword(
 
 // #region get price stats info
 export async function getPriceStats(
+    chainId: ChainId,
     id: string,
     currency: Currency,
     days: number,
@@ -443,6 +444,7 @@ export async function getPriceStats(
                 return 300 // 5m
             })()
             return uniswapAPI.getPriceStats(
+                chainId,
                 id,
                 currency,
                 uniswap_interval,

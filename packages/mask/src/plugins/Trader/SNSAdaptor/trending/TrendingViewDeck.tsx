@@ -16,7 +16,7 @@ import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
-import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
+import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
@@ -24,6 +24,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
+import { setStorage } from '../../storage'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -135,7 +136,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentDataProviderSettings.value = option.value as DataProvider
+        setStorage(option.value as DataProvider)
     }, [])
     // #endregion
 
