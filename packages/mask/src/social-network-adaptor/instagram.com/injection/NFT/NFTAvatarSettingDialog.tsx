@@ -8,7 +8,6 @@ import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Instagram } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
@@ -16,6 +15,8 @@ import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { delay } from '@dimensiondev/kit'
+import type { NonFungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -32,11 +33,11 @@ export function NFTAvatarSettingDialog() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
+        async (token: NonFungibleToken<ChainId, SchemaType>) => {
             try {
-                if (!token.info.imageURL) return
+                if (!token.metadata?.imageURL || !token.contract?.address) return
                 if (!identity.identifier) return
-                const image = await toPNG(token.info.imageURL)
+                const image = await toPNG(token.metadata.imageURL)
                 if (!image || !wallet) return
 
                 await Instagram.uploadUserAvatar(image, identity.identifier.userId)
@@ -60,7 +61,7 @@ export function NFTAvatarSettingDialog() {
                     {
                         userId: identity.identifier.userId,
                         tokenId: token.tokenId,
-                        address: token.contractDetailed.address,
+                        address: token.contract.address,
                         avatarId: getAvatarId(metaTag.content),
                     } as AvatarMetaDB,
                     identity.identifier.network,
