@@ -6,10 +6,17 @@ import type { ChainId, AccountRewards, Reward } from '../../types'
 import { getAccountEntitlements } from './entitlements'
 import { getMyRewardsHarvested, getFarmExistEvents } from './farms'
 import { toChainAddressEthers, parseChainAddress } from '../../helpers'
-import { REFERRAL_FARMS_V1_ADDR, CONFIRMATION_V1_ADDR } from '../../constants'
+import { supportedChainId } from '../../constants'
 import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
+import { getFarmOraclesDiscovery } from './discovery'
 
-function makeLeafHash(chainId: number, reward: Reward, rewardTokenDefn: string) {
+function makeLeafHash(
+    chainId: number,
+    reward: Reward,
+    rewardTokenDefn: string,
+    referralFarmsAddr: string,
+    confirmationsAddr: string,
+) {
     return keccak256(
         defaultAbiCoder.encode(
             [
@@ -20,8 +27,8 @@ function makeLeafHash(chainId: number, reward: Reward, rewardTokenDefn: string) 
                 '(bytes32 farmHash, uint128 rewardValue, uint128 confirmation)',
             ],
             [
-                toChainAddressEthers(chainId, CONFIRMATION_V1_ADDR),
-                toChainAddressEthers(chainId, REFERRAL_FARMS_V1_ADDR),
+                toChainAddressEthers(chainId, confirmationsAddr),
+                toChainAddressEthers(chainId, referralFarmsAddr),
                 reward.entitlee,
                 rewardTokenDefn,
                 {
@@ -51,6 +58,13 @@ export async function getAccountRewards(
     // Query tokens
     const tokensMap = await fetchERC20TokensFromTokenListsMap(tokenLists, chainId)
 
+    // Query addresses
+    const {
+        discovery: { referralFarmsV1, confirmationsV1 },
+    } = await getFarmOraclesDiscovery()
+    const referralFarmsAddr = referralFarmsV1.find((e) => e.chainId === supportedChainId)?.address ?? ''
+    const confirmationsAddr = confirmationsV1.find((e) => e.chainId === supportedChainId)?.address ?? ''
+
     const rewards = entitlements?.map((entitlement) => {
         const farm = farmsMap.get(entitlement.farmHash)
 
@@ -60,7 +74,17 @@ export async function getAccountRewards(
             referredToken: tokensMap.get(parseChainAddress(farm?.referredTokenDefn ?? '').address),
             rewardToken: tokensMap.get(parseChainAddress(farm?.rewardTokenDefn ?? '').address),
             claimed: farm
-                ? Boolean(rewardsHarvestedMap.get(makeLeafHash(chainId, entitlement, farm.rewardTokenDefn)))
+                ? Boolean(
+                      rewardsHarvestedMap.get(
+                          makeLeafHash(
+                              chainId,
+                              entitlement,
+                              farm.rewardTokenDefn,
+                              referralFarmsAddr,
+                              confirmationsAddr,
+                          ),
+                      ),
+                  )
                 : false,
         }
     })

@@ -1,14 +1,13 @@
 import type { JsonRpcResponse } from 'web3-core-helpers'
 
-const ORACLE_URL = 'https://oracle-4470-dub.attrace.com'
+import { getFarmOraclesDiscovery } from './discovery'
 
 export async function getOracle(): Promise<string> {
-    // TODO: add oracle selection
-    // const {
-    //     discovery: { womOracles },
-    // } = await getDiscovery()
-    // return womOracles[Math.floor(Math.random() * womOracles.length)].url
-    return ORACLE_URL
+    const {
+        discovery: { oracles },
+    } = await getFarmOraclesDiscovery()
+
+    return oracles[Math.floor(Math.random() * oracles.length)].url
 }
 
 export async function jsonReq(url: string, opts: any) {

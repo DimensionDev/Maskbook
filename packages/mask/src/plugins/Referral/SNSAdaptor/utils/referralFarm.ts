@@ -9,7 +9,16 @@ import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.jso
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 import { roundValue, toChainAddressEthers } from '../../helpers'
-import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
+import { ReferralRPC } from '../../messages'
+
+async function resolveReferralFarmsV1Address(onError: (error?: string) => void) {
+    try {
+        return await ReferralRPC.getReferralFarmsV1Address()
+    } catch (error) {
+        onError('Referral farms address cannot be retrieved at the moment. Please try later.')
+        return undefined
+    }
+}
 
 export async function runCreateERC20PairFarm(
     onStart: () => void,
@@ -25,8 +34,9 @@ export async function runCreateERC20PairFarm(
 ) {
     try {
         onStart()
+        const farmsAddr = await resolveReferralFarmsV1Address(onError)
+        if (!farmsAddr) return
 
-        const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
         const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)
@@ -129,7 +139,9 @@ export async function adjustFarmRewards(
                 from: account,
             }
 
-            const farmsAddr = REFERRAL_FARMS_V1_ADDR
+            const farmsAddr = await resolveReferralFarmsV1Address(onError)
+            if (!farmsAddr) return
+
             const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
             const rewardTokenDefn = toChainAddressEthers(chainId, rewardToken.address)
             const referredTokenDefn = toChainAddressEthers(chainId, referredToken.address)

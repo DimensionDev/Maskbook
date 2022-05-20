@@ -8,7 +8,7 @@ import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.jso
 
 import type { Reward, ChainAddress } from '../../types'
 import { parseChainAddress } from '../../helpers'
-import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
+import { ReferralRPC } from '../../messages'
 
 function validateRewardPeriods(rewards: Reward[]) {
     let isValid = true
@@ -31,8 +31,9 @@ export async function getAccountTokenConfirmationOffset(
     web3: Web3,
     account: string,
     rewardTokenDefn: ChainAddress,
+    farmsAddr: string,
 ): Promise<number> {
-    const referralFarmsV1Contract = createContract(web3, REFERRAL_FARMS_V1_ADDR, ReferralFarmsV1ABI as AbiItem[])
+    const referralFarmsV1Contract = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
     const tokenAddress = parseChainAddress(rewardTokenDefn).address
 
     const offset =
@@ -46,11 +47,12 @@ export async function filterRewardsByAccountTokenPeriodOffset(
     account: string,
     rewardTokenDefn: ChainAddress,
     rewards: Reward[],
+    farmsAddr: string,
 ): Promise<Reward[]> {
     const rewardsFiltered = (
         await Promise.allSettled(
             rewards.map(async (reward) => {
-                const offset = await getAccountTokenConfirmationOffset(web3, account, rewardTokenDefn)
+                const offset = await getAccountTokenConfirmationOffset(web3, account, rewardTokenDefn, farmsAddr)
                 if (offset < BigNumber.from(reward.confirmation).toNumber()) {
                     return reward
                 }
@@ -62,6 +64,15 @@ export async function filterRewardsByAccountTokenPeriodOffset(
         .filter(isNonNull)
 
     return rewardsFiltered
+}
+
+async function resolveReferralFarmsV1Address(onError: (error?: string) => void) {
+    try {
+        return await ReferralRPC.getReferralFarmsV1Address()
+    } catch (error) {
+        onError('Referral farms address cannot be retrieved at the moment. Please try later.')
+        return undefined
+    }
 }
 
 export async function harvestRewards(
@@ -79,8 +90,18 @@ export async function harvestRewards(
         const config = {
             from: account,
         }
+
+        const farmsAddr = await resolveReferralFarmsV1Address(onError)
+        if (!farmsAddr) return
+
         // filter out the periods that oracle might still need to pick up
-        const rewardsFiltered = await filterRewardsByAccountTokenPeriodOffset(web3, account, rewardTokenDefn, rewards)
+        const rewardsFiltered = await filterRewardsByAccountTokenPeriodOffset(
+            web3,
+            account,
+            rewardTokenDefn,
+            rewards,
+            farmsAddr,
+        )
         const rewardsSorted = rewardsFiltered.sort(
             (rewardA, rewardB) =>
                 BigNumber.from(rewardA.confirmation).toNumber() - BigNumber.from(rewardB.confirmation).toNumber(),
@@ -106,7 +127,6 @@ export async function harvestRewards(
 
         const proofs = [rewardsSorted.map((reward) => reward.proof)]
 
-        const farmsAddr = REFERRAL_FARMS_V1_ADDR
         const farms = createContract(web3, farmsAddr, ReferralFarmsV1ABI as AbiItem[])
 
         const estimatedGas = await farms?.methods.harvestRewardsNoGapcheck(requests, proofs).estimateGas(config)

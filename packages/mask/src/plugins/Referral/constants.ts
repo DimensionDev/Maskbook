@@ -17,12 +17,14 @@ enum ORACLE_CHAIN_ID {
     mainnet = 47,
 }
 
-// TODO: change to Mainnet before mainnet release
-export const supportedChainId = ChainId.Rinkeby
+export const supportedChainId = ChainId.Mainnet
 export const SWAP_CHAIN_ID = ChainId.Mainnet
-export const REFERRAL_FARMS_V1_ADDR = '0x5c057Fd6830fCAecA2BC76A8FBFf9b03D274Ce13'
-export const CONFIRMATION_V1_ADDR = '0x1d7216020f8FF3Fb32C7AD96F583a6D7b65E985A'
-export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
+export const supportedOracleChainId = ORACLE_CHAIN_ID.mainnet
+
+// testnet example
+// export const supportedChainId = ChainId.Rinkeby
+// export const SWAP_CHAIN_ID = ChainId.Mainnet
+// export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
 export const errors = {
     rpc: 'Failed to fetch',

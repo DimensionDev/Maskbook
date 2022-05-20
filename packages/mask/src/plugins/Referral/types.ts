@@ -241,6 +241,16 @@ export type Discovery = {
     airports: Airport[]
 }
 
+type Contract = {
+    chainId: number
+    address: string
+}
+export type DiscoveryFarmOracles = {
+    oracles: Node[]
+    referralFarmsV1: Contract[]
+    confirmationsV1: Contract[]
+}
+
 export enum RpcMethod {
     oracle_chainId = 'oracle_chainId',
     oracle_getDerivedBlockByHash = 'oracle_getDerivedBlockByHash',

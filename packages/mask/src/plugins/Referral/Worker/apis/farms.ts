@@ -24,8 +24,8 @@ import {
     toChainAddressEthers,
 } from '../../helpers'
 import { queryIndexersWithNearestQuorum } from './indexers'
-import { REFERRAL_FARMS_V1_ADDR } from '../../constants'
 import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
+import { getReferralFarmsV1Address } from './discovery'
 
 const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 
@@ -108,8 +108,10 @@ function parseFarmDepositAndFarmMetastateEvents(
 }
 
 export async function getFarmExistEvents(chainId: ChainId): Promise<FarmExistsEvent[]> {
+    const farmsAddr = await getReferralFarmsV1Address()
+
     const farmExistsEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
+        addresses: [farmsAddr],
         topic1: [eventIds.FarmExists],
         chainId: [chainId],
     })
@@ -137,9 +139,11 @@ export async function getAccountFarms(
         topic4 = filter.referredTokens.map((t) => expandBytes24ToBytes32(t))
     }
 
+    const farmsAddr = await getReferralFarmsV1Address()
+
     // Query account farms
     const farmExistsEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
+        addresses: [farmsAddr],
         topic1: [eventIds.FarmExists],
         topic2: [expandEvmAddressToBytes32(account)],
         topic3,
@@ -152,7 +156,7 @@ export async function getAccountFarms(
     const farms = parseFarmExistsEvents(farmExistsEvents.items)
 
     const farmsDepositEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
+        addresses: [farmsAddr],
         topic1: [eventIds.FarmDepositIncreased],
         topic2: farms.map((farm) => farm.farmHash),
         chainId: [chainId],
@@ -195,7 +199,7 @@ export async function getDailyAndTotalRewardsFarm(
     farmHash: FarmHash,
     tokenDecimals: number,
 ): Promise<Farm> {
-    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+    const farmsAddr = await getReferralFarmsV1Address()
 
     const res = await queryIndexersWithNearestQuorum({
         addresses: [farmsAddr],
@@ -235,7 +239,7 @@ export async function getMyRewardsHarvested(
     chainId: ChainId,
     filter?: { rewardTokens?: ChainAddress[] },
 ): Promise<RewardsHarvested[]> {
-    const farmsAddr = REFERRAL_FARMS_V1_ADDR
+    const farmsAddr = await getReferralFarmsV1Address()
 
     // Allow filtering by reward tokens
     let topic3
@@ -260,9 +264,11 @@ async function getFarmsForReferredToken(
     referredToken: EvmAddress,
     tokenLists: string[],
 ): Promise<Map<string, FarmDetailed>> {
+    const farmsAddr = await getReferralFarmsV1Address()
+
     // query farms basic data
     const farmExistsEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
+        addresses: [farmsAddr],
         topic1: [eventIds.FarmExists],
         topic4: [expandBytes24ToBytes32(toChainAddressEthers(chainId, referredToken))],
         chainId: [chainId],
@@ -286,7 +292,7 @@ async function getFarmsForReferredToken(
 
     // query farms meta data
     const farmsDataEvents = await queryIndexersWithNearestQuorum({
-        addresses: [REFERRAL_FARMS_V1_ADDR],
+        addresses: [farmsAddr],
         topic1: [eventIds.FarmMetastate, eventIds.FarmDepositIncreased],
         topic2: farms.map(({ farmHash }) => farmHash),
         chainId: [chainId],

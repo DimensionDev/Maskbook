@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
 /* eslint-disable no-return-await */
 
-import { getDiscovery } from './discovery'
+import { getFullDiscovery } from './discovery'
 
 import type { Bytes32, EvmAddress, Geolocation, Airport, Node } from '../../types'
 
@@ -107,7 +107,7 @@ async function findQuorum(nodes: Node[], airports: Airport[], pop: string, urlPa
 
 export async function queryIndexersWithNearestQuorum(searchParams: LogParams): Promise<any> {
     const urlPath = makeIndexerUrlPath(searchParams)
-    const { discovery, pop } = await getDiscovery()
+    const { discovery, pop } = await getFullDiscovery()
     const minQuorum = 1
 
     const responses = await findQuorum(discovery.indexers, discovery.airports, pop, urlPath, minQuorum)
