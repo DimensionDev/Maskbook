@@ -13,6 +13,7 @@ import { InstagramAPI } from './instagram'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 
+export * from './helpers'
 export * from './types'
 export * from './hooks'
 export * from './opensea/utils'
