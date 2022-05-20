@@ -28,21 +28,20 @@ function resolveCurrentVisitingIdentityInner(
         }
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src', 'content'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src', 'content'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()

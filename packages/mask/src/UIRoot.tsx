@@ -16,7 +16,7 @@ import { isTwitter } from './social-network-adaptor/twitter.com/base'
 import { MaskThemeProvider } from '@masknet/theme'
 
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
-function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
+function compose(init: React.ReactNode, ...f: Array<(children: React.ReactNode) => JSX.Element>) {
     // eslint-disable-next-line unicorn/no-array-reduce
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
 }
@@ -37,8 +37,7 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
     const pluginID = useValueRef(pluginIDSettings)
     const PluginsWeb3State = useAllPluginsWeb3State()
 
-    // TODO:
-    // migrate EVM plugin
+    // TODO: migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     return compose(

@@ -10,7 +10,7 @@ import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWallet
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        marginTop: theme.spacing(1.5),
+        margin: 0,
     },
     timeline: {
         backgroundColor: theme.palette.maskColor.dark,

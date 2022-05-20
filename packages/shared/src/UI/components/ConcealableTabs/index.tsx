@@ -106,7 +106,7 @@ interface TabOption<T> {
 }
 
 export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
-    tabs: TabOption<T>[]
+    tabs: Array<TabOption<T>>
     selectedId?: T
     onChange?(id: T): void
     tail?: ReactNode

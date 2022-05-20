@@ -281,7 +281,7 @@ export declare namespace Web3Plugin {
                 providerType: string,
                 network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<Asset<FungibleToken>[]>
+            ) => Promise<Array<Asset<FungibleToken>>>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
