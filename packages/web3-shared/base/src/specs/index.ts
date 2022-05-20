@@ -859,10 +859,10 @@ export interface WalletState {
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     // #region resolvers
-    chainResolver: ReturnType<typeof createChainResolver>
-    explorerResolver: ReturnType<typeof createExplorerResolver>
-    providerResolver: ReturnType<typeof createProviderResolver>
-    networkResovler: ReturnType<typeof createNetworkResolver>
+    chainResolver: ReturnType<typeof createChainResolver<ChainId, SchemaType, NetworkType>>
+    explorerResolver: ReturnType<typeof createExplorerResolver<ChainId, SchemaType, NetworkType>>
+    providerResolver: ReturnType<typeof createProviderResolver<ChainId, ProviderType>>
+    networkResolver: ReturnType<typeof createNetworkResolver<ChainId, NetworkType>>
     // #endregion
 
     // #region validators

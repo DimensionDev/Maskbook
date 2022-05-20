@@ -44,7 +44,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         if (!networkType || !providerType || !Others || !Protocol) throw new Error('Failed to connect to provider.')
 
-        const chainId = Others?.networkResovler.networkChainId(networkType)
+        const chainId = Others?.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
         const connection = await Protocol.getConnection?.({

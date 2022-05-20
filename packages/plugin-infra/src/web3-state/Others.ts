@@ -37,10 +37,10 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
         throw new Error('Method not implemented.')
     }
 
-    chainResolver = createChainResolver(this.options.chainDescriptors)
-    explorerResolver = createExplorerResolver(this.options.chainDescriptors)
-    providerResolver = createProviderResolver(this.options.providerDescriptors)
-    networkResovler = createNetworkResolver(this.options.networkDescriptors)
+    chainResolver = createChainResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
+    explorerResolver = createExplorerResolver<ChainId, SchemaType, NetworkType>(this.options.chainDescriptors)
+    providerResolver = createProviderResolver<ChainId, ProviderType>(this.options.providerDescriptors)
+    networkResolver = createNetworkResolver<ChainId, NetworkType>(this.options.networkDescriptors)
 
     getZeroAddress(chainId?: ChainId | undefined): string {
         return this.options.defaultAddress
