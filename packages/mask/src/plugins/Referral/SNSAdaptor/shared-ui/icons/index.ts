@@ -1,4 +1,5 @@
-export * from './AttraceLogoText'
+export * from './AttraceLogoDarkTheme'
+export * from './AttraceLogoLightTheme'
 export * from './BuyToFarm'
 export * from './CreateFarm'
 export * from './ReferralFarms'

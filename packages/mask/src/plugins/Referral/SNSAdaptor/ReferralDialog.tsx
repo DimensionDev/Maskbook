@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { useTheme } from '@mui/material/styles'
 
 import { PageHistory, PagesType, DialogInterface } from '../types'
 import { useI18N } from '../locales'
@@ -15,7 +16,7 @@ import { BuyToFarm } from './BuyToFarm'
 import { AdjustFarmRewards } from './AdjustFarmRewards'
 import { Transaction } from './Transaction'
 import { Deposit } from './Deposit'
-import { AttraceLogoText } from './shared-ui/icons/AttraceLogoText'
+import { AttraceLogoDarkTheme, AttraceLogoLightTheme } from './shared-ui/icons'
 
 interface ReferralDialogProps {
     open: boolean
@@ -39,6 +40,8 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
         justifyContent: 'space-between',
     },
     powered: {
+        display: 'flex',
+        alignItems: 'center',
         fontWeight: 400,
         fontSize: '12px',
         color: theme.palette.text.secondary,
@@ -82,6 +85,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
         page: PagesType.LANDING,
         title: t.__plugin_name(),
     })
+    const mode = useTheme().palette.mode
     const [previousPages, setPreviousPages] = useState<PageHistory[]>([])
     const [currentTitle, setCurrentTitle] = useState(t.__plugin_name())
 
@@ -179,7 +183,7 @@ export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDial
                         {currentTitle}
                         <span className={classes.powered}>
                             {t.powered_by()}
-                            <AttraceLogoText />
+                            {mode === 'dark' ? <AttraceLogoDarkTheme /> : <AttraceLogoLightTheme />}
                         </span>
                     </span>
                 )
