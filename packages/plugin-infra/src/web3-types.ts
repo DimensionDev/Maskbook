@@ -5,23 +5,18 @@ import type {
     NameServiceState,
     RiskWarningState,
     SettingsState,
-    GasOptionsState,
     TokenState,
-    TokenPriceState,
-    TokenListState,
     TransactionState,
     TransactionFormatterState,
     TransactionWatcherState,
     ProtocolState,
     ProviderState,
-    ExplorerState,
     WalletState,
     OthersState,
     IdentityServiceState,
-    TokenIconState,
+    HubState,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from './types'
-import type { AssetState } from './web3-state'
 
 export declare namespace Web3Plugin {
     export namespace ObjectCapabilities {
@@ -40,16 +35,12 @@ export declare namespace Web3Plugin {
             Web3,
         > {
             AddressBook?: AddressBookState<ChainId>
-            Asset?: AssetState<ChainId, SchemaType>
+            Hub?: HubState<ChainId, SchemaType, GasOption, Transaction>
             IdentityService?: IdentityServiceState
             NameService?: NameServiceState<ChainId>
             RiskWarning?: RiskWarningState
             Settings?: SettingsState
-            GasOptions?: GasOptionsState<ChainId, GasOption>
             Token?: TokenState<ChainId, SchemaType>
-            TokenIcon?: TokenIconState<ChainId>
-            TokenPrice?: TokenPriceState<ChainId>
-            TokenList?: TokenListState<ChainId, SchemaType>
             Transaction?: TransactionState<ChainId, Transaction>
             TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
             TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
@@ -65,7 +56,6 @@ export declare namespace Web3Plugin {
                 Web3
             >
             Provider?: ProviderState<ChainId, ProviderType, NetworkType>
-            Explorer?: ExplorerState<ChainId, Transaction>
             Wallet?: WalletState
             Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType>
         }

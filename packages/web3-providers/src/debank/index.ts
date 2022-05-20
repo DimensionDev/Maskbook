@@ -4,8 +4,8 @@ import {
     GasOptionType,
     Pageable,
     Transaction,
-    Web3Pagination,
     createPageable,
+    HubOptions,
 } from '@masknet/web3-shared-base'
 import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
@@ -66,7 +66,7 @@ export class DeBankAPI
 
     async getAssets(
         address: string,
-        pagination?: Web3Pagination<ChainId>,
+        options?: HubOptions<ChainId>,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
@@ -95,7 +95,7 @@ export class DeBankAPI
 
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet }: Web3Pagination<ChainId> = {},
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return createPageable()

@@ -14,7 +14,7 @@ import {
     OrderSide,
     scale10,
     TokenType,
-    Web3Pagination,
+    HubOptions,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -292,7 +292,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     constructor(apiKey?: string) {
         this._apiKey = apiKey
     }
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet } = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const response = await fetchFromOpenSea<OpenSeaResponse>(
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
@@ -301,7 +301,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getContract(address: string, { chainId = ChainId.Mainnet } = {}) {
+    async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
@@ -317,7 +317,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet } = {}) {
+    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const response = await fetchFromOpenSea<OpenSeaResponse>(
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
@@ -326,7 +326,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 } = {}) {
+    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
             urlcat('/api/v1/assets', {
                 owner: from,
@@ -353,7 +353,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getHistory(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, page, size }: Web3Pagination<ChainId> = {},
+        { chainId = ChainId.Mainnet, page, size }: HubOptions<ChainId> = {},
     ) {
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
@@ -373,7 +373,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, page, size }: Web3Pagination<ChainId> = {},
+        { chainId = ChainId.Mainnet, page, size }: HubOptions<ChainId> = {},
     ) {
         const response = await fetchFromOpenSea<{
             orders: OpenSeaAssetOrder[]
@@ -392,7 +392,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getCollections(
         address: string,
-        { chainId = ChainId.Mainnet, page = 0, size = 50 }: Web3Pagination<ChainId> = {},
+        { chainId = ChainId.Mainnet, page = 0, size = 50 }: HubOptions<ChainId> = {},
     ) {
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {

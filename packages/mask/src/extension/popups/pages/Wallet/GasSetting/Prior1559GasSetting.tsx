@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { GasOptionType, isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -23,7 +23,7 @@ import { isEmpty } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
-import { useChainId, useNativeToken, useNativeTokenPrice, useWeb3, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -99,7 +99,7 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const { GasOptions } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)
@@ -111,15 +111,13 @@ export const Prior1559GasSetting = memo(() => {
     })
 
     // #region Get gas options from debank
-    const { value: gasOptions } = useAsync(async () => {
-        const gasOptions = await GasOptions?.getGasOptions?.(chainId)
-        if (!gasOptions) return null
+    const gasOptions = useMemo(() => {
         return {
-            slow: gasOptions.slow.suggestedMaxFeePerGas,
-            standard: gasOptions.normal.suggestedMaxFeePerGas,
-            fast: gasOptions.fast.suggestedMaxFeePerGas,
+            slow: gasOptions_?.[GasOptionType.SLOW].suggestedMaxFeePerGas ?? 0,
+            standard: gasOptions_?.[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0,
+            fast: gasOptions_?.[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
         }
-    }, [chainId])
+    }, [chainId, gasOptions_])
     // #endregion
 
     const options = useMemo(
@@ -128,15 +126,15 @@ export const Prior1559GasSetting = memo(() => {
                 ? [
                       {
                           title: t('popups_wallet_gas_fee_settings_low'),
-                          gasPrice: gasOptions?.slow ?? 0,
+                          gasPrice: gasOptions.slow,
                       },
                       {
                           title: t('popups_wallet_gas_fee_settings_medium'),
-                          gasPrice: gasOptions?.standard ?? 0,
+                          gasPrice: gasOptions.standard,
                       },
                       {
                           title: t('popups_wallet_gas_fee_settings_high'),
-                          gasPrice: gasOptions?.fast ?? 0,
+                          gasPrice: gasOptions.fast,
                       },
                   ]
                 : null,

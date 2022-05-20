@@ -1,11 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { AddressBook } from './AddressBook'
-import { Asset } from './Asset'
+import { Hub } from './Hub'
 import { RiskWarning } from './RiskWarning'
 import { Token } from './Token'
-import { TokenIcon } from './TokenIcon'
-import { TokenList } from './TokenList'
-import { TokenPrice } from './TokenPrice'
 import { Transaction } from './Transaction'
 import { NameService } from './NameService'
 import { Protocol } from './Protocol'
@@ -17,16 +14,23 @@ import { TransactionFormatter } from './TransactionFormatter'
 import { TransactionWatcher } from './TransactionWatcher'
 import type { EVM_Web3State } from './Protocol/types'
 import { IdentityService } from './IdentityService'
-import { GasOptions } from './GasOptions'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
     const Provider_ = new Provider(context)
+    const Settings_ = new Settings(context)
 
     return {
+        Settings: Settings_,
+        Provider: Provider_,
+
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
-        Asset: new Asset(),
+        Hub: new Hub(context, {
+            chainId: Provider_.chainId,
+            account: Provider_.account,
+            currencyType: Settings_.currencyType,
+        }),
         IdentityService: new IdentityService(context),
         NameService: new NameService(context, {
             chainId: Provider_.chainId,
@@ -34,15 +38,8 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         RiskWarning: new RiskWarning(context, {
             account: Provider_.account,
         }),
-        Settings: new Settings(context),
-        GasOptions: new GasOptions(context),
         Token: new Token(context, {
             account: Provider_.account,
-        }),
-        TokenIcon: new TokenIcon(context),
-        TokenPrice: new TokenPrice(context),
-        TokenList: new TokenList(context, {
-            chainId: Provider_.chainId,
         }),
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,
@@ -50,7 +47,6 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         }),
         TransactionFormatter: new TransactionFormatter(context),
         TransactionWatcher: new TransactionWatcher(context),
-        Provider: Provider_,
         Protocol: new Protocol(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,

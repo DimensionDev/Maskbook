@@ -1,10 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { AddressBook } from './AddressBook'
-import { Asset } from './Asset'
+import { Hub } from './Hub'
 import { Provider } from './Provider'
 import { Protocol } from './Protocol'
 import { Settings } from './Settings'
-import { TokenList } from './TokenList'
 import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Others } from './Others'
@@ -16,11 +15,11 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3S
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
-        Asset: new Asset(),
-        Settings: new Settings(context),
-        TokenList: new TokenList(context, {
+        Hub: new Hub(context, {
             chainId: Provider_.chainId,
+            account: Provider_.account,
         }),
+        Settings: new Settings(context),
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,

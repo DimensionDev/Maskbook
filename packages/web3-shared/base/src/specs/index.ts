@@ -9,17 +9,6 @@ import type {
     createProviderResolver,
 } from '../utils'
 
-export interface Pagination {
-    /** The item size of each page. */
-    size?: number
-    /** The page index. */
-    page?: number
-}
-
-export type Web3Pagination<ChainId> = Pagination & {
-    chainId?: ChainId
-}
-
 export interface Pageable<T> {
     currentPage: number
     hasNextPage: boolean
@@ -59,6 +48,18 @@ export enum GasOptionType {
 export enum TokenType {
     Fungible = 'Fungible',
     NonFungible = 'NonFungible',
+}
+
+export enum SourceType {
+    // FT assets
+    DeBank = 'DeBank',
+    Zerion = 'Zerion',
+
+    // NFT assets
+    RSS3 = 'RSS3',
+    Zora = 'zora',
+    OpenSea = 'opensea',
+    NFTScan = 'NFTScan',
 }
 
 export enum TransactionStatusType {
@@ -349,18 +350,6 @@ export type Web3EnableRequirement = Partial<
     >
 >
 
-export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
-    /** Designate the sub-network id of the transaction. */
-    chainId?: ChainId
-    /** Designate the signer of the transaction. */
-    account?: string
-    /** Designate the provider to handle the transaction. */
-    providerType?: ProviderType
-    /** Handle on popups page. */
-    popupsWindow?: boolean
-    /** Fragments to merge into the transaction. */
-    overrides?: Partial<Transaction>
-}
 export interface TransactionDescriptor<ChainId, Transaction> {
     chainId: ChainId
     /** The transaction type */
@@ -515,7 +504,18 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
 export interface TransactionChecker<ChainId> {
     checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType>
 }
-
+export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
+    /** Designate the sub-network id of the transaction. */
+    chainId?: ChainId
+    /** Designate the signer of the transaction. */
+    account?: string
+    /** Designate the provider to handle the transaction. */
+    providerType?: ProviderType
+    /** Handle on popups page. */
+    popupsWindow?: boolean
+    /** Fragments to merge into the transaction. */
+    overrides?: Partial<Transaction>
+}
 export interface Connection<
     ChainId,
     SchemaType,
@@ -639,6 +639,91 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
+export interface HubOptions<ChainId> {
+    /** The user account as the API parameter */
+    account?: string
+    /** The chain id as the API parameter */
+    chainId?: ChainId
+    /** The id of data provider */
+    sourceType?: SourceType
+    /** The currency type of data */
+    currencyType?: CurrencyType
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
+
+export interface Hub<ChainId, SchemaType, GasOption, Transaction, Web3HubOptions = HubOptions<ChainId>> {
+    /** Get the fungible from built-in token list */
+    getFungibleTokensFromTokenList?: (chainId: ChainId, options?: Web3HubOptions) => Promise<FungibleToken<ChainId, SchemaType>[]>
+    /** Get the non-fungible from built-in token list */
+    getNonFungibleTokensFromTokenList?: (
+        chainId: ChainId,
+        options?: Web3HubOptions,
+    ) => Promise<NonFungibleToken<ChainId, SchemaType>[]>
+    /** Get all gas options */
+    getGasOptions?: (
+        chainId: ChainId,
+        options?: Web3HubOptions,
+    ) => Promise<Record<GasOptionType, GasOption>>
+    /** Get a fungible asset */
+    getFungibleAsset?: (
+        address: string,
+        options?: Web3HubOptions,
+    ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
+    /** Get an non-fungible asset */
+    getNonFungibleAsset?: (
+        address: string,
+        tokenId: string,
+        options?: Web3HubOptions,
+    ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
+    /** Get fungible assets of given account with pagnaition supported. */
+    getFungibleAssets?: (
+        account: string,
+        options?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    /** Get non-fungible assets of given account with pagnaition supported. */
+    getNonFungibleAssets?: (
+        account: string,
+        options?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get all fungible assets of given account and ignore the pagnation options. */
+    getAllFungibleAssets?: (
+        address: string,
+        options?: Web3HubOptions,
+    ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
+    /** Get all non-fungible assets of given account and ignore the pagnation options. */
+    getAllNonFungibleAssets?: (
+        address: string,
+        options?: Web3HubOptions,
+    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
+    /** Get price of a fungible token */
+    getFungibleTokenPrice?: (
+        chainId: ChainId,
+        address: string,
+        options?: Web3HubOptions,
+    ) => Promise<number>
+    /** Get price of an non-fungible token */
+    getNonFungibleTokenPrice?: (
+        chainId: ChainId,
+        address: string,
+        tokenId: string,
+        options?: Web3HubOptions,
+    ) => Promise<number>
+    /** Get token icon urls of a fungible token */
+    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, options?: Web3HubOptions) => Promise<string[]>
+    /** Get token icon urls of an non-fungible token */
+    getNonFungibleTokenIconURLs?: (
+        chainId: ChainId,
+        address: string,
+        tokenId?: string,
+        options?: Web3HubOptions,
+    ) => Promise<string[]>
+    /** Get the most recent transactions */
+    getLatestTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Transaction[]>
+}
+
 export interface SettingsState {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
@@ -646,6 +731,10 @@ export interface SettingsState {
     currencyType?: Subscription<CurrencyType>
     /** The gas options type */
     gasOptionType?: Subscription<GasOptionType>
+    /** The source type of fungible assets */
+    fungibleAssetSourceType?: Subscription<SourceType>
+    /** The source type of non-fungible assets */
+    nonFungibleAssetSourceType?: Subscription<SourceType>
 }
 export interface AddressBookState<ChainId> {
     /** The tracked addresses of currently chosen sub-network */
@@ -667,22 +756,18 @@ export interface RiskWarningState {
     /** Revoke statement of designate account */
     revoke?: (address: string, pluginID?: string) => Promise<void>
 }
-export interface AssetState<ChainId, SchemaType> {
-    /** Get fungible assets of given account. */
-    getFungibleAssets?: (
-        address: string,
-        pagination?: Web3Pagination<ChainId>,
-    ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
-    /** Get non-fungible assets of given account. */
-    getNonFungibleAssets?: (
-        address: string,
-        pagination?: Web3Pagination<ChainId>,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get all fungible assets of given account. */
-    getAllFungibleAssets?: (address: string) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible assets of given account. */
-    getAllNonFungibleAssets?: (address: string) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
+export interface HubState<
+    ChainId,
+    SchemaType,
+    GasOption,
+    Transaction,
+    Web3HubOptions = HubOptions<ChainId>,
+    Web3Hub = Hub<ChainId, SchemaType, GasOption, Transaction>,
+> {
+    /** Get external data hub */
+    getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
 }
+
 export interface IdentityServiceState {
     /** Find all social addresses related to given social identity. */
     lookup(identity: SocialIdentity): Promise<IdentityAddress[]>
@@ -692,10 +777,6 @@ export interface NameServiceState<ChainId, DomainBook = Record<string, string>> 
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
     reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
-}
-export interface GasOptionsState<ChainId, GasOption> {
-    /** get all gas options */
-    getGasOptions?: (chainId: ChainId, currencyType?: CurrencyType) => Promise<Record<GasOptionType, GasOption>>
 }
 export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */
@@ -715,34 +796,6 @@ export interface TokenState<ChainId, SchemaType> {
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
     blockToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
-}
-export interface TokenPriceState<ChainId> {
-    /** get price of a fungible token */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, currencyType?: CurrencyType) => Promise<number>
-    /** get price of a non-fungible token */
-    getNonFungibleTokenPrice?: (
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        currencyType?: CurrencyType,
-    ) => Promise<number>
-}
-export interface TokenIconState<ChainId> {
-    /** get token icon urls of fungible token */
-    getFungibleTokenIconURLs?: (chainId: ChainId, address: string) => Promise<string[]>
-    /** get token icon urls of non-fungible token */
-    getNonFungibleTokenIconURLs?: (chainId: ChainId, address: string, tokenId?: string) => Promise<string[]>
-}
-export interface TokenListState<ChainId, SchemaType> {
-    /** The tracked fungible token list of currently chosen sub-network */
-    fungibleTokens?: Subscription<FungibleToken<ChainId, SchemaType>[]>
-    /** The tracked non-fungible token list of currently chosen sub-network */
-    nonFungibleTokens?: Subscription<NonFungibleToken<ChainId, SchemaType>[]>
-
-    /** Get the fungible token list. */
-    getFungibleTokens?: (chainId: ChainId) => Promise<FungibleToken<ChainId, SchemaType>[]>
-    /** Get the non-fungible token list. */
-    getNonFungibleTokens?: (chainId: ChainId) => Promise<NonFungibleToken<ChainId, SchemaType>[]>
 }
 export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
@@ -794,10 +847,6 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     unwatchTransaction: (chainId: ChainId, id: string) => void
     /** Update transaction status */
     notifyTransaction: (id: string, status: TransactionStatusType) => void
-}
-export interface ExplorerState<ChainId, Transaction> {
-    /** Get the most recent transactions */
-    getLatestTransactions: (chainId: ChainId, account: string) => Promise<Transaction[]>
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */

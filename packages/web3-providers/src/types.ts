@@ -11,14 +11,13 @@ import type {
     CurrencyType,
     Pageable,
     FungibleToken,
-    Pagination,
-    Web3Pagination,
     OrderSide,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
     NonFungibleTokenOrder,
     NonFungibleTokenEvent,
     GasOptionType,
+    HubOptions,
 } from '@masknet/web3-shared-base'
 
 export namespace ExplorerAPI {
@@ -110,7 +109,7 @@ export namespace HistoryAPI {
     export interface Provider<ChainId, SchemaType> {
         getTransactions(
             address: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
     }
 }
@@ -123,7 +122,7 @@ export namespace GasOptionAPI {
 
 export namespace FungibleTokenAPI {
     export interface Provider<ChainId, SchemaType> {
-        getAssets(address: string, pagination?: Pagination): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+        getAssets(address: string, options?: HubOptions<ChainId>): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
     }
 }
 
@@ -132,47 +131,47 @@ export namespace NonFungibleTokenAPI {
         getAsset?: (
             address: string,
             tokenId: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         getAssets?: (address: string) => Promise<NonFungibleAsset<ChainId, SchemaType>[]>
         getHistory?: (
             address: string,
             tokenId: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenEvent<ChainId, SchemaType>[]>
         getListings?: (
             address: string,
             tokenId: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
         getOffers?: (
             address: string,
             tokenId: string,
-            opts?: Web3Pagination<ChainId>,
+            opts?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenOrder<ChainId, SchemaType>[]>
         getToken?: (
             address: string,
             tokenId: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
         getTokens?: (
             from: string,
-            opts?: Web3Pagination<ChainId>,
+            opts?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
         getContract?: (
             address: string,
-            opts?: Web3Pagination<ChainId>,
+            opts?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
         getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            pagination?: Web3Pagination<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
     }
 }

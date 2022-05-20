@@ -59,7 +59,7 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
         transactionPathname = '/tx/:id',
         domainPathname = '/address/:domain',
         fungibleTokenPathname = '/address/:address',
-        nonFungibleTokenPathname = '/address/:address',
+        nonFungibleTokenPathname = '/nft/:address/:tokenId',
     }: ExplorerRoutes = {},
 ) {
     const getExploroerURL = (chainId: ChainId) => {
