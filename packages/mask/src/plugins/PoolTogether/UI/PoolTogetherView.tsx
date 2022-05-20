@@ -151,6 +151,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 <EthereumChainBoundary
                     chainId={ChainId.Mainnet}
                     isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    renderInTimeline
                 />
             </Box>
         </>

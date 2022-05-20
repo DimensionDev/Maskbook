@@ -444,8 +444,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </Box>
                     {availability.isClaimed ? null : (
                         <Box sx={{ flex: 1, padding: 1.5 }}>
-                            <EthereumChainBoundary chainId={payload.chainId}>
+                            <EthereumChainBoundary chainId={payload.chainId} renderInTimeline>
                                 <EthereumWalletConnectedBoundary
+                                    renderInTimeline
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,

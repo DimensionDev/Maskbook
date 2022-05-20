@@ -786,7 +786,7 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ padding: 12, flex: 1 }}>
-                                    <EthereumChainBoundary chainId={payload.chain_id}>
+                                    <EthereumChainBoundary chainId={payload.chain_id} renderInTimeline>
                                         <EthereumWalletConnectedBoundary
                                             hideRiskWarningConfirmed
                                             startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}

@@ -94,7 +94,7 @@ export function FurucomboView(props: PoolViewProps) {
                 </Typography>
 
                 <Box sx={{ padding: 1.5 }}>
-                    <EthereumChainBoundary chainId={props.chainId} />
+                    <EthereumChainBoundary chainId={props.chainId} renderInTimeline />
                 </Box>
             </>
         )
@@ -120,7 +120,7 @@ export function FurucomboView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ padding: 1.5 }}>
-                <EthereumChainBoundary chainId={props.chainId} />
+                <EthereumChainBoundary chainId={props.chainId} renderInTimeline />
             </Box>
         </>
     )

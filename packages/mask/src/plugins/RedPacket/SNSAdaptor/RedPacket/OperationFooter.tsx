@@ -88,10 +88,11 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet}>
+            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet} renderInTimeline>
                 <EthereumWalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                    renderInTimeline
                     classes={{
                         button: classes.walletButton,
                     }}>
@@ -100,16 +101,15 @@ export function OperationFooter({
                             <ActionButton
                                 sx={{
                                     backgroundColor: theme.palette.maskColor.dark,
-                                    width: '100%',
-                                    color: 'white',
+                                    color: theme.palette.maskColor.white,
                                     '&:hover': {
                                         backgroundColor: theme.palette.maskColor.dark,
                                     },
                                     padding: 1.125,
                                 }}
+                                fullWidth
                                 startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                 variant="contained"
-                                fullWidth
                                 onClick={onShare}>
                                 {t('share')}
                             </ActionButton>

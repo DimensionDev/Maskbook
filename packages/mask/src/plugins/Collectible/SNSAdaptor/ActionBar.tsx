@@ -49,7 +49,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <EthereumChainBoundary chainId={ChainId.Mainnet}>
+            <EthereumChainBoundary chainId={ChainId.Mainnet} renderInTimeline>
                 {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
                     <ActionButton
                         className={classes.button}
