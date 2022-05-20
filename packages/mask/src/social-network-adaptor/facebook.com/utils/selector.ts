@@ -30,7 +30,7 @@ export const bioDescriptionSelector = () =>
 export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
 
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[data-pagelet="ProfileTabs"] a[role="tab"]')
+    querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
 
 export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
