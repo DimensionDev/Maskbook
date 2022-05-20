@@ -19,7 +19,7 @@ import {
     useWeb3State,
     useReverseAddress,
     useChainIdMainnet,
-    useTransactions,
+    useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
 import { useCallback, useEffect } from 'react'
 import { WalletIcon } from '@masknet/shared'
@@ -205,7 +205,7 @@ function useToolbox() {
     const { Others } = useWeb3State()
 
     // #region recent pending transactions
-    const pendingTransactions = useTransactions(undefined, TransactionStatusType.NOT_DEPEND)
+    const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     // #endregion
 
     // #region Wallet

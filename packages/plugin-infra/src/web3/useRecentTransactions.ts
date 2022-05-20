@@ -5,7 +5,7 @@ import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
 import { EMPTY_ARRAY } from '../utils/subscription'
 
-export function useTransactions<T extends NetworkPluginID>(pluginID?: T, status?: TransactionStatusType) {
+export function useRecentTransactions<T extends NetworkPluginID>(pluginID?: T, status?: TransactionStatusType) {
     const { Transaction } = useWeb3State(pluginID)
     const transactions = useSubscription(
         (Transaction?.transactions ?? EMPTY_ARRAY) as Subscription<

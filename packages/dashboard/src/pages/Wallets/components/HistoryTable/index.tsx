@@ -8,7 +8,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-unified'
-import { useAccount, useTransactions, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAccount, useRecentTransactions, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,7 +51,7 @@ interface HistoryTableProps {
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const transactions = useTransactions(NetworkPluginID.PLUGIN_EVM)
+    const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
 
     useUpdateEffect(() => {
         setPage(0)

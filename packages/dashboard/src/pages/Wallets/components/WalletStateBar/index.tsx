@@ -10,7 +10,7 @@ import {
     useWallet,
     useWeb3State,
     useReverseAddress,
-    useTransactions,
+    useRecentTransactions,
     Web3Helper,
     useAccount,
 } from '@masknet/plugin-infra/web3'
@@ -68,7 +68,7 @@ export const WalletStateBar = memo(() => {
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor() as Web3Helper.NetworkDescriptorAll
     const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
-    const pendingTransactions = useTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
+    const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
