@@ -104,8 +104,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { Utils } = useWeb3State()
     const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
 
-    console.log(collectibles)
-
     const onClick = useCallback(async () => {
         if (!selectedToken) return
         onChange(selectedToken)
