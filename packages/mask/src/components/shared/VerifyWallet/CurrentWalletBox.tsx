@@ -1,19 +1,18 @@
-import { ExternalLink } from 'react-feather'
-import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
-import { Button, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
-    useWeb3State,
+    useAccount,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useReverseAddress,
-    Web3Plugin,
     useProviderType,
-    useAccount,
+    useReverseAddress,
+    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { Button, Link, Typography } from '@mui/material'
+import { ExternalLink } from 'react-feather'
 import { useI18N } from '../../../utils'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -95,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface CurrentWalletBox {
-    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    wallet: Wallet
     walletName?: string
     changeWallet: () => void
     notInPop?: boolean
@@ -105,13 +104,12 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { classes } = useStyles()
     const { wallet, walletName, notInPop, changeWallet } = props
     const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
-    const providerDescriptor = useProviderDescriptor(wallet.providerType ?? providerType)
-    const networkDescriptor = useNetworkDescriptor(wallet.networkType)
+    const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, providerType)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const account = notInPop ? frontAccount : wallet.account
+    const account = notInPop ? frontAccount : wallet.address
     const { Others } = useWeb3State() ?? {}
-    const { value: domain } = useReverseAddress(wallet.account)
-    const _providerType = wallet.providerType ?? providerType
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
@@ -122,7 +120,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {_providerType !== ProviderType.MaskWallet ? (
+                    {providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
                             {domain && Others?.formatDomainName
                                 ? Others.formatDomainName(domain)
@@ -146,7 +144,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
 
                     <Link
                         className={classes.link}
-                        href={Others?.resolveAddressLink?.(wallet.chainId, wallet.account) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(wallet.chainId, wallet.account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

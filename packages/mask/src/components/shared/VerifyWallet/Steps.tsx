@@ -13,10 +13,9 @@ import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import type { Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -99,7 +98,7 @@ export enum SignSteps {
 interface StepsProps {
     step: SignSteps
     nickname?: string
-    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    wallet: Wallet
     disableConfirm?: boolean
     confirmLoading: boolean
     notInPop?: boolean

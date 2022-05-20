@@ -1,8 +1,8 @@
 import { BindingProof, NextIDAction, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import { memo, useCallback, useMemo } from 'react'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { memo, useMemo } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -10,16 +10,12 @@ import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import {
-    useAccount,
-    useChainId,
-    useNetworkType,
     useProviderDescriptor,
     useProviderType,
     useReverseAddress,
     useWallet,
     useWeb3Connection,
     useWeb3State,
-    Web3Plugin,
 } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../locales'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -34,39 +30,33 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
-    const wallet = {
-        ...useWallet(NetworkPluginID.PLUGIN_EVM),
-        account: useAccount(NetworkPluginID.PLUGIN_EVM),
-        networkType: useNetworkType(NetworkPluginID.PLUGIN_EVM),
-        chainId: useChainId(NetworkPluginID.PLUGIN_EVM),
-        providerType,
-    }
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
-    const isBound = bindings.some((x) => isSameAddress(x.identity, wallet.account))
+    const isBound = bindings.some((x) => isSameAddress(x.identity, wallet?.address))
 
     const walletName = () => {
         if (isNotEvm && providerType) return `${Others?.providerResolver.providerName(providerType)} Wallet`
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
-        if (providerType && ![wallet.providerType, providerType].includes(ProviderType.MaskWallet))
-            return `${Others?.providerResolver.providerName(wallet.providerType ?? providerType)} Wallet`
-        return wallet.name ?? 'Wallet'
+        if (providerType && providerType !== ProviderType.MaskWallet)
+            return `${Others?.providerResolver.providerName(providerType)} Wallet`
+        return wallet?.name ?? 'Wallet'
     }
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
-        if (!currentPersona || !wallet.account) return
+        if (!currentPersona || !wallet?.address) return
         return NextIDProof.createPersonaPayload(
             currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
-            wallet.account,
+            wallet.address,
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [currentPersona?.identifier, wallet.address])
+    }, [currentPersona?.identifier, wallet?.address])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -90,16 +80,16 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }, [currentPersona?.identifier, payload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona || !wallet.account) return false
+        if (!payload || !currentPersona || !wallet?.address) return false
         try {
-            const walletSig = await connection?.signMessage(payload.signPayload, wallet.account)
+            const walletSig = await connection?.signMessage(payload.signPayload, wallet.address)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
-                wallet.account,
+                wallet.address,
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
@@ -134,13 +124,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    const changeWallet = useCallback(() => {
-        setDialog({
-            open: true,
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-        })
-    }, [])
+    const { openDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     if (!currentPersona || !wallet) return null
 
     return (
@@ -148,15 +132,15 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             <Steps
                 isBound={isBound}
                 notEvm={isNotEvm}
-                notConnected={!wallet.account}
-                wallet={wallet as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>}
+                notConnected={!wallet?.address}
+                wallet={wallet}
                 walletName={walletName()}
                 nickname={currentPersona.nickname}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}
-                disableConfirm={isBound || isNotEvm || !wallet.account}
+                disableConfirm={isBound || isNotEvm || !wallet.address}
                 notInPop
-                changeWallet={changeWallet}
+                changeWallet={openDialog}
                 onConfirm={handleConfirm}
                 onCustomCancel={onCancel}
             />
