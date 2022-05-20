@@ -150,7 +150,7 @@ importers:
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.17.12
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@hookform/resolvers': ^2.8.10
       '@masknet/backup-format': workspace:*
       '@masknet/icons': workspace:*
@@ -206,7 +206,7 @@ importers:
       webpack: ^5.72.1
       zod: ^3.16.0
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@hookform/resolvers': 2.8.10_react-hook-form@7.31.1
       '@masknet/backup-format': link:../backup-format
       '@masknet/icons': link:../icons
@@ -319,7 +319,7 @@ importers:
   packages/mask:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
@@ -466,7 +466,7 @@ importers:
       zod: 3.16.0
     dependencies:
       '@balancer-labs/sor': 1.0.0
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_5owzivba7saavwcb3imbrcsadu
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919_5owzivba7saavwcb3imbrcsadu
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/secp256k1-webcrypto': 1.0.0-20220412114204-be816df
@@ -630,7 +630,7 @@ importers:
 
   packages/plugin-infra:
     specifiers:
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@masknet/encryption': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/shared-base-ui': workspace:*
@@ -645,7 +645,7 @@ importers:
       unstated-next: ^1.1.0
       use-subscription: 1.6.0
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/encryption': link:../encryption
       '@masknet/shared-base': link:../shared-base
       '@masknet/shared-base-ui': link:../shared-base-ui
@@ -1063,7 +1063,7 @@ importers:
 
   packages/shared:
     specifiers:
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
@@ -1083,7 +1083,7 @@ importers:
       urlcat: ^2.0.4
       use-subscription: 1.6.0
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/icons': link:../icons
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/shared-base': link:../shared-base
@@ -1106,7 +1106,7 @@ importers:
 
   packages/shared-base:
     specifiers:
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@masknet/public-api': workspace:*
       '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
@@ -1129,7 +1129,7 @@ importers:
       typeson-registry: ^3.0.0
       z-schema: ^5.0.3
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/public-api': link:../public-api
       '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
@@ -1155,7 +1155,7 @@ importers:
 
   packages/shared-base-ui:
     specifiers:
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@masknet/shared-base': workspace:*
       '@types/use-subscription': ^1.0.0
       '@types/uuid': ^8.3.4
@@ -1163,7 +1163,7 @@ importers:
       use-subscription: 1.6.0
       uuid: ^8.3.2
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/shared-base': link:../shared-base
       '@types/use-subscription': 1.0.0
       '@types/uuid': 8.3.4
@@ -4713,34 +4713,32 @@ packages:
       eslint: 8.15.0
     dev: true
 
-  /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:
-    resolution: {integrity: sha512-Vk22WLOTW20OECTHdLGulGmDsTFguURQYB9Oq8S+eDVrmWHCxKD/N+4OU5uCFrWCkqjl/n7vec3fVWUSunpBeA==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0/bce56871014284e7863fc97177b316aec94f6dfddf627312e690958400e958e8}
+  /@dimensiondev/holoflows-kit/0.9.0-20220520093249-0870919:
+    resolution: {integrity: sha512-T1qxi14bTzTnKtLJ52xbgKjJv0X5hClAU6avoCfriUqbGJZ1mMvBv3VusdfesNwwOhgXzxGBrTDSOSwJlUg9+g==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20220520093249-0870919/e5aea45ad486fa8fd5027339b1398d9604ed4230a07a5ea9a7f6f22a038fddbc}
     peerDependencies:
       webextension-polyfill: '*'
     peerDependenciesMeta:
       webextension-polyfill:
         optional: true
     dependencies:
-      '@servie/events': 1.0.0
+      '@servie/events': 3.0.0
       event-iterator: 2.0.0
-      jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: false
 
-  /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0_5owzivba7saavwcb3imbrcsadu:
-    resolution: {integrity: sha512-Vk22WLOTW20OECTHdLGulGmDsTFguURQYB9Oq8S+eDVrmWHCxKD/N+4OU5uCFrWCkqjl/n7vec3fVWUSunpBeA==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0/bce56871014284e7863fc97177b316aec94f6dfddf627312e690958400e958e8}
+  /@dimensiondev/holoflows-kit/0.9.0-20220520093249-0870919_5owzivba7saavwcb3imbrcsadu:
+    resolution: {integrity: sha512-T1qxi14bTzTnKtLJ52xbgKjJv0X5hClAU6avoCfriUqbGJZ1mMvBv3VusdfesNwwOhgXzxGBrTDSOSwJlUg9+g==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20220520093249-0870919/e5aea45ad486fa8fd5027339b1398d9604ed4230a07a5ea9a7f6f22a038fddbc}
     peerDependencies:
       webextension-polyfill: '*'
     peerDependenciesMeta:
       webextension-polyfill:
         optional: true
     dependencies:
-      '@servie/events': 1.0.0
+      '@servie/events': 3.0.0
       event-iterator: 2.0.0
-      jsx-jsonml-devtools-renderer: 1.4.3
       lodash-es: 4.17.21
-      tslib: 2.3.1
+      tslib: 2.4.0
       webextension-polyfill: 0.9.0
     dev: false
 
@@ -7037,10 +7035,6 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
-
-  /@servie/events/1.0.0:
-    resolution: {integrity: sha512-sBSO19KzdrJCM3gdx6eIxV8M9Gxfgg6iDQmH5TIAGaUu+X9VDdsINXJOnoiZ1Kx3TrHdH4bt5UVglkjsEGBcvw==}
-    dev: false
 
   /@servie/events/3.0.0:
     resolution: {integrity: sha512-Zd79bWhTuG8NvPgSiOcivorJIDg+goMw76TIqYTIR5ua5HOEkS29fmIh2VVSeDeabNF6z8ceTwzB0pSh/BhXyw==}
@@ -11395,7 +11389,7 @@ packages:
     dev: true
 
   /array-uniq/1.0.3:
-    resolution: {integrity: sha1-r2rId6Jcx/dOBYiUdThY39sk/bY=}
+    resolution: {integrity: sha512-MNha4BWQ6JbwhFhj03YK552f7cb3AzoE8SzeljgChvL1dl3IcvggXVz1DilzySZkCja+CXuZbdW7yATchWn8/Q==}
     engines: {node: '>=0.10.0'}
 
   /array-unique/0.3.2:
@@ -20862,12 +20856,6 @@ packages:
       array-includes: 3.1.4
       object.assign: 4.1.2
     dev: true
-
-  /jsx-jsonml-devtools-renderer/1.4.3:
-    resolution: {integrity: sha512-U1Ayx2VUF6plTLrQkNnJAg8UInToPseWqugxYTKEyaWG8G83Vqpx8BpyW9MObK1kPHdtMkevKfLi+PVwqp5Rtw==}
-    dependencies:
-      csstype: 3.0.11
-    dev: false
 
   /junk/3.1.0:
     resolution: {integrity: sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==}

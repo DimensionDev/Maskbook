@@ -1,5 +1,4 @@
 import '../utils/debug/general'
-import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import type { SocialNetworkUI } from './types'

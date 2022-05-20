@@ -9,7 +9,6 @@ import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB }
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
-import { noop } from 'lodash-unified'
 import { parseColor } from '@masknet/theme'
 
 const themeColorRef = new ValueRef('rgb(29, 161, 242)')
@@ -36,30 +35,17 @@ export function startWatchThemeColor(signal: AbortSignal) {
         if (textColor) textColorRef.value = textColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
-    const watcher = new MutationObserverWatcher(composeAnchorSelector())
+    new MutationObserverWatcher(composeAnchorSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
-    const unwatchAnchor = () => watcher.stopWatch()
-    let unwatchHeadingText = noop
+        .startWatch({ childList: true, subtree: true }, signal)
 
     if (isMobileTwitter) {
-        const headingWatcher = new MutationObserverWatcher(headingTextSelector())
+        new MutationObserverWatcher(headingTextSelector())
             .addListener('onAdd', updateThemeColor)
             .addListener('onChange', updateThemeColor)
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
-        unwatchHeadingText = () => headingWatcher.stopWatch()
+            .startWatch({ childList: true, subtree: true }, signal)
     }
-    signal.addEventListener('abort', () => {
-        unwatchAnchor()
-        unwatchHeadingText()
-    })
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(themeColorRef)

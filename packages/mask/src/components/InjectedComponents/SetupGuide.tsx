@@ -84,11 +84,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const handler = (val: IdentityResolved) => {
             if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
-        ui.collecting.identityProvider?.recognized.addListener(handler)
-
-        return () => {
-            ui.collecting.identityProvider?.recognized.removeListener(handler)
-        }
+        return ui.collecting.identityProvider?.recognized.addListener(handler)
     }, [username])
 
     useEffect(() => {

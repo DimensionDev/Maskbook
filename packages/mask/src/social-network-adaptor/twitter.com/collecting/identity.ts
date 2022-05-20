@@ -31,20 +31,6 @@ function recognizeDesktop() {
     return { watcher, collect }
 }
 
-function recognizeMobile() {
-    const collect = () => {
-        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
-        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
-
-        return { handle, nickname, avatar }
-    }
-
-    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
-
-    return { watcher, collect }
-}
-
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
@@ -68,21 +54,20 @@ function resolveLastRecognizedIdentityInner(
     }
 
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()
@@ -142,21 +127,20 @@ function resolveCurrentVisitingIdentityInner(
         })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src', 'content'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src', 'content'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()
