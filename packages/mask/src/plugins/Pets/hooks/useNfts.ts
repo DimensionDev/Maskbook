@@ -6,7 +6,7 @@ import {
     isSameAddress,
     NonFungibleTokenContract,
     transform,
-    FungibleAsset,
+    NonFungibleAsset,
 } from '@masknet/web3-shared-base'
 import { resolveIPFSLink, Constant, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
@@ -29,7 +29,7 @@ function useInitNFTs(config: Record<string, Constant> | undefined) {
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
-    const [fetchTotal, setFetchTotal] = useState<FungibleAsset<ChainId, SchemaType>[]>([])
+    const [fetchTotal, setFetchTotal] = useState<NonFungibleAsset<ChainId, SchemaType>[]>([])
     const { value: collectibles } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         if (!initContracts.length) return
@@ -37,20 +37,19 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
         if (collectibles?.length) {
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
-            console.log({ total })
             for (const NFT of total) {
                 const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.address))
                 if (!sameNFT) continue
-                const isPunk = isSameAddress(NFT.address, Punk3D.contract) && NFT.id === Punk3D.tokenId
+                const isPunk = isSameAddress(NFT.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
                 if (isPunk) {
-                    NFT.logoURL = Punk3D.url
+                    NFT.metadata.imageURL = Punk3D.url
                 }
-                const glbSupport = NFT.logoURL?.endsWith('.glb') || isPunk
-                if (NFT.logoURL?.includes('ipfs://')) {
-                    NFT.logoURL = resolveIPFSLink(NFT.logoURL.replace('ipfs://', ''))
+                const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') || isPunk
+                if (NFT.metadata?.imageURL?.includes('ipfs://')) {
+                    NFT.metadata.imageURL = resolveIPFSLink(NFT.metadata.imageURL.replace('ipfs://', ''))
                 }
-                const item = { ...NFT, tokenId: NFT.id, glbSupport }
-                const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.id)
+                const item = { ...NFT, tokenId: NFT.tokenId, glbSupport }
+                const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
                 if (sameTokenIndex === -1) {
                     sameNFT.tokens.push(item)
                 } else {
