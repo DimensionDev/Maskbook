@@ -654,7 +654,7 @@ export interface HubOptions<ChainId> {
     page?: number
 }
 
-export interface Hub<ChainId, SchemaType, GasOption, Transaction, Web3HubOptions = HubOptions<ChainId>> {
+export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get the fungible from built-in token list */
     getFungibleTokensFromTokenList?: (chainId: ChainId, options?: Web3HubOptions) => Promise<FungibleToken<ChainId, SchemaType>[]>
     /** Get the non-fungible from built-in token list */
@@ -721,7 +721,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Transaction, Web3HubOptions
         options?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get the most recent transactions */
-    getLatestTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Transaction[]>
+    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
 }
 
 export interface SettingsState {
@@ -760,9 +760,8 @@ export interface HubState<
     ChainId,
     SchemaType,
     GasOption,
-    Transaction,
     Web3HubOptions = HubOptions<ChainId>,
-    Web3Hub = Hub<ChainId, SchemaType, GasOption, Transaction>,
+    Web3Hub = Hub<ChainId, SchemaType, GasOption>,
 > {
     /** Get external data hub */
     getHub?: (options: Web3HubOptions) => Promise<Web3Hub>

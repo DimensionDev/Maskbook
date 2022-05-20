@@ -4,9 +4,7 @@ import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyTyp
 const SIZE_PER_PAGE = 50
 const MAX_PAGE_SIZE = 25
 
-export class HubState<ChainId, SchemaType, GasOption, Transaction>
-    implements Web3HubState<ChainId, SchemaType, GasOption, Transaction>
-{
+export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<ChainId, SchemaType, GasOption> {
     constructor(
         protected createHub: (
             chainId?: ChainId,
@@ -15,7 +13,7 @@ export class HubState<ChainId, SchemaType, GasOption, Transaction>
             currencyType?: CurrencyType,
             sizePerPage?: number,
             maxPageSize?: number,
-        ) => Hub<ChainId, SchemaType, GasOption, Transaction>,
+        ) => Hub<ChainId, SchemaType, GasOption>,
         protected subscription: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>

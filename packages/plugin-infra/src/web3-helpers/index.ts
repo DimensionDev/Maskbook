@@ -113,12 +113,7 @@ export declare namespace Web3Helper {
         : HubOptions<Definition[T]['ChainId']>
     export type Web3Hub<T extends NetworkPluginID = never> = T extends never
         ? never
-        : Hub<
-              Definition[T]['ChainId'],
-              Definition[T]['SchemaType'],
-              Definition[T]['GasOption'],
-              Definition[T]['Transaction']
-          >
+        : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
     export type Web3State<T extends NetworkPluginID = never> = T extends never
         ? never
         : Web3Plugin.ObjectCapabilities.Capabilities<

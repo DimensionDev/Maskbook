@@ -12,6 +12,7 @@ import {
     isSameAddress,
     currySameAddress,
     CurrencyType,
+    Transaction,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -22,7 +23,6 @@ import {
     getTokenConstants,
     getTokenListConstants,
     SchemaType,
-    Transaction,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
@@ -135,12 +135,12 @@ class Hub implements EVM_Hub {
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
-    getLatestTransactions(
+    async getTransactions(
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Transaction[]> {
-        throw new Error('Method not implemented.')
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        return DeBank.getTransactions(account, { chainId })
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
