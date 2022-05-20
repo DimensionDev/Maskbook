@@ -23,6 +23,7 @@
     "postinstall": "patch-package && gulp fix-lockfile",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:debug": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
     "test:update": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js -u",
     "spellcheck": "cspell lint --no-must-find-files"
   },

@@ -25,7 +25,7 @@ export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 
     return false
 }
 
-export function normalizeBackupVersion2(item: BackupJSONFileVersion2): NormalizedBackup.Data {
+export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Promise<NormalizedBackup.Data> {
     const backup = createEmptyNormalizedBackup()
 
     backup.meta.version = 2
@@ -38,7 +38,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     for (const persona of personas) {
         const { publicKey } = persona
         if (!isEC_Public_JsonWebKey(publicKey)) continue
-        const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
+        const identifier = await ECKeyIdentifierFromJsonWebKey(publicKey)
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
             linkedProfiles: new Map(),
