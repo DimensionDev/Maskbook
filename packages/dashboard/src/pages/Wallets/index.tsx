@@ -2,22 +2,17 @@ import {
     getRegisteredWeb3Networks,
     useAccount,
     useChainId,
-    useNetworkDescriptor,
-    useWallet,
-    useWallets,
-    useWeb3State,
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
+    useNetworkDescriptor,
+    useWallets,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, EMPTY_LIST, relativeRouteOf } from '@masknet/shared-base'
-import { FungibleAsset, FungibleToken, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
-import { PluginMessages } from '../../API'
 import { PageFrame } from '../../components/PageFrame'
 import { useDashboardI18N } from '../../locales'
 import { Assets } from './components/Assets'
@@ -38,8 +33,7 @@ function Wallets() {
     const navigate = useNavigate()
     const chainId = useChainId()
     const account = useAccount()
-    const { Asset } = useWeb3State() as Web3Helper.Web3StateAll
-    const network = useNetworkDescriptor()
+    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const { pathname } = useLocation()
     const isWalletPath = useIsMatched(DashboardRoutes.Wallets)
@@ -58,14 +52,6 @@ function Wallets() {
     // const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     // const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    // const detailedTokens: FungibleAsset<
-    //     Web3Helper.Definition[NetworkPluginID]['ChainId'],
-    //  Web3Helper.Definition[NetworkPluginID]['SchemaType']>[] = []
-    const { value: fungibleAssets } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account),
-        [account, Asset, network],
-    )
-    const detailedTokens = fungibleAssets?.data ?? EMPTY_LIST
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
     }, [networks, pluginId])
@@ -90,13 +76,13 @@ function Wallets() {
     }, [pathname, defaultNetwork])
 
     const balance = useMemo(() => {
-        if (!detailedTokens || !detailedTokens.length) return 0
+        if (!fungibleAssets || !fungibleAssets.length) return 0
 
-        const values = detailedTokens
+        const values = fungibleAssets
             .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
             .map((y) => getTokenUSDValue(y.value))
         return BigNumber.sum(...values).toNumber()
-    }, [selectedNetwork, detailedTokens])
+    }, [selectedNetwork, fungibleAssets])
 
     const pateTitle = useMemo(() => {
         if (wallets.length === 0) return t.create_wallet_form_title()

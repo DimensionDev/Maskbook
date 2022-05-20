@@ -1,5 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useAsync } from 'react-use'
+import { memo, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
@@ -9,16 +8,8 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { formatBalance, FungibleAsset, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../../../API'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import {
-    useNetworkDescriptor,
-    useWeb3State,
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useFungibleAssets, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -68,17 +59,12 @@ interface TokenTableProps {
 
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
-    const account = useAccount()
-    const { Asset } = useWeb3State() as Web3Helper.Web3StateAll
-    const network = useNetworkDescriptor()
-    const [tokenUpdateCount, setTokenUpdateCount] = useState(0)
-    // const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
-
     const {
-        error: fungibleAssetsError,
+        value: fungibleAssets = EMPTY_LIST,
         loading: fungibleAssetsLoading,
-        value: fungibleAssets,
-    } = useAsync(async () => Asset?.getFungibleAssets?.(account), [account, Asset])
+        error: fungibleAssetsError,
+    } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    // const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     useEffect(() => {
         // PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
@@ -109,10 +95,8 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     return (
         <TokenTableUI
             isLoading={fungibleAssetsLoading}
-            isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.data?.length)}
-            dataSource={(fungibleAssets?.data ?? EMPTY_LIST).filter(
-                (x) => !selectedChainId || x.chainId === selectedChainId,
-            )}
+            isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+            dataSource={fungibleAssets.filter((x) => !selectedChainId || x.chainId === selectedChainId)}
             onSwap={onSwap}
             onSend={onSend}
         />

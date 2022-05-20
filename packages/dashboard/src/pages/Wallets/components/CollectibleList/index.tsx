@@ -1,21 +1,19 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkDescriptor, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginMessages } from '../../../../API'
 import { TransferTab } from '../Transfer'
 import {
-    useNetworkDescriptor,
-    useWeb3State as useWeb3PluginState,
     useAccount,
     useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
+    useNonFungibleAssets,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 
@@ -52,7 +50,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const account = useAccount()
-    const { Asset } = useWeb3PluginState()
+    const { value = [], error, retry, loading } = useNonFungibleAssets()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
     const [renderData, setRenderData] = useState<
@@ -62,15 +60,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         >[]
     >([])
 
-    const {
-        value = { data: EMPTY_LIST, hasNextPage: false },
-        error: collectiblesError,
-        loading: isQuerying,
-        retry,
-    } = useAsyncRetry(
-        async () => Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }),
-        [account, Asset?.getNonFungibleAssets],
-    )
     useEffect(() => {
         // const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
         // const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
@@ -86,9 +75,9 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     useEffect(() => {
         if (!loadingSize) return
-        const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
+        const render = value.slice(page * loadingSize, (page + 1) * loadingSize)
         setRenderData(render)
-    }, [value.data, loadingSize, page])
+    }, [value, loadingSize, page])
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
@@ -110,17 +99,17 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         [currentPluginId],
     )
 
-    const hasNextPage = (page + 1) * loadingSize < value.data.length
-    const isLoading = renderData.length === 0 && isQuerying
+    const hasNextPage = (page + 1) * loadingSize < value.length
+    const isLoading = renderData.length === 0 && loading
 
     return (
         <CollectibleListUI
             isLoading={isLoading}
-            isEmpty={!!collectiblesError || renderData.length === 0}
+            isEmpty={!!error || renderData.length === 0}
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
-            showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
+            showPagination={!loading && !(page === 0 && !hasNextPage)}
             dataSource={renderData}
             onSend={onSend}
             setLoadingSize={(size) => setLoadingSize(size)}
