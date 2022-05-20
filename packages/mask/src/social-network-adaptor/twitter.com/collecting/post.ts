@@ -93,10 +93,7 @@ function registerPostCollectorInner(
                 const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
                     actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
                 }
-                proxy.on('currentChanged', handleChanged)
-                unwatchPostNodeChange = () => {
-                    proxy.off('currentChanged', handleChanged)
-                }
+                unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
             }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,

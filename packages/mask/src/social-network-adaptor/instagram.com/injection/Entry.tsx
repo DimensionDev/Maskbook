@@ -20,8 +20,8 @@ export function Entry() {
             childList: true,
             subtree: true,
         })
-        watch.on('onAdd', () => setDisplay(true))
-        watch.on('onRemove', () => setDisplay(false))
+        watch.addListener('onAdd', () => setDisplay(true))
+        watch.addListener('onRemove', () => setDisplay(false))
         return () => watch.stopWatch()
     })
     if (!display) return null
