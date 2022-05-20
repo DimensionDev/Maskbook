@@ -244,7 +244,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
-    }, [onSelect, refundCallback, canRefund, canSend, history])
+    }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
