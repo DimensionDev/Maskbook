@@ -440,7 +440,7 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<Block>(
             {
                 method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-                params: [typeof noOrId === 'number' ? toHex(noOrId) : noOrId],
+                params: [typeof noOrId === 'number' ? toHex(noOrId) : noOrId, false],
             },
             options,
         )
