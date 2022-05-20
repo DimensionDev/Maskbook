@@ -6,10 +6,12 @@
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
     "rollup": "^2.72.0",
     "rollup-plugin-dts": "4.2.1"
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "node ./build.mjs",
+    "build:rollup": "rollup -c"
   }
 }
