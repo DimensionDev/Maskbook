@@ -11,7 +11,10 @@ import { useAvailability } from './useAvailability'
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const parsedChainId = networkResolver.networkChainId((payload.network ?? '') as NetworkType) ?? ChainId.Mainnet
+    const parsedChainId =
+        payload.token?.chainId ??
+        networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
+        ChainId.Mainnet
 
     const asyncResult = useAvailability(payload.rpid, payload.contract_address, {
         account,

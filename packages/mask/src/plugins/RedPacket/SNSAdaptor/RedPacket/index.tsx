@@ -2,14 +2,14 @@ import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Card, Typography } from '@mui/material'
-import { ChainId, chainResolver, TransactionStateType, networkResolver } from '@masknet/web3-shared-evm'
+import { ChainId, TransactionStateType, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../../Wallet/messages'
-import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
+import type { RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
@@ -112,22 +112,19 @@ export function RedPacket(props: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
     const myStatus = useMemo(() => {
+        if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t(
                 'plugin_red_packet_description_claimed',
-                (availability as RedPacketAvailability).claimed_amount
+                availability.claimed_amount
                     ? {
-                          amount: formatBalance(
-                              (availability as RedPacketAvailability).claimed_amount,
-                              token.decimals,
-                              8,
-                          ),
+                          amount: formatBalance(availability.claimed_amount, token.decimals, 8),
                           symbol: token.symbol,
                       }
                     : { amount: '', symbol: '' },
             )
         return ''
-    }, [listOfStatus, t, token])
+    }, [listOfStatus, t, token, availability])
 
     const subtitle = useMemo(() => {
         if (!availability || !token) return
@@ -193,7 +190,11 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
-                    chainId={chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={
+                        payload.token?.chainId ??
+                        networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
+                        ChainId.Mainnet
+                    }
                     canClaim={canClaim}
                     canRefund={canRefund}
                     claimState={claimState}
