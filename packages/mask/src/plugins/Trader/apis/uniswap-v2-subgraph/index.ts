@@ -182,7 +182,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
     const utcTimestamp = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
     const data = await fetchFromUniswapV2Subgraph<{
         data: {
-            tokenDayData: {
+            tokenDayData: Array<{
                 id: string
                 date: number
                 priceUSD: string
@@ -192,7 +192,7 @@ export async function fetchTokenDayData(address: string, date: Date) {
                 dailyVolumeETH: number
                 dailyVolumeToken: number
                 dailyVolumeUSD: number
-            }[]
+            }>
         }
     }>(`
         {
@@ -317,7 +317,7 @@ export async function fetchPairData(pairAddress: string, blockNumber?: string) {
  */
 export async function fetchPricesByBlocks(
     tokenAddress: string,
-    blocks: { blockNumber?: string; timestamp: number }[],
+    blocks: Array<{ blockNumber?: string; timestamp: number }>,
     skipCount = 50,
 ) {
     // avoiding request entity too large

@@ -170,8 +170,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             // the settings is not available
             if (!createSettings?.token) return
 
-            // TODO:
-            // early return happened
+            // TODO: early return happened
             // we should guide user to select the red packet in the existing list
             if (createState.type !== TransactionStateType.CONFIRMED) return
 
