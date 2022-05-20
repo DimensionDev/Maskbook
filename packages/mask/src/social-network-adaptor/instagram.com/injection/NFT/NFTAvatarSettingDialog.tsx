@@ -15,7 +15,7 @@ import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { delay } from '@dimensiondev/kit'
-import type { NonFungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({

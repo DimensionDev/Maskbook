@@ -7,7 +7,7 @@ import {
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-// import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
 import { useLocation } from 'react-use'
 
@@ -53,6 +53,5 @@ function OpenNFTAvatarEditProfileButtonInInstagram() {
 
     if (location.pathname?.includes('/edit') || !editButton) return null
 
-    return null
-    // return <NFTAvatarButton onClick={openNFTAvatarSettingDialog} classes={classes} />
+    return <NFTAvatarButton onClick={openNFTAvatarSettingDialog} classes={classes} />
 }

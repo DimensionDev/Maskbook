@@ -11,9 +11,10 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useCollectibles } from '../hooks/useCollectibles'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -103,32 +104,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const {
-        value: assets = [],
-        error,
-        retry,
-        loading,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
-
-    const collectibles = assets.map((x) => {
-        return {
-            contract: {
-                chainId,
-                address: x.address,
-                name: x.name,
-                symbol: x.symbol,
-                schema: SchemaType.ERC721,
-                logoURL: x.logoURL,
-            },
-            metadata: {
-                chainId,
-                name: x.name,
-                symbol: x.symbol,
-                imageURL: x.logoURL,
-            },
-            tokenId: x.id,
-        } as NonFungibleToken<ChainId, SchemaType>
-    })
+    const { collectibles, retry, error, loading } = useCollectibles()
 
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {

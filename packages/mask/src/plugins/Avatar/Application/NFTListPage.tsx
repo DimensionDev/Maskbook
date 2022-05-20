@@ -54,20 +54,7 @@ export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
     const { onSelect, chainId, tokenInfo, tokens, children } = props
     const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(
-        tokenInfo
-            ? createERC721Token(
-                  chainId,
-                  tokenInfo.address,
-                  tokenInfo.tokenId,
-                  {
-                      chainId,
-                      name: '',
-                      symbol: '',
-                  },
-                  {},
-                  tokenInfo.tokenId,
-              )
-            : undefined,
+        tokenInfo ? createERC721Token(chainId, tokenInfo.address, tokenInfo.tokenId) : undefined,
     )
 
     const onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {

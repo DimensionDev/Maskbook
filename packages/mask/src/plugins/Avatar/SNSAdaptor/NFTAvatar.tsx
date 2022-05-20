@@ -8,10 +8,11 @@ import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useChainId, useImageChecker, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useImageChecker } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useCollectibles } from '../hooks/useCollectibles'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -95,31 +96,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<NonFungibleToken<ChainId, SchemaType>[]>([])
     const { t } = useI18N()
-    const {
-        value: assets = [],
-        error,
-        retry,
-        loading,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
-    const collectibles = assets.map((x) => {
-        return {
-            contract: {
-                chainId,
-                address: x.address,
-                name: x.name,
-                symbol: x.symbol,
-                schema: SchemaType.ERC721,
-                logoURL: x.logoURL,
-            },
-            metadata: {
-                chainId,
-                name: x.name,
-                symbol: x.symbol,
-                imageURL: x.logoURL,
-            },
-            tokenId: x.id,
-        } as NonFungibleToken<ChainId, SchemaType>
-    })
+    const { collectibles, error, retry, loading } = useCollectibles()
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
