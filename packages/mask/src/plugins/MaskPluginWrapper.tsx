@@ -74,6 +74,10 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
         body: {
             padding: theme.spacing(0),
         },
+        providerBy: {
+            marginRight: theme.spacing(0.5),
+            color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
+        },
     }
 })
 
@@ -92,12 +96,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         )
         return (
             <Box className={classes.provider}>
-                <Typography
-                    sx={{ marginRight: 0.5 }}
-                    variant="body1"
-                    fontSize={14}
-                    fontWeight="400"
-                    color={theme.palette.text.secondary}>
+                <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
                     {t('plugin_provider_by')}
                 </Typography>
                 {main}

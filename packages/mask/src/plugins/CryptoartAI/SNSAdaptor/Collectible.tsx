@@ -136,7 +136,7 @@ export function Collectible(props: CollectibleProps) {
                             target="_blank"
                             rel="noopener noreferrer">
                             <Avatar
-                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
+                                src={assetSource?.owner[0]?.ownerAvatar ?? assetSource?.creator?.avatarPath ?? ''}
                             />
                         </Link>
                     }
@@ -267,7 +267,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </CollectibleCard>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={expectChainId ?? chainId}>
+                <EthereumChainBoundary chainId={expectChainId ?? chainId} renderInTimeline>
                     <ActionBar />
                 </EthereumChainBoundary>
             </Box>

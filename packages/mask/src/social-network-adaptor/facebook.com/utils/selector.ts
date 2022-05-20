@@ -30,7 +30,7 @@ export const bioDescriptionSelector = () =>
 export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
 
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[data-pagelet="ProfileTabs"] a[role="tab"]')
+    querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
 
 export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
@@ -88,7 +88,12 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="LeftRail"] li:nth-child(2)')
+    /* cspell:disable-next-line */
+    querySelector<E>('#ssrb_left_rail_start')
+        .closest(1)
+        .querySelector('h2')
+        .closest(1)
+        .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>

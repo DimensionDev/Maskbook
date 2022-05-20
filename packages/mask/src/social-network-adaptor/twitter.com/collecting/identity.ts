@@ -57,15 +57,12 @@ function resolveLastRecognizedIdentityInner(
         new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src'],
-                },
-                cancel,
-            )
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            })
 
         window.addEventListener('locationchange', assign, { signal: cancel })
     }
@@ -130,15 +127,12 @@ function resolveCurrentVisitingIdentityInner(
         new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src', 'content'],
-                },
-                cancel,
-            )
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src', 'content'],
+            })
 
         window.addEventListener('locationchange', assign, { signal: cancel })
     }
