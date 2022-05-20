@@ -45,7 +45,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (!gasOptions) return
 
         if (is1559Supported) {
-            const gasLevel = gasOptions.options.normal
+            const gasLevel = gasOptions.normal
             setMaxFee((oldVal) => {
                 return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? '0') : oldVal
             })
@@ -53,20 +53,20 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
                 return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? '0') : oldVal
             })
         } else {
-            setCustomGasPrice((oldVal) => (!oldVal ? gasOptions.options.normal.suggestedMaxFeePerGas : oldVal))
+            setCustomGasPrice((oldVal) => (!oldVal ? gasOptions.normal.suggestedMaxFeePerGas : oldVal))
         }
-    }, [is1559Supported, gasOptions?.options.normal])
+    }, [is1559Supported, gasOptions?.normal])
 
     useEffect(() => {
         if (!gasOptions) return
         if (is1559Supported) {
-            const gasLevel = gasOptions.options.normal
+            const gasLevel = gasOptions.normal
             setMaxFee(formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0))
             setPriorityFee(formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0))
         } else {
-            setCustomGasPrice(gasOptions.options.normal.suggestedMaxFeePerGas)
+            setCustomGasPrice(gasOptions.normal.suggestedMaxFeePerGas)
         }
-    }, [chainId, gasOptions?.options.normal])
+    }, [chainId, gasOptions?.normal])
 
     const gasConfig = useMemo(() => {
         return is1559Supported
