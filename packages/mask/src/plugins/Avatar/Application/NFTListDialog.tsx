@@ -103,7 +103,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const { value: assets = [], error, retry, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const {
+        value: assets = [],
+        error,
+        retry,
+        loading,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
 
     const collectibles = assets.map((x) => {
         return {
@@ -121,6 +126,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 symbol: x.symbol,
                 imageURL: x.logoURL,
             },
+            tokenId: x.id,
         } as NonFungibleToken<ChainId, SchemaType>
     })
 
@@ -162,7 +168,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
     const onAddClick = (token: NonFungibleToken<ChainId, SchemaType>) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.id))
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
     const onChangePage = (name: Application_NFT_LIST_PAGE) => {

@@ -95,7 +95,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<NonFungibleToken<ChainId, SchemaType>[]>([])
     const { t } = useI18N()
-    const { value: assets = [], error, retry, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const {
+        value: assets = [],
+        error,
+        retry,
+        loading,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
     const collectibles = assets.map((x) => {
         return {
             contract: {
@@ -112,6 +117,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 symbol: x.symbol,
                 imageURL: x.logoURL,
             },
+            tokenId: x.id,
         } as NonFungibleToken<ChainId, SchemaType>
     })
 
@@ -123,7 +129,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const onAddClick = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
         setSelectedToken(token)
-        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.id))
+        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -176,7 +182,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 ? Retry
                                 : uniqBy(
                                       [...collectibles_, ...(collectibles ?? [])],
-                                      (x) => x.contract?.address && x.id,
+                                      (x) => x.contract?.address && x.tokenId,
                                   ).map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
                                       <NFTImageCollectibleAvatar
                                           key={i}
