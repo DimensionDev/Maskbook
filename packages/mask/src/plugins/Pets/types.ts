@@ -1,5 +1,5 @@
-import type { Constant } from '@masknet/web3-shared-base'
-import type { ERC721TokenInfo } from '@masknet/web3-shared-evm'
+import type { Constant, NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface PetsDialogEvent {
     open: boolean
@@ -39,7 +39,7 @@ export interface User {
     address: string
 }
 
-export interface OwnerERC721TokenInfo extends ERC721TokenInfo {
+export interface OwnerERC721TokenInfo extends NonFungibleAsset<ChainId, SchemaType> {
     tokenId: string
     glbSupport: boolean
 }

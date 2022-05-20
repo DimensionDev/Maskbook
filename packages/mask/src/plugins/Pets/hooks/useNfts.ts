@@ -8,7 +8,6 @@ import {
     transform,
     NonFungibleAsset,
     Constant,
-    Constants,
 } from '@masknet/web3-shared-base'
 import { resolveIPFSLink, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
@@ -65,7 +64,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     return nfts
 }
 
-export function useNFTsExtra(configNFTs: Record<string, Constants> | undefined) {
+export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
     const initContracts = useInitNFTs(configNFTs)
     const [retry, setRetry] = useState(0)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

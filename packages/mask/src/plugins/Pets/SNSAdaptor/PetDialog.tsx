@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useAsync, useTimeout } from 'react-use'
-import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
@@ -8,6 +7,7 @@ import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { useI18N } from '../../../utils'
 import { PetShareDialog } from './PetShareDialog'
 import { PetSetDialog } from './PetSetDialog'
+import type { Constant } from '@masknet/web3-shared-base'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',

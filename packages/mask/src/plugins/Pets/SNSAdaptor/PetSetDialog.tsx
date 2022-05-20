@@ -136,7 +136,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             return
         }
         setLoading(true)
-        const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        const chosenToken = collection.tokens.find((item) => item?.metadata?.imageURL === metaData.image)
         const meta = {
             ...metaData,
             userId: user.userId,
@@ -172,12 +172,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const onImageChange = (v: OwnerERC721TokenInfo | null) => {
         setTokenInfoSelect(v)
-        setInputTokenName(v?.name ?? '')
+        setInputTokenName(v?.metadata?.name ?? '')
         setMetaData({
             ...metaData,
             userId: user.userId,
             tokenId: v?.tokenId ?? '',
-            image: v?.mediaUrl ?? '',
+            image: v?.metadata?.imageURL ?? '',
             type: v?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
         })
         setImageError(false)
@@ -192,12 +192,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
-        return imageChosen?.mediaUrl
+        return imageChosen?.metadata?.imageURL
     }, [metaData.image, collection.tokens])
 
     const renderImg = (address: string) => {
         const matched = extraData.find((item) => isSameAddress(item.address, address))
-        return <ImageLoader className={classes.thumbnail} src={matched?.iconURL ?? ''} />
+        return <ImageLoader className={classes.thumbnail} src={matched?.logoURL ?? ''} />
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
@@ -246,13 +246,15 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 options={collection.tokens}
                 inputValue={inputTokenName}
                 onChange={(_event, newValue) => onImageChange(newValue)}
-                getOptionLabel={(option) => option.name ?? ''}
+                getOptionLabel={(option) => option?.metadata?.name ?? ''}
                 PaperComponent={({ children }) => paperComponent(children)}
                 PopperComponent={ShadowRootPopper}
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
-                        {!option.glbSupport ? <img className={classes.thumbnail} src={option.mediaUrl} /> : null}
-                        <Typography>{option.name}</Typography>
+                        {!option.glbSupport ? (
+                            <img className={classes.thumbnail} src={option?.metadata?.imageURL} />
+                        ) : null}
+                        <Typography>{option?.metadata?.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
                 )}
