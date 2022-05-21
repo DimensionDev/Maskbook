@@ -77,10 +77,13 @@ export function splitToPair(a: FungibleTokenDetailed[] | undefined) {
     if (!a) {
         return []
     }
-    const pairs: FungibleTokenDetailed[][] = []
+    const pairs: Array<[FungibleTokenDetailed, FungibleTokenDetailed]> = []
     a.forEach((value, index) => {
-        if (index % 2 === 0) {
-            pairs.push(a.slice(index, index + 2))
+        if (!(index % 2 === 0)) return
+        const pair = a.slice(index, index + 2)
+        if (pair.length === 2) {
+            const [a, b] = pair
+            pairs.push([a, b])
         }
     })
     return pairs
