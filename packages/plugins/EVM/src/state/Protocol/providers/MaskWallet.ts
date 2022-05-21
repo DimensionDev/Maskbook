@@ -46,7 +46,6 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         const sharedContext = SharedContextSettings.value
 
         sharedContext.chainId.subscribe(() => {
-            console.log(this)
             this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
         })
         sharedContext.account.subscribe(() => {

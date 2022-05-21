@@ -26,6 +26,7 @@
     "typed_message_text_alert": "当前只支持输入消息文本。",
     "badge_renderer_provided_by_plugin": "插件提供：",
     "add_token": "添加代币",
+    "add_nft_contract_search_hint": "搜索 NFT 合约名称或地址",
     "applications": "应用程序",
     "application_settings": "应用设置",
     "application_settings_tab_app_list": "应用列表",

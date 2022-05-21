@@ -18,6 +18,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -210,18 +211,22 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
-    // const {
-    //     asyncRetry: { loading: loadingOwnerList },
-    //     tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
-    //     clearTokenDetailedOwnerList,
-    // } = useERC721TokenDetailedOwnerList(contract, account)
-    const loadingOwnerList = false
-    const _tokenDetailedOwnerList: OrderedERC721Token[] = []
-    const clearTokenDetailedOwnerList = () => {}
+    const {
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
+        clearTokenDetailedOwnerList,
+    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId, balance)
     const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
-    const removeToken = useCallback((token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
-        setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
-    }, [])
+    const removeToken = useCallback(
+        (token: NonFungibleToken<ChainId, SchemaType.ERC721>) => {
+            ;(selectOption === NFTSelectOption.Partial ? setExistTokenDetailedList : setAllTokenDetailedList)((list) =>
+                list.filter((t) => t.tokenId !== token.tokenId),
+            )
+
+            setSelectOption(NFTSelectOption.Partial)
+        },
+        [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
+    )
 
     const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
 

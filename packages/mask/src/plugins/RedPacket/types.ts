@@ -121,8 +121,12 @@ export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_ran
     total_remaining: string
 }
 
+export type NonFungibleTokenOutMask = Omit<NonFungibleToken<ChainId, SchemaType.ERC721>, 'chainId'> & {
+    chain_id: ChainId
+}
+
 export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token'> {
-    token: ERC721TokenOutMask
+    token: NonFungibleTokenOutMask
 }
 
 export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {

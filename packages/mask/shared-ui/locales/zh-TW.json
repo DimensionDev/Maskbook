@@ -17,6 +17,7 @@
     "initializing": "初始化中...",
     "redirect_alert": "如果你的瀏覽器沒有跳轉， <terms>請點擊此處</terms>.",
     "add_token": "新增代幣",
+    "add_nft_contract_search_hint": "檢索NFT合約名稱或地址",
     "applications": "應用",
     "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "用 #mask_io @{{account}} 開啟紅包 {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "用 #mask_io 開啟紅包 {{encrypted}}",

@@ -1,29 +1,16 @@
 import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import {
-    SchemaType,
-    formatEthereumAddress,
-    explorerResolver,
-    // useCollections,
-    ChainId,
-} from '@masknet/web3-shared-evm'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
+import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
 import { EthereumAddress } from 'wallet.ts'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import { unionBy } from 'lodash-unified'
-import {
-    useAccount,
-    useChainId,
-    useNonFungibleAssets,
-    useNonFungibleTokenContract,
-    useNonFungibleTokens,
-} from '@masknet/plugin-infra/web3'
+import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
+import { useChainId, useNonFungibleAssets, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -125,7 +112,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -155,54 +141,45 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    // const { data: assets } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, account, chainId, open)
+    const { value: assets = [], loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
-    // const erc721InDb = useNonFungibleTokens(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
-    // const allContractsInDb = unionBy(
-    //     erc721InDb.map((x) => ({ ...x, address: formatEthereumAddress(x.address) })),
-    //     'address',
-    // ).map((x) => ({ contractDetailed: x, balance: undefined }))
+    const contractList = assets.map(
+        (x) =>
+            ({
+                address: x.address,
+                chainId,
+                schema: SchemaType.ERC721,
+                name: x.contract?.name,
+                symbol: x.contract?.symbol,
+                baseURI: x.collection?.iconURL,
+                iconURL: x.collection?.iconURL,
+                balance: x.contract?.balance,
+            } as NonFungibleTokenContract<ChainId, SchemaType>),
+    )
 
-    // const renderAssets = assets.map((x) => ({
-    //     contractDetailed: {
-    //         address: x.address,
-    //         chainId,
-    //         schema: SchemaType.ERC721,
-    //         name: x.name,
-    //         symbol: x.symbol,
-    //         baseURI: x.iconURL,
-    //         iconURL: x.iconURL,
-    //     } as NonFungibleTokenContract<ChainId, SchemaType>,
-    //     balance: x.balance,
-    // }))
+    // #region fuse
+    const fuse = useMemo(
+        () =>
+            new Fuse(contractList, {
+                shouldSort: true,
+                threshold: 0.45,
+                minMatchCharLength: 3,
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                    { name: 'address', weight: 1 },
+                ],
+            }),
+        [contractList],
+    )
 
-    // const contractList = renderAssets
-    //     ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-    //     : allContractsInDb
-
-    // // #region fuse
-    // const fuse = useMemo(
-    //     () =>
-    //         new Fuse(contractList, {
-    //             shouldSort: true,
-    //             threshold: 0.45,
-    //             minMatchCharLength: 3,
-    //             keys: [
-    //                 { name: 'contractDetailed.name', weight: 0.5 },
-    //                 { name: 'contractDetailed.symbol', weight: 0.8 },
-    //                 { name: 'contractDetailed.address', weight: 1 },
-    //             ],
-    //         }),
-    //     [contractList],
-    // )
-
-    // const searchedTokenList = fuse.search(keyword).map((x) => x.item)
-    // // #endregion
+    const searchedTokenList = fuse.search(keyword).map((x) => x.item)
+    // #endregion
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>
             <DialogContent className={classes.dialogContent}>
-                {/* <div className={classes.search}>
+                <div className={classes.search}>
                     <SearchInput
                         label={t('add_nft_contract_search_hint')}
                         onChange={(keyword) => {
@@ -210,15 +187,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         }}
                     />
                 </div>
-                {loadingCollectionState === SocketState.done && (
-                    <SearchResultBox
-                        keyword={keyword}
-                        contractList={contractList}
-                        searchedTokenList={searchedTokenList}
-                        onSubmit={onSubmit}
-                    />
-                )}
-                {loadingCollectionState !== SocketState.done && (
+
+                {loading ? (
                     <Box
                         display="flex"
                         alignItems="center"
@@ -226,7 +196,14 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         sx={{ paddingTop: 4, paddingBottom: 4 }}>
                         <CircularProgress size={24} />
                     </Box>
-                )} */}
+                ) : (
+                    <SearchResultBox
+                        keyword={keyword}
+                        contractList={contractList}
+                        searchedTokenList={searchedTokenList}
+                        onSubmit={onSubmit}
+                    />
+                )}
             </DialogContent>
         </InjectedDialog>
     )

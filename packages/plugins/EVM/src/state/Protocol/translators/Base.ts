@@ -4,11 +4,12 @@ import { GasOptionType, isLessThan } from '@masknet/web3-shared-base'
 import { addGasMargin, chainResolver, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import type { Context, Translator } from '../types'
 import { Web3StateSettings } from '../../../settings'
+import { isReadOnlyMethod } from '../connection'
 
 export class Base implements Translator {
     async encode(context: Context) {
         const config = context.config
-        if (!config) return
+        if (!config || isReadOnlyMethod(context.method)) return
 
         // #region polyfill transaction config
         {

@@ -6,7 +6,7 @@ import { Typography, Link } from '@mui/material'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import {
     useERC721ContractIsApproveForAll,
     useERC721ContractSetApproveForAllCallback,
@@ -36,7 +36,7 @@ const useStyles = makeStyles()(() => ({
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
     owner: string | undefined
-    contractDetailed: NonFungibleToken<ChainId, SchemaType.ERC721> | undefined
+    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | undefined
     validationMessage?: string
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps
@@ -60,7 +60,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>
                         {t('plugin_wallet_approve_all_nft_successfully', {
-                            symbol: contractDetailed?.metadata?.symbol,
+                            symbol: contractDetailed?.symbol,
                         })}
                     </Typography>
                     <Link
@@ -109,10 +109,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 disabled
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_nft_approving_all', {
-                    symbol: contractDetailed?.metadata?.symbol
-                        ? contractDetailed.metadata.symbol.toLowerCase() === 'unknown'
+                    symbol: contractDetailed?.symbol
+                        ? contractDetailed.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed.metadata.symbol
+                            : contractDetailed?.symbol
                         : 'All',
                 })}
             </ActionButton>
@@ -151,10 +151,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_approve_all_nft', {
-                    symbol: contractDetailed?.metadata?.symbol
-                        ? contractDetailed.metadata.symbol.toLowerCase() === 'unknown'
+                    symbol: contractDetailed?.symbol
+                        ? contractDetailed?.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed.metadata.symbol
+                            : contractDetailed?.symbol
                         : 'All',
                 })}
             </ActionButton>

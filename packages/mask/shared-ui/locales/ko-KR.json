@@ -26,6 +26,7 @@
     "typed_message_text_alert": "현재 TypedMessageText만 지원합니다.",
     "badge_renderer_provided_by_plugin": "플러그인으로 제공",
     "add_token": "토큰 추가",
+    "add_nft_contract_search_hint": "NFT 컨트렉트 이름이나 주소를 검색하기",
     "applications": "어플리케이션",
     "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "레드 패킷을 수령하고 #mask_io @{{account}} {{encrypted}} 하세요.",
     "additional_post_box__encrypted_post_pre_red_packet": "#mask_io {{encrypted}} 덧붙이고 레드 패킷을 수령하세요.",

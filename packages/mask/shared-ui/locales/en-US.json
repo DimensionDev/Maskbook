@@ -30,6 +30,7 @@
     "typed_message_text_alert": "Only TypedMessageText is supported currently.",
     "badge_renderer_provided_by_plugin": "Provided by plugin",
     "add_token": "Add Token",
+    "add_nft_contract_search_hint": "Search NFT Contract Symbol Name or Address",
     "applications": "Applications",
     "application_settings": "Application Settings",
     "application_tooltip_hint_sns_persona_unmatched": "Twitter ID verified persona({{currentSNSConnectedPersonaPublicKey}}) is not consistent with your current persona({{currentPersonaPublicKey}}). Please switch to persona({{currentSNSConnectedPersonaPublicKey}}) and try again.",

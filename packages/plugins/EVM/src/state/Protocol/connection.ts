@@ -298,14 +298,6 @@ class Connection implements EVM_Connection {
             chainId: numberToHex(options?.chainId ?? this.chainId),
         })
 
-        if (result?.length) {
-            console.log({
-                result,
-                listOfAddress,
-                entries: listOfAddress.map<[string, string]>((x, i) => [x, result[i]]),
-            })
-        }
-
         if (result?.length !== listOfAddress.length) return {}
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }

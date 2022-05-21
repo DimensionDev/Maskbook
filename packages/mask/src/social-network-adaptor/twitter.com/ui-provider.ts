@@ -71,9 +71,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
                 fontSize: 18,
                 lineHeight: '22px',
                 display: 'inline-block',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
             },
             [smallQuery]: {
                 display: 'flex',

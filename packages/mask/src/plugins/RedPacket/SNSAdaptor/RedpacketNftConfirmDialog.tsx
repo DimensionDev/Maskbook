@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
     explorerResolver,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
+    ChainId,
+    SchemaType,
     TransactionStateType,
     isNativeTokenAddress,
     formatTokenId,
@@ -24,7 +24,7 @@ import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
 import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 
@@ -152,8 +152,8 @@ export interface RedpacketNftConfirmDialogProps {
     open: boolean
     onBack: () => void
     onClose: () => void
-    contract: ERC721ContractDetailed
-    tokenList: ERC721TokenDetailed[]
+    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>
+    tokenList: NonFungibleToken<ChainId, SchemaType.ERC721>[]
     message: string
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
@@ -166,7 +166,10 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const { attachMetadata } = useCompositionContext()
 
     const { t } = useI18N()
-    const { address: publicKey, privateKey } = useMemo(() => web3?.eth.accounts.create(), [])
+    const { address: publicKey, privateKey } = useMemo(
+        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
+        [web3],
+    )!
     const duration = 60 * 60 * 24
     const currentIdentity = useCurrentIdentity()
 
@@ -201,7 +204,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 senderName,
                 contractName: contract.name,
                 contractAddress: contract.address,
-                contractTokenURI: contract.iconURL ?? '',
+                contractTokenURI: contract.logoURL ?? '',
                 contractVersion: 1,
                 privateKey,
                 chainId: contract.chainId,
@@ -249,7 +252,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNativeTokenAddress(wallet) ? null : (
+                            {isNativeTokenAddress(wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
@@ -356,7 +359,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 }
 
 interface NFTCardProps {
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType.ERC721>
     renderOrder: number
 }
 
@@ -367,8 +370,8 @@ function NFTCard(props: NFTCardProps) {
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
-                contractAddress={token.contractDetailed.address}
-                chainId={token.contractDetailed.chainId}
+                contractAddress={token.contract?.address}
+                chainId={token.contract?.chainId}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}

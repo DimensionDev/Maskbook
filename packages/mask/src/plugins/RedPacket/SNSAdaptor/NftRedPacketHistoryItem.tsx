@@ -193,7 +193,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
                         logoURL={
-                            contractDetailed?.logoURL ??
+                            contractDetailed?.iconURL ??
                             new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
                         }
                     />

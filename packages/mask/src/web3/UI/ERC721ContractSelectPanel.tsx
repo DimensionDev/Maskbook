@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
@@ -66,9 +66,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
-    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
+    onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
     onBalanceChange?: (balance: number) => void
-    contract: NonFungibleTokenContract<ChainId, SchemaType> | null | undefined
+    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet } = props
@@ -103,9 +103,9 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
 
-    // useEffect(() => {
-    //     onBalanceChange?.(balance)
-    // }, [onBalanceChange, balance])
+    useEffect(() => {
+        onBalanceChange?.(balance)
+    }, [onBalanceChange, balance])
 
     const loading = loadingFromChain && !balance
 
@@ -117,7 +117,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         useCallback(
             (ev: SelectNftContractDialogEvent) => {
                 if (ev.open || !ev.contract || ev.uuid !== id) return
-                onContractChange(ev.contract)
+                onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
             },
             [id, onContractChange],
         ),
