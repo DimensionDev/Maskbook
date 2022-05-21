@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import type { NftRedPacketHistory } from '../types'
@@ -77,7 +77,7 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory, contract: NonFungibleToken<ChainId, SchemaType.ERC721>['contract']) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {

@@ -1,12 +1,5 @@
-import { isSameAddress } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    FungibleTokenDetailed,
-    FungibleTokenOutMask,
-    getTokenConstants,
-    getRedPacketConstants,
-    chainResolver,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, getTokenConstants, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
@@ -66,7 +59,9 @@ type RedpacketFromSubgraphType = {
     message: string
     rpid: string
     shares: number
-    token: FungibleTokenOutMask
+    token: Omit<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>, 'chainId'> & {
+        chain_id: ChainId
+    }
     total: string
     total_remaining: string
     txid: string
@@ -122,7 +117,7 @@ export async function getRedPacketHistory(chainId: ChainId, address: string) {
 
     return data.redPackets
         .map((x) => {
-            const token = tokenIntoMask({ ...x.token }) as FungibleTokenDetailed
+            const token = tokenIntoMask({ ...x.token }) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
             if (isSameAddress(x.token.address, NATIVE_TOKEN_ADDRESS)) {
                 const nativeCurrency = chainResolver.nativeCurrency(x.token.chain_id ?? chainId)
                 if (nativeCurrency) {
@@ -148,7 +143,7 @@ export async function getRedPacketHistory(chainId: ChainId, address: string) {
                 },
                 contract_version: x.contract_version,
                 network: chainResolver.chainName(x.chain_id),
-                token: token,
+                token,
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,
                 block_number: x.block_number,

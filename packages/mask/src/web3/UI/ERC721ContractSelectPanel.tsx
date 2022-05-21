@@ -9,8 +9,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -73,23 +72,7 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
-
-    const { value: assets = [] } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-
-    const convertedAssets = assets.map((x) => ({
-        contractDetailed: {
-            chainId,
-            address: x.address,
-            name: x.metadata?.name,
-            symbol: x.metadata?.symbol,
-            schema: SchemaType.ERC721,
-            logoURL: x.metadata?.imageURL,
-        } as NonFungibleTokenContract<ChainId, SchemaType>,
-        balance: x.contract?.balance,
-    }))
-
     const { t } = useI18N()
 
     // #region select contract

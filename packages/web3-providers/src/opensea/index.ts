@@ -403,7 +403,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
             this._apiKey,
         )
-
         if (!response) return createPageable<NonFungibleTokenCollection<ChainId>>()
 
         const collections: NonFungibleTokenCollection<ChainId>[] =
@@ -414,7 +413,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     slug: x.slug,
                     address: x.primary_asset_contracts?.[0]?.address,
                     symbol: x.primary_asset_contracts?.[0]?.symbol,
-                    schema_name: x.primary_asset_contracts?.[0].schema_name,
+                    schema_name: x.primary_asset_contracts?.[0]?.schema_name,
                     description: x.description,
                     iconURL: x.image_url,
                     balance: x.owned_asset_count,
@@ -422,7 +421,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     createdAt: getUnixTime(new Date(x.created_date)),
                 }))
                 .filter((x) => x.address) ?? []
-
         return createPageable(collections, page, collections.length === size)
     }
 }
