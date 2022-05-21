@@ -77,16 +77,17 @@ export function splitToPair(a: FungibleTokenDetailed[] | undefined) {
     if (!a) {
         return []
     }
-    return a.reduce(function (result: any, value, index, array) {
+    const pairs: FungibleTokenDetailed[][] = []
+    a.forEach((value, index) => {
         if (index % 2 === 0) {
-            result.push(array.slice(index, index + 2))
+            pairs.push(a.slice(index, index + 2))
         }
-        return result
-    }, [])
+    })
+    return pairs
 }
 
 export async function getFungibleTokensDetailed(
-    allTokens: Pick<FungibleToken, 'address'>[],
+    allTokens: Array<Pick<FungibleToken, 'address'>>,
     web3: Web3,
     chainId: ChainId,
 ) {
