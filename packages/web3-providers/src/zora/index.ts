@@ -4,6 +4,7 @@ import { formatWeiToEther, ChainId, resolveIPFSLinkFromURL, SchemaType } from '@
 
 import type { ZoraToken, ZoraHistory, ZoraBid, ZoraAsk } from './types'
 import {
+    CurrencyType,
     FungibleToken,
     NonFungibleAsset,
     NonFungibleToken,
@@ -26,7 +27,7 @@ function createNFTAsset(asset: ZoraToken): NonFungibleAsset<ChainId, SchemaType>
 
         price: asset.v3Ask
             ? {
-                  usd: formatWeiToEther(asset.v3Ask.askPrice).toString(),
+                  [CurrencyType.USD]: formatWeiToEther(asset.v3Ask.askPrice).toString(),
               }
             : undefined,
 
@@ -159,7 +160,7 @@ export class ZoraAPI {
                         } as FungibleToken<ChainId, SchemaType>,
 
                         price: {
-                            usd: '0',
+                            [CurrencyType.USD]: '0',
                         },
                     }
                 }
@@ -193,7 +194,7 @@ export class ZoraAPI {
                             schema: SchemaType.ERC721,
                         } as FungibleToken<ChainId, SchemaType>,
                         price: {
-                            usd: '1',
+                            [CurrencyType.USD]: '1',
                         },
                     }
                 }
@@ -215,7 +216,7 @@ export class ZoraAPI {
                             schema: SchemaType.ERC721,
                         } as FungibleToken<ChainId, SchemaType>,
                         price: {
-                            usd: '1',
+                            [CurrencyType.USD]: '1',
                         },
                         from: {
                             nickname: bid?.bidder,
@@ -251,7 +252,7 @@ export class ZoraAPI {
                             schema: SchemaType.ERC721,
                         } as FungibleToken<ChainId, SchemaType>,
                         price: {
-                            usd: '1',
+                            [CurrencyType.USD]: '1',
                         },
                         from: {
                             nickname: buy?.tokenOwner,
@@ -298,7 +299,7 @@ export class ZoraAPI {
                         createdAt: new Date(`${bid?.blockTimestamp}Z`).getTime(),
                         expiredAt: 0,
                         price: {
-                            usd: bid?.amount,
+                            [CurrencyType.USD]: bid?.amount,
                         },
 
                         paymentToken: {
@@ -337,7 +338,7 @@ export class ZoraAPI {
                         expiredAt: 0,
 
                         price: {
-                            usd: formatWeiToEther(ask?.reservePrice || 0).toString(),
+                            [CurrencyType.USD]: formatWeiToEther(ask?.reservePrice || 0).toString(),
                         },
 
                         paymentToken: {
