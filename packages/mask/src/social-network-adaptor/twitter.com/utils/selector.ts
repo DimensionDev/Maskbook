@@ -1,4 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
+import { regexMatch } from '../../../utils/utils'
 import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
@@ -113,7 +114,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Lists"] > div')
+    querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 
@@ -216,6 +217,25 @@ export const postsContentSelector = () =>
 export const postAvatarsContentSelector = () =>
     querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
 
+const base = querySelector<HTMLScriptElement>('#react-root ~ script')
+const handle = /"screen_name":"(.*?)"/
+const name = /"name":"(.*?)"/
+const bio = /"description":"(.*?)"/
+const avatar = /"profile_image_url_https":"(.*?)"/
+/**
+ * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
+ */
+const p = (regex: RegExp, index: number) => {
+    return base.clone().map((x) => regexMatch(x.innerText, regex, index))
+}
+export const selfInfoSelectors = () => ({
+    handle: p(handle, 1),
+    name: p(name, 1),
+    bio: p(bio, 1),
+    userAvatar: p(avatar, 1),
+})
+
 // #region self info
 export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
@@ -234,6 +254,9 @@ export const searchSelfNicknameSelector = () => {
         ].join(),
     )
 }
+
+export const searchWatcherAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="SideNav_AccountSwitcher_Button"] img')
 
 export const searchSelfAvatarSelector = () => {
     return querySelector<HTMLImageElement>(

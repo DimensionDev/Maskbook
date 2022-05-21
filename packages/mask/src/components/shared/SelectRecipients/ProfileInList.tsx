@@ -1,19 +1,19 @@
 import { useCallback } from 'react'
-import classNames from 'classnames'
-import { ListItemText, Checkbox, ListItemAvatar } from '@mui/material'
-import ListItemButton from '@mui/material/ListItemButton'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
-import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
-import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Avatar } from '../../../utils/components/Avatar'
-import type { CheckboxProps } from '@mui/material/Checkbox'
-import type { ListItemTypeMap } from '@mui/material/ListItem'
+import { CopyIcon } from '@masknet/icons'
+import { truncate } from 'lodash-unified'
+import { useI18N } from '../../../utils'
+import { useCopyToClipboard } from 'react-use'
 
-const useStyle = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
-        cursor: 'pointer',
-        paddingLeft: 8,
+        maxWidth: 'calc(50% - 6px)',
+        padding: '0 0 0 8px',
+        borderRadius: 8,
     },
     overflow: {
         textOverflow: 'ellipsis',
@@ -25,55 +25,144 @@ const useStyle = makeStyles()({
         color: 'inherit',
         fontWeight: 'bold',
     },
-})
+    flex: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    actionIcon: {
+        fontSize: 16,
+        cursor: 'pointer',
+    },
+    badge: {
+        background: theme.palette.background.input,
+        color: theme.palette.text.strong,
+        fontSize: 10,
+        fontWeight: 700,
+        marginLeft: 12,
+        padding: '2px 4px',
+        borderRadius: 2,
+    },
+    highLightBg: {
+        background: theme.palette.background.default,
+    },
+    avatarBox: {
+        minWidth: 46,
+    },
+    avatar: {
+        width: 36,
+        height: 36,
+    },
+    highLightBase: {
+        lineHeight: '20px',
+    },
+    highLightSecond: {
+        fontSize: 14,
+        lineHeight: '20px',
+    },
+    listItemRoot: {
+        margin: '4px 0',
+    },
+    columnReverse: {
+        margin: '4px 0',
+        display: 'flex',
+        flexDirection: 'column-reverse',
+    },
+    toolTip: {
+        maxWidth: 250,
+        fontSize: 14,
+        lineHeight: '18px',
+        padding: 10,
+        boxSizing: 'border-box',
+        borderRadius: 4,
+        whiteSpace: 'normal',
+        marginTop: 0,
+        transform: 'translate(5px,45px,0px)',
+    },
+}))
 
-export interface ProfileInListProps extends withClasses<never> {
-    item: Profile
-    search?: string
-    checked?: boolean
+export interface ProfileInListProps {
+    item: ProfileInformationFromNextID
+    highlightText?: string
+    selected?: boolean
     disabled?: boolean
-    onChange: (ev: React.MouseEvent<HTMLDivElement>, checked: boolean) => void
-    CheckboxProps?: Partial<CheckboxProps>
-    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
+    onChange: (ev: React.MouseEvent<HTMLButtonElement>, checked: boolean) => void
 }
 export function ProfileInList(props: ProfileInListProps) {
-    const classes = useStylesExtends(useStyle(), props)
+    const { t } = useI18N()
+    const { classes, cx } = useStyles()
     const profile = props.item
-    const name = profile.nickname || profile.identifier.userId
-    const secondary = profile.fingerprint?.toLowerCase()
-    const onClick = useCallback((ev: React.MouseEvent<HTMLDivElement>) => props.onChange(ev, !props.checked), [props])
+
+    const [, copyToClipboard] = useCopyToClipboard()
+    const highlightText = (() => {
+        if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
+        const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
+        if (mentions.length < 15) return mentions
+        const len = profile.linkedTwitterNames.length
+        return truncate(mentions, { length: 15 }) + (len > 1 ? `(${len})` : '')
+    })()
+
+    const tooltipTitle = (() => {
+        const linkedNames = profile.linkedTwitterNames
+        if (!linkedNames || !linkedNames.length) return ''
+        const mentions = profile.linkedTwitterNames.map((username) => '@' + username)
+        return `${t('select_friends_dialog_persona_connect')} ${mentions.join(', ')}.`
+    })()
+
+    const onClick = useCallback(
+        (ev: React.MouseEvent<HTMLButtonElement>) => props.onChange(ev, !props.selected),
+        [props],
+    )
+    const textToHighlight = formatPersonaFingerprint(profile.linkedPersona?.rawPublicKey?.toUpperCase() ?? '', 3)
     return (
-        <ListItemButton
-            onClick={onClick}
+        <ListItem
             disabled={props.disabled}
-            {...props.ListItemProps}
-            className={classNames(classes.root, props.ListItemProps?.className)}>
-            <Checkbox checked={!!props.checked} color="primary" {...props.CheckboxProps} />
-            <ListItemAvatar>
-                <Avatar person={profile} />
+            className={props.selected ? cx(classes.root, classes.highLightBg) : classes.root}>
+            <ListItemAvatar classes={{ root: classes.avatarBox }}>
+                <Avatar classes={{ root: classes.avatar }} person={profile} />
             </ListItemAvatar>
             <ListItemText
                 classes={{
+                    root: profile.fromNextID ? classes.columnReverse : classes.listItemRoot,
                     primary: classes.overflow,
                     secondary: classes.overflow,
                 }}
                 primary={
-                    <Highlighter
-                        highlightClassName={classes.highlighted}
-                        searchWords={[props.search ?? '']}
-                        autoEscape
-                        textToHighlight={name}
-                    />
+                    <div className={classes.flex}>
+                        <ShadowRootTooltip title={tooltipTitle} arrow classes={{ tooltip: classes.toolTip }}>
+                            <div>
+                                <Highlighter
+                                    className={classes.highLightBase}
+                                    highlightClassName={classes.highlighted}
+                                    searchWords={[props.highlightText ?? '']}
+                                    autoEscape
+                                    textToHighlight={highlightText}
+                                />
+                            </div>
+                        </ShadowRootTooltip>
+                    </div>
                 }
                 secondary={
-                    <Highlighter
-                        highlightClassName={classes.highlighted}
-                        searchWords={[props.search ?? '']}
-                        autoEscape
-                        textToHighlight={secondary || ''}
-                    />
+                    <div className={classes.flex}>
+                        <Highlighter
+                            className={classes.highLightSecond}
+                            highlightClassName={classes.highlighted}
+                            searchWords={[props.highlightText ?? '']}
+                            autoEscape
+                            textToHighlight={textToHighlight}
+                        />
+                        <CopyIcon
+                            className={classes.actionIcon}
+                            onClick={() => {
+                                const rawPublicKey = profile.linkedPersona?.rawPublicKey
+                                if (!rawPublicKey) return
+                                copyToClipboard(rawPublicKey.toUpperCase())
+                            }}
+                        />
+                        {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
+                    </div>
                 }
             />
-        </ListItemButton>
+            <Checkbox onClick={onClick} checked={!!props.selected} color="primary" />
+        </ListItem>
     )
 }

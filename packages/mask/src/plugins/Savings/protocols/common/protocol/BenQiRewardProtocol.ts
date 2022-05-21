@@ -48,7 +48,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
         pair: [FungibleTokenDetailed, FungibleTokenDetailed],
         nativeToken: string,
         readonly allPairs: [[FungibleTokenDetailed, FungibleTokenDetailed]],
-        readonly rewardTokens: Array<RewardToken>,
+        readonly rewardTokens: RewardToken[],
         readonly config: PairConfig,
     ) {
         super(pair, nativeToken)
@@ -60,7 +60,7 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
             underlying: FungibleTokenDetailed
             market: FungibleTokenDetailed
         }>,
-        notInPairTokens: Array<RewardToken>,
+        notInPairTokens: RewardToken[],
         web3: Web3,
     ) {
         const oracle = getBenQiOracleComptrollerContract(this.config.oracle, web3)
@@ -134,13 +134,13 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
     public async loadMarketPriceAndSpeed(comptroller: BenQiComptroller, web3: Web3) {
         const { matchPairs: needLoadPricePairs, notMatchTokens: notInPairTokens } =
             await this.getAllNeedFetchPricePairs()
-        let allPrice: Array<MarketStatus> = []
+        let allPrice: MarketStatus[] = []
         try {
             allPrice = await this.fetchPrices(needLoadPricePairs, notInPairTokens, web3)
         } catch (error) {
             console.error('BenQiRewardProtocol.fetchPrices', error)
         }
-        let currentMarketSpeeds: Array<RewardSpeed> = []
+        let currentMarketSpeeds: RewardSpeed[] = []
         try {
             currentMarketSpeeds = await this.fetchSpeeds(web3)
         } catch (error) {
@@ -190,46 +190,43 @@ export default class BenQiRewardProtocol extends CompoundTimestampBasedProtocol 
             }
 
             const totalPrice = marketPrice ? totalSupplyAmount.times(marketPrice) : ZERO
-            const rewardsAPR = this.rewardTokens
-                .filter(({ symbol }) => symbolWithPrice[symbol])
-                .map(({ symbol }) => {
-                    // price not found
-                    if (!symbolWithPrice[symbol]) {
-                        return {
-                            apr: ZERO,
-                        }
-                    }
-                    const { price: rewardPrice } = symbolWithPrice[symbol]
-                    const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
-                    if (!speedItem)
-                        return {
-                            apr: ZERO,
-                        }
-
-                    const { speed: rewardSpeed } = speedItem
-                    const rewardPerDay = rewardSpeed.shiftedBy(-18).times(60 * 60 * 24)
-                    const rewardValue = rewardPerDay.times(rewardPrice)
-                    const supplyBase = rewardValue.div(totalPrice)
-                    const supply = supplyBase.times(365).times(100)
+            const rewardsAPR = this.rewardTokens.map(({ symbol }) => {
+                // price not found
+                if (!symbolWithPrice[symbol]) {
                     return {
-                        symbol,
-                        marketPrice: marketPrice ? marketPrice.toString(10) : 0,
-                        rewardPrice: rewardPrice.toString(10),
-                        rewardPerDay: rewardPerDay.toString(10),
-                        rewardValue: rewardValue.toString(10),
-                        supplyBase: supplyBase.toString(10),
-                        rewardSpeed: rewardSpeed.toString(10),
-                        totalPrice: totalPrice.toString(10),
-                        aprDisplay: supply.toString(10),
-                        apr: supply,
+                        apr: ZERO,
                     }
-                })
+                }
+                const { price: rewardPrice } = symbolWithPrice[symbol]
+                const speedItem = currentMarketSpeeds.find((_) => _.symbol === symbol)
+                if (!speedItem)
+                    return {
+                        apr: ZERO,
+                    }
 
-            const totalDistributionAPR = rewardsAPR
-                .filter((_) => _ !== null)
-                .reduce((total, item) => {
-                    return total.plus(item.apr)
-                }, ZERO)
+                const { speed: rewardSpeed } = speedItem
+                const rewardPerDay = rewardSpeed.shiftedBy(-18).times(60 * 60 * 24)
+                const rewardValue = rewardPerDay.times(rewardPrice)
+                const supplyBase = rewardValue.div(totalPrice)
+                const supply = supplyBase.times(365).times(100)
+                return {
+                    symbol,
+                    marketPrice: marketPrice ? marketPrice.toString(10) : 0,
+                    rewardPrice: rewardPrice.toString(10),
+                    rewardPerDay: rewardPerDay.toString(10),
+                    rewardValue: rewardValue.toString(10),
+                    supplyBase: supplyBase.toString(10),
+                    rewardSpeed: rewardSpeed.toString(10),
+                    totalPrice: totalPrice.toString(10),
+                    aprDisplay: supply.toString(10),
+                    apr: supply,
+                }
+            })
+
+            let totalDistributionAPR = ZERO
+            rewardsAPR.forEach((item) => {
+                totalDistributionAPR = totalDistributionAPR.plus(item.apr)
+            })
             return totalDistributionAPR
         } catch (error) {
             console.error('getDistributionAPR', error)

@@ -9,7 +9,7 @@ export default class BenQiProtocol extends BenQiRewardProtocol {
     constructor(
         pair: [FungibleTokenDetailed, FungibleTokenDetailed],
         allPairs: [[FungibleTokenDetailed, FungibleTokenDetailed]],
-        rewardTokens: Array<RewardToken>,
+        rewardTokens: RewardToken[],
     ) {
         super(pair, BenQiProtocol.nativeToken, allPairs, rewardTokens, <PairConfig>{
             comptroller: BENQI_COMPTROLLER,

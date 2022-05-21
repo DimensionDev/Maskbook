@@ -82,13 +82,13 @@ export class AAVEProtocol implements SavingsProtocol {
             })
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         id: string
                         name: string
                         decimals: number
                         underlyingAsset: string
                         liquidityRate: number
-                    }[]
+                    }>
                 }
             } = await response.json()
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
@@ -133,11 +133,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         aToken: {
                             id: string
                         }
-                    }[]
+                    }>
                 }
             } = await response.json()
 
@@ -179,10 +179,8 @@ export class AAVEProtocol implements SavingsProtocol {
                     gas: gasEstimate.toNumber(),
                 })
             }
-            return null
-        } catch (error) {
-            throw error
-        }
+        } catch (error) {}
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

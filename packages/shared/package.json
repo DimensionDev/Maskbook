@@ -8,7 +8,7 @@
     }
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared-base": "workspace:*",

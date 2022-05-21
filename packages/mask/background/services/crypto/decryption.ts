@@ -226,7 +226,7 @@ async function storeAuthorPublicKey(
     if (persona?.privateKey) return
 
     const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
-    const otherPersona = await queryPersonaDB(ECKeyIdentifierFromJsonWebKey(key))
+    const otherPersona = await queryPersonaDB(await ECKeyIdentifierFromJsonWebKey(key))
     if (otherPersona?.privateKey) return
 
     return createProfileWithPersona(

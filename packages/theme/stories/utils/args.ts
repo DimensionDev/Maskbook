@@ -1,5 +1,5 @@
 export type ControlType = 'radio' | 'inline-radio' | 'check' | 'inline-check' | 'select' | 'multi-select'
-export function argsOfArr<T>(keys: NonNullable<T>[], type?: ControlType) {
+export function argsOfArr<T>(keys: Array<NonNullable<T>>, type?: ControlType) {
     if (type === undefined) {
         if (keys.length <= 6) type = 'inline-radio'
         else type = 'select'

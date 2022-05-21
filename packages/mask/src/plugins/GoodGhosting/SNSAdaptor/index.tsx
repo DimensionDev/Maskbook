@@ -37,8 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 13,
             description: <Trans i18nKey="plugin_good_ghosting_description" />,
             name: <Trans i18nKey="plugin_good_ghosting_name" />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
+            tutorialLink: 'https://realmasknetwork.notion.site/f94aa38b01404b9c99c7a03935840962',
             icon: <GoogGhostingIcon />,
         },
     ],
@@ -52,7 +51,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <EthereumChainBoundary chainId={ChainId.Matic}>
+        <EthereumChainBoundary chainId={ChainId.Matic} renderInTimeline>
             <PreviewCard id={id} />
         </EthereumChainBoundary>
     )

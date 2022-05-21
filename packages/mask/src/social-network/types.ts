@@ -2,6 +2,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
+    EncryptionTargetType,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -111,7 +112,7 @@ export namespace SocialNetworkUI {
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
-            toolbox?(signal: AbortSignal): void
+            toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
             setupPrompt?(signal: AbortSignal): void
             /**
@@ -200,7 +201,7 @@ export namespace SocialNetworkUI {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            target?: 'E2E' | 'Everyone'
+            target?: EncryptionTargetType
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void

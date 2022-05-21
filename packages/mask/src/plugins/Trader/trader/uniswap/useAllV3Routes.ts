@@ -11,10 +11,10 @@ function computeAllRoutes(
     pools: Pool[],
     chainId: number,
     currentPath: Pool[] = [],
-    allPaths: Route<Currency, Currency>[] = [],
+    allPaths: Array<Route<Currency, Currency>> = [],
     startCurrencyIn: Currency = currencyIn,
     maxHops = 2,
-): Route<Currency, Currency>[] {
+): Array<Route<Currency, Currency>> {
     const tokenIn = currencyIn?.wrapped
     const tokenOut = currencyOut?.wrapped
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
@@ -54,7 +54,7 @@ function computeAllRoutes(
 export function useAllV3Routes(
     currencyIn?: Currency,
     currencyOut?: Currency,
-): { loading: boolean; routes: Route<Currency, Currency>[] } {
+): { loading: boolean; routes: Array<Route<Currency, Currency>> } {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut)
     const singleHopOnly = useSingleHopOnly()

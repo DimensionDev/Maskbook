@@ -814,7 +814,7 @@
     },
     {
         "name": "OKExChain Mainnet",
-        "chain": "okexchain",
+        "chain": "OKEx",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
@@ -1047,7 +1047,7 @@
         "name": "Gnosis Chain",
         "chain": "Gnosis",
         "network": "mainnet",
-        "features": ["EIP1559"],
+        "features": [],
         "nativeCurrency": {
             "name": "xDai",
             "symbol": "xDai",

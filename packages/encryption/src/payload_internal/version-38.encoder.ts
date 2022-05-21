@@ -77,7 +77,7 @@ function encodeSignature(sig: Option<Signature>) {
 async function compressSecp256k1Key(key: CryptoKey) {
     const jwk = await exportCryptoKeyToJWK(key)
     if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
-    const arr = Result.wrap(() => compressSecp256k1Point(jwk.val.x!, jwk.val.y!)).mapErr(
+    const arr = (await Result.wrapAsync(() => compressSecp256k1Point(jwk.val.x!, jwk.val.y!))).mapErr(
         (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
     )
     if (arr.err) return arr

@@ -35,7 +35,7 @@ const Icon = styled(ListItemIcon)`
     min-width: 0;
 `
 
-export function ToolboxHintAtTwitter() {
+export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
@@ -44,6 +44,7 @@ export function ToolboxHintAtTwitter() {
             Typography={Text}
             ListItemButton={ListItem}
             Container={Container}
+            category={props.category}
         />
     )
 }
@@ -51,7 +52,7 @@ export function ToolboxHintAtTwitter() {
 export function ProfileLinkAtTwitter() {
     const { t } = useI18N()
     return (
-        <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
+        <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
             <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
         </GuideStep>
     )

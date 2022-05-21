@@ -2,13 +2,11 @@ import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { DepositDialog } from '../UI/DepositDialog'
 import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PoolTogetherIcon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
@@ -42,22 +40,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: <Trans i18nKey="plugin_pooltogether_description" />,
             name: <Trans i18nKey="plugin_pooltogether_name" />,
             marketListSortingPriority: 14,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',
+            tutorialLink: 'https://realmasknetwork.notion.site/377597e14aff441ab645ecba5ea690f1',
             icon: <PoolTogetherIcon />,
         },
     ],
+    wrapperProps: {
+        icon: (
+            <PoolTogetherIcon
+                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(70, 39, 155, 0.2))' }}
+            />
+        ),
+        backgroundGradient:
+            ' linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(70, 39, 155, 0.2) 100%), #FFFFFF;',
+    },
 }
 
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
-    return (
-        <EthereumChainBoundary
-            chainId={ChainId.Mainnet}
-            isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}>
-            <PoolTogetherView />
-        </EthereumChainBoundary>
-    )
+    return <PoolTogetherView />
 }

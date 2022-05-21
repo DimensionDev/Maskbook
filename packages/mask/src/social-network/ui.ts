@@ -1,5 +1,4 @@
 import '../utils/debug/general'
-import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import type { SocialNetworkUI } from './types'
@@ -15,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
+import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
@@ -86,8 +85,10 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
 
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbox_enabled) ui.injection.toolbox?.(signal)
-    ui.injection.setupPrompt?.(signal)
+    if (Flags.toolbox_enabled) {
+        ui.injection.toolbox?.(signal, 'wallet')
+        ui.injection.toolbox?.(signal, 'application')
+    }
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
@@ -106,8 +107,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
-        if (ref.avatar && ref.identifier) {
-            Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar })
+        if (!(ref.avatar && ref.identifier)) return
+        Services.Identity.updateProfileInfo(ref.identifier, { avatarURL: ref.avatar, nickname: ref.nickname })
+        const currentProfile = getCurrentIdentifier()
+        if (currentProfile?.linkedPersona) {
+            Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
 
@@ -148,11 +152,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}
-        for (const namespace in i18n) {
+        for (const namespace of Object.keys(i18n)) {
             const ns = i18n[namespace]
-            for (const i18nKey in ns) {
+            for (const i18nKey of Object.keys(ns)) {
                 const pair = i18n[namespace][i18nKey]
-                for (const language in pair) {
+                for (const language of Object.keys(pair)) {
                     const value = pair[language]
                     i18NextInstance.addResource(language, namespace, i18nKey, value)
                 }
@@ -224,6 +228,19 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
         onStatusUpdate(id)
     }
+}
+
+export async function loadSocialNetworkUIs(): Promise<SocialNetworkUI.Definition[]> {
+    const defines = [...definedSocialNetworkUIs.values()].map(async (x) => x.load())
+    const uis = (await Promise.all(defines)).map((x) => x.default)
+
+    if (!defines) throw new Error('SNS adaptor load failed')
+
+    for (const ui of uis) {
+        definedSocialNetworkUIsResolved.set(ui.networkIdentifier, ui)
+    }
+
+    return uis
 }
 
 export async function loadSocialNetworkUI(identifier: string): Promise<SocialNetworkUI.Definition> {

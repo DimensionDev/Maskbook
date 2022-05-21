@@ -9,13 +9,15 @@ function addI18NBundle(instance: i18n, namespace: string, langs: Record<string, 
                 const [ns, langs] = (e as CustomEvent).detail
                 if (namespace !== ns) return
 
-                for (const lang in langs) {
+                for (const lang of Object.keys(langs)) {
                     instance.addResourceBundle(lang, namespace, removeEmptyString(langs[lang]))
                 }
             })
         }
-    } catch {}
-    for (const lang in langs) {
+    } catch {
+        // ignore
+    }
+    for (const lang of Object.keys(langs)) {
         instance.addResourceBundle(lang, namespace, removeEmptyString(langs[lang]))
     }
 }

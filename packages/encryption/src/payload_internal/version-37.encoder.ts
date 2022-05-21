@@ -14,7 +14,10 @@ const enum Index {
     data = 6,
 }
 export async function encode37(payload: PayloadWellFormed.Payload) {
-    const payload_arr: any[] = [0]
+    type KeyMaterials = Partial<Record<EC_KeyCurveEnum, Uint8Array>>
+    type AcceptableArray = Array<number | string | Uint8Array | null | Array<KeyMaterials | number | Uint8Array>>
+
+    const payload_arr: AcceptableArray = [0]
 
     if (payload.author.some) {
         const { network, userId } = payload.author.val
@@ -27,7 +30,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         const raw = await exportCryptoKeyToRaw(key)
         if (raw.ok) {
             if (algr === EC_KeyCurveEnum.secp256k1)
-                payload_arr[Index.authorPublicKey] = compressSecp256k1KeyRaw(raw.val)
+                payload_arr[Index.authorPublicKey] = await compressSecp256k1KeyRaw(raw.val)
             else payload_arr[Index.authorPublicKey] = raw.val
         } else {
             payload_arr[Index.authorPublicKey] = null
@@ -36,13 +39,13 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
     }
     if (payload.encryption.type === 'E2E') {
         const { ephemeralPublicKey, iv, ownersAESKeyEncrypted } = payload.encryption
-        const keyMaterials: any = {}
-        const subArr: any[] = [1, ownersAESKeyEncrypted, iv, keyMaterials]
+        const keyMaterials: Partial<Record<EC_KeyCurveEnum, Uint8Array>> = {}
+        const subArr: Array<KeyMaterials | number | Uint8Array> = [1, ownersAESKeyEncrypted, iv, keyMaterials]
         for (const [alg, key] of ephemeralPublicKey.entries()) {
             const k = await exportCryptoKeyToRaw(key)
             if (k.err) warn(key, k.err)
             else {
-                if (alg === EC_KeyCurveEnum.secp256k1) keyMaterials[alg] = compressSecp256k1KeyRaw(k.val)
+                if (alg === EC_KeyCurveEnum.secp256k1) keyMaterials[alg] = await compressSecp256k1KeyRaw(k.val)
                 else keyMaterials[alg] = k.val
             }
         }
