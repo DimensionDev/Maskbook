@@ -1,3 +1,5 @@
+import type { NonFungibleTokenTrait } from '@masknet/web3-shared-base'
+
 export interface ZoraHistory {
     blockTimestamp: string
     transaction: ZoraTransactionEvent
@@ -78,7 +80,7 @@ export interface MetadataInfo {
     animation_url: string
     image_url: string
     created_by: string
-    attributes: TokenAttributes[]
+    attributes: NonFungibleTokenTrait[]
     name: string
     description: string
     image: string
