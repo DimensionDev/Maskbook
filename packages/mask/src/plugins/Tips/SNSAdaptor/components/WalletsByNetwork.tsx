@@ -64,7 +64,7 @@ export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }
         <div className={classes.container}>
             <div className={classes.topBox}>
                 <Typography className={classes.commonFlexBox} sx={{ fontWeight: 'bold' }}>
-                    <network.icon className={classes.networkIcon} />
+                    <Icon type={network.icon} className={classes.networkIcon} />
                     {network.name}
                 </Typography>
                 <Icon

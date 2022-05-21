@@ -82,8 +82,10 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ],
     wrapperProps: {
         icon: (
-            <FileServiceIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(247, 147, 30, 0.2))' }}
+            <Icon
+                type="fileService"
+                size={24}
+                style={{ filter: 'drop-shadow(0px 6px 12px rgba(247, 147, 30, 0.2))' }}
             />
         ),
         backgroundGradient:
@@ -98,7 +100,7 @@ function onAttachedFile(payload: FileInfo) {
     return {
         text: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                <Icon type="fileService" size={16} />
                 Attached File: {name} ({formatFileSize(payload.size)})
             </div>
         ),

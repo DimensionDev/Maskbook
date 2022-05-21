@@ -11,7 +11,7 @@ import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
-import { PluginIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 
@@ -79,7 +79,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Button
                             size="small"
-                            startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
+                            startIcon={<Icon type="plugin" size={18} />}
                             variant="roundedDark"
                             onClick={() => onClick(x)}
                             sx={{

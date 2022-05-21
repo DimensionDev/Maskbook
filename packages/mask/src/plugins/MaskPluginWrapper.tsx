@@ -11,7 +11,7 @@ import {
     Plugin,
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
-import { ProviderByIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
@@ -101,7 +101,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        <ProviderByIcon style={{ width: 16, height: 16, marginLeft: 4 }} />
+                        <Icon type="provider" size={16} style={{ marginLeft: 4 }} />
                     </Link>
                 ) : null}
             </Box>

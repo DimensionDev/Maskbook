@@ -77,8 +77,10 @@ const sns: Plugin.SNSAdaptor.Definition<
     ],
     wrapperProps: {
         icon: (
-            <SwapColorfulIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(254, 156, 0, 0.2))' }}
+            <Icon
+                type="swapColorful"
+                size={24}
+                style={{ filter: 'drop-shadow(0px 6px 12px rgba(254, 156, 0, 0.2))' }}
             />
         ),
         backgroundGradient:

@@ -5,7 +5,7 @@ import { PopoverListTrigger } from './PopoverListTrigger'
 import { useState } from 'react'
 import { PopoverListItem } from './PopoverListItem'
 import { E2EUnavailableReason } from './CompositionUI'
-import { RightArrowIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 
@@ -154,7 +154,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                         props.onChange(EncryptionTargetType.E2E)
                         setAnchorEl(null)
                     }}
-                    itemTail={<RightArrowIcon className={classes.rightIcon} />}
+                    itemTail={<Icon type="rightArrow" className={classes.rightIcon} />}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.E2E}
                     title={t('compose_encrypt_visible_to_share')}

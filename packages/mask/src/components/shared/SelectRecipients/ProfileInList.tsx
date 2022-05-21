@@ -1,4 +1,4 @@
-import { CopyIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
@@ -163,7 +163,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             autoEscape
                             textToHighlight={textToHighlight}
                         />
-                        <CopyIcon className={classes.actionIcon} onClick={onCopyPubkey} />
+                        <Icon type="copy" className={classes.actionIcon} onClick={onCopyPubkey} />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
                 }

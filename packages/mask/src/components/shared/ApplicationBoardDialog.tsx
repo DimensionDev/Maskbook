@@ -8,7 +8,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { GearIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,17 +31,17 @@ export function ApplicationBoardDialog() {
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
 
-    const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
+    const { open, closeDialog: closeAppDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {
-        _closeDialog()
+        closeAppDialog()
         CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: 'timeline',
             open: false,
         })
-    }, [])
+    }, [closeAppDialog])
 
     return open ? (
         <InjectedDialog
@@ -49,7 +49,7 @@ export function ApplicationBoardDialog() {
             maxWidth="sm"
             onClose={closeDialog}
             title={t('applications')}
-            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
+            titleTail={<Icon type="gear" className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
                 {openSettings ? (

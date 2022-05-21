@@ -11,7 +11,7 @@ import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { Context } from '../../hooks/useContext'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { SharedIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     main: { padding: 8 },
@@ -63,7 +63,7 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
                         ))}
                     </Box>
                     <ActionButton
-                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
+                        startIcon={<Icon type="shared" size={18} />}
                         size="medium"
                         fullWidth
                         onClick={onShare}>

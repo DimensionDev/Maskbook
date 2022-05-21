@@ -18,7 +18,7 @@ import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -151,7 +151,7 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
-    const { address, t } = useContext(FindTrumanContext)
+    const { t } = useContext(FindTrumanContext)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         postType,
@@ -278,7 +278,7 @@ export function FindTruman(props: FindTrumanProps) {
                     ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
                         classes={{ button: classes.button }}
-                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                        startIcon={<Icon type="connect" size={18} />}
                         ActionButtonProps={{ variant: 'roundedDark' }}
                     />
                 </ChainBoundary>

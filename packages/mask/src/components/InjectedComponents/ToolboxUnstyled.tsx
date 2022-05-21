@@ -30,7 +30,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import GuideStep from '../GuideStep'
-import { AccountBalanceWalletIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { MaskIcon } from '../../resources/MaskIcon'
@@ -166,7 +166,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
-                            <AccountBalanceWalletIcon className={classes.iconFont} />
+                            <Icon type="accountBalanceWallet" className={classes.iconFont} />
                         )}
                     </ListItemIcon>
                     {mini ? null : (

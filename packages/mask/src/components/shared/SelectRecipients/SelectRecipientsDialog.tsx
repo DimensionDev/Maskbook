@@ -10,7 +10,7 @@ import type {
 } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
-import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -139,7 +139,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     onBlur={() => onSearch(search)}
                     startAdornment={
                         <InputAdornment position="start">
-                            <SearchIcon />
+                            <Icon type="search" />
                         </InputAdornment>
                     }
                     placeholder={t('post_dialog_share_with_input_placeholder')}
@@ -153,7 +153,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     <div className={classes.list}>
                         {searchedItems.length === 0 ? (
                             <div className={classes.empty}>
-                                <SearchEmptyIcon style={{ width: 36, height: 36 }} />
+                                <Icon type="search" size={36} />
                                 <Typography>
                                     {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                 </Typography>

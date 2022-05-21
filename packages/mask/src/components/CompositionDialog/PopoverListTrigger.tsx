@@ -1,4 +1,4 @@
-import { RightArrowIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Typography } from '@mui/material'
@@ -57,7 +57,7 @@ export function PopoverListTrigger({
                     setAnchorEl(anchorEl ? null : e.currentTarget)
                 }}>
                 <Typography className={classes.selected}>{selectedTitle}</Typography>
-                <RightArrowIcon />
+                <Icon type="rightArrow" />
             </div>
             <Popover
                 disablePortal
