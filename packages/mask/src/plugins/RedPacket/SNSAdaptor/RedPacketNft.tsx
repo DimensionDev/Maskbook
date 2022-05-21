@@ -18,7 +18,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -76,7 +76,12 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
+        backgroundColor: theme.palette.maskColor.dark,
         marginTop: '0 !important',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        color: 'white',
         minHeight: 38,
         height: 38,
     },
@@ -97,6 +102,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttonWrapper: {
         marginTop: 0,
+        display: 'flex',
+        padding: theme.spacing(0, 2, 1.5, 2),
     },
     loadingBox: {
         borderRadius: theme.spacing(1),
@@ -424,7 +431,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             ) : availability.isClaimedAll || availability.isCompleted ? null : (
                 <Grid container spacing={2} className={classes.buttonWrapper}>
                     <Grid item xs={availability.isClaimed ? 12 : 6}>
-                        <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">
+                        <Button
+                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            className={classes.button}
+                            fullWidth
+                            onClick={onShare}
+                            size="large"
+                            variant="contained">
                             {t('share')}
                         </Button>
                     </Grid>
