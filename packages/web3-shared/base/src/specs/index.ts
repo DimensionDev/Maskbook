@@ -228,6 +228,7 @@ export interface NonFungibleTokenCollection<ChainId> {
     slug: string
     address?: string
     symbol?: string
+    schema_name?: string
     balance?: number
     description?: string
     iconURL?: string

@@ -3,6 +3,7 @@ import { CircularProgress, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
 import { useImageChecker, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -62,7 +63,9 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
-    const { value: tokenDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, contractAddress, tokenId)
+    const { value: tokenDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, contractAddress, tokenId, {
+        chainId: chainId as ChainId,
+    })
     const { value: isImageToken } = useImageChecker(
         url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL,
     )

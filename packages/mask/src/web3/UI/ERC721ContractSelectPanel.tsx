@@ -1,16 +1,16 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { useAccount, useNonFungibleAssets, useNonFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     hasIcon: boolean
@@ -67,20 +67,15 @@ export interface ERC721TokenSelectPanelProps {
     label?: string
     chainId?: ChainId
     onContractChange: (contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
-    onBalanceChange?: (balance: number) => void
+    onBalanceChange: (balance: number) => void
+    balance: number
     contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet } = props
+    const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
-    const { value: balanceFromChain, loading: loadingFromChain } = useNonFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        contract?.address,
-        {
-            account,
-        },
-    )
+
     const { value: assets = [] } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const convertedAssets = assets.map((x) => ({
@@ -97,18 +92,6 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const { t } = useI18N()
 
-    const balanceFromRemote = convertedAssets
-        ? convertedAssets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
-        : undefined
-
-    const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
-
-    useEffect(() => {
-        onBalanceChange?.(balance)
-    }, [onBalanceChange, balance])
-
-    const loading = loadingFromChain && !balance
-
     // #region select contract
     const [id] = useState(uuid)
 
@@ -118,8 +101,9 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             (ev: SelectNftContractDialogEvent) => {
                 if (ev.open || !ev.contract || ev.uuid !== id) return
                 onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
+                onBalanceChange(ev.contract?.balance ?? 0)
             },
-            [id, onContractChange],
+            [id, onContractChange, onBalanceChange],
         ),
     )
 
@@ -138,11 +122,9 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {label ?? t('collectibles_name')}
                 </Typography>
-                {!contract?.address || !EthereumAddress.isValid(contract.address) ? null : loading ? (
-                    <CircularProgress size={16} />
-                ) : (
+                {!contract?.address || !EthereumAddress.isValid(contract.address) ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                        {t('wallet_balance')}: {balance ? balance : '0'}
+                        {t('wallet_balance')}: {balance}
                     </Typography>
                 )}
             </div>

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
+import { WyvernSchemaName } from 'opensea-js/lib/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
@@ -143,19 +144,21 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const contractList = assets.map(
-        (x) =>
-            ({
-                address: x.address,
-                chainId,
-                schema: SchemaType.ERC721,
-                name: x.name,
-                symbol: x.symbol,
-                baseURI: x.iconURL,
-                iconURL: x.iconURL,
-                balance: x.balance,
-            } as NonFungibleTokenContract<ChainId, SchemaType>),
-    )
+    const contractList = assets
+        .filter((x) => x.schema_name === WyvernSchemaName.ERC721)
+        .map(
+            (x) =>
+                ({
+                    address: x.address,
+                    chainId,
+                    schema: SchemaType.ERC721,
+                    name: x.name,
+                    symbol: x.symbol,
+                    baseURI: x.iconURL,
+                    iconURL: x.iconURL,
+                    balance: x.balance,
+                } as NonFungibleTokenContract<ChainId, SchemaType>),
+        )
 
     // #region fuse
     const fuse = useMemo(

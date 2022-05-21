@@ -404,7 +404,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setTokenDetailed(_tokenDetailed?.contract?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
-    }, [connection])
+    }, [connection, contract, tokenId, chainId])
 
     useEffect(() => {
         setTokenDetailed(undefined)

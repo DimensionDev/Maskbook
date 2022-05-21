@@ -414,6 +414,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     slug: x.slug,
                     address: x.primary_asset_contracts?.[0]?.address,
                     symbol: x.primary_asset_contracts?.[0]?.symbol,
+                    schema_name: x.primary_asset_contracts?.[0].schema_name,
                     description: x.description,
                     iconURL: x.image_url,
                     balance: x.owned_asset_count,

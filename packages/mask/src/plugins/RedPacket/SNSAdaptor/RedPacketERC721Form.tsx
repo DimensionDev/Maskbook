@@ -272,6 +272,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 <ERC721ContractSelectPanel
                     contract={contract}
                     onContractChange={setContract}
+                    balance={balance}
                     onBalanceChange={setBalance}
                 />
                 {contract && balance ? (

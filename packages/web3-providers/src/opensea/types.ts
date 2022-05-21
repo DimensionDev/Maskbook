@@ -129,6 +129,7 @@ export interface OpenSeaCollection extends OpenSeaFees {
     primary_asset_contracts: {
         address: string
         asset_contract_type: string
+        schema_name: string
         symbol: string
     }[]
 }
