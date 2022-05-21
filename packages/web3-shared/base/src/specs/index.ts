@@ -226,6 +226,9 @@ export interface NonFungibleTokenCollection<ChainId> {
     chainId: ChainId
     name: string
     slug: string
+    address?: string
+    symbol?: string
+    balance?: number
     description?: string
     iconURL?: string
     /** verified by provider */
@@ -699,6 +702,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         options?: Web3HubOptions,
     ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
+    /** Get all non-fungible collections of given account and ignore the pagnation options. */
+    getAllNonFungibleCollections?: (
+        address: string,
+        options?: Web3HubOptions,
+    ) => AsyncIterableIterator<NonFungibleTokenCollection<ChainId>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (
         chainId: ChainId,

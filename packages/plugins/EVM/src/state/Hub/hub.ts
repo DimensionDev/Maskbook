@@ -2,6 +2,7 @@ import { CoinGecko, DeBank, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from
 import {
     FungibleToken,
     NonFungibleToken,
+    NonFungibleTokenCollection,
     SourceType,
     FungibleAsset,
     HubOptions,
@@ -94,6 +95,12 @@ class Hub implements EVM_Hub {
             return NFTScan.getTokens(account, options)
         }
     }
+    getNonFungibleCollections(
+        account: string,
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+        return OpenSea.getCollections(account, options)
+    }
     getFungibleTokenPrice(
         chainId: ChainId,
         address: string,
@@ -161,6 +168,23 @@ class Hub implements EVM_Hub {
             const pageable = await this.getNonFungibleAssets(address, {
                 page: i,
                 size: this.sizePerPage,
+            })
+
+            yield* pageable.data
+
+            if (pageable.data.length === 0) return
+        }
+    }
+
+    async *getAllNonFungibleCollections(
+        address: string,
+        options?: HubOptions<ChainId>,
+    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
+        for (let i = 0; i < this.maxPageSize; i += 1) {
+            const pageable = await this.getNonFungibleCollections(address, {
+                page: i,
+                size: this.sizePerPage,
+                chainId: options?.chainId,
             })
 
             yield* pageable.data

@@ -407,15 +407,20 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         if (!response) return createPageable<NonFungibleTokenCollection<ChainId>>()
 
         const collections: NonFungibleTokenCollection<ChainId>[] =
-            response?.map((x) => ({
-                chainId,
-                name: x.name,
-                slug: x.slug,
-                description: x.description,
-                iconURL: x.image_url,
-                verified: ['approved', 'verified'].includes(x.safelist_request_status ?? ''),
-                createdAt: getUnixTime(new Date(x.created_date)),
-            })) ?? []
+            response
+                ?.map((x) => ({
+                    chainId,
+                    name: x.name,
+                    slug: x.slug,
+                    address: x.primary_asset_contracts?.[0]?.address,
+                    symbol: x.primary_asset_contracts?.[0]?.symbol,
+                    description: x.description,
+                    iconURL: x.image_url,
+                    balance: x.owned_asset_count,
+                    verified: ['approved', 'verified'].includes(x.safelist_request_status ?? ''),
+                    createdAt: getUnixTime(new Date(x.created_date)),
+                }))
+                .filter((x) => x.address) ?? []
 
         return createPageable(collections, page, collections.length === size)
     }

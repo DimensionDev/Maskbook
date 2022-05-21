@@ -10,7 +10,7 @@ import { EthereumAddress } from 'wallet.ts'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
-import { useChainId, useNonFungibleAssets, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { useChainId, useNonFungibleCollections, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -141,7 +141,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { value: assets = [], loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const contractList = assets.map(
         (x) =>
@@ -149,11 +149,11 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                 address: x.address,
                 chainId,
                 schema: SchemaType.ERC721,
-                name: x.contract?.name,
-                symbol: x.contract?.symbol,
-                baseURI: x.collection?.iconURL,
-                iconURL: x.collection?.iconURL,
-                balance: x.contract?.balance,
+                name: x.name,
+                symbol: x.symbol,
+                baseURI: x.iconURL,
+                iconURL: x.iconURL,
+                balance: x.balance,
             } as NonFungibleTokenContract<ChainId, SchemaType>),
     )
 
@@ -262,11 +262,11 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-
+    console.log({ contract })
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract)}>
-                <Avatar className={classes.icon} src={contract.logoURL} />
+                <Avatar className={classes.icon} src={contract.iconURL} />
                 <Typography className={classes.contractName}>
                     {contract.name}{' '}
                     {contract.symbol && contract.symbol !== 'UNKNOWN' ? '(' + contract.symbol + ')' : ''}
