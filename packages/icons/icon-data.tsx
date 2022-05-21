@@ -319,7 +319,7 @@ export const copyIcon = (
     </svg>
 )
 export const cramIcon = new URL('./general/Cram.svg', import.meta.url).href
-export const cryptoArtIcon = new URL('./general/CryptoArt.svg', import.meta.url).href
+export const cryptoArtIcon = new URL('./general/CryptoArt.png', import.meta.url).href
 export const dashboardIcon = new URL('./general/Dashboard.svg', import.meta.url).href
 export const defaultTokenIconDarkIcon = new URL('./general/DefaultTokenIcon.dark.svg', import.meta.url).href
 export const defaultTokenIconDimIcon = new URL('./general/DefaultTokenIcon.dim.svg', import.meta.url).href
@@ -662,7 +662,7 @@ export const cyberConnectLightIcon = new URL('./plugins/CyberConnect.light.svg',
 export const cyberConnectIcon = new URL('./plugins/CyberConnect.svg', import.meta.url).href
 export const dhedgeIcon = new URL('./plugins/Dhedge.svg', import.meta.url).href
 export const fileServiceIcon = new URL('./plugins/FileService.svg', import.meta.url).href
-export const findTrumanIcon = new URL('./plugins/FindTruman.svg', import.meta.url).href
+export const findTrumanIcon = new URL('./plugins/FindTruman.png', import.meta.url).href
 export const gitcoinIcon = new URL('./plugins/Gitcoin.svg', import.meta.url).href
 export const goodGhostingDarkIcon = new URL('./plugins/GoodGhosting.dark.svg', import.meta.url).href
 export const goodGhostingLightIcon = new URL('./plugins/GoodGhosting.light.svg', import.meta.url).href

@@ -51,9 +51,9 @@ function handleNormalIcon(code, name) {
     writefile(`${name}.svg`, code)
 }
 
-const responseIconMark = '= createPaletteAwareIcon('
-function handleResponseIcon(code, name) {
-    const firstRoundBracket = code.indexOf(responseIconMark)
+const responsiveIconMark = '= createPaletteAwareIcon('
+function handleResponsiveIcon(code, name) {
+    const firstRoundBracket = code.indexOf(responsiveIconMark)
     const lastRoundBracket = code.lastIndexOf(')') + 1
     const lastBracket = code.lastIndexOf('>') + 1
     let [_, lightCode, darkCode, dimCode] = code
@@ -87,8 +87,8 @@ files.forEach((file) => {
         const name = file.replace(/\.tsx/, '')
         if (code.includes('= createIcon(')) {
             handleNormalIcon(code, name)
-        } else if (code.includes(responseIconMark)) {
-            handleResponseIcon(code, name)
+        } else if (code.includes(responsiveIconMark)) {
+            handleResponsiveIcon(code, name)
         }
     } catch (err) {
         console.log(err)
