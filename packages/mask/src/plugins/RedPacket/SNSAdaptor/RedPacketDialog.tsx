@@ -210,7 +210,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 password: privateKey,
                 contract_version,
             }
-            RedPacketRPC.discoverRedPacket(record)
+            RedPacketRPC.discoverRedPacket(record, chainId)
         }
 
         setTransactionDialog({
@@ -221,7 +221,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 symbol: createSettings?.token.symbol,
             }),
         })
-    }, [createState /* update tx dialog only if state changed */])
+    }, [chainId, createState])
     // #endregion
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)

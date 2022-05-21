@@ -105,6 +105,7 @@ export enum NFTSelectOption {
 
 export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_random'> {
     token: NonFungibleToken<ChainId, SchemaType>
+    contract_version: number
     token_contract: NonFungibleTokenContract<ChainId, SchemaType>
     address: string
     chain_id: number

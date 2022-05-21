@@ -6,9 +6,9 @@ import * as nftDb from './databaseForNft'
 
 export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft'
 
-export async function discoverRedPacket(record: RedPacketRecord) {
+export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainId) {
     if (record.contract_version === 1) {
-        const txid = await subgraph.getRedPacketTxid(record.id)
+        const txid = await subgraph.getRedPacketTxid(chainId, record.id)
         if (!txid) return
         record.id = txid
     }
@@ -30,7 +30,7 @@ export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPa
 }
 
 export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {
-    const histories = await subgraph.getNftRedPacketHistory(address, page)
+    const histories = await subgraph.getNftRedPacketHistory(chainId, address, page)
     const historiesWithPassword = []
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)
