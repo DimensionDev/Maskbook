@@ -141,6 +141,7 @@ export async function fetchTwitterLookups(tokens: IdeaToken[]) {
     const twitterLookups = (await response.json())?.data
 
     // create a hashmap in order to optimize twitter username lookups
+    // eslint-disable-next-line unicorn/no-array-reduce
     const twitterLookupsToDictionary = twitterLookups.reduce(
         (result: { [x: string]: { username: string } }, lookup: { username: string }) => {
             result[lookup.username.toLowerCase()] = lookup
