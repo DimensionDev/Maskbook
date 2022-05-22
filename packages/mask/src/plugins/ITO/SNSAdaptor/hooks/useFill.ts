@@ -64,7 +64,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { contract: ITO_Contract } = useITO_Contract()
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
@@ -170,8 +170,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
-    const { contract: ITO_Contract } = useITO_Contract()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
 
     return useAsync(async () => {
         if (!poolSettings || !ITO_Contract) return null

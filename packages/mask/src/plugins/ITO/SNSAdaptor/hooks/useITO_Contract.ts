@@ -8,7 +8,7 @@ import { useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/plugin-infra/web3-evm'
 
 export function useITO_Contract(chainId?: ChainId, contractAddress?: string) {
-    const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const ITO_CONTRACT = useContract<ITO>(chainId, ITO_CONTRACT_ADDRESS, ITO_ABI as AbiItem[])
     const ITO2_CONTRACT = useContract<ITO2>(chainId, ITO2_CONTRACT_ADDRESS, ITO2_ABI as AbiItem[])
 
