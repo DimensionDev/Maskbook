@@ -8,8 +8,8 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { Account, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { ExternalLink } from 'react-feather'
 import { useI18N } from '../../../utils'
@@ -94,7 +94,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface CurrentWalletBox {
-    wallet: Wallet
+    wallet: Account<ChainId> & {
+        providerType: ProviderType
+        address?: string
+    }
     walletName?: string
     changeWallet: () => void
     notInPop?: boolean
@@ -108,7 +111,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
     const account = notInPop ? frontAccount : wallet.address
-    const { Others } = useWeb3State() ?? {}
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) ?? {}
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
     return account ? (
         <section className={classes.currentAccount}>
@@ -144,7 +147,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
 
                     <Link
                         className={classes.link}
-                        href={Others?.explorerResolver.addressLink?.(wallet.chainId, wallet.account) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(wallet.chainId, account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

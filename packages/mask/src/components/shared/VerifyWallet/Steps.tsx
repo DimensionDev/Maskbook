@@ -15,7 +15,8 @@ import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import { LoadingButton } from '@mui/lab'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import type { Wallet } from '@masknet/web3-shared-base'
+import type { Account } from '@masknet/web3-shared-base'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -98,7 +99,10 @@ export enum SignSteps {
 interface StepsProps {
     step: SignSteps
     nickname?: string
-    wallet: Wallet
+    wallet: Account<ChainId> & {
+        providerType: ProviderType
+        address?: string
+    }
     disableConfirm?: boolean
     confirmLoading: boolean
     notInPop?: boolean

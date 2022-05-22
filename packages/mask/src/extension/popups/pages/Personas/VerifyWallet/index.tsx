@@ -38,8 +38,8 @@ const VerifyWallet = memo(() => {
 
     const wallet: Account<ChainId> & {
         providerType: ProviderType
+        address?: string
     } = location.state.usr
-
     const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return EMPTY_LIST
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
