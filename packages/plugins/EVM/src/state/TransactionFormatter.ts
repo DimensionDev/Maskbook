@@ -20,7 +20,7 @@ import {
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { readABI } from './TransactionFormatter/abi'
-import { createConnection } from './Protocol/connection'
+import { createConnection } from './Connection/connection'
 import type { TransactionDescriptor } from './TransactionFormatter/types'
 
 // built-in descriptors

@@ -876,7 +876,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Discconect with the provider. */
     disconect: (providerType: ProviderType) => Promise<void>
 }
-export interface ProtocolState<
+export interface ConnectionState<
     ChainId,
     SchemaType,
     ProviderType,

@@ -6,7 +6,7 @@ import { getTokenAmountDescription } from '../utils'
 
 export class BaseTransactionDescriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId, string | undefined>) {
-        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
 

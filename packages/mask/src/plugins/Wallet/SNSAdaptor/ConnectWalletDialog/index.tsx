@@ -37,7 +37,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    const { Protocol, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
+    const { Connection: Protocol, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true

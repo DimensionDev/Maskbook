@@ -4,7 +4,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NameServiceState } from '@masknet/plugin-infra/web3'
 import { ChainId, formatEthereumAddress, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { Providers } from './Protocol/provider'
+import { Providers } from './Connection/provider'
 
 export class NameService extends NameServiceState<ChainId> {
     private ens: ENS | null = null

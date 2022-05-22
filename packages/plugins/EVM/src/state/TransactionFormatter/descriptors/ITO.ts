@@ -9,7 +9,7 @@ export class ITODescriptor implements TransactionDescriptor {
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 
-        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
             account: context.from,
         })

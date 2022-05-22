@@ -8,7 +8,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
         if (!context.name) return
 
-        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
 

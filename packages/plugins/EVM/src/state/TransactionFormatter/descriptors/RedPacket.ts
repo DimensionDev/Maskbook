@@ -13,7 +13,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
         const { RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(context.chainId)
 
         if (isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4)) {
-            const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+            const connection = await Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,
                 account: context.from,
             })

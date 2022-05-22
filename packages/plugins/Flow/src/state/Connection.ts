@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { CurrentUserObject } from '@blocto/fcl'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProtocolState } from '@masknet/plugin-infra/web3'
+import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
     ChainId,
     ProviderType,
@@ -12,14 +12,14 @@ import type {
     Transaction,
     TransactionDetailed,
 } from '@masknet/web3-shared-flow'
-import { createConnection } from './Protocol/connection'
+import { createConnection } from './Connection/connection'
 
-export interface ProtocolStorage {
+export interface ConnectionStorage {
     chainId: ChainId
     user: CurrentUserObject | null
 }
 
-export class Protocol extends ProtocolState<
+export class Connection extends ConnectionState<
     ChainId,
     SchemaType,
     ProviderType,

@@ -9,7 +9,7 @@ import type {
     TransactionState,
     TransactionFormatterState,
     TransactionWatcherState,
-    ProtocolState,
+    ConnectionState,
     ProviderState,
     WalletState,
     OthersState,
@@ -44,7 +44,7 @@ export declare namespace Web3Plugin {
             Transaction?: TransactionState<ChainId, Transaction>
             TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
             TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-            Protocol?: ProtocolState<
+            Connection?: ConnectionState<
                 ChainId,
                 SchemaType,
                 ProviderType,

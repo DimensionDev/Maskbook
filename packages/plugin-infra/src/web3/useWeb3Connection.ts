@@ -12,7 +12,7 @@ export function useWeb3Connection<T extends NetworkPluginID>(
 ) {
     type GetConnection = (options?: Web3Helper.Web3ConnectionOptions<T>) => Promise<Web3Helper.Web3Connection<T>>
 
-    const { Protocol } = useWeb3State(pluginID)
+    const { Connection: Protocol } = useWeb3State(pluginID)
     const chainId = useChainId(pluginID)
     const account = useAccount(pluginID)
     const providerType = useProviderType(pluginID)

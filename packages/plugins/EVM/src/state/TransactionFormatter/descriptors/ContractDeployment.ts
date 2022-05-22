@@ -5,7 +5,7 @@ import { Web3StateSettings } from '../../../settings'
 
 export class ContractDepolymentDescriptor {
     async compute(context: TransactionContext<ChainId>) {
-        const connection = await Web3StateSettings.value.Protocol?.getConnection?.({
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
 

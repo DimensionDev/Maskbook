@@ -5,14 +5,14 @@ import { RiskWarning } from './RiskWarning'
 import { Token } from './Token'
 import { Transaction } from './Transaction'
 import { NameService } from './NameService'
-import { Protocol } from './Protocol'
+import { Protocol } from './Connection'
 import { Provider } from './Provider'
 import { Wallet } from './Wallet'
 import { Others } from './Others'
 import { Settings } from './Settings'
 import { TransactionFormatter } from './TransactionFormatter'
 import { TransactionWatcher } from './TransactionWatcher'
-import type { EVM_Web3State } from './Protocol/types'
+import type { EVM_Web3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
@@ -47,7 +47,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         }),
         TransactionFormatter: new TransactionFormatter(context),
         TransactionWatcher: new TransactionWatcher(context),
-        Protocol: new Protocol(context, {
+        Connection: new Protocol(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
             providerType: Provider_.providerType,
@@ -57,4 +57,4 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
     }
 }
 
-export * from './Protocol/types'
+export * from './Connection/types'

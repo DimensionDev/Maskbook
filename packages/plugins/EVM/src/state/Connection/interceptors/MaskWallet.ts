@@ -5,7 +5,7 @@ import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Protocol } = Web3StateSettings.value
+        const { Connection: Protocol } = Web3StateSettings.value
         const { hasNativeAPI, send, account, chainId, signTransaction, signPersonalMessage, signTypedData } =
             SharedContextSettings.value
 

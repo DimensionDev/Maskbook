@@ -14,7 +14,7 @@ import {
     Web3Provider,
 } from '@masknet/web3-shared-flow'
 import { SharedContextSettings } from '../settings'
-import { Providers } from './Protocol/provider'
+import { Providers } from './Connection/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {

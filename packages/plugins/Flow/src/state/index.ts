@@ -2,12 +2,12 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { AddressBook } from './AddressBook'
 import { Hub } from './Hub'
 import { Provider } from './Provider'
-import { Protocol } from './Protocol'
+import { Connection } from './Connection'
 import { Settings } from './Settings'
 import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Others } from './Others'
-import type { FlowWeb3State } from './Protocol/types'
+import type { FlowWeb3State } from './Connection/types'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3State {
     const Provider_ = new Provider(context)
@@ -25,7 +25,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3S
             account: Provider_.account,
         }),
         Provider: Provider_,
-        Protocol: new Protocol(context, {
+        Connection: new Connection(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
             providerType: Provider_.providerType,

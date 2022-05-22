@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
-import type { Connection, ConnectionOptions, ProtocolState as Web3ProtocolState } from '@masknet/web3-shared-base'
+import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
 
-export class ProtocolState<
+export class ConnectionState<
     ChainId,
     SchemaType,
     ProviderType,
@@ -17,7 +17,7 @@ export class ProtocolState<
         Transaction
     >,
 > implements
-        Web3ProtocolState<
+Web3ConnectionState<
             ChainId,
             SchemaType,
             ProviderType,

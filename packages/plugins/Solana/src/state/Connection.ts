@@ -1,20 +1,20 @@
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProtocolState } from '@masknet/plugin-infra/web3'
+import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
-    Block,
     ChainId,
     ProviderType,
     SchemaType,
+    Web3,
     Signature,
+    Block,
     Transaction,
     TransactionDetailed,
     TransactionSignature,
-    Web3,
-} from '@masknet/web3-shared-evm'
-import { createConnection } from './Protocol/connection'
+} from '@masknet/web3-shared-solana'
+import { createConnection } from './Connection/connection'
 
-export class Protocol extends ProtocolState<
+export class Connection extends ConnectionState<
     ChainId,
     SchemaType,
     ProviderType,

@@ -5,7 +5,7 @@ import type {
     HubOptions,
     NetworkDescriptor,
     NetworkPluginID,
-    ProtocolState,
+    ConnectionState,
     ProviderDescriptor,
     ProviderState,
 } from '@masknet/web3-shared-base'
@@ -77,9 +77,9 @@ export declare namespace Web3Helper {
         ? never
         : ProviderState<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
 
-    export type Web3ProtocolState<T extends NetworkPluginID = never> = T extends never
+    export type Web3ConnectionState<T extends NetworkPluginID = never> = T extends never
         ? never
-        : ProtocolState<
+        : ConnectionState<
               Definition[T]['ChainId'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],

@@ -13,7 +13,7 @@ import {
     Web3Provider,
     Web3,
 } from '@masknet/web3-shared-solana'
-import { Providers } from './Protocol/provider'
+import { Providers } from './Connection/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {
