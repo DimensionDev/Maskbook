@@ -6,6 +6,10 @@ import { aaveLazyResolver } from './aave/AAVEResolver'
 import { alpacaLazyResolver } from './alpaca/pairs'
 import { moolaLazyResolver } from './moola/pairs'
 
+import { aurigamiLazyResolver } from './aurigami/pairs'
+import { giestLazyResolver } from './giest/pairs'
+import { tranquilLazyResolver } from './tranquil/pairs'
+
 export const SavingsProtocols = [...LDO_PAIRS]
 
 export const LazyProtocolsResolvers = [
@@ -14,4 +18,7 @@ export const LazyProtocolsResolvers = [
     benqiLazyResolver,
     alpacaLazyResolver,
     moolaLazyResolver,
+    aurigamiLazyResolver,
+    giestLazyResolver,
+    tranquilLazyResolver,
 ]
