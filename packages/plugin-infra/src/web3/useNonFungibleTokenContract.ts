@@ -17,7 +17,7 @@ export function useNonFungibleTokenContract<T extends NetworkPluginID>(
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection || !address || !id) return null
+        if (!connection || !address || !id) return
         return (connection.getNonFungibleTokenContract as GetNonFungibleTokenContract)(address, id)
     }, [address, id, connection])
 }

@@ -17,7 +17,7 @@ export class ConnectionState<
         Transaction
     >,
 > implements
-Web3ConnectionState<
+        Web3ConnectionState<
             ChainId,
             SchemaType,
             ProviderType,

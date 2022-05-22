@@ -101,7 +101,6 @@ interface StepsProps {
     nickname?: string
     wallet: Account<ChainId> & {
         providerType: ProviderType
-        address?: string
     }
     disableConfirm?: boolean
     confirmLoading: boolean
