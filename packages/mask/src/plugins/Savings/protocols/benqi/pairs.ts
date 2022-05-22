@@ -13,7 +13,7 @@ export type RewardToken = {
 const qiQiReward = 0
 const qiAVAXReward = 1
 
-const rewardTokens: Array<RewardToken> = [
+const rewardTokens: RewardToken[] = [
     {
         symbol: 'qiQI',
         rewardType: qiQiReward,

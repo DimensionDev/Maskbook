@@ -109,10 +109,8 @@ export default class AAVELikeProtocol implements SavingsProtocol {
                     gas: gasEstimate.toNumber(),
                 })
             }
-            return null
-        } catch (error) {
-            throw error
-        }
+        } catch (error) {}
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {

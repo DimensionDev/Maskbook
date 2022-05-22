@@ -94,9 +94,8 @@ export class LidoProtocol implements SavingsProtocol {
                 value: value.toString(),
                 gas: 300000,
             })
-        } catch (error) {
-            throw error
-        }
+        } catch (error) {}
+        return null
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
