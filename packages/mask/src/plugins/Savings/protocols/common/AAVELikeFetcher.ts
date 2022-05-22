@@ -57,8 +57,10 @@ export default class AAVELikeFetcher {
         if (poolAddress === null) return []
         const detailedAaveTokens = await getFungibleTokensDetailed(allTokens, web3, chainId)
         const allPairs = splitToPair(detailedAaveTokens)
-        return allPairs.map((pair: [FungibleTokenDetailed, FungibleTokenDetailed]) => {
-            return [pair, poolAddress, dataProviderAddress]
+        const pairsWithPool: Array<[[FungibleTokenDetailed, FungibleTokenDetailed], string, string]> = []
+        allPairs.forEach((pair: [FungibleTokenDetailed, FungibleTokenDetailed]) => {
+            pairsWithPool.push([pair, poolAddress, dataProviderAddress])
         })
+        return pairsWithPool
     }
 }
