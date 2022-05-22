@@ -1,8 +1,21 @@
 import { useCallback } from 'react'
-import { ERC20TokenListProps, usePickToken } from '@masknet/shared'
+import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
+import { usePickToken } from '@masknet/shared'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
+
+interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
+    targetChainId?: ChainId
+    whitelist?: string[]
+    blacklist?: string[]
+    tokens?: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
+    selectedTokens?: string[]
+    disableSearch?: boolean
+    onSelect?(token: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native> | null): void
+    FixedSizeListProps?: Partial<MaskFixedSizeListProps>
+    SearchTextFieldProps?: MaskTextFieldProps
+}
 
 export interface SelectTokenAmountPanelProps {
     amount: string

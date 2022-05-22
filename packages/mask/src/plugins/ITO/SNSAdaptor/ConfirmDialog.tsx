@@ -146,10 +146,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isNativeTokenAddress(poolSettings?.token) ? null : (
+                        {isNativeTokenAddress(poolSettings?.token?.address) ? null : (
                             <Link
                                 className={classes.link}
-                                href={explorerResolver.fungibleTokenLink(chainId, poolSettings?.token!)}
+                                href={explorerResolver.fungibleTokenLink(chainId, poolSettings?.token?.address!)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={stop}>

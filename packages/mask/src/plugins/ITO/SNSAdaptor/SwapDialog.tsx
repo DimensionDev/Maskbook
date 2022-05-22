@@ -26,12 +26,12 @@ import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
 import { SwapStatus } from './SwapGuide'
-import { useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SwapDialogProps extends withClasses<'root'> {
-    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
+    exchangeTokens: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
     payload: JSON_PayloadInMask
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -117,6 +117,7 @@ export function SwapDialog(props: SwapDialogProps) {
     } = props
 
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const classes = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
@@ -189,10 +190,9 @@ export function SwapDialog(props: SwapDialogProps) {
     )
     const onSwap = useCallback(async () => {
         await swapCallback()
-        if (payload.token.type !== SchemaType.ERC20) return
-        await WalletRPC.addToken(payload.token)
-        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
-    }, [swapCallback, payload.token.address])
+        if (payload.token.schema !== SchemaType.ERC20) return
+        await Token?.addToken?.(payload.token)
+    }, [swapCallback, payload.token, Token])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,

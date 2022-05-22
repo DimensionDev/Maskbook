@@ -27,8 +27,9 @@ import { fromHex, toHex } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
-import { checkAvailability } from '../../Worker/apis/checkAvailability'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { checkAvailability } from '../utils/checkAvailability'
+import type { EVM_Connection } from '@masknet/plugin-evm'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export function useSwapCallback(
@@ -41,6 +42,7 @@ export function useSwapCallback(
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)
     const [swapState, setSwapState] = useTransactionState()
@@ -132,6 +134,7 @@ export function useSwapCallback(
                 account,
                 payload.contract_address,
                 chainId,
+                connection,
                 isSameAddress(payload.contract_address, ITO_CONTRACT_ADDRESS),
             )
             if (isZero(availability.remaining)) {
@@ -221,7 +224,17 @@ export function useSwapCallback(
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.ERROR, onFailed)
         })
-    }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
+    }, [
+        ITO_Contract,
+        chainId,
+        connection,
+        qualificationContract,
+        account,
+        payload,
+        total,
+        token.address,
+        isQualificationHasLucky,
+    ])
 
     const resetCallback = useCallback(() => {
         setSwapState({

@@ -13,15 +13,13 @@ import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { formatBalance, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { TransactionStateType, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { TransactionStateType, explorerResolver, useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../utils'
 import { Flags } from '../../../../shared'
-import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
-import { NftAirdropCard } from './NftAirdropCard'
 import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
@@ -230,23 +228,20 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const {
-        value: campaignInfos,
-        loading: loadingAirdrop,
-        retry: retryAirdrop,
-    } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         (_swappedTokens ?? []).map((t) => t.token.address) ?? [],
-        { chainId },
+        {
+            chainId,
+        },
     )
     const loading = _loading || loadingTokenDetailed
     const swappedTokens = _swappedTokens?.map((t) => {
         const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
-        if (tokenDetailed) t.token = tokenDetailed
+        if (tokenDetailed) t.token = tokenDetailed as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
         return t
     })
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
@@ -254,9 +249,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
-        shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
+        shortITOwrapper: !swappedTokens || swappedTokens.length === 0,
     })
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
@@ -296,10 +290,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         }
         const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
         const summary = claimableTokens
-            ? 'Claim ' +
-              new Intl.ListFormat('en').format(
-                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-              )
+            ? 'Claim ' + claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol)
             : ''
         setClaimTransactionDialog({
             open: true,
@@ -325,16 +316,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {(showNftAirdrop || loadingAirdrop) &&
-                        chainId === ChainId.Matic &&
-                        Flags.nft_airdrop_enabled ? (
-                            <NftAirdropCard
-                                campaignInfos={campaignInfos!}
-                                loading={loadingAirdrop}
-                                retry={retryAirdrop}
-                            />
-                        ) : null}
-
                         {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
                                 <CircularProgress size={24} />
@@ -343,11 +324,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             <div className={classes.content}>
                                 <Content swappedTokens={swappedTokens} chainId={chainId} />
                             </div>
-                        ) : !showNftAirdrop && !loadingAirdrop ? (
+                        ) : (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
-                        ) : null}
+                        )}
                         {(swappedTokens && swappedTokens.length > 0) ||
                         (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>

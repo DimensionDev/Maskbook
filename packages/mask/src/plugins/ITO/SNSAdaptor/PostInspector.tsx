@@ -4,9 +4,9 @@ import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
-import { NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ThemeProvider } from '@mui/material'
-import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
 import { useClassicMaskSNSPluginTheme } from '../../../utils'
 
 export interface PostInspectorProps {
@@ -45,9 +45,13 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                        schema: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                         chainId: _payload.chain_id,
-                    } as Pick<FungibleTokenInitial, 'address' | 'type'>),
+                        type: TokenType.Fungible,
+                    } as Pick<
+                        FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                        'address' | 'type' | 'schema' | 'chainId'
+                    >),
             ),
         [JSON.stringify(_payload.exchange_tokens)],
     )
@@ -56,7 +60,9 @@ export function PostInspector(props: PostInspectorProps) {
         value: exchangeTokensDetailed,
         loading: loadingExchangeTokensDetailed,
         retry: retryExchangeTokensDetailed,
-    } = useFungibleTokensDetailed(exchangeFungibleTokens, _payload.chain_id)
+    } = useFungibleTokens(NetworkPluginID.PLUGIN_EVM, (exchangeFungibleTokens ?? []).map((t) => t.address) ?? [], {
+        chainId: _payload.chain_id,
+    })
 
     const retry = useCallback(() => {
         retryPayload()
@@ -79,7 +85,14 @@ export function PostInspector(props: PostInspectorProps) {
                 pid={pid}
                 payload={
                     typeof token === 'string'
-                        ? { ..._payload, token: tokenDetailed!, exchange_tokens: exchangeTokensDetailed! }
+                        ? {
+                              ..._payload,
+                              token: tokenDetailed! as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                              exchange_tokens: exchangeTokensDetailed! as FungibleToken<
+                                  ChainId,
+                                  SchemaType.ERC20 | SchemaType.Native
+                              >[],
+                          }
                         : _payload
                 }
             />

@@ -13,7 +13,6 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
-import Services from '../../../extension/service'
 import { TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
@@ -22,7 +21,7 @@ import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface StyleProps {
@@ -58,6 +57,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
@@ -155,7 +155,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
+                payload.password =
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personaSign', {
+                        account,
+                    })) ?? ''
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

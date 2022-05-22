@@ -1,5 +1,5 @@
-import { ZERO, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { ZERO, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { useTokenConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -102,9 +102,11 @@ export function SwapGuide(props: SwapGuideProps) {
                         case SwapStatus.Unlock:
                             return (
                                 <UnlockDialog
-                                    tokens={payload.exchange_tokens.filter(
-                                        (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
-                                    )}
+                                    tokens={
+                                        payload.exchange_tokens.filter(
+                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
+                                        ) as FungibleToken<ChainId, SchemaType.ERC20>[]
+                                    }
                                 />
                             )
                         case SwapStatus.Swap:

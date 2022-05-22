@@ -34,7 +34,7 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
+    exchangeTokens: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
     token?: FungibleToken<ChainId, SchemaType.ERC20>
     advanceSettingData: AdvanceSettingData
 }
@@ -55,7 +55,7 @@ type paramsObjType = {
     now: number
     invalidTokenAt: number
     exchangeAmounts: string[]
-    exchangeTokens: FungibleToken<ChainId, SchemaType>[]
+    exchangeTokens: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
     token: FungibleToken<ChainId, SchemaType.ERC20> | undefined
 }
 

@@ -1,6 +1,13 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { SchemaType, TransactionStateType, useTokenConstants, chainResolver } from '@masknet/web3-shared-evm'
-import { isZero, formatBalance, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { SchemaType, TransactionStateType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
+import {
+    isZero,
+    formatBalance,
+    NetworkPluginID,
+    isSameAddress,
+    FungibleToken,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -144,8 +151,12 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
-                  } as Pick<FungibleTokenInitial, 'address' | 'type'>),
+                      schema: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                      type: TokenType.Fungible,
+                  } as Pick<
+                      FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                      'address' | 'type' | 'schema'
+                  >),
           )
         : []
 
@@ -230,7 +241,7 @@ export function PoolInList(props: PoolInListProps) {
                         classes={{ icon: classes.icon }}
                         address={poolToken.address}
                         name={poolToken.symbol}
-                        logoURL={poolToken.logoURI}
+                        logoURL={poolToken.logoURL}
                     />
                 </Box>
                 <Box className={classes.content}>

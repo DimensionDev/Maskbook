@@ -1,5 +1,5 @@
-import { SchemaType, formatAmount, useITOConstants } from '@masknet/web3-shared-evm'
-import { formatBalance, isGreaterThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isGreaterThan, isZero, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -235,10 +235,13 @@ export function CreateForm(props: CreateFormProps) {
             name: senderName,
             title: message,
             limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),
-            token: first?.token,
+            token: first?.token as FungibleToken<ChainId, SchemaType.ERC20>,
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
-            exchangeTokens: rest.map((item) => item.token!),
+            exchangeTokens: rest.map((item) => item.token!) as FungibleToken<
+                ChainId,
+                SchemaType.ERC20 | SchemaType.Native
+            >[],
             qualificationAddress: qualificationAddress_,
             startTime,
             endTime,

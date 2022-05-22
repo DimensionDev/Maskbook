@@ -3,7 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/m
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { isNativeTokenAddress, TransactionStateType } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, TransactionStateType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -17,7 +17,7 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
@@ -220,7 +220,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             }}
                             FungibleTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: paymentTokens,
+                                tokens: paymentTokens as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[],
                                 whitelist: paymentTokens.map((x: any) => x.address),
                             }}
                         />

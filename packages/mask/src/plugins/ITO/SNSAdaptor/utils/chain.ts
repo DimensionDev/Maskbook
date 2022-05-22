@@ -3,13 +3,13 @@ import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import isEqual from 'date-fns/isEqual'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, getExplorerConstants, getITOConstants, SchemaType } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
+import type { EVM_Connection } from '@masknet/plugin-evm'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types'
 import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
-import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
 import { checkAvailability } from './checkAvailability'
 
 const interFace = new Interface(ITO_ABI)
@@ -27,6 +27,7 @@ export async function getAllPoolsAsSeller(
     startBlock: number | undefined,
     endBlock: number,
     sellerAddress: string,
+    connection: EVM_Connection,
 ) {
     const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS } = getITOConstants(chainId)
@@ -126,7 +127,7 @@ export async function getAllPoolsAsSeller(
 
     const eventLogResponse = await Promise.allSettled(
         payloadList.map(async (entity) => {
-            const result = await getTransactionReceipt(entity.hash)
+            const result = await connection.getTransactionReceipt(entity.hash, { chainId })
             if (!result) return null
 
             const log = result.logs.find((log) => isSameAddress(log.address, ITO2_CONTRACT_ADDRESS))
@@ -147,6 +148,7 @@ export async function getAllPoolsAsSeller(
                 entity.payload.seller.address,
                 entity.payload.contract_address,
                 chainId,
+                connection,
             )
 
             entity.payload.total_remaining = new BigNumber(data.remaining).toString()
@@ -166,7 +168,12 @@ export async function getAllPoolsAsSeller(
         .filter((v) => Boolean(v)) as PoolFromNetwork[]
 }
 
-export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapperAddress: string) {
+export async function getClaimAllPools(
+    chainId: ChainId,
+    endBlock: number,
+    swapperAddress: string,
+    connection: EVM_Connection,
+) {
     const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS, ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: startBlock } = getITOConstants(chainId)
 
@@ -225,7 +232,13 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
     const swapRawFilteredData = (
         await Promise.allSettled(
             swapRawData.map(async (value) => {
-                const availability = await checkAvailability(value.pid, swapperAddress, ITO2_CONTRACT_ADDRESS, chainId)
+                const availability = await checkAvailability(
+                    value.pid,
+                    swapperAddress,
+                    ITO2_CONTRACT_ADDRESS,
+                    chainId,
+                    connection,
+                )
                 const unlockTime = new Date(Number(availability.unlock_time) * 1000)
                 if (isEqual(unlockTime, new Date(ITO_CONTRACT_BASE_TIMESTAMP)) || availability.claimed) return null
 
@@ -245,7 +258,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
     const swappedTokenUnmergedList = (
         await Promise.allSettled(
             swapRawFilteredData.map(async (value) => {
-                const result = await getTransactionReceipt(value.txHash, { chainId })
+                const result = await connection.getTransactionReceipt(value.txHash, { chainId })
                 if (!result) return null
                 const log = result.logs.find((log) => isSameAddress(log.address, ITO2_CONTRACT_ADDRESS))
                 if (!log) return null
@@ -260,7 +273,13 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
                     amount: new BigNumber(Number(eventParams.to_value)),
                     isClaimable: value.isClaimable,
                     unlockTime: value.unlockTime,
-                    token: { address: eventParams.to_address, type: SchemaType.ERC20 } as FungibleTokenDetailed,
+                    token: {
+                        id: eventParams.to_address,
+                        address: eventParams.to_address,
+                        type: TokenType.Fungible,
+                        schema: SchemaType.ERC20,
+                        chainId,
+                    } as FungibleToken<ChainId, SchemaType.ERC20>,
                 }
             }),
         )
