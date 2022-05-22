@@ -122,3 +122,33 @@ export function createProviderResolver<ChainId, ProviderType>(
         providerDownloadLink: (providerType: ProviderType) => getProviderDescriptor(providerType)?.downloadLink,
     }
 }
+
+// A workaround for extracting un-exported internal types.
+// Learn more https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
+class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
+    createChainResolver(descriptors: ChainDescriptor<ChainId, SchemaType, NetworkType>[]) {
+        return createChainResolver(descriptors)
+    }
+    createExplorerResolver(descriptors: ChainDescriptor<ChainId, SchemaType, NetworkType>[], routes?: ExplorerRoutes) {
+        return createExplorerResolver(descriptors, routes)
+    }
+    createNetworkResolver(descriptors: NetworkDescriptor<ChainId, NetworkType>[]) {
+        return createNetworkResolver(descriptors)
+    }
+    createProviderResolver(descriptors: ProviderDescriptor<ChainId, ProviderType>[]) {
+        return createProviderResolver(descriptors)
+    }
+}
+
+export type RetrunChainResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+    Wrapper<ChainId, SchemaType, never, NetworkType>['createChainResolver']
+>
+export type RetrunExplorerResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+    Wrapper<ChainId, SchemaType, never, NetworkType>['createExplorerResolver']
+>
+export type RetrunNetworkResolver<ChainId, NetworkType> = ReturnType<
+    Wrapper<ChainId, never, never, NetworkType>['createNetworkResolver']
+>
+export type RetrunProviderResolver<ChainId, ProviderType> = ReturnType<
+    Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
+>

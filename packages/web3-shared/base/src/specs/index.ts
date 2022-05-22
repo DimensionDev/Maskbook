@@ -3,10 +3,10 @@ import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
-    createChainResolver,
-    createExplorerResolver,
-    createNetworkResolver,
-    createProviderResolver,
+    RetrunChainResolver,
+    RetrunExplorerResolver,
+    RetrunNetworkResolver,
+    RetrunProviderResolver,
 } from '../utils'
 
 export interface Pageable<T> {
@@ -916,11 +916,12 @@ export interface WalletState {
     getAllWallets?: () => Promise<Wallet[]>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+
     // #region resolvers
-    chainResolver: ReturnType<typeof createChainResolver<ChainId, SchemaType, NetworkType>>
-    explorerResolver: ReturnType<typeof createExplorerResolver<ChainId, SchemaType, NetworkType>>
-    providerResolver: ReturnType<typeof createProviderResolver<ChainId, ProviderType>>
-    networkResolver: ReturnType<typeof createNetworkResolver<ChainId, NetworkType>>
+    chainResolver: RetrunChainResolver<ChainId, SchemaType, NetworkType>
+    explorerResolver: RetrunExplorerResolver<ChainId, SchemaType, NetworkType>
+    providerResolver: RetrunProviderResolver<ChainId, ProviderType>
+    networkResolver: RetrunNetworkResolver<ChainId, NetworkType>
     // #endregion
 
     // #region validators
