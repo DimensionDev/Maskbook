@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { Trans } from 'react-i18next'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { InjectedDialog } from '@masknet/shared'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
@@ -80,7 +80,7 @@ export interface DisconnectWalletDialogProps extends DialogProps {
 export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
     ({ open, confirmLoading, onConfirmDisconnect, onClose, address, personaName }) => {
         const { classes } = useStyles()
-        const { t } = useI18N()
+        const t = useI18N()
 
         const handleConfirm = useCallback(async () => {
             await onConfirmDisconnect()
@@ -90,7 +90,7 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
         return (
             <InjectedDialog open={open}>
                 <DialogContent className={classes.content}>
-                    <Typography className={classes.title}>{t('plugin_tips_disconnect_dialog_title')}</Typography>
+                    <Typography className={classes.title}>{t.tip_disconnect_dialog_title()}</Typography>
                     <Typography>
                         <Trans
                             i18nKey="plugin_tips_disconnect_introduction"
@@ -107,14 +107,14 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
                             onClick={handleConfirm}
                             loading={confirmLoading}
                             className={classNames(classes.button, classes.confirmButton)}>
-                            {t('confirm')}
+                            {t.confirm()}
                         </LoadingButton>
                         <ActionButton
                             className={classNames(classes.button, classes.cancelButton)}
                             fullWidth
                             color="secondary"
                             onClick={onClose}>
-                            {t('cancel')}
+                            {t.cancel()}
                         </ActionButton>
                     </div>
                 </DialogContent>

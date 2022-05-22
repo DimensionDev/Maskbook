@@ -3,7 +3,7 @@ import Web3Utils from 'web3-utils'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -79,8 +79,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     // #endregion
 
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -145,7 +145,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const state = useState<DialogTabs>(DialogTabs.create)
 
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+
+    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -179,7 +182,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
 
-            closeWalletStatusDialog()
+            closeApplicationBoardDialog()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)

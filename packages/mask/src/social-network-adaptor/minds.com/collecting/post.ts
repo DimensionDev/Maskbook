@@ -72,7 +72,7 @@ function collectPostsMindsInner(store: Next.CollectingCapabilities.PostsProvider
                         avatarURL: avatar,
                     })
                     if (currentProfile?.linkedPersona)
-                        Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona.identifier)
+                        Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona)
                 }
                 // decode steganographic image
                 // don't add await on this

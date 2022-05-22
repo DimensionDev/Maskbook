@@ -192,8 +192,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     symbol: info.symbol.toUpperCase(),
                     is_mirrored: isMirroredKeyword(info.symbol),
 
-                    // TODO:
-                    // use current language setting
+                    // TODO: use current language setting
                     description: info.description.en,
                     market_cap_rank: info.market_cap_rank,
                     image_url: info.image.small,
@@ -224,11 +223,15 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                             ) ?? ''
                         ],
                 },
-                market: Object.entries(info.market_data).reduce<any>((accumulated, [key, value]) => {
-                    if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
-                    else accumulated[key] = value
-                    return accumulated
-                }, {}),
+                market: (() => {
+                    const entries = Object.entries(info.market_data).map(([key, value]) => {
+                        if (value && typeof value === 'object') {
+                            return [key, value[currency.id] ?? 0]
+                        }
+                        return [key, value]
+                    })
+                    return Object.fromEntries(entries)
+                })(),
                 tickers: info.tickers.slice(0, 30).map((x) => ({
                     logo_url: x.market.logo,
                     trade_url: x.trade_url,

@@ -1,5 +1,6 @@
 import { PLUGIN_ID } from './constants'
-import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
+import { languages } from './locales/languages'
+import { Plugin, CurrentSNSNetwork } from '@masknet/plugin-infra'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -14,10 +15,12 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-in',
             networks: {
                 [CurrentSNSNetwork.Twitter]: true,
-                [CurrentSNSNetwork.Facebook]: true,
-                [CurrentSNSNetwork.Instagram]: true,
+                [CurrentSNSNetwork.Facebook]: false,
+                [CurrentSNSNetwork.Instagram]: false,
             },
         },
         target: 'stable',
     },
+
+    i18n: languages,
 }

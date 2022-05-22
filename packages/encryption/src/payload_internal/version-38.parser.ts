@@ -126,10 +126,10 @@ async function decodePublicSharedAESKey(
 }
 
 async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {
-    const key = decodeUint8ArrayCrypto(compressedPublic).andThen((val) =>
-        Result.wrap(() => decompressSecp256k1Point(val)).mapErr(
-            (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
-        ),
+    const key = await andThenAsync(decodeUint8ArrayCrypto(compressedPublic), async (val) =>
+        (
+            await Result.wrapAsync(() => decompressSecp256k1Point(val))
+        ).mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e)),
     )
 
     if (key.err) return key

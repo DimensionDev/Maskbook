@@ -63,7 +63,8 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
     },
 )
 
-export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId, string>(
+type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
+export const resolveRaribleUserNetwork = createLookupTableResolver<RaribleSupportedChainId, string>(
     {
         [ChainId.Mainnet]: RaribleUserURL,
         [ChainId.Ropsten]: RaribleRopstenUserURL,
@@ -72,7 +73,8 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId, stri
     RaribleUserURL,
 )
 
-export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId, string>(
+type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby
+export const resolveLinkOnOpenSea = createLookupTableResolver<OpenSeaSupportedChainId, string>(
     {
         [ChainId.Mainnet]: OpenSeaMainnetURL,
         [ChainId.Rinkeby]: OpenSeaTestnetURL,
@@ -80,7 +82,7 @@ export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId, string>(
     OpenSeaMainnetURL,
 )
 
-export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
+export const resolveLinkOnRarible = createLookupTableResolver<RaribleSupportedChainId, string>(
     {
         [ChainId.Mainnet]: 'https://rarible.com',
         [ChainId.Rinkeby]: 'https://rinkeby.rarible.com',
@@ -89,7 +91,8 @@ export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
     'https://rarible.com',
 )
 
-export const resolveLinkOnZora = createLookupTableResolver<ChainId, string>(
+type ZoraSupportedChainId = ChainId.Mainnet
+export const resolveLinkOnZora = createLookupTableResolver<ZoraSupportedChainId, string>(
     {
         [ChainId.Mainnet]: 'https://zora.co',
     },
@@ -112,13 +115,22 @@ export function resolveAssetLinkOnCurrentProvider(
 ) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return urlcat(resolveLinkOnOpenSea(chainId), '/assets/:address/:id', { address, id })
+            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), '/assets/:address/:id', {
+                address,
+                id,
+            })
         case NonFungibleAssetProvider.RARIBLE:
-            return urlcat(resolveLinkOnRarible(chainId), '/token/:address/:id', { address, id })
+            return urlcat(resolveLinkOnRarible(chainId as RaribleSupportedChainId), '/token/:address/:id', {
+                address,
+                id,
+            })
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:
-            return urlcat(resolveLinkOnZora(chainId), '/collections/:address/:id', { address, id })
+            return urlcat(resolveLinkOnZora(chainId as ZoraSupportedChainId), '/collections/:address/:id', {
+                address,
+                id,
+            })
         default:
             return ''
     }
@@ -132,13 +144,13 @@ export function resolveUserUrlOnCurrentProvider(
 ) {
     switch (provider) {
         case NonFungibleAssetProvider.RARIBLE:
-            return urlcat(resolveRaribleUserNetwork(chainId), `/${address}`)
+            return urlcat(resolveRaribleUserNetwork(chainId as RaribleSupportedChainId), `/${address}`)
         case NonFungibleAssetProvider.OPENSEA:
-            return urlcat(resolveLinkOnOpenSea(chainId), `/${username ?? ''}`)
+            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), `/${username ?? ''}`)
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:
-            return urlcat(resolveLinkOnZora(chainId), `/${address}`)
+            return urlcat(resolveLinkOnZora(chainId as ZoraSupportedChainId), `/${address}`)
         default:
             return ''
     }
@@ -147,9 +159,12 @@ export function resolveUserUrlOnCurrentProvider(
 export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any, provider: NonFungibleAssetProvider) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return urlcat(resolveLinkOnOpenSea(chainId), `/collection/${asset.slug ?? ''}`)
+            return urlcat(resolveLinkOnOpenSea(chainId as OpenSeaSupportedChainId), `/collection/${asset.slug ?? ''}`)
         case NonFungibleAssetProvider.RARIBLE:
-            return urlcat(resolveLinkOnRarible(chainId), `/collection/${asset.token_address ?? ''}`)
+            return urlcat(
+                resolveLinkOnRarible(chainId as RaribleSupportedChainId),
+                `/collection/${asset.token_address ?? ''}`,
+            )
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:

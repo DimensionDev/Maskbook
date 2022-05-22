@@ -4,7 +4,15 @@ import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, EthereumRpcType, isSameAddress, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    EthereumRpcType,
+    isSameAddress,
+    NetworkType,
+    ProviderType,
+    resolveProviderName,
+    useWallets,
+} from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
@@ -14,6 +22,7 @@ import { useI18N } from '../../../../../utils'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
 import urlcat from 'urlcat'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -33,8 +42,10 @@ const VerifyWallet = memo(() => {
     const location = useLocation()
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
-
     const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
+    const { value: domain } = useReverseAddress(wallet.account)
+    const { Utils } = useWeb3State() ?? {}
+    const wallets = useWallets()
 
     const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return EMPTY_LIST
@@ -51,6 +62,12 @@ const VerifyWallet = memo(() => {
         }
         return false
     }, [bounds])
+
+    const walletName = () => {
+        if (domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
+        if (wallet.providerType !== ProviderType.MaskWallet) return `${resolveProviderName(wallet.providerType)} Wallet`
+        return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
+    }
 
     useEffect(() => {
         if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
@@ -78,8 +95,10 @@ const VerifyWallet = memo(() => {
                 currentPersona.identifier,
                 payload.signPayload,
             )
+            showSnackbar(t('popups_verify_persona_sign_success'), { variant: 'success' })
             return signResult.signature.signature
         } catch (error) {
+            showSnackbar(t('popups_verify_persona_sign_failed'), { variant: 'error' })
             console.error(error)
             return
         }
@@ -113,11 +132,12 @@ const VerifyWallet = memo(() => {
                     signature,
                 },
             )
+            showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             refreshProofs()
             return true
         } catch (error) {
-            console.error(error)
+            showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }
     }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
@@ -130,19 +150,17 @@ const VerifyWallet = memo(() => {
         try {
             if (signed) Services.Helper.removePopupWindow()
 
-            // first Step
             if (!signature && !walletSignState) {
                 await personaSilentSign()
                 return SignSteps.FirstStepDone
             } else if (signature && !walletSignState) {
-                await walletSign()
-                return SignSteps.SecondStepDone
+                const walletSignRes = await walletSign()
+                return walletSignRes ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
                 await Services.Helper.removePopupWindow()
                 return
             }
         } catch {
-            // err step
             showSnackbar('Connect error', { variant: 'error' })
             return SignSteps.Ready
         }
@@ -155,6 +173,7 @@ const VerifyWallet = memo(() => {
     return (
         <div className={classes.container}>
             <Steps
+                walletName={walletName()}
                 disableConfirm={isBound && !signed}
                 nickname={currentPersona.nickname}
                 wallet={wallet}

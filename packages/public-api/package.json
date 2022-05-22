@@ -2,6 +2,7 @@
   "name": "@masknet/public-api",
   "private": true,
   "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",

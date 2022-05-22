@@ -12,7 +12,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <CrossBridgeIcon />
-            const name = { i18nKey: '__plugin_name', fallback: 'Cross-bridge' }
+            const name = { i18nKey: '__plugin_name', fallback: 'Cross-chain' }
+            const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -22,6 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 disabled={disabled}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => setOpen(true)}
                             />
@@ -32,6 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 5,
                 name,
                 icon,
+                iconFilterColor,
             }
         })(),
     ],

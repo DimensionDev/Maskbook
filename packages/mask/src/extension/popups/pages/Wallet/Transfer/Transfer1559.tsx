@@ -54,7 +54,7 @@ import { TransferAddressError } from '../type'
 
 const useStyles = makeStyles()({
     container: {
-        padding: '16px 16px 0px 16px',
+        padding: '16px 16px 0 16px',
         flex: 1,
     },
     label: {
@@ -176,7 +176,7 @@ const useStyles = makeStyles()({
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
     selectedAsset?: Asset
-    otherWallets: { name: string; address: string }[]
+    otherWallets: Array<{ name: string; address: string }>
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
 

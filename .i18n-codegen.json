@@ -5,31 +5,29 @@
         {
             "input": "./packages/mask/shared-ui/locales/en-US.json",
             "output": "./packages/mask/shared-ui/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useMaskI18N",
                 "namespace": "mask",
-                "trans": "MaskTrans",
-                "sourceMap": "inline"
+                "trans": "MaskTrans"
             }
         },
         {
             "input": "./packages/mask/src/social-network-adaptor/twitter.com/locales/en-US.json",
             "output": "./packages/mask/src/social-network-adaptor/twitter.com/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useDO_NOT_USE",
                 "namespace": "DO_NOT_USE",
-                "trans": "DO_NOT_USE_TRANSLATOR",
-                "sourceMap": false
+                "trans": "DO_NOT_USE_TRANSLATOR"
             }
         },
         {
             "input": "./packages/shared/src/locales/en-US.json",
             "output": "./packages/shared/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedI18N",
@@ -41,7 +39,7 @@
         {
             "input": "./packages/shared-base-ui/src/locales/en-US.json",
             "output": "./packages/shared-base-ui/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedBaseI18N",
@@ -53,7 +51,7 @@
         {
             "input": "./packages/dashboard/src/locales/en-US.json",
             "output": "./packages/dashboard/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useDashboardI18N",
@@ -65,7 +63,7 @@
         {
             "input": "./packages/plugins/example/src/locales/en-US.json",
             "output": "./packages/plugins/example/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -77,7 +75,7 @@
         {
             "input": "./packages/plugins/Debugger/src/locales/en-US.json",
             "output": "./packages/plugins/Debugger/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -89,7 +87,7 @@
         {
             "input": "./packages/plugins/Wallet/src/locales/en-US.json",
             "output": "./packages/plugins/Wallet/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -101,7 +99,7 @@
         {
             "input": "./packages/plugins/Flow/src/locales/en-US.json",
             "output": "./packages/plugins/Flow/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -113,7 +111,7 @@
         {
             "input": "./packages/plugins/FileService/src/locales/en-US.json",
             "output": "./packages/plugins/FileService/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -125,7 +123,7 @@
         {
             "input": "./packages/plugins/CyberConnect/src/locales/en-US.json",
             "output": "./packages/plugins/CyberConnect/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -137,7 +135,7 @@
         {
             "input": "./packages/plugins/RSS3/src/locales/en-US.json",
             "output": "./packages/plugins/RSS3/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -149,7 +147,7 @@
         {
             "input": "./packages/plugins/DAO/src/locales/en-US.json",
             "output": "./packages/plugins/DAO/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -161,7 +159,7 @@
         {
             "input": "./packages/plugins/Solana/src/locales/en-US.json",
             "output": "./packages/plugins/Solana/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -173,7 +171,7 @@
         {
             "input": "./packages/mask/src/plugins/NextID/locales/en-US.json",
             "output": "./packages/mask/src/plugins/NextID/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -185,7 +183,7 @@
         {
             "input": "./packages/plugins/template/src/locales/en-US.json",
             "output": "./packages/plugins/template/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -197,7 +195,7 @@
         {
             "input": "./packages/plugins/GoPlusSecurity/src/locales/en-US.json",
             "output": "./packages/plugins/GoPlusSecurity/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -209,7 +207,7 @@
         {
             "input": "./packages/plugins/CrossChainBridge/src/locales/en-US.json",
             "output": "./packages/plugins/CrossChainBridge/src/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -221,11 +219,23 @@
         {
             "input": "./packages/mask/src/plugins/Tips/locales/en-US.json",
             "output": "./packages/mask/src/plugins/Tips/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.tip",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/mask/src/plugins/Avatar/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Avatar/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.avatar",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
