@@ -30,6 +30,9 @@ const approvedList = new Map([
 
     // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
     ['node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz'],
+
+    // @scamsniffer/detector
+    ['@scamsniffer/detector', 'link:/Users/fun/Documents/ios/adbug/blockchain/scam-sniffer-databse/detector/'],
 ])
 
 /**
