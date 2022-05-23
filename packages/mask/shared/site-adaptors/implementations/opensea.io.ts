@@ -7,7 +7,7 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 const origins = ['https://opensea.io/*']
 export const OpenSeaAdaptor: SiteAdaptor.Definition = {
-    networkIdentifier: EnhanceableSite.Minds,
+    networkIdentifier: EnhanceableSite.OpenSea,
     declarativePermissions: { origins },
     homepage: 'https://opensea.io/',
 
