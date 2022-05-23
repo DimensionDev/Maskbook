@@ -7,8 +7,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     FungibleTokenDetailed,
     Wallet,
-    ChainId,
-    ZERO_ADDRESS,
     EthereumTokenType,
     formatBalance,
     formatPercentage,
@@ -17,7 +15,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, isHighRisk, SelectTokenChip, TokenSecurityBar } from '@masknet/shared'
+import { FormattedBalance, isHighRisk, SelectTokenChip, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -32,11 +30,10 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { useAsyncRetry, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
-import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
 import { RiskWarningDialog } from './RiskWarningDialog'
 import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
 
@@ -183,10 +180,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
     }
 })
 
-type TokenSecurity = SecurityAPI.ContractSecurity &
-    SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
-
 export interface AllTradeFormProps {
     wallet?: Wallet
     inputAmount: string
@@ -233,15 +226,12 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
-        const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
-            if (isTokenSecurityClosed) return
-            if (!outputToken || outputToken?.address === ZERO_ADDRESS) return
-            const values = await GoPlusLabs.getTokenSecurity(chainId, [outputToken.address.trim()])
-            if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
-            return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
-                | TokenSecurity
-                | undefined
-        }, [chainId, outputToken, isTokenSecurityClosed])
+
+        const { value: tokenSecurityInfo, error } = useTokenSecurity(
+            chainId,
+            outputToken?.address.trim(),
+            isTokenSecurityClosed,
+        )
 
         const isRisky = isHighRisk(tokenSecurityInfo)
 

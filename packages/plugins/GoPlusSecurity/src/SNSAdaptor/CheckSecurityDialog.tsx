@@ -71,6 +71,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
             | TokenSecurity
             | undefined
     }, [])
+
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
     const { value: tokenPrice } = useAsync(async () => {
         if (!value) return

@@ -5,7 +5,7 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon, TokenSecurityBar } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
@@ -14,7 +14,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount, formatCurrency, ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
@@ -22,9 +22,7 @@ import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
-import { GoPlusLabs, SecurityAPI } from '@masknet/web3-providers'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -89,9 +87,6 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-type TokenSecurity = SecurityAPI.ContractSecurity &
-    SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
     stats: Stat[]
     coins: Coin[]
@@ -130,15 +125,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
     const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
-    const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
-        if (isTokenSecurityClosed) return
-        if (!coin?.contract_address || coin?.address === ZERO_ADDRESS) return
-        const values = await GoPlusLabs.getTokenSecurity(chainId, [coin.contract_address.trim()])
-        if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
-        return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
-            | TokenSecurity
-            | undefined
-    }, [chainId, coin, isTokenSecurityClosed])
+
+    const { value: tokenSecurityInfo, error } = useTokenSecurity(
+        chainId,
+        coin.contract_address?.trim(),
+        isTokenSecurityClosed,
+    )
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
