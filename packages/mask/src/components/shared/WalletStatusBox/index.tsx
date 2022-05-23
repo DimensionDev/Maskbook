@@ -15,7 +15,7 @@ import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { Copy } from 'react-feather'
-import { LinkOutIcon } from '@masknet/icons'
+import { LinkOutDarkIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { resetAccount } from '../../../plugins/Wallet/services'
@@ -179,7 +179,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} mode="light" />
+                            <LinkOutDarkIcon className={classes.linkIcon} />
                         </Link>
                     </div>
                     {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
