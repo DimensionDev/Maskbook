@@ -15,6 +15,5 @@
   },
   "dependencies": {
     "@emotion/server": "^11.4.0"
-  },
-  "devDependencies": {}
+  }
 }

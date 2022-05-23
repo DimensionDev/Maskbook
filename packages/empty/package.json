@@ -7,7 +7,5 @@
       "default": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
-  "dependencies": {},
-  "devDependencies": {}
+  "types": "./dist/index.d.ts"
 }
