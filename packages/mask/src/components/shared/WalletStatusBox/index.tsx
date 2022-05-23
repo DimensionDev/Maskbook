@@ -45,6 +45,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
+        color: theme.palette.maskColor.dark,
         fontSize: 16,
         marginRight: 6,
     },
@@ -54,8 +55,13 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
     },
     actionButton: {
         fontSize: 12,
+        color: 'white',
+        backgroundColor: theme.palette.maskColor.dark,
         marginLeft: theme.spacing(1),
         padding: theme.spacing(1, 2),
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
     },
     address: {
         fontSize: 16,
@@ -63,7 +69,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.dark,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -173,7 +179,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} />
+                            <LinkOutIcon className={classes.linkIcon} mode="light" />
                         </Link>
                     </div>
                     {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (

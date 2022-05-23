@@ -5,7 +5,7 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext'
 /** @internal */
 export type Size = [width: number | undefined, height: number | undefined]
 /** @internal */
-export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
+export type SvgIconRaw = JSX.Element | ((theme: Theme, fixedMode?: 'light' | 'dark') => JSX.Element)
 
 /**
  * Create an icon from svg fragment
@@ -26,7 +26,15 @@ export function createIcon(name: string, svg: SvgIconRaw, viewBox?: string, defa
         typeof svg === 'function'
             ? ({ sx, ...props }, ref) => {
                   const style = defaultSize ? { width, height, ...sx } : sx
-                  return <SvgIcon viewBox={viewBox} {...props} ref={ref} children={svg(useTheme())} sx={style} />
+                  return (
+                      <SvgIcon
+                          viewBox={viewBox}
+                          {...props}
+                          ref={ref}
+                          children={svg(useTheme(), props.mode as 'light' | 'dark')}
+                          sx={style}
+                      />
+                  )
               }
             : ({ sx, ...props }, ref) => {
                   const style = defaultSize ? { width, height, ...sx } : sx
@@ -57,10 +65,11 @@ export function createPaletteAwareIcon(
 ) {
     return createIcon(
         name,
-        (theme) => {
+        (theme, fixedMode?: 'light' | 'dark') => {
             const palette = useContext(MaskIconPaletteContext)
             const isDim = palette === 'dim'
-            if (theme.palette.mode === 'dark') {
+            const mode = fixedMode ?? theme.palette.mode
+            if (mode === 'dark') {
                 if (isDim && dim) return dim
                 return dark
             }
