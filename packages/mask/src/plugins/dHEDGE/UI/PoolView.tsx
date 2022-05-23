@@ -14,7 +14,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
     },
     message: {
