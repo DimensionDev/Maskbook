@@ -2,7 +2,7 @@ import { delay } from '@dimensiondev/kit'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission'
 
-export async function getSupportedSites(): Promise<{ networkIdentifier: string }[]> {
+export async function getSupportedSites(): Promise<Array<{ networkIdentifier: string }>> {
     return [...definedSiteAdaptors.values()].map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
