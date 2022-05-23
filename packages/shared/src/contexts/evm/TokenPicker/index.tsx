@@ -6,9 +6,8 @@ import { PickTokenOptions, SelectTokenDialog, SelectTokenDialogProps } from './S
 const { TaskManagerContext, TaskManagerProvider: TokenPickerProvider } = createUITaskManager<
     PickTokenOptions,
     FungibleTokenDetailed,
-    SelectTokenDialogProps,
-    'onSelect'
->(SelectTokenDialog, 'onSelect')
+    SelectTokenDialogProps
+>(SelectTokenDialog)
 
 export const usePickToken = () => {
     return useContext(TaskManagerContext).show

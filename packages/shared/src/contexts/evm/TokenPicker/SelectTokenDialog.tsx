@@ -47,10 +47,10 @@ export interface PickTokenOptions {
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
-    onSelect?(token: FungibleTokenDetailed): void
+    onSubmit?(token: FungibleTokenDetailed): void
 }
 
-export interface SelectTokenDialogProps extends PickTokenOptions, Omit<InjectedDialogProps, 'onSelect' | 'title'> {}
+export interface SelectTokenDialogProps extends PickTokenOptions, Omit<InjectedDialogProps, 'onSubmit' | 'title'> {}
 
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
@@ -61,7 +61,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSelect,
+    onSubmit,
     onClose,
     title,
 }) => {
@@ -84,7 +84,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSelect}
+                    onSelect={onSubmit}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={

@@ -1,18 +1,14 @@
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { createContext, createElement, FC, FunctionComponent, PropsWithChildren, useMemo, useState } from 'react'
+import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import type { InjectedDialogProps } from './components'
 
-type ExtendPromise<T> = Promise<T> & {
-    close(): Promise<T>
-}
 interface ContextOptionsGeneric<T, R> {
-    show(options: T): ExtendPromise<R>
+    show(options: T, signal?: AbortSignal): Promise<R>
 }
 
-type BaseDialogProps = Pick<InjectedDialogProps, 'open' | 'onClose'>
-type CallableKeys<T> = keyof {
-    [K in keyof T as T[K] extends ((...args: any[]) => any) | undefined ? K : never]: any
+interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
+    onSubmit?(result: T): void
 }
 
 /**
@@ -20,27 +16,23 @@ type CallableKeys<T> = keyof {
  * which provide both a Context and a Provider.
  */
 export const createUITaskManager = <
-    TaskOptions extends Record<string, any>,
+    TaskOptions extends { onSubmit?(result: Result | null): void },
     Result,
-    Props extends BaseDialogProps,
-    ResolveProp extends CallableKeys<Props> & CallableKeys<TaskOptions>,
+    Props extends BaseDialogProps<Result>,
 >(
-    Component: FunctionComponent<Props>,
-    taskResolveField: ResolveProp,
+    Component: ComponentType<Props>,
 ) => {
     type ContextOptions = ContextOptionsGeneric<TaskOptions, Result | null>
     const TaskManagerContext = createContext<ContextOptions>(null!)
     let id = 0
 
     type TaskDeferTuple = DeferTuple<Result | null>
-    interface TaskBase {
+    interface Task {
         id: number
         promise: Promise<Result | null>
         resolve: TaskDeferTuple[1]
         reject: TaskDeferTuple[2]
-    }
-    interface Task extends TaskBase {
-        taskOptions: TaskOptions
+        options: TaskOptions
     }
 
     const TaskManagerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -52,21 +44,19 @@ export const createUITaskManager = <
             }
 
             return {
-                show(options: TaskOptions) {
+                show(options: TaskOptions, signal?: AbortSignal) {
                     const [promise, resolve, reject] = defer<Result | null>()
                     id += 1
-                    const extendedPromise = Object.assign(promise, {
-                        close() {
-                            resolve(null)
-                            return promise
-                        },
+                    signal?.addEventListener('abort', function abortHandler() {
+                        resolve(null)
+                        signal.removeEventListener('abort', abortHandler)
                     })
-                    const newTask: Task = { id, promise, resolve, reject, taskOptions: options }
+                    const newTask: Task = { id, promise, resolve, reject, options }
                     setTasks((list) => [...list, newTask])
                     promise.then(() => {
                         removeTask(id)
                     })
-                    return extendedPromise
+                    return promise
                 },
             }
         }, [])
@@ -80,9 +70,9 @@ export const createUITaskManager = <
                         {
                             key: task.id,
                             open: true,
-                            ...task.taskOptions,
-                            [taskResolveField]: (result: Result | null) => {
-                                task.taskOptions[taskResolveField]?.()
+                            ...task.options,
+                            onSubmit: (result: Result | null) => {
+                                task.options.onSubmit?.(result)
                                 task.resolve(result)
                             },
                             onClose: () => {

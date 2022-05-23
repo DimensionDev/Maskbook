@@ -20,9 +20,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends ConfirmOptions, Omit<InjectedDialogProps, 'title'> {}
+export interface ConfirmDialogProps extends ConfirmOptions, Omit<InjectedDialogProps, 'title' | 'onSubmit'> {}
 
-export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, content, onConfirm, ...rest }) => {
+export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, content, onSubmit, ...rest }) => {
     const t = useSharedI18N()
     const { classes } = useStyles()
 
@@ -30,7 +30,7 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, con
         <InjectedDialog title={title ?? t.dialog_confirm()} {...rest}>
             <DialogContent className={classes.content}>{content}</DialogContent>
             <DialogActions>
-                <Button fullWidth className={classes.button} onClick={onConfirm}>
+                <Button fullWidth className={classes.button} onClick={() => onSubmit?.(true)}>
                     {confirmLabel ?? t.dialog_confirm()}
                 </Button>
             </DialogActions>

@@ -4,5 +4,5 @@ export interface ConfirmOptions {
     title?: string
     content: ReactNode | string
     confirmLabel?: string
-    onConfirm?(): void
+    onSubmit?(result: boolean | null): void
 }
