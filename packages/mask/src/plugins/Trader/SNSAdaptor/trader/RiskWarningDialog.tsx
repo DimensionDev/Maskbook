@@ -1,7 +1,7 @@
 import { SecurityRiskIcon } from '@masknet/icons'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { TokenSecurity, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles, MaskDialog } from '@masknet/theme'
+import { InjectedDialog, TokenSecurity, useSnackbarCallback } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
@@ -19,6 +19,8 @@ const useStyles = makeStyles()((theme) => ({
                     : undefined,
             borderBottom: `1px solid ${theme.palette.divider}`,
             marginBottom: 24,
+            display: 'grid !important',
+            gridTemplateColumns: 'repeat(3, 1fr)',
         },
     },
     content: {
@@ -86,10 +88,10 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
     )
     return (
         <>
-            <MaskDialog
+            <InjectedDialog
                 open={open}
                 onClose={onClose}
-                DialogProps={{ classes: { paper: classes.paperRoot } }}
+                classes={{ paper: classes.paperRoot }}
                 maxWidth="xs"
                 fullWidth
                 title="Swapping Risk">
@@ -144,7 +146,7 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
                         {t('plugin_trader_make_risk_trade')}
                     </Button>
                 </DialogActions>
-            </MaskDialog>
+            </InjectedDialog>
         </>
     )
 }
