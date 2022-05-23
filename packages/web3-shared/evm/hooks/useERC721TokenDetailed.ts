@@ -39,7 +39,7 @@ export async function getERC721TokenDetailedFromOpensea(
         description: string
         image_url: string
         animation_url: string
-        top_ownerships: { owner: { address: string } }[]
+        top_ownerships: Array<{ owner: { address: string } }>
     }
 
     if (response.ok) {
@@ -117,6 +117,7 @@ export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<E
                     return {
                         ...json,
                         mediaUrl: json.image || json.animation_url,
+                        imageURL: json.image || json.animation_url,
                     } as ERC721TokenInfo
                 },
                 noop,

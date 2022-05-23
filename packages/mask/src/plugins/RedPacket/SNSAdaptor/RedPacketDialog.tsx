@@ -165,8 +165,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             // the settings is not available
             if (!createSettings?.token) return
 
-            // TODO:
-            // early return happened
+            // TODO: early return happened
             // we should guide user to select the red packet in the existing list
             if (createState.type !== TransactionStateType.CONFIRMED) return
 
@@ -241,7 +240,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 670
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
 
     const tabProps: AbstractTabProps = {
         tabs: [

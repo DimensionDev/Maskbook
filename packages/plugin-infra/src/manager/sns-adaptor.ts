@@ -57,15 +57,12 @@ export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEquals
 
 export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, pluginID: string) {
     const plugins = useActivatedPluginsSNSAdaptor('any')
-    return plugins.reduce<Record<string, boolean>>((acc, cur) => {
-        if (!cur.enableRequirement.web3) {
-            acc[cur.ID] = true
-            return acc
-        }
-        const supportedChainIds = cur.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
-        acc[cur.ID] = supportedChainIds?.includes(chainId) ?? false
-        return acc
-    }, {})
+    const entries = plugins.map((plugin): [string, boolean] => {
+        if (!plugin.enableRequirement.web3) return [plugin.ID, true]
+        const supportedChainIds = plugin.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
+        return [plugin.ID, supportedChainIds?.includes(chainId) ?? false]
+    })
+    return Object.fromEntries(entries) as Record<string, boolean>
 }
 
 export function startPluginSNSAdaptor(

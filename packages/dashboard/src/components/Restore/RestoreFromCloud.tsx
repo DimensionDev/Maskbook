@@ -159,7 +159,7 @@ export const RestoreFromCloud = memo(() => {
                     )}
                 </Step>
                 <Step name="restore">
-                    {(_, { backupJson: backupBasicInfoJson, handleRestore: handleRestore }) => (
+                    {(_, { backupJson: backupBasicInfoJson, handleRestore }) => (
                         <>
                             <Box sx={{ width: '100%' }}>
                                 <BackupPreviewCard json={backupBasicInfoJson} />

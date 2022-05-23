@@ -63,8 +63,6 @@ export default function CompletionCard(props: CompletionCardProps) {
                     answer: e.answer || '',
                 })),
             )
-        } catch (error) {
-            throw error
         } finally {
             setSubmitting(false)
         }

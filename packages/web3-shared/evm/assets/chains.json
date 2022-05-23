@@ -814,7 +814,7 @@
     },
     {
         "name": "OKExChain Mainnet",
-        "chain": "okexchain",
+        "chain": "OKEx",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
@@ -1697,7 +1697,7 @@
         "network": "mainnet",
         "rpc": ["https://rpc.api.moonbeam.network"],
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "nativeCurrency": { "name": "Glimmer", "symbol": "GLMR", "decimals": 18 },
         "infoURL": "https://moonscan.io/",
         "shortName": "Moobeam",

@@ -80,11 +80,11 @@ export interface OpenSeaCollection extends OpenSeaFees {
     wiki_link?: string
     safelist_request_status: string
     owned_asset_count: number
-    primary_asset_contracts: {
+    primary_asset_contracts: Array<{
         address: string
         asset_contract_type: string
         symbol: string
-    }[]
+    }>
 }
 
 export interface OpenSeaResponse extends Asset {
@@ -104,19 +104,19 @@ export interface OpenSeaResponse extends Asset {
     image_thumbnail_url: string
     opensea_link: string
     external_link: string
-    traits: {
+    traits: Array<{
         trait_type: string
         value: string
-    }[]
+    }>
     num_sales: number
     last_sale: NonFungibleTokenAPI.AssetEvent | null
     background_color: string | null
     transfer_fee: string | null
     transfer_fee_payment_token: OpenSeaFungibleToken | null
-    top_ownerships: {
+    top_ownerships: Array<{
         owner: OpenSeaCustomAccount
         quantity: string
-    }[]
+    }>
     creator: OpenSeaCustomAccount
     endTime: string
 }

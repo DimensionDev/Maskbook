@@ -5,7 +5,7 @@ import type { Dimension } from './useDimension'
 
 export function usePriceLineChart(
     svgRef: RefObject<SVGSVGElement>,
-    data: { date: Date; value: number }[],
+    data: Array<{ date: Date; value: number }>,
     dimension: Dimension,
     id: string,
     color = 'steelblue',

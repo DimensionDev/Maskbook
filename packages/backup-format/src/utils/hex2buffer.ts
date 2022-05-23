@@ -1,3 +1,5 @@
+import { sum } from 'lodash-unified'
+
 /** @internal */
 export function hex2buffer(hexString: string, padded?: boolean) {
     if (hexString.length % 2) {
@@ -20,8 +22,8 @@ export function hex2buffer(hexString: string, padded?: boolean) {
 }
 
 /** @internal */
-function concat(...buf: (Uint8Array | number[])[]) {
-    const res = new Uint8Array(buf.map((item) => item.length).reduce((prev, cur) => prev + cur))
+function concat(...buf: Array<Uint8Array | number[]>) {
+    const res = new Uint8Array(sum(buf.map((item) => item.length)))
     let offset = 0
     buf.forEach((item) => {
         for (let i = 0; i < item.length; i += 1) {

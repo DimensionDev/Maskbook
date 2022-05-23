@@ -12,16 +12,16 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword = '',
-    additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = EMPTY_LIST,
+    additionalTokens: Array<ERC20TokenDetailed | NativeTokenDetailed> = EMPTY_LIST,
     targetChainId?: ChainId,
-): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {
+): AsyncStateRetry<Array<ERC20TokenDetailed | NativeTokenDetailed>> {
     // #region fetch token lists
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
     const { value: tokensFromList = EMPTY_LIST, ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),
-        [chainId, lists?.sort((a, b) => a.localeCompare('en-US', b)).join()],
+        [chainId, lists?.sort((a, b) => a.localeCompare(b, 'en-US')).join()],
     )
     // #endregion
     // #region fuse

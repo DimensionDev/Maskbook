@@ -39,6 +39,8 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         bottom: 0,
         width: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
         display: 'flex',
         padding: '14px 16px',
         boxSizing: 'border-box',
@@ -47,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: theme.palette.background.paper,
         boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
-        transform: 'translateX(-16px)',
     },
     between: {
         justifyContent: 'space-between',
@@ -77,6 +78,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: 14,
         boxSizing: 'border-box',
         borderRadius: 8,
+    },
+    sendIcon: {
+        width: 18,
+        height: 18,
+        fill: theme.palette.text.buttonText,
     },
 }))
 
@@ -239,7 +245,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<SendIcon style={{ width: 18, height: 18 }} />}>
+                    startIcon={<SendIcon className={classes.sendIcon} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>

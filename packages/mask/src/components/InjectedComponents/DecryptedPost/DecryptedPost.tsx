@@ -15,7 +15,7 @@ import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plug
 import { Some } from 'ts-results'
 
 function progressReducer(
-    state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
+    state: Array<{ key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }>,
     payload: {
         type: 'refresh'
         key: string
