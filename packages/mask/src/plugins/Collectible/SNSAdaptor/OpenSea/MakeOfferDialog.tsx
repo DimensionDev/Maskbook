@@ -231,7 +231,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 }
                                 label={
                                     <Typography variant="body2">
-                                        {t('plugin_collectible_approved_by_open_sea')}
+                                        {t('plugin_collectible_approved_by_opensea')}
                                     </Typography>
                                 }
                             />

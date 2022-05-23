@@ -1,5 +1,7 @@
+import urlcat from 'urlcat'
 import { Network } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { createLookupTableResolver, SourceType } from '@masknet/web3-shared-base'
 import {
     RaribleRopstenUserURL,
     RaribleUserURL,
@@ -7,8 +9,10 @@ import {
     OpenSeaMainnetURL,
     OpenSeaTestnetURL,
 } from '../constants'
-import urlcat from 'urlcat'
-import { createLookupTableResolver, SourceType } from '@masknet/web3-shared-base'
+
+type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
+type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby
+type ZoraSupportedChainId = ChainId.Mainnet
 
 export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, Network>(
     {
@@ -33,7 +37,6 @@ export const resolveCollectibleProviderName = createLookupTableResolver<SourceTy
     },
 )
 
-type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
 export const resolveRaribleUserNetwork = createLookupTableResolver<RaribleSupportedChainId, string>(
     {
         [ChainId.Mainnet]: RaribleUserURL,
@@ -43,7 +46,6 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<RaribleSuppor
     RaribleUserURL,
 )
 
-type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby
 export const resolveLinkOnOpenSea = createLookupTableResolver<OpenSeaSupportedChainId, string>(
     {
         [ChainId.Mainnet]: OpenSeaMainnetURL,
@@ -61,7 +63,6 @@ export const resolveLinkOnRarible = createLookupTableResolver<RaribleSupportedCh
     'https://rarible.com',
 )
 
-type ZoraSupportedChainId = ChainId.Mainnet
 export const resolveLinkOnZora = createLookupTableResolver<ZoraSupportedChainId, string>(
     {
         [ChainId.Mainnet]: 'https://zora.co',
