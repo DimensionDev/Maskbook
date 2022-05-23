@@ -17,14 +17,14 @@ enum ORACLE_CHAIN_ID {
     mainnet = 47,
 }
 
-export const supportedChainId = ChainId.Mainnet
-export const SWAP_CHAIN_ID = ChainId.Mainnet
-export const supportedOracleChainId = ORACLE_CHAIN_ID.mainnet
+// export const supportedChainId = ChainId.Mainnet
+// export const SWAP_CHAIN_ID = ChainId.Mainnet
+// export const supportedOracleChainId = ORACLE_CHAIN_ID.mainnet
 
 // testnet example
-// export const supportedChainId = ChainId.Rinkeby
-// export const SWAP_CHAIN_ID = ChainId.Mainnet
-// export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
+export const supportedChainId = ChainId.Rinkeby
+export const SWAP_CHAIN_ID = ChainId.Mainnet
+export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
 export const errors = {
     rpc: 'Failed to fetch',
