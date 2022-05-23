@@ -3,7 +3,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import type { InjectedDialogProps } from './components'
 
-interface ContextOptionsGeneric<T, R> {
+interface ContextOptions<T, R> {
     show(options: T, signal?: AbortSignal): Promise<R>
 }
 
@@ -22,8 +22,7 @@ export const createUITaskManager = <
 >(
     Component: ComponentType<Props>,
 ) => {
-    type ContextOptions = ContextOptionsGeneric<TaskOptions, Result | null>
-    const TaskManagerContext = createContext<ContextOptions>(null!)
+    const TaskManagerContext = createContext<ContextOptions<TaskOptions, Result | null>>(null!)
     let id = 0
 
     type TaskDeferTuple = DeferTuple<Result | null>

@@ -76,9 +76,8 @@ export function useOpenShareTxDialog() {
     const showConfirm = useShowConfirm()
     const t = useSharedI18N()
 
-    return async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-        let shared = false
-        await showConfirm({
+    return ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) =>
+        showConfirm({
             title: title ?? t.share_dialog_transaction(),
             content: (
                 <ShareTransaction
@@ -90,9 +89,6 @@ export function useOpenShareTxDialog() {
             confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
             onSubmit() {
                 onShare?.()
-                shared = true
             },
         })
-        return shared
-    }
 }
