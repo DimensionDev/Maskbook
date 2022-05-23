@@ -10,7 +10,13 @@ import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
-import { ChainId, CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    CurrencyType,
+    getCoinGeckoPlatformId,
+    useERC721ContractDetailed,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,6 +64,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const { open, onClose } = props
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: ChainId, content: string) => {
+        if (content.trim() === ZERO_ADDRESS) return
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
         if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as

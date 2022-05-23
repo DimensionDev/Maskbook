@@ -14,7 +14,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount, formatCurrency, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency, ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
@@ -132,7 +132,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
     const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
         if (isTokenSecurityClosed) return
-        if (!coin?.contract_address) return
+        if (!coin?.contract_address || coin?.address === ZERO_ADDRESS) return
         const values = await GoPlusLabs.getTokenSecurity(chainId, [coin.contract_address.trim()])
         if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as

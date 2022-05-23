@@ -4,8 +4,15 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { FungibleTokenDetailed, Wallet, ChainId } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    Wallet,
+    ChainId,
+    ZERO_ADDRESS,
+    EthereumTokenType,
+    formatBalance,
+    formatPercentage,
+} from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
@@ -228,7 +235,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
         const { value: tokenSecurityInfo, error } = useAsyncRetry(async () => {
             if (isTokenSecurityClosed) return
-            if (!outputToken) return
+            if (!outputToken || outputToken?.address === ZERO_ADDRESS) return
             const values = await GoPlusLabs.getTokenSecurity(chainId, [outputToken.address.trim()])
             if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
             return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
