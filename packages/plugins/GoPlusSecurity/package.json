@@ -9,15 +9,15 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "react-feather": "^2.0.9",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
-    "@masknet/shared-base-ui": "workspace:*",
     "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "react-feather": "^2.0.9",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"
   }

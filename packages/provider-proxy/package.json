@@ -2,8 +2,8 @@
   "name": "@dimensiondev/provider-proxy",
   "version": "0.0.1",
   "scripts": {
-    "build:rollup": "rollup -c --environment PROXY_VERSION:$PROXY_VERSION",
-    "build": "node ./build.mjs"
+    "build": "node ./build.mjs",
+    "build:rollup": "rollup -c --environment PROXY_VERSION:$PROXY_VERSION"
   },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
