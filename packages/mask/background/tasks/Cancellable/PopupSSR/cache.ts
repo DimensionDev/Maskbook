@@ -13,7 +13,6 @@ export function startListen(
     const task = throttle(
         async function task() {
             cache = await prepareData().then(render)
-            console.log(cache.html)
         },
         2000,
         { leading: true },

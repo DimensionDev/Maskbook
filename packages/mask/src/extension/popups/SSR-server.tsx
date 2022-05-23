@@ -53,38 +53,40 @@ function PopupSSR(props: PopupSSR_Props) {
     return (
         // MaskUIRoot
         <Suspense fallback={null}>
-            <StaticRouter location={PopupRoutes.Personas}>
-                <MaskThemeProvider useTheme={useTheme} CustomSnackbarOffsetY={0} useMaskIconPalette={() => 'light'}>
-                    <PopupFrame>
-                        {/* Persona */}
-                        <Suspense fallback={null}>
-                            {props.hasPersona ? (
-                                <PersonaHeaderUI
-                                    isSelectPersonaPage={false}
-                                    onActionClick={noop}
+            <Suspense fallback={null}>
+                <StaticRouter location={PopupRoutes.Personas}>
+                    <MaskThemeProvider useTheme={useTheme} CustomSnackbarOffsetY={0} useMaskIconPalette={() => 'light'}>
+                        <PopupFrame>
+                            {/* Persona */}
+                            <Suspense fallback={null}>
+                                {props.hasPersona ? (
+                                    <PersonaHeaderUI
+                                        isSelectPersonaPage={false}
+                                        onActionClick={noop}
+                                        avatar={props.avatar}
+                                        fingerprint={props.currentFingerPrint || ''}
+                                        nickname={props.nickname}
+                                    />
+                                ) : (
+                                    <NormalHeader />
+                                )}
+                                <PersonaHomeUI
+                                    fetchProofsLoading
+                                    onEdit={noop}
+                                    onRestore={noop}
+                                    onCreatePersona={noop}
                                     avatar={props.avatar}
                                     fingerprint={props.currentFingerPrint || ''}
+                                    isEmpty={!props.hasPersona}
                                     nickname={props.nickname}
+                                    accountsCount={props.linkedProfilesCount}
+                                    walletsCount={0}
                                 />
-                            ) : (
-                                <NormalHeader />
-                            )}
-                            <PersonaHomeUI
-                                fetchProofsLoading
-                                onEdit={noop}
-                                onRestore={noop}
-                                onCreatePersona={noop}
-                                avatar={props.avatar}
-                                fingerprint={props.currentFingerPrint || ''}
-                                isEmpty={!props.hasPersona}
-                                nickname={props.nickname}
-                                accountsCount={props.linkedProfilesCount}
-                                walletsCount={0}
-                            />
-                        </Suspense>
-                    </PopupFrame>
-                </MaskThemeProvider>
-            </StaticRouter>
+                            </Suspense>
+                        </PopupFrame>
+                    </MaskThemeProvider>
+                </StaticRouter>
+            </Suspense>
         </Suspense>
     )
 }

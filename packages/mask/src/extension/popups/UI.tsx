@@ -11,6 +11,7 @@ import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
 import { PopupSnackbarProvider } from '@masknet/theme'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -33,7 +34,7 @@ function PluginRenderDelayed() {
 export default function Popups() {
     const [title, setTitle] = useState('')
     return (
-        <MaskUIRoot useTheme={usePopupTheme} kind="page">
+        <MaskUIRoot fallback={frame(<LoadingPlaceholder />)} useTheme={usePopupTheme} kind="page">
             <PopupSnackbarProvider>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
