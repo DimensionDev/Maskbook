@@ -54,9 +54,6 @@
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
         ],
         "Harmony_Test": [],
-        "Moonbeam": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/moonbeam",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/moonbeam"
-        ]
+        "Moonbeam": []
     }
 }

@@ -69,7 +69,12 @@
             "https://rpc.hermesdefi.io/"
         ],
         "Harmony_Test": ["https://api.s0.b.hmny.io/"],
-        "Moonbeam": ["https://rpc.api.moonbeam.network"]
+        "Moonbeam": [
+            "https://moonbeam.api.onfinality.io/rpc?apikey=e5e810e6-6162-4427-8ba3-d5ad8b9cf4c0",
+            "https://moonbeam.blastapi.io/905553b4-5acd-4f24-b473-ebca226a76c4",
+            "https://moonbeam.public.blastapi.io",
+            "https://moonbeam.api.onfinality.io/public"
+        ]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],

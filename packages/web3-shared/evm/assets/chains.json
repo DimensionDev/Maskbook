@@ -1695,7 +1695,7 @@
         "name": "Moonbeam Polkadot",
         "chain": "Moonbeam",
         "network": "mainnet",
-        "rpc": ["https://rpc.api.moonbeam.network"],
+        "rpc": ["https://moonbeam.blastapi.io/905553b4-5acd-4f24-b473-ebca226a76c4"],
         "faucets": [],
         "features": ["EIP1559"],
         "nativeCurrency": { "name": "Glimmer", "symbol": "GLMR", "decimals": 18 },
