@@ -24,14 +24,6 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '100px',
         margin: 'auto',
     },
-    button: {
-        backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
-        },
-        width: '100%',
-    },
     retry: {
         backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
