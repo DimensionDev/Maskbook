@@ -141,14 +141,10 @@ export async function fetchTwitterLookups(tokens: IdeaToken[]) {
     const twitterLookups = (await response.json())?.data
 
     // create a hashmap in order to optimize twitter username lookups
-    // eslint-disable-next-line unicorn/no-array-reduce
-    const twitterLookupsToDictionary = twitterLookups.reduce(
-        (result: { [x: string]: { username: string } }, lookup: { username: string }) => {
-            result[lookup.username.toLowerCase()] = lookup
-            return result
-        },
-        {},
-    )
+    const twitterLookupsToDictionary: { [x: string]: { username: string } } = {}
+    for (const twitterLookup of twitterLookups) {
+        twitterLookupsToDictionary[twitterLookup.username.toLowerCase()] = twitterLookup
+    }
 
     const tokensWithTwitterLookups = tokens.map((token: IdeaToken) => {
         if (token.market.marketID === Markets.Twitter) {
