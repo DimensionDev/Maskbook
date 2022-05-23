@@ -12,6 +12,8 @@ import { usePoolAssets, usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { TimelineTimer } from './TimelineTimer'
 import { useI18N } from '../../../utils'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,6 +34,23 @@ const useStyles = makeStyles()((theme) => ({
     gameName: {
         textAlign: 'center',
     },
+    button: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        width: '100%',
+    },
+    retry: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        width: 254,
+        margin: 16,
+    },
 }))
 
 enum GoodGhostingTab {
@@ -48,6 +67,7 @@ interface PreviewCardProps {
 export function PreviewCard(props: PreviewCardProps) {
     const { value: addressInfo, error, loading, retry } = useGameContractAddress(props.id)
     const { t } = useI18N()
+    const { classes } = useStyles()
 
     if (loading) {
         return <Typography color="textPrimary">{t('loading')}</Typography>
@@ -56,8 +76,8 @@ export function PreviewCard(props: PreviewCardProps) {
     if (error || !addressInfo?.contractAddress) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">{t('go_wrong')}</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                <Typography color="error">{t('go_wrong')}</Typography>
+                <Button className={classes.retry} size="small" onClick={retry}>
                     {t('retry')}
                 </Button>
             </Box>
@@ -73,16 +93,21 @@ interface PreviewCardWithGameAddressProps {
 export function PreviewCardWithGameAddress(props: PreviewCardWithGameAddressProps) {
     const { value: info, error, loading, retry } = useGameInfo(props.gameData)
     const { t } = useI18N()
+    const { classes } = useStyles()
 
     if (loading) {
-        return <Typography color="textPrimary">{t('loading')}</Typography>
+        return (
+            <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
+                {t('loading')}
+            </Typography>
+        )
     }
 
     if (error || !info) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">{t('go_wrong')}</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                <Typography color="error">{t('go_wrong')}</Typography>
+                <Button className={classes.retry} size="small" onClick={retry}>
                     {t('retry')}
                 </Button>
             </Box>
@@ -108,39 +133,44 @@ function PreviewCardWithGameInfo(props: PreviewCardWithGameInfoProps) {
     if (props.info.currentPlayer) tabs.push(GoodGhostingTab.Personal)
 
     return (
-        <Card variant="outlined" className={classes.root} elevation={0}>
-            {props.info.gameName && (
-                <Typography className={classes.gameName} variant="h6" color="textPrimary">
-                    {props.info.gameName}
-                </Typography>
-            )}
-            <TimelineTimer info={props.info} />
-            <TabContext value={activeTab}>
-                <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
-                    {tabs.map((tab) => (
-                        <Tab className={classes.tab} key={tab} value={tab} label={tab} />
-                    ))}
-                </Tabs>
-                <TabPanel value={GoodGhostingTab.Game} sx={{ flex: 1 }}>
-                    <GameStatsView
-                        info={props.info}
-                        finDataResult={finDataResult}
-                        otherPlayerResult={otherPlayerResult}
-                        poolAssetsResult={poolAssetsResult}
-                    />
-                </TabPanel>
-                <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
-                    <TimelineView info={props.info} />
-                </TabPanel>
-                <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
-                    <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />
-                </TabPanel>
-                {props.info.currentPlayer && (
-                    <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
-                        <PersonalView info={props.info} />
-                    </TabPanel>
+        <>
+            <Card variant="outlined" className={classes.root} elevation={0}>
+                {props.info.gameName && (
+                    <Typography className={classes.gameName} variant="h6" color="textPrimary">
+                        {props.info.gameName}
+                    </Typography>
                 )}
-            </TabContext>
-        </Card>
+                <TimelineTimer info={props.info} />
+                <TabContext value={activeTab}>
+                    <Tabs className={classes.tabs} value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
+                        {tabs.map((tab) => (
+                            <Tab className={classes.tab} key={tab} value={tab} label={tab} />
+                        ))}
+                    </Tabs>
+                    <TabPanel value={GoodGhostingTab.Game} sx={{ flex: 1 }}>
+                        <GameStatsView
+                            info={props.info}
+                            finDataResult={finDataResult}
+                            otherPlayerResult={otherPlayerResult}
+                            poolAssetsResult={poolAssetsResult}
+                        />
+                    </TabPanel>
+                    <TabPanel value={GoodGhostingTab.Timeline} sx={{ flex: 1 }}>
+                        <TimelineView info={props.info} />
+                    </TabPanel>
+                    <TabPanel value={GoodGhostingTab.Everyone} sx={{ flex: 1 }}>
+                        <OtherPlayersView info={props.info} otherPlayerResult={otherPlayerResult} />
+                    </TabPanel>
+                    {props.info.currentPlayer && (
+                        <TabPanel value={GoodGhostingTab.Personal} sx={{ flex: 1 }}>
+                            <PersonalView info={props.info} />
+                        </TabPanel>
+                    )}
+                </TabContext>
+            </Card>
+            <Box sx={{ padding: 1.5 }}>
+                <EthereumChainBoundary chainId={ChainId.Matic} renderInTimeline />
+            </Box>
+        </>
     )
 }

@@ -5,9 +5,7 @@ import { parseURL } from '@masknet/shared-base'
 import { GoogGhostingIcon } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
@@ -50,11 +48,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     }
     usePluginWrapper(true)
 
-    return (
-        <EthereumChainBoundary chainId={ChainId.Matic} renderInTimeline>
-            <PreviewCard id={id} />
-        </EthereumChainBoundary>
-    )
+    return <PreviewCard id={id} />
 }
 
 export default sns

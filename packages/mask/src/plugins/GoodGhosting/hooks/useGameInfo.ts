@@ -1,4 +1,5 @@
 import {
+    ChainId,
     isZeroAddress,
     useAccount,
     useGoodGhostingConstants,
@@ -15,7 +16,7 @@ import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service'
 
 export function useGameContractAddress(id: string) {
-    const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants()
+    const { GOOD_GHOSTING_CONTRACT_ADDRESS_FILE } = useGoodGhostingConstants(ChainId.Matic)
 
     const asyncResult = useAsyncRetry(async (): Promise<GameMetaData> => {
         if (!GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
@@ -55,7 +56,13 @@ export function useGameInfo(gameData: GameMetaData) {
         }
     }, [account])
 
-    const [results, calls, _, callback] = useSingleContractMultipleData(contract, names, callDatas)
+    const [results, calls, _, callback] = useSingleContractMultipleData(
+        contract,
+        names,
+        callDatas,
+        undefined,
+        ChainId.Matic,
+    )
     const asyncResult = useAsyncRetry(() => callback(calls), [calls])
 
     const gameInfo = useMemo(() => {

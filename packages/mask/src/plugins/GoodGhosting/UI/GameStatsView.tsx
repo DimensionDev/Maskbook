@@ -24,6 +24,23 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '100px',
         margin: 'auto',
     },
+    button: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        width: '100%',
+    },
+    retry: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        width: 254,
+        margin: 16,
+    },
 }))
 
 interface GameStatsViewProps {
@@ -54,7 +71,7 @@ export function GameStatsView(props: GameStatsViewProps) {
 
     if ((loading && !financialData) || otherPlayerLoading || poolAssetsLoading) {
         return (
-            <Typography variant="h6" color="textSecondary">
+            <Typography variant="h6" color="textSecondary" textAlign="center" sx={{ padding: 2 }}>
                 {t('plugin_good_ghosting_loading_game_stats')}
             </Typography>
         )
@@ -66,8 +83,8 @@ export function GameStatsView(props: GameStatsViewProps) {
         }
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">{t('go_wrong')}</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retryFailed}>
+                <Typography color="error">{t('go_wrong')}</Typography>
+                <Button className={classes.retry} size="small" onClick={retryFailed}>
                     {t('retry')}
                 </Button>
             </Box>

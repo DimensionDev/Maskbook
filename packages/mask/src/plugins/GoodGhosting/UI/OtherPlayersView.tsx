@@ -21,6 +21,15 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: '100px',
         margin: 'auto',
     },
+    retry: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        width: 254,
+        margin: 16,
+    },
 }))
 
 interface OtherPlayersViewProps {
@@ -42,8 +51,8 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
     } else if (error || !players) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">{t('go_wrong')}</Typography>
-                <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
+                <Typography color="error">{t('go_wrong')}</Typography>
+                <Button className={classes.retry} size="small" onClick={retry}>
                     {t('retry')}
                 </Button>
             </Box>
