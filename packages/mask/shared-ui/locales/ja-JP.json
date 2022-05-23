@@ -1,5 +1,7 @@
 {
     "add_token": "トークンを追加",
+    "additional_post_box__encrypted_post_pre": "#mask_io で復号しましょう！ {{encrypted}}",
+    "additional_post_box__steganography_post_pre": "この投稿は #mask_io によって暗号化されています。 📪🔑 mask.io をインストールして復号しましょう！ ([I:b]) {{random}}",
     "auto_paste_failed_dialog_title": "手動でペーストする",
     "auto_paste_failed_dialog_content": "以下の文字列と画像（存在すれば）をコピーし、公開しましょう。",
     "auto_paste_failed_dialog_image_caption": "新しいタブで開く",

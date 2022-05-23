@@ -19,6 +19,8 @@
     "add_token": "新增代幣",
     "add_nft_contract_search_hint": "檢索NFT合約名稱或地址",
     "applications": "應用",
+    "additional_post_box__encrypted_post_pre": "使用 #mask_io 解密這篇貼文！ {{encrypted}}",
+    "additional_post_box__steganography_post_pre": "這張圖片是使用 #mask_io 加密。 📪🔑 安裝 mask.io 解密。 {{random}}",
     "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "用 #mask_io @{{account}} 開啟紅包 {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "用 #mask_io 開啟紅包 {{encrypted}}",
     "auto_paste_failed_dialog_title": "手動貼上",

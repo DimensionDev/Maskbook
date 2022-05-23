@@ -14,7 +14,7 @@ export function useAvailability(
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection | null
 
     return useAsyncRetry(async () => {
-        if (!id || !connection) return null
+        if (!id || !connection || !contract_address) return null
         return checkAvailability(id, account, contract_address, chainId, connection)
-    }, [id, account, chainId, connection])
+    }, [id, account, chainId, connection, contract_address])
 }

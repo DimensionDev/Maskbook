@@ -34,6 +34,8 @@
     "application_settings_tab_plug_app-list-unlisted": "未显示",
     "application_settings_tab_plug_app-listed-placeholder": "点击应用图标将会在应用列表中隐藏。",
     "application_settings_tab_plug_app-unlisted-placeholder": "点击应用图标将会在应用列表中显示。",
+    "additional_post_box__encrypted_post_pre": "安装 #mask_io 解密此贴文 ！ {{encrypted}}",
+    "additional_post_box__steganography_post_pre": "此图片使用#mask_io加密。📪🔑 安装mask.io解密它。 {{random}}",
     "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "使用 #mask_io 来认领这个红包！@{{account}} {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet": "使用 #mask_io 来认领这个红包！@{{encrypted}}",
     "auto_paste_failed_dialog_title": "手动粘贴",
