@@ -214,6 +214,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             margin: theme.spacing(3, 'auto'),
         },
         claimAllButton: {
+            height: 48,
+            borderRadius: 999,
             [smallQuery]: {
                 fontSize: 14,
             },

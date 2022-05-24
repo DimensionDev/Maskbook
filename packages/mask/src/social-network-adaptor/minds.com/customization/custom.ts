@@ -23,12 +23,16 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
+        console.log({ backgroundColor })
         currentTheme.value = contrastColor === 'rgb(255,255,255)' ? 'dark' : 'light'
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
         if (backgroundColor)
             backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
     }
+    // init
+    currentTheme.value = getBackgroundColor(document.body) === 'rgb(255,255,255)' ? 'light' : 'dark'
 
+    // update
     new MutationObserverWatcher(themeListItemSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
