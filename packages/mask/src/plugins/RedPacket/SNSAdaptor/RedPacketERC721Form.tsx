@@ -21,9 +21,10 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
-import { NFTCardStyledAssetPlayer, WalletStatusBar } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -351,7 +352,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         owner={account}
                         contractDetailed={contract}
                         operator={RED_PACKET_NFT_ADDRESS}>
-                        <WalletStatusBar
+                        <PluginWalletStatusBar
                             actionProps={{
                                 disabled: !!validationMessage,
                                 title: t('plugin_red_packet_next'),

@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip, WalletStatusBar } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -28,6 +28,7 @@ import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { PluginWalletStatusBar } from '../../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -504,7 +505,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     }
                                     render={(disable: boolean) =>
                                         isGreatThanSlippageSetting ? (
-                                            <WalletStatusBar
+                                            <PluginWalletStatusBar
                                                 actionProps={{
                                                     color: 'warning',
                                                     disabled: focusedTrade?.loading || !focusedTrade?.value || disable,
@@ -518,7 +519,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                 classes={{ button: classes.button }}
                                             />
                                         ) : (
-                                            <WalletStatusBar
+                                            <PluginWalletStatusBar
                                                 actionProps={{
                                                     color: 'warning',
                                                     disabled:

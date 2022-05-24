@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import { NextIDPersonaBindings, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
@@ -12,6 +12,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service'
 import { MaskMessages } from '../../utils'
+import { first } from 'lodash-unified'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
     return useAsyncRetry(() => {
@@ -132,4 +133,34 @@ export function useNextIDConnectStatus() {
                 ? verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier, lastState.username)
                 : null,
     }
+}
+
+export function useNextIDWallets() {
+    const lastRecognized = useLastRecognizedIdentity()
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+    return useAsyncRetry(async () => {
+        if (!lastRecognized.identifier?.userId) return
+        const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
+            platform ?? NextIDPlatform.Twitter,
+            lastRecognized.identifier.userId.toLowerCase(),
+        )
+
+        const currentPersonaBinding = first(
+            personaBindings.sort((a, b) =>
+                sortPersonaBindings(a, b, lastRecognized.identifier?.userId.toLowerCase() ?? ''),
+            ),
+        )
+        if (!currentPersonaBinding) return
+
+        return currentPersonaBinding?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+    }, [lastRecognized.identifier?.userId, platform])
+}
+
+const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
+    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
+    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
+
+    if (!p_a || !p_b) return 0
+    if (p_a.created_at > p_b.created_at) return -1
+    return 1
 }

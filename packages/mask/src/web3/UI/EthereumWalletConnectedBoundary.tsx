@@ -7,7 +7,8 @@ import { useI18N } from '../../utils'
 import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
-import { WalletStatusBar } from '@masknet/shared'
+import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -61,18 +62,20 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     )
     if (!account)
         return (
-            <WalletStatusBar
-                actionProps={{
-                    action: openSelectProviderDialog,
-                    title: t('plugin_wallet_connect_a_wallet'),
-                }}
-                classes={{ button: classNames(classes.button, classes.connectWallet) }}
-            />
+            <ActionButton
+                startIcon={props.startIcon}
+                className={buttonClass}
+                fullWidth
+                variant="contained"
+                onClick={openSelectProviderDialog}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_connect_a_wallet')}
+            </ActionButton>
         )
 
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     title: t('plugin_wallet_confirm_risk_warning'),
                     action: openRiskWarningDialog,
@@ -83,7 +86,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     disabled: !nativeTokenBalance.error,
                     action: nativeTokenBalance.retry,
@@ -95,7 +98,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
 
     if (!chainIdValid && !offChain)
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     title: t('plugin_wallet_invalid_network'),
                     disabled: true,

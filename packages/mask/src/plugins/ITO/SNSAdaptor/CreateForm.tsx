@@ -29,7 +29,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
-import { WalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -475,7 +475,7 @@ export function CreateForm(props: CreateFormProps) {
                         token={
                             tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
                         }>
-                        <WalletStatusBar
+                        <PluginWalletStatusBar
                             actionProps={{
                                 disabled: !!validationMessage,
                                 action: onNext,

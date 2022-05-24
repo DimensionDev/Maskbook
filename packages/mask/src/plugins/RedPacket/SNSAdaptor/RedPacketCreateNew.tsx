@@ -43,7 +43,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         display: 'flex',
     },
     tabWrapper: {
-        padding: theme.spacing(0, 2, 2, 2),
+        padding: 0,
     },
 }))
 

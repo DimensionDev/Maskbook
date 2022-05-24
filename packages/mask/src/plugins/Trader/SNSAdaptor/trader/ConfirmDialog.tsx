@@ -1,5 +1,5 @@
 import { CramIcon, InfoIcon, RetweetIcon } from '@masknet/icons'
-import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon, WalletStatusBar } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
@@ -28,6 +28,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
+import { PluginWalletStatusBar } from '../../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -383,7 +384,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 {!priceUpdated ? (
                     <DialogActions className={classes.actions}>
                         {isGreatThanSlippageSetting ? (
-                            <WalletStatusBar
+                            <PluginWalletStatusBar
                                 actionProps={{
                                     color: 'warning',
                                     title: t('plugin_trader_confirm_price_impact', {
@@ -395,7 +396,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 classes={{ button: classes.button }}
                             />
                         ) : (
-                            <WalletStatusBar
+                            <PluginWalletStatusBar
                                 actionProps={{
                                     title: t('plugin_trader_confirm_swap'),
                                     action: onConfirm,

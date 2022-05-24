@@ -5,7 +5,7 @@ import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, FormattedBalance, WalletStatusBar } from '@masknet/shared'
+import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
@@ -32,6 +32,7 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -372,7 +373,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             classes={{
                                                 connectWallet: classes.claimAllButton,
                                             }}>
-                                            <WalletStatusBar
+                                            <PluginWalletStatusBar
                                                 actionProps={{
                                                     loading: [
                                                         TransactionStateType.HASH,

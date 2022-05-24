@@ -12,7 +12,7 @@ import { Typography, Link } from '@mui/material'
 import { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { WalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()(() => ({
     snackBarText: {
@@ -100,7 +100,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
 
     if ([TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(approveState.type)) {
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     loading: true,
                     disabled: true,
@@ -117,7 +117,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (validationMessage) {
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     disabled: true,
                     title: validationMessage,
@@ -127,7 +127,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (loading) {
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     disabled: true,
                     loading: true,
@@ -137,7 +137,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (value === false) {
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     action: approveCallback,
                     title: t('plugin_wallet_approve_all_nft', {
@@ -153,7 +153,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         )
     } else if (value === undefined) {
         return (
-            <WalletStatusBar
+            <PluginWalletStatusBar
                 actionProps={{
                     action: retry,
                     title: t('plugin_wallet_fail_to_load_nft_contract'),

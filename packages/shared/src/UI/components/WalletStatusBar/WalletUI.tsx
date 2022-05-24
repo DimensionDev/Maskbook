@@ -1,13 +1,21 @@
-import { useNetworkDescriptor, useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
-import { ReversedAddress, WalletIcon } from '@masknet/shared'
+import {
+    NetworkPluginID,
+    useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useReverseAddress,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
+import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useAccount, useChainColor, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useChainColor, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
 import { DownIcon } from '../../assets/Down'
 import { LinkIcon } from '../../assets/Link'
 import { LockWalletIcon } from '../../assets/Lock'
+import { VerifyIcon } from '../../assets/verify'
 
 const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     root: {
@@ -20,7 +28,7 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
         alignItems: 'center',
     },
     domain: {
-        marginLeft: theme.spacing(1),
+        marginLeft: 9.53,
     },
     link: {
         lineHeight: 0,
@@ -40,28 +48,46 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     icon: {
         filter: `drop-shadow(0px 6px 12px ${new Color(props.filterColor).alpha(0.4).toString()})`,
     },
+    walletName: {
+        color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
+    },
+    walletAddress: {
+        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+    },
 }))
 
 interface WalletUIProps {
+    address: string
     iconSize?: number
     badgeSize?: number
     onClick?: () => void
+    verify?: boolean
+    isETH?: boolean
+    showMenuDrop?: boolean
 }
 
 export function WalletUI(props: WalletUIProps) {
-    const { iconSize = 24, badgeSize = 10, onClick } = props
+    const {
+        iconSize = 30,
+        badgeSize = 10,
+        onClick,
+        verify = false,
+        isETH = false,
+        address,
+        showMenuDrop = false,
+    } = props
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
     const { Utils } = useWeb3State()
-    const account = useAccount()
     const selectedWallet = useWallet()
     const chainIdValid = useChainIdValid()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
     const [pending, setPending] = useState(false)
     const [lock, setLock] = useState(false)
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
 
-    console.log(chainColor)
     return (
         <Box className={classes.root} onClick={onClick}>
             <WalletIcon
@@ -74,18 +100,21 @@ export function WalletUI(props: WalletUIProps) {
             />
             <Box className={classes.domain}>
                 <Box className={classes.name}>
-                    <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                        <ReversedAddress address={account} />
+                    <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
+                        {currentPluginId === NetworkPluginID.PLUGIN_EVM
+                            ? domain ?? Utils?.formatAddress?.(address, 4)
+                            : Utils?.formatAddress?.(address, 4)}
                     </Typography>
-                    <DownIcon />
+                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
+                    {showMenuDrop ? <DownIcon /> : null}
                 </Box>
                 <Box className={classes.address}>
                     <Typography variant="body2" color="textSecondary" fontSize={14}>
-                        {formatEthereumAddress(account, 4)}
+                        {formatEthereumAddress(address, 4)}
                     </Typography>
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, account) ?? ''}
+                        href={Utils?.resolveAddressLink?.(1, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">

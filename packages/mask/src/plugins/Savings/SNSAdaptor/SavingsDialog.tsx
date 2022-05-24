@@ -16,7 +16,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { InjectedDialog, WalletStatusBar } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -32,6 +32,7 @@ import { AAVEProtocol } from '../protocols/AAVEProtocol'
 import { LDO_PAIRS } from '../constants'
 import type { AbiItem } from 'web3-utils'
 import { flatten, compact, chunk } from 'lodash-unified'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 export interface SavingsDialogProps {
     open: boolean
@@ -150,7 +151,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <WalletStatusBar />
+                        <PluginWalletStatusBar />
                     </DialogActions>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>

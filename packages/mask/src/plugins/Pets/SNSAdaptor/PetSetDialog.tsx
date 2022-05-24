@@ -23,10 +23,10 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
-import { WalletStatusBar } from '@masknet/shared'
 import { ChearsIcon } from '../assets/Chears'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { LoadingButton } from '@mui/lab'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -341,7 +341,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </Typography>
                     <ChearsIcon style={{ width: 24, height: 24 }} />
                 </Box>
-                <WalletStatusBar
+                <PluginWalletStatusBar
                     actionProps={{
                         loading,
                         action: saveHandle,

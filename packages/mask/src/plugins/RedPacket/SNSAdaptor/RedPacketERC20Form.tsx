@@ -14,7 +14,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { usePickToken, WalletStatusBar } from '@masknet/shared'
+import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -22,11 +22,15 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        padding: theme.spacing(0, 2, 0, 2),
+    },
     field: {
         display: 'flex',
         margin: theme.spacing(1, 0),
@@ -190,92 +194,95 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     if (!token) return null
     return (
         <>
-            <div className={classes.field}>
-                <FormControl className={classes.input} variant="outlined">
-                    <InputLabel className={classes.selectShrinkLabel}>{t('plugin_red_packet_split_mode')}</InputLabel>
-                    <Select
-                        ref={selectRef}
-                        value={isRandom ? 1 : 0}
-                        onChange={(e) => {
-                            // foolproof, reset amount since the meaning of amount changed:
-                            // 'total amount' <=> 'amount per share'
-                            setRawAmount('0')
-                            setRandom(e.target.value as number)
-                        }}
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'center',
+            <div className={classes.root}>
+                <div className={classes.field}>
+                    <FormControl className={classes.input} variant="outlined">
+                        <InputLabel className={classes.selectShrinkLabel}>
+                            {t('plugin_red_packet_split_mode')}
+                        </InputLabel>
+                        <Select
+                            ref={selectRef}
+                            value={isRandom ? 1 : 0}
+                            onChange={(e) => {
+                                // foolproof, reset amount since the meaning of amount changed:
+                                // 'total amount' <=> 'amount per share'
+                                setRawAmount('0')
+                                setRandom(e.target.value as number)
+                            }}
+                            MenuProps={{
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                },
+                                container: selectRef.current,
+                                anchorEl: selectRef.current,
+                            }}>
+                            <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
+                            <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField
+                        className={classes.input}
+                        InputProps={{
+                            inputProps: {
+                                autoComplete: 'off',
+                                autoCorrect: 'off',
+                                inputMode: 'decimal',
+                                placeholder: '0',
+                                pattern: '^[0-9]$',
+                                spellCheck: false,
                             },
-                            container: selectRef.current,
-                            anchorEl: selectRef.current,
-                        }}>
-                        <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
-                        <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
-                    </Select>
-                </FormControl>
-                <TextField
-                    className={classes.input}
-                    InputProps={{
-                        inputProps: {
-                            autoComplete: 'off',
-                            autoCorrect: 'off',
-                            inputMode: 'decimal',
-                            placeholder: '0',
-                            pattern: '^[0-9]$',
-                            spellCheck: false,
-                        },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            shrink: classes.inputShrinkLabel,
-                        },
-                    }}
-                    label={t('plugin_red_packet_shares')}
-                    value={shares}
-                    onChange={onShareChange}
-                />
+                        }}
+                        InputLabelProps={{
+                            shrink: true,
+                            classes: {
+                                shrink: classes.inputShrinkLabel,
+                            },
+                        }}
+                        label={t('plugin_red_packet_shares')}
+                        value={shares}
+                        onChange={onShareChange}
+                    />
+                </div>
+                <div className={classes.field}>
+                    <TokenAmountPanel
+                        classes={{ root: classes.input }}
+                        label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
+                        amount={rawAmount}
+                        balance={tokenBalance}
+                        token={token}
+                        maxAmountShares={isRandom || shares === '' ? 1 : shares}
+                        onAmountChange={setRawAmount}
+                        SelectTokenChip={{
+                            loading: loadingTokenBalance,
+                            ChipProps: {
+                                onClick: onSelectTokenChipClick,
+                            },
+                        }}
+                    />
+                </div>
+                <div className={classes.field}>
+                    <TextField
+                        className={classes.input}
+                        onChange={(e) => setMessage(e.target.value)}
+                        InputLabelProps={{
+                            shrink: true,
+                            classes: {
+                                shrink: classes.inputShrinkLabel,
+                            },
+                        }}
+                        inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
+                        label={t('plugin_red_packet_attached_message')}
+                        value={message}
+                    />
+                </div>
             </div>
-            <div className={classes.field}>
-                <TokenAmountPanel
-                    classes={{ root: classes.input }}
-                    label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
-                    amount={rawAmount}
-                    balance={tokenBalance}
-                    token={token}
-                    maxAmountShares={isRandom || shares === '' ? 1 : shares}
-                    onAmountChange={setRawAmount}
-                    SelectTokenChip={{
-                        loading: loadingTokenBalance,
-                        ChipProps: {
-                            onClick: onSelectTokenChipClick,
-                        },
-                    }}
-                />
-            </div>
-            <div className={classes.field}>
-                <TextField
-                    className={classes.input}
-                    onChange={(e) => setMessage(e.target.value)}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            shrink: classes.inputShrinkLabel,
-                        },
-                    }}
-                    inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
-                    label={t('plugin_red_packet_attached_message')}
-                    value={message}
-                />
-            </div>
-
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
                     token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                    <WalletStatusBar
+                    <PluginWalletStatusBar
                         actionProps={{
                             disabled: !!validationMessage,
                             title: validationMessage || t('plugin_red_packet_next'),

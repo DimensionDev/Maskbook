@@ -10,7 +10,7 @@ import {
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { WalletStatusBar } from '@masknet/shared'
+import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -87,7 +87,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
-                <WalletStatusBar
+                <PluginWalletStatusBar
                     actionProps={{
                         disabled: true,
                         title: fallback ?? 'Enter an amount',
@@ -102,7 +102,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.FAILED)
         return (
             <Grid container>
-                <WalletStatusBar
+                <PluginWalletStatusBar
                     actionProps={{
                         title: t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' }),
                         action: resetApproveCallback,
@@ -154,7 +154,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
         return (
             <Grid container>
-                <WalletStatusBar
+                <PluginWalletStatusBar
                     actionProps={{
                         title:
                             approveStateType === ApproveStateType.PENDING

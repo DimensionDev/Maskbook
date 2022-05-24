@@ -1,17 +1,20 @@
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { useAccount, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
 import { Box, Button, CircularProgress } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { WalletUI } from './WalletUI'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMenuBar } from './WalletMenuBar'
+import type { BindingProof } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
-        width: '100%',
+        flex: 1,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        padding: theme.spacing(2),
+        borderRadius: theme.spacing(0, 0, 1.5, 1.5),
     },
     button: {
         borderRadius: 8,
@@ -38,6 +41,8 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         endIcon?: React.ReactNode
         loading?: boolean
         color?: 'warning'
+        openPopupsWindow: () => void
+        wallets: BindingProof[]
     }
 }
 
@@ -66,7 +71,13 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
             ) : (
                 <>
                     <Box sx={{ flex: 1 }}>
-                        <WalletUI iconSize={iconSize} badgeSize={badgeSize} onClick={openSelectProviderDialog} />
+                        <WalletMenuBar
+                            openPopupsWindow={actionProps?.openPopupsWindow}
+                            iconSize={iconSize}
+                            badgeSize={badgeSize}
+                            onChange={openSelectProviderDialog}
+                            wallets={actionProps?.wallets ?? []}
+                        />
                     </Box>
 
                     <Box sx={{ flex: 1, textAlign: 'center' }}>

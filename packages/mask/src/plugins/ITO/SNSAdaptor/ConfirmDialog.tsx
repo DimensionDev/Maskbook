@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance, WalletStatusBar } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
     formatBalance,
     formatEthereumAddress,
@@ -19,6 +19,7 @@ import { Fragment, useCallback, useState, useEffect } from 'react'
 import { useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -303,7 +304,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <WalletStatusBar
+                    <PluginWalletStatusBar
                         actionProps={{
                             title: t('plugin_ito_send_text', {
                                 total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),

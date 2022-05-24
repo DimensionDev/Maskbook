@@ -1,6 +1,6 @@
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { InjectedDialog, WalletStatusBar } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import AssetsPanel from './AssetsPanel'
@@ -11,6 +11,7 @@ import { FindTrumanContext } from '../context'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -115,7 +116,7 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <WalletStatusBar />
+                    <PluginWalletStatusBar />
                 </DialogActions>
             </InjectedDialog>
         </FindTrumanContext.Provider>

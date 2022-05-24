@@ -5,9 +5,10 @@ import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer, useCha
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance, WalletStatusBar } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -175,7 +176,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
 
             <Grid item xs={12}>
-                <WalletStatusBar
+                <PluginWalletStatusBar
                     actionProps={{
                         action: onCreate,
                         title: t('plugin_red_packet_send_symbol', {
