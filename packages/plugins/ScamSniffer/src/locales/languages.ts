@@ -12,7 +12,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./en-US.json'], () =>
         globalThis.dispatchEvent?.(
             new CustomEvent('MASK_I18N_HMR', {
-                detail: ['io.mask.example', { en: en_US }],
+                detail: ['io.scamsniffer.mask-plugin', { en: en_US }],
             }),
         ),
     )

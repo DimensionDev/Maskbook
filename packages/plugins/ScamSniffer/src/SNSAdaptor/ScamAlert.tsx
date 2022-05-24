@@ -37,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: '5px',
     },
     report: {
-        // fontSize: '13px',
         '& span': { fontSize: 13, color: '#888', lineHeight: 1.75 },
     },
     desc: {
@@ -67,7 +66,6 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
     const [autoReport, setAutoReport] = useState(false)
 
     useEffect(() => {
-        console.log('autoReport', autoReport)
         if (autoReport) {
             PluginScamRPC.sendReportScam(result)
         }
@@ -96,12 +94,14 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                         </ListItemIcon>
                         <ListItemText className={classes.highlight} primary={result.name} />
                     </ListItemButton>
-                    <ListItemButton onClick={() => openWindow(`https://twitter.com/${result.twitterUsername}`)}>
-                        <ListItemIcon>
-                            <TwitterIcon className={classes.highlight} />
-                        </ListItemIcon>
-                        <ListItemText className={classes.highlight} primary={result.twitterUsername} />
-                    </ListItemButton>
+                    {result.twitterUsername ? (
+                        <ListItemButton onClick={() => openWindow(`https://twitter.com/${c}`)}>
+                            <ListItemIcon>
+                                <TwitterIcon className={classes.highlight} />
+                            </ListItemIcon>
+                            <ListItemText className={classes.highlight} primary={result.twitterUsername} />
+                        </ListItemButton>
+                    ) : null}
                     {result.externalUrl ? (
                         <ListItemButton onClick={() => openWindow(result.externalUrl)}>
                             <ListItemIcon>
@@ -114,13 +114,6 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                 <Typography className={classes.desc}>Be careful what you visit and sign !</Typography>
             </div>
             <div className={classes.reportWrapper}>
-                {/* {!autoReport ? (
-                    <FormControlLabel
-                        className={classes.report}
-                        control={<Checkbox checked={autoReport} onChange={handleClick} />}
-                        label="Auto report the scam links to MetaMask"
-                    />
-                ) : null} */}
                 <FormControlLabel
                     className={classes.report}
                     control={<Checkbox checked={autoReport} onChange={handleClick} />}
