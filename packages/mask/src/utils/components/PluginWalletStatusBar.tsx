@@ -16,10 +16,11 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         loading?: boolean
         color?: 'warning'
     }
+    onChange?: (address: string) => void
 }
 
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
-    const { actionProps, className } = props
+    const { actionProps, className, onChange } = props
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -36,6 +37,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
             iconSize={30}
             badgeSize={12}
             actionProps={{ ...actionProps, openPopupsWindow, wallets, loading }}
+            onChange={(address: string) => onChange?.(address)}
         />
     )
 }

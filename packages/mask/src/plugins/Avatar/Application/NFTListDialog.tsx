@@ -263,6 +263,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),
                     }}
                     classes={{ button: classes.button }}
+                    onChange={(address: string) => onChange(address)}
                 />
             </DialogActions>
             <AddNFT
