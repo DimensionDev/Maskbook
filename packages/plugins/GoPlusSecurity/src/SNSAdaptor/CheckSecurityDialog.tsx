@@ -18,6 +18,7 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
+import { first, isEmpty } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,12 +65,13 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const { open, onClose } = props
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: ChainId, content: string) => {
-        if (content.trim() === ZERO_ADDRESS) return
-        const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
-        if (!Object.keys(values ?? {}).length) throw new Error('Contract Not Found')
-        return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
-            | TokenSecurity
-            | undefined
+        if (!content || content.trim() === ZERO_ADDRESS) return
+        let values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
+        values ??= {}
+        if (isEmpty(values)) throw new Error('Contract Not Found')
+        const entity = first(Object.entries(values ?? {}))
+        if (!entity) return
+        return { ...entity[1], contract: entity[0], chainId } as TokenSecurity
     }, [])
 
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
