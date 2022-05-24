@@ -13,7 +13,7 @@ import {
     FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
 
-import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, TabsReferralFarms } from '../types'
+import { AdjustFarmRewardsInterface, TransactionStatus, PagesType } from '../types'
 import { useI18N } from '../locales'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -93,7 +93,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     }, [])
 
     const onChangePageToAdjustRewards = useCallback(() => {
-        props?.onChangePage?.(PagesType.ADJUST_REWARDS, TabsReferralFarms.TOKENS + ': ' + PagesType.ADJUST_REWARDS, {
+        props?.onChangePage?.(PagesType.ADJUST_REWARDS, PagesType.ADJUST_REWARDS, {
             adjustFarmDialog: {
                 farm,
                 rewardToken,
@@ -184,24 +184,19 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     ])
 
     const onOpenDepositDialog = useCallback(() => {
-        props.continue(
-            PagesType.ADJUST_REWARDS,
-            PagesType.DEPOSIT,
-            TabsReferralFarms.TOKENS + ': ' + PagesType.ADJUST_REWARDS,
-            {
-                hideAttrLogo: true,
-                depositDialog: {
-                    deposit: {
-                        totalFarmReward,
-                        token: rewardToken,
-                        attraceFee,
-                        requiredChainId,
-                        onDeposit: onAdjustFarmReward,
-                    },
-                    adjustFarmData: { farm, referredToken, rewardToken },
+        props.continue(PagesType.ADJUST_REWARDS, PagesType.DEPOSIT, PagesType.ADJUST_REWARDS, {
+            hideAttrLogo: true,
+            depositDialog: {
+                deposit: {
+                    totalFarmReward,
+                    token: rewardToken,
+                    attraceFee,
+                    requiredChainId,
+                    onDeposit: onAdjustFarmReward,
                 },
+                adjustFarmData: { farm, referredToken, rewardToken },
             },
-        )
+        })
     }, [props, attraceFee, totalFarmReward, referredToken, rewardToken, requiredChainId, farm, onAdjustFarmReward])
 
     const onClickAdjustRewards = useCallback(() => {

@@ -8,14 +8,7 @@ import { Typography, Button, Box } from '@mui/material'
 import { useI18N } from '../../locales'
 import { roundValue } from '../../helpers'
 import { harvestRewards } from '../utils/rewards'
-import {
-    PagesType,
-    TransactionStatus,
-    TabsReferralFarms,
-    AccountRewards,
-    RewardDetailed,
-    ChangePage,
-} from '../../types'
+import { PagesType, TransactionStatus, AccountRewards, RewardDetailed, ChangePage } from '../../types'
 
 import { AccordionReward } from './AccordionReward'
 import { ReferredTokenRewards } from './ReferredTokenRewards'
@@ -69,7 +62,7 @@ export function Rewards({
                         status: TransactionStatus.CONFIRMED,
                         actionButton: {
                             label: t.dismiss(),
-                            onClick: () => onChangePage?.(pageType, TabsReferralFarms.TOKENS + ': ' + pageType),
+                            onClick: () => onChangePage?.(pageType, pageType),
                         },
                         transactionHash: txHash,
                     },
@@ -82,7 +75,7 @@ export function Rewards({
     const onErrorHarvestRewards = useCallback(
         (error?: string) => {
             showSnackbar(error || t.go_wrong(), { variant: 'error' })
-            onChangePage?.(pageType, TabsReferralFarms.TOKENS + ': ' + pageType)
+            onChangePage?.(pageType, pageType)
         },
         [onChangePage, t, showSnackbar],
     )

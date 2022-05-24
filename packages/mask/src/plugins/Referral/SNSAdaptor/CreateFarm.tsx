@@ -17,7 +17,7 @@ import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divi
 import { TabContext, TabPanel } from '@mui/lab'
 
 import { useI18N } from '../locales'
-import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
+import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType } from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
@@ -208,7 +208,7 @@ export function CreateFarm(props: PageInterface) {
             if (error) {
                 showSnackbar(error, { variant: 'error' })
             }
-            props?.onChangePage?.(PagesType.CREATE_FARM, TabsReferralFarms.TOKENS + ': ' + PagesType.CREATE_FARM)
+            props?.onChangePage?.(PagesType.CREATE_FARM, PagesType.CREATE_FARM)
         },
         [props?.onChangePage],
     )
@@ -240,23 +240,18 @@ export function CreateFarm(props: PageInterface) {
     }, [web3, account, currentChainId, tokenRefer, tokenReward, totalFarmReward, dailyFarmReward, attraceFee])
 
     const onClickCreateFarm = useCallback(() => {
-        props.continue(
-            PagesType.CREATE_FARM,
-            PagesType.DEPOSIT,
-            TabsReferralFarms.TOKENS + ': ' + PagesType.CREATE_FARM,
-            {
-                hideAttrLogo: true,
-                depositDialog: {
-                    deposit: {
-                        totalFarmReward,
-                        token: tokenReward,
-                        attraceFee,
-                        requiredChainId,
-                        onDeposit,
-                    },
+        props.continue(PagesType.CREATE_FARM, PagesType.DEPOSIT, PagesType.CREATE_FARM, {
+            hideAttrLogo: true,
+            depositDialog: {
+                deposit: {
+                    totalFarmReward,
+                    token: tokenReward,
+                    attraceFee,
+                    requiredChainId,
+                    onDeposit,
                 },
             },
-        )
+        })
     }, [props.continue, attraceFee, totalFarmReward, tokenReward, requiredChainId, onDeposit])
 
     const balance = formatBalance(rewardBalance ?? '', tokenReward?.decimals, 6)

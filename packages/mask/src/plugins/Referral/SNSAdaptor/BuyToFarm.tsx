@@ -15,7 +15,7 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
-import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, TabsReferralFarms } from '../types'
+import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType } from '../types'
 import type { Coin } from '../../Trader/types'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -134,7 +134,7 @@ export function BuyToFarm(props: PageInterface) {
     const onError = useCallback(
         (error?: string) => {
             showSnackbar(error || t.go_wrong(), { variant: 'error' })
-            props?.onChangePage?.(PagesType.BUY_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.BUY_TO_FARM}`)
+            props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
         },
         [props?.onChangePage, t, showSnackbar],
     )
@@ -147,7 +147,7 @@ export function BuyToFarm(props: PageInterface) {
         try {
             onConfirmReferFarm()
             await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
-            props?.onChangePage?.(PagesType.BUY_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.BUY_TO_FARM}`)
+            props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             swapToken()
         } catch (error: any) {
             onError(error?.message)

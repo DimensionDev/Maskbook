@@ -96,21 +96,21 @@ export function ReferralFarms(props: PageInterface) {
         {
             name: t.refer_to_farm(),
             onClick: () => {
-                props.continue(PagesType.REFERRAL_FARMS, PagesType.REFER_TO_FARM, tab + ': ' + PagesType.REFER_TO_FARM)
+                props.continue(PagesType.REFERRAL_FARMS, PagesType.REFER_TO_FARM, PagesType.REFER_TO_FARM)
             },
             icon: <ReferToFarmIcon />,
         },
         {
             name: t.buy_to_farm(),
             onClick: () => {
-                props.continue(PagesType.REFERRAL_FARMS, PagesType.BUY_TO_FARM, tab + ': ' + PagesType.BUY_TO_FARM)
+                props.continue(PagesType.REFERRAL_FARMS, PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             },
             icon: <BuyToFarmIcon />,
         },
         {
             name: t.create_farms(),
             onClick: () => {
-                props.continue(PagesType.REFERRAL_FARMS, PagesType.CREATE_FARM, tab + ': ' + PagesType.CREATE_FARM)
+                props.continue(PagesType.REFERRAL_FARMS, PagesType.CREATE_FARM, PagesType.CREATE_FARM)
             },
             icon: <CreateFarmIcon />,
         },

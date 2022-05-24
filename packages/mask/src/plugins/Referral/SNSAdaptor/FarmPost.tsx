@@ -8,9 +8,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TokenIcon } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { PluginId } from '@masknet/plugin-infra'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 import type { ReferralMetaData } from '../types'
 import type { Coin } from '../../Trader/types'
@@ -77,12 +74,6 @@ export function FarmPost(props: FarmPostProps) {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
     const { ERC20 } = useTokenListConstants(farmChainId)
-
-    // trader plugin
-    const traderPluginDefinition = useActivatedPlugin(PluginId.Trader, 'any')
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const traderPluginSupportedChainIds =
-        traderPluginDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
 
     const { value: rewards = EMPTY_LIST, error } = useAsync(
         async () =>
@@ -160,7 +151,6 @@ export function FarmPost(props: FarmPostProps) {
         }
     }, [payload, account, web3])
 
-    const switchNetworkBtnVisible = !traderPluginSupportedChainIds.includes(chainId)
     return (
         <div className={classes.farmPost}>
             <Card variant="outlined" className={classes.content}>
@@ -206,37 +196,22 @@ export function FarmPost(props: FarmPostProps) {
                 )}
             </Card>
             <Grid container className={classes.actions}>
-                {switchNetworkBtnVisible || !account ? (
-                    <EthereumChainBoundary
-                        chainId={SWAP_CHAIN_ID}
-                        noSwitchNetworkTip
-                        className={classes.switchButtonBox}
-                        classes={{ switchButton: sharedClasses.switchButton }}>
-                        <Grid item xs={6} display="flex" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
-                                {t.buy_to_farm()}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
-                                {t.refer_to_farm()}
-                            </Button>
-                        </Grid>
-                    </EthereumChainBoundary>
-                ) : (
-                    <>
-                        <Grid item xs={6} display="flex" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
-                                {t.buy_to_farm()}
-                            </Button>
-                        </Grid>
-                        <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
-                                {t.refer_to_farm()}
-                            </Button>
-                        </Grid>
-                    </>
-                )}
+                <EthereumChainBoundary
+                    chainId={SWAP_CHAIN_ID}
+                    noSwitchNetworkTip
+                    className={classes.switchButtonBox}
+                    classes={{ switchButton: sharedClasses.switchButton }}>
+                    <Grid item xs={6} display="flex" textAlign="center">
+                        <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
+                            {t.buy_to_farm()}
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
+                        <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
+                            {t.refer_to_farm()}
+                        </Button>
+                    </Grid>
+                </EthereumChainBoundary>
             </Grid>
         </div>
     )

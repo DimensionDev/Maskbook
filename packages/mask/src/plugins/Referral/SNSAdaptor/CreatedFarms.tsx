@@ -5,7 +5,7 @@ import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import { useI18N } from '../locales'
-import { PageInterface, PagesType, TabsReferralFarms, FarmDetailed } from '../types'
+import { PageInterface, PagesType, FarmDetailed } from '../types'
 import { getRequiredChainId } from '../helpers'
 import { ReferralRPC } from '../messages'
 
@@ -100,19 +100,14 @@ export function CreatedFarms(props: PageInterface) {
     )
 
     const onAdjustRewardButtonClick = (farm: FarmDetailed) => {
-        props.continue(
-            PagesType.CREATE_FARM,
-            PagesType.ADJUST_REWARDS,
-            `${TabsReferralFarms.TOKENS}: ${t.adjust_rewards()}`,
-            {
-                adjustFarmDialog: {
-                    farm,
-                    rewardToken: farm.rewardToken,
-                    referredToken: farm.referredToken,
-                    continue: () => {},
-                },
+        props.continue(PagesType.CREATE_FARM, PagesType.ADJUST_REWARDS, t.adjust_rewards(), {
+            adjustFarmDialog: {
+                farm,
+                rewardToken: farm.rewardToken,
+                referredToken: farm.referredToken,
+                continue: () => {},
             },
-        )
+        })
     }
 
     if (currentChainId !== requiredChainId) {

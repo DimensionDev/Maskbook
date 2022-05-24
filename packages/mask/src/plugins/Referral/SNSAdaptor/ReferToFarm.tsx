@@ -17,14 +17,7 @@ import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
-import {
-    ReferralMetaData,
-    TabsReferAndBuy,
-    TransactionStatus,
-    PageInterface,
-    PagesType,
-    TabsReferralFarms,
-} from '../types'
+import { ReferralMetaData, TabsReferAndBuy, TransactionStatus, PageInterface, PagesType } from '../types'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -152,7 +145,7 @@ export function ReferToFarm(props: PageInterface) {
     const onError = useCallback(
         (error?: string) => {
             showSnackbar(error || t.go_wrong(), { variant: 'error' })
-            props?.onChangePage?.(PagesType.REFER_TO_FARM, `${TabsReferralFarms.TOKENS}: ${PagesType.REFER_TO_FARM}`)
+            props?.onChangePage?.(PagesType.REFER_TO_FARM, PagesType.REFER_TO_FARM)
         },
         [props?.onChangePage, t, showSnackbar],
     )
