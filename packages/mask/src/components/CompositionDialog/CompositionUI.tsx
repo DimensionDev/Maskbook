@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback, useId } from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
@@ -107,11 +107,14 @@ export interface CompositionProps {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
+    version: -38 | -37
+    setVersion(version: -38 | -37): void
 }
 export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
     content: SerializableTypedMessages
     encode: 'text' | 'image'
+    version: -38 | -37
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
@@ -122,6 +125,7 @@ export interface CompositionRef {
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
+    const id = useId()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 
@@ -182,9 +186,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     encryptionKind === EncryptionTargetType.Public
                         ? { type: 'public' }
                         : { type: 'E2E', target: recipients.map((x) => x.identifier) },
+                version: props.version,
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
+    }, [encodingKind, encryptionKind, recipients, props.onSubmit, props.version])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
@@ -234,8 +239,27 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
-                    <EncryptionMethodSelector method={encodingKind} onChange={setEncoding} />
+                    <EncryptionMethodSelector
+                        imageDisabled={!props.supportImageEncoding}
+                        textDisabled={!props.supportTextEncoding}
+                        method={encodingKind}
+                        onChange={setEncoding}
+                    />
                 </div>
+                {process.env.NODE_ENV === 'development' ? (
+                    <div className={cx(classes.flex, classes.between)}>
+                        <Typography component="label" htmlFor={id}>
+                            Next generation payload
+                        </Typography>
+                        <div style={{ flex: 1 }} />
+                        <input
+                            id={id}
+                            type="checkbox"
+                            checked={props.version === -37}
+                            onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
+                        />
+                    </div>
+                ) : null}
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
