@@ -204,6 +204,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: '100%',
         margin: 0,
     },
+    walletBar: {
+        margin: -12,
+    },
 }))
 
 // #region token item
@@ -790,7 +793,7 @@ export function ITO(props: ITO_Props) {
                                         <EthereumWalletConnectedBoundary
                                             hideRiskWarningConfirmed
                                             startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                                            classes={{ button: classes.actionButton }}>
+                                            classes={{ button: classes.actionButton, walletBar: classes.walletBar }}>
                                             <ActionButton
                                                 onClick={retryIfQualified}
                                                 loading={loadingIfQualified}

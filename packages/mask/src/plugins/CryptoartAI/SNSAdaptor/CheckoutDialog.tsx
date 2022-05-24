@@ -27,6 +27,9 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
+        walletBar: {
+            margin: theme.spacing(0, -2, -2),
+        },
         panel: {
             marginTop: theme.spacing(2),
             '&:first-child': {
@@ -191,7 +194,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth

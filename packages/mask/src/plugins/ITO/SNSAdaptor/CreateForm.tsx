@@ -42,6 +42,12 @@ const useStyles = makeStyles()((theme) => {
                 margin: theme.spacing(0),
             },
         },
+        walletBar: {
+            marginTop: 0,
+            marginBottom: -16,
+            marginRight: -8,
+            marginLeft: -4,
+        },
         column: {
             flexDirection: 'column',
         },
@@ -468,7 +474,7 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.line}>
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}

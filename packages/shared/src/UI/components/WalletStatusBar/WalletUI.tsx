@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useChainColor, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useChainColor, useChainId } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
@@ -32,10 +32,12 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     },
     link: {
         lineHeight: 0,
+        marginLeft: 4,
     },
     linkIcon: {
         width: 14,
         height: 14,
+        fill: theme.palette.mode === 'dark' ? '#c4c7cd' : '#767f8d',
     },
     name: {
         display: 'flex',
@@ -60,7 +62,7 @@ interface WalletUIProps {
     address: string
     iconSize?: number
     badgeSize?: number
-    onClick?: () => void
+    onClick?: (adddress: string) => void
     verify?: boolean
     isETH?: boolean
     showMenuDrop?: boolean
@@ -69,7 +71,7 @@ interface WalletUIProps {
 export function WalletUI(props: WalletUIProps) {
     const {
         iconSize = 30,
-        badgeSize = 10,
+        badgeSize = 12,
         onClick,
         verify = false,
         isETH = false,
@@ -79,17 +81,17 @@ export function WalletUI(props: WalletUIProps) {
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
     const { Utils } = useWeb3State()
-    const selectedWallet = useWallet()
-    const chainIdValid = useChainIdValid()
-    const networkDescriptor = useNetworkDescriptor()
+    const chainId = useChainId()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const providerDescriptor = useProviderDescriptor()
     const [pending, setPending] = useState(false)
     const [lock, setLock] = useState(false)
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
 
     return (
-        <Box className={classes.root} onClick={onClick}>
+        <Box className={classes.root} onClick={() => onClick?.(address)}>
             <WalletIcon
                 classes={{ root: classes.icon }}
                 size={iconSize}
@@ -105,7 +107,7 @@ export function WalletUI(props: WalletUIProps) {
                             ? domain ?? Utils?.formatAddress?.(address, 4)
                             : Utils?.formatAddress?.(address, 4)}
                     </Typography>
-                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
+                    {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}
                     {showMenuDrop ? <DownIcon /> : null}
                 </Box>
                 <Box className={classes.address}>

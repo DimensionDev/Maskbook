@@ -150,7 +150,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             </>
                         )}
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions className={classes.actions}>
                         <PluginWalletStatusBar />
                     </DialogActions>
                 </InjectedDialog>

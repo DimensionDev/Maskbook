@@ -30,6 +30,9 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
+        walletBar: {
+            margin: theme.spacing(0, -2, -2),
+        },
         panel: {
             marginTop: theme.spacing(2),
             '&:first-child': {
@@ -281,7 +284,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 </Box>
             </CardContent>
             <CardActions className={classes.footer}>
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"

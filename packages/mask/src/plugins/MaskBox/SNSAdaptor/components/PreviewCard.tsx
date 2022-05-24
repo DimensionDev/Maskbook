@@ -50,6 +50,9 @@ const useTabsStyles = makeStyles()((theme) => ({
         },
         margin: '0 !important',
     },
+    walletBar: {
+        margin: -12,
+    },
 }))
 
 export interface PreviewCardProps {}
@@ -252,7 +255,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <EthereumChainBoundary chainId={chainId} renderInTimeline>
                     <EthereumWalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}
+                        classes={{ button: tabClasses.button, walletBar: classes.walletar }}
                         renderInTimeline>
                         <ActionButton
                             size="medium"

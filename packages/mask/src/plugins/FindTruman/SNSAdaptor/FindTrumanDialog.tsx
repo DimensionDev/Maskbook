@@ -51,6 +51,9 @@ const useStyles = makeStyles()((theme, props) => ({
         height: 22,
         margin: theme.spacing(0, 1),
     },
+    actions: {
+        padding: 0,
+    },
 }))
 
 interface FindTrumanDialogProps {
@@ -115,7 +118,7 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                         />
                     </Box>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={classes.actions}>
                     <PluginWalletStatusBar />
                 </DialogActions>
             </InjectedDialog>

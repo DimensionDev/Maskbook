@@ -71,7 +71,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount()
 
-    const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
+    const [selectedWallet, setSelectedWallet] = useState(account || wallets[0].identity || '')
     const onClick = useCallback((address: string) => {
         onChange(address)
         setSelectedWallet(address)
@@ -81,6 +81,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     useEffect(() => {
         if (!account && !wallets.length) return
         setSelectedWallet(account || wallets[0].identity)
+        onChange(account || wallets[0].identity)
     }, [account, wallets])
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -104,9 +105,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
         <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <>
-                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
-                    </>
+                    <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}
@@ -151,7 +150,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                         account,
                         Boolean(account),
                         () => onClick(account),
-                        onConnectWallet,
+                        () => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM }),
                         wallets.some((x) => isSameAddress(x.identity, account)),
                         wallets.some((x) => isSameAddress(x.identity, account))
                             ? true
