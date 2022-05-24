@@ -3,7 +3,6 @@ import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { Box, Button, CircularProgress } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletMenuBar } from './WalletMenuBar'
 import type { BindingProof } from '@masknet/shared-base'
 import classNames from 'classnames'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -55,60 +54,42 @@ interface WalletStatusBarProps extends withClasses<'button'> {
 
 export function WalletStatusBar(props: WalletStatusBarProps) {
     const t = useSharedI18N()
-    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange } = props
+    const { iconSize = 30, badgeSize = 12, actionProps, className } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+    const connectWalletDialog = () => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
 
     return (
         <Box className={classNames(classes.root, className)}>
-            <Box sx={{ flex: 1 }}>
-                <WalletMenuBar
-                    openPopupsWindow={actionProps?.openPopupsWindow}
-                    iconSize={iconSize}
-                    badgeSize={badgeSize}
-                    onChange={(address: string) => onChange?.(address)}
-                    wallets={actionProps?.wallets ?? []}
-                />
-            </Box>
-
-            <Box sx={{ flex: 1, textAlign: 'center' }}>
-                {!actionProps ? (
-                    <Button
-                        variant="contained"
-                        className={classes.button}
-                        fullWidth
-                        onClick={() => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })}>
-                        Change
-                    </Button>
-                ) : (
-                    <Button
-                        sx={{
+            {!actionProps ? (
+                <Button variant="contained" className={classes.button} fullWidth onClick={connectWalletDialog}>
+                    Change
+                </Button>
+            ) : (
+                <Button
+                    sx={{
+                        backgroundColor:
+                            actionProps.color === 'warning' ? '#FF3545' : MaskColorVar.buttonPluginBackground,
+                        color: actionProps.color === 'warning' ? '#ffffff' : MaskColorVar.twitterButtonText,
+                        '&:hover': {
                             backgroundColor:
                                 actionProps.color === 'warning' ? '#FF3545' : MaskColorVar.buttonPluginBackground,
-                            color: actionProps.color === 'warning' ? '#ffffff' : MaskColorVar.twitterButtonText,
-                            '&:hover': {
-                                backgroundColor:
-                                    actionProps.color === 'warning' ? '#FF3545' : MaskColorVar.buttonPluginBackground,
-                            },
-                        }}
-                        startIcon={actionProps.startIcon}
-                        endIcon={actionProps.endIcon}
-                        variant="contained"
-                        className={classes.button}
-                        fullWidth
-                        disabled={actionProps.loading || actionProps.disabled}
-                        onClick={
-                            actionProps.action ??
-                            (() => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM }))
-                        }>
-                        {actionProps.loading ? <CircularProgress size={24} className={classes.progress} /> : null}
-                        {actionProps.title ?? t.change()}
-                    </Button>
-                )}
-            </Box>
+                        },
+                    }}
+                    startIcon={actionProps.startIcon}
+                    endIcon={actionProps.endIcon}
+                    variant="contained"
+                    className={classes.button}
+                    fullWidth
+                    disabled={actionProps.loading || actionProps.disabled}
+                    onClick={actionProps.action ?? connectWalletDialog}>
+                    {actionProps.loading ? <CircularProgress size={24} className={classes.progress} /> : null}
+                    {actionProps.title ?? t.change()}
+                </Button>
+            )}
         </Box>
     )
 }

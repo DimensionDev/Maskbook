@@ -1,6 +1,5 @@
 import {
     NetworkPluginID,
-    useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
     useReverseAddress,
@@ -8,7 +7,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useChainColor, useChainId } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useChainColor } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
@@ -81,9 +80,8 @@ export function WalletUI(props: WalletUIProps) {
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
     const { Utils } = useWeb3State()
-    const chainId = useChainId()
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
+
+    const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
     const [pending, setPending] = useState(false)
     const [lock, setLock] = useState(false)
