@@ -48,4 +48,7 @@ export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDash
         width: 535,
         margin: 'auto',
     },
+    actions: {
+        padding: 0,
+    },
 }))

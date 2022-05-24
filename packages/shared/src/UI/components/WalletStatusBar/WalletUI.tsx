@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useChainColor, useChainIdValid, useWallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useChainColor } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
@@ -32,10 +32,12 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     },
     link: {
         lineHeight: 0,
+        marginLeft: 4,
     },
     linkIcon: {
         width: 14,
         height: 14,
+        fill: theme.palette.mode === 'dark' ? '#c4c7cd' : '#767f8d',
     },
     name: {
         display: 'flex',
@@ -69,7 +71,7 @@ interface WalletUIProps {
 export function WalletUI(props: WalletUIProps) {
     const {
         iconSize = 30,
-        badgeSize = 10,
+        badgeSize = 12,
         onClick,
         verify = false,
         isETH = false,
@@ -79,8 +81,7 @@ export function WalletUI(props: WalletUIProps) {
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
     const { Utils } = useWeb3State()
-    const selectedWallet = useWallet()
-    const chainIdValid = useChainIdValid()
+
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
     const [pending, setPending] = useState(false)
@@ -105,7 +106,7 @@ export function WalletUI(props: WalletUIProps) {
                             ? domain ?? Utils?.formatAddress?.(address, 4)
                             : Utils?.formatAddress?.(address, 4)}
                     </Typography>
-                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
+                    {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}
                     {showMenuDrop ? <DownIcon /> : null}
                 </Box>
                 <Box className={classes.address}>

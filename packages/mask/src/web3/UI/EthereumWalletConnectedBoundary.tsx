@@ -27,7 +27,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
-    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
+    extends withClasses<
+        'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button' | 'walletBar'
+    > {
     offChain?: boolean
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean
@@ -76,6 +78,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
         return (
             <PluginWalletStatusBar
+                className={classes.walletBar}
                 actionProps={{
                     title: t('plugin_wallet_confirm_risk_warning'),
                     action: openRiskWarningDialog,
@@ -87,6 +90,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <PluginWalletStatusBar
+                className={classes.walletBar}
                 actionProps={{
                     disabled: !nativeTokenBalance.error,
                     action: nativeTokenBalance.retry,
@@ -99,6 +103,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     if (!chainIdValid && !offChain)
         return (
             <PluginWalletStatusBar
+                className={classes.walletBar}
                 actionProps={{
                     title: t('plugin_wallet_invalid_network'),
                     disabled: true,

@@ -150,7 +150,7 @@ export const DarkColor: typeof LightColor = {
     warningBackground: 'rgba(255, 185, 21, 0.1)',
     cyberconnectPrimary: '#ffffff',
     errorPlugin: '#FF3545',
-    buttonPluginBackground: '#07101B',
+    buttonPluginBackground: '#F5F5F5',
     textPluginColor: '#07101B',
     buttonPluginColor: '#FFFFFF',
 }

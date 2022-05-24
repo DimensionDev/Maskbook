@@ -6,6 +6,7 @@ import { useNextIDWallets } from '../../components/DataSource/useNextID'
 import Services from '../../extension/service'
 
 interface WalletStatusBarProps extends withClasses<'button'> {
+    className?: string
     actionProps?: {
         title?: string | React.ReactElement | React.ReactNode
         action?: () => void
@@ -18,7 +19,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
 }
 
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
-    const { actionProps } = props
+    const { actionProps, className } = props
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -31,6 +32,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
 
     return (
         <WalletStatusBar
+            className={className}
             iconSize={30}
             badgeSize={12}
             actionProps={{ ...actionProps, openPopupsWindow, wallets, loading }}

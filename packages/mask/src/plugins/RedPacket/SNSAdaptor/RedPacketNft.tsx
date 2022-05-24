@@ -243,6 +243,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 160,
         width: 120,
     },
+    walletBar: {
+        margin: -12,
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -452,6 +455,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,
                                         gasFeeButton: classes.button,
+                                        walletBar: classes.walletBar,
                                     }}>
                                     <ActionButton
                                         variant="contained"

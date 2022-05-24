@@ -176,5 +176,8 @@ to {
                 backgroundColor: theme.palette.maskColor.dark,
             },
         },
+        walletBar: {
+            margin: -12,
+        },
     }
 })

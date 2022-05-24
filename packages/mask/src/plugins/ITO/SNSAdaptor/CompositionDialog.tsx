@@ -31,7 +31,19 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
         ...(snsId === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
+        padding: 0,
         paddingTop: 50,
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     tabs: {
         top: 0,

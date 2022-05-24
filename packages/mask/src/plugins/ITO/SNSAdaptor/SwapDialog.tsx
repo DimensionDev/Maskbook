@@ -76,6 +76,9 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         marginTop: theme.spacing(2),
     },
+    walletBar: {
+        margin: 0,
+    },
     remindText: {
         fontSize: 10,
         marginTop: theme.spacing(1),
@@ -295,7 +298,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 {t('plugin_ito_swap_only_once_remind')}
             </Typography>
             <section className={classes.swapButtonWrapper}>
-                <EthereumWalletConnectedBoundary>
+                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}

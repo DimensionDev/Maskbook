@@ -95,6 +95,7 @@ export function OperationFooter({
                     renderInTimeline
                     classes={{
                         button: classes.walletButton,
+                        walletBar: classes.walletBar,
                     }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (

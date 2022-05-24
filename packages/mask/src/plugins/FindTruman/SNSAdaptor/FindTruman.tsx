@@ -113,6 +113,9 @@ const useStyles = makeStyles()((theme) => {
             },
             margin: '0 !important',
         },
+        walletBar: {
+            margin: -12,
+        },
     }
 })
 
@@ -275,7 +278,7 @@ export function FindTruman(props: FindTrumanProps) {
                 <EthereumChainBoundary chainId={chainId} renderInTimeline>
                     <EthereumWalletConnectedBoundary
                         startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                        classes={{ button: classes.button }}
+                        classes={{ button: classes.button, walletBar: classes.walletar }}
                         renderInTimeline
                     />
                 </EthereumChainBoundary>

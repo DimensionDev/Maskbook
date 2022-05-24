@@ -13,6 +13,7 @@ import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import { NetworkPluginID, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -30,12 +31,13 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1D9BF0',
     },
     actions: {
-        padding: theme.spacing(2),
+        padding: 0,
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         position: 'absolute',
         left: 0,
         bottom: 0,
-        width: 'calc(100% - 32px)',
+        width: 'calc(100% - 12px)',
+        marginLeft: -4,
     },
     content: {
         height: 612,
@@ -245,8 +247,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         children={NoNFTList()}
                     />
                 )}
-            </DialogContent>
-            <DialogActions className={classes.actions}>
                 {tokens.length || collectibles.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography variant="body1" color="textPrimary">
@@ -261,10 +261,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
-
-                <Button disabled={disabled} className={classes.button} onClick={onSave}>
-                    {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                </Button>
+            </DialogContent>
+            <DialogActions className={classes.actions}>
+                <PluginWalletStatusBar
+                    actionProps={{
+                        disabled,
+                        action: onSave,
+                        title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),
+                    }}
+                    classes={{ button: classes.button }}
+                />
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
