@@ -888,7 +888,7 @@ importers:
       '@masknet/typed-message': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      '@scamsniffer/detector': ^0.0.1
+      '@scamsniffer/detector': 0.0.3
       react-use: ^17.3.2
       ts-results: ^3.3.0
     dependencies:
@@ -900,7 +900,7 @@ importers:
       '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      '@scamsniffer/detector': 0.0.1
+      '@scamsniffer/detector': 0.0.3
       react-use: 17.3.2
       ts-results: 3.3.0
 
@@ -7063,8 +7063,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@scamsniffer/detector/0.0.1:
-    resolution: {integrity: sha512-9U+YnZsn+aQ11ooollqIaYSrIW9FACiIwb9MuW1PMm0agsdtqT898XfkTO4wMkZjSRVr26r3i/QiKnQQZJSYTQ==}
+  /@scamsniffer/detector/0.0.3:
+    resolution: {integrity: sha512-oCW7l0kgn9foaJFKHtw503VfE5VpcYShTBVZZDXmOj5uQCDzs8hTUbip1QG3lZEY+l/AsHfcbRrbnHxx0BTV+w==}
     engines: {node: '>=16.6'}
     dependencies:
       '@types/isomorphic-fetch': 0.0.36
