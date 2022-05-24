@@ -219,7 +219,7 @@
         {
             "input": "./packages/mask/src/plugins/RedPacket/locales/en-US.json",
             "output": "./packages/mask/src/plugins/RedPacket/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -255,7 +255,7 @@
         {
             "input": "./packages/mask/src/plugins/Trader/locales/en-US.json",
             "output": "./packages/mask/src/plugins/Trader/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
@@ -267,7 +267,7 @@
         {
             "input": "./packages/mask/src/plugins/Gitcoin/locales/en-US.json",
             "output": "./packages/mask/src/plugins/Gitcoin/locales/i18n_generated",
-            "parser": "i18next",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",

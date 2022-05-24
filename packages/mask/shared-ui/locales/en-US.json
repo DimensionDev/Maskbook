@@ -200,6 +200,7 @@
     "wallet_rename": "Rename Wallet",
     "wallet_loading_nft_contract": "Loading NFT contract...",
     "wallet_search_contract_no_result": "No results or contract address does not meet the query criteria.",
+    "wallet_search_no_result": "No results.",
     "wallet_confirm_with_password": "Confirm with password",
     "wallet_airdrop_nft_unclaimed_title": "NFT Airdrop Unclaimed:",
     "plugin_external_unknown_plugin": "New unknown Mask plugins found. Do you want to load them?",
