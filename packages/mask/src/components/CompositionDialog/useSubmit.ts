@@ -72,31 +72,31 @@ async function pasteImage(
     })
 }
 
-// TODO: Provide API to plugin to postprocess post content,
+// TODO: Provide API to plugin to post-process post content,
 // then we can move these -PreText's and meta readers into plugin's own context
 function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta) {
-    const hasOfficalAccount = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-    const officalAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+    const hasOfficialAccount = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+    const officialAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
 
     if (RedPacketMetadataReader(meta).ok) {
-        return hasOfficalAccount
+        return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
                   encrypted,
-                  account: officalAccount,
+                  account: officialAccount,
               })
             : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
     } else if (ITO_MetadataReader(meta).ok) {
-        return hasOfficalAccount
+        return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_ito_twitter_official_account', {
                   encrypted,
-                  account: officalAccount,
+                  account: officialAccount,
               })
             : t('additional_post_box__encrypted_post_pre_ito', { encrypted })
     } else if (FileInfoMetadataReader(meta).ok) {
-        return hasOfficalAccount
+        return hasOfficialAccount
             ? t('additional_post_box__encrypted_post_pre_file_service_twitter_official_account', {
                   encrypted,
-                  account: officalAccount,
+                  account: officialAccount,
               })
             : t('additional_post_box__encrypted_post_pre_file_service', { encrypted })
     }

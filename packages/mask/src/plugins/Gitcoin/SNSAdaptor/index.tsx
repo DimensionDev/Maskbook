@@ -1,18 +1,15 @@
-import { useMemo } from 'react'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { usePostInfoDetails, Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
 import { GitcoinIcon } from '@masknet/icons'
-import { PreviewCard } from './PreviewCard'
+import { Plugin, PluginId, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
-import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
+import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants'
 import { DonateDialog } from './DonateDialog'
+import { PreviewCard } from './PreviewCard'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
-const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -52,7 +49,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     usePluginWrapper(true)
     return <PreviewCard id={id} />
 }

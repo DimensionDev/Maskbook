@@ -124,7 +124,7 @@ function NFTAvatarInTwitter() {
             return
         }
         openConfirmDialog({
-            title: t('plugin_avatar_setup_share_titlte'),
+            title: t('plugin_avatar_setup_share_title'),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <NFTCardStyledAssetPlayer contractAddress={avatar.address} tokenId={avatar.tokenId} />
