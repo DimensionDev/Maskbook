@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             flexDirection: 'column',
-            padding: theme.spacing(2, 3),
+            padding: theme.spacing(2),
         },
         section: {
             flexGrow: 1,
@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => {
                 background: theme.palette.background.default,
                 '& p': {
                     fontWeight: 600,
-                    color: theme.palette.text.primary,
                 },
             },
         },

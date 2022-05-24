@@ -4,7 +4,7 @@ export const SelectedIcon = createIcon(
     'SelectedIcon',
     <g fill="none">
         <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z" fill="#fff" />
-        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" fill="#60DFAB" />
+        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" fill="#3DC233" />
         <path
             fillRule="evenodd"
             clipRule="evenodd"
