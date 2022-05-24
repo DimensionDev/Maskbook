@@ -71,7 +71,7 @@ export async function runCreateERC20PairFarm(
                       {
                           key: padRight(asciiToHex('confirmationReward'), 64),
                           value: defaultAbiCoder.encode(
-                              ['uint128', 'int128'],
+                              ['uint128', 'uint128'],
                               [parseUnits(dailyFarmRewardStr, rewardTokenDecimals), '0'],
                           ),
                       },
@@ -151,7 +151,7 @@ export async function adjustFarmRewards(
                 {
                     key: padRight(asciiToHex('confirmationReward'), 64),
                     value: defaultAbiCoder.encode(
-                        ['uint128', 'int128'],
+                        ['uint128', 'uint128'],
                         [parseUnits(dailyFarmRewardStr, rewardTokenDecimals), '0'],
                     ),
                 },

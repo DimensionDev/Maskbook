@@ -206,7 +206,7 @@ export function FarmPost(props: FarmPostProps) {
                 )}
             </Card>
             <Grid container className={classes.actions}>
-                {switchNetworkBtnVisible ? (
+                {switchNetworkBtnVisible || !account ? (
                     <EthereumChainBoundary
                         chainId={SWAP_CHAIN_ID}
                         noSwitchNetworkTip

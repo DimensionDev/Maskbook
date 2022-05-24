@@ -4,7 +4,7 @@ import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Referral,
-    name: { fallback: 'Referral Farms', i18nKey: '__display_name' },
+    name: { fallback: 'Referral Farms', i18nKey: '__plugin_name' },
     description: {
         fallback: 'Referral Farming distributes yield farming alike returns for successful referrals.',
         i18nKey: '__plugin_description',

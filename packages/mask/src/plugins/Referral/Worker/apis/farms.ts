@@ -94,7 +94,7 @@ function parseFarmDepositAndFarmMetastateEvents(
 
             const confirmationRewardKey = padRight(asciiToHex('confirmationReward'), 64)
             if (key === confirmationRewardKey) {
-                const confirmationReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+                const confirmationReward = defaultAbiCoder.decode(['uint128', 'uint128'], value)[0]
 
                 farmsData.set(farmHash, {
                     ...farmState,
@@ -224,7 +224,7 @@ export async function getDailyAndTotalRewardsFarm(
 
             const confirmationRewardKey = padRight(asciiToHex('confirmationReward'), 64)
             if (key === confirmationRewardKey) {
-                const confirmationReward = defaultAbiCoder.decode(['uint128', 'int128'], value)[0]
+                const confirmationReward = defaultAbiCoder.decode(['uint128', 'uint128'], value)[0]
 
                 farm = { ...farm, dailyFarmReward: Number.parseFloat(formatUnits(confirmationReward, tokenDecimals)) }
             }

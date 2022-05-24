@@ -260,13 +260,17 @@ export function CreateFarm(props: PageInterface) {
     }, [props.continue, attraceFee, totalFarmReward, tokenReward, requiredChainId, onDeposit])
 
     const balance = formatBalance(rewardBalance ?? '', tokenReward?.decimals, 6)
-    const insufficientFunds = Number.parseFloat(totalFarmReward) > Number.parseFloat(balance)
+    const totalFarmRewardNum = Number.parseFloat(totalFarmReward)
+    const dailyFarmRewardNum = Number.parseFloat(dailyFarmReward)
+    const insufficientFunds = totalFarmRewardNum > Number.parseFloat(balance)
+    const totalFarmRewardLessThanDailyFarmReward = totalFarmRewardNum < dailyFarmRewardNum
     const createFarmBtnDisabled =
         !tokenRefer?.address ||
         !tokenReward?.address ||
-        !Number.parseFloat(totalFarmReward) ||
-        !Number.parseFloat(dailyFarmReward) ||
-        insufficientFunds
+        !totalFarmRewardNum ||
+        !dailyFarmRewardNum ||
+        insufficientFunds ||
+        totalFarmRewardLessThanDailyFarmReward
 
     return (
         <Box className={classes.container}>
@@ -379,9 +383,15 @@ export function CreateFarm(props: PageInterface) {
                             size="medium"
                             disabled={createFarmBtnDisabled}
                             onClick={onClickCreateFarm}>
-                            {insufficientFunds
-                                ? t.error_insufficient_balance({ symbol: tokenReward?.symbol ?? '' })
-                                : t.create_referral_farm()}
+                            {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
+                                <>
+                                    {insufficientFunds
+                                        ? t.error_insufficient_balance({ symbol: tokenReward?.symbol ?? '' })
+                                        : t.error_daily_rewards()}
+                                </>
+                            ) : (
+                                t.create_referral_farm()
+                            )}
                         </ActionButton>
                     </EthereumChainBoundary>
                 </TabPanel>

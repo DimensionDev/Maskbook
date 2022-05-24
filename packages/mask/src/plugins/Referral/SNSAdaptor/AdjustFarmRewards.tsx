@@ -256,8 +256,11 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const balance = formatBalance(rewardBalance ?? '', rewardToken?.decimals, 6)
     const totalFarmRewardNum = Number.parseFloat(totalFarmReward)
+    const dailyFarmRewardNum = Number.parseFloat(dailyFarmReward)
     const insufficientFunds = totalFarmRewardNum > Number.parseFloat(balance)
-    const adjustRewardsBtnDisabled = (!Number.parseFloat(dailyFarmReward) && !totalFarmRewardNum) || insufficientFunds
+    const totalFarmRewardLessThanDailyFarmReward = totalFarmRewardNum < dailyFarmRewardNum
+    const adjustRewardsBtnDisabled =
+        (!dailyFarmRewardNum && !totalFarmRewardNum) || insufficientFunds || totalFarmRewardLessThanDailyFarmReward
 
     return rewardToken ? (
         <Box display="flex" flexDirection="column">
@@ -353,9 +356,15 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                             size="medium"
                             disabled={adjustRewardsBtnDisabled}
                             onClick={onClickAdjustRewards}>
-                            {insufficientFunds
-                                ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
-                                : t.adjust_rewards()}
+                            {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
+                                <>
+                                    {insufficientFunds
+                                        ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
+                                        : t.error_daily_rewards()}
+                                </>
+                            ) : (
+                                t.adjust_rewards()
+                            )}
                         </ActionButton>
                     </EthereumChainBoundary>
                 </Grid>

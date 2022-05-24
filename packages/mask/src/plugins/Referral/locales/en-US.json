@@ -1,5 +1,4 @@
 {
-    "__display_name": "Plugin: Referral Farms",
     "__plugin_name": "Referral Farms",
     "__description": "Referral Farming distributes yield farming alike returns for successful referrals.",
     "powered_by": "Powered by",
@@ -53,7 +52,7 @@
     "select_a_token": "Select a token",
     "rewards_earned": "Rewards earned",
     "create_farms": "Create Farm",
-    "create_farms_desc": "incentivize referrals for the purchase of crypto tokens or NFT collection.",
+    "create_farms_desc": "incentivise referrals for the purchase of crypto tokens or NFT collection.",
     "rewards": "rewards",
     "create_farms_rewards_desc": "The <strong>rewards</strong> will be distributed to participants daily based on their share of the referred/purchased value in the referral farm.",
     "you_have_not_joined_farm": "You haven’t joined any referral farm yet",
@@ -79,6 +78,7 @@
     "error_native_token_farm": "Cannot create farm with native token.",
     "buy_and_hold_referral": "Buy & Hold Referral",
     "error_insufficient_balance": "Insufficient {{symbol}} balance",
+    "error_daily_rewards": "Daily farm reward should be less than total farm rewards",
     "reward_tokens": "Reward Tokens",
     "blockchain_error_your_referral_farms": "Referral farms cannot be retrieved from the blockchain at the moment. Please try later.",
     "blockchain_error_referral_farms": "Your referral farms cannot be retrieved from the blockchain at the moment. Please try later.",
