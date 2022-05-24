@@ -1,0 +1,15 @@
+{
+    "name": "Example Plugin",
+    "__entry__": "🤔 Example",
+    "ens": "Etherenum Name Service",
+    "search": "search",
+    "parent": "parent",
+    "registrant": "REGISTRANT",
+    "controller": "CONTROLLER",
+    "expiration_date": "EXPIRATION DATE",
+    "buy": "buy",
+    "Ethereum_Name_Service": "Ethereum Name Service",
+    "resolver": "resolver",
+    "owner": "owner",
+    "ttl": "time-to-live"
+}

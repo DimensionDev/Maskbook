@@ -239,6 +239,17 @@
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
+        },
+        {
+            "input": "./packages/plugins/ENS/src/locales/en-US.json",
+            "output": "./packages/plugins/ENS/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "io.mask.ens-plugin",
+                "trans": "Translate"
+            }
         }
     ]
 }

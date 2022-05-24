@@ -24,6 +24,7 @@
     "@masknet/plugin-cyberconnect": "workspace:*",
     "@masknet/plugin-dao": "workspace:*",
     "@masknet/plugin-debugger": "workspace:*",
+    "@masknet/plugin-ens": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-file-service": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
