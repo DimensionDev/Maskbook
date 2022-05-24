@@ -357,6 +357,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    ActionButtonPromiseProps={{
+                                        size: 'large',
+                                    }}
                                     disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
@@ -431,9 +434,9 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
-
-    return token ? (
+    const { value: _token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
+    const token = _token ?? swappedToken.token
+    return (
         <ListItem key={i} className={classes.tokenCard}>
             <div
                 className={classNames(
@@ -484,5 +487,5 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
                 />
             </Typography>
         </ListItem>
-    ) : null
+    )
 }

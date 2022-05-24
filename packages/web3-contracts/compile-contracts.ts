@@ -6,7 +6,7 @@ import { run } from './utils'
 const ABIS_PATH = path.join(__dirname, 'abis')
 const GENERATED_PATH = path.join(__dirname, 'types')
 
-async function replaceFileAll(file: string, pairs: [string, string][]) {
+async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
     for (const [pattern, value] of pairs) {
         content = content.replace(new RegExp(pattern, 'img'), value)

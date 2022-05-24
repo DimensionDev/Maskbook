@@ -7,5 +7,5 @@ import type { ChainId } from '../types'
 
 export function useNativeTokenWrapperContract(chainId?: ChainId) {
     const { WNATIVE_ADDRESS } = useTokenConstants(chainId)
-    return useContract<WETH>(WNATIVE_ADDRESS, WETH_ABI as AbiItem[])
+    return useContract<WETH>(WNATIVE_ADDRESS, WETH_ABI as AbiItem[], chainId)
 }

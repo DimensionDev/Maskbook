@@ -1,19 +1,19 @@
 {
   "name": "@masknet/gun-utils",
   "private": true,
-  "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "type": "module",
-  "dependencies": {
-    "event-iterator": "^2.0.0",
-    "gun": "^0.2020.1234"
-  },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "node ./builder.mjs"
+  },
+  "dependencies": {
+    "event-iterator": "^2.0.0",
+    "gun": "0.2020.1234"
   }
 }

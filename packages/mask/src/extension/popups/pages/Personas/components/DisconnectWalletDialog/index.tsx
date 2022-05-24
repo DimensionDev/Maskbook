@@ -28,7 +28,7 @@ const useStyles = makeStyles()(() => ({
         gap: 16,
         padding: 24,
         '& > *': {
-            marginLeft: '0px !important',
+            marginLeft: '0 !important',
         },
     },
     button: {

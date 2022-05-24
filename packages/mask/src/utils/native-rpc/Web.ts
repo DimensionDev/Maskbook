@@ -16,8 +16,8 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 
-const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
-const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
+const stringToPersonaIdentifier = (input: string) => ECKeyIdentifier.from(input).unwrap()
+const stringToProfileIdentifier = (input: string) => ProfileIdentifier.from(input).unwrap()
 
 function profileRelationFormatter(
     p: MobileProfile,
@@ -232,14 +232,14 @@ function wrapWithAssert(env: Environment, f: Function) {
 }
 
 try {
-    for (const _key in MaskNetworkAPI) {
-        const key = _key as keyof MaskNetworkAPIs
-        const f: Function = MaskNetworkAPI[key]
-
+    for (const key of Object.keys(MaskNetworkAPI) as Array<keyof MaskNetworkAPIs>) {
+        const fn: Function = MaskNetworkAPI[key]
         if (key.startsWith('SNSAdaptor_')) {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, fn)
         } else {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, fn)
         }
     }
-} catch {}
+} catch {
+    // ignore
+}

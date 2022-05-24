@@ -4,12 +4,11 @@ import type { Account } from '../type'
 import { AccountAvatar } from '../components/AccountAvatar'
 import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared'
 import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()(() => ({
     container: {
-        padding: '8px 16px 0px 16px',
+        padding: '8px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -73,15 +72,16 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                     network={account.identifier.network}
                     isValid={account.is_valid}
                 />
-                <Typography className={classes.name}>{account.identifier.userId}</Typography>
+                <Typography className={classes.name}>@{account.identifier.userId}</Typography>
                 <Typography className={classes.warning}>
                     {account.is_valid
-                        ? t('popups_disconnect_warning_alert', {
-                              network: SOCIAL_MEDIA_NAME[account.identifier.network],
-                              account: account.identifier.userId,
+                        ? t('popups_verify_warning_alert', {
                               persona: personaName,
+                              account: account.identifier.userId,
                           })
-                        : t('popups_verify_warning_alert')}
+                        : t('popups_disconnect_warning_alert', {
+                              account: account.identifier.userId,
+                          })}
                 </Typography>
                 <div className={classes.controller}>
                     {account.is_valid ? (

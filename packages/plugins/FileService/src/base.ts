@@ -1,5 +1,6 @@
 import { type Plugin, PluginId } from '@masknet/plugin-infra'
 import { languages } from './locales/languages'
+import { META_KEY_1, META_KEY_2 } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.FileService,
@@ -15,4 +16,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
+    contribution: {
+        metadataKeys: new Set([META_KEY_1, META_KEY_2]),
+    },
 }

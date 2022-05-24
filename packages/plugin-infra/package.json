@@ -34,6 +34,7 @@
       "default": "./dist/entry-content-script.js"
     }
   },
+  "types": "./dist/entry.d.ts",
   "typesVersions": {
     "*": {
       "web3": [
@@ -53,10 +54,8 @@
       ]
     }
   },
-  "types": "./dist/entry.d.ts",
-  "scripts": {},
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@masknet/encryption": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/shared-base-ui": "workspace:*",
@@ -69,10 +68,7 @@
     "bignumber.js": "^9.0.2",
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
-    "use-subscription": "^1.6.0"
-  },
-  "devDependencies": {
-    "react-i18next": "^11.16.7"
+    "use-subscription": "1.6.0"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

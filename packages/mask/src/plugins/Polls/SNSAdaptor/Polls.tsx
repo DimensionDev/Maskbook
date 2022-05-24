@@ -8,6 +8,7 @@ import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
 import { SupportedLanguages } from '@masknet/public-api'
 import { safeUnreachable } from '@dimensiondev/kit'
+import { sum } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -38,8 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     bar: {
         position: 'absolute',
-        top: '0',
-        left: '0',
+        top: 0,
+        left: 0,
         zIndex: 100,
         backgroundColor: theme.palette.primary.main,
         opacity: 0.6,
@@ -71,9 +72,7 @@ export function PollCardUI(props: PollCardProps) {
     const { t } = useI18N()
     const lang = useLanguage()
 
-    const totalVotes = poll.results.reduce(
-        (accumulator: number, currentValue: number): number => accumulator + currentValue,
-    )
+    const totalVotes = sum(poll.results)
 
     const getDeadline = (date: number) => {
         const deadline = new Date(date)

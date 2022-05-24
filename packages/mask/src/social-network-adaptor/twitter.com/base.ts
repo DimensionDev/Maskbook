@@ -1,5 +1,5 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
-import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
+import type { SocialNetwork } from '../../social-network/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
@@ -14,9 +14,4 @@ export const twitterBase: SocialNetwork.Base = {
 
 export function isTwitter(ui: SocialNetwork.Base) {
     return ui.networkIdentifier === EnhanceableSite.Twitter
-}
-
-export const twitterWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {
-    ...twitterBase,
-    gunNetworkHint: 'twitter-',
 }

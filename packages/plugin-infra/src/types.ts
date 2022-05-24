@@ -240,10 +240,10 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntries?: ApplicationEntry[]
-        /** This UI will be rendered as sliders on the profile page */
-        ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as plugin wrapper page */
+        wrapperProps?: PluginWrapperProps
         /**
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
@@ -333,6 +333,8 @@ export namespace Plugin.SNSAdaptor {
 
         description?: I18NFieldOrReactNode
 
+        iconFilterColor?: string
+
         tutorialLink?: string
         /**
          * Does the application listed in the DAPP list
@@ -340,6 +342,20 @@ export namespace Plugin.SNSAdaptor {
         category?: 'dapp' | 'other'
 
         nextIdRequired?: boolean
+
+        /**
+         * Display using an eye-catching card and unable to be unlisted.
+         */
+        recommendFeature?: {
+            description: React.ReactNode
+            backgroundGradient: string
+        }
+    }
+
+    export interface PluginWrapperProps {
+        icon?: React.ReactNode
+        title?: string
+        backgroundGradient?: string
     }
 
     export interface ProfileIdentity {
@@ -354,23 +370,6 @@ export namespace Plugin.SNSAdaptor {
         type: string
         label: string
         resolvedAddress: string
-    }
-
-    export interface ProfileSlider {
-        ID: string
-
-        /**
-         * The name of the slider card
-         */
-        label: I18NStringField | string
-        /**
-         * Used to order the sliders
-         */
-        priority: number
-        /**
-         * The injected UI
-         */
-        children: InjectUI<{}>
     }
 
     export interface ProfileTab {

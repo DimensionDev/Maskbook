@@ -20,15 +20,10 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
     const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
         .clone()
         .map((x) => getProfileIdentifierAtFacebook(x, false))
-    const watcher = new MutationObserverWatcher(self)
+    new MutationObserverWatcher(self)
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
-        .startWatch({
-            childList: true,
-            subtree: true,
-            characterData: true,
-        })
-    signal.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch({ childList: true, subtree: true, characterData: true }, signal)
     function assign(i: IdentityResolved) {
         if (i.identifier) ref.value = i
     }
@@ -68,19 +63,18 @@ function resolveCurrentVisitingIdentityInner(
     }
 
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-            })
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                },
+                cancel,
+            )
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()

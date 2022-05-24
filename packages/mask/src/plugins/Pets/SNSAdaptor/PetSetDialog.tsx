@@ -1,6 +1,6 @@
 import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -25,6 +25,8 @@ import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { WalletStatusBar } from '@masknet/shared'
 import { ChearsIcon } from '../assets/Chears'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -307,6 +309,25 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
+                <EthereumChainBoundary
+                    chainId={ChainId.Mainnet}
+                    noSwitchNetworkTip
+                    ActionButtonPromiseProps={{
+                        size: 'large',
+                        fullWidth: true,
+                    }}>
+                    <LoadingButton
+                        loading={loading}
+                        color="inherit"
+                        size="large"
+                        fullWidth
+                        variant="contained"
+                        className={classes.btn}
+                        onClick={saveHandle}
+                        disabled={!collection.name || !metaData.image}>
+                        {t('plugin_pets_dialog_btn')}
+                    </LoadingButton>
+                </EthereumChainBoundary>
                 <Box className={classes.desBox}>
                     <Typography color="textSecondary" fontSize={14} fontWeight={700} className={classes.des}>
                         {t('plugin_pets_dialog_created')}

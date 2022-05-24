@@ -1,16 +1,15 @@
 {
   "name": "@masknet/shared-base",
   "description": "This package MUST be pure (have no side effects when imported).",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "sideEffect": false,
+  "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@masknet/public-api": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
@@ -19,22 +18,21 @@
     "@mui/material": "link:..\\empty",
     "@mui/system": "link:..\\empty",
     "@servie/events": "^3.0.0",
-    "@types/react": "18.0.6",
+    "@types/react": "18.0.8",
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.0.2",
     "bignumber.js": "^9.0.2",
-    "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
     "idb": "^7.0.1",
-    "pvtsutils": "^1.2.2",
+    "pvtsutils": "^1.3.2",
     "react": "link:..\\empty",
     "tiny-secp256k1": "^2.2.1",
-    "typeson": "^7.0.1",
+    "typeson": "^7.0.2",
     "typeson-registry": "^3.0.0",
-    "use-subscription": "^1.6.0",
     "z-schema": "^5.0.3"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
-  }
+  },
+  "sideEffect": false
 }

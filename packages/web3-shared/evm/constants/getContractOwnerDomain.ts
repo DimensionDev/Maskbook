@@ -13,7 +13,10 @@ import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import Trader from '@masknet/web3-constants/evm/trader.json'
 import { filter, flatten, pick, uniq, values } from 'lodash-unified'
 
-const collect = <T extends Record<string, Record<string, string | number>>>(data: T, fields: (keyof T)[]): string[] => {
+const collect = <T extends Record<string, Record<string, string | number>>>(
+    data: T,
+    fields: Array<keyof T>,
+): string[] => {
     const groupedByFields = values(pick(data, fields))
     const listOfAddresses = groupedByFields.map((v) => values(v))
     const listOfAddress = flatten(listOfAddresses)
@@ -29,6 +32,10 @@ const domainAddressMap: Record<string, string[]> = {
         'UNISWAP_V3_FACTORY_ADDRESS',
         'UNISWAP_V3_QUOTER_ADDRESS',
     ]),
+    'defikingdoms.com': collect(Trader, ['DEFIKINGDOMS_ROUTER_ADDRESS', 'DEFIKINGDOMS_FACTORY_ADDRESS']),
+    'app.openswap.one': collect(Trader, ['OPENSWAP_ROUTER_ADDRESS', 'OPENSWAP_FACTORY_ADDRESS']),
+    'viper.exchange': collect(Trader, ['VENOMSWAP_ROUTER_ADDRESS', 'VENOMSWAP_FACTORY_ADDRESS']),
+    'viperswap.one': collect(Trader, ['VENOMSWAP_ROUTER_ADDRESS', 'VENOMSWAP_FACTORY_ADDRESS']),
     'www.sushi.com': collect(Trader, ['SUSHISWAP_ROUTER_ADDRESS', 'SUSHISWAP_FACTORY_ADDRESS']),
     'quickswap.exchange': collect(Trader, ['QUICKSWAP_ROUTER_ADDRESS', 'QUICKSWAP_FACTORY_ADDRESS']),
     'pancakeswap.finance': collect(Trader, ['PANCAKESWAP_ROUTER_ADDRESS', 'PANCAKESWAP_FACTORY_ADDRESS']),

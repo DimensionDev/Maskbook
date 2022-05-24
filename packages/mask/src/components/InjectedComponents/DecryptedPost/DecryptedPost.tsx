@@ -7,7 +7,6 @@ import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from '.
 import { DecryptPostSuccess } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailed } from './DecryptPostFailed'
-import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
 import { encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
@@ -16,7 +15,7 @@ import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plug
 import { Some } from 'ts-results'
 
 function progressReducer(
-    state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
+    state: Array<{ key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }>,
     payload: {
         type: 'refresh'
         key: string
@@ -48,9 +47,10 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
-    const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
-    const authorInPayload = usePostClaimedAuthor() || null
+    const deconstructedPayload = usePostInfoDetails.hasMaskPayload()
     const currentPostBy = usePostInfoDetails.author()
+    // TODO: we should read this from the payload.
+    const authorInPayload = usePostInfoDetails.author()
     const postBy = authorInPayload || currentPostBy
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
@@ -84,7 +84,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     })
                 }
             }
-        if (deconstructedPayload.ok) {
+        if (deconstructedPayload) {
             makeProgress(
                 postURL,
                 postBy,
@@ -140,9 +140,9 @@ export function DecryptPost(props: DecryptPostProps) {
             )
         })
         return () => signal.abort()
-    }, [deconstructedPayload.ok, postBy, postMetadataImages.join(), whoAmI, mentionedLinks.join()])
+    }, [deconstructedPayload, postBy, postMetadataImages.join(), whoAmI, mentionedLinks.join()])
 
-    if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null
+    if (!deconstructedPayload && progress.every((x) => x.progress.internal)) return null
     return (
         <>
             {progress

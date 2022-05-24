@@ -3,25 +3,21 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Card, Typography } from '@mui/material'
 import {
-    ChainId,
     formatBalance,
-    getChainIdFromName,
     resolveNetworkName,
     TransactionStateType,
     useAccount,
-    useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
     useTokenConstants,
-    EthereumTokenType,
-    isSameAddress,
+    getChainIdFromName,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../../utils'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
@@ -51,22 +47,12 @@ export function RedPacket(props: RedPacketProps) {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, payload)
+    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        payload.token?.type ??
-            payload.token_type ??
-            (isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
-                ? EthereumTokenType.Native
-                : EthereumTokenType.ERC20),
-        payload.token?.address ?? payload.token_address ?? '',
-    )
-    const token =
-        payload.token && ['chainId', 'decimal', 'symbol'].every((k) => Reflect.has(payload.token ?? {}, k))
-            ? payload.token
-            : tokenDetailed
+    const token = payload.token
+
     // #endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
@@ -180,17 +166,15 @@ export function RedPacket(props: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token)
         return (
-            <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
-                <Card className={classes.root} component="article" elevation={0}>
-                    <Typography className={classes.loadingText} variant="body2">
-                        {t('loading')}
-                    </Typography>
-                </Card>
-            </EthereumChainBoundary>
+            <Card className={classes.root} component="article" elevation={0}>
+                <Typography className={classes.loadingText} variant="body2">
+                    {t('loading')}
+                </Typography>
+            </Card>
         )
 
     return (
-        <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
+        <>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
@@ -219,6 +203,7 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
+                    chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     claimState={claimState}
@@ -227,7 +212,7 @@ export function RedPacket(props: RedPacketProps) {
                     onClaimOrRefund={onClaimOrRefund}
                 />
             )}
-        </EthereumChainBoundary>
+        </>
     )
 }
 

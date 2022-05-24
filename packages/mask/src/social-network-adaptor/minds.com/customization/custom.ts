@@ -29,14 +29,16 @@ export function startWatchThemeColor(signal: AbortSignal) {
             backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
     }
 
-    const watcher = new MutationObserverWatcher(themeListItemSelector())
+    new MutationObserverWatcher(themeListItemSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
-    signal.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+            },
+            signal,
+        )
 }
 
 export function useThemeMindsVariant(baseTheme: Theme) {

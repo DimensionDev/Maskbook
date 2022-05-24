@@ -83,7 +83,7 @@ export const ifUsingMask = memoizePromise(
     async (pid: ProfileIdentifier | null) => {
         if (!pid) throw new Error()
         const p = await Services.Identity.queryProfilesInformation([pid])
-        if (!p[0].fingerprint) throw new Error()
+        if (!p[0].linkedPersona?.rawPublicKey) throw new Error()
     },
     (x) => x,
 )

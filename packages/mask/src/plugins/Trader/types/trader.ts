@@ -76,6 +76,9 @@ export enum ZrxTradePool {
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
     Mdex = 'Mdex',
+    VenomSwap = 'VenomSwap',
+    OpenSwap = 'OpenSwap',
+    DefiKingdoms = 'DefiKingdoms',
 }
 
 export interface TradeComputed<T = unknown> {
@@ -89,7 +92,9 @@ export interface TradeComputed<T = unknown> {
     maximumSold: BigNumber
     minimumReceived: BigNumber
     fee: BigNumber
-    path?: (PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
+    path?: Array<
+        Array<PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>>
+    >
     trade_?: T
 }
 

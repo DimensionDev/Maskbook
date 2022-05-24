@@ -70,8 +70,8 @@ const useStyles = makeStyles()((theme) => {
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 16,
             width: '100%',
-            height: 200,
             overflowY: 'auto',
+            height: 200,
             background: theme.palette.background.default,
             borderRadius: 12,
             padding: theme.spacing(1.5, 1.5, 1, 1),
@@ -134,7 +134,7 @@ const useStyles = makeStyles()((theme) => {
             color: 'rgba(255, 95, 95, 1)',
         },
         loadingFailImage: {
-            minHeight: '0px !important',
+            minHeight: '0 !important',
             maxWidth: 'none',
             transform: 'translateY(10px)',
             width: 64,

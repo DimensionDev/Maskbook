@@ -97,6 +97,11 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'conflux',
+        [NetworkType.Harmony]: 'harmony',
+        [NetworkType.Boba]: 'boba',
+        [NetworkType.Fuse]: 'fuse',
+        [NetworkType.Metis]: 'metis',
+        [NetworkType.Optimistic]: 'optimistic',
     },
     'ethereum',
 )
@@ -113,6 +118,11 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Conflux]: 'Conflux',
+        [NetworkType.Harmony]: 'Harmony',
+        [NetworkType.Boba]: 'Boba',
+        [NetworkType.Fuse]: 'Fuse',
+        [NetworkType.Metis]: 'Metis',
+        [NetworkType.Optimistic]: 'Optimistic',
     },
     'Unknown',
 )
@@ -147,7 +157,13 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
         [ChainId.Conflux]: 'rgb(24, 163, 138)',
+        [ChainId.Harmony]: 'rgb(48, 153, 242)',
+        [ChainId.Harmony_Test]: 'rgb(48, 153, 242)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Fuse]: 'rgb(255 255 255)',
+        [ChainId.Boba]: 'rgb(255 255 255)',
+        [ChainId.Metis]: 'rgb(255 255 255)',
+        [ChainId.Optimistic]: 'rgb(255 255 255)',
     },
     'rgb(214, 217, 220)',
 )
@@ -262,7 +278,13 @@ export function resolveCollectibleLink(
     }
 }
 
-export function resolveOpenSeaLink(address: string, tokenId: string) {
+export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: ChainId) {
+    if (chainId === ChainId.Matic) {
+        return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    }
     return urlcat('https://opensea.io/assets/:address/:tokenId', {
         address,
         tokenId,

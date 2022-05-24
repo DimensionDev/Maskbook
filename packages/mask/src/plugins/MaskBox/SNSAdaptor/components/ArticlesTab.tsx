@@ -5,7 +5,10 @@ import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { Video } from '../../../../components/shared/Video'
 
 const useStyles = makeStyles()((theme) => ({
-    main: {},
+    main: {
+        paddingLeft: 16,
+        paddingRight: 16,
+    },
     body: {
         width: '100%',
         height: 360,

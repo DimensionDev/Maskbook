@@ -6,40 +6,34 @@ import DeBank from '@masknet/web3-constants/evm/debank.json'
 
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 
-export function formatAssets(data: WalletTokenRecord[]): Asset[] {
+export function formatAssets(records: WalletTokenRecord[]): Asset[] {
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
-
-    const result: Asset[] = data.reduce((list: Asset[], y) => {
-        if (!y.is_verified) return list
-        const chainIdFromChain = getChainIdFromName(y.chain)
-        if (!chainIdFromChain) return list
-        const address = supportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
-
-        return [
-            ...list,
-            {
+    return records.flatMap((asset) => {
+        if (!asset.is_verified) return []
+        const chainIdFromChain = getChainIdFromName(asset.chain)
+        if (!chainIdFromChain) return []
+        const address = supportedChains.includes(asset.id) ? createNativeToken(chainIdFromChain).address : asset.id
+        return {
+            id: address,
+            chainId: chainIdFromChain,
+            token: {
                 id: address,
+                address,
                 chainId: chainIdFromChain,
-                token: {
-                    id: address,
-                    address,
-                    chainId: chainIdFromChain,
-                    type: TokenType.Fungible,
-                    decimals: y.decimals,
-                    name: y.name,
-                    symbol: y.symbol,
-                    logoURI: y.logo_url,
-                },
-                balance: rightShift(y.amount, y.decimals).toFixed(),
-                price: {
-                    [CurrencyType.USD]: toFixed(y.price),
-                },
-                value: {
-                    [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
-                },
-                logoURI: y.logo_url,
+                type: TokenType.Fungible,
+                decimals: asset.decimals,
+                name: asset.name,
+                symbol: asset.symbol,
+                logoURI: asset.logo_url,
             },
-        ]
-    }, [])
-    return result
+            balance: rightShift(asset.amount, asset.decimals).toFixed(),
+            price: {
+                [CurrencyType.USD]: toFixed(asset.price),
+            },
+            value: {
+                [CurrencyType.USD]: multipliedBy(asset.price ?? 0, asset.amount).toFixed(),
+            },
+            logoURI: asset.logo_url,
+        }
+    })
 }

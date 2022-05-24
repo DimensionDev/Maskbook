@@ -2,23 +2,23 @@
   "name": "@masknet/injected-script",
   "version": "0.0.0",
   "private": true,
-  "types": "./dist/sdk/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
     }
   },
-  "devDependencies": {
-    "@rollup/plugin-sucrase": "^4.0.3",
-    "rollup": "^2.70.2",
-    "rollup-plugin-terser": "^7.0.2"
-  },
+  "types": "./dist/sdk/index.d.ts",
   "scripts": {
-    "start": "rollup -c -w",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "start": "rollup -c -w"
   },
   "dependencies": {
     "web3-core-helpers": "1.7.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-sucrase": "^4.0.4",
+    "rollup": "^2.73.0",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

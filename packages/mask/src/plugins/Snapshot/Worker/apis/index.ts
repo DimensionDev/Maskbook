@@ -113,7 +113,7 @@ export async function getScores(
     space: string,
     strategies: Strategy[],
 ) {
-    const scores: { [key in string]: number }[] = await ss.utils.getScores(
+    const scores: Array<{ [key in string]: number }> = await ss.utils.getScores(
         space,
         strategies,
         network,

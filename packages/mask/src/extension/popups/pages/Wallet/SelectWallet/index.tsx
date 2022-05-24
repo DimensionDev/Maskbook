@@ -64,7 +64,7 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#F7F9FA',
         padding: 0,
-        height: 'calc(100vh - 168px)',
+        height: 'calc(100vh - 132px)',
         overflow: 'auto',
     },
     controller: {
@@ -87,7 +87,7 @@ const useStyles = makeStyles()({
     },
     colorChainICon: {
         borderRadius: '999px!important',
-        margin: '0px !important',
+        margin: '0 !important',
     },
 })
 
