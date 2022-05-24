@@ -7,15 +7,12 @@ export function useRemarkable(md: string) {
         const remarkable = new Remarkable()
         const defaultImageRender = remarkable.renderer.rules.image
         remarkable.use(() => {
-            remarkable.renderer.rules.image = function (tokens: Remarkable.ImageToken[], idx: number, ...args: []) {
-                return defaultImageRender(
-                    tokens.map((token) => ({
-                        ...token,
-                        src: resolveIPFSLinkFromURL(token.src),
-                    })),
-                    idx,
-                    ...args,
-                )
+            remarkable.renderer.rules.image = function (_tokens: Remarkable.ImageToken[], idx: number, ...args: []) {
+                const tokens = _tokens.map((token) => ({
+                    ...token,
+                    src: resolveIPFSLinkFromURL(token.src),
+                }))
+                return defaultImageRender(tokens, idx, ...args)
             }
         })
         return remarkable.render(md)
