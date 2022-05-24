@@ -5,7 +5,6 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     TransactionEventType,
-    TransactionState,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -13,7 +12,7 @@ import {
     useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
@@ -42,29 +41,17 @@ type ParamsObjType = {
     token?: FungibleTokenDetailed
 }
 
-function checkParams(paramsObj: ParamsObjType, setCreateState?: (value: TransactionState) => void) {
+function checkParams(paramsObj: ParamsObjType) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least [number of lucky drops] tokens to your lucky drop.'),
-        })
-        return false
+        throw new Error('At least [number of lucky drops] tokens to your lucky drop.')
     }
 
     if (paramsObj.shares <= 0) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least 1 person should be able to claim the lucky drop.'),
-        })
-        return false
+        throw new Error('At least 1 person should be able to claim the lucky drop.')
     }
 
     if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('Token not supported'),
-        })
-        return false
+        throw new Error('Token not supported')
     }
 
     return true
@@ -106,7 +93,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             token,
         }
 
-        if (!checkParams(paramsObj)) {
+        try {
+            checkParams(paramsObj)
+        } catch {
             return null
         }
 
@@ -133,21 +122,19 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
-    const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
-    const transactionHashRef = useRef<string>()
-
+    const resetCallback = useCallback(() => {
+        setCreateState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
     const createCallback = useCallback(async () => {
+        resetCallback()
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
 
-        if (!token || !redPacketContract || !createParams) {
-            setCreateState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
+        if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
 
@@ -159,9 +146,15 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             return
         }
 
-        if (!checkParams(paramsObj, setCreateState)) return
-
-        setCreateSettings(redPacketSettings)
+        try {
+            checkParams(paramsObj)
+        } catch (error) {
+            setCreateState({
+                type: TransactionStateType.FAILED,
+                error: error as Error,
+            })
+            return
+        }
 
         // pre-step: start waiting for provider to confirm tx
         setCreateState({
@@ -170,41 +163,24 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
-        const config = {
+        const config: PayableTx = {
             from: account,
             value,
             gas,
         }
 
         // send transaction and wait for hash
-        return new Promise<void>(async (resolve, reject) => {
+        return new Promise<TransactionReceipt>(async (resolve, reject) => {
             redPacketContract.methods
                 .create_red_packet(...params)
-                .send(config as PayableTx)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                    setCreateState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    transactionHashRef.current = hash
-                })
-                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
-                })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                .send(config)
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setCreateState({
                         type: TransactionStateType.CONFIRMED,
                         no,
                         receipt,
                     })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
+                    resolve(receipt)
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
                     setCreateState({
@@ -216,11 +192,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
 
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [createSettings, createState, createCallback, resetCallback] as const
+    return [createState, createCallback, resetCallback] as const
 }

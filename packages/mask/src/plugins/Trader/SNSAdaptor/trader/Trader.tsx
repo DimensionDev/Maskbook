@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { delay } from '@dimensiondev/kit'
+import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
@@ -8,7 +9,6 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isSameAddress,
-    TransactionStateType,
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
@@ -16,28 +16,25 @@ import {
     useWallet,
     UST,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken } from '@masknet/shared'
-import { delay } from '@dimensiondev/kit'
-import { useGasConfig } from './hooks/useGasConfig'
-import type { Coin } from '../../types'
-import { TokenPanelType, TradeInfo } from '../../types'
-import { useI18N } from '../../../../utils'
-import { TradeForm } from './TradeForm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
-import { useTradeCallback } from '../../trader/useTradeCallback'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { useI18N } from '../../../../utils'
 import { isNativeTokenWrapper } from '../../helpers'
-import { ConfirmDialog } from './ConfirmDialog'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
-import { SettingsDialog } from './SettingsDialog'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { useTradeCallback } from '../../trader/useTradeCallback'
+import type { Coin } from '../../types'
+import { TokenPanelType, TradeInfo } from '../../types'
+import { ConfirmDialog } from './ConfirmDialog'
+import { useGasConfig } from './hooks/useGasConfig'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
+import { SettingsDialog } from './SettingsDialog'
+import { TradeForm } from './TradeForm'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -69,6 +66,7 @@ export function Trader(props: TraderProps) {
 
     // #region trade state
     const {
+        setIsSwapping,
         tradeState: [
             { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
             dispatchTradeStore,
@@ -229,19 +227,56 @@ export function Trader(props: TraderProps) {
     // #endregion
 
     // #region blocking (swap)
-    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(
+    const [{ loading: isTrading }, tradeCallback] = useTradeCallback(
         focusedTrade?.provider,
         focusedTrade?.value,
         gasConfig,
     )
+    useEffect(() => {
+        setIsSwapping(isTrading)
+    }, [isTrading])
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
+    const shareText = useMemo(() => {
+        const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+        return focusedTrade?.value && inputToken && outputToken
+            ? [
+                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
+                      inputToken.symbol
+                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
+                      outputToken.symbol
+                  }.${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to swap cryptocurrencies on ${
+                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                            }.`
+                          : ''
+                  }`,
+                  '#mask_io',
+              ].join('\n')
+            : ''
+    }, [focusedTrade?.value, inputToken, outputToken])
+    const openShareTxDialog = useOpenShareTxDialog()
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
-        await tradeCallback()
+        const hash = await tradeCallback()
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            buttonLabel: activatedSocialNetworkUI.utils.share ? 'Share' : 'Confirm',
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+            amount: '',
+        })
         setTemporarySlippage(undefined)
-    }, [tradeCallback])
+    }, [tradeCallback, shareText, openShareTxDialog])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
@@ -266,57 +301,6 @@ export function Trader(props: TraderProps) {
             amount: '',
         })
     }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
-
-    // #region remote controlled transaction dialog
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareText =
-        focusedTrade?.value && inputToken && outputToken
-            ? [
-                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
-                      inputToken.symbol
-                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
-                      outputToken.symbol
-                  }.${
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                            } (mask.io) to swap cryptocurrencies on ${
-                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                            }.`
-                          : ''
-                  }`,
-                  '#mask_io',
-              ].join('\n')
-            : ''
-
-    // #endregion
-
-    // #region close the transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (tradeState?.type === TransactionStateType.HASH) {
-                dispatchTradeStore({
-                    type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-                    amount: '',
-                })
-            }
-            resetTradeCallback()
-        },
-    )
-    // #endregion
-
-    // #region open the transaction dialog
-    useEffect(() => {
-        if (tradeState?.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            shareText,
-            state: tradeState,
-        })
-    }, [tradeState /* update tx dialog only if state changed */])
-    // #endregion
 
     // #region swap callback
     const onSwap = useCallback(() => {
