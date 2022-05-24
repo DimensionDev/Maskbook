@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         // width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
         backgroundColor: '#290b5a',
         textAlign: 'center',
