@@ -3,6 +3,7 @@
   "references": [
     { "path": "./template/" },
     { "path": "./example/" },
+    { "path": "./ScamSniffer/" },
     { "path": "./Debugger/" },
     { "path": "./Flow/" },
     { "path": "./Wallet/" },

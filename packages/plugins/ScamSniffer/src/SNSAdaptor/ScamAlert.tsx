@@ -10,6 +10,7 @@ import { PluginScamRPC } from '../messages'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useI18N } from '../locales/i18n_generated'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,6 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 const ScamAlert = ({ result }: { result: ScamResult }) => {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
+    const t = useI18N()
 
     useEffect(() => {
         if (autoReport) {
@@ -85,7 +87,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
             <div className={classes.scam}>
                 <Typography variant="body2" className={classes.title}>
                     <CrisisAlertIcon className={classes.icon} />
-                    Scam Alert
+                    {t.alertTitle()}
                 </Typography>
                 <List className={classes.list}>
                     <ListItemButton>
@@ -95,7 +97,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                         <ListItemText className={classes.highlight} primary={result.name} />
                     </ListItemButton>
                     {result.twitterUsername ? (
-                        <ListItemButton onClick={() => openWindow(`https://twitter.com/${c}`)}>
+                        <ListItemButton onClick={() => openWindow(`https://twitter.com/${result.twitterUsername}`)}>
                             <ListItemIcon>
                                 <TwitterIcon className={classes.highlight} />
                             </ListItemIcon>
@@ -111,13 +113,13 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                         </ListItemButton>
                     ) : null}
                 </List>
-                <Typography className={classes.desc}>Be careful what you visit and sign !</Typography>
+                <Typography className={classes.desc}>{t.tip()}</Typography>
             </div>
             <div className={classes.reportWrapper}>
                 <FormControlLabel
                     className={classes.report}
                     control={<Checkbox checked={autoReport} onChange={handleClick} />}
-                    label="Auto report the scam links to MetaMask"
+                    label={t.report()}
                 />
             </div>
         </div>
