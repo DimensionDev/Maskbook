@@ -43,7 +43,7 @@ export function useAsset(token?: Token) {
             editionNumber: assetResponse.editionNumber,
             metadataContentLength: assetResponse.metadataContentLength,
             metadataContentType: assetResponse.metadataContentType,
-            metadataColorModel: assetResponse.metadataColorModel,
+            metadateColorModel: assetResponse.metadateColorModel,
             metadataHasAlpha: assetResponse.metadataHasAlpha,
             metadataPixelWidth: assetResponse.metadataPixelWidth,
             metadataPixelHeight: assetResponse.metadataPixelHeight,
