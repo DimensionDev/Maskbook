@@ -101,7 +101,7 @@ export function RedPacket(props: RedPacketProps) {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
-    }, [canClaim, canRefund, claimCallback, isRefunded])
+    }, [canClaim, canRefund, claimCallback, isRefunded, openShareTxDialog])
 
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))

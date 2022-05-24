@@ -129,7 +129,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         setPoolSettings(undefined)
         onCreateOrSelect(payload)
         onBack()
-    }, [ITO2_CONTRACT_ADDRESS, fillCallback])
+    }, [ITO2_CONTRACT_ADDRESS, fillCallback, openShareTxDialog])
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(

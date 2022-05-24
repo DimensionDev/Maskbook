@@ -89,7 +89,7 @@ export function ITO_Card(props: ITO_CardProps) {
 
         onUpdateBalance()
         packetRetry()
-    }, [openShareTxDialog])
+    }, [openShareTxDialog, claimCallback])
     // #endregion
 
     // #region update parent amount

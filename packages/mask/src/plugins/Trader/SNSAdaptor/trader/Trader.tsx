@@ -276,7 +276,7 @@ export function Trader(props: TraderProps) {
             amount: '',
         })
         setTemporarySlippage(undefined)
-    }, [tradeCallback, shareText])
+    }, [tradeCallback, shareText, openShareTxDialog])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

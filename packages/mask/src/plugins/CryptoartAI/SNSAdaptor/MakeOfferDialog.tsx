@@ -133,7 +133,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             },
         })
         asset?.retry()
-    }, [placeBidCallback, amount, asset?.retry])
+    }, [placeBidCallback, amount, asset?.retry, openShareTxDialog])
 
     useEffect(() => {
         setAmount(atLeastBidValue.toString())

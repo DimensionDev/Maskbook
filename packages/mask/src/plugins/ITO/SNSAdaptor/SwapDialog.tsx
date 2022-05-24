@@ -206,7 +206,7 @@ export function SwapDialog(props: SwapDialogProps) {
         if (payload.token.type !== EthereumTokenType.ERC20) return
         await WalletRPC.addToken(payload.token)
         await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
-    }, [swapCallback, payload.token.address])
+    }, [swapCallback, payload.token.address, openShareTxDialog])
 
     // #endregion
 

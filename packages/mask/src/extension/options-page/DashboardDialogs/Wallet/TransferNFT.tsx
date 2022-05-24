@@ -50,7 +50,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
             onClose()
         }
         collectiblesRetry()
-    }, [transferCallback, token.tokenId, address, collectiblesRetry])
+    }, [transferCallback, token.tokenId, address, collectiblesRetry, openShareTxDialog])
     // #endregion
 
     // #region validation

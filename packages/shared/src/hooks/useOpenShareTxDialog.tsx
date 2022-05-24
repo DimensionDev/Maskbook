@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { resolveTransactionLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { Link, Typography } from '@mui/material'
-import { FC, memo } from 'react'
+import { FC, memo, useCallback } from 'react'
 import { useShowConfirm } from '../contexts'
 import { useSharedI18N } from '../locales'
 
@@ -76,19 +76,23 @@ export function useOpenShareTxDialog() {
     const showConfirm = useShowConfirm()
     const t = useSharedI18N()
 
-    return ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) =>
-        showConfirm({
-            title: title ?? t.share_dialog_transaction(),
-            content: (
-                <ShareTransaction
-                    message={message ?? t.share_dialog_transaction_confirmed()}
-                    content={content}
-                    hash={hash}
-                />
-            ),
-            confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
-            onSubmit() {
-                onShare?.()
-            },
-        })
+    return useCallback(
+        ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
+            return showConfirm({
+                title: title ?? t.share_dialog_transaction(),
+                content: (
+                    <ShareTransaction
+                        message={message ?? t.share_dialog_transaction_confirmed()}
+                        content={content}
+                        hash={hash}
+                    />
+                ),
+                confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
+                onSubmit() {
+                    onShare?.()
+                },
+            })
+        },
+        [t, showConfirm],
+    )
 }

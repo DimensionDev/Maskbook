@@ -170,7 +170,7 @@ export function DepositDialog() {
             setRawAmount('')
         }
         retryLoadTokenBalance()
-    }, [depositCallback, retryLoadTokenBalance])
+    }, [depositCallback, retryLoadTokenBalance, openShareTxDialog])
 
     // #region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(

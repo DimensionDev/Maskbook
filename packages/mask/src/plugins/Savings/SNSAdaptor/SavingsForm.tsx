@@ -207,7 +207,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             default:
                 unreachable(tab)
         }
-    }, [tab, protocol, account, chainId, web3, tokenAmount])
+    }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog])
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 

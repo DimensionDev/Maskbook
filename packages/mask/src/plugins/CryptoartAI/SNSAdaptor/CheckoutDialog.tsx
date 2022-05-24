@@ -121,7 +121,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
-    }, [purchaseCallback])
+    }, [purchaseCallback, openShareTxDialog])
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')

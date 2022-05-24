@@ -368,7 +368,7 @@ export function ITO(props: ITO_Props) {
                 window.location.reload()
             },
         })
-    }, [claimCallback, t])
+    }, [claimCallback, openShareTxDialog, t])
 
     // #endregion
 

@@ -268,7 +268,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                 retry()
             },
         })
-    }, [openShareTxDialog, retry])
+    }, [claimCallback, openShareTxDialog, retry])
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
         shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
