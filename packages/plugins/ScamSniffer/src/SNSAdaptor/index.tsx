@@ -15,6 +15,7 @@ function Renderer(props: React.PropsWithChildren<{ project: ScamResult }>) {
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
+    init(signal) {},
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const author = usePostInfoDetails.author()
