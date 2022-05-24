@@ -246,7 +246,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         onChange={setEncoding}
                     />
                 </div>
-                {process.env.NODE_ENV === 'development' ? (
+                {process.env.NODE_ENV === 'development' || process.env.channel !== 'stable' ? (
                     <div className={cx(classes.flex, classes.between)}>
                         <Typography component="label" htmlFor={id}>
                             Next generation payload
