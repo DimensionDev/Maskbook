@@ -1,5 +1,5 @@
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
-import { createNormalReactRoot, hydrateNormalReactRoot, MaskMessages } from '../../utils'
+import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils'
 import { createPluginHost, createSharedContext } from '../../plugin-infra/host'
 import { Services } from '../service'
 import { status } from '../../setup.ui'
