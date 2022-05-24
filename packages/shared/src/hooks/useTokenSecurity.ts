@@ -14,7 +14,7 @@ export const useTokenSecurity = (chainId: ChainId, address?: string, isTokenSecu
         let values = await GoPlusLabs.getTokenSecurity(chainId, [address])
         values ??= {}
         if (isEmpty(values)) throw new Error('Contract Not Found')
-        const entity = first(Object.entries(values ?? {}))
+        const entity = first(Object.entries(values))
         if (!entity) return
         return { ...entity[1], contract: entity[0], chainId } as TokenSecurity
     }, [chainId, address, isTokenSecurityClosed])
