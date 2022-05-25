@@ -1,4 +1,6 @@
 {
+    "name": "Gitcoin",
+    "description": "Display specific information of Gitcoin projects, donate to a project directly on social media.",
     "promote": "Share or browse Gitcoin projects you have donated or interested in.",
     "select_a_token": "Select a token",
     "grant_not_available": "Grant not available",
