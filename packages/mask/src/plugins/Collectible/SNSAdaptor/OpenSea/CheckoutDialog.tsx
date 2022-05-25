@@ -23,14 +23,9 @@ import { PluginCollectibleRPC } from '../../messages'
 import { PluginTraderMessages } from '../../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import type { Coin } from '../../../Trader/types'
-import {
-    CurrencyType,
-    isGreaterThan,
-    NetworkPluginID,
-    NonFungibleAsset,
-    NonFungibleTokenOrder,
-} from '@masknet/web3-shared-base'
+import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import type { Order } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,7 +57,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface CheckoutDialogProps {
     asset?: NonFungibleAsset<ChainId, SchemaType>
-    order?: NonFungibleTokenOrder<ChainId, SchemaType>
+    order?: Order
     open: boolean
     onClose: () => void
 }
@@ -77,13 +72,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
-    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, order?.paymentToken?.address ?? '')
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, order?.paymentToken ?? '')
     const onCheckout = useCallback(async () => {
         if (!asset?.tokenId || !asset.address) return
         if (!order) return
 
         await PluginCollectibleRPC.fulfillOrder({
-            assetOrder,
+            order,
             accountAddress: account,
             recipientAddress: account,
         })
@@ -108,7 +103,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     }, [token.value, openSwapDialog])
 
     const validationMessage = useMemo(() => {
-        if (isGreaterThan(order?.price?.[CurrencyType.USD] ?? 0, balance.value ?? 0)) {
+        if (isGreaterThan(order?.basePrice ?? 0, balance.value ?? 0)) {
             setInsufficientBalance(true)
             return t('plugin_collectible_insufficient_balance')
         }

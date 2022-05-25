@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { Network } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { createLookupTableResolver, SourceType } from '@masknet/web3-shared-base'
+import { createLookupTableResolver, createPredicate, SourceType } from '@masknet/web3-shared-base'
 import {
     RaribleRopstenUserURL,
     RaribleUserURL,
@@ -13,6 +13,11 @@ import {
 type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
 type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby
 type ZoraSupportedChainId = ChainId.Mainnet
+
+export const isOpenSeaSupportedChainId = createPredicate<ChainId, ChainId.Mainnet | ChainId.Rinkeby>([
+    ChainId.Mainnet,
+    ChainId.Rinkeby,
+])
 
 export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, Network>(
     {

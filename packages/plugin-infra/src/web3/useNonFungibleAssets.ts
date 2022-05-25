@@ -8,6 +8,7 @@ import { useWeb3Hub } from './useWeb3Hub'
 export function useNonFungibleAssets<T extends NetworkPluginID>(
     pluginID?: T,
     schemaType?: Web3Helper.Definition[T]['SchemaType'],
+    options?: Web3Helper.Web3HubOptions<T>,
 ) {
     type GetAllNonFungibleAssets = (
         address: string,
@@ -16,7 +17,7 @@ export function useNonFungibleAssets<T extends NetworkPluginID>(
     >
 
     const account = useAccount(pluginID)
-    const hub = useWeb3Hub(pluginID)
+    const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
         if (!account || !hub) return []

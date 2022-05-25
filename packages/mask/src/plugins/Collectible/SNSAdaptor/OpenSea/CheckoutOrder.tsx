@@ -1,13 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../../../../components/shared/Image'
-import { CurrencyType, formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveAssetLinkOnCurrentProvider } from '../../pipes'
 import { useI18N } from '../../../../utils'
 import type { Order } from 'opensea-js/lib/types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -19,23 +18,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CheckoutOrder() {
+export interface CheckoutOrderProps {
+    order?: Order
+}
+
+export function CheckoutOrder({ order }: CheckoutOrderProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { token, asset, provider } = CollectibleState.useContainer()
-    const order = asset?.value?.auction ?? asset?.value?.desktopOrder
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    if (!asset?.value || !token) return null
-    if (!order) return null
+
+    if (!asset?.value || !token || !order) return null
 
     const price = (order as Order).currentPrice ?? asset.value.price?.[CurrencyType.USD]
+
     const getPrice = () => {
-        if (!price) return 'error'
-        const decimal = asset.value?.find((item: FungibleToken<ChainId, SchemaType>) => {
-            return item.symbol === asset.value?.metadata?.symbol
-        })?.decimals
-        if (!decimal) return 'error'
-        return formatBalance(price, decimal) ?? 'error'
+        const decimals = order.paymentTokenContract?.decimals
+        if (!decimals) return 'error'
+        return formatBalance(price, decimals) ?? 'error'
     }
 
     return (

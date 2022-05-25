@@ -10,6 +10,7 @@ import { CheckoutDialog } from './CheckoutDialog'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAssetOrder } from '../../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -35,6 +36,7 @@ export function ActionBar(props: ActionBarProps) {
     const { asset } = CollectibleState.useContainer()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 
     const {
         open: openCheckoutDialog,
@@ -97,8 +99,13 @@ export function ActionBar(props: ActionBarProps) {
                     open={openCheckoutDialog}
                     onClose={onCloseCheckoutDialog}
                 />
-                <MakeOfferDialog asset={asset.value} open={openOfferDialog} onClose={onCloseOfferDialog} />
                 <PostListingDialog asset={asset.value} open={openListingDialog} onClose={onCloseListingDialog} />
+                <MakeOfferDialog
+                    asset={asset.value}
+                    order={assetOrder}
+                    open={openOfferDialog}
+                    onClose={onCloseOfferDialog}
+                />
             </ChainBoundary>
         </Box>
     )

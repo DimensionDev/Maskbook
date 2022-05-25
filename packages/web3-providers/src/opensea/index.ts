@@ -125,20 +125,21 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
     return {
         ...createNFTToken(chainId, asset),
         link: asset.opensea_link,
-        auction: {
-            isAuction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now()),
-            endAt: getUnixTime(new Date(asset.endTime)),
-            orderTokens: uniqBy(
-                desktopOrder?.payment_token_contract
-                    ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)]
-                    : [],
-                (x) => x.address.toLowerCase(),
-            ),
-            offerTokens: uniqBy(
-                asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
-                (x) => x.address.toLowerCase(),
-            ),
-        },
+        auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now())
+            ? {
+                  endAt: getUnixTime(new Date(asset.endTime)),
+                  orderTokens: uniqBy(
+                      desktopOrder?.payment_token_contract
+                          ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)]
+                          : [],
+                      (x) => x.address.toLowerCase(),
+                  ),
+                  offerTokens: uniqBy(
+                      asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
+                      (x) => x.address.toLowerCase(),
+                  ),
+              }
+            : undefined,
         creator: {
             address: asset.creator.address,
             nickname: asset.creator.user?.username ?? 'Unknown',
@@ -259,6 +260,7 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
             address: order.maker.address,
             nickname: order.maker.user?.username,
             avatarURL: order.maker.profile_img_url,
+            link: urlcat('https://opensea.io/accounts/:address', { address: order.maker.address }),
         },
         taker: {
             address: order.taker.address,

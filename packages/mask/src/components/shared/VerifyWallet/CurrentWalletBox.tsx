@@ -96,7 +96,6 @@ const useStyles = makeStyles()((theme) => ({
 interface CurrentWalletBox {
     wallet: Account<ChainId> & {
         providerType: ProviderType
-        address?: string
     }
     walletName?: string
     changeWallet: () => void
@@ -110,9 +109,9 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, providerType)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const account = notInPop ? frontAccount : wallet.address
+    const account = notInPop ? frontAccount : wallet.account
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) ?? {}
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon

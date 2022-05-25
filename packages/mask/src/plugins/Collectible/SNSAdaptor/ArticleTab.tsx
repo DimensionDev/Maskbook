@@ -1,9 +1,9 @@
+import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { hasNativeAPI } from '../../../../shared/native-rpc'
-import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

@@ -1,5 +1,4 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useValueRef } from '@masknet/shared-base-ui'
 import {
     IdentityAddress,
     isSameAddress,
@@ -12,7 +11,6 @@ import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -243,15 +241,17 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleAsset<ChainId, SchemaType> | 'all' | undefined
     >('all')
-    const { resolvedAddress: address } = addressName
+    const { address } = addressName
 
     useEffect(() => {
         setSelectedCollection('all')
     }, [address])
 
-    const { data: collectionsFormRemote } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: collectionsFormRemote } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, {
+        account: address,
+    })
     const {
-        data: collectibles,
+        value: collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, address, chainId)
@@ -374,7 +374,6 @@ export function CollectionList({
                             address={address}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
-                            // loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>

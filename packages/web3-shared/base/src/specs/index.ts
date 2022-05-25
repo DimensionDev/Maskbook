@@ -252,7 +252,6 @@ export interface NonFungibleTokenTrait {
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {
-    isAuction: boolean
     /** unix timestamp */
     startAt?: number
     /** unix timestamp */

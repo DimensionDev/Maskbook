@@ -93,8 +93,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     ])
 
     const onPostListing = useCallback(async () => {
-        if (!asset) return
-        if (!asset.id || !asset.address) return
+        if (!asset?.id || !asset.address) return
         if (!token?.value) return
         if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
         await PluginCollectibleRPC.createSellOrder({

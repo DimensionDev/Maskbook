@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import urlcat from 'urlcat'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, explorerResolver, SchemaType } from '@masknet/web3-shared-evm'
@@ -66,16 +64,15 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const { provider } = CollectibleState.useContainer()
     const address = order.maker?.nickname || order.maker?.address || ''
 
-    const link = useMemo(() => {
-        return provider === SourceType.OpenSea
-            ? urlcat('https://opensea.io/accounts/:address', { address })
-            : order.maker?.link
-    }, [order, provider, address])
-
     return (
         <TableRow>
             <TableCell>
-                <Link href={link} title={address} target="_blank" className={classes.account} rel="noopener noreferrer">
+                <Link
+                    href={order.maker?.link}
+                    title={address}
+                    target="_blank"
+                    className={classes.account}
+                    rel="noopener noreferrer">
                     <Avatar src={order.maker?.avatarURL} className={classes.avatar} />
                     <Typography className={classes.accountName}>
                         <Account address={order.maker?.address} username={order.maker?.nickname} />

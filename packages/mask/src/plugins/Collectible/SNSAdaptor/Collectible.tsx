@@ -193,11 +193,6 @@ export function Collectible(props: CollectibleProps) {
         return tabMap[tabIndex] || null
     }
 
-    console.log('DEBUG: asset')
-    console.log({
-        asset,
-    })
-
     const _asset = asset.value
     const endDate = _asset.auction?.endAt
     return (

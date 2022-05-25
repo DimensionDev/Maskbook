@@ -10,6 +10,7 @@ import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import {
+    useChainId,
     useProviderDescriptor,
     useProviderType,
     useReverseAddress,
@@ -29,6 +30,7 @@ interface AddWalletViewProps {
 const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletViewProps) => {
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
@@ -125,7 +127,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    if (!currentPersona || !wallet) return null
+    if (!currentPersona || !wallet || !providerType) return null
 
     return (
         <div>
@@ -133,7 +135,11 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 isBound={isBound}
                 notEvm={isNotEvm}
                 notConnected={!wallet?.address}
-                wallet={wallet}
+                wallet={{
+                    account: wallet.address,
+                    chainId,
+                    providerType,
+                }}
                 walletName={walletName()}
                 nickname={currentPersona.nickname}
                 step={step}

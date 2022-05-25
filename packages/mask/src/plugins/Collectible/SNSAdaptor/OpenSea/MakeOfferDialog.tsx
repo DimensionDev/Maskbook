@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
+import { Trans } from 'react-i18next'
 import {
     DialogContent,
     Box,
@@ -23,15 +24,15 @@ import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../../messages'
 import { toAsset } from '../../helpers'
 import { PluginTraderMessages } from '../../../Trader/messages'
-import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
-import { NetworkPluginID, NonFungibleAsset, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, NonFungibleAsset, rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../../Trader/types'
 import { SelectTokenListPanel } from '.././SelectTokenListPanel'
 import { isWyvernSchemaName } from '../../utils'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Order } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,15 +65,17 @@ const useStyles = makeStyles()((theme) => {
 export interface MakeOfferDialogProps {
     open: boolean
     asset?: NonFungibleAsset<ChainId, SchemaType>
+    order?: Order
     onClose: () => void
 }
 
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
 
-    const isAuction = asset?.auction?.isAuction ?? false
+    const isAuction = !!asset?.auction
     const isVerified = asset?.collection?.verified ?? false
-    const leastPrice = asset && asset.desktopOrder ? new BigNumber(asset.desktopOrder.current_price ?? '0') : ZERO
+    const desktopOrder = first(asset?.orders)
+    const leastPrice = desktopOrder ? new BigNumber(desktopOrder.price?.[CurrencyType.USD] ?? '0') : ZERO
 
     const paymentTokens = uniqBy(
         [...(asset?.auction?.offerTokens ?? []), ...(asset?.auction?.orderTokens ?? [])],
@@ -158,6 +161,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
     if (!asset) return null
+
     return (
         <InjectedDialog
             title={isAuction ? t('plugin_collectible_place_a_bid') : t('plugin_collectible_make_an_offer')}
