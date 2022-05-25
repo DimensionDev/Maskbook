@@ -25,14 +25,16 @@ import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChearsIcon } from '../assets/Chears'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { LoadingButton } from '@mui/lab'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
+    root: {
+        padding: theme.spacing(2, 2, 0, 2),
+    },
     desBox: {
         display: 'flex',
         justifyContent: 'flex-end',
-        margin: theme.spacing(3, 0),
+        margin: theme.spacing(2, 0),
         alignItems: 'center',
     },
     des: {
@@ -279,7 +281,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     return (
         <>
-            <Box>
+            <Box className={classes.root}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
                         <PreviewBox message={metaData.word} imageUrl={imageChose} tokenInfo={tokenInfoSelect} />
@@ -309,25 +311,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <EthereumChainBoundary
-                    chainId={ChainId.Mainnet}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        size: 'large',
-                        fullWidth: true,
-                    }}>
-                    <LoadingButton
-                        loading={loading}
-                        color="inherit"
-                        size="large"
-                        fullWidth
-                        variant="contained"
-                        className={classes.btn}
-                        onClick={saveHandle}
-                        disabled={!collection.name || !metaData.image}>
-                        {t('plugin_pets_dialog_btn')}
-                    </LoadingButton>
-                </EthereumChainBoundary>
+
                 <Box className={classes.desBox}>
                     <Typography color="textSecondary" fontSize={14} fontWeight={700} className={classes.des}>
                         {t('plugin_pets_dialog_created')}
@@ -341,6 +325,13 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </Typography>
                     <ChearsIcon style={{ width: 24, height: 24 }} />
                 </Box>
+            </Box>
+            <EthereumChainBoundary
+                chainId={ChainId.Mainnet}
+                noSwitchNetworkTip
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                }}>
                 <PluginWalletStatusBar
                     actionProps={{
                         loading,
@@ -348,9 +339,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         title: t('plugin_pets_dialog_btn'),
                         disabled: !collection.name || !metaData.image,
                     }}
-                    classes={{ button: classes.btn }}
                 />
-            </Box>
+            </EthereumChainBoundary>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipVisible}
