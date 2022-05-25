@@ -46,11 +46,12 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     }
     boundary?: ERC20Bounday | ERC721Bounday
     onChange?: (address: string) => void
+    pending?: string | React.ReactElement | React.ReactNode
 }
 
 export function WalletStatusBar(props: WalletStatusBarProps) {
     const t = useSharedI18N()
-    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange } = props
+    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange, pending } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -67,6 +68,7 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                     badgeSize={badgeSize}
                     onChange={(address: string) => onChange?.(address)}
                     wallets={actionProps?.wallets ?? []}
+                    pending={pending}
                 />
             </Box>
 

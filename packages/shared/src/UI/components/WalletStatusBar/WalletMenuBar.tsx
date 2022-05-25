@@ -59,10 +59,11 @@ interface WalletMenuBarProps extends withClasses<'root'> {
     openPopupsWindow?: () => void
     iconSize?: number
     badgeSize?: number
+    pending?: string | React.ReactElement | React.ReactNode
 }
 
 export function WalletMenuBar(props: WalletMenuBarProps) {
-    const { onChange, wallets, openPopupsWindow, iconSize, badgeSize } = props
+    const { onChange, wallets, openPopupsWindow, iconSize, badgeSize, pending } = props
     const classes = useStylesExtends(useStyles(), props)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const onClose = () => setAnchorEl(null)
@@ -134,6 +135,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                             : currentPluginId === NetworkPluginID.PLUGIN_EVM
                     }
                     showMenuDrop
+                    pending={pending}
                 />
             </Stack>
             <ShadowRootMenu

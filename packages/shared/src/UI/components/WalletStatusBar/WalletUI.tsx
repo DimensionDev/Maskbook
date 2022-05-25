@@ -9,7 +9,7 @@ import {
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, useChainColor, useChainId } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress, Link, Typography } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
 import { DownIcon } from '../../assets/Down'
@@ -46,6 +46,8 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
         display: 'flex',
         alignItems: 'center',
         backgroundColor: 'rgba(255, 177, 0, 0.1)',
+        padding: 2,
+        marginLeft: 4,
     },
     icon: {
         filter: `drop-shadow(0px 6px 12px ${new Color(props.filterColor).alpha(0.4).toString()})`,
@@ -66,6 +68,7 @@ interface WalletUIProps {
     verify?: boolean
     isETH?: boolean
     showMenuDrop?: boolean
+    pending?: string | React.ReactElement | React.ReactNode
 }
 
 export function WalletUI(props: WalletUIProps) {
@@ -77,6 +80,7 @@ export function WalletUI(props: WalletUIProps) {
         isETH = false,
         address,
         showMenuDrop = false,
+        pending,
     } = props
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
@@ -86,7 +90,7 @@ export function WalletUI(props: WalletUIProps) {
     const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
 
     const providerDescriptor = useProviderDescriptor()
-    const [pending, setPending] = useState(false)
+
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
@@ -124,14 +128,7 @@ export function WalletUI(props: WalletUIProps) {
                         <LinkIcon className={classes.linkIcon} />
                     </Link>
                     {lock ? <LockWalletIcon className={classes.linkIcon} /> : null}
-                    {pending ? (
-                        <Box className={classes.pending}>
-                            <Typography variant="body1" color="#FFB100">
-                                Pending
-                            </Typography>
-                            <CircularProgress size={14} color="error" sx={{ color: '#FFB100' }} />
-                        </Box>
-                    ) : null}
+                    {pending ? <Box className={classes.pending}>{pending}</Box> : null}
                 </Box>
             </Box>
         </Box>
