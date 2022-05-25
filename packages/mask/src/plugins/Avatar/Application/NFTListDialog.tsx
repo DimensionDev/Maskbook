@@ -241,7 +241,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     />
                 )}
                 {tokens.length || collectibles.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
+                    <Stack
+                        style={{
+                            display: 'flex',
+                            flex: 1,
+                            flexDirection: 'row',
+                            paddingLeft: 16,
+                            position: 'absolute',
+                            left: 0,
+                            bottom: 89,
+                        }}>
                         <Typography variant="body1" color="textPrimary">
                             {t.collectible_not_found()}
                         </Typography>

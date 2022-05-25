@@ -280,8 +280,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 open={open}
                 onClose={onClose}
                 classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialog }}
-                title={t.tips()}
-                titleTail={walletChip}>
+                title={t.tips()}>
                 <DialogContent className={classes.content}>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
