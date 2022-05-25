@@ -1,9 +1,11 @@
 import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { MaskNotSquareIcon, SquareBack } from '@masknet/icons'
-import { useNavigate } from 'react-router-dom'
+import { MaskNotSquareIcon, SquareBack, PopupCloseIcon } from '@masknet/icons'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { PageTitleContext } from '../../context'
+import { PopupRoutes } from '@masknet/shared-base'
+import Services from '../../../service'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -23,11 +25,19 @@ const useStyles = makeStyles()(() => ({
         fontSize: 30,
         cursor: 'pointer',
     },
+    close: {
+        position: 'absolute',
+        left: 16,
+        top: 16,
+        fontSize: 30,
+        cursor: 'pointer',
+    },
     title: {
         fontSize: 14,
         lineHeight: '30px',
         color: '#15181B',
         fontWeight: 700,
+        minHeight: 30,
     },
     logo: {
         width: 96,
@@ -42,9 +52,14 @@ interface NormalHeaderProps {
 export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const location = useLocation()
     const { title } = useContext(PageTitleContext)
 
-    const showTitle = history.length !== 1 && title
+    const goBack = new URLSearchParams(location.search).get('goBack')
+
+    const showTitle = (history.length !== 1 && title) || !!goBack
+
+    const showClose = location.pathname === PopupRoutes.ConnectWallet
 
     if (onlyTitle)
         return (
@@ -52,6 +67,15 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
                 <Typography className={classes.title}>{title}</Typography>
             </Box>
         )
+
+    if (showClose) {
+        return (
+            <Box className={classes.container} style={{ justifyContent: 'center' }}>
+                <PopupCloseIcon className={classes.close} onClick={() => Services.Helper.removePopupWindow()} />
+                <Typography className={classes.title}>{title}</Typography>
+            </Box>
+        )
+    }
 
     return (
         <Box className={classes.container} style={{ justifyContent: showTitle ? 'center' : 'flex-start' }}>

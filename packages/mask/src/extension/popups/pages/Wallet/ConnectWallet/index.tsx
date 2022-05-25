@@ -16,6 +16,7 @@ import {
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PopupContext } from '../../../hook/usePopupContext'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -62,6 +63,7 @@ const ConnectWalletPage = memo(() => {
     const navigate = useNavigate()
 
     const { setSigned } = PopupContext.useContainer()
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     // connect to ethereum mainnet
     const network = getRegisteredWeb3Networks().find(
@@ -72,14 +74,21 @@ const ConnectWalletPage = memo(() => {
     )
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
 
-    const onClick = useCallback((network: Web3Plugin.NetworkDescriptor, provider: Web3Plugin.ProviderDescriptor) => {
-        if (provider.type !== ProviderType.MaskWallet) return
-        navigate(
-            urlcat(PopupRoutes.SelectWallet, {
-                popup: true,
-            }),
-        )
-    }, [])
+    const onClick = useCallback(
+        (network: Web3Plugin.NetworkDescriptor, provider: Web3Plugin.ProviderDescriptor) => {
+            if (provider.type !== ProviderType.MaskWallet) return
+            if (isLocked && !getLockStatusLoading) {
+                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: '1' }))
+                return
+            }
+            navigate(
+                urlcat(PopupRoutes.SelectWallet, {
+                    popup: true,
+                }),
+            )
+        },
+        [isLocked, getLockStatusLoading],
+    )
 
     const onSubmit = useCallback(
         async (
