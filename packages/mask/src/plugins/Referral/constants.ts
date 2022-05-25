@@ -14,7 +14,7 @@ export const ZERO_HASH = '0x0000000000000000000000000000000000000000000000000000
 
 enum ORACLE_CHAIN_ID {
     testnet = 4470,
-    mainnet = 47,
+    mainnet = 147,
 }
 
 // export const supportedChainId = ChainId.Mainnet
@@ -28,4 +28,5 @@ export const supportedOracleChainId = ORACLE_CHAIN_ID.testnet
 
 export const errors = {
     rpc: 'Failed to fetch',
+    referrerInvalid: 'Code: -32600. referrer invalid',
 }
