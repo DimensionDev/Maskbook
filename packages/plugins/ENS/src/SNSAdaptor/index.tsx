@@ -44,7 +44,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             UI: {
                 TabContent: (identity) => (
                     <ENSCard
-                        url="kk"
                         identity={{
                             userId: identity?.identity?.identifier?.userId,
                             bio: identity?.identity?.bio,

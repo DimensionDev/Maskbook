@@ -20,12 +20,12 @@ We will inject our UI in three places of twitter to provide different services. 
 
 ### 3.1 Add UI in application board
 
-Add following config：
+Add related config：
 
 ```JavaScript
   ApplicationEntries: [
         (() => {
-            const icon = 'kk'
+            const icon = <img src={new URL('./assets/ens.png', import.meta.url).toString()} />
             const name = { i18nKey: '__plugin_name', fallback: 'ENS' }
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
@@ -53,6 +53,24 @@ Add following config：
             }
         })(),
     ],
+```
+
+change plugin Definition config:
+
+```JavaScript
+export const base: Plugin.Shared.Definition = {
+    ID: PLUGIN_ID,
+    name: { fallback: PLUGIN_NAME },
+    description: { fallback: PLUGIN_DESCRIPTION },
+    publisher: { name: { fallback: 'ENS' }, link: '' },
+    enableRequirement: {
+        architecture: { app: false, web: true },
+        networks: { type: 'opt-out', networks: {} },
+        target: 'beta',  // set as 'stable' if this plugin exists in production environment
+    },
+    experimentalMark: true,
+    i18n: languages,
+}
 ```
 
 ### 3.2 Add UI in Timeline
@@ -83,7 +101,6 @@ We have injected `web3` tab in user profile, so we add a tab called `ENS` under 
             UI: {
                 TabContent: (identity) => (
                     <ENSCard
-                        url="kk"
                         identity={{
                             userId: identity?.identity?.identifier?.userId,
                             bio: identity?.identity?.bio,
