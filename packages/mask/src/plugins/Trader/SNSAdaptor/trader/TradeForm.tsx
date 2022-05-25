@@ -30,6 +30,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -508,40 +509,46 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     }
                                     render={(disable: boolean) =>
                                         isGreatThanSlippageSetting ? (
-                                            <ActionButton
-                                                fullWidth
-                                                loading={isSwapping}
-                                                variant="contained"
-                                                color="error"
-                                                disabled={
-                                                    focusedTrade?.loading ||
-                                                    !focusedTrade?.value ||
-                                                    disable ||
-                                                    isSwapping
-                                                }
-                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                                onClick={onSwap}>
-                                                {t('plugin_trader_confirm_price_impact', {
-                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                                })}
-                                            </ActionButton>
+                                            <EthereumWalletConnectedBoundary>
+                                                <ActionButton
+                                                    fullWidth
+                                                    loading={isSwapping}
+                                                    variant="contained"
+                                                    color="error"
+                                                    disabled={
+                                                        focusedTrade?.loading ||
+                                                        !focusedTrade?.value ||
+                                                        disable ||
+                                                        isSwapping
+                                                    }
+                                                    classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                    onClick={onSwap}>
+                                                    {t('plugin_trader_confirm_price_impact', {
+                                                        percent: formatPercentage(
+                                                            focusedTrade?.value?.priceImpact ?? 0,
+                                                        ),
+                                                    })}
+                                                </ActionButton>
+                                            </EthereumWalletConnectedBoundary>
                                         ) : (
-                                            <ActionButton
-                                                fullWidth
-                                                loading={isSwapping}
-                                                variant="contained"
-                                                disabled={
-                                                    focusedTrade?.loading ||
-                                                    !focusedTrade?.value ||
-                                                    !!validationMessage ||
-                                                    disable ||
-                                                    isSwapping
-                                                }
-                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                                color="primary"
-                                                onClick={onSwap}>
-                                                {validationMessage || nativeWrapMessage}
-                                            </ActionButton>
+                                            <EthereumWalletConnectedBoundary>
+                                                <ActionButton
+                                                    fullWidth
+                                                    loading={isSwapping}
+                                                    variant="contained"
+                                                    disabled={
+                                                        focusedTrade?.loading ||
+                                                        !focusedTrade?.value ||
+                                                        !!validationMessage ||
+                                                        disable ||
+                                                        isSwapping
+                                                    }
+                                                    classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                    color="primary"
+                                                    onClick={onSwap}>
+                                                    {validationMessage || nativeWrapMessage}
+                                                </ActionButton>
+                                            </EthereumWalletConnectedBoundary>
                                         )
                                     }
                                 />
