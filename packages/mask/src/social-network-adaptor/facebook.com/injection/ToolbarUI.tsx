@@ -3,8 +3,8 @@ import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/Tool
 
 const fbBreakPoint = 700 /** px */
 
-const Container = styled('div')`
-    padding: 0 8px;
+const Container = styled('div')<{ hasTopNavBar: boolean }>`
+    padding: 0 ${(props) => (props.hasTopNavBar ? '8px' : '4px')};
 `
 const Item = styled(ListItemButton)`
     border-radius: 8px;
@@ -23,12 +23,12 @@ const Icon = styled(ListItemIcon)`
     }
 `
 
-export function ToolboxAtFacebook(props: { category: 'wallet' | 'application' }) {
+export function ToolboxAtFacebook(props: { category: 'wallet' | 'application'; hasTopNavBar: boolean }) {
     const isSmall = useMediaQuery(`(max-height: ${fbBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
-            iconSize={isSmall ? 24 : 32}
-            Container={Container}
+            iconSize={isSmall || !props.hasTopNavBar ? 24 : 32}
+            Container={({ children }) => <Container hasTopNavBar={props.hasTopNavBar}>{children}</Container>}
             ListItemButton={Item}
             Typography={Text}
             ListItemIcon={Icon}
