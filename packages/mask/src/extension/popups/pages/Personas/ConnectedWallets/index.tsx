@@ -3,7 +3,7 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -17,7 +17,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
-    const { NameService } = useWeb3State()
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
     const navigate = useNavigate()
     const location = useLocation()
@@ -28,6 +28,7 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
+        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {

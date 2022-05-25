@@ -59,11 +59,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             }}
             open={open}
             items={searchedList || EMPTY_LIST}
-            selected={
-                searchedList?.filter((x) =>
-                    selected.some((i) => i.linkedPersona?.publicKeyAsHex === x.linkedPersona?.publicKeyAsHex),
-                ) || EMPTY_LIST
-            }
+            selected={selected}
             disabled={false}
             submitDisabled={false}
             onSubmit={onClose}

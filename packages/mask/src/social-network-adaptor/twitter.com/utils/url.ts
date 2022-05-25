@@ -7,7 +7,8 @@ export const twitterUrl = {
 export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
     isMobile ? twitterUrl.hostLeadingUrlMobile : twitterUrl.hostLeadingUrl
 
-// more about twitter photo url formating: https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
+// more about twitter photo url formatting:
+// https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
 export const canonifyImgUrl = (url: string) => {
     const parsed = new URL(url)
     if (parsed.hostname !== 'pbs.twimg.com') {

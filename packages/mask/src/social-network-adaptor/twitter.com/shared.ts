@@ -1,12 +1,12 @@
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
-import urlcat from 'urlcat'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { hasPayloadLike } from '../../utils'
 import { twitterBase } from './base'
-import { TwitterDecoder, __TwitterEncoder } from '@masknet/encryption'
+import { TwitterDecoder } from '@masknet/encryption'
 import { usernameValidator } from './utils/user'
+import { TwitterAdaptor } from '../../../shared/site-adaptors/implementations/twitter.com'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
     if (!(post.identifier instanceof ProfileIdentifier)) return null
@@ -15,20 +15,10 @@ const getPostURL = (post: PostIdentifier): URL | null => {
 export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...twitterBase,
     utils: {
-        getHomePage: () => 'https://twitter.com',
-        getProfilePage: (userId) => `https://twitter.com/${userId}`,
         isValidUsername: usernameValidator,
-        textPayloadPostProcessor: {
-            encoder: __TwitterEncoder,
-            decoder(text) {
-                return TwitterDecoder(text)
-                    .map((x) => [x])
-                    .unwrapOr([])
-            },
-        },
         getPostURL,
         share(text) {
-            const url = this.getShareLinkURL!(text)
+            const url = TwitterAdaptor.getShareLinkURL!(text)
             const width = 700
             const height = 520
             const openedWindow = openWindow(url, 'share', {
@@ -48,10 +38,6 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             if (openedWindow === null) {
                 location.assign(url)
             }
-        },
-        getShareLinkURL(message) {
-            const url = urlcat('https://twitter.com/intent/tweet', { text: message })
-            return new URL(url)
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             hasPayloadLike: (text) => {

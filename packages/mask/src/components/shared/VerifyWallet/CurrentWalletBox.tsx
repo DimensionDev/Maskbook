@@ -2,13 +2,7 @@ import { ExternalLink } from 'react-feather'
 import { ChainId, ProviderType, NetworkType, useAccount, useProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    useWeb3State,
-    useNetworkDescriptor,
-    useProviderDescriptor,
-    useReverseAddress,
-    Web3Plugin,
-} from '@masknet/plugin-infra/web3'
+import { useWeb3State, useNetworkDescriptor, useProviderDescriptor, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 
@@ -107,8 +101,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const frontAccount = useAccount()
     const account = notInPop ? frontAccount : wallet.account
     const { Utils } = useWeb3State() ?? {}
-    const { value: domain } = useReverseAddress(wallet.account)
-    const _providerType = wallet.providerType ?? providerType
+
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
@@ -119,22 +112,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {_providerType !== ProviderType.MaskWallet ? (
-                        <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
-                                : providerDescriptor?.name}
-                        </Typography>
-                    ) : (
-                        <>
-                            <Typography className={classes.accountName}>
-                                {walletName ?? providerDescriptor?.name}
-                            </Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
-                            ) : null}
-                        </>
-                    )}
+                    <Typography className={classes.accountName}>{walletName}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={account}>

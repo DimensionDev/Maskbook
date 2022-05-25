@@ -11,7 +11,14 @@ const interFaceV2 = new Interface(ITO2_ABI)
 // ITO Contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId, isV1 = false) {
     const callData = (isV1 ? interFaceV1 : interFaceV2).encodeFunctionData('check_availability', [pid])
-    const data = await Services.Ethereum.call({ to, from, data: callData }, { chainId })
+    const data = await Services.Ethereum.call(
+        {
+            to,
+            from,
+            data: callData,
+        },
+        { chainId },
+    )
     return decodeResult(data, isV1)
 }
 

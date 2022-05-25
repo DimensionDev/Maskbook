@@ -1,4 +1,5 @@
-import { type TypedMessage, createTypedMessageMetadataReader } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
+import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { META_KEY_1, META_KEY_2 } from './constants'
 import { FileInfo, FileInfoV1, Provider } from './types'
 import schemaV1 from './schema-v1.json'

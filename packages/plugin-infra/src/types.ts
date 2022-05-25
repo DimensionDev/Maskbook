@@ -240,8 +240,6 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntries?: ApplicationEntry[]
-        /** This UI will be rendered as sliders on the profile page */
-        ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as plugin wrapper page */
@@ -372,23 +370,6 @@ export namespace Plugin.SNSAdaptor {
         type: string
         label: string
         resolvedAddress: string
-    }
-
-    export interface ProfileSlider {
-        ID: string
-
-        /**
-         * The name of the slider card
-         */
-        label: I18NStringField | string
-        /**
-         * Used to order the sliders
-         */
-        priority: number
-        /**
-         * The injected UI
-         */
-        children: InjectUI<{}>
     }
 
     export interface ProfileTab {

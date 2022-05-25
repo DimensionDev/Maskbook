@@ -8,7 +8,7 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
+import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -23,7 +23,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,9 +81,12 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        marginTop: '0 !important',
-        minHeight: 38,
-        height: 38,
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        margin: '0 !important',
     },
     footer: {
         display: 'flex',
@@ -102,6 +105,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttonWrapper: {
         marginTop: 0,
+        display: 'flex',
     },
     loadingBox: {
         borderRadius: theme.spacing(1),
@@ -255,7 +259,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         loading,
         retry: retryAvailability,
         error: availabilityError,
-    } = useAvailabilityNftRedPacket(payload.id, account)
+    } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -427,16 +431,22 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </div>
                 </Card>
             ) : availability.isClaimedAll || availability.isCompleted ? null : (
-                <Grid container spacing={2} className={classes.buttonWrapper}>
-                    <Grid item xs={availability.isClaimed ? 12 : 6}>
-                        <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">
+                <Box className={classes.buttonWrapper}>
+                    <Box sx={{ flex: 1, padding: 1.5 }}>
+                        <Button
+                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            className={classes.button}
+                            fullWidth
+                            onClick={onShare}
+                            variant="contained">
                             {t('share')}
                         </Button>
-                    </Grid>
+                    </Box>
                     {availability.isClaimed ? null : (
-                        <Grid item xs={6}>
-                            <EthereumChainBoundary chainId={payload.chainId}>
+                        <Box sx={{ flex: 1, padding: 1.5 }}>
+                            <EthereumChainBoundary chainId={payload.chainId} renderInTimeline>
                                 <EthereumWalletConnectedBoundary
+                                    renderInTimeline
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
@@ -454,9 +464,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     </ActionButton>
                                 </EthereumWalletConnectedBoundary>
                             </EthereumChainBoundary>
-                        </Grid>
+                        </Box>
                     )}
-                </Grid>
+                </Box>
             )}
         </div>
     )

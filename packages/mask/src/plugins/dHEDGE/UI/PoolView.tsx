@@ -14,7 +14,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
     },
     message: {
@@ -133,7 +132,7 @@ export function PoolView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={pool.chainId} />
+                <EthereumChainBoundary chainId={pool.chainId} renderInTimeline />
             </Box>
         </>
     )

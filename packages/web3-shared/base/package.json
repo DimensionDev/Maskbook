@@ -1,13 +1,13 @@
 {
   "name": "@masknet/web3-shared-base",
   "private": true,
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "bignumber.js": "9.0.2",
     "date-fns": "^2.28.0",
