@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         justifyItems: 'center',
-        padding: theme.spacing(3),
+        padding: 0,
         boxSizing: 'border-box',
         color: theme.palette.text.primary,
         textAlign: 'center',

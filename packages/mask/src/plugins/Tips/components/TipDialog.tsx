@@ -40,15 +40,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flexBasis: '100%',
-        paddingTop: 0,
+        padding: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
     },
     abstractTabWrapper: {
-        width: '100%',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
+        flex: 1,
+        padding: theme.spacing(1, 2, 2, 2),
         flexShrink: 0,
     },
     tab: {

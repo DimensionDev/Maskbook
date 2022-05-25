@@ -18,6 +18,7 @@ import {
 import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { TargetChainIdContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
@@ -30,6 +31,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             flexDirection: 'column',
+            padding: theme.spacing(0, 2, 2, 2),
         },
         main: {
             display: 'flex',
@@ -127,65 +129,67 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     }, [sendTip, onSent])
 
     return (
-        <Box className={classnames(classes.root, className)} {...rest}>
-            <div className={classes.main}>
-                <FormControl fullWidth className={classes.receiverRow}>
-                    <Typography className={classes.to}>{t.tip_to()}</Typography>
-                    <Select
-                        className={classes.address}
-                        ref={selectRef}
-                        value={recipient}
-                        disabled={isSending}
-                        onChange={(e) => {
-                            setRecipient(e.target.value)
-                        }}
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            },
-                            container: selectRef.current,
-                            anchorEl: selectRef.current,
-                            BackdropProps: {
-                                invisible: true,
-                            },
-                        }}>
-                        {recipientAddresses.map((address) => (
-                            <MenuItem key={address} value={address}>
-                                {Utils?.formatDomainName?.(address) || address}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl className={classes.controls}>
-                    <RadioGroup row value={tipType} onChange={(e) => setTipType(e.target.value as TipType)}>
-                        <FormControlLabel
+        <>
+            <Box className={classnames(classes.root, className)} {...rest}>
+                <div className={classes.main}>
+                    <FormControl fullWidth className={classes.receiverRow}>
+                        <Typography className={classes.to}>{t.tip_to()}</Typography>
+                        <Select
+                            className={classes.address}
+                            ref={selectRef}
+                            value={recipient}
                             disabled={isSending}
-                            value={TipType.Token}
-                            control={<Radio />}
-                            label={t.tip_type_token()}
-                        />
-                        <FormControlLabel
-                            disabled={!enabledNft}
-                            value={TipType.NFT}
-                            control={<Radio />}
-                            label={t.tip_type_nft()}
-                        />
-                    </RadioGroup>
-                    {tipType === TipType.NFT && !empty ? (
-                        <Button variant="text" className={classes.addButton} onClick={onAddToken}>
-                            {t.tip_add_collectibles()}
-                        </Button>
-                    ) : null}
-                </FormControl>
-                {tipType === TipType.Token ? (
-                    <FormControl className={classes.tokenField}>
-                        <TokenSection />
+                            onChange={(e) => {
+                                setRecipient(e.target.value)
+                            }}
+                            MenuProps={{
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                },
+                                container: selectRef.current,
+                                anchorEl: selectRef.current,
+                                BackdropProps: {
+                                    invisible: true,
+                                },
+                            }}>
+                            {recipientAddresses.map((address) => (
+                                <MenuItem key={address} value={address}>
+                                    {Utils?.formatDomainName?.(address) || address}
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </FormControl>
-                ) : (
-                    <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
-                )}
-            </div>
+                    <FormControl className={classes.controls}>
+                        <RadioGroup row value={tipType} onChange={(e) => setTipType(e.target.value as TipType)}>
+                            <FormControlLabel
+                                disabled={isSending}
+                                value={TipType.Token}
+                                control={<Radio />}
+                                label={t.tip_type_token()}
+                            />
+                            <FormControlLabel
+                                disabled={!enabledNft}
+                                value={TipType.NFT}
+                                control={<Radio />}
+                                label={t.tip_type_nft()}
+                            />
+                        </RadioGroup>
+                        {tipType === TipType.NFT && !empty ? (
+                            <Button variant="text" className={classes.addButton} onClick={onAddToken}>
+                                {t.tip_add_collectibles()}
+                            </Button>
+                        ) : null}
+                    </FormControl>
+                    {tipType === TipType.Token ? (
+                        <FormControl className={classes.tokenField}>
+                            <TokenSection />
+                        </FormControl>
+                    ) : (
+                        <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
+                    )}
+                </div>
+            </Box>
             {account ? (
                 <EthereumChainBoundary
                     chainId={chainId}
@@ -196,15 +200,14 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                         classes: { root: classes.button, disabled: classes.disabledButton },
                         color: 'primary',
                     }}>
-                    <ActionButton
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}
-                        fullWidth
-                        disabled={!isValid || isSending}
-                        onClick={send}>
-                        {buttonLabel}
-                    </ActionButton>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            disabled: !isValid || isSending,
+                            action: send,
+                            title: buttonLabel,
+                        }}
+                        classes={{ button: classes.actionButton }}
+                    />
                 </EthereumChainBoundary>
             ) : (
                 <ActionButton
@@ -216,6 +219,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                     {t.tip_connect_wallet()}
                 </ActionButton>
             )}
-        </Box>
+        </>
     )
 })
