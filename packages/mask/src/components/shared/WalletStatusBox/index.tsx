@@ -1,5 +1,6 @@
 import {
     useAccount,
+    useWallet,
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -14,86 +15,95 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { Copy } from 'react-feather'
-import { LinkOutDarkIcon } from '@masknet/icons'
+import { LinkOutDarkIcon, CopyDarkIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { resetAccount } from '../../../plugins/Wallet/services'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { contentBackground }) => ({
-    content: {
-        padding: theme.spacing(2, 3, 3),
-    },
-    currentAccount: {
-        padding: theme.spacing(1.5),
-        marginBottom: theme.spacing(2),
-        display: 'flex',
-        background:
-            contentBackground ??
-            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    dashboardBackground: {
-        background: theme.palette.background.default,
-    },
-    accountInfo: {
-        fontSize: 16,
-        flexGrow: 1,
-        marginLeft: theme.spacing(1.5),
-    },
-    accountName: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 16,
-        marginRight: 6,
-    },
-    infoRow: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    actionButton: {
-        fontSize: 12,
-        color: 'white',
-        backgroundColor: theme.palette.maskColor.dark,
-        marginLeft: theme.spacing(1),
-        padding: theme.spacing(1, 2),
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
+const useStyles = makeStyles<{ contentBackground?: string; showWalletName: boolean }>()(
+    (theme, { contentBackground, showWalletName }) => ({
+        content: {
+            padding: theme.spacing(2, 3, 3),
         },
-    },
-    address: {
-        fontSize: 16,
-        marginRight: theme.spacing(1),
-        display: 'inline-block',
-    },
-    link: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
-    },
-    connectButtonWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: theme.spacing(2, 0),
-    },
-    linkIcon: {
-        fill: 'none',
-        width: 16,
-        height: 16,
-        marginLeft: theme.spacing(0.5),
-    },
-    statusBox: {
-        position: 'relative',
-    },
-}))
+        currentAccount: {
+            padding: theme.spacing(showWalletName ? '13px' : '22px', 1.5),
+            marginBottom: theme.spacing(2),
+            display: 'flex',
+            background:
+                contentBackground ??
+                (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+            borderRadius: 8,
+            alignItems: 'center',
+        },
+        dashboardBackground: {
+            background: theme.palette.background.default,
+        },
+        accountInfo: {
+            fontSize: 16,
+            flexGrow: 1,
+            marginLeft: theme.spacing(1.5),
+        },
+        accountName: {
+            color: theme.palette.maskColor.dark,
+            fontWeight: 700,
+            fontSize: 14,
+            marginRight: 5,
+            lineHeight: '18px',
+        },
+        balance: {
+            color: theme.palette.maskColor.dark,
+            fontSize: 14,
+            paddingTop: 2,
+            lineHeight: '18px',
+        },
+        infoRow: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        actionButton: {
+            fontSize: 12,
+            color: 'white',
+            backgroundColor: theme.palette.maskColor.dark,
+            marginLeft: theme.spacing(1),
+            padding: theme.spacing(1, 2),
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
+        },
+        address: {
+            fontSize: 16,
+            marginRight: theme.spacing(1),
+            display: 'inline-block',
+        },
+        link: {
+            color: theme.palette.maskColor.dark,
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        twitterProviderBorder: {
+            width: 14,
+            height: 14,
+        },
+        connectButtonWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: theme.spacing(2, 0),
+        },
+        icon: {
+            fill: 'none',
+            width: 17.5,
+            height: 17.5,
+            marginRight: theme.spacing(0.5),
+        },
+        statusBox: {
+            position: 'relative',
+        },
+    }),
+)
 interface WalletStatusBox {
     disableChange?: boolean
     showPendingTransaction?: boolean
@@ -102,8 +112,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
     const providerDescriptor = useProviderDescriptor()
-    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
+    const { classes } = useStyles({
+        contentBackground: providerDescriptor?.backgroundGradient,
+        showWalletName: [ProviderType.MaskWallet, 'Phantom', 'Blocto'].includes(providerDescriptor?.type ?? ''),
+    })
     const chainId = useChainId()
+    const wallet = useWallet()
     const account = useAccount()
     const { value: balance = '0' } = useBalance()
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -154,8 +168,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     badgeIcon={networkDescriptor?.icon}
                 />
                 <div className={classes.accountInfo}>
-                    {[ProviderType.MaskWallet, 'Phantom', 'Blocto'].includes(providerDescriptor?.type ?? '') ? (
-                        <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
+                    {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                        <Typography className={classes.accountName}>{wallet?.name}</Typography>
                     ) : null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
@@ -171,7 +185,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <Copy size={14} />
+                            <CopyDarkIcon className={classes.icon} />
                         </Link>
                         <Link
                             className={classes.link}
@@ -179,12 +193,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <LinkOutDarkIcon className={classes.linkIcon} />
+                            <LinkOutDarkIcon className={classes.icon} />
                         </Link>
                     </div>
                     {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
                         <div className={classes.infoRow}>
-                            <Typography className={classes.accountName}>
+                            <Typography className={classes.balance}>
                                 {Utils?.formatBalance?.(balance, nativeToken?.decimals, 3)} {nativeToken?.symbol}
                             </Typography>
                         </div>

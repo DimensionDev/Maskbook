@@ -9,6 +9,7 @@ import {
     ListItemIcon as MuiListItemIcon,
     ListItemText as MuiListItemText,
     Box,
+    useTheme,
 } from '@mui/material'
 import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
@@ -140,7 +141,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     } = props
     const { classes } = useStyles()
     const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
-
+    const theme = useTheme()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
@@ -164,6 +165,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                     badgeSize={badgeSize}
                                     mainIcon={providerDescriptor?.icon}
                                     badgeIcon={networkDescriptor?.icon}
+                                    badgeIconBorderColor={theme.palette.background.paper}
                                 />
                             ) : (
                                 <AccountBalanceWalletIcon />

@@ -12,7 +12,7 @@ import { WalletMessages } from '../../messages'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2.5),
+        padding: theme.spacing(2),
         overflowX: 'hidden',
     },
     footer: {

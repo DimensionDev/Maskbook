@@ -16,7 +16,7 @@ import { LoadingPlaceholder } from '../../../../extension/popups/components/Load
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2.5),
+        padding: theme.spacing(2),
     },
     popupDialog: {
         width: 200,

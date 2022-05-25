@@ -1,5 +1,6 @@
 import { SelectedIcon } from '@masknet/icons'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { getNetworkName } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
         list: {
             marginTop: 12,
             display: 'flex',
-            gridGap: '16px 8px',
+            gridGap: '16px 9px',
             flexWrap: 'wrap',
         },
         networkItem: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles()((theme) => {
             '&:hover': {
                 background: theme.palette.background.default,
                 '& p': {
-                    fontWeight: 600,
+                    fontWeight: 700,
                 },
             },
         },
@@ -60,7 +61,7 @@ const useStyles = makeStyles()((theme) => {
             bottom: 0,
             width: 12,
             height: 12,
-            background: '#fff',
+            background: theme.palette.background.paper,
             borderRadius: '50%',
         },
         alert: {
@@ -102,6 +103,10 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             color: theme.palette.text.secondary,
         },
+        selected: {
+            color: theme.palette.text.primary,
+            fontWeight: 700,
+        },
     }
 })
 
@@ -128,7 +133,7 @@ export function PluginProviderRender({
     ProviderIconClickBait,
     onSubmit,
 }: PluginProviderRenderProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     return (
@@ -163,7 +168,15 @@ export function PluginProviderRender({
                                             <SelectedIcon className={classes.checkedBadge} />
                                         )}
                                     </div>
-                                    <Typography className={classes.networkName}>{network.type}</Typography>
+                                    <Typography
+                                        className={cx(
+                                            classes.networkName,
+                                            undeterminedNetworkID === network.ID ? classes.selected : '',
+                                        )}>
+                                        {network.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+                                            ? getNetworkName(network.chainId)
+                                            : network.type}
+                                    </Typography>
                                 </ListItem>
                             ))}
                     </List>

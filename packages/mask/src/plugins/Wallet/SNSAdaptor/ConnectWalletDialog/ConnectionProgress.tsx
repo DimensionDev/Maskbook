@@ -26,25 +26,28 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         alignItems: 'center',
         marginTop: 10,
         backgroundColor: MaskColorVar.warningBackground,
-        padding: '11px 0 11px 14px',
+        padding: '13px 12px 13px 14.5px',
         borderRadius: 8,
     },
     tipContentText: {
         color: MaskColorVar.warning,
-        fontSize: 12,
+        fontSize: 13,
         marginLeft: 8,
     },
     tipLink: {
         color: MaskColorVar.warning,
         textDecoration: 'underline',
     },
+    connectWith: {
+        color: theme.palette.maskColor.dark,
+        fontWeight: 700,
+    },
     error: {
-        fontSize: 12,
-        paddingTop: theme.spacing(0.5),
+        fontSize: 14,
         paddingRight: theme.spacing(1),
     },
     progress: {
-        color: 'white',
+        color: theme.palette.common.black,
     },
 }))
 
@@ -77,7 +80,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             badgeIcon={networkDescriptor?.icon}
                         />
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
-                            <Typography>
+                            <Typography className={classes.connectWith}>
                                 {loading
                                     ? t('plugin_wallet_connect_with')
                                     : t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
@@ -86,7 +89,9 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             {loading ? (
                                 <Box display="flex" alignItems="center">
                                     <CircularProgress className={classes.progress} size={14} sx={{ marginRight: 1 }} />
-                                    <Typography variant="body2">{t('initializing')}</Typography>
+                                    <Typography variant="body2" className={classes.progress}>
+                                        {t('initializing')}
+                                    </Typography>
                                 </Box>
                             ) : null}
                             {!loading && error ? (
@@ -108,30 +113,32 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     </Box>
                 </Card>
             </Paper>
-            <Card className={classes.tipContent} elevation={0}>
-                <WarningTriangleIcon />
-                <Typography className={classes.tipContentText} variant="body2">
-                    <Trans
-                        i18nKey="plugin_wallet_connect_tip"
-                        components={{
-                            providerLink: Utils?.resolveProviderHomeLink?.(providerType) ? (
-                                <Link
-                                    className={classes.tipLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href={Utils?.resolveProviderHomeLink?.(providerType)}
-                                />
-                            ) : (
-                                <span />
-                            ),
-                        }}
-                        values={{
-                            providerName: Utils?.resolveProviderName?.(providerType),
-                            providerShortenLink: Utils?.resolveProviderShortenLink?.(providerType),
-                        }}
-                    />
-                </Typography>
-            </Card>
+            {providerDescriptor?.ID === `${NetworkPluginID.PLUGIN_EVM}_walletconnect` ? null : (
+                <Card className={classes.tipContent} elevation={0}>
+                    <WarningTriangleIcon />
+                    <Typography className={classes.tipContentText} variant="body2">
+                        <Trans
+                            i18nKey="plugin_wallet_connect_tip"
+                            components={{
+                                providerLink: Utils?.resolveProviderHomeLink?.(providerType) ? (
+                                    <Link
+                                        className={classes.tipLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href={Utils?.resolveProviderHomeLink?.(providerType)}
+                                    />
+                                ) : (
+                                    <span />
+                                ),
+                            }}
+                            values={{
+                                providerName: Utils?.resolveProviderName?.(providerType),
+                                providerShortenLink: Utils?.resolveProviderShortenLink?.(providerType),
+                            }}
+                        />
+                    </Typography>
+                </Card>
+            )}
         </>
     )
 }

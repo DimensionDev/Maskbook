@@ -3,6 +3,7 @@ import { ImageIcon } from '../ImageIcon'
 
 interface StyleProps {
     size: number
+    badgeIconBorderColor?: string
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -21,7 +22,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         position: 'absolute',
         right: -6,
         bottom: -4,
-        border: `1px solid ${theme.palette.background.default}`,
+        border: `1px solid ${props.badgeIconBorderColor ?? theme.palette.common.white}`,
         borderRadius: '50%',
     },
 }))
@@ -31,12 +32,14 @@ interface WalletIconProps {
     badgeSize?: number
     mainIcon?: URL
     badgeIcon?: URL
+    badgeIconBorderColor?: string
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
-    const { size = 24, badgeSize = 14, mainIcon, badgeIcon } = props
+    const { size = 24, badgeSize = 14, mainIcon, badgeIcon, badgeIconBorderColor } = props
     const { classes } = useStyles({
         size: badgeSize > size ? badgeSize : size,
+        badgeIconBorderColor,
     })
 
     return (
