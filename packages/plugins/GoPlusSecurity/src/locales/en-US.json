@@ -1,6 +1,7 @@
 {
     "__plugin_name": "Check Security",
-    "powered_by_go_plus": "Powered by Go+",
+    "powered_by": "Powered by",
+    "go_plus": "GO+",
     "high_risk": "High Risk",
     "low_risk": "Low Risk",
     "medium_risk": "Medium Risk",
@@ -22,6 +23,7 @@
     "token_info_contract_creator": "Contract Creator",
     "token_info_contract_owner": "Contract Owner",
     "token_info_total_supply": "Total Supply",
+    "token_market_cap": "Market Cap",
     "default_placeholder": "Note: Scams detections might not be 100% guaranteed.",
     "not_found_tip_title": "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:",
     "not_found_tip_network_error": "1. Make sure network is working;",

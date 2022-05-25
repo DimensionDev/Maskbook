@@ -1,5 +1,5 @@
 import { Link, Stack, Tooltip, Typography } from '@mui/material'
-import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
+import type { TokenSecurity } from './Common'
 import { useI18N } from '../../locales'
 import React from 'react'
 import { useTheme } from '@mui/system'
@@ -15,11 +15,12 @@ import {
 
 const useStyles = makeStyles()((theme) => ({
     card: {
-        borderColor: theme.palette.divider,
-        borderStyle: 'solid',
-        borderWidth: 1,
         padding: theme.spacing(1.5),
         borderRadius: 9,
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
     subtitle: {
         color: theme.palette.text.secondary,
@@ -45,10 +46,10 @@ function formatTotalSupply(total?: number) {
 
 interface TokenPanelProps {
     tokenSecurity: TokenSecurity
-    securityMessageLevel: SecurityMessageLevel
+    tokenMarketCap?: string
 }
 
-export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLevel }: TokenPanelProps, ref) => {
+export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
     const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -71,24 +72,12 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
     return (
         <Stack>
             <Stack direction="row" className={classes.card} spacing={2}>
-                <Stack
-                    spacing={1.5}
-                    borderRadius={0.5}
-                    sx={{ background: DefineMapping[securityMessageLevel].bgColor }}
-                    width={128}
-                    height={128}
-                    justifyContent="center"
-                    alignItems="center">
-                    {DefineMapping[securityMessageLevel].icon(33)}
-                    <Typography color={DefineMapping[securityMessageLevel].titleColor} fontSize={14}>
-                        {t[DefineMapping[securityMessageLevel].i18nKey]({ quantity: '', rate: '' })}
-                    </Typography>
-                </Stack>
                 <Stack height={128} justifyContent="space-between" flex={1}>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.token_symbol}({tokenSecurity.token_name})
+                            {tokenSecurity.token_symbol}
+                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}{' '}
                         </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
@@ -158,6 +147,10 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
                         {totalSupply}
+                    </Stack>
+                    <Stack direction="row" justifyContent="space-between">
+                        <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
+                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : '--'}
                     </Stack>
                 </Stack>
             </Stack>
