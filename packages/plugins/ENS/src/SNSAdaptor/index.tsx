@@ -57,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     ApplicationEntries: [
         (() => {
-            const icon = 'kk'
+            const icon = <img src={new URL('./assets/ens.png', import.meta.url).toString()} />
             const name = { i18nKey: '__plugin_name', fallback: 'ENS' }
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {

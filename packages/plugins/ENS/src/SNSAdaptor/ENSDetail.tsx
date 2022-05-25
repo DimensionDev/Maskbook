@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 600,
         display: 'flex',
         paddingLeft: theme.spacing(2),
-        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
     },
     input: {
         flex: 1,

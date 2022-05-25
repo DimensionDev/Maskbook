@@ -19,12 +19,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         flex: 1,
-        padding: theme.spacing(0.5),
     },
     button: {
-        padding: theme.spacing(1, 2),
+        padding: '16px 18px',
         marginLeft: theme.spacing(1),
-        marginTop: theme.spacing(1),
     },
     skeleton: {
         borderRadius: 8,
@@ -81,18 +79,12 @@ const TestDialog: React.FC<TestDialogProps> = (props) => {
                             spellCheck: false,
                         },
                     }}
-                    // InputLabelProps={{
-                    //     shrink: true,
-                    //     classes: {
-                    //         shrink: classes.inputShrinkLabel,
-                    //     },
-                    // }}
                     label={t.ens()}
                     value={ensName}
                     onChange={handleEnsNameChange}
                 />
                 <section>
-                    <Button className={classes.button} variant="contained" size="small" onClick={handleSearch}>
+                    <Button className={classes.button} variant="contained" size="large" onClick={handleSearch}>
                         {t.search()}
                     </Button>
                 </section>
