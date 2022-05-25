@@ -1,13 +1,6 @@
-import { useCallback } from 'react'
+import { EthereumTokenType, FungibleTokenDetailed, TransactionEventType, useAccount } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -28,20 +21,11 @@ export function useDepositCallback(
     const poolContract = usePoolTogetherPoolContract(address)
 
     const account = useAccount()
-    const [depositState, setDepositState] = useTransactionState()
 
-    const depositCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !poolContract) {
-            setDepositState({
-                type: TransactionStateType.UNKNOWN,
-            })
             return
         }
-
-        // pre-step: start waiting for provider to confirm tx
-        setDepositState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         // step 1: estimate gas
         const config = {
@@ -52,10 +36,6 @@ export function useDepositCallback(
             .depositTo(account, amount, controlledToken, referrer)
             .estimateGas(config)
             .catch((error) => {
-                setDepositState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
                 throw error
             })
 
@@ -67,28 +47,12 @@ export function useDepositCallback(
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setDepositState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
-                    setDepositState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
                     reject(error)
                 })
         })
     }, [address, account, amount, token, referrer, controlledToken])
-
-    const resetCallback = useCallback(() => {
-        setDepositState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [depositState, depositCallback, resetCallback] as const
 }

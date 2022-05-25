@@ -29,6 +29,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { PluginWalletStatusBar } from '../../../../utils/components/PluginWalletStatusBar'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -213,6 +214,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+        const { isSwapping } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
         // #region approve token
@@ -508,7 +510,12 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <PluginWalletStatusBar
                                                 actionProps={{
                                                     color: 'warning',
-                                                    disabled: focusedTrade?.loading || !focusedTrade?.value || disable,
+                                                    disabled:
+                                                        focusedTrade?.loading ||
+                                                        !focusedTrade?.value ||
+                                                        disable ||
+                                                        isSwapping,
+                                                    loading: isSwapping,
                                                     action: onSwap,
                                                     title: t('plugin_trader_confirm_price_impact', {
                                                         percent: formatPercentage(
@@ -521,12 +528,13 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         ) : (
                                             <PluginWalletStatusBar
                                                 actionProps={{
-                                                    color: 'warning',
+                                                    loading: isSwapping,
                                                     disabled:
                                                         focusedTrade?.loading ||
                                                         !focusedTrade?.value ||
                                                         !!validationMessage ||
-                                                        disable,
+                                                        disable ||
+                                                        isSwapping,
                                                     title: validationMessage || nativeWrapMessage,
                                                     action: onSwap,
                                                 }}

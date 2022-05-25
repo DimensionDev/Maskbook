@@ -26,7 +26,7 @@ import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
@@ -281,7 +281,6 @@ export function ITO(props: ITO_Props) {
         value: availability,
         computed: availabilityComputed,
         loading: loadingAvailability,
-        error: errorAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
 
@@ -360,36 +359,19 @@ export function ITO(props: ITO_Props) {
     }, [retryPoolTradeInfo, retryAvailability])
 
     // #region claim
-    const [claimState, claimCallback] = useClaimCallback([pid], payload.contract_address)
-
-    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            if (
-                claimState.type !== TransactionStateType.CONFIRMED ||
-                (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
-            )
-                return
-            window.location.reload()
-        },
-    )
-
-    useEffect(() => {
-        if (
-            claimState.type === TransactionStateType.UNKNOWN ||
-            (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
-        )
-            return
-        setClaimTransactionDialog({
-            open: true,
-            state: claimState,
-            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
-                token?.symbol ?? 'Token'
-            }.`,
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
+    const openShareTxDialog = useOpenShareTxDialog()
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash !== 'string') return
+        openShareTxDialog({
+            hash,
+            buttonLabel: t('dismiss'),
+            onShare() {
+                window.location.reload()
+            },
         })
-    }, [claimState /* update tx dialog only if state changed */])
+    }, [claimCallback, openShareTxDialog, t])
 
     // #endregion
 
@@ -417,14 +399,6 @@ export function ITO(props: ITO_Props) {
     }, [])
 
     // #region withdraw
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (destructState.type !== TransactionStateType.CONFIRMED) return
-            window.location.reload()
-        },
-    )
 
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
@@ -455,11 +429,6 @@ export function ITO(props: ITO_Props) {
             if (token) {
                 summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
             }
-        })
-        setTransactionDialog({
-            open: true,
-            state: destructState,
-            summary,
         })
     }, [destructState, canWithdraw])
 
@@ -574,12 +543,13 @@ export function ITO(props: ITO_Props) {
         if (!availability?.claimed) {
             return (
                 <ActionButton
-                    onClick={claimCallback}
+                    loading={isClaiming}
+                    onClick={claim}
                     variant="contained"
                     size="large"
-                    disabled={claimState.type === TransactionStateType.HASH}
+                    disabled={isClaiming}
                     className={classes.actionButton}>
-                    {claimState.type === TransactionStateType.HASH ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
+                    {isClaiming ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
                 </ActionButton>
             )
         }
@@ -592,7 +562,7 @@ export function ITO(props: ITO_Props) {
             )
         }
         return null
-    }, [availability?.claimed, canWithdraw, claimState])
+    }, [availability?.claimed, canWithdraw, isClaiming])
 
     const FooterBuyerWithLockTimeButton = useMemo(
         () => (

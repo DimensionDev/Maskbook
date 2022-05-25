@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => {
             '--tabHeight': '35px',
 
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
             position: 'relative',
         },

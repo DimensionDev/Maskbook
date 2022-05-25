@@ -1,7 +1,7 @@
-import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { ChainId, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box, useTheme } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
@@ -13,8 +13,8 @@ interface OperationFooterProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
-    claimState: TransactionState
-    refundState: TransactionState
+    isClaiming: boolean
+    isRefunding: boolean
     onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
@@ -22,8 +22,8 @@ export function OperationFooter({
     chainId,
     canClaim,
     canRefund,
-    claimState,
-    refundState,
+    isClaiming,
+    isRefunding,
     onShare,
     onClaimOrRefund,
 }: OperationFooterProps) {
@@ -56,9 +56,7 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
-        const isLoading =
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+        const isLoading = isClaiming || isRefunding
 
         return (
             <ActionButton
@@ -71,15 +69,15 @@ export function OperationFooter({
                     },
                 }}
                 fullWidth
-                disabled={isLoading}
                 loading={isLoading}
+                disabled={isLoading}
                 variant="contained"
                 onClick={onClaimOrRefund}>
                 {canClaim
-                    ? claimState.type === TransactionStateType.HASH
+                    ? isClaiming
                         ? t('plugin_red_packet_claiming')
                         : t('plugin_red_packet_claim')
-                    : refundState.type === TransactionStateType.HASH
+                    : isRefunding
                     ? t('plugin_red_packet_refunding')
                     : t('plugin_red_packet_refund')}
             </ActionButton>

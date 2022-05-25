@@ -1,11 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import {
-    ERC721ContractDetailed,
-    FungibleTokenDetailed,
-    GasConfig,
-    TransactionState,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, FungibleTokenDetailed, GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import { TipType } from '../../types'
@@ -26,9 +20,8 @@ export interface ContextOptions {
     erc721Contract: ERC721ContractDetailed | null
     erc721Address: string
     setErc721Address: Dispatch<SetStateAction<string>>
-    sendTip: () => Promise<void>
+    sendTip: () => Promise<string | undefined>
     isSending: boolean
-    sendState: TransactionState
     storedTokens: Web3Plugin.NonFungibleToken[]
     reset: () => void
     setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
@@ -50,9 +43,8 @@ export const TipContext = createContext<ContextOptions>({
     erc721Contract: null,
     erc721Address: '',
     setErc721Address: noop,
-    sendTip: noop as () => Promise<void>,
+    sendTip: noop as () => Promise<string | undefined>,
     isSending: false,
-    sendState: { type: TransactionStateType.UNKNOWN },
     storedTokens: [],
     reset: noop,
     setGasConfig: noop,

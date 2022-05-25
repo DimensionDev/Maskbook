@@ -109,13 +109,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
+    loading?: boolean
     onDone: () => void
     onBack: () => void
     onClose: () => void
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { poolSettings, onDone, onBack, onClose } = props
+    const { poolSettings, loading, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
@@ -315,6 +316,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                         symbol: poolSettings?.token?.symbol,
                     }),
+                    loading,
+                    disabled: loading,
                     action: onDone,
                 }}
             />
