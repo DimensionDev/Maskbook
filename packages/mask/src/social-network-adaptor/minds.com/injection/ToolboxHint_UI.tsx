@@ -43,7 +43,6 @@ const Icon = styled(ListItemIcon)`
 export function ToolboxHintAtMinds(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${mindsBreakPoint}px)`)
     const mode = useTheme().palette.mode
-    console.log({ mode })
     return (
         <ToolboxHintUnstyled
             mini={mini}

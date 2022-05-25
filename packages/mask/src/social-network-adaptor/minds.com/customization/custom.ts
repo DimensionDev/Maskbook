@@ -23,7 +23,6 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
-        console.log({ backgroundColor })
         currentTheme.value = contrastColor === 'rgb(255,255,255)' ? 'dark' : 'light'
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
         if (backgroundColor)
