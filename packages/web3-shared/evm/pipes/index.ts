@@ -22,6 +22,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
         [ProviderType.WalletLink]: 'Coinbase',
         [ProviderType.MathWallet]: 'MathWallet',
         [ProviderType.Fortmatic]: 'Fortmatic',
+        [ProviderType.Opera]: 'Opera',
     },
     'Unknown Network',
 )
@@ -36,6 +37,7 @@ export const resolveProviderShortenLink = createLookupTableResolver<ProviderType
         [ProviderType.WalletLink]: 'Walletlink.org',
         [ProviderType.MathWallet]: 'Mathwallet.org',
         [ProviderType.Fortmatic]: 'Fortmatic.com',
+        [ProviderType.Opera]: 'Opera Wallet',
     },
     'website',
 )
@@ -50,6 +52,7 @@ export const resolveProviderHomeLink = createLookupTableResolver<ProviderType, s
         [ProviderType.WalletLink]: 'https://walletlink.org',
         [ProviderType.MathWallet]: 'https://mathwallet.org',
         [ProviderType.Fortmatic]: 'https://fortmatic.com',
+        [ProviderType.Opera]: 'https://opera.com',
     },
     '',
 )
@@ -63,6 +66,7 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
         [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
         [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
         [ProviderType.Fortmatic]: '',
+        [ProviderType.Opera]: ' https://www.opera.com/crypto/next',
         [ProviderType.CustomNetwork]: '',
     },
     '',
@@ -70,7 +74,7 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
 
 export const resolveProviderInjectedKey = createLookupTableResolver<
     ProviderType,
-    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | 'isOpera' | ''
 >(
     {
         [ProviderType.MaskWallet]: 'isMaskWallet',
@@ -80,6 +84,7 @@ export const resolveProviderInjectedKey = createLookupTableResolver<
         [ProviderType.Coin98]: 'isCoin98',
         [ProviderType.WalletLink]: 'isWalletLink',
         [ProviderType.Fortmatic]: '',
+        [ProviderType.Opera]: 'isOpera',
         [ProviderType.CustomNetwork]: '',
     },
     '',

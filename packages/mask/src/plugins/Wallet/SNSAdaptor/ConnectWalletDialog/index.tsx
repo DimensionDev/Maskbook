@@ -103,6 +103,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.MathWallet:
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
+            case ProviderType.Opera:
+                ;({ account, chainId } = await Services.Ethereum.connectInjected())
+                break
             case ProviderType.Fortmatic:
                 ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
                 break

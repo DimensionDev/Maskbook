@@ -37,6 +37,7 @@ export function NetworkIconClickBait({
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
             case ProviderType.Fortmatic:
+            case ProviderType.Opera:
                 setConnectWalletDialog({
                     open: true,
                     providerType,

@@ -28,6 +28,8 @@ export async function createWeb3({
         case ProviderType.WalletLink:
         case ProviderType.MathWallet:
             return Injected.createWeb3()
+        case ProviderType.Opera:
+            return Injected.createWeb3()
         case ProviderType.Fortmatic:
             return Fortmatic.createWeb3()
         case ProviderType.CustomNetwork:

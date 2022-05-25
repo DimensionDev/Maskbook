@@ -225,6 +225,20 @@ export async function INTERNAL_send(
                     callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
                 }
                 break
+            case ProviderType.Opera:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await Injected.createProvider().request({
+                            method: EthereumMethodType.PERSONAL_SIGN,
+                            params: payload.params,
+                        }),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
             case ProviderType.Fortmatic:
                 try {
                     callback(null, {
@@ -381,6 +395,19 @@ export async function INTERNAL_send(
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+                await Injected.ensureConnectedAndUnlocked()
+                Injected.createProvider().send(payload, (error, response) => {
+                    callback(
+                        hasError(error, response)
+                            ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                            : null,
+                        response,
+                    )
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, accountFinally, payload, response)
+                })
+                break
+            case ProviderType.Opera:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
                     callback(

@@ -25,6 +25,10 @@ export function useInjectedProviderType(type: 'ethereum' | 'coin98') {
         const isMetaMask = await bridgedProvider.getProperty('isMetaMask')
         if (isMetaMask) return ProviderType.MetaMask
 
+        // opera wallet
+        const isOpera = await bridgedProvider.getProperty('isOpera')
+        if (isOpera) return ProviderType.Opera
+
         return
     }, [injectedProviderReady, bridgedProvider])
     return injectedProviderType

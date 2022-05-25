@@ -236,6 +236,13 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         name: 'Fortmatic',
         icon: new URL('./assets/fortmatic.png', import.meta.url),
     },
+    {
+        ID: `${PLUGIN_ID}_opera`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Opera,
+        name: 'Opera',
+        icon: new URL('./assets/opera.png', import.meta.url),
+    },
 ]
 export const PLUGIN_APPLICATION_CATEGORIES: Web3Plugin.ApplicationCategoryDescriptor[] = [
     {

@@ -69,6 +69,7 @@ export function ProviderIconClickBait({
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
             case ProviderType.Fortmatic:
+            case ProviderType.Opera:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -85,6 +86,8 @@ export function ProviderIconClickBait({
 
     // hide injected provider on dashboard
     if (isInjectedProvider(providerType) && isDashboardPage()) return null
+
+    if (providerType === ProviderType.Opera && isDashboardPage()) return null
 
     // hide fortmatic for some networks because of incomplete supporting
     if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
