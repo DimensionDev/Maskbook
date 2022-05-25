@@ -130,191 +130,194 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     }, [onClose, chainId, poolSettings])
 
     return (
-        <Card elevation={0}>
-            <Grid container spacing={0}>
-                <Grid item xs={12}>
-                    <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
-                        {poolSettings?.title}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_sell_token')}</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.data} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Typography variant="body1" component="span">
-                            {poolSettings?.token?.symbol}
+        <>
+            <Card elevation={0}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
+                            {poolSettings?.title}
                         </Typography>
-                        {isNativeTokenAddress(poolSettings?.token) ? null : (
-                            <Link
-                                className={classes.link}
-                                href={resolveTokenLinkOnExplorer(poolSettings?.token!)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={stop}>
-                                <LaunchIcon fontSize="small" />
-                            </Link>
-                        )}
-                    </Paper>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_sell_total_amount')}</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        <Typography>
-                            <FormattedBalance
-                                value={poolSettings?.total}
-                                decimals={poolSettings?.token?.decimals}
-                                symbol={poolSettings?.token?.symbol}
-                                formatter={formatBalance}
-                            />
-                        </Typography>
-                    </Paper>
-                </Grid>
-
-                {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
-                    return (
-                        <Fragment key={index}>
-                            {index === 0 ? (
-                                <Grid item xs={1}>
-                                    <Paper className={classes.label}>
-                                        <Typography variant="body1" color="textSecondary">
-                                            {t('plugin_ito_sell_price')}
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                            ) : null}
-                            <Grid item xs={index === 0 ? 11 : 12}>
-                                <SwapItem
-                                    token={poolSettings.token}
-                                    swap={item}
-                                    swapAmount={poolSettings?.exchangeAmounts[index]}
-                                />
-                            </Grid>
-                        </Fragment>
-                    )
-                })}
-
-                <Grid item xs={6}>
-                    <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_allocation_per_wallet_title')}</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        <Typography>
-                            <FormattedBalance
-                                value={poolSettings?.limit}
-                                decimals={poolSettings?.token?.decimals}
-                                symbol={poolSettings?.token?.symbol}
-                                formatter={formatBalance}
-                            />
-                        </Typography>
-                    </Paper>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_begin_time_title')}</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        <Typography>{formatDateTime(poolSettings?.startTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
-                    </Paper>
-                </Grid>
-
-                <Grid item xs={6}>
-                    <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_end_time_title')}</Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.data}>
-                        <Typography>{formatDateTime(poolSettings?.endTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
-                    </Paper>
-                </Grid>
-
-                {showQualification ? (
-                    <>
-                        <Grid item xs={6}>
-                            <Paper className={classes.label}>
-                                <Typography>{t('plugin_ito_qualification_label')}</Typography>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Paper className={classes.data}>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_sell_token')}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.data} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Typography variant="body1" component="span">
+                                {poolSettings?.token?.symbol}
+                            </Typography>
+                            {isNativeTokenAddress(poolSettings?.token) ? null : (
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(chainId, poolSettings?.qualificationAddress!)}
+                                    className={classes.link}
+                                    href={resolveTokenLinkOnExplorer(poolSettings?.token!)}
                                     target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Typography>
-                                        <FormattedAddress
-                                            address={poolSettings?.qualificationAddress!}
-                                            size={4}
-                                            formatter={formatEthereumAddress}
-                                        />
-                                    </Typography>
+                                    rel="noopener noreferrer"
+                                    onClick={stop}>
+                                    <LaunchIcon fontSize="small" />
                                 </Link>
-                            </Paper>
-                        </Grid>
-                    </>
-                ) : null}
-                {poolSettings?.regions ? (
-                    <>
-                        <Grid item xs={6}>
-                            <Paper className={classes.label}>
-                                <Typography>{t('plugin_ito_region_confirm_label')}</Typography>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Paper className={classes.data}>
-                                <Typography>
-                                    {decodeRegionCode(poolSettings?.regions!).length}/{regionCodes.length}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    </>
-                ) : null}
-                {poolSettings?.unlockTime ? (
-                    <>
-                        <Grid item xs={6}>
-                            <Paper className={classes.label}>
-                                <Typography>{t('plugin_ito_unlock_time')}</Typography>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Paper className={classes.data}>
-                                <Typography>
-                                    {formatDateTime(poolSettings?.unlockTime!, 'yyyy-MM-dd HH:mm:ss')}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    </>
-                ) : null}
-                <Grid item xs={12}>
-                    <Typography variant="h5" className={classes.title} component="p">
-                        {t('plugin_ito_send_tip')}
-                    </Typography>
+                            )}
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_sell_total_amount')}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.data}>
+                            <Typography>
+                                <FormattedBalance
+                                    value={poolSettings?.total}
+                                    decimals={poolSettings?.token?.decimals}
+                                    symbol={poolSettings?.token?.symbol}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                        </Paper>
+                    </Grid>
+
+                    {poolSettings?.exchangeTokens.filter(Boolean).map((item, index) => {
+                        return (
+                            <Fragment key={index}>
+                                {index === 0 ? (
+                                    <Grid item xs={1}>
+                                        <Paper className={classes.label}>
+                                            <Typography variant="body1" color="textSecondary">
+                                                {t('plugin_ito_sell_price')}
+                                            </Typography>
+                                        </Paper>
+                                    </Grid>
+                                ) : null}
+                                <Grid item xs={index === 0 ? 11 : 12}>
+                                    <SwapItem
+                                        token={poolSettings.token}
+                                        swap={item}
+                                        swapAmount={poolSettings?.exchangeAmounts[index]}
+                                    />
+                                </Grid>
+                            </Fragment>
+                        )
+                    })}
+
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_allocation_per_wallet_title')}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.data}>
+                            <Typography>
+                                <FormattedBalance
+                                    value={poolSettings?.limit}
+                                    decimals={poolSettings?.token?.decimals}
+                                    symbol={poolSettings?.token?.symbol}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_begin_time_title')}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.data}>
+                            <Typography>{formatDateTime(poolSettings?.startTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Paper className={classes.label}>
+                            <Typography>{t('plugin_ito_end_time_title')}</Typography>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper className={classes.data}>
+                            <Typography>{formatDateTime(poolSettings?.endTime!, 'yyyy-MM-dd HH:mm:ss')}</Typography>
+                        </Paper>
+                    </Grid>
+
+                    {showQualification ? (
+                        <>
+                            <Grid item xs={6}>
+                                <Paper className={classes.label}>
+                                    <Typography>{t('plugin_ito_qualification_label')}</Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper className={classes.data}>
+                                    <Link
+                                        href={resolveAddressLinkOnExplorer(
+                                            chainId,
+                                            poolSettings?.qualificationAddress!,
+                                        )}
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        <Typography>
+                                            <FormattedAddress
+                                                address={poolSettings?.qualificationAddress!}
+                                                size={4}
+                                                formatter={formatEthereumAddress}
+                                            />
+                                        </Typography>
+                                    </Link>
+                                </Paper>
+                            </Grid>
+                        </>
+                    ) : null}
+                    {poolSettings?.regions ? (
+                        <>
+                            <Grid item xs={6}>
+                                <Paper className={classes.label}>
+                                    <Typography>{t('plugin_ito_region_confirm_label')}</Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper className={classes.data}>
+                                    <Typography>
+                                        {decodeRegionCode(poolSettings?.regions!).length}/{regionCodes.length}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </>
+                    ) : null}
+                    {poolSettings?.unlockTime ? (
+                        <>
+                            <Grid item xs={6}>
+                                <Paper className={classes.label}>
+                                    <Typography>{t('plugin_ito_unlock_time')}</Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper className={classes.data}>
+                                    <Typography>
+                                        {formatDateTime(poolSettings?.unlockTime!, 'yyyy-MM-dd HH:mm:ss')}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </>
+                    ) : null}
+                    <Grid item xs={12}>
+                        <Typography variant="h5" className={classes.title} component="p">
+                            {t('plugin_ito_send_tip')}
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid item lg={6} xs={12} className={classes.button}>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            title: t('plugin_ito_send_text', {
-                                total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
-                                symbol: poolSettings?.token?.symbol,
-                            }),
-                            action: onDone,
-                        }}
-                    />
-                </Grid>
-            </Grid>
-        </Card>
+            </Card>
+            <PluginWalletStatusBar
+                actionProps={{
+                    title: t('plugin_ito_send_text', {
+                        total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
+                        symbol: poolSettings?.token?.symbol,
+                    }),
+                    action: onDone,
+                }}
+            />
+        </>
     )
 }
