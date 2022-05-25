@@ -11,7 +11,7 @@ const useStyles = makeStyles()(() => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
-        padding: 16,
+        padding: 17,
         lineHeight: 0,
         display: 'flex',
         alignItems: 'center',
@@ -22,22 +22,22 @@ const useStyles = makeStyles()(() => ({
         position: 'absolute',
         left: 16,
         top: 16,
-        fontSize: 30,
+        fontSize: 24,
         cursor: 'pointer',
     },
     close: {
         position: 'absolute',
         left: 16,
         top: 16,
-        fontSize: 30,
+        fontSize: 24,
         cursor: 'pointer',
     },
     title: {
         fontSize: 14,
-        lineHeight: '30px',
+        lineHeight: '24px',
         color: '#15181B',
         fontWeight: 700,
-        minHeight: 30,
+        minHeight: 24,
     },
     logo: {
         width: 96,
