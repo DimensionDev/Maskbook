@@ -1,13 +1,14 @@
 import type { JsonRpcResponse } from 'web3-core-helpers'
 
 import { getFarmOraclesDiscovery } from './discovery'
+import { supportedOracleChainId } from '../../constants'
 
 export async function getOracle(): Promise<string> {
     const {
         discovery: { oracles },
     } = await getFarmOraclesDiscovery()
 
-    return oracles[Math.floor(Math.random() * oracles.length)].url
+    return oracles.find((oracle) => oracle.chainId === supportedOracleChainId)?.url ?? ''
 }
 
 export async function jsonReq(url: string, opts: any) {

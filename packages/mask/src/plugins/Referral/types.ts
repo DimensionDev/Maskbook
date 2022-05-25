@@ -245,8 +245,14 @@ type Contract = {
     chainId: number
     address: string
 }
+
+type Oracle = {
+    chainId: number
+    url: string
+    location: Geolocation
+}
 export type DiscoveryFarmOracles = {
-    oracles: Node[]
+    oracles: Oracle[]
     referralFarmsV1: Contract[]
     confirmationsV1: Contract[]
 }
