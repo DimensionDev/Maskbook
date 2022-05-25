@@ -10,12 +10,12 @@ import { ActionButtonPromise } from '../../../../extension/options-page/Dashboar
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
-import { PluginCollectibleRPC } from '../../messages'
 import { toAsset } from '../../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-unified'
 import { isWyvernSchemaName } from '../../utils'
-import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useOpenSea } from '../../hooks/useOpenSea'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -60,6 +60,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { classes } = useStyles()
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const opensea = useOpenSea(chainId)
 
     const [scheduleTime, setScheduleTime] = useState(new Date())
     const [expirationTime, setExpirationTime] = useState(new Date())
@@ -93,10 +95,10 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     ])
 
     const onPostListing = useCallback(async () => {
+        if (!opensea) return
         if (!asset?.id || !asset.address) return
-        if (!token?.value) return
-        if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
+        if (token.value?.schema !== SchemaType.Native && token.value?.schema !== SchemaType.ERC20) return
+        await opensea.createSellOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
                 tokenAddress: asset.address,
@@ -121,6 +123,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         endingPriceChecked,
         futureTimeChecked,
         privacyChecked,
+        opensea,
     ])
 
     useEffect(() => {

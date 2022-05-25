@@ -21,7 +21,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { UnreviewedWarning } from '.././UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
-import { PluginCollectibleRPC } from '../../messages'
 import { toAsset } from '../../helpers'
 import { PluginTraderMessages } from '../../../Trader/messages'
 import getUnixTime from 'date-fns/getUnixTime'
@@ -33,6 +32,7 @@ import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { Order } from 'opensea-js/lib/types'
+import { useOpenSea } from '../../hooks/useOpenSea'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -89,6 +89,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const opensea = useOpenSea(chainId)
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
@@ -105,7 +106,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!token?.value) return
         if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
         const schemaName = asset.contract?.schema
-        await PluginCollectibleRPC.createBuyOrder({
+        await opensea?.createBuyOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
                 tokenAddress: asset.address,
@@ -116,7 +117,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.schema === SchemaType.Native ? undefined : token.value.address,
         })
-    }, [asset, token, account, amount, expirationDateTime, isAuction])
+    }, [asset, token, account, amount, expirationDateTime, isAuction, opensea])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

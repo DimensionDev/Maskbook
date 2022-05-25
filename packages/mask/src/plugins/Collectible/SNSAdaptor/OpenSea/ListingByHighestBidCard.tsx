@@ -10,11 +10,11 @@ import { ActionButtonPromise } from '../../../../extension/options-page/Dashboar
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
-import { PluginCollectibleRPC } from '../../messages'
 import { toAsset } from '../../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
 import { isWyvernSchemaName } from '../../utils'
-import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useOpenSea } from '../../hooks/useOpenSea'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -51,6 +51,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     )
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const opensea = useOpenSea(chainId)
 
     const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
@@ -64,11 +66,10 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     }, [amount, reservePrice, expirationDateTime])
 
     const onPostListing = useCallback(async () => {
-        if (!asset) return
-        if (!asset.tokenId || !asset.address) return
-        if (!token?.value) return
-        if (token.value.schema !== SchemaType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
+        if (!opensea) return
+        if (!asset?.tokenId || !asset.address) return
+        if (token?.value?.schema !== SchemaType.ERC20) return
+        await opensea.createSellOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
                 tokenAddress: asset.address,
@@ -81,7 +82,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             waitForHighestBid: true,
             paymentTokenAddress: token.value.address, // english auction must be erc20 token
         })
-    }, [asset, token, amount, account, reservePrice, expirationDateTime])
+    }, [asset, token, amount, account, reservePrice, expirationDateTime, opensea])
 
     useEffect(() => {
         setAmount('')

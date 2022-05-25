@@ -19,13 +19,13 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { PluginCollectibleRPC } from '../../messages'
 import { PluginTraderMessages } from '../../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import type { Coin } from '../../../Trader/types'
 import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
-import { useAccount, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import type { Order } from 'opensea-js/lib/types'
+import { useOpenSea } from '../../hooks/useOpenSea'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -68,21 +68,22 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const opensea = useOpenSea(chainId)
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
     const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, order?.paymentToken ?? '')
     const onCheckout = useCallback(async () => {
         if (!asset?.tokenId || !asset.address) return
-        if (!order) return
+        if (!order || !opensea) return
 
-        await PluginCollectibleRPC.fulfillOrder({
+        await opensea.fulfillOrder({
             order,
             accountAddress: account,
             recipientAddress: account,
         })
-    }, [account, asset, order])
+    }, [account, asset, order, opensea])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

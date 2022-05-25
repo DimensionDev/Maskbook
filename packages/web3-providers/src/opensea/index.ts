@@ -300,6 +300,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
         )
         if (!response) return
+        // @ts-ignore
         return createNFTAsset(chainId, response)
     }
 
