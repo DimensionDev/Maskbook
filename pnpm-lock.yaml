@@ -851,6 +851,7 @@ importers:
       react-feather: ^2.0.9
       react-use: ^17.3.2
       urlcat: ^2.0.4
+      wallet.ts: 1.0.1
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -863,6 +864,7 @@ importers:
       react-feather: 2.0.9
       react-use: 17.3.2
       urlcat: 2.0.4
+      wallet.ts: 1.0.1
 
   packages/plugins/RSS3:
     specifiers:
@@ -8136,6 +8138,7 @@ packages:
     transitivePeerDependencies:
       - '@swc/core'
       - '@types/react'
+      - acorn
       - esbuild
       - eslint
       - supports-color
@@ -8918,6 +8921,7 @@ packages:
     transitivePeerDependencies:
       - '@swc/core'
       - '@types/react'
+      - acorn
       - encoding
       - esbuild
       - eslint
@@ -11472,7 +11476,7 @@ packages:
     optional: true
 
   /assert-plus/1.0.0:
-    resolution: {integrity: sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=}
+    resolution: {integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==}
     engines: {node: '>=0.8'}
 
   /assert/1.5.0:
@@ -11561,7 +11565,7 @@ packages:
     dev: false
 
   /asynckit/0.4.0:
-    resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
   /at-least-node/1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
@@ -11615,7 +11619,7 @@ packages:
     dev: false
 
   /aws-sign2/0.7.0:
-    resolution: {integrity: sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg=}
+    resolution: {integrity: sha512-08kcGqnYf/YmjoRhfxyu+CLxBjUtHLXLXX/vUfx9l2LYzG3c1m61nrpyFUZI6zeS+Li/wWMMidD9KgrqtGq3mA==}
     dev: false
 
   /aws4/1.11.0:
@@ -12559,7 +12563,7 @@ packages:
     resolution: {integrity: sha1-3DQxT05nkxgJP8dgJyUl+UvyXBY=}
 
   /bcrypt-pbkdf/1.0.2:
-    resolution: {integrity: sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=}
+    resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
     dependencies:
       tweetnacl: 0.14.5
     dev: false
@@ -13229,7 +13233,7 @@ packages:
     dev: true
 
   /caseless/0.12.0:
-    resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=}
+    resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
     dev: false
 
   /cborg/1.7.0:
@@ -18258,6 +18262,8 @@ packages:
       param-case: 3.0.4
       relateurl: 0.2.7
       terser: 5.10.0
+    transitivePeerDependencies:
+      - acorn
     dev: true
 
   /html-parse-stringify/3.0.1:
@@ -18320,6 +18326,8 @@ packages:
       pretty-error: 4.0.0
       tapable: 2.2.1
       webpack: 5.72.0
+    transitivePeerDependencies:
+      - acorn
     dev: true
 
   /html-webpack-plugin/5.5.0_webpack@5.72.1:
@@ -18334,6 +18342,8 @@ packages:
       pretty-error: 4.0.0
       tapable: 2.2.1
       webpack: 5.72.1_webpack-cli@4.9.2
+    transitivePeerDependencies:
+      - acorn
     dev: true
 
   /htmlparser2/6.1.0:
@@ -20400,14 +20410,6 @@ packages:
     resolution: {integrity: sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==}
     dev: true
 
-  /keccak/3.0.1:
-    resolution: {integrity: sha512-epq90L9jlFWCW7+pQa6JOnKn2Xgl2mtI664seYR6MHskvI9agt7AnDqmAlp9TqU4/caMYbA08Hi5DMZAl5zdkA==}
-    engines: {node: '>=10.0.0'}
-    dependencies:
-      node-addon-api: 2.0.2
-      node-gyp-build: 4.2.3
-    dev: false
-
   /keccak/3.0.2:
     resolution: {integrity: sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==}
     engines: {node: '>=10.0.0'}
@@ -21845,11 +21847,6 @@ packages:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
     engines: {node: '>= 6.13.0'}
     dev: true
-
-  /node-gyp-build/4.2.3:
-    resolution: {integrity: sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==}
-    hasBin: true
-    dev: false
 
   /node-gyp-build/4.3.0:
     resolution: {integrity: sha512-iWjXZvmboq0ja1pUGULQBexmxq8CV4xBhX7VDOTbL7ZR4FOowwY/VOtRxBN/yKxmdGoIp4j5ysNT4u3S2pDQ3Q==}
@@ -24510,7 +24507,7 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.2.0
+      glob: 7.2.3
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
@@ -27661,7 +27658,7 @@ packages:
       bn.js: 5.2.0
       bs58: 4.0.1
       elliptic: 6.5.4
-      keccak: 3.0.1
+      keccak: 3.0.2
     dev: false
 
   /warning/4.0.3:

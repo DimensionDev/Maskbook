@@ -13,5 +13,5 @@ export const SecurityWarningIcon = createIcon(
             fill="#fff"
         />
     </g>,
-    '0 0 16 16',
+    '2 2 12 12',
 )

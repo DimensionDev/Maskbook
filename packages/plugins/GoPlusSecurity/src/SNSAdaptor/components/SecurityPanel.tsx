@@ -11,11 +11,11 @@ import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
-import type { ERC721ContractDetailed, PriceRecord } from '@masknet/web3-shared-evm'
+import type { ERC20TokenDetailed, PriceRecord } from '@masknet/web3-shared-evm'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
-    tokenInfo?: ERC721ContractDetailed
+    tokenInfo?: ERC20TokenDetailed
     tokenPrice?: PriceRecord
     tokenMarketCap?: string
 }
@@ -99,14 +99,13 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 <Stack direction="row" spacing={0.8}>
                     <TokenIcon
                         classes={{ icon: classes.icon }}
-                        address={(tokenSecurity?.contract || tokenInfo?.address) ?? ''}
-                        name={(tokenSecurity?.token_name || tokenInfo?.name) ?? '-'}
-                        logoURI={tokenInfo?.iconURL}
+                        address={tokenSecurity?.contract ?? ''}
+                        name={tokenSecurity?.token_name ?? '-'}
+                        logoURI={tokenInfo?.logoURI}
+                        chainId={tokenSecurity?.chainId}
                     />
                     <Stack>
-                        <Typography className={classes.tokenName}>
-                            {(tokenSecurity?.token_name || tokenInfo?.name) ?? '-'}
-                        </Typography>
+                        <Typography className={classes.tokenName}>{tokenSecurity?.token_name ?? '-'}</Typography>
                         <Typography className={classes.tokenPrice}>
                             {' '}
                             {tokenPrice?.usd ? `$${tokenPrice?.usd} USD` : '--'}
@@ -121,7 +120,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                     DefineMapping[
                                         riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
                                     ].bgColor,
-                                padding: '14px 12px 14px 18px',
+                                padding: '16px 12px 16px 18px',
                                 borderRadius: '12px',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -179,8 +178,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.High].icon(14)}
-                                <Typography component="span">
+                                {DefineMapping[SecurityMessageLevel.High].icon(16)}
+                                <Typography component="span" color="#C4C7CD">
                                     {riskyFactors > 1
                                         ? t.risky_factors({ quantity: riskyFactors.toString() })
                                         : t.risky_factor({ quantity: riskyFactors.toString() })}
@@ -189,8 +188,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         )}
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
-                                <Typography component="span">
+                                {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
+                                <Typography component="span" color="#C4C7CD">
                                     {attentionFactors > 1
                                         ? t.attention_factors({ quantity: attentionFactors.toString() })
                                         : t.attention_factor({ quantity: attentionFactors.toString() })}

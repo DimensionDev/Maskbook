@@ -14,7 +14,7 @@ import {
     ChainId,
     CurrencyType,
     getCoinGeckoPlatformId,
-    useERC721ContractDetailed,
+    useERC20TokenDetailed,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
@@ -74,7 +74,20 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         return { ...entity[1], contract: entity[0], chainId } as TokenSecurity
     }, [])
 
-    const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
+    // const erc721TokenContract = useERC721TokenContract(value?.contract)
+
+    // const { value: contractDetailed, loading: loadingToken } = useAsyncRetry(async () => {
+    //     if (!value?.contract || !EthereumAddress.isValid(value?.contract) || !erc721TokenContract) return
+    //     return getERC721ContractDetailed(erc721TokenContract, value.contract, value.chainId)
+    // }, [value, erc721TokenContract])
+    // console.log({ contractDetailed })
+    const { value: contractDetailed, loading: loadingToken } = useERC20TokenDetailed(
+        value?.contract,
+        undefined,
+        value?.chainId,
+    )
+    console.log({ contractDetailed })
+
     const { value: tokenPrice } = useAsync(async () => {
         if (!value) return
         const platformId = getCoinGeckoPlatformId(value.chainId)
