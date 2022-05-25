@@ -59,7 +59,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
 
     const showTitle = (history.length !== 1 && title) || !!goBack
 
-    const showClose = location.pathname === PopupRoutes.ConnectWallet
+    const showClose = location.pathname === PopupRoutes.ConnectWallet && !goBack
 
     if (onlyTitle)
         return (

@@ -78,7 +78,7 @@ const ConnectWalletPage = memo(() => {
         (network: Web3Plugin.NetworkDescriptor, provider: Web3Plugin.ProviderDescriptor) => {
             if (provider.type !== ProviderType.MaskWallet) return
             if (isLocked && !getLockStatusLoading) {
-                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: '1', popup: true }))
+                navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                 return
             }
             navigate(
