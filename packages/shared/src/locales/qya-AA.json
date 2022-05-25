@@ -20,5 +20,11 @@
     "address_viewer_address_name_rns": "crwdns10801:0crwdne10801:0",
     "address_viewer_address_name_address": "crwdns10803:0crwdne10803:0",
     "address_viewer_address_name_twitter": "crwdns14534:0crwdne14534:0",
-    "dialog_dismiss": "crwdns14952:0crwdne14952:0"
+    "dialog_dismiss": "crwdns14952:0crwdne14952:0",
+    "dialog_confirm": "crwdns16694:0crwdne16694:0",
+    "dialog_share": "crwdns16696:0crwdne16696:0",
+    "dialog_confirm_label": "crwdns16698:0crwdne16698:0",
+    "share_dialog_transaction": "crwdns16700:0crwdne16700:0",
+    "share_dialog_view_on_explorer": "crwdns16702:0crwdne16702:0",
+    "share_dialog_transaction_confirmed": "crwdns16704:0crwdne16704:0"
 }
