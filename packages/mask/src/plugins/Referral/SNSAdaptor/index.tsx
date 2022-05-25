@@ -46,22 +46,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = { i18nKey: '__plugin_name', fallback: 'Referral Farms' }
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
-                                disabled={disabled}
+                                {...EntryComponentProps}
                                 icon={icon}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                onClick={() =>
-                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                        reason: 'timeline',
-                                        open: true,
-                                        options: {
-                                            startupPlugin: base.ID,
-                                        },
-                                    })
+                                onClick={
+                                    EntryComponentProps.onClick ??
+                                    (() =>
+                                        CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                            reason: 'timeline',
+                                            open: true,
+                                            options: {
+                                                startupPlugin: base.ID,
+                                            },
+                                        }))
                                 }
                             />
                             <ReferralDialog open={open} onClose={() => setOpen(false)} />
