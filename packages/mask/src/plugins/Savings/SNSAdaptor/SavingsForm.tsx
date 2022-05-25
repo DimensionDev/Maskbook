@@ -191,7 +191,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         activatedSocialNetworkUI.utils.share?.(shareText)
                     },
                 })
-                break
+                return
             case TabType.Withdraw:
                 switch (protocol.type) {
                     case ProtocolType.Lido:
