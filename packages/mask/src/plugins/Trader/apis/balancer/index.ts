@@ -1,7 +1,6 @@
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { ChainId, getRPCConstants, getTraderConstants, isSameAddress } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { first, memoize } from 'lodash-unified'
 import { currentChainIdSettings } from '../../../Wallet/settings'
@@ -73,7 +72,7 @@ export async function getSwaps(
 
     // compose routes
     // learn more: https://github.com/balancer-labs/balancer-frontend/blob/develop/src/components/swap/Routing.vue
-    const totalSwapAmount = swaps.reduce((total, rawHops) => total.plus(first(rawHops)?.swapAmount || '0'), ZERO)
+    const totalSwapAmount = BigNumber.sum(...swaps.map((rawHops) => first(rawHops)?.swapAmount || '0'))
 
     const pools = sor.onChainCache.pools
     const routes = swaps.map((rawHops) => {

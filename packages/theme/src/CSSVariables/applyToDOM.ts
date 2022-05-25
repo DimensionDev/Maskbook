@@ -12,7 +12,7 @@ function getRGBFragment(x: Record<string, string>, key: string) {
 export function CSSVariableInjectorCSS(scheme: PaletteMode) {
     const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
     const result: Record<string, string> = {}
-    for (const key in ns) {
+    for (const key of Object.keys(ns)) {
         // --mask-name: val;
         result[`--mask-${kebabCase(key)}`] = ns[key]
         result[`--mask-${kebabCase(key)}-fragment`] = getRGBFragment(ns, key)
@@ -33,14 +33,14 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
         return
     } else if (node instanceof HTMLStyleElement) {
         let rule = ':root, :host {\n'
-        for (const key in ns) {
+        for (const key of Object.keys(ns)) {
             // --mask-name: val;
             rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
             rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
         node.textContent = rule + '}'
     } else {
-        for (const key in ns) {
+        for (const key of Object.keys(ns)) {
             node.style.setProperty('--mask-' + kebabCase(key), ns[key])
             node.style.setProperty('--mask-' + kebabCase(key) + '-fragment', getRGBFragment(ns, key))
         }

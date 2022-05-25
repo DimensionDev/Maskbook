@@ -92,10 +92,10 @@ const onConnect = () => onUpdate(null)
 const onUpdate = async (
     error: Error | null,
     payload?: {
-        params: {
+        params: Array<{
             chainId: number
             accounts: string[]
-        }[]
+        }>
     },
 ) => {
     if (error) return

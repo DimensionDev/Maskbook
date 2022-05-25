@@ -92,6 +92,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <FindTrumanIcon />
             const name = <Trans i18nKey="plugin_find_truman_name" />
+            const iconFilterColor = 'rgba(251, 49, 32, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -101,6 +102,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 {...EntryComponentProps}
                                 title={name}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
@@ -111,9 +113,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 12,
                 icon,
                 name: <Trans i18nKey="plugin_find_truman_name" />,
+                iconFilterColor,
             }
         })(),
     ],
+    wrapperProps: {
+        icon: (
+            <FindTrumanIcon
+                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(251, 49, 32, 0.2))' }}
+            />
+        ),
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(251, 49, 32, 0.2) 100%), #FFFFFF;',
+    },
 }
 
 export default sns

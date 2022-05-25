@@ -1,10 +1,7 @@
-import { Typography, SnackbarContent, Button, Link } from '@mui/material'
+import { Typography, SnackbarContent, Link, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { isTwitter } from '../social-network-adaptor/twitter.com/base'
-import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
 import {
@@ -14,104 +11,100 @@ import {
     Plugin,
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
+import { ProviderByIcon } from '@masknet/icons'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean
-    title: string
+    title: JSX.Element | string
     width?: number
+    content?: ReactNode
     action?: ReactNode
     publisher?: JSX.Element
+    wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
     publisherLink?: string
 }
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) => {
     return {
         card: {
+            background:
+                props?.backgroundGradient ??
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
             margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
-            border: `1px solid ${theme.palette.secondaryDivider}`,
             cursor: 'default',
-            ...(isTwitter(activatedSocialNetworkUI)
-                ? {
-                      borderRadius: 15,
-                      overflow: 'hidden',
-                  }
-                : null),
+            borderRadius: 15,
+            overflow: 'hidden',
         },
         header: {
             backgroundColor: 'transparent',
             color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
-            padding: theme.spacing(2),
+            padding: 15,
         },
         title: {
             display: 'flex',
             flexDirection: 'column',
             paddingLeft: theme.spacing(1.5),
         },
-        action: {
+        provider: {
+            display: 'flex',
+            alignItems: 'center',
+            '& > a': {
+                lineHeight: 0,
+            },
+        },
+        publish: {
             flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
         },
-        body: {
-            borderTop: `1px solid ${theme.palette.secondaryDivider}`,
-            padding: theme.spacing(2),
+        action: {
+            textAlign: 'center',
+            margin: theme.spacing(1),
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 16,
         },
-        button: {
-            color: MaskColorVar.twitterButtonText,
-            '&,&:hover': {
-                background: MaskColorVar.twitterButton,
-            },
+        body: {
+            padding: theme.spacing(0),
+        },
+        providerBy: {
+            marginRight: theme.spacing(0.5),
+            color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
         },
     }
 })
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { classes } = useStyles()
-    const { open, title, children, action, publisher, publisherLink } = props
-    const personaConnectStatus = usePersonaConnectStatus()
+    const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
+    const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
+    const theme = useTheme()
     const { t } = useI18N()
 
-    const name = !personaConnectStatus.hasPersona
-        ? t('please_create_persona')
-        : !personaConnectStatus.connected
-        ? t('please_connect_persona')
-        : title
-
-    const actionButton = useMemo(() => {
-        if (!personaConnectStatus.action) return null
-
-        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
-        return (
-            <Button variant="contained" className={classes.button} onClick={personaConnectStatus.action}>
-                {button}
-            </Button>
-        )
-    }, [personaConnectStatus, t])
-
     const publisherInfo = useMemo(() => {
-        if (!publisher) return null
+        if (!publisher) return
         const main = (
-            <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
+            <Typography variant="body1" fontSize={14} fontWeight="500" color={MaskColorVar.textPluginColor}>
                 {publisher}
             </Typography>
         )
         return (
-            <Box>
-                <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textSecondary}>
-                    Provided by
+            <Box className={classes.provider}>
+                <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
+                    {t('plugin_provider_by')}
                 </Typography>
+                {main}
                 {publisherLink ? (
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
-                        {main}
+                        <ProviderByIcon style={{ width: 16, height: 16, marginLeft: 4 }} />
                     </Link>
-                ) : (
-                    main
-                )}
+                ) : null}
             </Box>
         )
     }, [publisher, publisherLink])
@@ -122,26 +115,39 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             style={{ display: open ? 'block' : 'none' }}
             onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskIcon size={45} />
-                <div className={classes.title}>
-                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        Mask Plugin {!personaConnectStatus.connected && title ? `(${title})` : ''}
-                    </Typography>
-                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        {name}
-                    </Typography>
-                </div>
-                <div className={classes.action}>{actionButton || action || publisherInfo}</div>
+                {wrapperProps?.icon ?? (
+                    <MaskIcon
+                        style={{ filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))', width: 24, height: 24 }}
+                    />
+                )}
+                <Typography
+                    sx={{ marginLeft: 0.5 }}
+                    variant="body1"
+                    fontSize={16}
+                    fontWeight={700}
+                    color={MaskColorVar.textPluginColor}>
+                    {wrapperProps?.title ?? title ?? t('plugin_default_title')}
+                </Typography>
+                <div className={classes.publish}>{publisherInfo}</div>
             </div>
-            {personaConnectStatus.connected && children ? <div className={classes.body}>{children}</div> : null}
+            {action ? (
+                <>
+                    <Typography variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
+                        {content}
+                    </Typography>
+                    <div className={classes.action}>{action}</div>
+                </>
+            ) : null}
+            {children ? <div className={classes.body}>{children}</div> : null}
         </div>
     )
+
     return <Suspense fallback={<SnackbarContent message="Mask is loading this content..." />} children={inner} />
 }
 
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
     (props, ref) => {
-        const { ID, name, publisher } = props.definition
+        const { ID, name, publisher, wrapperProps } = props.definition
         const t = usePluginI18NField()
         const [width, setWidth] = useState<undefined | number>(undefined)
         const [open, setOpen] = useState<boolean>(false)
@@ -159,6 +165,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
 
         return (
             <MaskPostExtraInfoWrapper
+                wrapperProps={wrapperProps}
                 open={open}
                 title={title || t(ID, name)}
                 width={width}

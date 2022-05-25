@@ -9,13 +9,7 @@ import type {
 } from '@masknet/web3-shared-evm'
 import type { CurrencyType } from '@masknet/plugin-infra/web3'
 import type { Result } from 'ts-results'
-import type {
-    NextIDAction,
-    NextIDStoragePayload,
-    NextIDPayload,
-    NextIDPlatform,
-    NextIDStorageInfo,
-} from '@masknet/shared-base'
+import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -46,10 +40,10 @@ export namespace RSS3BaseAPI {
             animation_original_url?: string | null
             title?: string
             total_contribs?: number
-            token_contribs?: {
+            token_contribs?: Array<{
                 token: string
                 amount: string
-            }[]
+            }>
             start_date?: string
             end_date?: string
             country?: string
@@ -210,13 +204,13 @@ export namespace NonFungibleTokenAPI {
         collection_name: string
         animation_url?: string
         end_time: Date | null
-        order_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
-        offer_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
+        order_payment_tokens: Array<ERC20TokenDetailed | NativeTokenDetailed>
+        offer_payment_tokens: Array<ERC20TokenDetailed | NativeTokenDetailed>
         slug: string | null
         desktopOrder?: AssetOrder
-        top_ownerships: {
+        top_ownerships: Array<{
             owner: AssetOwner
-        }[]
+        }>
         last_sale: AssetEvent | null
         response_: any
     }
@@ -328,7 +322,13 @@ export namespace NextIDBaseAPI {
             patchData: unknown,
             pluginId: string,
         ): Promise<Result<T, string>>
-        get(key: string): Promise<Result<NextIDStorageInfo, string>>
+        getByIdentity<T>(
+            key: string,
+            platform: NextIDPlatform,
+            identity: string,
+            pluginId: string,
+        ): Promise<Result<T, string>>
+        get<T>(key: string): Promise<Result<T, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
@@ -464,15 +464,32 @@ export namespace TwitterBaseAPI {
                     name: string
                 }
             }
-            traits: {
+            traits: Array<{
                 trait_type: string
                 value: string
-            }[]
+            }>
         }
+    }
+    export interface AvatarInfo {
+        nickname: string
+        userId: string
+        imageUrl: string
+        mediaId: string
     }
 
     export interface Settings {
         screen_name: string
+    }
+
+    export interface TwitterResult {
+        media_id: number
+        media_id_string: string
+        size: number
+        image: {
+            image_type: string
+            w: number
+            h: number
+        }
     }
 
     export interface Provider {
@@ -485,6 +502,8 @@ export namespace TwitterBaseAPI {
               }
             | undefined
         >
+        uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
+        updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
     }
 }
 

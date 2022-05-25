@@ -1,25 +1,29 @@
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
+import { ChainId, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { Box, useTheme } from '@mui/material'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useStyles } from './useStyles'
 
 interface OperationFooterProps {
+    chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
-    claimState: TransactionState
-    refundState: TransactionState
+    isClaiming: boolean
+    isRefunding: boolean
     onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
 export function OperationFooter({
+    chainId,
     canClaim,
     canRefund,
-    claimState,
-    refundState,
+    isClaiming,
+    isRefunding,
     onShare,
     onClaimOrRefund,
 }: OperationFooterProps) {
@@ -27,6 +31,7 @@ export function OperationFooter({
     const { t } = useI18N()
     const account = useAccount()
     const chainIdValid = useChainIdValid()
+    const theme = useTheme()
 
     // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -39,35 +44,40 @@ export function OperationFooter({
 
         if (!account) {
             return (
-                <ActionButton variant="contained" fullWidth size="large" onClick={openSelectProviderDialog}>
+                <ActionButton variant="contained" fullWidth onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             )
         }
         if (!chainIdValid) {
             return (
-                <ActionButton disabled variant="contained" fullWidth size="large">
+                <ActionButton disabled variant="contained" fullWidth>
                     {t('plugin_wallet_invalid_network')}
                 </ActionButton>
             )
         }
-        const isLoading =
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+        const isLoading = isClaiming || isRefunding
 
         return (
             <ActionButton
+                sx={{
+                    backgroundColor: theme.palette.maskColor.dark,
+                    width: '100%',
+                    color: 'white',
+                    '&:hover': {
+                        backgroundColor: theme.palette.maskColor.dark,
+                    },
+                }}
                 fullWidth
-                disabled={isLoading}
                 loading={isLoading}
+                disabled={isLoading}
                 variant="contained"
-                size="large"
                 onClick={onClaimOrRefund}>
                 {canClaim
-                    ? claimState.type === TransactionStateType.HASH
+                    ? isClaiming
                         ? t('plugin_red_packet_claiming')
                         : t('plugin_red_packet_claim')
-                    : refundState.type === TransactionStateType.HASH
+                    : isRefunding
                     ? t('plugin_red_packet_refunding')
                     : t('plugin_red_packet_refund')}
             </ActionButton>
@@ -75,18 +85,37 @@ export function OperationFooter({
     }
 
     return (
-        <EthereumWalletConnectedBoundary
-            classes={{
-                connectWallet: classes.connectWallet,
-            }}>
-            <Box className={classes.footer}>
-                {canRefund ? null : (
-                    <ActionButton variant="contained" fullWidth size="large" onClick={onShare}>
-                        {t('share')}
-                    </ActionButton>
-                )}
-                <ObtainButton />
-            </Box>
-        </EthereumWalletConnectedBoundary>
+        <Box style={{ flex: 1, padding: 12 }}>
+            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet} renderInTimeline>
+                <EthereumWalletConnectedBoundary
+                    hideRiskWarningConfirmed
+                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                    renderInTimeline
+                    classes={{
+                        button: classes.walletButton,
+                    }}>
+                    <Box className={classes.footer}>
+                        {canRefund ? null : (
+                            <ActionButton
+                                sx={{
+                                    backgroundColor: theme.palette.maskColor.dark,
+                                    color: theme.palette.maskColor.white,
+                                    '&:hover': {
+                                        backgroundColor: theme.palette.maskColor.dark,
+                                    },
+                                    padding: 1.125,
+                                }}
+                                fullWidth
+                                startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                variant="contained"
+                                onClick={onShare}>
+                                {t('share')}
+                            </ActionButton>
+                        )}
+                        <ObtainButton />
+                    </Box>
+                </EthereumWalletConnectedBoundary>
+            </EthereumChainBoundary>
+        </Box>
     )
 }

@@ -108,7 +108,7 @@ const useStyles = makeStyles()((theme) => ({
         textOverflow: 'ellipsis',
     },
     buttonWrapper: {
-        marginTop: 16,
+        marginTop: 0,
     },
     button: {
         minHeight: 36,
@@ -135,7 +135,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(1px)',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,

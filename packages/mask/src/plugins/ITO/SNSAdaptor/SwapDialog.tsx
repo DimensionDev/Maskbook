@@ -1,5 +1,5 @@
-import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken } from '@masknet/shared'
+import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
@@ -11,7 +11,6 @@ import {
     isNativeTokenAddress,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
-    TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useFungibleTokenDetailed,
@@ -25,7 +24,7 @@ import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { WalletRPC } from '../../Wallet/messages'
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -159,7 +158,7 @@ export function SwapDialog(props: SwapDialogProps) {
         pickToken,
         exchangeTokens
             .map((x) => x.address)
-            .sort((a, b) => a.localeCompare('en-US', b))
+            .sort((a, b) => a.localeCompare(b, 'en-US'))
             .join(),
     ])
     // #endregion
@@ -184,54 +183,31 @@ export function SwapDialog(props: SwapDialogProps) {
         payload.contract_address,
     )
 
-    const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
+    const [{ loading: isSwapping }, swapCallback] = useSwapCallback(
         payload,
         swapAmount.toFixed(),
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
+    const openShareTxDialog = useOpenShareTxDialog()
     const onSwap = useCallback(async () => {
-        await swapCallback()
-        if (payload.token.type !== EthereumTokenType.ERC20) return
-        await WalletRPC.addToken(payload.token)
-        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
-    }, [swapCallback, payload.token.address])
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()
-            if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
-                return
-            const { receipt } = swapState
+        const receipt = await swapCallback()
+        if (typeof receipt?.transactionHash === 'string') {
+            await openShareTxDialog({
+                hash: receipt.transactionHash,
+            })
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
             setStatus(SwapStatus.Share)
-            resetSwapCallback()
-        },
-    )
-
-    useEffect(() => {
-        if (swapState.type === TransactionStateType.UNKNOWN) return
-
-        if (swapState.type === TransactionStateType.HASH) {
-            const { hash } = swapState
             setTimeout(() => {
-                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
+                openWindow(resolveTransactionLinkOnExplorer(chainId, receipt.transactionHash))
             }, 2000)
-            return
         }
+        if (payload.token.type !== EthereumTokenType.ERC20) return
+        await WalletRPC.addToken(payload.token)
+        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
+    }, [swapCallback, payload.token.address, openShareTxDialog])
 
-        setTransactionDialog({
-            open: true,
-            state: swapState,
-            summary: t('plugin_ito_swapping', {
-                amount: formatBalance(tokenAmount, token.decimals),
-                symbol: token.symbol,
-            }),
-        })
-    }, [swapState])
     // #endregion
 
     const validationMessage = useMemo(() => {
@@ -301,11 +277,12 @@ export function SwapDialog(props: SwapDialogProps) {
                         spender={payload.contract_address}
                         token={swapToken.type === EthereumTokenType.ERC20 ? swapToken : undefined}>
                         <ActionButton
+                            loading={isSwapping}
                             className={classes.button}
                             fullWidth
                             variant="contained"
                             size="large"
-                            disabled={!!validationMessage || loadingQualification}
+                            disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
                             {loadingQualification ? (
                                 <CircularProgress size={16} className={classes.loading} />

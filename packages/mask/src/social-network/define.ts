@@ -1,4 +1,4 @@
-import type { SocialNetworkUI, SocialNetworkWorker } from './types'
+import type { SocialNetworkUI } from './types'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =
@@ -15,12 +15,4 @@ export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
     }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
-}
-
-export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker.DeferredDefinition>()
-export function defineSocialNetworkWorker(worker: SocialNetworkWorker.DeferredDefinition) {
-    if (worker.notReadyForProduction) {
-        if (process.env.channel === 'stable' && process.env.NODE_ENV === 'production') return
-    }
-    definedSocialNetworkWorkers.add(worker)
 }

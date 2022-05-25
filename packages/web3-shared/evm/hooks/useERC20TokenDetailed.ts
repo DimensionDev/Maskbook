@@ -15,17 +15,20 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
     const chainId = targetChainId ?? currentChainId
     const erc20TokenContract = useERC20TokenContract(address, chainId)
     const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address, chainId)
-    const tokenType = useEthereumTokenType(address)
+    const tokenType = useEthereumTokenType(address, chainId)
 
     return useAsyncRetry(async () => {
         if (!address) return
         if (!EthereumAddress.isValid(address)) return
         if (tokenType !== EthereumTokenType.ERC20) return
         return getERC20TokenDetailed(address, chainId, erc20TokenContract, erc20TokenBytes32Contract, token)
-    }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address, tokenType])
+    }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
 }
 
-export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[], _chainId?: ChainId) {
+export function useFungibleTokensDetailed(
+    listOfToken: Array<Pick<FungibleToken, 'address' | 'type'>>,
+    _chainId?: ChainId,
+) {
     const currentChainId = useChainId()
     const chainId = _chainId ? _chainId : currentChainId
     const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])

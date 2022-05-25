@@ -32,19 +32,7 @@ import { LidoProtocol } from '../protocols/LDOProtocol'
 import { AAVEProtocol } from '../protocols/AAVEProtocol'
 import { LDO_PAIRS } from '../constants'
 import type { AbiItem } from 'web3-utils'
-import { flatten, compact } from 'lodash-unified'
-
-function splitToPair(a: FungibleTokenDetailed[] | undefined) {
-    if (!a) {
-        return []
-    }
-    return a.reduce(function (result: any, value, index, array) {
-        if (index % 2 === 0) {
-            result.push(array.slice(index, index + 2))
-        }
-        return result
-    }, [])
-}
+import { flatten, compact, chunk } from 'lodash-unified'
 
 export interface SavingsDialogProps {
     open: boolean
@@ -100,7 +88,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
-            ...splitToPair(detailedAaveTokens).map((pair: any) => new AAVEProtocol(pair)),
+            ...chunk(detailedAaveTokens, 2).map(
+                (pair) => new AAVEProtocol(pair as [FungibleTokenDetailed, FungibleTokenDetailed]),
+            ),
         ],
         [chainId, detailedAaveTokens, tab],
     )

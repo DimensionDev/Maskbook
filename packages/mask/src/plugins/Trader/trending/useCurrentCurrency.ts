@@ -3,12 +3,12 @@ import { DataProvider } from '@masknet/public-api'
 const CURRENCIES_MAP: Record<
     DataProvider,
     | undefined
-    | {
+    | Array<{
           id: string
           name: string
           symbol: string
           description: string
-      }[]
+      }>
 > = {
     [DataProvider.COIN_GECKO]: [
         {

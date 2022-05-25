@@ -6,8 +6,6 @@ import { instagramBase } from './base'
 export const instagramShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...instagramBase,
     utils: {
-        getHomePage: () => 'https://www.instagram.com/',
-        getProfilePage: () => 'https://www.instagram.com/',
         createPostContext: createSNSAdaptorSpecializedPostContext({
             hasPayloadLike,
         }),

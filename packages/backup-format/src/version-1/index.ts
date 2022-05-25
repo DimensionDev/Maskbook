@@ -25,7 +25,7 @@ export function isBackupVersion1(obj: unknown): obj is BackupJSONFileVersion1 {
         return false
     }
 }
-export function normalizeBackupVersion1(file: BackupJSONFileVersion1): NormalizedBackup.Data {
+export async function normalizeBackupVersion1(file: BackupJSONFileVersion1): Promise<NormalizedBackup.Data> {
     const backup = createEmptyNormalizedBackup()
 
     backup.meta.version = 1
@@ -49,7 +49,7 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
         }
 
         if (isEC_Public_JsonWebKey(publicKey)) {
-            const personaID = ECKeyIdentifierFromJsonWebKey(publicKey)
+            const personaID = await ECKeyIdentifierFromJsonWebKey(publicKey)
             const persona: NormalizedBackup.PersonaBackup = backup.personas.get(personaID) || {
                 identifier: personaID,
                 nickname: None,
@@ -89,16 +89,16 @@ interface BackupJSONFileVersion1 {
         publicKey: EC_Public_JsonWebKey
         privateKey: EC_Private_JsonWebKey
         localKey: AESJsonWebKey
-        previousIdentifiers?: { network: string; userId: string }[]
+        previousIdentifiers?: Array<{ network: string; userId: string }>
         nickname?: string
     }>
     people?: Array<{
         network: string
         userId: string
         publicKey: EC_Public_JsonWebKey
-        previousIdentifiers?: { network: string; userId: string }[]
+        previousIdentifiers?: Array<{ network: string; userId: string }>
         nickname?: string
-        groups?: { network: string; groupID: string; virtualGroupOwner: string | null }[]
+        groups?: Array<{ network: string; groupID: string; virtualGroupOwner: string | null }>
 
         // Note: those props are not existed in the backup, just to make the code more readable
         privateKey?: EC_Private_JsonWebKey

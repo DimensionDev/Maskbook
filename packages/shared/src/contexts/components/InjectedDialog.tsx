@@ -42,6 +42,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         flex: 1,
         textAlign: 'center',
         verticalAlign: 'middle',
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 700,
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
@@ -149,7 +152,11 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>
                                 <DialogDismissIcon
-                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
+                                    style={
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                            ? 'back'
+                                            : titleBarIconStyle
+                                    }
                                 />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">

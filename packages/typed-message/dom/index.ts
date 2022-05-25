@@ -21,3 +21,17 @@ export {
     useTransformedValue,
     TransformationContextProvider,
 } from './Renderer/utils/TransformContext.js'
+
+// Metadata
+export {
+    createRenderWithMetadata,
+    createTypedMessageMetadataReader,
+    editMetadata,
+    editTypedMessageMeta,
+    getKnownMetadataKeys,
+    getMetadataSchema,
+    isDataMatchJSONSchema,
+    readTypedMessageMetadataUntyped,
+    registerMetadataSchema,
+    renderWithMetadataUntyped,
+} from './Metadata/index.js'

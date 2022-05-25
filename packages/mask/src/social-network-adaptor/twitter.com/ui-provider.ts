@@ -13,7 +13,6 @@ import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customizat
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
-import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
@@ -29,7 +28,6 @@ import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/sha
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
-import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
@@ -51,7 +49,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '600px !important',
+            width: '612px !important',
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
@@ -62,11 +60,11 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         },
         dialogTitle: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.background.modalTitle,
+            background: theme.palette.maskColor.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -85,7 +83,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -158,7 +155,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileTabContent: injectProfileTabContentAtTwitter,
-        profileSlider: injectProfileSliderAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
@@ -179,7 +175,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,

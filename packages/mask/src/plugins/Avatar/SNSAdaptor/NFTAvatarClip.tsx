@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     price: {
-        transform: 'translate(0px, -5px) ',
+        transform: 'translate(0, -5px) ',
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
