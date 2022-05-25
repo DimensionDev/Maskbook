@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     tooltip: {
-        color: theme.palette.text.buttonText,
         fontSize: 12,
     },
 }))
@@ -60,7 +59,12 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 PopperProps={{ container }}
                 arrow
                 title={
-                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
+                    <Typography
+                        color={(theme) => {
+                            console.log({ theme })
+                            return theme.palette.info.contrastText
+                        }}
+                        className={classes.tooltip}>
                         {tokenSecurity.total_supply}
                     </Typography>
                 }>
