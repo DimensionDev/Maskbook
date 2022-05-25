@@ -77,11 +77,14 @@ export function useAllProviderTradeContext() {
         inputTokenBalance: '0',
         outputTokenBalance: '0',
     })
+    const [isSwapping, setIsSwapping] = useState(false)
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore
     const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken, temporarySlippage)
 
     return {
+        isSwapping,
+        setIsSwapping,
         tradeState: [tradeStore, dispatchTradeStore] as const,
         temporarySlippage,
         setTemporarySlippage,

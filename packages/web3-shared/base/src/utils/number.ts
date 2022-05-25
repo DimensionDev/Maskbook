@@ -51,7 +51,7 @@ export function pow10(n: BigNumber.Value) {
 
 /** scale 10 ** n * m */
 export function scale10(m: BigNumber.Value, n = 1) {
-    const x = new BigNumber(10).shiftedBy(n)
+    const x = new BigNumber(1).shiftedBy(n)
     return n === 1 ? x : x.multipliedBy(m)
 }
 

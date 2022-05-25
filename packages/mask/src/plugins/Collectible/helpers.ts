@@ -1,5 +1,5 @@
 import type { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
-import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { PLUGIN_META_KEY } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'

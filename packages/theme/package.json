@@ -15,6 +15,7 @@
       "default": "./dist/src/entry-base.js"
     }
   },
+  "types": "./dist/src/entry.d.ts",
   "typesVersions": {
     "*": {
       "base": [
@@ -22,7 +23,6 @@
       ]
     }
   },
-  "types": "./dist/src/entry.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"

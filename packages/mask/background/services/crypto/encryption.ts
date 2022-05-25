@@ -7,6 +7,8 @@ import {
     EncryptionResultE2EMap,
     EncryptTargetE2E,
     EncryptTargetPublic,
+    SocialNetworkEnum,
+    SocialNetworkEnumToProfileDomain,
 } from '@masknet/encryption'
 import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
 import { savePostKeyToDB } from '../../database/post/helper'
@@ -18,13 +20,11 @@ export async function encryptTo(
     content: SerializableTypedMessages,
     target: EncryptTargetPublic | EncryptTargetE2E,
     whoAmI: ProfileIdentifier | undefined,
-    IdentifierNetwork: string,
+    network: SocialNetworkEnum,
 ): Promise<string> {
-    // always use identifier network from ProfileIdentifier if possible.
-    if (whoAmI) IdentifierNetwork = whoAmI.network
     const { identifier, output, postKey, e2e } = await encrypt(
         {
-            network: IdentifierNetwork,
+            network: whoAmI?.network || SocialNetworkEnumToProfileDomain(network),
             author: whoAmI,
             message: content,
             target,
@@ -59,7 +59,7 @@ export async function encryptTo(
     })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
-        publishPostAESKey_version39Or38(-38, identifier.toIV(), IdentifierNetwork, e2e!)
+        publishPostAESKey_version39Or38(-38, identifier.toIV(), network, e2e!)
     }
     if (typeof output !== 'string') throw new Error('version -37 is not enabled yet!')
     return output

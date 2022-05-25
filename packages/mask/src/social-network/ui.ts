@@ -28,10 +28,6 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     collecting: {},
     customization: {},
     configuration: {},
-    permission: {
-        has: async () => false,
-        request: async () => false,
-    },
     init: () => {
         throw new Error()
     },

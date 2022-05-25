@@ -13,9 +13,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             '--contentHeight': '400px',
             '--tabHeight': '35px',
-
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
         },
         content: {

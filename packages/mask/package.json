@@ -2,7 +2,6 @@
   "name": "@masknet/extension",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "scripts": {},
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
