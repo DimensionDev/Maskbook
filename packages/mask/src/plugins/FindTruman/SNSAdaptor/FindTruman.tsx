@@ -277,7 +277,7 @@ export function FindTruman(props: FindTrumanProps) {
                 <EthereumChainBoundary chainId={chainId} renderInTimeline>
                     <EthereumWalletConnectedBoundary
                         startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                        classes={{ button: classes.button, walletBar: classes.walletar }}
+                        classes={{ button: classes.button, walletBar: classes.walletBar }}
                         renderInTimeline
                     />
                 </EthereumChainBoundary>

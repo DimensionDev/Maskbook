@@ -184,7 +184,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary classes={{ walletBAr: classes.walletBar }}>
+                        <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButtonPromise
                                     className={classes.button}

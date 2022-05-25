@@ -26,8 +26,8 @@ import { currentSlippageSettings } from '../../settings'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
-import { MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { isZero } from '@masknet/web3-shared-base'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { isZero, multipliedBy } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar } from '../../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -94,11 +94,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
     },
     actions: {
-        marginLeft: 40,
-        marginRight: 40,
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingBottom: 40,
+        padding: 0,
     },
     accept: {
         backgroundColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,

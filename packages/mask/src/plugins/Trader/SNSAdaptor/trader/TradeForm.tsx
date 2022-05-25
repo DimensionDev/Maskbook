@@ -37,6 +37,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            padding: 16,
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -333,221 +334,215 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const isGreatThanSlippageSetting = useGreatThanSlippageSetting(focusedTrade?.value?.priceImpact)
         return (
-            <Box className={classes.root}>
-                <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
-                    <Typography fontSize={14} lineHeight="20px">
-                        {t('plugin_trader_swap_from')}
-                    </Typography>
-                </Box>
-                <InputTokenPanel
-                    chainId={chainId}
-                    amount={inputAmount}
-                    balance={inputTokenBalanceAmount.toFixed()}
-                    token={inputToken}
-                    onAmountChange={onInputAmountChange}
-                    SelectTokenChip={{
-                        ChipProps: {
-                            onClick: () => onTokenChipClick(TokenPanelType.Input),
-                            deleteIcon: (
-                                <DropIcon
-                                    className={classes.dropIcon}
-                                    style={{ fill: !inputToken ? '#ffffff' : undefined }}
-                                />
-                            ),
-                            onDelete: noop,
-                        },
-                    }}
-                />
-                <Box className={classes.reverse}>
-                    <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
-                </Box>
-                <Box className={classes.section} marginBottom={2.5}>
-                    <Box display="flex" justifyContent="space-between" mb={1}>
-                        {outputToken && outputTokenBalance !== undefined ? (
-                            <>
-                                <Typography fontSize={14} lineHeight="20px">
-                                    {t('plugin_trader_swap_to')}
-                                </Typography>
-                                <Typography className={classes.balance}>
-                                    {t('plugin_ito_list_table_got')}:
-                                    <Typography component="span" className={classes.amount} color="primary">
-                                        <FormattedBalance
-                                            value={outputTokenBalance}
-                                            decimals={outputToken?.decimals}
-                                            significant={6}
-                                            formatter={formatBalance}
-                                        />
-                                    </Typography>
-                                </Typography>
-                            </>
-                        ) : null}
+            <>
+                <Box className={classes.root}>
+                    <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
+                        <Typography fontSize={14} lineHeight="20px">
+                            {t('plugin_trader_swap_from')}
+                        </Typography>
                     </Box>
-
-                    <Box className={classes.card}>
-                        <SelectTokenChip
-                            classes={{
-                                chip: classes.selectedTokenChip,
-                                tokenIcon: classes.chipTokenIcon,
-                                noToken: classes.noToken,
-                            }}
-                            token={outputToken}
-                            ChipProps={{
-                                onClick: () => onTokenChipClick(TokenPanelType.Output),
+                    <InputTokenPanel
+                        chainId={chainId}
+                        amount={inputAmount}
+                        balance={inputTokenBalanceAmount.toFixed()}
+                        token={inputToken}
+                        onAmountChange={onInputAmountChange}
+                        SelectTokenChip={{
+                            ChipProps: {
+                                onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
                                     <DropIcon
                                         className={classes.dropIcon}
-                                        style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                        style={{ fill: !inputToken ? '#ffffff' : undefined }}
                                     />
                                 ),
                                 onDelete: noop,
-                            }}
-                        />
-
-                        {trades.filter((item) => !!item.value).length >= 1 ? (
-                            <>
-                                <Box marginTop="20px">
-                                    {firstTraderInfo}
-                                    <Collapse in={isExpand}>
-                                        {trades.slice(1).map((trade) => (
-                                            <TraderInfo
-                                                key={trade.provider}
-                                                trade={trade}
-                                                onClick={() => {
-                                                    if (!userSelected.current) userSelected.current = true
-                                                    onFocusedTradeChange(trade)
-                                                }}
-                                                isFocus={trade.provider === focusedTrade?.provider}
-                                                gasPrice={gasPrice}
-                                            />
-                                        ))}
-                                    </Collapse>
-                                </Box>
-                                <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
-                                    <ChevronUpIcon
-                                        className={classnames(
-                                            classes.chevron,
-                                            isExpand ? classes.reverseChevron : null,
-                                        )}
-                                        onClick={() => setExpand(!isExpand)}
-                                    />
-                                </Box>
-                            </>
-                        ) : null}
+                            },
+                        }}
+                    />
+                    <Box className={classes.reverse}>
+                        <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
                     </Box>
-                </Box>
-                <Box className={classes.controller}>
-                    <Box className={classes.section}>
-                        <div className={classes.status}>
-                            <Typography className={classes.label} color="textSecondary" variant="body2">
-                                {t('plugin_trader_slippage_tolerance')}{' '}
-                            </Typography>
-                            <Typography className={classes.slippageValue}>
-                                {formatPercentage(toBips(currentSlippageSettings.value))}
-                            </Typography>
-                            <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
-                                <TuneIcon fontSize="small" />
-                            </IconButton>
-                        </div>
-                    </Box>
-                    {wallet ? (
-                        <Box className={classes.section}>
-                            <EthereumChainBoundary
-                                chainId={chainId}
-                                noSwitchNetworkTip
-                                disablePadding
-                                className={classes.chainBoundary}
-                                ActionButtonPromiseProps={{
-                                    fullWidth: true,
-                                    classes: { root: classes.button, disabled: classes.disabledButton },
-                                    color: 'primary',
-                                    style: { padding: '13px 0', marginTop: 0 },
-                                }}>
-                                <EthereumERC20TokenApprovedBoundary
-                                    amount={approveAmount.toFixed()}
-                                    token={
-                                        !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.type === EthereumTokenType.ERC20 &&
-                                        !!approveAmount.toNumber()
-                                            ? approveToken
-                                            : undefined
-                                    }
-                                    spender={approveAddress}
-                                    onlyInfiniteUnlock
-                                    withChildren
-                                    ActionButtonProps={{
-                                        color: 'primary',
-                                    }}
-                                    infiniteUnlockContent={
-                                        <Box component="span" display="flex" alignItems="center">
-                                            <Typography fontSize={18} fontWeight={600} lineHeight="18px">
-                                                {t('plugin_trader_unlock_symbol', {
-                                                    symbol: approveToken?.symbol,
-                                                })}
-                                            </Typography>
-                                            <Tooltip
-                                                classes={{
-                                                    tooltip: classes.tooltip,
-                                                }}
-                                                PopperProps={{
-                                                    disablePortal: true,
-                                                }}
-                                                title={t('plugin_trader_unlock_tips', {
-                                                    provider: focusedTrade?.provider
-                                                        ? resolveTradeProviderName(focusedTrade.provider)
-                                                        : '',
-                                                    symbol: approveToken?.symbol,
-                                                })}
-                                                placement="top"
-                                                arrow
-                                                disableFocusListener
-                                                disableTouchListener>
-                                                <HelpOutline style={{ marginLeft: 10, height: 22 }} />
-                                            </Tooltip>
-                                        </Box>
-                                    }
-                                    render={(disable: boolean) =>
-                                        isGreatThanSlippageSetting ? (
-                                            <PluginWalletStatusBar
-                                                actionProps={{
-                                                    color: 'warning',
-                                                    disabled:
-                                                        focusedTrade?.loading ||
-                                                        !focusedTrade?.value ||
-                                                        disable ||
-                                                        isSwapping,
-                                                    loading: isSwapping,
-                                                    action: onSwap,
-                                                    title: t('plugin_trader_confirm_price_impact', {
-                                                        percent: formatPercentage(
-                                                            focusedTrade?.value?.priceImpact ?? 0,
-                                                        ),
-                                                    }),
-                                                }}
-                                                classes={{ button: classes.button }}
+                    <Box className={classes.section} marginBottom={2.5}>
+                        <Box display="flex" justifyContent="space-between" mb={1}>
+                            {outputToken && outputTokenBalance !== undefined ? (
+                                <>
+                                    <Typography fontSize={14} lineHeight="20px">
+                                        {t('plugin_trader_swap_to')}
+                                    </Typography>
+                                    <Typography className={classes.balance}>
+                                        {t('plugin_ito_list_table_got')}:
+                                        <Typography component="span" className={classes.amount} color="primary">
+                                            <FormattedBalance
+                                                value={outputTokenBalance}
+                                                decimals={outputToken?.decimals}
+                                                significant={6}
+                                                formatter={formatBalance}
                                             />
-                                        ) : (
-                                            <PluginWalletStatusBar
-                                                actionProps={{
-                                                    loading: isSwapping,
-                                                    disabled:
-                                                        focusedTrade?.loading ||
-                                                        !focusedTrade?.value ||
-                                                        !!validationMessage ||
-                                                        disable ||
-                                                        isSwapping,
-                                                    title: validationMessage || nativeWrapMessage,
-                                                    action: onSwap,
-                                                }}
-                                                classes={{ button: classes.button }}
-                                            />
-                                        )
-                                    }
-                                />
-                            </EthereumChainBoundary>
+                                        </Typography>
+                                    </Typography>
+                                </>
+                            ) : null}
                         </Box>
-                    ) : null}
+
+                        <Box className={classes.card}>
+                            <SelectTokenChip
+                                classes={{
+                                    chip: classes.selectedTokenChip,
+                                    tokenIcon: classes.chipTokenIcon,
+                                    noToken: classes.noToken,
+                                }}
+                                token={outputToken}
+                                ChipProps={{
+                                    onClick: () => onTokenChipClick(TokenPanelType.Output),
+                                    deleteIcon: (
+                                        <DropIcon
+                                            className={classes.dropIcon}
+                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                        />
+                                    ),
+                                    onDelete: noop,
+                                }}
+                            />
+
+                            {trades.filter((item) => !!item.value).length >= 1 ? (
+                                <>
+                                    <Box marginTop="20px">
+                                        {firstTraderInfo}
+                                        <Collapse in={isExpand}>
+                                            {trades.slice(1).map((trade) => (
+                                                <TraderInfo
+                                                    key={trade.provider}
+                                                    trade={trade}
+                                                    onClick={() => {
+                                                        if (!userSelected.current) userSelected.current = true
+                                                        onFocusedTradeChange(trade)
+                                                    }}
+                                                    isFocus={trade.provider === focusedTrade?.provider}
+                                                    gasPrice={gasPrice}
+                                                />
+                                            ))}
+                                        </Collapse>
+                                    </Box>
+                                    <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
+                                        <ChevronUpIcon
+                                            className={classnames(
+                                                classes.chevron,
+                                                isExpand ? classes.reverseChevron : null,
+                                            )}
+                                            onClick={() => setExpand(!isExpand)}
+                                        />
+                                    </Box>
+                                </>
+                            ) : null}
+                        </Box>
+                    </Box>
+                    <Box className={classes.controller}>
+                        <Box className={classes.section}>
+                            <div className={classes.status}>
+                                <Typography className={classes.label} color="textSecondary" variant="body2">
+                                    {t('plugin_trader_slippage_tolerance')}{' '}
+                                </Typography>
+                                <Typography className={classes.slippageValue}>
+                                    {formatPercentage(toBips(currentSlippageSettings.value))}
+                                </Typography>
+                                <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                                    <TuneIcon fontSize="small" />
+                                </IconButton>
+                            </div>
+                        </Box>
+                    </Box>
                 </Box>
-            </Box>
+
+                <EthereumChainBoundary
+                    chainId={chainId}
+                    noSwitchNetworkTip
+                    disablePadding
+                    className={classes.chainBoundary}
+                    ActionButtonPromiseProps={{
+                        fullWidth: true,
+                        classes: { root: classes.button, disabled: classes.disabledButton },
+                        color: 'primary',
+                        style: { padding: '13px 0', marginTop: 0 },
+                    }}>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={approveAmount.toFixed()}
+                        token={
+                            !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                            approveToken?.type === EthereumTokenType.ERC20 &&
+                            !!approveAmount.toNumber()
+                                ? approveToken
+                                : undefined
+                        }
+                        spender={approveAddress}
+                        onlyInfiniteUnlock
+                        withChildren
+                        ActionButtonProps={{
+                            color: 'primary',
+                        }}
+                        infiniteUnlockContent={
+                            <Box component="span" display="flex" alignItems="center">
+                                <Typography fontSize={18} fontWeight={600} lineHeight="18px">
+                                    {t('plugin_trader_unlock_symbol', {
+                                        symbol: approveToken?.symbol,
+                                    })}
+                                </Typography>
+                                <Tooltip
+                                    classes={{
+                                        tooltip: classes.tooltip,
+                                    }}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={t('plugin_trader_unlock_tips', {
+                                        provider: focusedTrade?.provider
+                                            ? resolveTradeProviderName(focusedTrade.provider)
+                                            : '',
+                                        symbol: approveToken?.symbol,
+                                    })}
+                                    placement="top"
+                                    arrow
+                                    disableFocusListener
+                                    disableTouchListener>
+                                    <HelpOutline style={{ marginLeft: 10, height: 22 }} />
+                                </Tooltip>
+                            </Box>
+                        }
+                        render={(disable: boolean) =>
+                            isGreatThanSlippageSetting ? (
+                                <PluginWalletStatusBar
+                                    actionProps={{
+                                        color: 'warning',
+                                        disabled:
+                                            focusedTrade?.loading || !focusedTrade?.value || disable || isSwapping,
+                                        loading: isSwapping,
+                                        action: onSwap,
+                                        title: t('plugin_trader_confirm_price_impact', {
+                                            percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                        }),
+                                    }}
+                                    classes={{ button: classes.button }}
+                                />
+                            ) : (
+                                <PluginWalletStatusBar
+                                    actionProps={{
+                                        loading: isSwapping,
+                                        disabled:
+                                            focusedTrade?.loading ||
+                                            !focusedTrade?.value ||
+                                            !!validationMessage ||
+                                            disable ||
+                                            isSwapping,
+                                        title: validationMessage || nativeWrapMessage,
+                                        action: onSwap,
+                                    }}
+                                    classes={{ button: classes.button }}
+                                />
+                            )
+                        }
+                    />
+                </EthereumChainBoundary>
+            </>
         )
     },
 )

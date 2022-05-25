@@ -30,6 +30,7 @@
     "use-subscription": "1.6.0"
   },
   "devDependencies": {
+    "@types/color": "^3.0.3",
     "@types/qrcode": "^1.4.2"
   }
 }

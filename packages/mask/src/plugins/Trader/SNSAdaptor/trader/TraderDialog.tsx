@@ -47,13 +47,12 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
     },
     content: {
-        paddingTop: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        padding: 0,
     },
     tradeRoot: {
-        width: 535,
         margin: 'auto',
     },
 }))

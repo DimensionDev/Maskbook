@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
-    "@masknet/shared": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "bignumber.js": "^9.0.2",
