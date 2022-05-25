@@ -12,6 +12,11 @@ function parseError(error: Error) {
                 ...error,
                 message: 'Oracle is not responding at the moment. Please try in a few minutes.',
             }
+        case errors.referrerInvalid:
+            return {
+                ...error,
+                message: 'Referrer cannot be the same as Buyer.',
+            }
         default:
             return error
     }
