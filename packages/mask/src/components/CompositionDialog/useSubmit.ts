@@ -100,5 +100,5 @@ function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta) 
               })
             : t('additional_post_box__encrypted_post_pre_file_service', { encrypted })
     }
-    return ''
+    return null
 }
