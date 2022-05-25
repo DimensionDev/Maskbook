@@ -11,6 +11,7 @@ export class ConnectionState<
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
     Web3ConnectionOptions extends ConnectionOptions<ChainId, ProviderType, Transaction> = ConnectionOptions<
         ChainId,
         ProviderType,
@@ -27,6 +28,7 @@ export class ConnectionState<
             TransactionDetailed,
             TransactionSignature,
             Web3,
+            Web3Provider,
             Web3ConnectionOptions
         >
 {
@@ -45,6 +47,7 @@ export class ConnectionState<
             TransactionDetailed,
             TransactionSignature,
             Web3,
+            Web3Provider,
             Web3ConnectionOptions
         >,
         protected subscription: {
@@ -54,16 +57,21 @@ export class ConnectionState<
         },
     ) {}
 
+    async getWeb3(options?: Web3ConnectionOptions) {
+        const connection = await this.getConnection(options)
+        return connection.getWeb3(options)
+    }
+
+    async getWeb3Provider(options?: Web3ConnectionOptions) {
+        const connection = await this.getConnection(options)
+        return connection.getWeb3Provider(options)
+    }
+
     async getConnection(options?: Web3ConnectionOptions) {
         return this.createConnection(
             options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
             options?.account ?? this.subscription.account?.getCurrentValue(),
             options?.providerType ?? this.subscription.providerType?.getCurrentValue(),
         )
-    }
-
-    async getWeb3(options?: Web3ConnectionOptions) {
-        const connection = await this.getConnection(options)
-        return connection.getWeb3(options)
     }
 }

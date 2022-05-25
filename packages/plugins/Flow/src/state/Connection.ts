@@ -11,6 +11,7 @@ import type {
     Block,
     Transaction,
     TransactionDetailed,
+    Web3Provider,
 } from '@masknet/web3-shared-flow'
 import { createConnection } from './Connection/connection'
 
@@ -28,7 +29,8 @@ export class Connection extends ConnectionState<
     Transaction,
     TransactionDetailed,
     never,
-    Web3
+    Web3,
+    Web3Provider
 > {
     constructor(
         private context: Plugin.Shared.SharedContext,

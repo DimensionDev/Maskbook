@@ -73,6 +73,10 @@ export declare namespace Web3Helper {
 
     export type Web3<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3']
 
+    export type Web3Provider<T extends NetworkPluginID = never> = T extends never
+        ? never
+        : Definition[T]['Web3Provider']
+
     export type Web3ProviderState<T extends NetworkPluginID = never> = T extends never
         ? never
         : ProviderState<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
@@ -88,7 +92,8 @@ export declare namespace Web3Helper {
               Definition[T]['Transaction'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
-              Definition[T]['Web3']
+              Definition[T]['Web3'],
+              Definition[T]['Web3Provider']
           >
 
     export type Web3ConnectionOptions<T extends NetworkPluginID = never> = T extends never
@@ -106,7 +111,8 @@ export declare namespace Web3Helper {
               Definition[T]['Transaction'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
-              Definition[T]['Web3']
+              Definition[T]['Web3'],
+              Definition[T]['Web3Provider']
           >
     export type Web3HubOptions<T extends NetworkPluginID = never> = T extends never
         ? never
@@ -167,7 +173,8 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],
-        Definition[NetworkPluginID]['Web3']
+        Definition[NetworkPluginID]['Web3'],
+        Definition[NetworkPluginID]['Web3Provider']
     >
     export type Web3HubAll = Hub<
         Definition[NetworkPluginID]['ChainId'],

@@ -73,7 +73,7 @@ const ConnectWalletPage = memo(() => {
     ) as Web3Helper.Web3ProviderDescriptor<NetworkPluginID.PLUGIN_EVM>[]
 
     const { ProviderIconClickBait } = useWeb3UI(NetworkPluginID.PLUGIN_EVM).SelectProviderDialog ?? {}
-    const { Connection: Protocol } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Connection } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(
         async (
@@ -89,7 +89,7 @@ const ConnectWalletPage = memo(() => {
                 return
             }
 
-            const connection = await Protocol?.getConnection?.({
+            const connection = await Connection?.getConnection?.({
                 chainId: network.chainId,
                 providerType: provider.type,
             })

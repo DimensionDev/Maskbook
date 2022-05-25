@@ -533,10 +533,13 @@ export interface Connection<
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(options?: Web3ConnectionOptions): Promise<Web3>
+    /** Get web3 provider instance */
+    getWeb3Provider(options?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(options?: Web3ConnectionOptions): Promise<string>
     /** Get schema type of given token address. */
@@ -888,6 +891,7 @@ export interface ConnectionState<
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
@@ -899,11 +903,14 @@ export interface ConnectionState<
         TransactionDetailed,
         TransactionSignature,
         Web3,
+        Web3Provider,
         Web3ConnectionOptions
     >,
 > {
-    /** Get web3 client */
+    /** Get web3 SDK */
     getWeb3?: (options?: Web3ConnectionOptions) => Promise<Web3>
+    /** Get web3 provider instance */
+    getWeb3Provoder?: (options?: Web3ConnectionOptions) => Promise<Web3Provider>
     /** Get connection */
     getConnection?: (options?: Web3ConnectionOptions) => Promise<Web3Connection>
 }
