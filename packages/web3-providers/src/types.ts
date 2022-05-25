@@ -26,6 +26,16 @@ export namespace ExplorerAPI {
         getLatestTransactions(account: string, url: string, pageInfo?: PageInfo): Promise<Transaction[]>
     }
 }
+
+export namespace TokenAPI {
+    export interface tokenInfo {
+        id: string
+        market_cap: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<tokenInfo>
+    }
+}
 export namespace RSS3BaseAPI {
     export interface GeneralAsset {
         platform: string
