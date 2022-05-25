@@ -23,5 +23,7 @@
     "dialog_dismiss": "Dismiss",
     "wallet_settings": "Wallet settings",
     "connect_your_wallet": "Connect your wallet",
-    "change": "Change"
+    "change": "Change",
+    "wallet_load_retry": "Failed to load {{symbol}}. Click to retry.",
+    "plugin_ito_unlocking_symbol": "Unlocking {{symbol}}"
 }

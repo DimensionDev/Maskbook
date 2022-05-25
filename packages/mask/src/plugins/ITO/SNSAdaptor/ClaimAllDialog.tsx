@@ -6,7 +6,16 @@ import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, FormattedBalance } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
+import {
+    DialogContent,
+    CircularProgress,
+    Typography,
+    List,
+    ListItem,
+    useTheme,
+    Box,
+    DialogActions,
+} from '@mui/material'
 import {
     formatBalance,
     useERC20TokenDetailed,
@@ -29,9 +38,9 @@ import { NftAirdropCard } from './NftAirdropCard'
 import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 interface StyleProps {
@@ -43,7 +52,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
     const isLight = theme.palette.mode === 'light'
     return {
         wrapper: {
-            padding: theme.spacing(0, 4),
+            padding: theme.spacing(0),
             [smallQuery]: {
                 padding: theme.spacing(0, 1),
             },
@@ -75,7 +84,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             color: 'white',
             overflow: 'auto',
             paddingTop: theme.spacing(1),
-            marginBottom: theme.spacing(0.5),
+            //            marginBottom: theme.spacing(0.5),
         },
         tokenCard: {
             marginLeft: 'auto',
@@ -167,6 +176,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             paddingTop: theme.spacing(2),
             backgroundColor: theme.palette.background.paper,
         },
+        walletBar: {},
         emptyContentWrapper: {
             display: 'flex',
             justifyContent: 'center',
@@ -200,18 +210,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         snackbarError: {
             backgroundColor: '#FF5555',
         },
-        abstractTabWrapper: {
-            position: 'sticky',
-            top: 0,
-            width: '100%',
-            zIndex: 2,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(2),
-            backgroundColor: theme.palette.background.paper,
-        },
-        walletStatusBox: {
-            margin: theme.spacing(3, 'auto'),
-        },
+        abstractTabWrapper: {},
         claimAllButton: {
             [smallQuery]: {
                 fontSize: 14,
@@ -324,83 +323,81 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
-                    </div>
-                    <div className={classes.contentWrapper} ref={DialogRef}>
-                        {(showNftAirdrop || loadingAirdrop) &&
-                        chainId === ChainId.Matic &&
-                        Flags.nft_airdrop_enabled ? (
-                            <NftAirdropCard
-                                campaignInfos={campaignInfos!}
-                                loading={loadingAirdrop}
-                                retry={retryAirdrop}
+                    <Box style={{ padding: 16 }}>
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab
+                                chainId={chainId}
+                                setChainId={setChainId}
+                                classes={classes}
+                                chains={chainIdList}
                             />
-                        ) : null}
+                        </div>
+                        <div className={classes.contentWrapper} ref={DialogRef}>
+                            {(showNftAirdrop || loadingAirdrop) &&
+                            chainId === ChainId.Matic &&
+                            Flags.nft_airdrop_enabled ? (
+                                <NftAirdropCard
+                                    campaignInfos={campaignInfos!}
+                                    loading={loadingAirdrop}
+                                    retry={retryAirdrop}
+                                />
+                            ) : null}
 
-                        {loading || initLoading || !swappedTokens ? (
-                            <div className={classes.emptyContentWrapper}>
-                                <CircularProgress size={24} />
-                            </div>
-                        ) : swappedTokens.length > 0 ? (
-                            <div className={classes.content}>
-                                <Content swappedTokens={swappedTokens} chainId={chainId} />
-                            </div>
-                        ) : !showNftAirdrop && !loadingAirdrop ? (
-                            <div className={classes.emptyContentWrapper}>
-                                <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
-                            </div>
-                        ) : null}
-                        {(swappedTokens && swappedTokens.length > 0) ||
-                        (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
-                            <div className={classes.actionButtonWrapper}>
-                                <EthereumChainBoundary
-                                    chainId={chainId}
-                                    classes={{ switchButton: classes.claimAllButton }}
-                                    noSwitchNetworkTip
-                                    ActionButtonPromiseProps={{
-                                        size: 'large',
-                                    }}
-                                    disablePadding
-                                    switchButtonStyle={{
-                                        minHeight: 'auto',
-                                        width: '100%',
-                                        fontSize: 18,
-                                        fontWeight: 400,
-                                    }}>
-                                    {swappedTokens?.length ? (
-                                        <EthereumWalletConnectedBoundary
-                                            classes={{
-                                                connectWallet: classes.claimAllButton,
-                                            }}>
-                                            <PluginWalletStatusBar
-                                                actionProps={{
-                                                    loading: [
-                                                        TransactionStateType.HASH,
-                                                        TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                    ].includes(claimState.type),
-                                                    disabled:
-                                                        claimablePids!.length === 0 ||
-                                                        [
-                                                            TransactionStateType.HASH,
-                                                            TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                        ].includes(claimState.type),
-                                                    action: claimCallback,
-                                                    title: t('plugin_ito_claim_all'),
-                                                }}
-                                                classes={{
-                                                    button: classNames(classes.actionButton, classes.claimAllButton),
-                                                }}
-                                            />
-                                        </EthereumWalletConnectedBoundary>
-                                    ) : (
-                                        <div />
-                                    )}
-                                </EthereumChainBoundary>
-                            </div>
-                        ) : null}
-                    </div>
+                            {loading || initLoading || !swappedTokens ? (
+                                <div className={classes.emptyContentWrapper}>
+                                    <CircularProgress size={24} />
+                                </div>
+                            ) : swappedTokens.length > 0 ? (
+                                <div className={classes.content}>
+                                    <Content swappedTokens={swappedTokens} chainId={chainId} />
+                                </div>
+                            ) : !showNftAirdrop && !loadingAirdrop ? (
+                                <div className={classes.emptyContentWrapper}>
+                                    <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
+                                </div>
+                            ) : null}
+                        </div>
+                    </Box>
                 </DialogContent>
+                <DialogActions style={{ padding: 0 }}>
+                    <EthereumChainBoundary
+                        chainId={chainId}
+                        classes={{ switchButton: classes.claimAllButton }}
+                        noSwitchNetworkTip
+                        disablePadding
+                        switchButtonStyle={{
+                            minHeight: 'auto',
+                            width: '100%',
+                            fontSize: 18,
+                            fontWeight: 400,
+                        }}>
+                        <EthereumWalletConnectedBoundary
+                            classes={{
+                                connectWallet: classes.claimAllButton,
+                                walletBar: classes.walletBar,
+                            }}>
+                            <PluginWalletStatusBar
+                                actionProps={{
+                                    loading: [
+                                        TransactionStateType.HASH,
+                                        TransactionStateType.WAIT_FOR_CONFIRMING,
+                                    ].includes(claimState.type),
+                                    disabled:
+                                        claimablePids!.length === 0 ||
+                                        [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(
+                                            claimState.type,
+                                        ),
+                                    action: claimCallback,
+                                    title: t('plugin_ito_claim_all'),
+                                }}
+                                classes={{
+                                    button: classNames(classes.actionButton, classes.claimAllButton),
+                                }}
+                                className={classes.walletBar}
+                            />
+                        </EthereumWalletConnectedBoundary>
+                    </EthereumChainBoundary>
+                </DialogActions>
             </InjectedDialog>
         </SnackbarProvider>
     )

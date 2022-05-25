@@ -82,11 +82,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     )
 
     // not a valid erc20 token, please given token as undefined
-    if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
+    if (!token) return <>{render ? (render(false) as any) : children}</>
 
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
-            <Grid container>
+            <>
                 <PluginWalletStatusBar
                     actionProps={{
                         disabled: true,
@@ -97,11 +97,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 {withChildren ? (
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
-            </Grid>
+            </>
         )
     if (approveStateType === ApproveStateType.FAILED)
         return (
-            <Grid container>
+            <>
                 <PluginWalletStatusBar
                     actionProps={{
                         title: t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' }),
@@ -112,11 +112,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 {withChildren ? (
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
-            </Grid>
+            </>
         )
     if (approveStateType === ApproveStateType.NOT_APPROVED)
         return (
-            <Box width="100%">
+            <Box style={{ flex: 1, display: 'flex' }}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                     {!onlyInfiniteUnlock ? (
                         <Grid item xs={6}>
@@ -153,27 +153,21 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         )
     if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
         return (
-            <Grid container>
-                <PluginWalletStatusBar
-                    actionProps={{
-                        title:
-                            approveStateType === ApproveStateType.PENDING
-                                ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                                : `Updating ${token.symbol}`,
-                        action: resetApproveCallback,
-                        disabled: true,
-                        loading: approveStateType === ApproveStateType.PENDING,
-                    }}
-                    classes={{ button: classes.button }}
-                />
-            </Grid>
+            <PluginWalletStatusBar
+                actionProps={{
+                    title:
+                        approveStateType === ApproveStateType.PENDING
+                            ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                            : `Updating ${token.symbol}`,
+                    action: resetApproveCallback,
+                    disabled: true,
+                    loading: approveStateType === ApproveStateType.PENDING,
+                }}
+                classes={{ button: classes.button }}
+            />
         )
     if (approveStateType === ApproveStateType.APPROVED)
-        return (
-            <Grid container>
-                {render ? render(false) : typeof children === 'function' ? children(allowance) : children}
-            </Grid>
-        )
+        return <>{render ? render(false) : typeof children === 'function' ? children(allowance) : children}</>
 
     unreachable(approveStateType)
 }

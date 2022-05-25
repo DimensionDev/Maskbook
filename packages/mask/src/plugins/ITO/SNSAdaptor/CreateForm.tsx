@@ -34,6 +34,21 @@ import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletSta
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
+        root: {
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
+            height: 'calc(100% - 75px)',
+            overflowY: 'auto',
+        },
         line: {
             margin: theme.spacing(1),
             paddingBottom: theme.spacing(2),
@@ -43,10 +58,10 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         walletBar: {
-            marginTop: 0,
-            marginBottom: -16,
-            marginRight: -8,
-            marginLeft: -4,
+            //         marginTop: 0,
+            //         marginBottom: -16,
+            //         marginRight: -8,
+            //         marginLeft: -4,
         },
         column: {
             flexDirection: 'column',
@@ -364,87 +379,34 @@ export function CreateForm(props: CreateFormProps) {
 
     return (
         <>
-            <Box className={classes.line} style={{ display: 'block' }}>
-                <ExchangeTokenPanelGroup
-                    token={tokenAndAmount?.token}
-                    origin={tokenAndAmounts}
-                    onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
-                />
-            </Box>
-            <Box className={classes.line}>
-                <TextField
-                    className={classes.input}
-                    label={t('plugin_ito_message_label')}
-                    value={message}
-                    onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            root: classes.inputLabel,
-                        },
-                    }}
-                />
-            </Box>
-            <Box className={classes.line}>
-                <TextField
-                    className={classes.input}
-                    label={t('plugin_ito_allocation_per_wallet_title')}
-                    onChange={onTotalOfPerWalletChange}
-                    value={totalOfPerWallet}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            root: classes.inputLabel,
-                        },
-                    }}
-                    InputProps={{
-                        endAdornment: tokenAndAmount?.token?.symbol,
-                        inputProps: {
-                            autoComplete: 'off',
-                            autoCorrect: 'off',
-                            inputMode: 'decimal',
-                            placeholder: '0.0',
-                            pattern: '^[0-9]$',
-                            spellCheck: false,
-                        },
-                    }}
-                />
-            </Box>
-            <Stack className={classes.date} direction="row">
-                {StartTime} {EndTime}
-            </Stack>
-            <Box className={classes.line}>
-                <AdvanceSetting advanceSettingData={advanceSettingData} setAdvanceSettingData={setAdvanceSettingData} />
-            </Box>
-            {advanceSettingData.IPRegion ? (
+            <Box className={classes.root}>
+                <Box className={classes.line} style={{ display: 'block' }}>
+                    <ExchangeTokenPanelGroup
+                        token={tokenAndAmount?.token}
+                        origin={tokenAndAmounts}
+                        onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
+                    />
+                </Box>
                 <Box className={classes.line}>
                     <TextField
                         className={classes.input}
-                        label={t('plugin_ito_region_label')}
+                        label={t('plugin_ito_message_label')}
+                        value={message}
+                        onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                         InputLabelProps={{
                             shrink: true,
                             classes: {
                                 root: classes.inputLabel,
                             },
                         }}
-                        InputProps={{
-                            inputComponent: RegionSelect,
-                            inputProps: {
-                                value: regions,
-                                onRegionChange: setRegions,
-                            },
-                        }}
                     />
                 </Box>
-            ) : null}
-            {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
-            {account && advanceSettingData.contract ? (
-                <Box className={classNames(classes.line, classes.column)}>
+                <Box className={classes.line}>
                     <TextField
                         className={classes.input}
-                        label={t('plugin_ito_qualification_label')}
-                        onChange={(e) => setQualificationAddress(e.currentTarget.value)}
-                        value={qualificationAddress}
+                        label={t('plugin_ito_allocation_per_wallet_title')}
+                        onChange={onTotalOfPerWalletChange}
+                        value={totalOfPerWallet}
                         InputLabelProps={{
                             shrink: true,
                             classes: {
@@ -452,46 +414,102 @@ export function CreateForm(props: CreateFormProps) {
                             },
                         }}
                         InputProps={{
-                            endAdornment: qualification?.isQualification ? (
-                                <Box className={classNames(classes.iconWrapper, classes.success)}>
-                                    <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
-                                </Box>
-                            ) : qualification?.loadingERC165 || loadingQualification ? (
-                                <CircularProgress size={16} />
-                            ) : qualificationAddress.length > 0 ? (
-                                <Box className={classNames(classes.iconWrapper, classes.fail)}>
-                                    <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
-                                </Box>
-                            ) : null,
+                            endAdornment: tokenAndAmount?.token?.symbol,
+                            inputProps: {
+                                autoComplete: 'off',
+                                autoCorrect: 'off',
+                                inputMode: 'decimal',
+                                placeholder: '0.0',
+                                pattern: '^[0-9]$',
+                                spellCheck: false,
+                            },
                         }}
                     />
-                    {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
-                        <div className={classes.qualStartTime}>
-                            <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
-                            <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
-                        </div>
-                    ) : null}
                 </Box>
-            ) : null}
-            <Box className={classes.line}>
-                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={inputTokenAmount}
-                        spender={ITO2_CONTRACT_ADDRESS}
-                        token={
-                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
-                        }>
-                        <PluginWalletStatusBar
-                            actionProps={{
-                                disabled: !!validationMessage,
-                                action: onNext,
-                                title: validationMessage || t('plugin_ito_next'),
+                <Stack className={classes.date} direction="row">
+                    {StartTime} {EndTime}
+                </Stack>
+                <Box className={classes.line}>
+                    <AdvanceSetting
+                        advanceSettingData={advanceSettingData}
+                        setAdvanceSettingData={setAdvanceSettingData}
+                    />
+                </Box>
+                {advanceSettingData.IPRegion ? (
+                    <Box className={classes.line}>
+                        <TextField
+                            className={classes.input}
+                            label={t('plugin_ito_region_label')}
+                            InputLabelProps={{
+                                shrink: true,
+                                classes: {
+                                    root: classes.inputLabel,
+                                },
                             }}
-                            classes={{ button: classes.button }}
+                            InputProps={{
+                                inputComponent: RegionSelect,
+                                inputProps: {
+                                    value: regions,
+                                    onRegionChange: setRegions,
+                                },
+                            }}
                         />
-                    </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                    </Box>
+                ) : null}
+                {advanceSettingData.delayUnlocking ? <Box className={classes.date}>{UnlockTime}</Box> : null}
+                {account && advanceSettingData.contract ? (
+                    <Box className={classNames(classes.line, classes.column)}>
+                        <TextField
+                            className={classes.input}
+                            label={t('plugin_ito_qualification_label')}
+                            onChange={(e) => setQualificationAddress(e.currentTarget.value)}
+                            value={qualificationAddress}
+                            InputLabelProps={{
+                                shrink: true,
+                                classes: {
+                                    root: classes.inputLabel,
+                                },
+                            }}
+                            InputProps={{
+                                endAdornment: qualification?.isQualification ? (
+                                    <Box className={classNames(classes.iconWrapper, classes.success)}>
+                                        <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
+                                    </Box>
+                                ) : qualification?.loadingERC165 || loadingQualification ? (
+                                    <CircularProgress size={16} />
+                                ) : qualificationAddress.length > 0 ? (
+                                    <Box className={classNames(classes.iconWrapper, classes.fail)}>
+                                        <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />
+                                    </Box>
+                                ) : null,
+                            }}
+                        />
+                        {qualification?.startTime && new Date(Number(qualification.startTime) * 1000) > startTime ? (
+                            <div className={classes.qualStartTime}>
+                                <Typography>{t('plugin_ito_qualification_start_time')}</Typography>
+                                <Typography>{new Date(Number(qualification.startTime) * 1000).toString()}</Typography>
+                            </div>
+                        ) : null}
+                    </Box>
+                ) : null}
             </Box>
+
+            <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
+                <EthereumERC20TokenApprovedBoundary
+                    amount={inputTokenAmount}
+                    spender={ITO2_CONTRACT_ADDRESS}
+                    token={tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined}>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            disabled: !!validationMessage,
+                            action: onNext,
+                            title: validationMessage || t('plugin_ito_next'),
+                        }}
+                        classes={{ button: classes.button }}
+                        className={classes.walletBar}
+                    />
+                </EthereumERC20TokenApprovedBoundary>
+            </EthereumWalletConnectedBoundary>
         </>
     )
 }

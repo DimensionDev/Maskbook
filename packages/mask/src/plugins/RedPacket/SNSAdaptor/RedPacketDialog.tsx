@@ -252,7 +252,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
+    // const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -292,9 +292,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     return (
         <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                    <AbstractTab height={dialogContentHeight} {...tabProps} />
-                ) : null}
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? <AbstractTab height={350} {...tabProps} /> : null}
                 {step === CreateRedPacketPageStep.ConfirmPage ? (
                     <RedPacketConfirmDialog
                         onClose={onClose}

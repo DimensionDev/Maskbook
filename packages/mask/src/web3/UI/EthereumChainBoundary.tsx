@@ -33,6 +33,7 @@ import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import Services from '../../extension/service'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
+import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -185,12 +186,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
-                <Box
-                    className={props.className}
-                    sx={{ flex: 1 }}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center">
+                <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
                     {children}
                 </Box>
             </ShadowRootTooltip>
@@ -241,40 +237,59 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     </Typography>
                 ) : null}
                 {isAllowed ? (
-                    <ActionButtonPromise
-                        className={classes.switchButton}
-                        startIcon={
-                            <WalletIcon
-                                networkIcon={networkDescriptor?.icon} // switch the icon to meet design
-                                isBorderColorNotDefault
-                                size={18}
-                            />
-                        }
-                        sx={props.switchButtonStyle}
-                        init={
-                            <span>
-                                {t('plugin_wallet_connect_network', {
+                    props.renderInTimeline ? (
+                        <ActionButtonPromise
+                            className={classes.switchButton}
+                            startIcon={
+                                <WalletIcon
+                                    networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                                    isBorderColorNotDefault
+                                    size={18}
+                                />
+                            }
+                            sx={props.switchButtonStyle}
+                            init={
+                                <span>
+                                    {t('plugin_wallet_connect_network', {
+                                        network: 'EVM',
+                                    })}
+                                </span>
+                            }
+                            waiting={t('plugin_wallet_connect_network_under_going', {
+                                network: 'EVM',
+                            })}
+                            complete={t('plugin_wallet_connect_network', {
+                                network: 'EVM',
+                            })}
+                            failed={t('retry')}
+                            executor={onSwitchChain}
+                            completeOnClick={onSwitchChain}
+                            failedOnClick="use executor"
+                            fullWidth
+                            {...buttonProps}
+                        />
+                    ) : (
+                        <PluginWalletStatusBar
+                            actionProps={{
+                                startIcon: (
+                                    <WalletIcon
+                                        networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                                        isBorderColorNotDefault
+                                        size={18}
+                                    />
+                                ),
+                                title: t('plugin_wallet_connect_network', {
                                     network: 'EVM',
-                                })}
-                            </span>
-                        }
-                        waiting={t('plugin_wallet_connect_network_under_going', {
-                            network: 'EVM',
-                        })}
-                        complete={t('plugin_wallet_connect_network', {
-                            network: 'EVM',
-                        })}
-                        failed={t('retry')}
-                        executor={onSwitchChain}
-                        completeOnClick={onSwitchChain}
-                        failedOnClick="use executor"
-                        fullWidth
-                        {...buttonProps}
-                    />
+                                }),
+                                action: onSwitchChain,
+                            }}
+                        />
+                    )
                 ) : null}
             </>,
         )
     }
+    console.log(props.renderInTimeline)
 
     return renderBox(
         <>
@@ -288,31 +303,51 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 </Typography>
             ) : null}
             {isAllowed ? (
-                <ActionButtonPromise
-                    startIcon={
-                        <WalletIcon
-                            networkIcon={networkDescriptor?.icon} // switch the icon to meet design
-                            isBorderColorNotDefault
-                            size={18}
-                        />
-                    }
-                    sx={props.switchButtonStyle}
-                    init={
-                        <span>
-                            {t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
-                        </span>
-                    }
-                    waiting={t('plugin_wallet_switch_network_under_going', {
-                        network: expectedNetwork.replace('Mainnet', ''),
-                    })}
-                    complete={t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
-                    failed={t('retry')}
-                    executor={onSwitchChain}
-                    completeOnClick={onSwitchChain}
-                    failedOnClick="use executor"
-                    fullWidth
-                    {...buttonProps}
-                />
+                props.renderInTimeline ? (
+                    <ActionButtonPromise
+                        startIcon={
+                            <WalletIcon
+                                networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                                isBorderColorNotDefault
+                                size={18}
+                            />
+                        }
+                        sx={props.switchButtonStyle}
+                        init={
+                            <span>
+                                {t('plugin_wallet_switch_network', { network: expectedNetwork.replace('Mainnet', '') })}
+                            </span>
+                        }
+                        waiting={t('plugin_wallet_switch_network_under_going', {
+                            network: expectedNetwork.replace('Mainnet', ''),
+                        })}
+                        complete={t('plugin_wallet_switch_network', {
+                            network: expectedNetwork.replace('Mainnet', ''),
+                        })}
+                        failed={t('retry')}
+                        executor={onSwitchChain}
+                        completeOnClick={onSwitchChain}
+                        failedOnClick="use executor"
+                        fullWidth
+                        {...buttonProps}
+                    />
+                ) : (
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            startIcon: (
+                                <WalletIcon
+                                    networkIcon={networkDescriptor?.icon} // switch the icon to meet design
+                                    isBorderColorNotDefault
+                                    size={18}
+                                />
+                            ),
+                            title: t('plugin_wallet_switch_network_under_going', {
+                                network: expectedNetwork.replace('Mainnet', ''),
+                            }),
+                            action: onSwitchChain,
+                        }}
+                    />
+                )
             ) : null}
         </>,
         providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',

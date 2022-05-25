@@ -32,6 +32,8 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
+            height: 213,
+            overflowY: 'auto',
         },
         line: {
             display: 'flex',
@@ -346,22 +348,23 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Typography>
                     </>
                 ) : null}
-                <EthereumWalletConnectedBoundary>
-                    <EthereumERC721TokenApprovedBoundary
-                        validationMessage={validationMessage}
-                        owner={account}
-                        contractDetailed={contract}
-                        operator={RED_PACKET_NFT_ADDRESS}>
-                        <PluginWalletStatusBar
-                            actionProps={{
-                                disabled: !!validationMessage,
-                                title: t('plugin_red_packet_next'),
-                                action: () => setOpenConfirmDialog(true),
-                            }}
-                        />
-                    </EthereumERC721TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
             </Box>
+            <EthereumWalletConnectedBoundary>
+                <EthereumERC721TokenApprovedBoundary
+                    validationMessage={validationMessage}
+                    owner={account}
+                    contractDetailed={contract}
+                    operator={RED_PACKET_NFT_ADDRESS}>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            disabled: !!validationMessage,
+                            title: t('plugin_red_packet_next'),
+                            action: () => setOpenConfirmDialog(true),
+                        }}
+                    />
+                </EthereumERC721TokenApprovedBoundary>
+            </EthereumWalletConnectedBoundary>
+
             {open ? (
                 <SelectNftTokenDialog
                     open={open}

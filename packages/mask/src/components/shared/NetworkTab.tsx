@@ -66,5 +66,5 @@ export function NetworkTab(props: NetworkTabProps) {
         scrollable: true,
     }
 
-    return <AbstractTab {...tabProps} />
+    return <AbstractTab {...tabProps} height={350} />
 }
