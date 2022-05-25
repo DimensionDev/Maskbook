@@ -11,13 +11,15 @@ import {
     useFungibleTokenBalance,
     useWeb3,
 } from '@masknet/web3-shared-evm'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 
 import { useI18N } from '../locales'
-import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType } from '../types'
+import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, ReferralMetaData } from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
@@ -158,29 +160,37 @@ export function CreateFarm(props: PageInterface) {
         })
     }, [props?.onChangePage, totalFarmReward, attraceFee, tokenReward])
 
-    const onInsertData = useCallback(() => {
+    const openComposeBox = useCallback(
+        (message: string, selectedReferralData: Map<string, ReferralMetaData>) =>
+            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                reason: 'timeline',
+                open: true,
+                content: makeTypedMessageText(message, selectedReferralData),
+            }),
+        [],
+    )
+
+    const onPublishFarm = useCallback(() => {
         if (!tokenRefer?.address) {
             showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return
         }
 
         const { address, name = '', symbol = '', logoURI = [''] } = tokenRefer
-        const selectedReferralData = {
+
+        const metadata = new Map<string, ReferralMetaData>()
+        metadata.set(META_KEY, {
             referral_token: address,
             referral_token_name: name,
             referral_token_symbol: symbol,
             referral_token_icon: logoURI,
             referral_token_chain_id: currentChainId,
-            sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User',
-        }
-        if (selectedReferralData) {
-            attachMetadata(META_KEY, JSON.parse(JSON.stringify(selectedReferralData)))
-        } else {
-            dropMetadata(META_KEY)
-        }
-
+            sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? '',
+        })
         closeApplicationBoardDialog()
         props.onClose?.()
+
+        openComposeBox(t.buy_or_refer_to_earn_buy_hold_referral({ token: symbol }), metadata)
     }, [tokenRefer, showSnackbar, currentChainId, props.onClose, currentIdentity, linkedPersona])
 
     const onConfirmedDeposit = useCallback(
@@ -193,14 +203,14 @@ export function CreateFarm(props: PageInterface) {
                         status: TransactionStatus.CONFIRMED,
                         actionButton: {
                             label: t.publish_farm(),
-                            onClick: onInsertData,
+                            onClick: onPublishFarm,
                         },
                         transactionHash: txHash,
                     },
                 },
             })
         },
-        [props?.onChangePage, onInsertData],
+        [props?.onChangePage, onPublishFarm],
     )
 
     const onErrorDeposit = useCallback(

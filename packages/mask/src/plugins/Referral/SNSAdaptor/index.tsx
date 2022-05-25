@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
-import type { ReferralMetaData } from '../types'
 import { base } from '../base'
-import { META_KEY } from '../constants'
 import { referralMetadataReader } from '../helpers'
 
 import { FarmPost } from './FarmPost'
@@ -21,21 +18,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const metadata = referralMetadataReader(props.message.meta)
         if (!metadata.ok) return null
         return <FarmPost payload={metadata.val} />
-    },
-    CompositionDialogMetadataBadgeRender: new Map([
-        [META_KEY, (meta: ReferralMetaData) => `Refer Farm of '${meta.referral_token_name}' from ${meta.sender}`],
-    ]),
-    CompositionDialogEntry: {
-        label: (
-            <>
-                <ReferralFarmsIcon style={{ width: 16, height: 16, marginRight: '4px' }} />
-                <PluginI18NFieldRender
-                    field={{ i18nKey: '__plugin_name', fallback: 'Referral Farms' }}
-                    pluginID={base.ID}
-                />
-            </>
-        ),
-        dialog: ReferralDialog,
     },
     GlobalInjection: function Component() {
         return <SelectToken />
@@ -54,17 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 {...EntryComponentProps}
                                 icon={icon}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                onClick={
-                                    EntryComponentProps.onClick ??
-                                    (() =>
-                                        CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                            reason: 'timeline',
-                                            open: true,
-                                            options: {
-                                                startupPlugin: base.ID,
-                                            },
-                                        }))
-                                }
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
                             <ReferralDialog open={open} onClose={() => setOpen(false)} />
                         </>

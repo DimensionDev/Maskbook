@@ -101,7 +101,7 @@ export function FarmPost(props: FarmPostProps) {
         try {
             await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
 
-            const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+            const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? ''
 
             const metadata = new Map<string, ReferralMetaData>()
             metadata.set(META_KEY, {

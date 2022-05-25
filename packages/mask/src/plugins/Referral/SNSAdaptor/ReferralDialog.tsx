@@ -21,7 +21,6 @@ import { AttraceLogoDarkTheme, AttraceLogoLightTheme } from './shared-ui/icons'
 interface ReferralDialogProps {
     open: boolean
     onClose?: () => void
-    onSwapDialogOpen?: () => void
 }
 
 const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn = false }) => ({
@@ -76,7 +75,7 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
     },
 }))
 
-export function ReferralDialog({ open, onClose, onSwapDialogOpen }: ReferralDialogProps) {
+export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
     const [propsData, setPropsData] = useState<DialogInterface>()
 
     const t = useI18N()

@@ -6,10 +6,10 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { v4 as uuid } from 'uuid'
 import { blue } from '@mui/material/colors'
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 
 import { useI18N } from '../locales'
 import { META_KEY } from '../constants'
@@ -72,7 +72,6 @@ export function ReferToFarm(props: PageInterface) {
     const web3 = useWeb3()
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
-    const { attachMetadata, dropMetadata } = useCompositionContext()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -96,6 +95,16 @@ export function ReferToFarm(props: PageInterface) {
             },
             [id, setToken],
         ),
+    )
+
+    const openComposeBox = useCallback(
+        (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
+            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                reason: 'timeline',
+                open: true,
+                content: makeTypedMessageText(message, selectedReferralData),
+            }),
+        [],
     )
 
     const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
@@ -129,19 +138,6 @@ export function ReferToFarm(props: PageInterface) {
         })
     }, [props?.onChangePage, t])
 
-    const insertData = useCallback(
-        (selectedReferralData: ReferralMetaData) => {
-            if (selectedReferralData) {
-                attachMetadata(META_KEY, JSON.parse(JSON.stringify(selectedReferralData)))
-            } else {
-                dropMetadata(META_KEY)
-            }
-            closeApplicationBoardDialog()
-            props.onClose?.()
-        },
-        [props],
-    )
-
     const onError = useCallback(
         (error?: string) => {
             showSnackbar(error || t.go_wrong(), { variant: 'error' })
@@ -160,19 +156,24 @@ export function ReferToFarm(props: PageInterface) {
 
             await singAndPostProofOfRecommendationOrigin(web3, account, token.address)
 
-            insertData({
+            const metadata = new Map<string, ReferralMetaData>()
+            metadata.set(META_KEY, {
                 referral_token: token?.address ?? '',
                 referral_token_name: token?.name ?? '',
                 referral_token_symbol: token?.symbol ?? '',
                 referral_token_icon: token?.logoURI ?? [''],
                 referral_token_chain_id: currentChainId,
                 promoter_address: account,
-                sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User',
+                sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? '',
             })
+            closeApplicationBoardDialog()
+            props.onClose?.()
+
+            openComposeBox(t.buy_refer_earn_yield({ token: token?.symbol ?? '' }), metadata)
         } catch (error: any) {
             onError(error?.message)
         }
-    }, [token, currentChainId, account, currentIdentity, linkedPersona])
+    }, [token, currentChainId, account, currentIdentity, linkedPersona, props.onClose])
 
     const farm_category_types = [
         {
