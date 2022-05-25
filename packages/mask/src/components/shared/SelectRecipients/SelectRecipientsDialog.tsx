@@ -3,7 +3,11 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useEffect, useMemo, useState } from 'react'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import type {
+    ProfileInformation as Profile,
+    ProfileInformation,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
@@ -85,7 +89,7 @@ export interface SelectRecipientsDialogUIProps extends withClasses<never> {
     searchEmptyText?: string
     onSubmit: () => void
     onClose: () => void
-    onSelect: (item: Profile) => void
+    onSelect: (item: ProfileInformationFromNextID | ProfileInformation) => void
     onDeselect: (item: Profile) => void
     onSearch(v: string): void
 }

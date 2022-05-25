@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ProfileInformation as Profile, EMPTY_LIST, NextIDPlatform, ECKeyIdentifier } from '@masknet/shared-base'
+import {
+    ProfileInformation as Profile,
+    EMPTY_LIST,
+    NextIDPlatform,
+    ECKeyIdentifier,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
@@ -8,6 +14,8 @@ import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { cloneDeep, uniqBy } from 'lodash-unified'
+import Services from '../../../extension/service'
+import type { ProfileRecord } from '../../../../background/database/persona/type'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -49,6 +57,14 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         ({ linkedPersona }) => linkedPersona?.publicKeyAsHex,
     )
 
+    const onSelect = async (item: ProfileInformationFromNextID) => {
+        onSetSelected([...selected, item])
+        console.log(item, 'select')
+
+        if (!item || !item.fromNextID) return
+        await Services.Crypto.setRecipients(item as ProfileRecord)
+    }
+
     useEffect(() => void (open && items.request()), [open, items.request])
     return (
         <SelectRecipientsDialogUI
@@ -64,8 +80,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             submitDisabled={false}
             onSubmit={onClose}
             onClose={onClose}
-            onSelect={(item) => onSetSelected([...selected, item])}
+            onSelect={(item) => onSelect(item as ProfileInformationFromNextID)}
             onDeselect={(item) => {
+                7823
                 onSetSelected(
                     cloneDeep(selected).filter(
                         (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
