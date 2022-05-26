@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletStatusBarProps extends withClasses<'button'> {
+export interface WalletStatusBarProps extends withClasses<'button'> {
     iconSize?: number
     badgeSize?: number
     className?: string
@@ -41,8 +41,8 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         endIcon?: React.ReactNode
         loading?: boolean
         color?: 'warning'
-        openPopupsWindow: () => void
-        wallets: BindingProof[]
+        openPopupsWindow?: () => void
+        wallets?: BindingProof[]
     }
     onChange?: (address: string) => void
     pending?: string | React.ReactElement | React.ReactNode

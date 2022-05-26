@@ -1,11 +1,12 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages'
 import { Skeleton, Typography } from '@mui/material'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
 import { useAsyncRetry } from 'react-use'
+import { CyberConnectChainBoundary } from './PluginChainBoudary'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -71,43 +72,50 @@ const Profile = ({ url }: { url: string }) => {
         const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
         return res.data.identity
     }, [queryAddress])
+    const chainId = useChainId()
+    const account = useAccount()
 
     return (
-        <div className={classes.root}>
-            <div className={classes.avatar}>
-                {identity?.avatar ? (
-                    <img src={identity.avatar} alt="" width={300} height={300} />
+        <>
+            <div className={classes.root}>
+                <div className={classes.avatar}>
+                    {identity?.avatar ? (
+                        <img src={identity.avatar} alt="" width={300} height={300} />
+                    ) : (
+                        <Avatar name={queryAddress} square size={300} />
+                    )}
+                </div>
+                <Typography className={classes.userName} component="div">
+                    {identity?.ens || formatEthereumAddress(queryAddress, 4)}
+                </Typography>
+
+                {!identity ? (
+                    <Skeleton width={400} height={40} />
                 ) : (
-                    <Avatar name={queryAddress} square size={300} />
+                    <Typography className={classes.address} component="div">
+                        {identity.address}
+                    </Typography>
+                )}
+
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {!loading ? (
+                    identity && account ? (
+                        <ConnectButton address={identity?.address} refreshFollowList={retry} />
+                    ) : null
+                ) : (
+                    <Skeleton width={400} height={68} />
+                )}
+
+                {!identity ? (
+                    <Skeleton width={400} height={100} />
+                ) : (
+                    <FollowTab followingList={identity.followings.list} followerList={identity.followers.list} />
                 )}
             </div>
-            <Typography className={classes.userName} component="div">
-                {identity?.ens || formatEthereumAddress(queryAddress, 4)}
-            </Typography>
-
-            {!identity ? (
-                <Skeleton width={400} height={40} />
-            ) : (
-                <Typography className={classes.address} component="div">
-                    {identity.address}
-                </Typography>
-            )}
-
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {!loading ? (
-                identity ? (
-                    <ConnectButton address={identity?.address} refreshFollowList={retry} />
-                ) : null
-            ) : (
-                <Skeleton width={400} height={68} />
-            )}
-
-            {!identity ? (
-                <Skeleton width={400} height={100} />
-            ) : (
-                <FollowTab followingList={identity.followings.list} followerList={identity.followers.list} />
-            )}
-        </div>
+            <div style={{ padding: 12 }}>
+                <CyberConnectChainBoundary renderInTimeline chainId={chainId} />
+            </div>
+        </>
     )
 }
 

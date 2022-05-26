@@ -31,5 +31,13 @@
     "dialog_confirm_label": "Confirm",
     "share_dialog_transaction": "Transaction",
     "share_dialog_view_on_explorer": "View on Explorer",
-    "share_dialog_transaction_confirmed": "Your transaction was confirmed!"
+    "share_dialog_transaction_confirmed": "Your transaction was confirmed!",
+    "plugin_wallet_switch_network": "Switch to {{network}}",
+    "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
+    "plugin_wallet_switch_network_under_going": "Switching to {{network}}",
+    "plugin_wallet_connect_network": "Connect {{network}} wallet",
+    "plugin_wallet_connect_network_under_going": "Connect {{network}} wallet",
+    "plugin_wallet_connect_wallet": "Connect wallet",
+    "plugin_wallet_connect_retry": "Retry",
+    "plugin_wallet_connect_tips": "You’re connected to a walletConnect\nwallet. Please switch network in that wallet, \nor switch to another wallet."
 }

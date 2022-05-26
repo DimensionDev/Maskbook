@@ -6,6 +6,7 @@ import { status } from '../../setup.ui'
 import Popups from './UI'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
 import { createSubscriptionFromAsync } from '@masknet/shared-base'
+import { WalletRPC } from '../../plugins/Wallet/messages'
 
 status.then(() => createNormalReactRoot(<Popups />))
 
@@ -27,6 +28,7 @@ startPluginDashboard(
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
             currentPersona: currentPersonaSub,
+            updateAccount: WalletRPC.updateAccount,
         }
     }),
 )

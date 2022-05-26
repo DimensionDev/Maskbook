@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { parseURL } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile'
+import { setupContext } from '../context'
 
 const isCyberConnectUrl = (x: string): boolean => x.includes('app.cyberconnect.me')
 
@@ -15,7 +16,9 @@ function Renderer({ url }: { url: string }) {
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     DecryptedInspector: function Component(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)

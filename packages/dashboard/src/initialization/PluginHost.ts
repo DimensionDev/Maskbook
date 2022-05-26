@@ -2,7 +2,7 @@ import './plugins'
 
 import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
-import { Services, Messages } from '../API'
+import { Services, Messages, PluginServices } from '../API'
 import { createI18NBundle, createSubscriptionFromAsync, i18NextInstance } from '@masknet/shared-base'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
 
@@ -30,6 +30,7 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
             },
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
+            updateAccount: PluginServices.Wallet.updateAccount,
             currentPersona: currentPersonaSub,
         }
     },

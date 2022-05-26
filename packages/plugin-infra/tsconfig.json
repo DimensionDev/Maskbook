@@ -5,13 +5,14 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src"],
+  "include": ["./src", "../plugins/utils/PluginChainBoundary.tsx"],
   "references": [
     { "path": "../shared-base-ui" },
     { "path": "../theme" },
     { "path": "../web3-shared/base" },
     { "path": "../typed-message/base" },
-    { "path": "../encryption" }
+    { "path": "../encryption" },
+    { "path": "../web3-shared/evm" }
   ],
   "ts-node": {
     "swc": true,

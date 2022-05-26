@@ -1,1 +1,5 @@
 export * from './useImageFailOver'
+export * from './useAddEthereumChain'
+export * from './useGetChainId'
+export * from './useSwitchEthereumChain'
+export * from './useNextIDWallets'

@@ -17,6 +17,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
@@ -27,7 +28,8 @@
     "react-feather": "^2.0.9",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4",
-    "use-subscription": "1.6.0"
+    "use-subscription": "1.6.0",
+    "web3-utils": "1.7.3"
   },
   "devDependencies": {
     "@types/color": "^3.0.3",

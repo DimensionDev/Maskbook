@@ -49,6 +49,7 @@ export default function FollowTab({
                     <Typography className={classes.userName} component="div">
                         {identity.ens || formatEthereumAddress(identity.address, 16)}
                     </Typography>
+
                     <Typography className={classes.namespace} component="div">
                         From {identity.namespace}
                     </Typography>

@@ -62,6 +62,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "async-call-rpc": "^6.0.2",

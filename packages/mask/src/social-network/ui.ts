@@ -11,6 +11,7 @@ import {
     EnhanceableSite,
     i18NextInstance,
     createSubscriptionFromValueRef,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -19,8 +20,15 @@ import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
+import {
+    sharedUINetworkIdentifier,
+    sharedUIComponentOverwrite,
+    sharedProviderType,
+    sharedNextIDPlatform,
+} from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import { currentProviderSettings } from '../plugins/Wallet/settings'
+import { WalletRPC } from '../plugins/Wallet/messages'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -51,6 +59,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     if (ui.customization.sharedComponentOverwrite) {
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
+    sharedProviderType.value = currentProviderSettings.value
+    sharedNextIDPlatform.value = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
 
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
@@ -137,6 +147,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
+                updateAccount: WalletRPC.updateAccount,
                 currentPersona: personaSub,
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,

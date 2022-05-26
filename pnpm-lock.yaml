@@ -655,6 +655,7 @@ importers:
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.2
@@ -670,6 +671,7 @@ importers:
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
       '@masknet/web3-shared-base': link:../web3-shared/base
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.2
@@ -701,22 +703,28 @@ importers:
       '@cyberlab/cyberconnect': ^4.2.2
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@types/use-subscription': ^1.0.0
       boring-avatars: ^1.6.3
       react-use: ^17.3.2
+      use-subscription: 1.6.0
     dependencies:
       '@cyberlab/cyberconnect': 4.2.2
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
       '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      '@types/use-subscription': 1.0.0
       boring-avatars: 1.6.3
       react-use: 17.3.2
+      use-subscription: 1.6.0
 
   packages/plugins/DAO:
     specifiers:
@@ -1086,6 +1094,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       '@types/color': ^3.0.3
@@ -1101,6 +1110,7 @@ importers:
       react-use: ^17.3.2
       urlcat: ^2.0.4
       use-subscription: 1.6.0
+      web3-utils: 1.7.3
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/icons': link:../icons
@@ -1109,6 +1119,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
+      '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       anchorme: 2.1.2
@@ -1122,6 +1133,7 @@ importers:
       react-use: 17.3.2
       urlcat: 2.0.4
       use-subscription: 1.6.0
+      web3-utils: 1.7.3
     devDependencies:
       '@types/color': 3.0.3
       '@types/qrcode': 1.4.2
@@ -11128,7 +11140,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /ansi-regex/3.0.0:
-    resolution: {integrity: sha1-7QMXwyIGT3lGbAKWa922Bas32Zg=}
+    resolution: {integrity: sha512-wFUFA5bg5dviipbQQ32yOQhl6gcJaJXiHE7dvR8VYPG97+J/GNC5FKGepKdEDUFeXRzDxPF1X/Btc8L+v7oqIQ==}
     engines: {node: '>=4'}
     dev: false
 
@@ -12519,12 +12531,12 @@ packages:
     resolution: {integrity: sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==}
     dependencies:
       safe-buffer: 5.2.1
+    dev: false
 
   /base-x/3.0.9:
     resolution: {integrity: sha512-H7JU6iBHTal1gp56aKoaa//YUxEaAOUiydvrV/pILqIHXTtqxSkATOnDA2u+jZ/61sD+L/412+7kzXRtWukhpQ==}
     dependencies:
       safe-buffer: 5.2.1
-    dev: false
 
   /base/0.11.2:
     resolution: {integrity: sha512-5T6P4xPgpp0YDFvSWwEZ4NoE3aM4QBQXDzmVbraCkFj8zHM+mba8SyqB5DbZWyR7mYHo6Y7BdQo3MoA4m0TeQg==}
@@ -12679,7 +12691,7 @@ packages:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
 
   /bn.js/4.11.6:
-    resolution: {integrity: sha1-UzRK2xRhehP26N0s4okF0cC6MhU=}
+    resolution: {integrity: sha512-XWwnNNFCuuSQ0m3r3C4LE3EiORltHd9M05pq6FOlVeiophzRbMo50Sbz1ehl8K3Z+jw9+vmgnXefY1hz8X+2wA==}
 
   /bn.js/4.11.7:
     resolution: {integrity: sha512-LxFiV5mefv0ley0SzqkOPR1bC4EbpPx8LkOz5vMe/Yi15t5hzwgO/G+tc7wOtL4PZTYjwHu8JnEiSLumuSjSfA==}
@@ -12842,7 +12854,7 @@ packages:
       fill-range: 7.0.1
 
   /brorand/1.1.0:
-    resolution: {integrity: sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=}
+    resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
 
   /browser-headers/0.4.1:
     resolution: {integrity: sha512-CA9hsySZVo9371qEHjHZtYxV2cFtVj5Wj/ZHi8ooEsrtm4vOnl9Y9HmyYWk9q+05d7K3rdoAE0j3MVEFVvtQtg==}
@@ -12944,9 +12956,9 @@ packages:
     dev: true
 
   /bs58/4.0.1:
-    resolution: {integrity: sha1-vhYedsNU9veIrkBx9j806MTwpCo=}
+    resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
     dependencies:
-      base-x: 3.0.8
+      base-x: 3.0.9
 
   /bs58check/2.1.2:
     resolution: {integrity: sha512-0TS1jicxdU09dwJMNZtVAfzPi6Q6QeN0pM1Fkzrjn+XYHvzMKPU3pHVpva+769iNVSfIYWf7LJ6WR+BuuMf8cA==}
@@ -12991,7 +13003,7 @@ packages:
     dev: false
 
   /buffer-xor/1.0.3:
-    resolution: {integrity: sha1-JuYe0UIvtw3ULm42cp7VHYVf6Nk=}
+    resolution: {integrity: sha512-571s0T7nZWK6vB67HI5dyUF7wXiNcfaPPPTl6zYCNApANjIvYJTg7hlud/+cJpdAhS7dVzqMLmfhfHR3rAcOjQ==}
 
   /buffer/4.9.2:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
@@ -15231,7 +15243,7 @@ packages:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /dot-prop/5.3.0:
@@ -20893,7 +20905,7 @@ packages:
   /lower-case/2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
     dependencies:
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /lowercase-keys/1.0.1:
@@ -21793,7 +21805,7 @@ packages:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /node-addon-api/2.0.2:
@@ -22561,7 +22573,7 @@ packages:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
     dependencies:
       no-case: 3.0.4
-      tslib: 2.3.1
+      tslib: 2.4.0
     dev: true
 
   /pascalcase/0.1.1:

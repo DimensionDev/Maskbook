@@ -47,6 +47,7 @@ startPluginDashboard(
             },
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
+            updateAccount: WalletRPC.updateAccount,
             currentPersona: currentPersonaSub,
         }
     }),

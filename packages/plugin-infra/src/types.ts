@@ -6,6 +6,8 @@ import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@maskn
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
+import type { NetworkType, ProviderType } from '../../public-api/src/web'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export declare namespace Plugin {
     /**
@@ -69,6 +71,13 @@ export namespace Plugin.Shared {
         personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
         /** Sign a message with wallet */
         walletSign(message: string, address: string): Promise<string>
+        updateAccount(options: {
+            name?: string
+            account?: string
+            chainId?: ChainId
+            networkType?: NetworkType
+            providerType?: ProviderType
+        }): Promise<void>
         currentPersona: Subscription<PersonaIdentifier | undefined>
     }
     export interface Definition {

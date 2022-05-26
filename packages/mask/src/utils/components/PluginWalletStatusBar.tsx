@@ -1,9 +1,9 @@
-import { WalletStatusBar } from '@masknet/shared'
+import { useNextIDWallets, WalletStatusBar } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { CircularProgress, Typography, useTheme } from '@mui/material'
 import { useCallback } from 'react'
-import { useNextIDWallets } from '../../components/DataSource/useNextID'
+import { useLastRecognizedIdentity } from '../../components/DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks'
 import { useI18N } from '../i18n-next-ui'
@@ -36,7 +36,8 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     const { value: pendingTransactions = [] } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })
-    const { loading, value: wallets = [] } = useNextIDWallets()
+    const lastRecognized = useLastRecognizedIdentity()
+    const { loading, value: wallets = [] } = useNextIDWallets(lastRecognized)
 
     function renderButtonText() {
         if (pendingTransactions.length <= 0) return

@@ -4,6 +4,7 @@ import { InMemoryStorages, MaskMessages, PersistentStorages } from '../../../../
 import { createPluginDatabase } from '../../../../background/database/plugin-db'
 import { createPluginHost } from '../../../plugin-infra/host'
 import { Services } from '../../service'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 export default function (signal: AbortSignal) {
     startPluginWorker(createPluginHost(signal, createWorkerContext))
 }
@@ -27,6 +28,7 @@ function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Work
         },
         personaSign: Services.Identity.signWithPersona,
         walletSign: Services.Ethereum.personalSign,
+        updateAccount: WalletRPC.updateAccount,
         currentPersona: currentPersonaSub,
     }
 }
