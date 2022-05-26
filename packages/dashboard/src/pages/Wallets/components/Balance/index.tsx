@@ -137,10 +137,13 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
+                        <Button
+                            size="small"
+                            onClick={onSend}
+                            endIcon={<SendIcon style={{ fill: '#fff' }} fontSize="inherit" />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
+                        <Button size="small" onClick={onBuy} endIcon={<CardIcon fontSize="inherit" />}>
                             {t.wallets_balance_Buy()}
                         </Button>
                         <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>

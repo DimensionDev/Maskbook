@@ -6,15 +6,15 @@ import { generateBackupVersion2, isBackupVersion2, normalizeBackupVersion2 } fro
 import type { NormalizedBackup } from './type'
 
 export * from './type'
-function __normalizeBackup(data: unknown): NormalizedBackup.Data {
+async function __normalizeBackup(data: unknown): Promise<NormalizedBackup.Data> {
     if (isBackupVersion2(data)) return normalizeBackupVersion2(data)
     if (isBackupVersion1(data)) return normalizeBackupVersion1(data)
     if (isBackupVersion0(data)) return normalizeBackupVersion0(data)
     throw new TypeError(BackupErrors.UnknownFormat)
 }
 
-export function normalizeBackup(data: unknown): NormalizedBackup.Data {
-    const normalized = __normalizeBackup(data)
+export async function normalizeBackup(data: unknown): Promise<NormalizedBackup.Data> {
+    const normalized = await __normalizeBackup(data)
 
     // fix invalid URL
     normalized.settings.grantedHostPermissions = normalized.settings.grantedHostPermissions.filter((url) =>

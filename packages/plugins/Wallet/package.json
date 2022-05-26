@@ -1,7 +1,6 @@
 {
   "name": "@masknet/plugin-wallet",
   "private": true,
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
@@ -12,6 +11,7 @@
       "default": "./dist/components.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
       "components": [

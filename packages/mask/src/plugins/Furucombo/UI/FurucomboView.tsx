@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'Muli,Helvetica,-apple-system,system-ui,"sans-serif"',
         width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
     },
     content: {
@@ -95,14 +94,14 @@ export function FurucomboView(props: PoolViewProps) {
                 </Typography>
 
                 <Box sx={{ padding: 1.5 }}>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} renderInTimeline />
                 </Box>
             </>
         )
 
     return (
         <>
-            <Card className={classes.root}>
+            <Card className={classes.root} elevation={0}>
                 <CardContent className={classes.content}>
                     <Tabs
                         value={tabIndex}
@@ -121,7 +120,7 @@ export function FurucomboView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} renderInTimeline />
             </Box>
         </>
     )

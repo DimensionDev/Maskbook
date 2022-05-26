@@ -17,6 +17,7 @@ import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 
+export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
 

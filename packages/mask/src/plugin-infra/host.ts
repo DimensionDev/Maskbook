@@ -90,10 +90,10 @@ export function createPluginHost<Context>(
         isEnabled: Services.Settings.getPluginMinimalModeEnabled,
         events: new Emitter(),
     }
-    const removeListener = MaskMessages.events.pluginMinimalModeChanged.on(([id, val]) =>
-        minimalMode.events.emit(val ? 'enabled' : 'disabled', id),
+    MaskMessages.events.pluginMinimalModeChanged.on(
+        ([id, val]) => minimalMode.events.emit(val ? 'enabled' : 'disabled', id),
+        { signal },
     )
-    signal?.addEventListener('abort', removeListener)
 
     return {
         signal,

@@ -67,7 +67,7 @@ async function fetchFromMarketSubgraph<T>(chainId: ChainId, query: string) {
 
 export async function getTradeInfo(chainId: ChainId, pid: string, trader: string) {
     const data = await fetchFromMarketSubgraph<{
-        buyInfos: {
+        buyInfos: Array<{
             buyer: {
                 address: string
                 name: string
@@ -76,26 +76,24 @@ export async function getTradeInfo(chainId: ChainId, pid: string, trader: string
             amount: string
             amount_sold: string
             amount_bought: string
-        }[]
-        sellInfos: {
+        }>
+        sellInfos: Array<{
             buyer: {
                 address: string
                 name: string
             }
             token: JSON_PayloadOutMask['token']
             amount: string
-        }[]
-        destructInfos: {
+        }>
+        destructInfos: Array<{
             buyer: {
                 address: string
                 name: string
             }
             token: JSON_PayloadOutMask['token']
             amount: string
-        }[]
-    }>(
-        chainId,
-        `
+        }>
+    }>(chainId, `
     {
         buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
             buyer {
@@ -152,12 +150,12 @@ export async function getPool(chainId: ChainId, pid: string) {
 
 export async function getAllPoolsAsSeller(chainId: ChainId, address: string, page: number) {
     const data = await fetchFromMarketSubgraph<{
-        sellInfos: {
+        sellInfos: Array<{
             pool: JSON_PayloadOutMask & {
                 exchange_in_volumes: string[]
                 exchange_out_volumes: string[]
             }
-        }[]
+        }>
     }>(
         chainId,
         `
@@ -188,12 +186,12 @@ export async function getAllPoolsAsSeller(chainId: ChainId, address: string, pag
 
 export async function getAllPoolsAsBuyer(chainId: ChainId, address: string) {
     const data = await fetchFromMarketSubgraph<{
-        buyInfos: {
+        buyInfos: Array<{
             pool: JSON_PayloadOutMask & {
                 exchange_in_volumes: string[]
                 exchange_out_volumes: string[]
             }
-        }[]
+        }>
     }>(
         chainId,
         `

@@ -71,7 +71,7 @@ export const FeaturePromotions = memo(() => {
         <div className={classes.container}>
             <img
                 className={classes.img}
-                onClick={openTwitter(PluginId.RedPacket)}
+                onClick={() => openTwitter(PluginId.RedPacket)}
                 src={new URL('./SendLuckyDrop.png', import.meta.url).toString()}
             />
             <img

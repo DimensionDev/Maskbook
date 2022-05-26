@@ -1,38 +1,22 @@
 import { useCallback } from 'react'
 import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, GasOptionConfig, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useTransactionState } from './useTransactionState'
+import { ChainId, GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract'
 import { useAccount } from '../useAccount'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const wrapperContract = useNativeTokenWrapperContract(chainId)
-    const [transactionState, setTransactionState] = useTransactionState()
 
     const wrapCallback = useCallback(
         async (amount: string, gasConfig?: GasOptionConfig) => {
             if (!wrapperContract || !amount) {
-                setTransactionState({
-                    type: TransactionStateType.UNKNOWN,
-                })
                 return
             }
 
             // error: invalid deposit amount
-            if (isZero(amount)) {
-                setTransactionState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Invalid deposit amount'),
-                })
-                return
-            }
-
-            // start waiting for provider to confirm tx
-            setTransactionState({
-                type: TransactionStateType.WAIT_FOR_CONFIRMING,
-            })
+            if (isZero(amount)) return
 
             // estimate gas and compose transaction
             const config = {
@@ -45,10 +29,6 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                         value: amount,
                     })
                     .catch((error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         throw error
                     }),
                 ...gasConfig,
@@ -59,18 +39,10 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                 wrapperContract.methods
                     .deposit()
                     .send(config as PayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransactionState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
+                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         reject(error)
                     })
             })
@@ -81,9 +53,6 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const unwrapCallback = useCallback(
         async (all = true, amount = '0', gasConfig?: GasOptionConfig) => {
             if (!wrapperContract || !amount) {
-                setTransactionState({
-                    type: TransactionStateType.UNKNOWN,
-                })
                 return
             }
 
@@ -92,26 +61,13 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
 
             // error: invalid withdraw amount
             if (all === false && isZero(amount)) {
-                setTransactionState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Invalid withdraw amount'),
-                })
                 return
             }
 
             // error: insufficient weth balance
             if (all === false && isLessThan(wethBalance, amount)) {
-                setTransactionState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Insufficient WETH balance'),
-                })
                 return
             }
-
-            // start waiting for provider to confirm tx
-            setTransactionState({
-                type: TransactionStateType.WAIT_FOR_CONFIRMING,
-            })
 
             // estimate gas and compose transaction
             const withdrawAmount = all ? wethBalance : amount
@@ -123,10 +79,6 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                         from: account,
                     })
                     .catch((error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         throw error
                     }),
                 ...gasConfig,
@@ -136,18 +88,10 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                 wrapperContract.methods
                     .withdraw(withdrawAmount)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransactionState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
+                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         reject(error)
                     })
             })
@@ -155,11 +99,5 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
         [account, wrapperContract],
     )
 
-    const resetCallback = useCallback(() => {
-        setTransactionState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [transactionState, wrapCallback, unwrapCallback, resetCallback] as const
+    return [wrapCallback, unwrapCallback] as const
 }

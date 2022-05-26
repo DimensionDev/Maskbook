@@ -48,7 +48,7 @@ const RED_PACKET_FIELDS = `
 
 type RedpacketFromSubgraphType = {
     chain_id: ChainId
-    claimers: { name: string; address: string }[]
+    claimers: Array<{ name: string; address: string }>
     contract_address: string
     contract_version: number
     block_number: number

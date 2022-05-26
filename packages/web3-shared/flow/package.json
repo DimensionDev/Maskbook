@@ -1,13 +1,13 @@
 {
   "name": "@masknet/web3-shared-flow",
   "private": true,
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/flow/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.10",
     "@masknet/shared-base": "workspace:*",

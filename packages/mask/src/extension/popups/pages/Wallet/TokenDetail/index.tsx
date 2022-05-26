@@ -71,7 +71,7 @@ const TokenDetail = memo(() => {
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))
-        const definedSocialNetworkUrls = (await Services.SocialNetwork.getDefinedSocialNetworkUIs()).map(
+        const definedSocialNetworkUrls = (await Services.SocialNetwork.getSupportedSites()).map(
             ({ networkIdentifier }) => networkIdentifier,
         )
 

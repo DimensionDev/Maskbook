@@ -833,7 +833,8 @@
     },
     {
         "chainId": 66,
-        "name": "okexchain",
+        "name": "OKExChain Mainnet",
+        "chain": "OKEx",
         "network": "mainnet",
         "shortName": "okt",
         "features": [],

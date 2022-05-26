@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, GasConfig, SchemaType, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
+=======
+import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { ERC721ContractDetailed, FungibleTokenDetailed, GasConfig } from '@masknet/web3-shared-evm'
+>>>>>>> develop
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import { TipType } from '../../types'
@@ -20,10 +25,14 @@ export interface ContextOptions {
     erc721Contract: NonFungibleTokenContract<ChainId, SchemaType> | null
     erc721Address: string
     setErc721Address: Dispatch<SetStateAction<string>>
-    sendTip: () => Promise<void>
+    sendTip: () => Promise<string | undefined>
     isSending: boolean
+<<<<<<< HEAD
     sendState: TransactionState
     storedTokens: NonFungibleToken<ChainId, SchemaType>[]
+=======
+    storedTokens: Web3Plugin.NonFungibleToken[]
+>>>>>>> develop
     reset: () => void
     setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
 }
@@ -44,9 +53,8 @@ export const TipContext = createContext<ContextOptions>({
     erc721Contract: null,
     erc721Address: '',
     setErc721Address: noop,
-    sendTip: noop as () => Promise<void>,
+    sendTip: noop as () => Promise<string | undefined>,
     isSending: false,
-    sendState: { type: TransactionStateType.UNKNOWN },
     storedTokens: [],
     reset: noop,
     setGasConfig: noop,

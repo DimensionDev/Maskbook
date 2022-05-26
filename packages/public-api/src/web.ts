@@ -1,4 +1,4 @@
-import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types'
+import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types/index.js'
 
 // This interface uses by-name style JSON RPC.
 

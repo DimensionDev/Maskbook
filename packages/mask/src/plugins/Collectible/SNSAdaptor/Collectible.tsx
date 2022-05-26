@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
         },
         content: {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
@@ -66,7 +67,20 @@ export const TokenPickerProvider: FC<PropsWithChildren<{}>> = ({ children }) => 
         </TokenPickerContext.Provider>
     )
 }
+=======
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { useContext } from 'react'
+import { createUITaskManager } from '../../UITaskManager'
+import { PickTokenOptions, SelectTokenDialog, SelectTokenDialogProps } from './SelectTokenDialog'
+
+const { TaskManagerContext, TaskManagerProvider: TokenPickerProvider } = createUITaskManager<
+    PickTokenOptions,
+    FungibleTokenDetailed,
+    SelectTokenDialogProps
+>(SelectTokenDialog)
+>>>>>>> develop
 
 export const usePickToken = () => {
-    return useContext(TokenPickerContext).pickToken
+    return useContext(TaskManagerContext).show
 }
+export { TokenPickerProvider }

@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { explorerResolver, TransactionStateType, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
+import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -77,13 +77,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
-        marginTop: '0 !important',
+        color: 'white',
         '&:hover': {
             backgroundColor: theme.palette.maskColor.dark,
         },
-        color: 'white',
-        minHeight: 38,
-        height: 38,
+        margin: '0 !important',
     },
     footer: {
         display: 'flex',
@@ -103,7 +101,6 @@ const useStyles = makeStyles()((theme) => ({
     buttonWrapper: {
         marginTop: 0,
         display: 'flex',
-        padding: theme.spacing(0, 2, 1.5, 2),
     },
     loadingBox: {
         borderRadius: theme.spacing(1),
@@ -257,7 +254,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         loading,
         retry: retryAvailability,
         error: availabilityError,
-    } = useAvailabilityNftRedPacket(payload.id, account)
+    } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -429,30 +426,31 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     </div>
                 </Card>
             ) : availability.isClaimedAll || availability.isCompleted ? null : (
-                <Grid container spacing={2} className={classes.buttonWrapper}>
-                    <Grid item xs={availability.isClaimed ? 12 : 6}>
+                <Box className={classes.buttonWrapper}>
+                    <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
                             startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                             className={classes.button}
                             fullWidth
                             onClick={onShare}
-                            size="large"
                             variant="contained">
                             {t('share')}
                         </Button>
-                    </Grid>
+                    </Box>
                     {availability.isClaimed ? null : (
-                        <Grid item xs={6}>
+                        <Box sx={{ flex: 1, padding: 1.5 }}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={payload.chainId}>
+                                expectedChainId={payload.chainId}
+                                renderInTimeline>
                                 <WalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,
                                         gasFeeButton: classes.button,
-                                    }}>
+                                    }}
+                                    renderInTimeline>
                                     <ActionButton
                                         variant="contained"
                                         loading={isClaiming}
@@ -464,9 +462,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     </ActionButton>
                                 </WalletConnectedBoundary>
                             </ChainBoundary>
-                        </Grid>
+                        </Box>
                     )}
-                </Grid>
+                </Box>
             )}
         </div>
     )

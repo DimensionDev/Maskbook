@@ -1,5 +1,5 @@
 import { SocialNetworkEnum } from '@masknet/encryption'
-import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
+import type { SocialNetwork } from '../../social-network/types'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
@@ -14,9 +14,4 @@ export const mindsBase: SocialNetwork.Base = {
 
 export function isMinds(ui: SocialNetwork.Base) {
     return ui.networkIdentifier === EnhanceableSite.Minds
-}
-
-export const mindsWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {
-    ...mindsBase,
-    gunNetworkHint: 'minds-',
 }

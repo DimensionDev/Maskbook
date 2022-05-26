@@ -13,7 +13,6 @@ import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customizat
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
-import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
@@ -61,11 +60,11 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         },
         dialogTitle: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.background.modalTitle,
+            background: theme.palette.maskColor.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -81,7 +80,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -154,7 +152,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileTabContent: injectProfileTabContentAtTwitter,
-        profileSlider: injectProfileSliderAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,

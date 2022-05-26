@@ -38,6 +38,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
+            borderRadius: 0,
         },
         footer: {
             display: 'flex',
@@ -169,7 +170,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Card elevation={0}>
+                <Card elevation={0} className={classes.content}>
                     <CardContent>
                         {isVerified ? null : (
                             <Box sx={{ marginBottom: 2 }}>

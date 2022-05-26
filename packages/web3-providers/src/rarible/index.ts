@@ -49,7 +49,7 @@ async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit
     return response.json() as Promise<T>
 }
 
-function getProfilesFromRarible(addresses: (string | undefined)[]) {
+function getProfilesFromRarible(addresses: Array<string | undefined>) {
     return fetchFromRarible<RaribleProfileResponse[]>(RaribleMainnetURL, '/profiles/list', {
         method: 'POST',
         body: JSON.stringify(addresses),

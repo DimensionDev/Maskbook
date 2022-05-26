@@ -24,8 +24,8 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
         return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
     }, [chainId, chainIdValid, tokenA?.address, tokenB?.address])
 
-    const basePairs: [Token, Token][] = useMemo(
-        () => flatMap(bases, (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])),
+    const basePairs: Array<[Token, Token]> = useMemo(
+        () => flatMap(bases, (base): Array<[Token, Token]> => bases.map((otherBase) => [base, otherBase])),
         [bases],
     )
 

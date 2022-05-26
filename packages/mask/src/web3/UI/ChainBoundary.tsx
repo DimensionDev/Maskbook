@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Typography, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import {
@@ -26,14 +26,6 @@ import { PluginWalletConnectIcon } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    button: {
-        backgroundColor: theme.palette.maskColor?.dark,
-        color: 'white',
-        width: 254,
-        '&,&:hover': {
-            background: theme.palette.maskColor?.dark,
-        },
-    },
     action: {
         textAlign: 'center',
         margin: theme.spacing(1),
@@ -61,6 +53,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     children?: React.ReactNode
+    renderInTimeline?: boolean
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
@@ -123,6 +116,26 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         openSelectProviderDialog,
     ])
 
+    // TODO: will remove this and extract new boundary for timeline
+    const buttonProps = useMemo(() => {
+        return {
+            ...(props.renderInTimeline
+                ? {
+                        variant: 'contained',
+                        fullWidth: true,
+                        sx: {
+                            backgroundColor: theme.palette.maskColor.dark,
+                            color: theme.palette.maskColor.white,
+                            '&:hover': {
+                                backgroundColor: theme.palette.maskColor.dark,
+                            },
+                        },
+                    }
+                : {}),
+            ...props.ActionButtonPromiseProps,
+        } as Partial<ActionButtonPromiseProps>
+    }, [props.ActionButtonPromiseProps, props.renderInTimeline])
+
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
@@ -158,7 +171,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             paddingTop: 1.25,
                             paddingBottom: 1.25,
                         }}
-                        onClick={openSelectProviderDialog}>
+                        onClick={openSelectProviderDialog}
+                        {...buttonProps}>
                         {t('plugin_wallet_connect_wallet')}
                     </ActionButton>
                 ) : null}
@@ -209,7 +223,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
-                    {...props.ActionButtonPromiseProps}
+                    {...buttonProps}
                 />
             ) : null}
         </>,

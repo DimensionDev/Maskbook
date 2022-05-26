@@ -76,7 +76,7 @@ delegateWalletRestore(async function (backup) {
             const name = wallet.name
 
             if (wallet.privateKey.some)
-                await recoverWalletFromPrivateKey(name, JWKToKey(wallet.privateKey.val, 'private'))
+                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'))
             else if (wallet.mnemonic.some) {
                 // fix a backup bug of pre-v2.2.2 versions
                 const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
@@ -225,17 +225,17 @@ function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
     }
 }
 
-function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): string {
+async function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): Promise<string> {
     const ec = new EC('secp256k1')
     if (type === 'public' && jwk.x && jwk.y) {
         const xb = fromBase64URL(jwk.x)
         const yb = fromBase64URL(jwk.y)
         const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
-        if (isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
+        if (await isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
     }
     if (type === 'private' && jwk.d) {
         const db = fromBase64URL(jwk.d)
-        if (isSecp256k1PrivateKey(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
+        if (await isSecp256k1PrivateKey(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
     }
     throw new Error('invalid private key')
 }

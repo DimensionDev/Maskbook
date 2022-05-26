@@ -49,10 +49,10 @@ export namespace RSS3BaseAPI {
             animation_original_url?: string | null
             title?: string
             total_contribs?: number
-            token_contribs?: {
+            token_contribs?: Array<{
                 token: string
                 amount: string
-            }[]
+            }>
             start_date?: string
             end_date?: string
             country?: string
@@ -349,10 +349,10 @@ export namespace TwitterBaseAPI {
                     name: string
                 }
             }
-            traits: {
+            traits: Array<{
                 trait_type: string
                 value: string
-            }[]
+            }>
         }
     }
     export interface AvatarInfo {

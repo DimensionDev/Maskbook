@@ -11,10 +11,19 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_PayloadFromChain) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+<<<<<<< HEAD
     const asyncResult = useAvailability(payload.pid, payload.contract_address, {
         account: payload.seller.address,
         chainId: payload.chain_id ?? chainId,
     })
+=======
+    const asyncResult = useAvailability(
+        payload.pid,
+        payload.contract_address,
+        payload.chain_id ?? chainId,
+        payload.seller.address,
+    )
+>>>>>>> develop
     const { value: availability, loading: loadingITO } = asyncResult
     const qualificationAddress =
         payload.qualification_address ?? availability?.qualification_addr ?? DEFAULT_QUALIFICATION2_ADDRESS

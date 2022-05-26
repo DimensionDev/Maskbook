@@ -92,11 +92,11 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const accounts: {
+    const accounts: Array<{
         index: number
         address: string
         derivationPath: string
-    }[] = []
+    }> = []
 
     for (let i = pageSize * page; i < pageSize * (page + 1); i += 1) {
         const derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${i}`

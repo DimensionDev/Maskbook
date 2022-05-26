@@ -1,14 +1,14 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/evm/index.js"
     }
   },
-  "sideEffects": false,
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@ensdomains/address-encoder": "^0.2.6",
@@ -22,7 +22,7 @@
     "bignumber.js": "9.0.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
-    "fuse.js": "^6.5.3",
+    "fuse.js": "^6.6.2",
     "punycode": "^2.1.1",
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",

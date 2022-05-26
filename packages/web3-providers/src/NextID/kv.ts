@@ -35,20 +35,22 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         identity: string,
         pluginId: string,
     ): Promise<Result<T, string>> {
-        const response = await fetchJSON<{
+        interface Proof {
+            platform: NextIDPlatform
+            identity: string
+            content: Record<string, T>
+        }
+        interface Response {
             persona: string
-            proofs: {
-                platform: NextIDPlatform
-                identity: string
-                content: Record<string, T>
-            }[]
-        }>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+            proofs: Proof[]
+        }
+        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
         if (!response.ok) return Err('User not found')
-
-        const data =
-            response.val.proofs?.filter((x) => x.identity === identity.toLowerCase() && x.platform === platform) ?? []
-        if (!data.length) return Err('Not found')
-        return Ok(data[0].content[pluginId])
+        const proofs = (response.val.proofs ?? [])
+            .filter((x) => x.platform === platform)
+            .filter((x) => x.identity === identity.toLowerCase())
+        if (!proofs.length) return Err('Not found')
+        return Ok(proofs[0].content[pluginId])
     }
     async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
         return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))

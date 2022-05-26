@@ -3,7 +3,7 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import {  useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
 import { compact, sortBy } from 'lodash-unified'
@@ -28,6 +28,7 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
+        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {

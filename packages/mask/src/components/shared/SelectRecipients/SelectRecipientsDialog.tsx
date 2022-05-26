@@ -7,6 +7,7 @@ import type { ProfileInformation as Profile, ProfileInformationFromNextID } from
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
+import { uniqBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -100,14 +101,22 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     }, [props.open])
     const itemsAfterSearch = useMemo(() => {
         const fuse = new Fuse(items, {
-            keys: ['identifier.userId', 'nickname', 'walletAddress', 'linkedPersona.publicKeyAsHex'],
+            keys: [
+                'identifier.userId',
+                'nickname',
+                'walletAddress',
+                'linkedPersona.rawPublicKey',
+                'linkedPersona.publicKeyAsHex',
+            ],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
-        return search === '' ? items : fuse.search(search).map((item) => item.item)
+        return uniqBy(
+            (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected),
+            (x) => x.linkedPersona?.rawPublicKey.toLowerCase(),
+        )
     }, [search, items])
-
     return (
         <InjectedDialog
             className={classes.root}

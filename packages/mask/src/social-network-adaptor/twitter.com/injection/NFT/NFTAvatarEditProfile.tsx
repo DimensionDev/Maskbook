@@ -89,7 +89,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useLocationChange(() => setStyleFromEditProfileSelector())
 
     const { classes } = useStyles(style)
-
     return (
         <>
             <NFTAvatarButton

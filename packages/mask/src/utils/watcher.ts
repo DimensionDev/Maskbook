@@ -6,7 +6,6 @@ export function startWatch<T extends MutationObserverWatcher<any, any, any, any>
             afterShadowRootInit: { mode: 'closed' },
             beforeShadowRootInit: { mode: 'closed' },
         })
-        .startWatch({ subtree: true, childList: true })
-    signal.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch({ subtree: true, childList: true }, signal)
     return watcher
 }

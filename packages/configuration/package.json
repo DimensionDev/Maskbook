@@ -1,14 +1,14 @@
 {
   "name": "@masknet/configuration",
   "private": true,
-  "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "type": "module",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "urlcat": "^2.0.4"
   }

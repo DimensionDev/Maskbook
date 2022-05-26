@@ -191,7 +191,7 @@ export function useMulticallStateDecoded<
 export function useSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
     contract: T | null,
     names: K[],
-    callDatas: Parameters<T['methods'][K]>[],
+    callDatas: Array<Parameters<T['methods'][K]>>,
     gasLimit = DEFAULT_GAS_LIMIT,
     chainId?: ChainId,
     blockNumber?: number,
@@ -240,7 +240,7 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
 export function useMultipleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
     contracts: T[],
     names: K[],
-    callDatas: Parameters<T['methods'][K]>[],
+    callDatas: Array<Parameters<T['methods'][K]>>,
     gasLimit = DEFAULT_GAS_LIMIT,
     chainId?: ChainId,
 ) {

@@ -67,7 +67,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                           <ChainBoundary
                               expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                               expectedChainId={chain}
-                              noSwitchNetworkTip={false}>
+                              noSwitchNetworkTip={false}
+                              renderInTimeline>
                               <Typography color="textPrimary">{content}</Typography>
                           </ChainBoundary>
                       </Render>
@@ -102,7 +103,8 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                           <ChainBoundary
                               expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                               expectedChainId={chain}
-                              noSwitchNetworkTip={false}>
+                              noSwitchNetworkTip={false}
+                              renderInTimeline>
                               <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />
                           </ChainBoundary>

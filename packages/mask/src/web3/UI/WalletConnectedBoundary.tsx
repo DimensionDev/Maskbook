@@ -20,9 +20,15 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         margin: 0,
     },
-    grid: {
-        justifyContent: 'center',
-        padding: 8,
+    timeline: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
     },
 }))
 
@@ -33,10 +39,11 @@ export interface WalletConnectedBoundaryProps
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
+    renderInTimeline?: boolean
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, renderInTimeline = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -54,11 +61,16 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    // TODO: will remove  this and extract new boundary for timeline
+    const buttonClass = classNames(
+        classNames(classes.button, classes.connectWallet, renderInTimeline ? classes.timeline : null),
+    )
+
     if (!account)
         return (
             <ActionButton
                 startIcon={props.startIcon}
-                className={classNames(classes.button, classes.connectWallet)}
+                className={buttonClass}
                 fullWidth
                 variant="contained"
                 onClick={openSelectProviderDialog}
@@ -70,7 +82,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     if (!approved && !hideRiskWarningConfirmed)
         return (
             <ActionButton
-                className={classNames(classes.button, classes.connectWallet)}
+                className={buttonClass}
                 fullWidth
                 variant="contained"
                 onClick={() => {
@@ -88,7 +100,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
-                className={classNames(classes.button, classes.gasFeeButton)}
+                className={buttonClass}
                 disabled={!nativeTokenBalance.error}
                 fullWidth
                 variant="contained"
@@ -101,7 +113,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     if (!chainIdValid && !offChain)
         return (
             <ActionButton
-                className={classNames(classes.button, classes.invalidButton)}
+                className={buttonClass}
                 disabled
                 fullWidth
                 variant="contained"

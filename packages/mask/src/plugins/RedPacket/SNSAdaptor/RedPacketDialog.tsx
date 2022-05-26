@@ -8,14 +8,17 @@ import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { chainResolver, TransactionStateType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
-import { RedPacketRPC } from '../messages'
-import { DialogTabs, RedPacketJSONPayload, RedPacketRecord, RpTypeTabs } from '../types'
-import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
+import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
+import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
@@ -63,7 +66,6 @@ interface RedPacketDialogProps extends withClasses<never> {
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
@@ -90,8 +92,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname
+    const lastRecognized = useLastRecognizedIdentity()
+    const senderName =
+        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -123,6 +126,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onClose, chainId, senderName, connection],
     )
 
+<<<<<<< HEAD
     // #region blocking
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
@@ -224,6 +228,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [chainId, createState])
     // #endregion
 
+=======
+>>>>>>> develop
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -238,7 +244,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 670
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -272,8 +278,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
     }
 
-    const isCreating = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreating ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
+    const handleCreated = useCallback(
+        (payload: RedPacketJSONPayload) => {
+            onCreateOrSelect(payload)
+            setSettings(undefined)
+        },
+        [onCreateOrSelect],
+    )
+
+    const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
+    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
     return (
         <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
@@ -285,7 +299,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     <RedPacketConfirmDialog
                         onClose={onClose}
                         onBack={onBack}
-                        onCreate={createCallback}
+                        onCreated={handleCreated}
                         settings={settings}
                     />
                 ) : null}

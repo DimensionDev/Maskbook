@@ -1,10 +1,24 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { RightIcon } from '@masknet/icons'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { NetworkType } from '@masknet/public-api'
+import { FormattedAddress } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
+<<<<<<< HEAD
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { v4 as uuid } from 'uuid'
+=======
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
+import { multipliedBy } from '@masknet/web3-shared-base'
+>>>>>>> develop
 import {
     isSameAddress,
+<<<<<<< HEAD
     NonFungibleToken,
     NonFungibleTokenContract,
     multipliedBy,
@@ -48,6 +62,34 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { RightIcon } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+=======
+    isValidAddress,
+    useAccount,
+    useChainId,
+    useGasLimit,
+    useGasPrice,
+    useNativeTokenDetailed,
+    useTokenTransferCallback,
+} from '@masknet/web3-shared-evm'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import TuneIcon from '@mui/icons-material/Tune'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
+import { unionBy } from 'lodash-unified'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { v4 as uuid } from 'uuid'
+import { EthereumAddress } from 'wallet.ts'
+import { z } from 'zod'
+import { Services } from '../../../../API'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
+import { useDashboardI18N } from '../../../../locales'
+import { useGasConfig } from '../../hooks/useGasConfig'
+import { SelectNFTList } from './SelectNFTList'
+import { TransferTab } from './types'
+import { useNativeTokenPrice } from './useNativeTokenPrice'
+>>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -107,7 +149,6 @@ export const TransferERC721 = memo(() => {
         handleSubmit,
         setValue,
         watch,
-        setError,
         clearErrors,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
@@ -173,8 +214,16 @@ export const TransferERC721 = memo(() => {
     }, [erc721GasLimit.value])
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
+<<<<<<< HEAD
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         SchemaType.ERC721,
+=======
+    const account = useAccount()
+    const nativeToken = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice()
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
+        EthereumTokenType.ERC721,
+>>>>>>> develop
         contract?.address ?? '',
     )
 
@@ -210,21 +259,17 @@ export const TransferERC721 = memo(() => {
     const tokenDetailedOwnerList: NonFungibleToken<ChainId, SchemaType>[] = []
     const refreshing = false
 
-    useEffect(() => {
-        if (transferState.type === TransactionStateType.HASH) {
-            navigate(DashboardRoutes.WalletsHistory)
-        }
-    }, [transferState])
-
     const onTransfer = useCallback(
         async (data: FormInputs) => {
+            let hash: string | undefined
             if (EthereumAddress.isValid(data.recipient)) {
-                await transferCallback(data.tokenId, data.recipient, gasConfig)
-                return
+                hash = await transferCallback(data.tokenId, data.recipient, gasConfig)
             } else if (Others?.isValidDomain?.(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
-                await transferCallback(data.tokenId, registeredAddress, gasConfig)
+                hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
             }
-            return
+            if (typeof hash === 'string') {
+                navigate(DashboardRoutes.WalletsHistory)
+            }
         },
         [transferCallback, contract?.address, gasConfig, registeredAddress, Others?.isValidDomain],
     )
@@ -422,10 +467,7 @@ export const TransferERC721 = memo(() => {
                         </Box>
                     </Box>
                     <Box mt={4}>
-                        <Button
-                            sx={{ width: 240 }}
-                            type="submit"
-                            disabled={isSubmitting || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}>
+                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransferring}>
                             {t.wallets_transfer_send()}
                         </Button>
                     </Box>

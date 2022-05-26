@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
+import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, TransactionStateType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import {
     useAccount,
     useChainId,
     useFungibleToken,
     useFungibleTokenBalance,
-    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -21,7 +20,6 @@ import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
 
@@ -101,47 +99,36 @@ export function DonateDialog(props: DonateDialogProps) {
     // #endregion
 
     // #region blocking
-    const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
+    const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     // #endregion
 
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareText = token
-        ? [
-              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to donate Gitcoin grants.`
-                      : ''
-              }`,
-              '#mask_io',
-              postLink,
-          ].join('\n')
-        : ''
 
-    // close the transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (donateState.type === TransactionStateType.HASH) setRawAmount('')
-            resetDonateCallback()
-        },
-    )
-
-    // open the transaction dialog
-    useEffect(() => {
-        if (!token) return
-        if (donateState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            shareText,
-            state: donateState,
-            summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
+    const openShareTxDialog = useOpenShareTxDialog()
+    const donate = useCallback(async () => {
+        const hash = await donateCallback()
+        if (typeof hash !== 'string') return
+        const shareText = token
+            ? [
+                  `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to donate Gitcoin grants.`
+                          : ''
+                  }`,
+                  '#mask_io',
+                  postLink,
+              ].join('\n')
+            : ''
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
         })
-    }, [donateState /* update tx dialog only if state changed */])
-    // #endregion
+    }, [openShareTxDialog, token, donateCallback])
 
     // #region submit button
     const validationMessage = useMemo(() => {
@@ -198,11 +185,12 @@ export function DonateDialog(props: DonateDialogProps) {
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
+                                loading={loading}
                                 className={classes.button}
                                 fullWidth
                                 size="large"
-                                disabled={!!validationMessage}
-                                onClick={donateCallback}
+                                disabled={!!validationMessage || loading}
+                                onClick={donate}
                                 variant="contained">
                                 {validationMessage || t('plugin_gitcoin_donate')}
                             </ActionButton>

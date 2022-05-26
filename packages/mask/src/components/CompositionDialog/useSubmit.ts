@@ -25,7 +25,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 content,
                 target,
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
-                activatedSocialNetworkUI.networkIdentifier,
+                activatedSocialNetworkUI.encryptionNetwork,
             )
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
 
