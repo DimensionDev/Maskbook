@@ -119,7 +119,7 @@ export function WalletUI(props: WalletUIProps) {
                     </Typography>
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, address) ?? ''}
+                        href={Utils?.resolveAddressLink?.(chainId, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">
