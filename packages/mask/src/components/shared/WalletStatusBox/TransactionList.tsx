@@ -176,7 +176,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Link>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">
-                <Typography fontWeight={300} justifyContent="center" color={statusTextColorMap[txStatus]} fontSize={14}>
+                <Typography fontWeight={400} justifyContent="center" color={statusTextColorMap[txStatus]} fontSize={14}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>

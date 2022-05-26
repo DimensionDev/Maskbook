@@ -39,6 +39,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
+            iconSize={26}
             mini={mini}
             ListItemIcon={Icon}
             Typography={Text}

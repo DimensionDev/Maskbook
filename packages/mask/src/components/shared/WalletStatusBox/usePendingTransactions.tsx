@@ -23,6 +23,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.warning.main,
         fontSize: 14,
     },
+    noPendingTransactions: {
+        padding: theme.spacing(1, 0),
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
+    },
     clearAll: {
         cursor: 'pointer',
         color: theme.palette.primary.main,
@@ -70,15 +76,20 @@ export function usePendingTransactions() {
         </section>
     ) : null
 
-    const transactionList = (
-        <TransactionList
-            transactions={transactions}
-            onClear={(tx) => {
-                setMeltedTxHashes((list) => [...list, tx.hash])
-                removeRecentTx(tx.hash)
-            }}
-        />
-    )
+    const transactionList =
+        transactions.length > 0 ? (
+            <TransactionList
+                transactions={transactions}
+                onClear={(tx) => {
+                    setMeltedTxHashes((list) => [...list, tx.hash])
+                    removeRecentTx(tx.hash)
+                }}
+            />
+        ) : (
+            <Typography className={classes.noPendingTransactions}>
+                {t('wallet_status_no_pending_transactions')}
+            </Typography>
+        )
 
     return { summary, transactionList }
 }

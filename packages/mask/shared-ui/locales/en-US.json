@@ -227,6 +227,7 @@
     "wallet_new": "New Wallet",
     "wallet_status_pending": "Pending{{plural}}",
     "wallet_status_pending_clear_all": "Clear All",
+    "wallet_status_no_pending_transactions": "Your transactions will appear here...",
     "wallet_status_pending_clear": "Clear",
     "wallet_status_button_change": "Change",
     "wallet_status_button_copy_address": "Copy Address",

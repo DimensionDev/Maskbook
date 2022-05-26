@@ -26,13 +26,13 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         alignItems: 'center',
         marginTop: 10,
         backgroundColor: MaskColorVar.warningBackground,
-        padding: '13px 12px 13px 14.5px',
+        padding: '14.5px 14.5px 16px 14.5px',
         borderRadius: 8,
     },
     tipContentText: {
         color: MaskColorVar.warning,
         fontSize: 13,
-        marginLeft: 8,
+        marginLeft: 8.5,
     },
     tipLink: {
         color: MaskColorVar.warning,
@@ -48,6 +48,9 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     progress: {
         color: theme.palette.common.black,
+    },
+    warningTriangleIcon: {
+        fontSize: 20,
     },
 }))
 
@@ -115,7 +118,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
             </Paper>
             {providerDescriptor?.ID === `${NetworkPluginID.PLUGIN_EVM}_walletconnect` ? null : (
                 <Card className={classes.tipContent} elevation={0}>
-                    <WarningTriangleIcon />
+                    <WarningTriangleIcon className={classes.warningTriangleIcon} />
                     <Typography className={classes.tipContentText} variant="body2">
                         <Trans
                             i18nKey="plugin_wallet_connect_tip"
