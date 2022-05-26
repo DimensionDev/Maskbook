@@ -38,7 +38,7 @@ export function callRequest(path: string, id: number, request: unknown) {
 }
 
 export function execute(path: string, id: number, ...args: unknown[]) {
-    handlePromise(id, () => (read(path) as any)?.(...args))
+    handlePromise(id, () => (read(path) as any)?.(...clone_into(args)))
 }
 
 export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
