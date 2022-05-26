@@ -12,7 +12,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     className?: string
     actionProps?: {
         title?: string | React.ReactElement | React.ReactNode
-        action?: () => void
+        action?: () => Promise<void>
         disabled?: boolean
         startIcon?: React.ReactNode
         endIcon?: React.ReactNode

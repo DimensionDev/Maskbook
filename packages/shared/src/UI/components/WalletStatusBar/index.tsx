@@ -7,7 +7,7 @@ import type { BindingProof } from '@masknet/shared-base'
 import classNames from 'classnames'
 import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMenuBar } from './WalletMenuBar'
-import { ERC20Bounday, ERC721Bounday, WalletButton } from './WalletBarButton'
+import { WalletButton } from './WalletBarButton'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,7 +35,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     className?: string
     actionProps?: {
         title?: string | React.ReactElement | React.ReactNode
-        action?: () => void
+        action?: () => Promise<void>
         disabled?: boolean
         startIcon?: React.ReactNode
         endIcon?: React.ReactNode
@@ -44,7 +44,6 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         openPopupsWindow: () => void
         wallets: BindingProof[]
     }
-    boundary?: ERC20Bounday | ERC721Bounday
     onChange?: (address: string) => void
     pending?: string | React.ReactElement | React.ReactNode
 }
