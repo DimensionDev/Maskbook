@@ -33,6 +33,7 @@ export declare namespace Web3Plugin {
             TransactionSignature,
             TransactionParameter,
             Web3,
+            Web3Provider,
         > {
             AddressBook?: AddressBookState<ChainId>
             Hub?: HubState<ChainId, SchemaType, GasOption>
@@ -53,7 +54,8 @@ export declare namespace Web3Plugin {
                 Transaction,
                 TransactionDetailed,
                 TransactionSignature,
-                Web3
+                Web3,
+                Web3Provider
             >
             Provider?: ProviderState<ChainId, ProviderType, NetworkType>
             Wallet?: WalletState
