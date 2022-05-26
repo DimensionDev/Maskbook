@@ -23,13 +23,11 @@ interface TabPanelProps extends BoxProps {
 
 export interface AbstractTabProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper' | 'flexContainer'> {
-    tabs: Array<
-        Omit<TabPanelProps, 'height' | 'minHeight'> & {
-            cb?: () => void
-            disableFocusRipple?: boolean
-            disableRipple?: boolean
-        }
-    >
+    tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
+        cb?: () => void
+        disableFocusRipple?: boolean
+        disableRipple?: boolean
+    })[]
     state?: readonly [number, (next: number) => void]
     index?: number
     disableFocusRipple?: boolean

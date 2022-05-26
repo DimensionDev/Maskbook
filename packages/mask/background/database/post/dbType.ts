@@ -7,7 +7,7 @@ export declare namespace PostDB_HistoryTypes {
         postBy: { userId: string; network: string } | undefined
         identifier: string
         recipientGroups?: unknown
-        recipients?: Array<{ userId: string; network: string }>
+        recipients?: { userId: string; network: string }[]
         foundAt: Date
         postCryptoKey?: CryptoKey
     }

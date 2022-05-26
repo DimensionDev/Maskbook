@@ -18,10 +18,10 @@ async function fetchFromBalancerPoolSubgraph<T>(query: string) {
 
 export async function fetchLBP_PoolsByTokenAddress(address: string) {
     const data = await fetchFromBalancerPoolSubgraph<{
-        pools: Array<{
+        pools: {
             id: string
             createTime: number
-        }>
+        }[]
     }>(`
     {
         pools(
@@ -53,7 +53,7 @@ export async function fetchLBP_PoolTokenPrices(poolId: string, address: string, 
         }
     `,
     )
-    const data = await fetchFromBalancerPoolSubgraph<Record<string, Array<{ price: string }>>>(`
+    const data = await fetchFromBalancerPoolSubgraph<Record<string, { price: string }[]>>(`
         query tokenPrices {
             ${queries.join('\n')}
         }

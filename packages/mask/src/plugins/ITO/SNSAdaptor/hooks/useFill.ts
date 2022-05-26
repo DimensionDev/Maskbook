@@ -49,7 +49,7 @@ type paramsObjType = {
     total: string
     limit: string
     qualificationAddress: string
-    exchangeAmountsDivided: Array<readonly [BigNumber, BigNumber]>
+    exchangeAmountsDivided: (readonly [BigNumber, BigNumber])[]
     now: number
     invalidTokenAt: number
     exchangeAmounts: string[]

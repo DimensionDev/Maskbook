@@ -68,7 +68,7 @@ async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
 
 export async function getTradeInfo(pid: string, trader: string) {
     const data = await fetchFromMarketSubgraph<{
-        buyInfos: Array<{
+        buyInfos: {
             buyer: {
                 address: string
                 name: string
@@ -77,23 +77,23 @@ export async function getTradeInfo(pid: string, trader: string) {
             amount: string
             amount_sold: string
             amount_bought: string
-        }>
-        sellInfos: Array<{
+        }[]
+        sellInfos: {
             buyer: {
                 address: string
                 name: string
             }
             token: JSON_PayloadOutMask['token']
             amount: string
-        }>
-        destructInfos: Array<{
+        }[]
+        destructInfos: {
             buyer: {
                 address: string
                 name: string
             }
             token: JSON_PayloadOutMask['token']
             amount: string
-        }>
+        }[]
     }>(`
     {
         buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
@@ -147,12 +147,12 @@ export async function getPool(pid: string) {
 
 export async function getAllPoolsAsSeller(address: string, page: number, chainId: ChainId) {
     const data = await fetchFromMarketSubgraph<{
-        sellInfos: Array<{
+        sellInfos: {
             pool: JSON_PayloadOutMask & {
                 exchange_in_volumes: string[]
                 exchange_out_volumes: string[]
             }
-        }>
+        }[]
     }>(
         `
     {
@@ -183,12 +183,12 @@ export async function getAllPoolsAsSeller(address: string, page: number, chainId
 
 export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
     const data = await fetchFromMarketSubgraph<{
-        buyInfos: Array<{
+        buyInfos: {
             pool: JSON_PayloadOutMask & {
                 exchange_in_volumes: string[]
                 exchange_out_volumes: string[]
             }
-        }>
+        }[]
     }>(
         `
     {

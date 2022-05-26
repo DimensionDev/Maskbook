@@ -167,7 +167,7 @@ async function* v38To40StaticECDH(
 }
 type StaticV38OrOlderECDH = {
     type: 'static-v38-or-older'
-    derive: (postKeyIV: Uint8Array) => Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array]>>
+    derive: (postKeyIV: Uint8Array) => Promise<(readonly [key: AESCryptoKey, iv: Uint8Array])[]>
 }
 type EphemeralECDH = {
     type: 'ephemeral'
