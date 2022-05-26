@@ -11,6 +11,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import {
     ChainId,
+    getChainDetailed,
     getChainDetailedCAIP,
     getChainName,
     getNetworkTypeFromChainId,
@@ -79,8 +80,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { noSwitchNetworkTip = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
-    const expectedNetwork = getChainName(expectedChainId)
-
+    const expectedNetwork = getChainDetailed(expectedChainId)?.chain ?? getChainName(expectedChainId)
     const actualChainId = chainId
     const actualNetwork = getChainName(actualChainId)
 
