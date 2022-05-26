@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, useChainColor, useChainId } from '@masknet/web3-shared-evm'
+import { useChainColor, useChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
@@ -71,6 +71,11 @@ interface WalletUIProps {
     pending?: string | React.ReactElement | React.ReactNode
 }
 
+function formatAddress(address: string, size = 0) {
+    if (size === 0 || size >= 20) return address
+    return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
+}
+
 export function WalletUI(props: WalletUIProps) {
     const {
         iconSize = 30,
@@ -92,7 +97,6 @@ export function WalletUI(props: WalletUIProps) {
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
-
     return (
         <Box className={classes.root} onClick={() => onClick?.(address)}>
             <WalletIcon
@@ -107,15 +111,15 @@ export function WalletUI(props: WalletUIProps) {
                 <Box className={classes.name}>
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
-                            ? domain ?? providerDescriptor?.name ?? Utils?.formatAddress?.(address, 4)
-                            : providerDescriptor?.name ?? Utils?.formatAddress?.(address, 4)}
+                            ? domain ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            : providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}
                     {showMenuDrop ? <DownIcon /> : null}
                 </Box>
                 <Box className={classes.address}>
                     <Typography variant="body2" color="textSecondary" fontSize={14}>
-                        {formatEthereumAddress(address, 4)}
+                        {formatAddress(address, 4)}
                     </Typography>
                     <Link
                         className={classes.link}
