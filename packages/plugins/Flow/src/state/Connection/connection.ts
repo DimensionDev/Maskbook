@@ -4,7 +4,6 @@ import type { BlockObject, CompositeSignature, MutateOptions, QueryOptions } fro
 import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
-    ConnectionOptions,
     FungibleToken,
     NonFungibleToken,
     NonFungibleTokenCollection,
@@ -18,10 +17,15 @@ import { Web3StateSettings } from '../../settings'
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject> {
-        throw new Error('Method not implemented.')
+    private _getWeb3Provider(options?: FlowConnectionOptions) {
+        return Providers[options?.providerType ?? this.providerType]
     }
-
+    getWeb3(options?: FlowConnectionOptions) {
+        return this._getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
+    }
+    getWeb3Provider(options?: FlowConnectionOptions) {
+        return this._getWeb3Provider(options).createWeb3Provider(options?.chainId ?? this.chainId)
+    }
     async connect(options?: FlowConnectionOptions): Promise<Account<ChainId>> {
         return {
             account: '',
@@ -52,6 +56,9 @@ class Connection implements BaseConnection {
         address: string,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject> {
         throw new Error('Method not implemented.')
     }
     getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
@@ -114,9 +121,6 @@ class Connection implements BaseConnection {
         throw new Error('Method not implemented.')
     }
 
-    getWeb3(options?: FlowConnectionOptions) {
-        return Providers[options?.providerType ?? this.providerType].createWeb3(options?.chainId ?? this.chainId)
-    }
     async getAccount(options?: FlowConnectionOptions): Promise<string> {
         const web3 = await this.getWeb3(options)
         return web3.currentUser().addr ?? ''

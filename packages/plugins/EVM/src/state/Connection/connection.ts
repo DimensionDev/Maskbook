@@ -131,6 +131,20 @@ class Connection implements EVM_Connection {
         }
     }
 
+    getWeb3(options?: EVM_Web3ConnectionOptions) {
+        const web3 = new Web3(
+            createWeb3Provider((requestArguments: RequestArguments) => this.hijackedRequest(requestArguments, options)),
+        )
+        return Promise.resolve(web3)
+    }
+
+    getWeb3Provider(options?: EVM_Web3ConnectionOptions) {
+        const web3Provider = createWeb3Provider((requestArguments: RequestArguments) =>
+            this.hijackedRequest(requestArguments, options),
+        )
+        return Promise.resolve(web3Provider)
+    }
+
     async connect(options?: EVM_Web3ConnectionOptions): Promise<Account<ChainId>> {
         return this.hijackedRequest<Account<ChainId>>(
             {
@@ -390,13 +404,6 @@ class Connection implements EVM_Connection {
             ),
             createERC721Collection(this.chainId, name ?? 'Unknown Token', ''),
         )
-    }
-
-    getWeb3(options?: EVM_Web3ConnectionOptions) {
-        const web3 = new Web3(
-            createWeb3Provider((requestArguments: RequestArguments) => this.hijackedRequest(requestArguments, options)),
-        )
-        return Promise.resolve(web3)
     }
 
     async getWeb3Contract<T extends BaseContract>(

@@ -59,6 +59,7 @@ export enum SourceType {
     RSS3 = 'RSS3',
     Zora = 'zora',
     OpenSea = 'opensea',
+    Rarible = 'rarible',
     NFTScan = 'NFTScan',
 }
 
@@ -251,7 +252,6 @@ export interface NonFungibleTokenTrait {
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {
-    isAuction: boolean
     /** unix timestamp */
     startAt?: number
     /** unix timestamp */
@@ -269,7 +269,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     /** permalink of asset */
     asset_permalink: string
     /** token amount */
-    quantity: number
+    quantity: string
     /** transaction hash */
     hash?: string
     /** buy or sell */
@@ -294,9 +294,11 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** token type */
     type: string
     /** permalink of asset */
-    asset_permalink: string
+    assetPermalink?: string
+    /** symbol of asset */
+    assetSymbol?: string
     /** token amount */
-    quantity: number
+    quantity: string
     /** transaction hash */
     hash?: string
     /** the account make the order */
@@ -531,10 +533,13 @@ export interface Connection<
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(options?: Web3ConnectionOptions): Promise<Web3>
+    /** Get web3 provider instance */
+    getWeb3Provider(options?: Web3ConnectionOptions): Promise<Web3Provider>
     /** Get gas price */
     getGasPrice(options?: Web3ConnectionOptions): Promise<string>
     /** Get schema type of given token address. */
@@ -886,6 +891,7 @@ export interface ConnectionState<
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
     Web3ConnectionOptions = ConnectionOptions<ChainId, ProviderType, Transaction>,
     Web3Connection = Connection<
         ChainId,
@@ -897,11 +903,14 @@ export interface ConnectionState<
         TransactionDetailed,
         TransactionSignature,
         Web3,
+        Web3Provider,
         Web3ConnectionOptions
     >,
 > {
-    /** Get web3 client */
+    /** Get web3 SDK */
     getWeb3?: (options?: Web3ConnectionOptions) => Promise<Web3>
+    /** Get web3 provider instance */
+    getWeb3Provoder?: (options?: Web3ConnectionOptions) => Promise<Web3Provider>
     /** Get connection */
     getConnection?: (options?: Web3ConnectionOptions) => Promise<Web3Connection>
 }

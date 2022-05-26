@@ -1,15 +1,16 @@
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
+import { useI18N } from '../../../../utils'
+import { CollectibleState } from '../../hooks/useCollectibleState'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { useControlledDialog } from '../../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAssetOrder } from '../../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -32,9 +33,10 @@ export interface ActionBarProps {}
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, assetOrder } = CollectibleState.useContainer()
-    const assets = asset.value
+    const { asset } = CollectibleState.useContainer()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 
     const {
         open: openCheckoutDialog,
@@ -49,10 +51,11 @@ export function ActionBar(props: ActionBarProps) {
     } = useControlledDialog()
 
     if (!asset.value) return null
+    const isOwner = isSameAddress(asset.value.owner?.address, account)
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
             <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
+                {!isOwner && asset.value.auction ? (
                     <ActionButton
                         className={classes.button}
                         color="primary"
@@ -61,7 +64,7 @@ export function ActionBar(props: ActionBarProps) {
                         {t('plugin_collectible_buy_now')}
                     </ActionButton>
                 ) : null}
-                {!asset.value.isOwner && asset.value.is_auction ? (
+                {!isOwner && asset.value.auction ? (
                     <ActionButton
                         className={classes.button}
                         color="primary"
@@ -72,7 +75,7 @@ export function ActionBar(props: ActionBarProps) {
                     </ActionButton>
                 ) : null}
 
-                {!asset.value.isOwner && !asset.value.is_auction ? (
+                {!isOwner && !asset.value.auction ? (
                     <ActionButton
                         className={classes.button}
                         color="primary"
@@ -81,7 +84,7 @@ export function ActionBar(props: ActionBarProps) {
                         {t('plugin_collectible_make_offer')}
                     </ActionButton>
                 ) : null}
-                {assets?.isOwner ? (
+                {isOwner ? (
                     <ActionButton
                         className={classes.button}
                         color="primary"
@@ -91,13 +94,18 @@ export function ActionBar(props: ActionBarProps) {
                     </ActionButton>
                 ) : null}
                 <CheckoutDialog
-                    asset={asset}
+                    asset={asset.value}
                     order={assetOrder}
                     open={openCheckoutDialog}
                     onClose={onCloseCheckoutDialog}
                 />
-                <MakeOfferDialog asset={asset} open={openOfferDialog} onClose={onCloseOfferDialog} />
-                <PostListingDialog asset={asset} open={openListingDialog} onClose={onCloseListingDialog} />
+                <PostListingDialog asset={asset.value} open={openListingDialog} onClose={onCloseListingDialog} />
+                <MakeOfferDialog
+                    asset={asset.value}
+                    order={assetOrder}
+                    open={openOfferDialog}
+                    onClose={onCloseOfferDialog}
+                />
             </ChainBoundary>
         </Box>
     )

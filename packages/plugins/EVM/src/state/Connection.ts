@@ -11,10 +11,11 @@ import type {
     TransactionDetailed,
     TransactionSignature,
     Web3,
+    Web3Provider,
 } from '@masknet/web3-shared-evm'
 import { createConnection } from './Connection/connection'
 
-export class Protocol extends ConnectionState<
+export class Connection extends ConnectionState<
     ChainId,
     SchemaType,
     ProviderType,
@@ -23,7 +24,8 @@ export class Protocol extends ConnectionState<
     Transaction,
     TransactionDetailed,
     TransactionSignature,
-    Web3
+    Web3,
+    Web3Provider
 > {
     constructor(
         private context: Plugin.Shared.SharedContext,

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
-import { unreachable } from '@dimensiondev/kit'
-import { ChainId, NonFungibleAssetProvider } from '../types'
+import { ChainId } from '../types'
+import { SourceType } from '@masknet/web3-shared-base'
 
 // TODO check ipfs inside before resolving
 export function resolveIPFSLink(ipfs: string): string {
@@ -12,43 +12,38 @@ export function resolveIPFSLinkFromURL(url: string): string {
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
-export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
+export function resolveCollectibleAssetLink(chainId: ChainId, provider: SourceType) {
     switch (provider) {
-        case NonFungibleAssetProvider.OPENSEA:
+        case SourceType.OpenSea:
             if (chainId === ChainId.Rinkeby) return 'https://testnets.opensea.io/assets'
             if (chainId === ChainId.Matic) return 'https://opensea.io/assets/matic'
             return 'https://opensea.io/assets'
-        case NonFungibleAssetProvider.RARIBLE:
+        case SourceType.Rarible:
             return ''
-        case NonFungibleAssetProvider.NFTSCAN:
+        case SourceType.NFTScan:
             return ''
-        case NonFungibleAssetProvider.ZORA:
+        case SourceType.Zora:
             return ''
         default:
-            unreachable(provider)
+            return ''
     }
 }
 
-export function resolveCollectibleLink(
-    chainId: ChainId,
-    provider: NonFungibleAssetProvider,
-    address: string,
-    tokenId: string,
-) {
+export function resolveCollectibleLink(chainId: ChainId, provider: SourceType, address: string, tokenId: string) {
     switch (provider) {
-        case NonFungibleAssetProvider.OPENSEA:
+        case SourceType.OpenSea:
             return urlcat(resolveCollectibleAssetLink(chainId, provider), '/:address/:tokenId', {
                 address,
                 tokenId,
             })
-        case NonFungibleAssetProvider.RARIBLE:
+        case SourceType.Rarible:
             return ''
-        case NonFungibleAssetProvider.NFTSCAN:
+        case SourceType.NFTScan:
             return ''
-        case NonFungibleAssetProvider.ZORA:
+        case SourceType.Zora:
             return ''
         default:
-            unreachable(provider)
+            return ''
     }
 }
 

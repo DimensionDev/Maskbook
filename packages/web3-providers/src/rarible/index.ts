@@ -222,14 +222,14 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     name: order.token,
                     id: order.tokenId,
                     type: TokenType.NonFungible,
+                    schema: SchemaType.ERC20,
                     chainId,
                     address: tokenAddress,
-                    // schema: SchemaType.ERC721,
-                    // symbol: '1',
+                    symbol: '',
                     decimals: 0,
                 } as FungibleToken<ChainId, SchemaType>,
                 side: OrderSide.Buy,
-                quantity: order.value,
+                quantity: order.value.toString(),
                 expiredAt: 0,
             }
         })
@@ -265,7 +265,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     type: TokenType.NonFungible,
                 } as FungibleToken<ChainId, SchemaType>,
                 side: OrderSide.Buy,
-                quantity: asset.value,
+                quantity: asset.value.toString(),
                 expiredAt: 0,
             }
         })
@@ -315,8 +315,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 id: history.id,
                 chainId: ChainId.Mainnet,
                 type: history['@type'],
-                asset_permalink: '',
-                quantity: Number(history.value),
+                assetPermalink: '',
+                quantity: history.value,
                 timestamp: history.date.getTime() ?? 0,
                 hash: history.transactionHash,
                 from: {

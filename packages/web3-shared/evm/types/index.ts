@@ -274,11 +274,17 @@ export enum ProviderType {
     CustomNetwork = 'CustomNetwork',
 }
 
+/**
+ * @deprecated use SourceType instead
+ */
 export enum FungibleAssetProvider {
     ZERION = 'Zerion',
     DEBANK = 'Debank',
 }
 
+/**
+ * @deprecated use SourceType instead
+ */
 export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
     RARIBLE = 'Rarible',

@@ -9,10 +9,10 @@ interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
+    tokens?: FungibleToken<ChainId, SchemaType>[]
     selectedTokens?: string[]
     disableSearch?: boolean
-    onSelect?(token: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native> | null): void
+    onSelect?(token: FungibleToken<ChainId, SchemaType> | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
 }

@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenIconProps extends withClasses<'icon'> {
     chainId?: Web3Helper.ChainIdAll
-    networkPluginID?: NetworkPluginID
+    pluginID?: NetworkPluginID
     address: string
     name?: string
     logoURL?: string
@@ -27,13 +27,13 @@ export interface TokenIconProps extends withClasses<'icon'> {
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name, AvatarProps, classes } = props
 
-    const chainId = useChainId() as Web3Helper.ChainIdAll
-    const hub = useWeb3Hub(props.networkPluginID) as Web3Helper.Web3HubAll
+    const chainId = useChainId(props.pluginID, props.chainId) as Web3Helper.ChainIdAll
+    const hub = useWeb3Hub(props.pluginID) as Web3Helper.Web3HubAll
 
     const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
-        const logoURLs = await hub?.getFungibleTokenIconURLs?.(props.chainId ?? chainId, address)
+        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
         return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
-    }, [chainId, props.chainId, address, logoURL, TokenIcon])
+    }, [chainId, address, logoURL, hub])
 
     const { value: trustedLogoURI, loading } = useImageFailOver(urls, '')
 

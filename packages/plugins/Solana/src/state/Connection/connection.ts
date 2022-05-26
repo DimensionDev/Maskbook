@@ -24,8 +24,16 @@ class Connection implements BaseConnection {
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse> {
-        throw new Error('Method not implemented.')
+    private _getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
+        return Providers[options?.providerType ?? this.providerType]
+    }
+
+    async getWeb3(options?: SolanaWeb3ConnectionOptions) {
+        return this._getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
+    }
+
+    getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
+        return this._getWeb3Provider(options).createWeb3Provider(options?.chainId)
     }
 
     async connect(options?: SolanaWeb3ConnectionOptions): Promise<Account<ChainId>> {
@@ -110,14 +118,6 @@ class Connection implements BaseConnection {
         throw new Error('Method not implemented.')
     }
 
-    getWeb3(options?: SolanaWeb3ConnectionOptions) {
-        return this.getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
-    }
-
-    getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
-        return Providers[options?.providerType ?? this.providerType]
-    }
-
     getWeb3Connection(options?: SolanaWeb3ConnectionOptions) {
         const chainId = options?.chainId ?? this.chainId
         const connection = this.connections.get(chainId) ?? new SolanaConnection(NETWORK_ENDPOINTS[chainId])
@@ -135,6 +135,10 @@ class Connection implements BaseConnection {
 
     getChainId(options?: SolanaWeb3ConnectionOptions) {
         return Promise.resolve(options?.chainId ?? this.chainId)
+    }
+
+    getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse> {
+        throw new Error('Method not implemented.')
     }
 
     async getBlockNumber(options?: SolanaWeb3ConnectionOptions) {
@@ -158,21 +162,21 @@ class Connection implements BaseConnection {
         return TransactionStatusType.NOT_DEPEND
     }
 
-    signMessage(dataToSign: string, signType?: string, options?: SolanaWeb3ConnectionOptions) {
-        return this.getWeb3Provider(options).signMessage(dataToSign)
+    async signMessage(dataToSign: string, signType?: string, options?: SolanaWeb3ConnectionOptions) {
+        return this._getWeb3Provider(options).signMessage(dataToSign)
     }
 
-    verifyMessage(
+    async verifyMessage(
         dataToVerify: string,
         signature: string,
         signType?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<boolean> {
-        return this.getWeb3Provider(options).verifyMessage(dataToVerify, signature)
+        return this._getWeb3Provider(options).verifyMessage(dataToVerify, signature)
     }
 
     async signTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions) {
-        return this.getWeb3Provider(options).signTransaction(transaction)
+        return this._getWeb3Provider(options).signTransaction(transaction)
     }
 
     signTransactions(transactions: Transaction[], options?: SolanaWeb3ConnectionOptions) {

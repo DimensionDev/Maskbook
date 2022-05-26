@@ -35,8 +35,8 @@ import {
     useChainId,
     useFungibleTokenBalance,
     useWallet,
-    useWeb3State,
     useWeb3Connection,
+    useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
@@ -160,7 +160,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
 
@@ -245,14 +245,14 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     // #region Set default gas price
     useAsync(async () => {
-        const gasOptions = await web3State.GasOptions?.getGasOptions?.(chainId)
+        const gasOptions = await hub?.getGasOptions?.(chainId)
 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
             const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
-    }, [methods.setValue, methods.getValues, chainId, web3State])
+    }, [methods.setValue, methods.getValues, chainId, hub])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address

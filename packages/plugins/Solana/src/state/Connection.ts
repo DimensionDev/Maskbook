@@ -11,6 +11,7 @@ import type {
     Transaction,
     TransactionDetailed,
     TransactionSignature,
+    Web3Provider,
 } from '@masknet/web3-shared-solana'
 import { createConnection } from './Connection/connection'
 
@@ -23,7 +24,8 @@ export class Connection extends ConnectionState<
     Transaction,
     TransactionDetailed,
     TransactionSignature,
-    Web3
+    Web3,
+    Web3Provider
 > {
     constructor(
         private context: Plugin.Shared.SharedContext,
