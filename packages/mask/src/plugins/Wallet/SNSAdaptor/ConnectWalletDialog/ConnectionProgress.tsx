@@ -16,7 +16,7 @@ import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
     content: {
-        padding: theme.spacing('20px', 2),
+        padding: theme.spacing('22px', '12px'),
         borderRadius: 8,
         background: props.contentBackground ?? theme.palette.background.default,
     },
@@ -39,6 +39,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         textDecoration: 'underline',
     },
     connectWith: {
+        fontSize: '14px',
         color: theme.palette.maskColor.dark,
         fontWeight: 700,
     },

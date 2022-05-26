@@ -136,7 +136,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
-        badgeSize = 10,
+        badgeSize = 12,
         mini,
     } = props
     const { classes } = useStyles()

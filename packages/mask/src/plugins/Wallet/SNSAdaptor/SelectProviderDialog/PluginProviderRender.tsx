@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
         list: {
             marginTop: 12,
             display: 'flex',
-            gridGap: '16px 9px',
+            gridGap: '16px 10.5px',
             flexWrap: 'wrap',
         },
         networkItem: {

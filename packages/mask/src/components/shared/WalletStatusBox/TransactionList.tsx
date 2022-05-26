@@ -64,8 +64,8 @@ const useStyles = makeStyles()((theme) => ({
         fill: 'none',
     },
     linkText: {
+        fontSize: 14,
         lineHeight: '18px',
-        transform: 'translateY(-2px)',
     },
     linkIcon: {
         fill: 'none',
