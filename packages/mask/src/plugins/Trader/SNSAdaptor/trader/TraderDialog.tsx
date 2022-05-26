@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
         padding: 0,
+        overflow: 'hidden',
     },
     tradeRoot: {
         margin: 'auto',
