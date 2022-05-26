@@ -12,12 +12,13 @@ import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId, ERC721ContractDetailed, PriceRecord } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
+import type { TokenAPI } from '@masknet/web3-providers'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
     tokenInfo?: ERC721ContractDetailed
     tokenPrice?: PriceRecord
-    tokenMarketCap?: string
+    tokenMarketCap?: TokenAPI.tokenInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,11 +66,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const { classes } = useStyles()
     const t = useSharedI18N()
     const theme = useTheme()
-
+    const price = tokenPrice?.usd ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
     const makeMessageList =
-        tokenSecurity.is_whitelisted === '1'
+        tokenSecurity.trust_list === '1'
             ? []
             : SecurityMessages.filter(
                   (x) =>
@@ -112,9 +113,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         <Typography className={classes.tokenName}>
                             {(tokenSecurity?.token_name || tokenInfo?.name) ?? '--'}
                         </Typography>
-                        <Typography className={classes.tokenPrice}>
-                            {tokenPrice?.usd ? `$ ${tokenPrice?.usd} USD` : '--'}
-                        </Typography>
+                        <Typography className={classes.tokenPrice}>{price ? `$ ${price} USD` : '--'}</Typography>
                     </Stack>
                 </Stack>
                 <Stack>
@@ -172,7 +171,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Collapse in={!isCollapse}>
-                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap} />
+                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap?.market_cap} />
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>

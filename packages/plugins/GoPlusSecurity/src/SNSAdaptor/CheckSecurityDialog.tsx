@@ -86,7 +86,6 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         undefined,
         value?.chainId,
     )
-    console.log({ contractDetailed })
 
     const { value: tokenPrice } = useAsync(async () => {
         if (!value) return
@@ -98,6 +97,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         if (!value?.token_symbol) return
         return TokenView.getTokenInfo(value.token_symbol)
     }, [value])
+
     return (
         <InjectedDialog title={t.__plugin_name()} classes={{ paper: classes.paperRoot }} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -117,7 +117,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 tokenInfo={contractDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice?.[value?.contract]}
-                                tokenMarketCap={tokenMarketCapInfo?.market_cap}
+                                tokenMarketCap={tokenMarketCapInfo}
                             />
                         )}
                         {!error && !searching && !loadingToken && !value && (

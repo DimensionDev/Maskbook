@@ -31,6 +31,7 @@ export namespace TokenAPI {
     export interface tokenInfo {
         id: string
         market_cap: string
+        price: string
     }
     export interface Provider {
         getTokenInfo(tokenName: string): Promise<tokenInfo>
@@ -403,6 +404,7 @@ export namespace SecurityAPI {
         is_whitelisted?: '0' | '1'
         is_in_dex?: '0' | '1'
         is_anti_whale?: '0' | '1'
+        trust_list?: '0' | '1'
     }
 
     export interface ContractSecurity {
