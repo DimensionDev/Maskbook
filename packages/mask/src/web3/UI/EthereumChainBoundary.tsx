@@ -289,7 +289,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             </>,
         )
     }
-    console.log(props.renderInTimeline)
 
     return renderBox(
         <>

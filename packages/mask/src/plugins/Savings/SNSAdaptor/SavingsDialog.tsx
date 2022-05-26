@@ -33,6 +33,7 @@ import { LDO_PAIRS } from '../constants'
 import type { AbiItem } from 'web3-utils'
 import { flatten, compact, chunk } from 'lodash-unified'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 export interface SavingsDialogProps {
     open: boolean
@@ -112,7 +113,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             setSelectedProtocol(null)
                         }
                     }}>
-                    <DialogContent>
+                    <DialogContent style={{ padding: 0 }}>
                         {selectedProtocol ? (
                             <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
                         ) : (
@@ -151,7 +152,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
-                        <PluginWalletStatusBar />
+                        <EthereumChainBoundary chainId={chainId}>
+                            <PluginWalletStatusBar />
+                        </EthereumChainBoundary>
                     </DialogActions>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>

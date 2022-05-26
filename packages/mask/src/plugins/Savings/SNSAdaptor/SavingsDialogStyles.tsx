@@ -22,10 +22,10 @@ export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDash
         backgroundColor: 'inherit',
     },
     tabs: {
-        width: 535,
         height: 36,
         minHeight: 36,
-        margin: '0 auto',
+        paddingLeft: 16,
+        paddingRight: 16,
         borderRadius: 4,
         '& .Mui-selected': {
             color: '#ffffff',
