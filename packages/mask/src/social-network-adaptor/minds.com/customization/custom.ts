@@ -28,14 +28,15 @@ export function startWatchThemeColor(signal: AbortSignal) {
         if (backgroundColor)
             backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
     }
+    // init
+    currentTheme.value = getBackgroundColor(document.body) === 'rgb(255,255,255)' ? 'light' : 'dark'
 
     const watcher = new MutationObserverWatcher(themeListItemSelector())
-        .addListener('onAdd', updateThemeColor)
-        .addListener('onChange', updateThemeColor)
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
+    // update
+    watcher.addListener('onAdd', updateThemeColor).addListener('onChange', updateThemeColor).startWatch({
+        childList: true,
+        subtree: true,
+    })
     signal.addEventListener('abort', () => watcher.stopWatch())
 }
 
