@@ -33,7 +33,7 @@ import { difference } from 'lodash-unified'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
-        const cancel: Array<Function | undefined> = []
+        const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
         // #region Mentioned links

@@ -5,14 +5,13 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     TransactionEventType,
-    TransactionStateType,
     useAccount,
     useChainId,
     useTokenConstants,
-    useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
 import { useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
@@ -120,17 +119,10 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const account = useAccount()
     const chainId = useChainId()
-    const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-    const createCallback = useCallback(async () => {
-        resetCallback()
+    return useAsyncFn(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
 
@@ -139,27 +131,14 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         const { gas, params, paramsObj, gasError } = createParams
 
         if (gasError) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
             return
         }
 
         try {
             checkParams(paramsObj)
         } catch (error) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: error as Error,
-            })
             return
         }
-
-        // pre-step: start waiting for provider to confirm tx
-        setCreateState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         // estimate gas and compose transaction
         const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
@@ -175,22 +154,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 .create_red_packet(...params)
                 .send(config)
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
                     resolve(receipt)
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
-                    setCreateState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
                     reject(error)
                 })
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
-
-    return [createState, createCallback, resetCallback] as const
 }

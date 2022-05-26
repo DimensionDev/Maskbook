@@ -94,7 +94,7 @@ export function InvestDialog() {
     // #endregion
 
     // #region blocking
-    const [isInvesting, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
+    const [{ loading: isInvesting }, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareText = token

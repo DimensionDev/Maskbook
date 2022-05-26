@@ -89,16 +89,16 @@ interface BackupJSONFileVersion1 {
         publicKey: EC_Public_JsonWebKey
         privateKey: EC_Private_JsonWebKey
         localKey: AESJsonWebKey
-        previousIdentifiers?: Array<{ network: string; userId: string }>
+        previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
     }>
     people?: Array<{
         network: string
         userId: string
         publicKey: EC_Public_JsonWebKey
-        previousIdentifiers?: Array<{ network: string; userId: string }>
+        previousIdentifiers?: { network: string; userId: string }[]
         nickname?: string
-        groups?: Array<{ network: string; groupID: string; virtualGroupOwner: string | null }>
+        groups?: { network: string; groupID: string; virtualGroupOwner: string | null }[]
 
         // Note: those props are not existed in the backup, just to make the code more readable
         privateKey?: EC_Private_JsonWebKey

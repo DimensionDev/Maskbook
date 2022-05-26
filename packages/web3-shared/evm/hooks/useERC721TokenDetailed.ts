@@ -39,7 +39,7 @@ export async function getERC721TokenDetailedFromOpensea(
         description: string
         image_url: string
         animation_url: string
-        top_ownerships: Array<{ owner: { address: string } }>
+        top_ownerships: { owner: { address: string } }[]
     }
 
     if (response.ok) {

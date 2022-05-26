@@ -31,11 +31,11 @@ const useStyles = makeStyles()((theme) => ({
 
 // TODO: actions, and icon may be an img url
 export interface CreateWalletFormProps {
-    options: Array<{
+    options: {
         label: string
         icon: React.ReactNode
         value: number
-    }>
+    }[]
 }
 
 export function CreateWalletForm(props: CreateWalletFormProps) {

@@ -10,15 +10,15 @@ for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
 }
 
 export interface verifyHolderResponse {
-    keyHolders: Array<{
-        keys: Array<{
+    keyHolders: {
+        keys: {
             expiration: number
             keyId: string
             lock: {
                 address: string
             }
-        }>
-    }>
+        }[]
+    }[]
 }
 
 const verifyHolder = async <verifyHolderResponse>(_lockAddress: string, _holder: string, _chain: number) => {

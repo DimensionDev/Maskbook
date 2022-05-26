@@ -68,7 +68,7 @@ export async function getFungibleAssets(
     provider: string,
     network: Web3Plugin.NetworkDescriptor,
     pagination?: Pagination,
-): Promise<Array<Web3Plugin.Asset<Web3Plugin.FungibleToken>>> {
+): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
     const allSettled = await Promise.allSettled([
         getSolanaBalance(network.chainId, address).then((x) => [x]),
         getSplTokenList(network.chainId, address),
@@ -77,5 +77,5 @@ export async function getFungibleAssets(
     return allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
         .flat()
-        .filter(Boolean) as Array<Web3Plugin.Asset<Web3Plugin.FungibleToken>>
+        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
 }

@@ -235,7 +235,7 @@ export interface SubmitPollParams {
 export interface SubmitCompletionParams {
     timestamp: number
     quesId: string
-    answers: Array<{ id: string; answer: string }>
+    answers: { id: string; answer: string }[]
 }
 
 export enum ClueConditionType {
