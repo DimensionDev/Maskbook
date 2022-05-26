@@ -286,7 +286,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         actionProps={{
                             disabled: !!validationMessage,
                             title: validationMessage || t('plugin_red_packet_next'),
-                            action: onClick,
+                            action: async () => onClick(),
                         }}
                         classes={{ button: classes.button }}
                     />

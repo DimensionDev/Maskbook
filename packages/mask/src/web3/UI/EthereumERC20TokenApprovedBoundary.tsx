@@ -105,7 +105,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 <PluginWalletStatusBar
                     actionProps={{
                         title: t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' }),
-                        action: resetApproveCallback,
+                        action: async () => resetApproveCallback(),
                     }}
                     classes={{ button: classes.button }}
                 />
@@ -169,7 +169,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         approveStateType === ApproveStateType.PENDING
                             ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                             : `Updating ${token.symbol}`,
-                    action: resetApproveCallback,
+                    action: async () => resetApproveCallback(),
                     disabled: true,
                     loading: approveStateType === ApproveStateType.PENDING,
                 }}

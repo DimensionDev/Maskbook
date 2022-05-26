@@ -318,7 +318,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     }),
                     loading,
                     disabled: loading,
-                    action: onDone,
+                    action: async () => onDone(),
                 }}
             />
         </>

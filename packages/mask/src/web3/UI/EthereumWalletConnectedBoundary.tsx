@@ -81,7 +81,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                 className={classes.walletBar}
                 actionProps={{
                     title: t('plugin_wallet_confirm_risk_warning'),
-                    action: openRiskWarningDialog,
+                    action: async () => openRiskWarningDialog(),
                 }}
                 classes={{ button: classNames(classes.button, classes.connectWallet) }}
             />
@@ -93,7 +93,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                 className={classes.walletBar}
                 actionProps={{
                     disabled: !nativeTokenBalance.error,
-                    action: nativeTokenBalance.retry,
+                    action: async () => nativeTokenBalance.retry(),
                     title: t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee'),
                 }}
                 classes={{ button: classNames(classes.button, classes.gasFeeButton) }}

@@ -502,7 +502,7 @@ export function CreateForm(props: CreateFormProps) {
                     <PluginWalletStatusBar
                         actionProps={{
                             disabled: !!validationMessage,
-                            action: onNext,
+                            action: async () => onNext(),
                             title: validationMessage || t('plugin_ito_next'),
                         }}
                         classes={{ button: classes.button }}

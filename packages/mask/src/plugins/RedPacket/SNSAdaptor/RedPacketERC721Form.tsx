@@ -360,7 +360,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         actionProps={{
                             disabled: !!validationMessage,
                             title: t('plugin_red_packet_next'),
-                            action: () => setOpenConfirmDialog(true),
+                            action: async () => setOpenConfirmDialog(true),
                         }}
                     />
                 </EthereumERC721TokenApprovedBoundary>

@@ -386,7 +386,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     title: t('plugin_trader_confirm_price_impact', {
                                         percent: formatPercentage(cacheTrade.priceImpact),
                                     }),
-                                    action: onConfirmPriceImpact,
+                                    action: async () => onConfirmPriceImpact(),
                                     disabled: staled,
                                 }}
                                 classes={{ button: classes.button }}
@@ -395,7 +395,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <PluginWalletStatusBar
                                 actionProps={{
                                     title: t('plugin_trader_confirm_swap'),
-                                    action: onConfirm,
+                                    action: async () => onConfirm(),
                                     disabled: staled,
                                 }}
                                 classes={{ button: classes.button }}

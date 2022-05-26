@@ -155,7 +155,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         return (
             <PluginWalletStatusBar
                 actionProps={{
-                    action: retry,
+                    action: async () => retry(),
                     title: t('plugin_wallet_fail_to_load_nft_contract'),
                 }}
                 classes={{ button: classes.approveButton }}

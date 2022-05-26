@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
+import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -79,6 +79,13 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.maskColor.dark,
         },
         width: '100%',
+    },
+    link: {
+        color: theme.palette.maskColor.main,
+        textDecoration: 'none',
+        '&:hover': {
+            textDecoration: 'none',
+        },
     },
 }))
 
@@ -175,13 +182,14 @@ export function PreviewCard(props: PreviewCardProps) {
             </Card>
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
-                    <Button
-                        fullWidth
-                        className={classes.button}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={urlcat('https://gitcoin.co', grant.url)}>
-                        {t('plugin_gitcoin_view_on')}
+                    <Button fullWidth className={classes.button}>
+                        <Link
+                            className={classes.link}
+                            target="_blank"
+                            href={urlcat('https://gitcoin.co', grant.url)}
+                            rel="noopener noreferrer">
+                            {t('plugin_gitcoin_view_on')}
+                        </Link>
                     </Button>
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>

@@ -528,7 +528,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         disabled:
                                             focusedTrade?.loading || !focusedTrade?.value || disable || isSwapping,
                                         loading: isSwapping,
-                                        action: onSwap,
+                                        action: async () => onSwap(),
                                         title: t('plugin_trader_confirm_price_impact', {
                                             percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
                                         }),
@@ -546,7 +546,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             disable ||
                                             isSwapping,
                                         title: validationMessage || nativeWrapMessage,
-                                        action: onSwap,
+                                        action: async () => onSwap(),
                                     }}
                                     classes={{ button: classes.button }}
                                 />
