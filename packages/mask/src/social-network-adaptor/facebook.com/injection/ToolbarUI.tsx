@@ -16,10 +16,11 @@ const Text = styled(Typography)`
     color: var(--primary-text);
     font-weight: 500;
 `
-const Icon = styled(ListItemIcon)`
-    min-width: 46px;
+const Icon = styled(ListItemIcon)<{ hasTopNavBar: boolean }>`
+    min-width: ${(props) => (props.hasTopNavBar ? '46px' : 'auto')};
+    margin-right: ${(props) => (props.hasTopNavBar ? '0px' : '12px')};
     @media screen and (max-height: ${fbBreakPoint}px) {
-        min-width: 36px;
+        min-width: ${(props) => (props.hasTopNavBar ? '36px' : 'auto')};
     }
 `
 
@@ -31,7 +32,7 @@ export function ToolboxAtFacebook(props: { category: 'wallet' | 'application'; h
             Container={({ children }) => <Container hasTopNavBar={props.hasTopNavBar}>{children}</Container>}
             ListItemButton={Item}
             Typography={Text}
-            ListItemIcon={Icon}
+            ListItemIcon={({ children }) => <Icon hasTopNavBar={props.hasTopNavBar}>{children}</Icon>}
             category={props.category}
         />
     )
