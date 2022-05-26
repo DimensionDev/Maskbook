@@ -5,7 +5,6 @@ import {
     FungibleTokenInitial,
     getChainDetailed,
     isSameAddress,
-    TransactionStateType,
     useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
@@ -35,10 +34,10 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -175,11 +174,14 @@ export function PoolInList(props: PoolInListProps) {
     // #endregion
 
     // #region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
-    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
-        onRetry()
-        resetDestructCallback()
-    })
+    const [{ loading: destructing }, destructCallback] = useDestructCallback(pool.contract_address)
+    const destruct = useCallback(
+        async (pid: string) => {
+            await destructCallback(pid)
+            onRetry()
+        },
+        [destructCallback, onRetry],
+    )
     // #endregion
 
     const account = useAccount()
@@ -202,7 +204,13 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton
+                        loading={destructing}
+                        disabled={destructing}
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        onClick={() => destruct(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
