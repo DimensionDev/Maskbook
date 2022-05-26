@@ -152,7 +152,11 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>
                                 <DialogDismissIcon
-                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
+                                    style={
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                            ? 'back'
+                                            : titleBarIconStyle
+                                    }
                                 />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">

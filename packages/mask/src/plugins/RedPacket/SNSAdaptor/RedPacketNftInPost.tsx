@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { RedPacketRPC } from '../messages'
 import type { RedPacketNftJSONPayload } from '../types'
 import { RedPacketNft } from './RedPacketNft'
@@ -17,9 +16,5 @@ export function RedPacketNftInPost({ payload }: RedPacketNftInPostProps) {
             contract_version: payload.contractVersion,
         })
     }, [payload])
-    return (
-        <EthereumChainBoundary chainId={payload.chainId}>
-            <RedPacketNft payload={payload} />
-        </EthereumChainBoundary>
-    )
+    return <RedPacketNft payload={payload} />
 }

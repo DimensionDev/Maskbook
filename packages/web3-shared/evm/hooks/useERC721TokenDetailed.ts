@@ -117,6 +117,7 @@ export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<E
                     return {
                         ...json,
                         mediaUrl: json.image || json.animation_url,
+                        imageURL: json.image || json.animation_url,
                     } as ERC721TokenInfo
                 },
                 noop,

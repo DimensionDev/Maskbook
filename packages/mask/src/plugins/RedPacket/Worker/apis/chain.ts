@@ -64,53 +64,50 @@ export async function getRedPacketHistory(
         _total_tokens: BigNumber
     }
 
-    const { result } = await response.json()
+    const { result }: { result: TxType[] } = await response.json()
     if (!result.length) return []
 
-    const payloadList: RedPacketJSONPayloadFromChain[] = result.reduce(
-        (acc: RedPacketJSONPayloadFromChain[], cur: TxType) => {
-            if (!isSameAddress(cur.from, senderAddress)) return acc
-            try {
-                const decodedInputParam = interFace.decodeFunctionData(
-                    'create_red_packet',
-                    cur.input,
-                ) as unknown as CreateRedpacketParam
+    const payloadList: RedPacketJSONPayloadFromChain[] = result.flatMap((txType: TxType) => {
+        if (!isSameAddress(txType.from, senderAddress)) return []
+        try {
+            const decodedInputParam = interFace.decodeFunctionData(
+                'create_red_packet',
+                txType.input,
+            ) as unknown as CreateRedpacketParam
 
-                const redpacketPayload: RedPacketJSONPayloadFromChain = {
-                    contract_address: cur.to,
-                    txid: cur.hash,
-                    shares: decodedInputParam._number.toNumber(),
-                    is_random: decodedInputParam._ifrandom,
-                    total: decodedInputParam._total_tokens.toString(),
-                    duration: decodedInputParam._duration.toNumber() * 1000,
-                    block_number: Number(cur.blockNumber),
-                    contract_version: 4,
-                    network: getChainName(chainId),
-                    token_address: decodedInputParam._token_addr,
-                    sender: {
-                        address: senderAddress,
-                        name: decodedInputParam._name,
-                        message: decodedInputParam._message,
-                    },
-                    // #region Retrieve at step 3
-                    rpid: '',
-                    creation_time: 0,
-                    // #endregion
-                    // #region Retrieve at step 4
-                    total_remaining: '',
-                    claimers: [],
-                    // #endregion
-                    // #region Retrieve from database
-                    password: '',
-                    // #endregion
-                }
-                return acc.concat(redpacketPayload)
-            } catch {
-                return acc
+            const redpacketPayload: RedPacketJSONPayloadFromChain = {
+                contract_address: txType.to,
+                txid: txType.hash,
+                shares: decodedInputParam._number.toNumber(),
+                is_random: decodedInputParam._ifrandom,
+                total: decodedInputParam._total_tokens.toString(),
+                duration: decodedInputParam._duration.toNumber() * 1000,
+                block_number: Number(txType.blockNumber),
+                contract_version: 4,
+                network: getChainName(chainId),
+                token_address: decodedInputParam._token_addr,
+                sender: {
+                    address: senderAddress,
+                    name: decodedInputParam._name,
+                    message: decodedInputParam._message,
+                },
+                // #region Retrieve at step 3
+                rpid: '',
+                creation_time: 0,
+                // #endregion
+                // #region Retrieve at step 4
+                total_remaining: '',
+                claimers: [],
+                // #endregion
+                // #region Retrieve from database
+                password: '',
+                // #endregion
             }
-        },
-        [],
-    )
+            return redpacketPayload
+        } catch {
+            return []
+        }
+    })
     // #endregion
 
     // #region

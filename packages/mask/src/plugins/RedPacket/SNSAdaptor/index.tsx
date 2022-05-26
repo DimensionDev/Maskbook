@@ -1,4 +1,4 @@
-import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     EthereumTokenType,
@@ -94,9 +94,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <RedPacketIcon />
-            const name = <Trans i18nKey="plugin_red_packet_name" />
+            const name = <Trans ns={PluginId.RedPacket} i18nKey="name" />
             const recommendFeature = {
-                description: <Trans i18nKey="plugin_red_packet_recommend_feature_description" />,
+                description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
             }
             return {
@@ -125,7 +125,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Trans i18nKey="plugin_red_packet_description" />,
+                description: <Trans ns={PluginId.RedPacket} i18nKey="description" />,
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',
@@ -133,6 +133,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    wrapperProps: {
+        icon: (
+            <RedPacketIcon
+                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(240, 51, 51, 0.2))' }}
+            />
+        ),
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
+    },
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload

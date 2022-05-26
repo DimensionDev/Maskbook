@@ -117,12 +117,7 @@ export const ProfileList = memo(() => {
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(
-                    currentPersona.identifier,
-                    networkIdentifier,
-                    type,
-                    profile,
-                )
+                await Services.SocialNetwork.connectSite(currentPersona.identifier, networkIdentifier, type, profile)
             }
         },
         [currentPersona],

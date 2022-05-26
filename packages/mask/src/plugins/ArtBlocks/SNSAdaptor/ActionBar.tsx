@@ -8,16 +8,17 @@ import type { Project } from '../types'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
-            marginTop: theme.spacing(1),
+            flex: 1,
         },
         content: {
             padding: theme.spacing(0),
         },
         button: {
-            flex: 1,
-            margin: `${theme.spacing(0)} ${theme.spacing(0.5)}`,
+            backgroundColor: theme.palette.maskColor.dark,
+            color: 'white',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
         },
     }
 })
@@ -45,6 +46,7 @@ export function ActionBar(props: ActionBarProps) {
         <Box className={classes.root} display="flex" justifyContent="center">
             <ActionButton
                 className={classes.button}
+                fullWidth
                 color="primary"
                 variant="contained"
                 onClick={onOpenMintDialog}

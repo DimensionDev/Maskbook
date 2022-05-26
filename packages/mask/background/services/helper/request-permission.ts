@@ -1,5 +1,8 @@
 import { getPermissionRequestURL } from '../../../shared/definitions/routes'
+import { Flags } from '../../../shared/flags'
+import type { SiteAdaptor } from '../../../shared/site-adaptors/types'
 export async function requestExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
+    if (Flags.no_web_extension_dynamic_permission_request) return true
     if (await browser.permissions.contains(permission)) return true
     try {
         return await browser.permissions.request(permission)
@@ -22,7 +25,7 @@ export async function requestExtensionPermission(permission: browser.permissions
     })
 }
 
-export async function requestHostPermission(origins: string[]) {
+export async function requestHostPermission(origins: readonly string[]) {
     const currentOrigins = (await browser.permissions.getAll()).origins || []
     const extra = origins.filter((i) => !currentOrigins?.includes(i))
     if (!extra.length) return true
@@ -31,4 +34,11 @@ export async function requestHostPermission(origins: string[]) {
 
 export function queryExtensionPermission(permission: browser.permissions.Permissions): Promise<boolean> {
     return browser.permissions.contains(permission)
+}
+
+/** @internal */
+export function requestSiteAdaptorsPermission(defines: readonly SiteAdaptor.Definition[]) {
+    return requestExtensionPermission({
+        origins: defines.map((x) => x.declarativePermissions.origins).flat(),
+    })
 }

@@ -63,7 +63,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false} renderInTimeline>
                               <Typography color="textPrimary">{content}</Typography>
                           </EthereumChainBoundary>
                       </Render>
@@ -95,7 +95,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <Render>
-                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
+                          <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false} renderInTimeline>
                               <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />
                           </EthereumChainBoundary>

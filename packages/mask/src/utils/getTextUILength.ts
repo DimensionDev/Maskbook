@@ -1,6 +1,9 @@
+import { sum } from 'lodash-unified'
+
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
+
 export function getTextUILength(text: string) {
-    return Array.from(text).reduce((acc, char) => acc + getCharUILength(char), 0)
+    return sum(Array.from(text).map(getCharUILength))
 }
 
 export function sliceTextByUILength(text: string, len: number) {

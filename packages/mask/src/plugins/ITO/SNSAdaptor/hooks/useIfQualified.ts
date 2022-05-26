@@ -1,11 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import { useQualificationContract } from './useQualificationContract'
 
 export function useIfQualified(address: string, ito_address: string) {
     const account = useAccount()
+    const chainId = useChainId()
     const { contract: qualificationContract, version } = useQualificationContract(address, ito_address)
 
     return useAsyncRetry(async () => {
@@ -17,5 +18,5 @@ export function useIfQualified(address: string, ito_address: string) {
         ).call({
             from: account,
         })
-    }, [account, qualificationContract])
+    }, [account, qualificationContract, chainId])
 }

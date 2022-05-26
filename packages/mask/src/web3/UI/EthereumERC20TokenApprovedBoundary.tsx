@@ -154,7 +154,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 ) : null}
             </Box>
         )
-    if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
         return (
             <Grid container>
                 <ActionButton
@@ -164,7 +164,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     size="large"
                     disabled
                     {...props.ActionButtonProps}>
-                    {approveStateType === ApproveStateType.PENDING
+                    {transactionState.loading
                         ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                         : `Updating ${token.symbol}`}
                     &hellip;

@@ -5,7 +5,7 @@ import type { PostIdentifier } from '@masknet/shared-base'
 import { hasPayloadLike } from '../../utils'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { openWindow } from '@masknet/shared-base-ui'
-import urlcat from 'urlcat'
+import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/facebook.com'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
     return new URL(getPostUrlAtFacebook(post))
@@ -13,20 +13,10 @@ const getPostURL = (post: PostIdentifier): URL | null => {
 export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...facebookBase,
     utils: {
-        getHomePage: () => 'https://www.facebook.com',
-        getProfilePage: (userId: string) => 'https://www.facebook.com',
         isValidUsername: (v) => !!isValidFacebookUsername(v),
-        textPayloadPostProcessor: undefined,
         getPostURL,
         share(message) {
-            openWindow(this.getShareLinkURL?.(message))
-        },
-        getShareLinkURL(message) {
-            const url = urlcat('https://www.facebook.com/sharer/sharer.php', {
-                quote: message,
-                u: 'mask.io',
-            })
-            return new URL(url)
+            openWindow(FacebookAdaptor.getShareLinkURL?.(message))
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             hasPayloadLike,

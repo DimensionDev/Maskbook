@@ -1,13 +1,11 @@
-import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
+import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
-import { InjectedDialog } from '../../components'
+import { InjectedDialog, InjectedDialogProps } from '../../components'
 import { useRowSize } from './useRowSize'
 
 interface StyleProps {
@@ -49,13 +47,10 @@ export interface PickTokenOptions {
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
+    onSubmit?(token: FungibleTokenDetailed): void
 }
 
-export interface SelectTokenDialogProps extends PickTokenOptions {
-    open: boolean
-    onSelect?(token: FungibleTokenDetailed): void
-    onClose?(): void
-}
+export interface SelectTokenDialogProps extends PickTokenOptions, Omit<InjectedDialogProps, 'onSubmit' | 'title'> {}
 
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
@@ -66,7 +61,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSelect,
+    onSubmit,
     onClose,
     title,
 }) => {
@@ -76,7 +71,6 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -90,7 +84,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSelect}
+                    onSelect={onSubmit}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={

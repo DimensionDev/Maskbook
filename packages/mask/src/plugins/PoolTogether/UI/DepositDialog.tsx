@@ -1,12 +1,10 @@
+import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
-    formatBalance,
     FungibleTokenDetailed,
-    TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
     ZERO_ADDRESS,
@@ -23,7 +21,6 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { WalletMessages } from '../../Wallet/messages'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
@@ -132,17 +129,48 @@ export function DepositDialog() {
                   )
                 : undefined,
         )
-    }, [rawAmount])
+    }, [pool, rawAmount])
 
     // #region blocking
-    const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(
+    const [{ loading: isDepositing }, depositCallback] = useDepositCallback(
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',
-        ZERO_ADDRESS, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
+        ZERO_ADDRESS, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf79/lib/components/DepositUI.jsx#L25
         token,
     )
     // #endregion
+
+    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const shareText = token
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_pooltogether_share'
+                  : 'plugin_pooltogether_share_no_official_account',
+              {
+                  amount: rawAmount,
+                  cashTag,
+                  symbol: token.symbol,
+                  pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          )
+        : ''
+
+    const openShareTxDialog = useOpenShareTxDialog()
+    const deposit = useCallback(async () => {
+        const hash = await depositCallback()
+        if (typeof hash === 'string') {
+            await openShareTxDialog({
+                hash,
+                onShare() {
+                    activatedSocialNetworkUI.utils.share?.(shareText)
+                },
+            })
+            setRawAmount('')
+        }
+        retryLoadTokenBalance()
+    }, [depositCallback, retryLoadTokenBalance, openShareTxDialog])
 
     // #region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
@@ -171,52 +199,6 @@ export function DepositDialog() {
             },
         })
     }, [token, openSwapDialog])
-    // #endregion
-
-    // #region transaction dialog
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareText = token
-        ? t(
-              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                  ? 'plugin_pooltogether_share'
-                  : 'plugin_pooltogether_share_no_official_account',
-              {
-                  amount: rawAmount,
-                  cashTag,
-                  symbol: token.symbol,
-                  pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
-                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-              },
-          )
-        : ''
-
-    // on close transaction dialog
-    const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    retryLoadTokenBalance()
-                    if (depositState.type === TransactionStateType.HASH) onClose()
-                }
-                if (depositState.type === TransactionStateType.HASH) setRawAmount('')
-                resetDepositCallback()
-            },
-            [depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
-        ),
-    )
-
-    // open the transaction dialog
-    useEffect(() => {
-        if (!token || !pool) return
-        if (depositState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialogOpen({
-            open: true,
-            shareText,
-            state: depositState,
-            summary: `Depositing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
-        })
-    }, [depositState /* update tx dialog only if state changed */])
     // #endregion
 
     // #region submit button
@@ -265,7 +247,8 @@ export function DepositDialog() {
                                 fullWidth
                                 onClick={openSwap}
                                 variant="contained"
-                                loading={loadingTokenBalance}>
+                                disabled={isDepositing}
+                                loading={loadingTokenBalance || isDepositing}>
                                 {t('plugin_pooltogether_buy', { symbol: token.symbol })}
                             </ActionButton>
                         ) : (
@@ -276,10 +259,10 @@ export function DepositDialog() {
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage}
-                                    onClick={depositCallback}
+                                    disabled={!!validationMessage || isDepositing}
+                                    onClick={deposit}
                                     variant="contained"
-                                    loading={loadingTokenBalance}>
+                                    loading={loadingTokenBalance || isDepositing}>
                                     {validationMessage || t('plugin_pooltogether_deposit_msg')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
@@ -295,7 +278,7 @@ export function DepositDialog() {
                             <Grid item>
                                 <Typography variant="body2" fontWeight="fontWeightBold" className={classes.oddsValue}>
                                     {t('plugin_pooltogether_odds_value', {
-                                        value: odds.toLocaleString(),
+                                        value: Number.parseFloat(odds).toFixed(4),
                                         period: getPrizePeriod(t, prizePeriodSeconds),
                                     })}
                                 </Typography>
