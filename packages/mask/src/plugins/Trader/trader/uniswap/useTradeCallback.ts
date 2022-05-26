@@ -118,7 +118,7 @@ export function useTradeCallback(
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...(targetChainId === 10 ? { gasPrice: 15000000, gas: 820000 } : { ...gasConfig }),
+                    ...gasConfig,
                 })
                 .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
                     resolve(receipt.transactionHash)
