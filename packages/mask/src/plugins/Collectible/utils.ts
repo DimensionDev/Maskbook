@@ -35,8 +35,8 @@ export function getAssetInfoFromURL(url?: string) {
     if (openSeaMatched) {
         return {
             chain_id: _url.host.includes('testnets') ? ChainId.Rinkeby : ChainId.Mainnet,
-            address: openSeaMatched[1],
-            token_id: openSeaMatched[2],
+            address: openSeaMatched[2],
+            token_id: openSeaMatched[3],
         }
     }
     // #endregion

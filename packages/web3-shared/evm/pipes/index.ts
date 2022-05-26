@@ -226,7 +226,7 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return 'https://testnets.opensea.io/assets'
             if (chainId === ChainId.Matic) return 'https://opensea.io/assets/matic'
-            return 'https://opensea.io/assets'
+            return 'https://opensea.io/assets/ethereum'
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
@@ -267,7 +267,7 @@ export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: C
             tokenId,
         })
     }
-    return urlcat('https://opensea.io/assets/:address/:tokenId', {
+    return urlcat('https://opensea.io/assets/ethereum/:address/:tokenId', {
         address,
         tokenId,
     })
