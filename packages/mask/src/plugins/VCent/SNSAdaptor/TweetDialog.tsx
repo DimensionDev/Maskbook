@@ -12,7 +12,7 @@ import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
-        marginTop: 20,
+        padding: theme.spacing(0, 2, 2, 2),
     },
     content: {
         display: 'flex',
