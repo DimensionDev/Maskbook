@@ -1,46 +1,23 @@
-import { TokenIcon } from '@masknet/shared'
-<<<<<<< HEAD
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../utils'
-import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
-import { TransactionStateType, SchemaType, ChainId } from '@masknet/web3-shared-evm'
-import { dateTimeFormat } from '../../ITO/assets/formatDate'
-=======
-import { makeStyles } from '@masknet/theme'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
-    NativeTokenDetailed,
-    useAccount,
-    useFungibleTokenDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { Box, ListItem, Popper, Theme, Typography, useMediaQuery } from '@mui/material'
+import { useState, useCallback, MouseEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import intervalToDuration from 'date-fns/intervalToDuration'
-import nextDay from 'date-fns/nextDay'
-import { omit, pick } from 'lodash-unified'
-import { MouseEvent, useCallback, useState } from 'react'
+import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
->>>>>>> develop
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { omit, pick } from 'lodash-unified'
+import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
+import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { dateTimeFormat } from '../../ITO/assets/formatDate'
+import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
+import type { dateTimeFormat } from '../../ITO/assets/formatDate'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
-import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-<<<<<<< HEAD
-import { WalletMessages } from '../../Wallet/messages'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
-=======
->>>>>>> develop
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -207,12 +184,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
-<<<<<<< HEAD
-    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
-=======
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
->>>>>>> develop
         history.contract_version,
         account,
         history.rpid,
@@ -229,15 +201,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) {
-            await refundCallback()
+            refundCallback()
             revalidateAvailability()
         }
-<<<<<<< HEAD
-    }, [refundState /* update tx dialog only if state changed */])
-    // #endregion
-
-    const onSendOrRefund = useCallback(async () => {
-        if (canRefund) await refundCallback()
         if (canSend)
             onSelect(
                 removeUselessSendParams({
@@ -245,11 +211,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     token: historyToken as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
                 }),
             )
-    }, [onSelect, refundCallback, canRefund, canSend, history])
-=======
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
     }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
->>>>>>> develop
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
