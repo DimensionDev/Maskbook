@@ -10,7 +10,10 @@ import { CheckoutDialog } from './CheckoutDialog'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {},
+        root: {
+            display: 'flex',
+            flex: 1,
+        },
         button: {
             flex: 1,
             backgroundColor: theme.palette.maskColor.dark,
@@ -68,6 +71,7 @@ export function ActionBar(props: ActionBarProps) {
                     className={classes.button}
                     color="primary"
                     variant="contained"
+                    fullWidth
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -82,6 +86,7 @@ export function ActionBar(props: ActionBarProps) {
                 <ActionButton
                     className={classes.button}
                     color="primary"
+                    fullWidth
                     variant="contained"
                     onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
