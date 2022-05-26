@@ -18,9 +18,8 @@ import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { omit, pick } from 'lodash-unified'
 import { MouseEvent, useCallback, useState } from 'react'
-import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
+import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
@@ -185,7 +184,7 @@ export interface RedPacketInHistoryListProps {
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const account = useAccount()
     const { history, onSelect } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
@@ -246,28 +245,24 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         <div className={classes.div}>
                             <div className={classes.fullWidthBox}>
                                 <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                    {history.sender.message === ''
-                                        ? t('plugin_red_packet_best_wishes')
-                                        : history.sender.message}
+                                    {history.sender.message === '' ? t.best_wishes() : history.sender.message}
                                 </Typography>
                             </div>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_duration', {
+                                {t.history_duration({
                                     startTime: dateTimeFormat(new Date(history.creation_time)),
                                     endTime: dateTimeFormat(new Date(history.creation_time + history.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_total_amount', {
+                                {t.history_total_amount({
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
-                                    symbol: historyToken?.symbol,
+                                    symbol: historyToken?.symbol!,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_split_mode', {
-                                    mode: history.is_random
-                                        ? t('plugin_red_packet_random')
-                                        : t('plugin_red_packet_average'),
+                                {t.history_split_mode({
+                                    mode: history.is_random ? t.random() : t.average(),
                                 })}
                             </Typography>
                         </div>
@@ -291,12 +286,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     variant="contained"
                                     size="large">
                                     {canSend
-                                        ? t('plugin_red_packet_history_send')
+                                        ? t.send()
                                         : refunded
-                                        ? t('plugin_red_packet_refunding')
+                                        ? t.refunding()
                                         : listOfStatus.includes(RedPacketStatus.empty)
-                                        ? t('plugin_red_packet_empty')
-                                        : t('plugin_red_packet_refund')}
+                                        ? t.empty()
+                                        : t.refund()}
                                 </ActionButton>
                                 <Popper
                                     className={classes.popper}
@@ -306,7 +301,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     transition
                                     disablePortal>
                                     <Typography className={classes.popperText}>
-                                        {t('plugin_red_packet_data_broken', { duration: formatRefundDuration })}
+                                        {t.data_broken({ duration: formatRefundDuration })}
                                     </Typography>
                                     <div className={classes.arrow} />
                                 </Popper>
@@ -319,20 +314,18 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey="plugin_red_packet_history_claimed"
+                            <Translate.history_claimed
                                 components={{
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers?.length ?? 0,
-                                    shares: history.shares,
+                                    claimedShares: history.claimers?.length.toString() ?? '0',
+                                    shares: history.shares.toString(),
                                 }}
                             />
                         </Typography>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey="plugin_red_packet_history_total_claimed_amount"
+                            <Translate.history_total_claimed_amount
                                 components={{
                                     strong: <strong className={classes.strong} />,
                                     span: <span className={classes.span} />,
@@ -344,7 +337,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: historyToken?.symbol,
+                                    symbol: historyToken?.symbol!,
                                 }}
                             />
                         </Typography>

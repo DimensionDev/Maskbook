@@ -1,6 +1,6 @@
 import { toFixed } from '@masknet/web3-shared-base'
 import { EthereumTokenType, FungibleTokenDetailed, TransactionEventType, useAccount } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
 
@@ -15,9 +15,8 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
     const poolV2Contract = useDHedgePoolV2Contract(pool?.address ?? '')
 
     const account = useAccount()
-    const [loading, setLoading] = useState(false)
 
-    const investCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !poolV1Contract || !poolV2Contract) return
 
         // step 1: estimate gas
@@ -32,11 +31,9 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 : poolV2Contract.methods.deposit(token.address, amount)
         }
 
-        setLoading(true)
         const estimatedGas = await deposit()
             .estimateGas(config)
             .catch((error) => {
-                setLoading(false)
                 throw error
             })
 
@@ -53,6 +50,4 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 .on(TransactionEventType.ERROR, reject)
         })
     }, [pool, account, amount, token])
-
-    return [loading, investCallback] as const
 }
