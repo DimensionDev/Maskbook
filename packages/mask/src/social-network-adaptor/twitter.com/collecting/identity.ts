@@ -31,6 +31,23 @@ function recognizeDesktop() {
     return { watcher, collect }
 }
 
+function _getNickname(nickname?: string) {
+    const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
+    let _nickname = ''
+    if (!nicknameNode?.childNodes.length) return nickname
+
+    for (const child of nicknameNode.childNodes) {
+        const ele = child as HTMLDivElement
+        if (ele.tagName === 'IMG') {
+            _nickname += ele.getAttribute('alt') ?? ''
+        }
+        if (ele.tagName === 'SPAN') {
+            _nickname += ele.textContent?.trim()
+        }
+    }
+
+    return _nickname ?? nickname
+}
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
@@ -42,7 +59,7 @@ function resolveLastRecognizedIdentityInner(
         const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
         const handle =
             searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
-        const nickname = (searchSelfNicknameSelector().evaluate()?.textContent?.trim() || dataFromScript.nickname) ?? ''
+        const nickname = _getNickname(dataFromScript.nickname)
 
         if (handle) {
             ref.value = {

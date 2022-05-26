@@ -2,7 +2,7 @@ import { ChainId, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '../type
 import { useWeb3Context } from '../context'
 import { noop, uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
-import { useSocket } from './useSocket'
+import { SocketState, useSocket } from './useSocket'
 import { useMemo } from 'react'
 
 export function useCollections(address: string, chainId: ChainId | null, dependReady?: boolean) {
@@ -55,7 +55,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     )
     return {
         data: chainId === ChainId.Mainnet ? (all as ERC721TokenDetailed[]) : [],
-        state,
+        state: chainId === ChainId.Mainnet ? state : SocketState.done,
         error: chainId === ChainId.Mainnet ? error : undefined,
         retry: chainId === ChainId.Mainnet ? retry : noop,
     }
