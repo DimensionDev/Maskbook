@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Grid, Box } from '@mui/material'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,
@@ -117,9 +117,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.NOT_APPROVED)
         return (
             <Box style={{ flex: 1, display: 'flex' }}>
-                <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                    {!onlyInfiniteUnlock ? (
-                        <Grid item xs={6}>
+                {!onlyInfiniteUnlock ? (
+                    <>
+                        <Box style={{ flex: 1, padding: 16 }}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth
@@ -132,20 +132,30 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                                     {formatBalance(amount, token.decimals, 2)} {token?.symbol ?? 'Token'}
                                 </span>
                             </ActionButton>
-                        </Grid>
-                    ) : null}
-                    <Grid item xs={onlyInfiniteUnlock ? 12 : 6}>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            onClick={() => onApprove(false)}
-                            {...props.ActionButtonProps}>
-                            {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock')}
-                        </ActionButton>
-                    </Grid>
-                </Grid>
+                        </Box>
+                        <Box style={{ flex: 1, padding: 16 }}>
+                            <ActionButton
+                                className={classes.button}
+                                fullWidth
+                                variant="contained"
+                                size="large"
+                                onClick={() => onApprove(false)}
+                                {...props.ActionButtonProps}>
+                                {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock')}
+                            </ActionButton>
+                        </Box>
+                    </>
+                ) : null}
+                {onlyInfiniteUnlock ? (
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            title: infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock'),
+                            action: () => onApprove(false),
+                        }}
+                        classes={{ button: classes.button }}
+                    />
+                ) : null}
+
                 {withChildren ? (
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}

@@ -476,7 +476,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                         }
                         spender={approveAddress}
                         onlyInfiniteUnlock
-                        withChildren
                         ActionButtonProps={{
                             color: 'primary',
                         }}
