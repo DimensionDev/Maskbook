@@ -8,10 +8,11 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useChainColor, useChainId } from '@masknet/web3-shared-evm'
+import { useChainColor, useChainId, useProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import Color from 'color'
 import { useState } from 'react'
+import { ProviderType } from '../../../../../public-api/src/web'
 import { DownIcon } from '../../assets/Down'
 import { LinkIcon } from '../../assets/Link'
 import { LockWalletIcon } from '../../assets/Lock'
@@ -41,6 +42,7 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     },
     name: {
         display: 'flex',
+        alignItems: 'center',
     },
     pending: {
         display: 'flex',
@@ -62,9 +64,9 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
 
 interface WalletUIProps {
     address: string
+    name?: string
     iconSize?: number
     badgeSize?: number
-    onClick?: (adddress: string) => void
     verify?: boolean
     isETH?: boolean
     showMenuDrop?: boolean
@@ -80,7 +82,7 @@ export function WalletUI(props: WalletUIProps) {
     const {
         iconSize = 30,
         badgeSize = 12,
-        onClick,
+        name,
         verify = false,
         isETH = false,
         address,
@@ -94,11 +96,12 @@ export function WalletUI(props: WalletUIProps) {
     const chainId = useChainId()
     const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const providerDescriptor = useProviderDescriptor()
+    const providerType = useProviderType()
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
     return (
-        <Box className={classes.root} onClick={() => onClick?.(address)}>
+        <Box className={classes.root}>
             <WalletIcon
                 classes={{ root: classes.icon }}
                 size={iconSize}
@@ -110,8 +113,10 @@ export function WalletUI(props: WalletUIProps) {
             <Box className={classes.domain}>
                 <Box className={classes.name}>
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
-                        {currentPluginId === NetworkPluginID.PLUGIN_EVM
-                            ? domain ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                        {currentPluginId !== NetworkPluginID.PLUGIN_EVM
+                            ? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            : providerType === ProviderType.MaskWallet
+                            ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}

@@ -1,9 +1,9 @@
-import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { BindingProof } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, useWallet } from '@masknet/web3-shared-evm'
 import { Button, Divider, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -70,9 +70,9 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
     const t = useSharedI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const account = useAccount()
+    const wallet = useWallet()
 
-    const [selectedWallet, setSelectedWallet] = useState(account || wallets[0].identity || '')
+    const [selectedWallet, setSelectedWallet] = useState(wallet?.address || wallets[0].identity || '')
     const onClick = useCallback((address: string) => {
         onChange(address)
         setSelectedWallet(address)
@@ -80,10 +80,10 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     }, [])
 
     useEffect(() => {
-        if (!account && !wallets.length) return
-        setSelectedWallet(account || wallets[0].identity)
-        onChange(account || wallets[0].identity)
-    }, [account, wallets])
+        if (!wallet?.address && !wallets.length) return
+        setSelectedWallet(wallet?.address || wallets[0].identity)
+        onChange(wallet?.address || wallets[0].identity)
+    }, [wallet, wallets])
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -95,6 +95,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     }, [openSelectProviderDialog, onClose])
 
     const walletItem = (
+        name: string,
         selectedWallet: string,
         wallet: string,
         enableChange: boolean,
@@ -103,7 +104,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
         verify?: boolean,
         isETH?: boolean,
     ) => (
-        <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
+        <MenuItem key={wallet} value={wallet} onClick={() => onClick(wallet)}>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
                     <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
@@ -111,7 +112,14 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
-            <WalletUI iconSize={iconSize} badgeSize={badgeSize} address={wallet} verify={verify} isETH={isETH} />
+            <WalletUI
+                name={name}
+                iconSize={iconSize}
+                badgeSize={badgeSize}
+                address={wallet}
+                verify={verify}
+                isETH={isETH}
+            />
             {enableChange && (
                 <Button size="small" className={classes.change} onClick={onChange}>
                     {t.change()}
@@ -120,17 +128,18 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
         </MenuItem>
     )
 
-    if (!wallets.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account)) return null
+    if (!wallets.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !wallet?.address)) return null
 
     return (
         <Stack className={classes.root}>
             <Stack onClick={onOpen} direction="row" alignItems="center" className={classes.wrapper}>
                 <WalletUI
+                    name={wallet?.name ?? ''}
                     iconSize={iconSize}
                     badgeSize={badgeSize}
                     address={selectedWallet}
                     isETH={
-                        wallets.some((x) => isSameAddress(x.identity, account))
+                        wallets.some((x) => isSameAddress(x.identity, wallet?.address))
                             ? true
                             : currentPluginId === NetworkPluginID.PLUGIN_EVM
                     }
@@ -146,15 +155,16 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                 PaperProps={{
                     className: classes.paper,
                 }}>
-                {account ? (
+                {wallet?.address ? (
                     walletItem(
+                        wallet.name ?? '',
                         selectedWallet,
-                        account,
-                        Boolean(account),
-                        () => onClick(account),
+                        wallet.address,
+                        Boolean(wallet.address),
+                        () => onClick(wallet.address),
                         () => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM }),
-                        wallets.some((x) => isSameAddress(x.identity, account)),
-                        wallets.some((x) => isSameAddress(x.identity, account))
+                        wallets.some((x) => isSameAddress(x.identity, wallet.address)),
+                        wallets.some((x) => isSameAddress(x.identity, wallet.address))
                             ? true
                             : currentPluginId === NetworkPluginID.PLUGIN_EVM,
                     )
@@ -168,10 +178,11 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                 <Divider className={classes.divider} />
                 {wallets
                     .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
-                    ?.filter((x) => !isSameAddress(x.identity, account))
+                    ?.filter((x) => !isSameAddress(x.identity, wallet?.address))
                     .map((x) => (
                         <>
                             {walletItem(
+                                wallet?.name ?? '',
                                 selectedWallet,
                                 x.identity,
                                 false,
