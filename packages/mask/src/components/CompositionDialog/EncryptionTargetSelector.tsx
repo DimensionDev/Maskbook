@@ -138,18 +138,18 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.Public}
                     title={t('compose_encrypt_visible_to_all')}
                     subTitle={t('compose_encrypt_visible_to_all_sub')}
-                    showDivider
                 />
+                <div className={classes.divider} />
                 <PopoverListItem
                     onItemClick={() => props.onChange(EncryptionTargetType.Self)}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.Self}
                     title={t('compose_encrypt_visible_to_private')}
                     subTitle={t('compose_encrypt_visible_to_private_sub')}
-                    showDivider
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
+                <div className={classes.divider} />
                 <PopoverListItem
                     onItemClick={() => {
                         props.onChange(EncryptionTargetType.E2E)
