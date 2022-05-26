@@ -216,10 +216,10 @@ export interface OpenSeaResponse extends Asset {
     background_color: string | null
     transfer_fee: string | null
     transfer_fee_payment_token: OpenSeaFungibleToken | null
-    top_ownerships: Array<{
+    top_ownerships: {
         owner: OpenSeaCustomAccount
         quantity: string
-    }>
+    }[]
     creator: OpenSeaCustomAccount
     endTime: string
 }

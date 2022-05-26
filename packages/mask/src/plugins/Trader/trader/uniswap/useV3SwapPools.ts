@@ -19,7 +19,7 @@ export function useV3SwapPools(
 } {
     const allCurrencyCombinations = useAllCurrencyCombinations(TradeProvider.UNISWAP_V3, currencyIn, currencyOut)
 
-    const allCurrencyCombinationsWithAllFees: Array<[Token, Token, FeeAmount]> = useMemo(
+    const allCurrencyCombinationsWithAllFees: [Token, Token, FeeAmount][] = useMemo(
         () =>
             allCurrencyCombinations.flatMap<[Token, Token, FeeAmount]>(([tokenA, tokenB]) => [
                 [tokenA, tokenB, FeeAmount.LOW],

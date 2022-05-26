@@ -58,7 +58,7 @@ export async function getCampaignInfo(id: number): Promise<CampaignInfo> {
             endTime: number
             startTime: number
             gamification: {
-                nfts: Array<{ nft: { image: string } }>
+                nfts: { nft: { image: string } }[]
             }
         }
     }>(`

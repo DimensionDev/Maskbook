@@ -5,7 +5,7 @@ import type { Dimension } from './useDimension'
 
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
-    data: Array<{ date: Date; value: number }>,
+    data: { date: Date; value: number }[],
     dimension: Dimension,
     id: string,
     opts: { color?: string; tickFormat?: string; formatTooltip?: Function },

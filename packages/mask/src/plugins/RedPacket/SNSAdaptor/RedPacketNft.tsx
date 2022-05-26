@@ -1,30 +1,31 @@
-import { makeStyles } from '@masknet/theme'
-import {
-    useAccount,
-    resolveAddressLinkOnExplorer,
-    useWeb3,
-    resolveNetworkName,
-    useNetworkType,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
-import LaunchIcon from '@mui/icons-material/Launch'
-import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { RedPacketNftJSONPayload } from '../types'
-import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
-import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
-import classNames from 'classnames'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import {
+    resolveAddressLinkOnExplorer,
+    resolveNetworkName,
+    TransactionStateType,
+    useAccount,
+    useNetworkType,
+    useWeb3,
+} from '@masknet/web3-shared-evm'
+import LaunchIcon from '@mui/icons-material/Launch'
+import { Box, Button, Card, CardContent, CardHeader, CardMedia, Link, Skeleton, Typography } from '@mui/material'
+import classNames from 'classnames'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { useI18N } from '../locales'
+import type { RedPacketNftJSONPayload } from '../types'
+import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
+import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -249,7 +250,8 @@ export interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
-    const { t } = useI18N()
+    const { t: i18n } = useBaseI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
     const account = useAccount()
@@ -295,29 +297,23 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const networkType = useNetworkType()
-    const shareText = availability?.isClaimed
-        ? t(
-              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                  ? 'plugin_red_packet_nft_share_claimed_message'
-                  : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
-              {
-                  sender: payload.senderName,
-                  payload: postLink,
-                  network: resolveNetworkName(networkType),
-                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-              },
-          ).trim()
-        : t(
-              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                  ? 'plugin_red_packet_nft_share_foreshow_message'
-                  : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
-              {
-                  sender: payload.senderName,
-                  payload: postLink,
-                  network: resolveNetworkName(networkType),
-                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-              },
-          ).trim()
+    const shareText = useMemo(() => {
+        const isTwitterOrFacebook = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+        const options = {
+            sender: payload.senderName,
+            payload: postLink.toString(),
+            network: resolveNetworkName(networkType),
+            account: isTwitter(activatedSocialNetworkUI) ? i18n('twitter_account') : i18n('facebook_account'),
+        }
+        if (availability?.isClaimed) {
+            return isTwitterOrFacebook
+                ? t.nft_share_claimed_message(options)
+                : t.nft_share_claimed_message_not_twitter(options)
+        }
+        return isTwitterOrFacebook
+            ? t.nft_share_foreshow_message(options)
+            : t.nft_share_foreshow_message_not_twitter(options)
+    }, [availability?.isClaimed, t, i18n])
 
     const onShare = useCallback(() => {
         if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
@@ -330,13 +326,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
                     <img className={classes.errImage} src={rpNftImg} />
                     <Typography className={classes.whiteText} variant="h5">
-                        {t('loading_failed')}
+                        {i18n('loading_failed')}
                     </Typography>
                     <Button
                         onClick={retryAvailability}
                         className={classNames(classes.errorButton, classes.whiteText)}
                         variant="outlined">
-                        {t('try_again')}
+                        {i18n('try_again')}
                     </Button>
                 </Card>
             </div>
@@ -389,14 +385,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : (
                     <CardMedia className={classes.image} component="div" image={rpNftImg}>
                         <Typography className={classes.remain}>
-                            {availability.claimedAmount}/{availability.totalAmount} {t('collectibles_name')}
+                            {availability.claimedAmount}/{availability.totalAmount} {i18n('collectibles_name')}
                         </Typography>
                     </CardMedia>
                 )}
 
                 <CardContent>
                     <Typography variant="body1" className={classes.whiteText}>
-                        {t('plugin_red_packet_nft_tip')}
+                        {t.nft_tip()}
                     </Typography>
                 </CardContent>
                 <div className={classes.footer}>
@@ -426,7 +422,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     />
                     <div className={classNames(classes.badge, classes.whiteText)}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {availability.expired ? t('plugin_red_packet_expired') : t('plugin_red_packet_completed')}
+                            {availability.expired ? t.expired() : t.completed()}
                         </Typography>
                     </div>
                 </Card>
@@ -439,7 +435,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             fullWidth
                             onClick={onShare}
                             variant="contained">
-                            {t('share')}
+                            {i18n('share')}
                         </Button>
                     </Box>
                     {availability.isClaimed ? null : (
@@ -460,7 +456,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                         onClick={claimCallback}
                                         className={classes.button}
                                         fullWidth>
-                                        {isClaiming ? t('plugin_red_packet_claiming') : t('plugin_red_packet_claim')}
+                                        {isClaiming ? t.claiming() : t.claim()}
                                     </ActionButton>
                                 </EthereumWalletConnectedBoundary>
                             </EthereumChainBoundary>

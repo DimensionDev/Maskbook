@@ -27,10 +27,10 @@ export function extractTextFromTypedMessage(
     if (text.length) return Some(text.join(' '))
     return None
 }
-export function extractImageFromTypedMessage(message: TypedMessage | null): Array<string | Blob> {
+export function extractImageFromTypedMessage(message: TypedMessage | null): (string | Blob)[] {
     if (!message) return []
 
-    const image: Array<string | Blob> = []
+    const image: (string | Blob)[] = []
     function visitor(message: TypedMessage): void {
         if (isTypedMessageImage(message)) return void image.push(message.image)
         return forEachTypedMessageChild(message, visitor)

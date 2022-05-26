@@ -2,7 +2,7 @@ import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjec
 import { MaskUIRoot } from '../../UIRoot'
 import { useClassicMaskSNSTheme } from '../theme'
 
-const captureEvents: Array<keyof HTMLElementEventMap> = [
+const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
     'keydown',
     'keypress',

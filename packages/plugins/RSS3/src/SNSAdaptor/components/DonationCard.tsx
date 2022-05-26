@@ -8,10 +8,10 @@ export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     imageUrl: string
     name: string
     contribCount: number
-    contribDetails: Array<{
+    contribDetails: {
         token: string
         amount: string
-    }>
+    }[]
 }
 
 const useStyles = makeStyles()((theme) => ({

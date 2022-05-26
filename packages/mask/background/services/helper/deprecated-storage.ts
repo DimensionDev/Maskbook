@@ -5,7 +5,7 @@ import { timeout } from '@dimensiondev/kit'
  * Make sure that the storage is used serially.
  */
 class MutexStorage<T extends browser.storage.StorageValue> {
-    private tasks: Array<() => void> = []
+    private tasks: (() => void)[] = []
     private locked = false
 
     private lock() {

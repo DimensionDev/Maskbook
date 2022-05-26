@@ -76,8 +76,8 @@ export interface BoxMetadata {
     name: string
     mediaType: MediaType
     mediaUrl: string
-    activities: Array<{
+    activities: {
         title: string
         body: string
-    }>
+    }[]
 }

@@ -56,7 +56,7 @@ export function PriceChangedTable({ market }: PriceChangedTableProps) {
         },
     ]
 
-    const filteredRecords = records.filter((record) => typeof record.percentage === 'number') as Array<Required<Record>>
+    const filteredRecords = records.filter((record) => typeof record.percentage === 'number') as Required<Record>[]
 
     return (
         <TableContainer className={classes.container}>

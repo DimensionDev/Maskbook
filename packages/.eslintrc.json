@@ -83,7 +83,6 @@
         "@dimensiondev/type/no-instanceof-wrapper": "error",
         "@dimensiondev/type/no-wrapper-type-reference": "error",
         "@dimensiondev/unicode/specific-set": "error",
-        "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-base-to-string": "off",
         "@typescript-eslint/no-implied-eval": "error",
