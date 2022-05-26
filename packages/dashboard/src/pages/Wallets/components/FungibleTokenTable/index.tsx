@@ -125,7 +125,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Array<Web3Plugin.Asset<Web3Plugin.FungibleToken>>
+    dataSource: Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
     onSwap(token: Web3Plugin.FungibleToken): void
     onSend(token: Web3Plugin.FungibleToken): void
 }

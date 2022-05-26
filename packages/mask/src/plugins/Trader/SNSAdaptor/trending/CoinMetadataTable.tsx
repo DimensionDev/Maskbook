@@ -63,7 +63,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
         ['Tech Docs', trending.coin.tech_docs_urls],
         ['Source Code', trending.coin.source_code_urls],
         ['Community', trending.coin.community_urls],
-    ] as Array<[string, string[] | undefined]>
+    ] as [string, string[] | undefined][]
 
     return (
         <TableContainer className={classes.container} component={Paper} elevation={0}>

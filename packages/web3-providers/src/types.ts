@@ -40,10 +40,10 @@ export namespace RSS3BaseAPI {
             animation_original_url?: string | null
             title?: string
             total_contribs?: number
-            token_contribs?: Array<{
+            token_contribs?: {
                 token: string
                 amount: string
-            }>
+            }[]
             start_date?: string
             end_date?: string
             country?: string
@@ -204,13 +204,13 @@ export namespace NonFungibleTokenAPI {
         collection_name: string
         animation_url?: string
         end_time: Date | null
-        order_payment_tokens: Array<ERC20TokenDetailed | NativeTokenDetailed>
-        offer_payment_tokens: Array<ERC20TokenDetailed | NativeTokenDetailed>
+        order_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
+        offer_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
         slug: string | null
         desktopOrder?: AssetOrder
-        top_ownerships: Array<{
+        top_ownerships: {
             owner: AssetOwner
-        }>
+        }[]
         last_sale: AssetEvent | null
         response_: any
     }
@@ -464,10 +464,10 @@ export namespace TwitterBaseAPI {
                     name: string
                 }
             }
-            traits: Array<{
+            traits: {
                 trait_type: string
                 value: string
-            }>
+            }[]
         }
     }
     export interface AvatarInfo {

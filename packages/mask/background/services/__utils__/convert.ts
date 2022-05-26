@@ -25,8 +25,8 @@ export function toProfileInformation(profiles: ProfileRecord[]) {
 /** @internal */
 export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDBTransaction<'readonly'>) {
     const personaInfo: PersonaInformation[] = []
-    const dbQueryPass2: Array<Promise<void>> = []
-    const dbQuery: Array<Promise<void>> = personas.map(async (persona) => {
+    const dbQueryPass2: Promise<void>[] = []
+    const dbQuery: Promise<void>[] = personas.map(async (persona) => {
         const map: ProfileInformation[] = []
         personaInfo.push({
             nickname: persona.nickname,

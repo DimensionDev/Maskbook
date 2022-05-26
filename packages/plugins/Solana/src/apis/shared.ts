@@ -49,7 +49,7 @@ export interface ProgramAccount {
     pubkey: string
 }
 
-export type GetProgramAccountsResponse = RpcResponse<ProgramAccount[]>
+export type GetProgramAccountsResponse = RpcResponse<Array<ProgramAccount>>
 
 let id = 0
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {

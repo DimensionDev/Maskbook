@@ -22,7 +22,7 @@ export function hex2buffer(hexString: string, padded?: boolean) {
 }
 
 /** @internal */
-function concat(...buf: Array<Uint8Array | number[]>) {
+function concat(...buf: (Uint8Array | number[])[]) {
     const res = new Uint8Array(sum(buf.map((item) => item.length)))
     let offset = 0
     buf.forEach((item) => {

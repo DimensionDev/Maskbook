@@ -57,7 +57,7 @@ export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 
 
 export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: string
-    exchange_tokens: Array<{ address: string }>
+    exchange_tokens: { address: string }[]
 }
 
 export enum ITO_Status {
@@ -113,7 +113,7 @@ export interface CampaignInfo {
     chain: string
     endTime: number
     startTime: number
-    nfts: Array<{ image: string }>
+    nfts: { image: string }[]
 }
 
 export interface ClaimParams {

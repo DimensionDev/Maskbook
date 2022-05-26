@@ -7,7 +7,7 @@ class NonceManager {
     constructor(private address: string) {}
     private nonce = NonceManager.INITIAL_NONCE
     private locked = false
-    private tasks: Array<() => void> = []
+    private tasks: (() => void)[] = []
 
     private lock() {
         this.locked = true

@@ -1,6 +1,6 @@
 import { useUpdate } from 'react-use'
 
-export function useSuspense<T, U extends any[]>(
+export function useSuspense<T, U extends Array<any>>(
     id: string,
     args: U,
     cache: Map<string, [0, Promise<void>] | [1, T] | [2, Error]>,

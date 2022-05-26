@@ -44,7 +44,7 @@ export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: 
 
 export async function getUnconfirmedBackup(
     id: string,
-): Promise<undefined | { wallets: Array<{ address: string; name: string }> }> {
+): Promise<undefined | { wallets: { address: string; name: string }[] }> {
     if (!unconfirmedBackup.has(id)) return undefined
     const backup = unconfirmedBackup.get(id)!
     return {

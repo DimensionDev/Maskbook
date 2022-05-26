@@ -23,10 +23,10 @@ export interface GeneralAsset {
         animation_original_url?: string | null
         title?: string
         total_contribs?: number
-        token_contribs?: Array<{
+        token_contribs?: {
             token: string
             amount: string
-        }>
+        }[]
         start_date?: string
         end_date?: string
         country?: string

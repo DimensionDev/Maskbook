@@ -44,13 +44,13 @@ export interface NetworkSelectorMinProps {
         ID: string
         chainId: number
     } | null
-    networks: Array<{
+    networks: {
         ID: string
         isMainnet: boolean
         chainId: number
         icon: URL
         iconColor: string
-    }>
+    }[]
     onSelect(network: { chainId: number } | null): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
