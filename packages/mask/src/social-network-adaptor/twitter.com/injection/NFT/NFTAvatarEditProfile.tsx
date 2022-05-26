@@ -12,8 +12,7 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(
-        // <OpenNFTAvatarEditProfileButtonInTwitter />,
-        <></>,
+        <OpenNFTAvatarEditProfileButtonInTwitter />,
     )
 }
 
