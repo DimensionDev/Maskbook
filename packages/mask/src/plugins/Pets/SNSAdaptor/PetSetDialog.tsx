@@ -23,9 +23,9 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
-import { ChearsIcon } from '../assets/Chears'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
+import { RSS3Icon } from '../assets/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -39,6 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     des: {
         marginRight: theme.spacing(1),
+    },
+    poweredBy: {
+        marginRight: theme.spacing(1),
+        color: '#767F8D',
     },
     input: {
         margin: theme.spacing(2, 0, 0),
@@ -313,17 +317,20 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 />
 
                 <Box className={classes.desBox}>
-                    <Typography color="textSecondary" fontSize={14} fontWeight={700} className={classes.des}>
+                    <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
                         {t('plugin_pets_dialog_created')}
                     </Typography>
-                    <Typography color="textPrimary" fontSize={14} fontWeight={700} className={classes.des}>
+                    <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
                     </Typography>
                     <img className={classes.icon} src={new URL('../assets/pets.png', import.meta.url).toString()} />
                     <Typography fontSize={14} color="textSeconary" fontWeight={700} className={classes.des}>
-                        & Chears
+                        &
                     </Typography>
-                    <ChearsIcon style={{ width: 24, height: 24 }} />
+                    <Typography fontSize={14} color="textSeconary" fontWeight={700} className={classes.des}>
+                        RSS3
+                    </Typography>
+                    <RSS3Icon style={{ fontSize: 24 }} />
                 </Box>
             </Box>
             <EthereumChainBoundary
