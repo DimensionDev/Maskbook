@@ -8,7 +8,7 @@ import {
     useNetworkType,
     useWeb3,
 } from '@masknet/web3-shared-evm'
-import { Card, Typography } from '@mui/material'
+import { Card, CircularProgress, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useCallback, useMemo } from 'react'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
@@ -148,10 +148,8 @@ export function RedPacket(props: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token)
         return (
-            <Card className={classes.root} component="article" elevation={0}>
-                <Typography className={classes.loadingText} variant="body2">
-                    {t('loading')}
-                </Typography>
+            <Card className={classes.loadingRoot} component="article" elevation={0}>
+                <CircularProgress />
             </Card>
         )
 

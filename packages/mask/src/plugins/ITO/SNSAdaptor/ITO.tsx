@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Box, Card, Link, Typography } from '@mui/material'
+import { Box, Card, CircularProgress, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
@@ -174,24 +174,27 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     loadingITO: {
-        marginTop: 260,
+        padding: '43px 16px 43px 16px',
         textAlign: 'center',
         fontSize: 24,
     },
     loadingITO_Button: {
-        color: '#fff',
-        borderColor: '#fff !important',
-        margin: theme.spacing(1, 'auto'),
-        minHeight: 35,
+        margin: 16,
+        minHeight: 40,
+        width: 254,
+        backgroundColor: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.white,
         '&:hover': {
-            background: 'none',
-            borderColor: '#fff !important',
+            backgroundColor: theme.palette.maskColor.dark,
         },
-        background: 'none',
     },
     loadingWrap: {
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'center',
+        height: 196,
+        minHeight: 196,
+        background: 'none',
     },
     textInOneLine: {
         whiteSpace: 'nowrap',
@@ -863,17 +866,11 @@ export function ITO(props: ITO_Props) {
 
 export function ITO_Loading() {
     const { t } = useI18N()
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     const { classes } = useStyles({})
     return (
         <div style={{ width: '100%' }}>
-            <Card
-                className={classNames(classes.root, classes.loadingWrap)}
-                elevation={0}
-                style={{ backgroundImage: `url(${PoolBackground})` }}>
-                <Typography variant="body1" className={classes.loadingITO}>
-                    {t('plugin_ito_loading')}
-                </Typography>
+            <Card className={classNames(classes.root, classes.loadingWrap)} elevation={0}>
+                <CircularProgress />
             </Card>
         </div>
     )
@@ -882,13 +879,9 @@ export function ITO_Loading() {
 export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }) {
     const { t } = useI18N()
     const { classes } = useStyles({})
-    const PoolBackground = getAssetAsBlobURL(new URL('../assets/pool-loading-background.jpg', import.meta.url))
     return (
-        <Card
-            className={classNames(classes.root, classes.loadingWrap)}
-            elevation={0}
-            style={{ backgroundImage: `url(${PoolBackground})` }}>
-            <Typography variant="body1" className={classes.loadingITO}>
+        <Card className={classNames(classes.root, classes.loadingWrap)} elevation={0}>
+            <Typography color="error" variant="body1" className={classes.loadingITO}>
                 {t('loading_failed')}
             </Typography>
             <ActionButton onClick={retryPoolPayload} variant="outlined" className={classes.loadingITO_Button}>

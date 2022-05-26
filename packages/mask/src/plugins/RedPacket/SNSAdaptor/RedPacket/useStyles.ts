@@ -26,6 +26,15 @@ to {
             },
             width: '100%',
         },
+        loadingRoot: {
+            position: 'relative',
+            display: 'flex',
+            height: 196,
+            minHeight: 196,
+            background: 'none',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
