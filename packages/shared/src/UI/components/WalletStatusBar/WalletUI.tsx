@@ -88,9 +88,7 @@ export function WalletUI(props: WalletUIProps) {
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
     const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
-
     const providerDescriptor = useProviderDescriptor()
-
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
@@ -109,8 +107,8 @@ export function WalletUI(props: WalletUIProps) {
                 <Box className={classes.name}>
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
-                            ? domain ?? Utils?.formatAddress?.(address, 4)
-                            : Utils?.formatAddress?.(address, 4)}
+                            ? domain ?? providerDescriptor?.name ?? Utils?.formatAddress?.(address, 4)
+                            : providerDescriptor?.name ?? Utils?.formatAddress?.(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}
                     {showMenuDrop ? <DownIcon /> : null}
