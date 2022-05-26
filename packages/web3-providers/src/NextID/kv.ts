@@ -3,7 +3,7 @@
  */
 import urlcat from 'urlcat'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
-import { fetchJSON } from './helper'
+import { deleteCache, fetchJSON } from './helper'
 import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants'
@@ -25,15 +25,20 @@ function formatPatchData(pluginId: string, data: unknown) {
 
 export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
     /**
-     * Get current KV of a persona
+     * Get platform KV of a persona
      * @param personaPublicKey
      *
+     * @param platform
+     * @param identity
+     * @param pluginId
+     * @param enableCache
      */
     async getByIdentity<T>(
         personaPublicKey: string,
         platform: NextIDPlatform,
         identity: string,
         pluginId: string,
+        enableCache?: boolean,
     ): Promise<Result<T, string>> {
         interface Proof {
             platform: NextIDPlatform
@@ -44,7 +49,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             persona: string
             proofs: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        const response = await fetchJSON<Response>(
+            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            {},
+            enableCache,
+        )
         if (!response.ok) return Err('User not found')
         const proofs = (response.val.proofs ?? [])
             .filter((x) => x.platform === platform)
@@ -52,9 +61,16 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
         if (!proofs.length) return Err('Not found')
         return Ok(proofs[0].content[pluginId])
     }
-    async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
-        return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+
+    /**
+     * Get current KV of a persona
+     * @param personaPublicKey
+     * @param enableCache
+     */
+    async get<T>(personaPublicKey: string, enableCache?: boolean): Promise<Result<T, string>> {
+        return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }), {}, enableCache)
     }
+
     /**
      * Get signature payload for updating
      * @param personaPublicKey
@@ -123,6 +139,9 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             patch: formatPatchData(pluginId, patchData),
             created_at: createdAt,
         }
+
+        const cacheKey = urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey })
+        deleteCache(cacheKey)
 
         return fetchJSON(urlcat(BASE_URL, '/v1/kv'), {
             body: JSON.stringify(requestBody),

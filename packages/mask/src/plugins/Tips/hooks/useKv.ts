@@ -15,7 +15,7 @@ const getCurrentPersonaPublicKey = async () => {
 export function useKvGet<T>(publicKey: string | null | undefined) {
     return useAsyncRetry(async () => {
         if (!publicKey) return null
-        return NextIDStorage.get<T>(publicKey)
+        return NextIDStorage.get<T>(publicKey, true)
     }, [publicKey])
 }
 

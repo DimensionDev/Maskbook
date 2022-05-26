@@ -327,8 +327,9 @@ export namespace NextIDBaseAPI {
             platform: NextIDPlatform,
             identity: string,
             pluginId: string,
+            enableCache?: boolean,
         ): Promise<Result<T, string>>
-        get<T>(key: string): Promise<Result<T, string>>
+        get<T>(key: string, enableCache?: boolean): Promise<Result<T, string>>
         getPayload(
             personaPublicKey: string,
             platform: NextIDPlatform,
