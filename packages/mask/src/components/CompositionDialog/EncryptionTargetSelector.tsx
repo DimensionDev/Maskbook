@@ -90,21 +90,22 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const e2eDisabledMessage = props.e2eDisabled ? (
-        <div className={classes.flex}>
-            <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-            <Typography
-                className={classes.create}
-                onClick={() => {
-                    if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
-                    props.e2eDisabled === E2EUnavailableReason.NoPersona
-                        ? props.onCreatePersona()
-                        : props.onConnectPersona()
-                }}>
-                {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
-            </Typography>
-        </div>
-    ) : null
+    const e2eDisabledMessage =
+        props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
+            <div className={classes.flex}>
+                <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+                <Typography
+                    className={classes.create}
+                    onClick={() => {
+                        if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
+                        props.e2eDisabled === E2EUnavailableReason.NoPersona
+                            ? props.onCreatePersona()
+                            : props.onConnectPersona()
+                    }}>
+                    {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
+                </Typography>
+            </div>
+        ) : null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
         <div className={classes.flex}>
             <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
