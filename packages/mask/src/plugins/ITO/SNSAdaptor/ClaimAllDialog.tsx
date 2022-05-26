@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
     useAccount,
     useChainId,
@@ -7,60 +6,25 @@ import {
     useFungibleTokens,
 } from '@masknet/plugin-infra/web3'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useEffect, useState, useLayoutEffect, useRef } from 'react'
+import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
-import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, FormattedBalance } from '@masknet/shared'
+import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
-import { TransactionStateType, explorerResolver, useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-=======
-import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { FormattedBalance, InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles, SnackbarProvider } from '@masknet/theme'
-import {
-    ChainId,
-    EthereumTokenType,
-    formatBalance,
-    isSameAddress,
-    useAccount,
-    useChainId,
-    useERC20TokenDetailed,
-    useFungibleTokensDetailed,
-    useITOConstants,
-} from '@masknet/web3-shared-evm'
-import { CircularProgress, DialogContent, List, ListItem, Typography, useTheme } from '@mui/material'
->>>>>>> develop
+import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import formatDateTime from 'date-fns/format'
-import { flatten, uniq } from 'lodash-unified'
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
-import { Flags } from '../../../../shared'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-<<<<<<< HEAD
 import { useI18N } from '../../../utils'
 import { Flags } from '../../../../shared'
 import { useClaimAll } from './hooks/useClaimAll'
-import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-=======
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
->>>>>>> develop
 import type { SwappedTokenType } from '../types'
-import { useClaimAll } from './hooks/useClaimAll'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
-import { NftAirdropCard } from './NftAirdropCard'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -282,11 +246,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
-<<<<<<< HEAD
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-=======
     const [{ loading: isClaiming }, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-
     const openShareTxDialog = useOpenShareTxDialog()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
@@ -298,8 +258,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             },
         })
     }, [claimCallback, openShareTxDialog, retry])
-    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
->>>>>>> develop
     const { classes } = useStyles({
         shortITOwrapper: !swappedTokens || swappedTokens.length === 0,
     })
@@ -308,52 +266,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         setTimeout(() => setInitLoading(false), 1000)
     }, [])
 
-<<<<<<< HEAD
-    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            if (claimState.type === TransactionStateType.CONFIRMED) {
-                resetClaimCallback()
-                retry()
-            }
-        },
-    )
-
-    useEffect(() => {
-        resetClaimCallback()
-    }, [chainId])
-
-    useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
-
-        if (claimState.type === TransactionStateType.FAILED) {
-            setClaimTransactionDialog({ open: false })
-            return
-        }
-
-        if (claimState.type === TransactionStateType.HASH) {
-            const { hash } = claimState
-            setTimeout(() => {
-                openWindow(explorerResolver.transactionLink(chainId, hash))
-            }, 2000)
-            return
-        }
-        const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
-        const summary = claimableTokens
-            ? 'Claim ' + claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol)
-            : ''
-        setClaimTransactionDialog({
-            open: true,
-            state: claimState,
-            title: t('plugin_ito_claim_all_title'),
-            summary,
-        })
-    }, [claimState, swappedTokens /* update tx dialog only if state changed */])
-
-=======
->>>>>>> develop
     return (
         <SnackbarProvider
             domRoot={DialogRef.current as HTMLElement}

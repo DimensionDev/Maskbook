@@ -1,5 +1,5 @@
-import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { usePickToken, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     leftShift,
@@ -14,17 +14,8 @@ import {
     ChainId,
     SchemaType,
     isNativeTokenAddress,
-<<<<<<< HEAD
-    explorerResolver,
-    TransactionStateType,
-=======
-    isSameAddress,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-    useFungibleTokenBalance,
-    useFungibleTokenDetailed,
->>>>>>> develop
     useTokenConstants,
+    explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -34,11 +25,6 @@ import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-<<<<<<< HEAD
-import { WalletMessages } from '../../Wallet/messages'
-=======
-import { WalletRPC } from '../../Wallet/messages'
->>>>>>> develop
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -100,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SwapDialogProps extends withClasses<'root'> {
-    exchangeTokens: FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>[]
+    exchangeTokens: Array<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>>
     payload: JSON_PayloadInMask
     initAmount: BigNumber
     tokenAmount: BigNumber
@@ -202,44 +188,21 @@ export function SwapDialog(props: SwapDialogProps) {
     )
     const openShareTxDialog = useOpenShareTxDialog()
     const onSwap = useCallback(async () => {
-<<<<<<< HEAD
-        await swapCallback()
-        if (payload.token.schema !== SchemaType.ERC20) return
-        await Token?.addToken?.(payload.token)
-    }, [swapCallback, payload.token, Token])
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()
-            if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
-                return
-            const { receipt } = swapState
-=======
         const receipt = await swapCallback()
         if (typeof receipt?.transactionHash === 'string') {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })
->>>>>>> develop
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
             setStatus(SwapStatus.Share)
             setTimeout(() => {
-<<<<<<< HEAD
-                openWindow(explorerResolver.transactionLink(chainId, hash))
-=======
-                openWindow(resolveTransactionLinkOnExplorer(chainId, receipt.transactionHash))
->>>>>>> develop
+                openWindow(explorerResolver.transactionLink(chainId, receipt.transactionHash))
             }, 2000)
         }
-        if (payload.token.type !== EthereumTokenType.ERC20) return
-        await WalletRPC.addToken(payload.token)
-        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
-    }, [swapCallback, payload.token.address, openShareTxDialog])
-
-    // #endregion
+        if (payload.token.schema !== SchemaType.ERC20) return
+        await Token?.addToken?.(payload.token)
+    }, [swapCallback, payload.token, Token])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
