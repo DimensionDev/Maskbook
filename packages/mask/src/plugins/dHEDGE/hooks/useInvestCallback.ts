@@ -1,10 +1,9 @@
-import { useCallback } from 'react'
-import { TransactionStateType, TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
-import { Pool, PoolType } from '../types'
+import { useState, useCallback } from 'react'
+import { TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
+import { Pool, PoolType } from '../types'
 
 /**
  * A callback for invest dhedge pool
@@ -15,23 +14,13 @@ import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [investState, setInvestState] = useTransactionState()
+    const [loading, setLoading] = useState(false)
 
     const poolV1Contract = useDHedgePoolV1Contract(chainId, pool?.address ?? '')
     const poolV2Contract = useDHedgePoolV2Contract(chainId, pool?.address ?? '')
 
     const investCallback = useCallback(async () => {
-        if (!token || !poolV1Contract || !poolV2Contract) {
-            setInvestState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
-
-        // pre-step: start waiting for provider to confirm tx
-        setInvestState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
+        if (!token || !poolV1Contract || !poolV2Contract) return
 
         // step 1: estimate gas
         const config = {
@@ -45,13 +34,11 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 : poolV2Contract.methods.deposit(token.address, amount)
         }
 
+        setLoading(true)
         const estimatedGas = await deposit()
             .estimateGas(config)
             .catch((error) => {
-                setInvestState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
+                setLoading(false)
                 throw error
             })
 
@@ -62,28 +49,12 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setInvestState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
+                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setInvestState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
+                .on(TransactionEventType.ERROR, reject)
         })
     }, [pool, account, amount, token])
 
-    const resetCallback = useCallback(() => {
-        setInvestState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [investState, investCallback, resetCallback] as const
+    return [loading, investCallback] as const
 }

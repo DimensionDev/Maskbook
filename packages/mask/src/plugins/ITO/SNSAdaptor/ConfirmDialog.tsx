@@ -108,13 +108,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
+    loading?: boolean
     onDone: () => void
     onBack: () => void
     onClose: () => void
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { poolSettings, onDone, onBack, onClose } = props
+    const { poolSettings, loading, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -303,12 +304,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton fullWidth variant="outlined" onClick={onBack}>
+                    <ActionButton disabled={loading} fullWidth variant="outlined" onClick={onBack}>
                         {t('plugin_ito_back')}
                     </ActionButton>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton fullWidth variant="contained" onClick={onDone}>
+                    <ActionButton loading={loading} disabled={loading} fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
                             total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,

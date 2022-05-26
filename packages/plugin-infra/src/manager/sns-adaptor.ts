@@ -1,10 +1,10 @@
-import { unreachable } from '@dimensiondev/kit'
+import { useMemo } from 'react'
 import { useSubscription, Subscription } from 'use-subscription'
+import { unreachable } from '@dimensiondev/kit'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
-import { useMemo } from 'react'
 
 const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SNSAdaptor)
 
@@ -63,20 +63,12 @@ export function useActivatedPluginSNSAdaptor(pluginID: string, minimalModeEquals
 
 export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, pluginID: string) {
     const plugins = useActivatedPluginsSNSAdaptor('any')
-
-    return useMemo(() => {
-        // TODO: 6002
-        // eslint-disable-next-line unicorn/no-array-reduce
-        return plugins.reduce<Record<string, boolean>>((result, plugin) => {
-            if (!plugin.enableRequirement.web3) {
-                result[plugin.ID] = true
-                return result
-            }
-            const supportedChainIds = plugin.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
-            result[plugin.ID] = supportedChainIds?.includes(chainId) ?? false
-            return result
-        }, {})
-    }, [chainId, pluginID, plugins])
+    const entries = plugins.map((plugin): [string, boolean] => {
+        if (!plugin.enableRequirement.web3) return [plugin.ID, true]
+        const supportedChainIds = plugin.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
+        return [plugin.ID, supportedChainIds?.includes(chainId) ?? false]
+    })
+    return Object.fromEntries(entries) as Record<string, boolean>
 }
 
 export function startPluginSNSAdaptor(

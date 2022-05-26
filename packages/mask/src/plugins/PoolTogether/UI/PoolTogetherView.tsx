@@ -1,6 +1,7 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
@@ -10,7 +11,6 @@ import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -152,6 +152,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
                     predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    renderInTimeline
                 />
             </Box>
         </>

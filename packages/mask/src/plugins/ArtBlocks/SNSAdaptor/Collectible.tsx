@@ -134,7 +134,7 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </Card>
             <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId ?? chainId}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId ?? chainId} renderInTimeline>
                     <ActionBar project={project} />
                 </ChainBoundary>
             </Box>

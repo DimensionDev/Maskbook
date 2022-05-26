@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
+            borderRadius: 0,
         },
         footer: {
             display: 'flex',

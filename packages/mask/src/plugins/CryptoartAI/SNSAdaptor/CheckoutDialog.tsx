@@ -1,23 +1,20 @@
-import { useCallback, useMemo, useEffect } from 'react'
-import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-unified'
+import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { TransactionStateType } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { first } from 'lodash-unified'
+import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
-import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils'
+import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -93,7 +90,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const selectedPaymentToken = first(paymentTokens)
     const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, selectedPaymentToken?.address)
 
-    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
+    const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
@@ -115,29 +112,17 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
               },
           )
         : ''
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    if (purchaseState.type === TransactionStateType.HASH) onClose()
-                }
-                resetCallback()
+    const openShareTxDialog = useOpenShareTxDialog()
+    const purchase = useCallback(async () => {
+        const hash = await purchaseCallback()
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
             },
-            [purchaseState, onClose],
-        ),
-    )
-
-    useEffect(() => {
-        if (purchaseState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            shareText,
-            state: purchaseState,
-            summary: t('plugin_cryptoartai_buy') + ' ' + asset?.value?.title,
         })
-    }, [purchaseState])
+    }, [purchaseCallback, openShareTxDialog])
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
@@ -195,11 +180,12 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                     <CardActions className={classes.footer}>
                         <WalletConnectedBoundary>
                             <ActionButton
+                                loading={isPurchasing}
                                 className={classes.button}
                                 fullWidth
                                 variant="contained"
-                                disabled={!!validationMessage}
-                                onClick={onCheckout}>
+                                disabled={!!validationMessage || isPurchasing}
+                                onClick={purchase}>
                                 {validationMessage || t('plugin_cryptoartai_buy_now')}
                             </ActionButton>
                         </WalletConnectedBoundary>

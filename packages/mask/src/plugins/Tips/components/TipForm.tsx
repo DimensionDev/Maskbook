@@ -17,7 +17,7 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { TargetChainIdContext, useTip, useTipValidate } from '../contexts'
@@ -90,9 +90,10 @@ const useStyles = makeStyles()((theme) => {
 
 interface Props extends BoxProps {
     onAddToken?(): void
+    onSent?(): void
 }
 
-export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
+export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest }) => {
     const t = useI18N()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -120,6 +121,11 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
         !isSending &&
         chainId === currentChainId &&
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId)
+    const send = useCallback(async () => {
+        const hash = await sendTip()
+        if (typeof hash !== 'string') return
+        onSent?.()
+    }, [sendTip, onSent])
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -197,7 +203,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, ...rest }) => {
                         className={classes.actionButton}
                         fullWidth
                         disabled={!isValid || isSending}
-                        onClick={sendTip}>
+                        onClick={send}>
                         {buttonLabel}
                     </ActionButton>
                 </ChainBoundary>

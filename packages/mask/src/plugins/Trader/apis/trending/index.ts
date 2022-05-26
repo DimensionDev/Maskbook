@@ -206,8 +206,7 @@ async function getCoinTrending(
                     symbol: info.symbol.toUpperCase(),
                     is_mirrored: isMirroredKeyword(info.symbol),
 
-                    // TODO:
-                    // use current language setting
+                    // TODO: use current language setting
                     description: info.description.en,
                     market_cap_rank: info.market_cap_rank,
                     image_url: info.image.small,

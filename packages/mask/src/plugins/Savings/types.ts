@@ -1,6 +1,6 @@
 import type Web3 from 'web3'
 import type BigNumber from 'bignumber.js'
-import type { ChainId, SchemaType, TransactionState } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export enum TabType {
@@ -37,13 +37,7 @@ export interface SavingsProtocol {
     updateBalance(chainId: ChainId, web3: Web3, account: string): Promise<void>
 
     depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
-    deposit(
-        account: string,
-        chainId: ChainId,
-        web3: Web3,
-        value: BigNumber.Value,
-        onChange: (state: TransactionState) => void,
-    ): Promise<boolean>
+    deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<string>
     withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
-    withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
+    withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<string>
 }

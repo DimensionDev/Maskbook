@@ -1,6 +1,6 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { GasConfig, TransactionStateType } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage'
@@ -52,16 +52,10 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Address)
 
     const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
-    const sendState = sendTipTuple[0]
+    const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
 
     const contextValue = useMemo(() => {
-        const isSending = [
-            TransactionStateType.WAIT_FOR_CONFIRMING,
-            TransactionStateType.HASH,
-            TransactionStateType.RECEIPT,
-        ].includes(sendState.type)
-
         const reset = () => {
             setAmount('')
             setErc721TokenId(null)
@@ -86,7 +80,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             setErc721Address,
             sendTip,
             isSending,
-            sendState,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
             reset,
             setGasConfig,
@@ -103,7 +96,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         erc721Address,
         token,
         sendTip,
-        sendState,
+        isSending,
         storedTokens,
     ])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>

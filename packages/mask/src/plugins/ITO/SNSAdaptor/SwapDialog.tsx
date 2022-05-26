@@ -1,5 +1,5 @@
-import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { usePickToken } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
+import { usePickToken, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     leftShift,
@@ -14,9 +14,8 @@ import {
     ChainId,
     SchemaType,
     isNativeTokenAddress,
-    explorerResolver,
-    TransactionStateType,
     useTokenConstants,
+    explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -26,7 +25,6 @@ import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { WalletMessages } from '../../Wallet/messages'
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -182,54 +180,29 @@ export function SwapDialog(props: SwapDialogProps) {
         payload.contract_address,
     )
 
-    const [swapState, swapCallback, resetSwapCallback] = useSwapCallback(
+    const [{ loading: isSwapping }, swapCallback] = useSwapCallback(
         payload,
         swapAmount.toFixed(),
         swapToken ? swapToken : { address: NATIVE_TOKEN_ADDRESS },
         qualificationInfo?.isQualificationHasLucky,
     )
+    const openShareTxDialog = useOpenShareTxDialog()
     const onSwap = useCallback(async () => {
-        await swapCallback()
-        if (payload.token.schema !== SchemaType.ERC20) return
-        await Token?.addToken?.(payload.token)
-    }, [swapCallback, payload.token, Token])
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (swapState.type === TransactionStateType.CONFIRMED && !swapState.receipt.status) resetSwapCallback()
-            if (swapState.type !== TransactionStateType.CONFIRMED && swapState.type !== TransactionStateType.RECEIPT)
-                return
-            const { receipt } = swapState
+        const receipt = await swapCallback()
+        if (typeof receipt?.transactionHash === 'string') {
+            await openShareTxDialog({
+                hash: receipt.transactionHash,
+            })
             const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
             setActualSwapAmount(to_value)
             setStatus(SwapStatus.Share)
-            resetSwapCallback()
-        },
-    )
-
-    useEffect(() => {
-        if (swapState.type === TransactionStateType.UNKNOWN) return
-
-        if (swapState.type === TransactionStateType.HASH) {
-            const { hash } = swapState
             setTimeout(() => {
-                openWindow(explorerResolver.transactionLink(chainId, hash))
+                openWindow(explorerResolver.transactionLink(chainId, receipt.transactionHash))
             }, 2000)
-            return
         }
-
-        setTransactionDialog({
-            open: true,
-            state: swapState,
-            summary: t('plugin_ito_swapping', {
-                amount: formatBalance(tokenAmount, token.decimals),
-                symbol: token.symbol,
-            }),
-        })
-    }, [swapState])
-    // #endregion
+        if (payload.token.schema !== SchemaType.ERC20) return
+        await Token?.addToken?.(payload.token)
+    }, [swapCallback, payload.token, Token])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
@@ -298,11 +271,12 @@ export function SwapDialog(props: SwapDialogProps) {
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton
+                            loading={isSwapping}
                             className={classes.button}
                             fullWidth
                             variant="contained"
                             size="large"
-                            disabled={!!validationMessage || loadingQualification}
+                            disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
                             {loadingQualification ? (
                                 <CircularProgress size={16} className={classes.loading} />

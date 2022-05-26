@@ -1,21 +1,23 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { useAccount, useChainId, useNetworkType, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { chainResolver, TransactionStateType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID,  } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
-import { RedPacketRPC } from '../messages'
-import { DialogTabs, RedPacketJSONPayload, RedPacketRecord, RpTypeTabs } from '../types'
-import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
+import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
+import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
@@ -61,17 +63,13 @@ interface RedPacketDialogProps extends withClasses<never> {
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const contract_version = 4
     const [settings, setSettings] = useState<RedPacketSettings>()
 
     const onClose = useCallback(() => {
@@ -82,16 +80,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state])
 
-    const { address: publicKey, privateKey } = useMemo(
-        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
-        [web3],
-    )!
-
     const currentIdentity = useCurrentIdentity()
-
+    const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname
+    const senderName =
+        lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -123,107 +116,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onClose, chainId, senderName, connection],
     )
 
-    // #region blocking
-    // password should remain the same rather than change each time when createState change,
-    //  otherwise password in database would be different from creating red-packet.
-    const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
-        settings!,
-        contract_version,
-        publicKey,
-    )
-    // #endregion
-
-    // assemble JSON payload
-    const payload = useRef<RedPacketJSONPayload>({
-        network: chainResolver.chainName(chainId),
-    } as RedPacketJSONPayload)
-
-    useEffect(() => {
-        if (createState.type !== TransactionStateType.UNKNOWN) return
-        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
-        if (!contractAddress) {
-            onClose()
-            return
-        }
-        payload.current.contract_address = contractAddress
-        payload.current.contract_version = contract_version
-        payload.current.network = chainResolver.chainName(chainId)
-    }, [chainId, networkType, contract_version, createState])
-
-    // #region remote controlled transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            // reset state
-            resetCreateCallback()
-
-            // the settings is not available
-            if (!createSettings?.token) return
-
-            // TODO:
-            // early return happened
-            // we should guide user to select the red packet in the existing list
-            if (createState.type !== TransactionStateType.CONFIRMED) return
-
-            const { receipt } = createState
-            const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
-                creation_time: string
-                creator: string
-                id: string
-                token_address: string
-                total: string
-            }
-            payload.current.sender = {
-                address: account,
-                name: createSettings.name,
-                message: createSettings.message,
-            }
-            payload.current.is_random = createSettings.isRandom
-            payload.current.shares = createSettings.shares
-            payload.current.password = privateKey
-            payload.current.rpid = CreationSuccess.id
-            payload.current.total = CreationSuccess.total
-            payload.current.duration = createSettings.duration
-            payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-            payload.current.token = createSettings.token
-
-            setSettings(undefined)
-            // output the redpacket as JSON payload
-            onCreateOrSelect(payload.current)
-        },
-    )
-
-    // open the transaction dialog
-    useEffect(() => {
-        if (!createSettings?.token || createState.type === TransactionStateType.UNKNOWN) return
-
-        // storing the created red packet in DB, it helps retrieve red packet password later
-        // save to the database early, otherwise red-packet would lose when close the tx dialog or
-        //  web page before create successfully.
-        if (createState.type === TransactionStateType.HASH && createState.hash) {
-            payload.current.txid = createState.hash
-            const record: RedPacketRecord = {
-                id: createState.hash!,
-                from: '',
-                password: privateKey,
-                contract_version,
-            }
-            RedPacketRPC.discoverRedPacket(record, chainId)
-        }
-
-        setTransactionDialog({
-            open: true,
-            state: createState,
-            summary: t('plugin_red_packet_create_with_token', {
-                amount: formatBalance(createSettings?.total, createSettings?.token?.decimals),
-                symbol: createSettings?.token.symbol,
-            }),
-        })
-    }, [chainId, createState])
-    // #endregion
-
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -238,7 +130,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 670
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -272,8 +164,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
     }
 
-    const isCreating = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreating ? t.display_name() : t.details()
+    const handleCreated = useCallback(
+        (payload: RedPacketJSONPayload) => {
+            onCreateOrSelect(payload)
+            setSettings(undefined)
+        },
+        [onCreateOrSelect],
+    )
+
+    const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
+    const title = isCreateStep ? t.display_name() : t.details()
 
     return (
         <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
@@ -285,7 +185,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     <RedPacketConfirmDialog
                         onClose={onClose}
                         onBack={onBack}
-                        onCreate={createCallback}
+                        onCreated={handleCreated}
                         settings={settings}
                     />
                 ) : null}

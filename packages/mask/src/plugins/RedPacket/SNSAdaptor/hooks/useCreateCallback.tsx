@@ -1,20 +1,19 @@
-import { useCallback, useRef, useState } from 'react'
-import { omit } from 'lodash-unified'
-import type { TransactionReceipt } from 'web3-core'
+import { useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
+import type { TransactionReceipt } from 'web3-core'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
     SchemaType,
     TransactionEventType,
-    TransactionState,
-    TransactionStateType,
-    useTokenConstants,
+    useTokenConstants
 } from '@masknet/web3-shared-evm'
+import { omit } from 'lodash-unified'
 import { useRedPacketContract } from './useRedPacketContract'
-import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export interface RedPacketSettings {
     shares: number
@@ -40,29 +39,17 @@ type ParamsObjType = {
     token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
-function checkParams(paramsObj: ParamsObjType, setCreateState?: (value: TransactionState) => void) {
+function checkParams(paramsObj: ParamsObjType) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least [number of lucky drops] tokens to your lucky drop.'),
-        })
-        return false
+        throw new Error('At least [number of lucky drops] tokens to your lucky drop.')
     }
 
     if (paramsObj.shares <= 0) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('At least 1 person should be able to claim the lucky drop.'),
-        })
-        return false
+        throw new Error('At least 1 person should be able to claim the lucky drop.')
     }
 
     if (paramsObj.tokenType !== SchemaType.Native && paramsObj.tokenType !== SchemaType.ERC20) {
-        setCreateState?.({
-            type: TransactionStateType.FAILED,
-            error: new Error('Token not supported'),
-        })
-        return false
+        throw new Error('Token not supported')
     }
 
     return true
@@ -79,15 +66,14 @@ interface CreateParams {
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const redPacketContract = useRedPacketContract(chainId, version)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
-        const tokenType = token!.schema
+        const tokenType = token!.schema === SchemaType.Native ? 0 : 1
         const tokenAddress = token!.schema === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
-
         if (!tokenAddress) {
             return null
         }
@@ -106,13 +92,13 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             token,
         }
 
-        if (!checkParams(paramsObj)) {
+        try {
+            checkParams(paramsObj)
+        } catch {
             return null
         }
 
-        const params = Object.values(
-            omit({ ...paramsObj, tokenType: paramsObj.tokenType - 1 }, ['token']),
-        ) as MethodParameters
+        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
         let gasError: Error | null = null
         const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
@@ -133,84 +119,46 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [createState, setCreateState] = useTransactionState()
-    const redPacketContract = useRedPacketContract(chainId, version)
-    const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
+    const redPacketContract = useRedPacketContract(chainId ,version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
-    const transactionHashRef = useRef<string>()
 
-    const createCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
-        if (!token || !redPacketContract || !createParams) {
-            setCreateState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
+
+        if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
 
         if (gasError) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
             return
         }
 
-        if (!checkParams(paramsObj, setCreateState)) return
-
-        setCreateSettings(redPacketSettings)
-
-        // pre-step: start waiting for provider to confirm tx
-        setCreateState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
+        try {
+            checkParams(paramsObj)
+        } catch (error) {
+            return
+        }
 
         // estimate gas and compose transaction
         const value = toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0)
-        const config = {
+        const config: PayableTx = {
             from: account,
             value,
             gas,
         }
+
         // send transaction and wait for hash
-        return new Promise<void>(async (resolve, reject) => {
+        return new Promise<TransactionReceipt>(async (resolve, reject) => {
             redPacketContract.methods
                 .create_red_packet(...params)
                 .send(config)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                    setCreateState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    transactionHashRef.current = hash
-                })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                    transactionHashRef.current = receipt.transactionHash
-                    resolve()
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    resolve(receipt)
                 })
                 .on(TransactionEventType.ERROR, (error: Error) => {
-                    setCreateState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
                     reject(error)
                 })
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
-
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [createSettings, createState, createCallback, resetCallback] as const
 }

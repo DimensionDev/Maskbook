@@ -14,9 +14,9 @@ import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/s
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -25,8 +25,8 @@ import { WalletMessages } from '../../Wallet/messages'
 import { TargetChainIdContext, useTip } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
-import { ConfirmModal } from './common/ConfirmModal'
 import { AddDialog } from './AddDialog'
+import { ConfirmModal } from './common/ConfirmModal'
 import { TipForm } from './TipForm'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
@@ -162,7 +162,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         token,
         recipientSnsId,
         recipient,
-        sendState,
         erc721Contract,
         erc721TokenId,
         setErc721Address,
@@ -223,11 +222,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             )
         return t.send_tip_successfully()
     }, [t, isTokenTip, classes.nftMessage, erc721Token])
-
-    useEffect(() => {
-        if (sendState.type !== TransactionStateType.CONFIRMED) return
-        openConfirmModal(true)
-    }, [sendState.type])
 
     const handleConfirm = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)
@@ -306,7 +300,13 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                             chains={chainIdList}
                         />
                     </div>
-                    <TipForm className={classes.tipForm} onAddToken={() => openAddTokenDialog(true)} />
+                    <TipForm
+                        className={classes.tipForm}
+                        onAddToken={() => openAddTokenDialog(true)}
+                        onSent={() => {
+                            openConfirmModal(true)
+                        }}
+                    />
                 </DialogContent>
             </InjectedDialog>
             <ConfirmModal

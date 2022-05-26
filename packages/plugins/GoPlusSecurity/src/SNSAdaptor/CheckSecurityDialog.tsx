@@ -1,5 +1,5 @@
 import { Box, DialogContent, Stack } from '@mui/material'
-import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsyncFn } from 'react-use'
@@ -11,6 +11,7 @@ import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -51,11 +52,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [])
 
     return (
-        <MaskDialog
-            DialogProps={{ classes: { paper: classes.paperRoot } }}
-            title={t.__plugin_name()}
-            open={open}
-            onBack={onClose}>
+        <InjectedDialog classes={{ paper: classes.paperRoot }} title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>
@@ -80,6 +77,6 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                     </Box>
                 </Stack>
             </DialogContent>
-        </MaskDialog>
+        </InjectedDialog>
     )
 }

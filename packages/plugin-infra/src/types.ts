@@ -13,7 +13,7 @@ import type {
     Wallet,
     Web3EnableRequirement,
 } from '@masknet/web3-shared-base'
-import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { SchemaType, Transaction, Web3Provider } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -337,6 +337,7 @@ export namespace Plugin.SNSAdaptor {
         TransactionSignature = unknown,
         TransactionParameter = unknown,
         Web3 = unknown,
+        Web3Provider = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
@@ -363,7 +364,8 @@ export namespace Plugin.SNSAdaptor {
             TransactionDetailed,
             TransactionSignature,
             TransactionParameter,
-            Web3
+            Web3,
+            Web3Provider
         >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
@@ -563,6 +565,7 @@ export namespace Plugin.Dashboard {
         TransactionSignature = unknown,
         TransactionParameter = unknown,
         Web3 = unknown,
+        Web3Provider = unknown,
     > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
@@ -581,7 +584,8 @@ export namespace Plugin.Dashboard {
             TransactionDetailed,
             TransactionSignature,
             TransactionParameter,
-            Web3
+            Web3,
+            Web3Provider
         >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred

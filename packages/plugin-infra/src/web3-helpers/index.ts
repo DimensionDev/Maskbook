@@ -134,7 +134,8 @@ export declare namespace Web3Helper {
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
               Definition[T]['TransactionParameter'],
-              Definition[T]['Web3']
+              Definition[T]['Web3'],
+              Definition[T]['Web3Provider']
           >
 
     export type Web3UI<T extends NetworkPluginID = never> = T extends never
@@ -195,7 +196,8 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],
         Definition[NetworkPluginID]['TransactionParameter'],
-        Definition[NetworkPluginID]['Web3']
+        Definition[NetworkPluginID]['Web3'],
+        Definition[NetworkPluginID]['Web3Provider'],
     >
 
     export type Web3UIAll = Web3Plugin.UI.UI<

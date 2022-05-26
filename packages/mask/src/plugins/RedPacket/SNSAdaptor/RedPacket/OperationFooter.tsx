@@ -2,7 +2,7 @@ import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, useTheme } from '@mui/material'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -16,8 +16,8 @@ interface OperationFooterProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
-    claimState: TransactionState
-    refundState: TransactionState
+    isClaiming: boolean
+    isRefunding: boolean
     onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
@@ -25,8 +25,8 @@ export function OperationFooter({
     chainId,
     canClaim,
     canRefund,
-    claimState,
-    refundState,
+    isClaiming,
+    isRefunding,
     onShare,
     onClaimOrRefund,
 }: OperationFooterProps) {
@@ -60,9 +60,7 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
-        const isLoading =
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
-            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+        const isLoading = isClaiming || isRefunding
 
         return (
             <ActionButton
@@ -79,23 +77,18 @@ export function OperationFooter({
                 disabled={isLoading}
                 variant="contained"
                 onClick={onClaimOrRefund}>
-                {canClaim
-                    ? claimState.type === TransactionStateType.HASH
-                        ? t.claiming()
-                        : t.claim()
-                    : refundState.type === TransactionStateType.HASH
-                    ? t.refunding()
-                    : t.refund()}
+                {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
             </ActionButton>
         )
     }
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet}>
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet} renderInTimeline>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                    renderInTimeline
                     classes={{
                         connectWallet: classes.connectWallet,
                     }}>

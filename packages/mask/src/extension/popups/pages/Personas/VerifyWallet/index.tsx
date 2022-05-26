@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
@@ -14,7 +14,7 @@ import { useI18N } from '../../../../../utils'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
 import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -32,14 +32,18 @@ const VerifyWallet = memo(() => {
     const { signed, setSigned } = PopupContext.useContainer()
     const navigate = useNavigate()
     const location = useLocation()
-    const { showSnackbar } = usePopupCustomSnackbar()
-    const { value: request } = useUnconfirmedRequest()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const wallet: Account<ChainId> & {
         providerType: ProviderType
         address?: string
     } = location.state.usr
+
+    const { showSnackbar } = usePopupCustomSnackbar()
+    const { value: request } = useUnconfirmedRequest()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
     const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return EMPTY_LIST
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
@@ -55,6 +59,12 @@ const VerifyWallet = memo(() => {
         }
         return false
     }, [bounds])
+
+    const walletName = () => {
+        if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
+        if (wallet.providerType !== ProviderType.MaskWallet) return `${providerResolver.providerName(wallet.providerType)} Wallet`
+        return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
+    }
 
     useEffect(() => {
         // if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
@@ -155,6 +165,7 @@ const VerifyWallet = memo(() => {
     return (
         <div className={classes.container}>
             <Steps
+                walletName={walletName()}
                 disableConfirm={isBound && !signed}
                 nickname={currentPersona.nickname}
                 wallet={wallet}

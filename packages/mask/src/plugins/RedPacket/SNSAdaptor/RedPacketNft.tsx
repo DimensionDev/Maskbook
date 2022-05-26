@@ -256,7 +256,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         loading,
         retry: retryAvailability,
         error: availabilityError,
-    } = useAvailabilityNftRedPacket(payload.id, account)
+    } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -437,14 +437,16 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         <Box sx={{ flex: 1, padding: 1.5 }}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={payload.chainId}>
+                                expectedChainId={payload.chainId}
+                                renderInTimeline>
                                 <WalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,
                                         gasFeeButton: classes.button,
-                                    }}>
+                                    }}
+                                    renderInTimeline>
                                     <ActionButton
                                         variant="contained"
                                         loading={isClaiming}
