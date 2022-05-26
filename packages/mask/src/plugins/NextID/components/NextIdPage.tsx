@@ -109,7 +109,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
-    if (personaActionButton) {
+    if (personaActionButton && isOwn) {
         return (
             <Stack justifyContent="center" direction="row" mt="24px">
                 {personaActionButton}
