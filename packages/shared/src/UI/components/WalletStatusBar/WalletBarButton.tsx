@@ -4,6 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import type { ERC20TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-evm'
 import { Button, CircularProgress } from '@mui/material'
+import classNames from 'classnames'
 import { useSharedI18N } from '../../../locales'
 
 export type ERC20Bounday = {
@@ -25,18 +26,25 @@ interface WalletButtonProps extends withClasses<'root'> {
     boundary?: ERC20Bounday | ERC721Bounday
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
     progress: {
         color: MaskColorVar.twitterButtonText,
         position: 'absolute',
         top: theme.spacing(1),
         left: `calc(50%-${theme.spacing(1)})`,
     },
+    button: {
+        backgroundColor: props.color === 'warning' ? MaskColorVar.errorPlugin : '',
+        color: props.color === 'warning' ? '#FFFFFF' : '',
+        '&:hover': {
+            backgroundColor: props.color === 'warning' ? MaskColorVar.errorPlugin : '',
+        },
+    },
 }))
 
 export function WalletButton(props: WalletButtonProps) {
     const { color, startIcon, endIcon, loading = false, disabled = false, action, title } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles({ color }), props)
     const t = useSharedI18N()
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
@@ -45,17 +53,10 @@ export function WalletButton(props: WalletButtonProps) {
 
     return (
         <Button
-            sx={{
-                backgroundColor: color === 'warning' ? '#FF3545' : MaskColorVar.buttonPluginBackground,
-                color: color === 'warning' ? '#ffffff' : MaskColorVar.twitterButtonText,
-                '&:hover': {
-                    backgroundColor: color === 'warning' ? '#FF3545' : MaskColorVar.buttonPluginBackground,
-                },
-            }}
             startIcon={startIcon}
             endIcon={endIcon}
             variant="contained"
-            className={classes.root}
+            className={classNames(classes.button, classes.root)}
             fullWidth
             disabled={loading || disabled}
             onClick={action ?? connectWalletDialog}>
