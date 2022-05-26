@@ -76,7 +76,17 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         )
 
     if (!isRiskWarningConfirmed && !hideRiskWarningConfirmed)
-        return (
+        return renderInTimeline ? (
+            <ActionButton
+                className={classNames(classes.button, classes.connectWallet)}
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={openRiskWarningDialog}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_confirm_risk_warning')}
+            </ActionButton>
+        ) : (
             <PluginWalletStatusBar
                 className={classes.walletBar}
                 actionProps={{
@@ -88,7 +98,18 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         )
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
-        return (
+        return renderInTimeline ? (
+            <ActionButton
+                className={classNames(classes.button, classes.gasFeeButton)}
+                disabled={!nativeTokenBalance.error}
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={nativeTokenBalance.retry}
+                {...props.ActionButtonProps}>
+                {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
+            </ActionButton>
+        ) : (
             <PluginWalletStatusBar
                 className={classes.walletBar}
                 actionProps={{
@@ -101,7 +122,17 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         )
 
     if (!chainIdValid && !offChain)
-        return (
+        return renderInTimeline ? (
+            <ActionButton
+                className={classNames(classes.button, classes.invalidButton)}
+                disabled
+                fullWidth
+                variant="contained"
+                size="large"
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_invalid_network')}
+            </ActionButton>
+        ) : (
             <PluginWalletStatusBar
                 className={classes.walletBar}
                 actionProps={{
