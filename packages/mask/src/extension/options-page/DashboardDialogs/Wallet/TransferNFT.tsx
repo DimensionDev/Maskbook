@@ -1,18 +1,13 @@
-import { useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useTokenTransferCallback } from '@masknet/web3-shared-evm'
 import { Button, TextField } from '@mui/material'
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-<<<<<<< HEAD
 import { ChainId, formatEthereumAddress, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-=======
->>>>>>> develop
 import { Image } from '../../../../components/shared/Image'
+import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
-import { useI18N } from '../../../../utils'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
@@ -45,20 +40,12 @@ export function DashboardWalletTransferDialogNFT(
     const { collectiblesRetry } = useContext(CollectibleContext)
 
     // #region transfer tokens
-<<<<<<< HEAD
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         token.schema,
         token.address,
-=======
-    const [{ loading }, transferCallback] = useTokenTransferCallback(
-        token.contractDetailed.type,
-        token.contractDetailed.address,
->>>>>>> develop
     )
 
-    const openShareTxDialog = useOpenShareTxDialog()
     const onTransfer = useCallback(async () => {
-<<<<<<< HEAD
         await transferCallback(token.tokenId, address)
     }, [transferCallback, token.tokenId, address])
     // #endregion
@@ -87,17 +74,6 @@ export function DashboardWalletTransferDialogNFT(
             summary: `Transfer ${token.metadata?.name} to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
-=======
-        const hash = await transferCallback(token.tokenId, address)
-        if (typeof hash === 'string') {
-            await openShareTxDialog({
-                hash,
-            })
-            onClose()
-        }
-        collectiblesRetry()
-    }, [transferCallback, token.tokenId, address, collectiblesRetry, openShareTxDialog])
->>>>>>> develop
     // #endregion
 
     // #region validation
@@ -140,7 +116,9 @@ export function DashboardWalletTransferDialogNFT(
                             className={classes.button}
                             variant="contained"
                             color="primary"
-                            disabled={!!validationMessage || loading}
+                            disabled={
+                                !!validationMessage || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+                            }
                             onClick={onTransfer}>
                             {validationMessage || t('wallet_transfer_send')}
                         </Button>

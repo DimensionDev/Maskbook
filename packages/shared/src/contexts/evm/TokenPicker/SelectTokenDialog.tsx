@@ -6,7 +6,7 @@ import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
-import { InjectedDialog, InjectedDialogProps } from '../../components'
+import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
@@ -49,7 +49,6 @@ export interface PickTokenOptions {
     blacklist?: string[]
     tokens?: FungibleToken<ChainId, SchemaType>[]
     selectedTokens?: string[]
-    onSubmit?(token: FungibleToken<ChainId, SchemaType>): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
@@ -67,15 +66,17 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSubmit,
+    onSelect,
     onClose,
     title,
 }) => {
     const t = useSharedI18N()
     const isDashboard = location.href.includes('dashboard.html')
     const { networkIdentifier } = useBaseUIRuntime()
-    const { classes } = useStyles({ compact: networkIdentifier === EnhanceableSite.Minds, disablePaddingTop: isDashboard })
+    const compact = networkIdentifier === EnhanceableSite.Minds
+    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -89,7 +90,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSubmit}
+                    onSelect={onSelect}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
