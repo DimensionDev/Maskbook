@@ -67,6 +67,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         withChildren = false,
     } = props
 
+    console.log('----')
+    console.log(infiniteUnlockContent)
     const { t } = useI18N()
     const { classes } = useStyles()
 

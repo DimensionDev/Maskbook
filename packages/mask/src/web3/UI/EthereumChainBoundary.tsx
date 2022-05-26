@@ -184,12 +184,17 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     }, [props.ActionButtonPromiseProps, props.renderInTimeline])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
-        return (
+        const jsx = (
+            <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
+                {children}
+            </Box>
+        )
+        return props.renderInTimeline ? (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
-                <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
-                    {children}
-                </Box>
+                {jsx}
             </ShadowRootTooltip>
+        ) : (
+            jsx
         )
     }
 
@@ -270,6 +275,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         />
                     ) : (
                         <PluginWalletStatusBar
+                            tooltip={providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : ''}
                             actionProps={{
                                 startIcon: (
                                     <WalletIcon
@@ -332,6 +338,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     />
                 ) : (
                     <PluginWalletStatusBar
+                        tooltip={providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : ''}
                         actionProps={{
                             startIcon: (
                                 <WalletIcon

@@ -20,12 +20,13 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         color?: 'warning'
     }
     onChange?: (address: string) => void
+    tooltip?: string | React.ReactElement | React.ReactNode
 }
 
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     const { t } = useI18N()
     const theme = useTheme()
-    const { actionProps, className, onChange } = props
+    const { actionProps, className, onChange, tooltip } = props
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -62,6 +63,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
             actionProps={{ ...actionProps, openPopupsWindow, wallets, loading }}
             onChange={(address: string) => onChange?.(address)}
             pending={renderButtonText()}
+            tooltip={tooltip}
         />
     )
 }

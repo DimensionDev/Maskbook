@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
@@ -19,10 +19,9 @@ import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { currentSlippageSettings } from '../../settings'
 import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
-import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { HelpOutline, ArrowDownward } from '@mui/icons-material'
+import { ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
@@ -493,34 +492,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                             ActionButtonProps={{
                                 color: 'primary',
                             }}
-                            infiniteUnlockContent={
-                                <Box component="span" display="flex" alignItems="center">
-                                    <Typography fontSize={18} fontWeight={600} lineHeight="18px">
-                                        {t('plugin_trader_unlock_symbol', {
-                                            symbol: approveToken?.symbol,
-                                        })}
-                                    </Typography>
-                                    <Tooltip
-                                        classes={{
-                                            tooltip: classes.tooltip,
-                                        }}
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        title={t('plugin_trader_unlock_tips', {
-                                            provider: focusedTrade?.provider
-                                                ? resolveTradeProviderName(focusedTrade.provider)
-                                                : '',
-                                            symbol: approveToken?.symbol,
-                                        })}
-                                        placement="top"
-                                        arrow
-                                        disableFocusListener
-                                        disableTouchListener>
-                                        <HelpOutline style={{ marginLeft: 10, height: 22 }} />
-                                    </Tooltip>
-                                </Box>
-                            }
                             render={(disable: boolean) =>
                                 isGreatThanSlippageSetting ? (
                                     <PluginWalletStatusBar

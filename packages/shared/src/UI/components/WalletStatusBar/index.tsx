@@ -1,5 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { Box, Button } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -27,6 +27,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
         backgroundColor: MaskColorVar.buttonPluginBackground,
     },
+    tooltip: {
+        borderRadius: 4,
+        padding: 10,
+    },
 }))
 
 export interface WalletStatusBarProps extends withClasses<'button'> {
@@ -46,11 +50,12 @@ export interface WalletStatusBarProps extends withClasses<'button'> {
     }
     onChange?: (address: string) => void
     pending?: string | React.ReactElement | React.ReactNode
+    tooltip?: string | React.ReactElement | React.ReactNode
 }
 
 export function WalletStatusBar(props: WalletStatusBarProps) {
     const t = useSharedI18N()
-    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange, pending } = props
+    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange, pending, tooltip } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -70,25 +75,26 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                     pending={pending}
                 />
             </Box>
-
-            <Box sx={{ flex: 1, textAlign: 'center' }}>
-                {!actionProps ? (
-                    <Button variant="contained" className={classes.button} fullWidth onClick={connectWalletDialog}>
-                        Change
-                    </Button>
-                ) : (
-                    <WalletButton
-                        startIcon={actionProps.startIcon}
-                        endIcon={actionProps.endIcon}
-                        classes={{ root: classes.button }}
-                        title={actionProps.title}
-                        disabled={actionProps.loading || actionProps.disabled}
-                        loading={actionProps.loading}
-                        action={actionProps.action}
-                        color={actionProps.color}
-                    />
-                )}
-            </Box>
+            <ShadowRootTooltip title={tooltip ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
+                <Box sx={{ flex: 1, textAlign: 'center' }}>
+                    {!actionProps ? (
+                        <Button variant="contained" className={classes.button} fullWidth onClick={connectWalletDialog}>
+                            Change
+                        </Button>
+                    ) : (
+                        <WalletButton
+                            startIcon={actionProps.startIcon}
+                            endIcon={actionProps.endIcon}
+                            classes={{ root: classes.button }}
+                            title={actionProps.title}
+                            disabled={actionProps.loading || actionProps.disabled}
+                            loading={actionProps.loading}
+                            action={actionProps.action}
+                            color={actionProps.color}
+                        />
+                    )}
+                </Box>
+            </ShadowRootTooltip>
         </Box>
     )
 }
