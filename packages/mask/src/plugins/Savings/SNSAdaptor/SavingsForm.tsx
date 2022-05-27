@@ -43,7 +43,7 @@ export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
     tab: TabType
-    onClose?: () => void
+    onClose?: (reset?: boolean) => void
 }
 
 export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
@@ -249,7 +249,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 failed={t('failed')}
                                 failedOnClick="use executor"
                                 complete={t('done')}
-                                completeOnClick={() => onClose?.()}
+                                completeOnClick={() => onClose?.(true)}
                                 disabled={validationMessage !== '' && !needsSwap}
                                 noUpdateEffect
                                 executor={executor}
@@ -283,7 +283,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         failed={t('failed')}
                         failedOnClick="use executor"
                         complete={t('done')}
-                        completeOnClick={() => onClose?.()}
+                        completeOnClick={() => onClose?.(true)}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
                         executor={executor}
