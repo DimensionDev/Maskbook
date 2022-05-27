@@ -1,18 +1,34 @@
-import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
+import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
+import type { TransactionReceipt } from 'web3-core'
+import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
-    const redPacketContract = useRedPacketContract(version)
-    return useAsyncFn(async () => {
-        if (!redPacketContract || !id || !password) return
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const [claimState, setClaimState] = useTransactionState()
+    const redPacketContract = useRedPacketContract(chainId, version)
+    const claimCallback = useCallback(async () => {
+        if (!redPacketContract || !id || !password) {
+            setClaimState({
+                type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
+
+        // start waiting for provider to confirm tx
+        setClaimState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
 
         // note: despite the method params type of V1 and V2 is the same,
-        // but it is more understandable to declare respectively
+        //  but it is more understandable to declare respectively
         const claim =
             version === 4
                 ? () => (redPacketContract as HappyRedPacketV4).methods.claim(id, password, from)
@@ -32,18 +48,47 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     from,
                 })
                 .catch((error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
                     throw error
                 }),
         }
 
         // step 2-1: blocking
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             claim()
                 .send(config as NonPayableTx)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setClaimState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
                 })
-                .on(TransactionEventType.ERROR, reject)
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
+                })
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [id, password, from, redPacketContract])
+
+    const resetCallback = useCallback(() => {
+        setClaimState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
+
+    return [claimState, claimCallback, resetCallback] as const
 }

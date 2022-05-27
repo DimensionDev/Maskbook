@@ -1,15 +1,13 @@
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
-    formatBalance,
     formatEthereumAddress,
-    FungibleTokenDetailed,
     isNativeTokenAddress,
-    resolveAddressLinkOnExplorer,
-    resolveTokenLinkOnExplorer,
-    useChainId,
+    explorerResolver,
     useITOConstants,
+    SchemaType,
+    ChainId,
 } from '@masknet/web3-shared-evm'
-import { ONE } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -20,6 +18,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -30,9 +29,9 @@ const useSwapItemStyles = makeStyles()({
     },
 })
 interface SwapItemProps {
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
+    swap?: FungibleToken<ChainId, SchemaType>
     swapAmount?: string
-    swap?: FungibleTokenDetailed
 }
 
 function SwapItem(props: SwapItemProps) {
@@ -109,17 +108,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
-    loading?: boolean
     onDone: () => void
     onBack: () => void
     onClose: () => void
 }
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { poolSettings, loading, onDone, onBack, onClose } = props
+    const { poolSettings, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
@@ -148,10 +146,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isNativeTokenAddress(poolSettings?.token) ? null : (
+                        {isNativeTokenAddress(poolSettings?.token?.address) ? null : (
                             <Link
                                 className={classes.link}
-                                href={resolveTokenLinkOnExplorer(poolSettings?.token!)}
+                                href={explorerResolver.fungibleTokenLink(chainId, poolSettings?.token?.address!)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={stop}>
@@ -252,7 +250,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Grid item xs={6}>
                             <Paper className={classes.data}>
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(chainId, poolSettings?.qualificationAddress!)}
+                                    href={explorerResolver.addressLink(chainId, poolSettings?.qualificationAddress!)}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>
@@ -305,12 +303,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton disabled={loading} fullWidth variant="outlined" onClick={onBack}>
+                    <ActionButton fullWidth variant="outlined" onClick={onBack}>
                         {t('plugin_ito_back')}
                     </ActionButton>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton loading={loading} disabled={loading} fullWidth variant="contained" onClick={onDone}>
+                    <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
                             total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,

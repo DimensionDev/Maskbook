@@ -1,27 +1,28 @@
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
-import { EnhanceableSite } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useITOConstants } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
-import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import Services from '../../../extension/service'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { DialogContent } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { WalletMessages } from '../../Wallet/messages'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
-import { PluginITO_RPC } from '../messages'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
-import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { payloadOutMask } from './helpers'
-import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { PoolList } from './PoolList'
+import { PluginITO_RPC } from '../messages'
+import { TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
+import { PoolSettings, useFillCallback } from './hooks/useFill'
+import { ConfirmDialog } from './ConfirmDialog'
+import { WalletMessages } from '../../Wallet/messages'
+import { omit, set } from 'lodash-unified'
+import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { EnhanceableSite } from '@masknet/shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface StyleProps {
     snsId: string
@@ -54,8 +55,9 @@ export interface CompositionDialogProps extends withClasses<'root'>, Omit<Inject
 export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
@@ -76,64 +78,70 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
     // #region blocking
-    const [{ loading: filling }, fillCallback] = useFillCallback(poolSettings)
-    const openShareTxDialog = useOpenShareTxDialog()
-    const fill = useCallback(async () => {
-        const result = await fillCallback()
-        if (!result || result instanceof Error) return
-        const { receipt, settings } = result
-        if (!receipt.transactionHash) return
-        await openShareTxDialog({
-            hash: receipt.transactionHash,
-        })
-        // no contract is available
-        if (!ITO2_CONTRACT_ADDRESS) return
-
-        // the settings is not available
-        if (!settings?.token) return
-
-        const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
-            total: string
-            id: string
-            creator: string
-            creation_time: string
-            token_address: string
-            name: string
-            message: string
-        }
-
-        // assemble JSON payload
-        const payload: JSON_PayloadInMask = {
-            contract_address: ITO2_CONTRACT_ADDRESS,
-            pid: FillSuccess.id,
-            password: settings.password,
-            message: FillSuccess.message,
-            limit: settings.limit,
-            total: FillSuccess.total,
-            total_remaining: FillSuccess.total,
-            seller: {
-                address: FillSuccess.creator,
-            },
-            chain_id: chainId,
-            start_time: settings.startTime.getTime(),
-            end_time: settings.endTime.getTime(),
-            unlock_time: settings.unlockTime?.getTime() ?? 0,
-            qualification_address: settings.qualificationAddress,
-            creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
-            token: settings.token,
-            exchange_amounts: settings.exchangeAmounts,
-            exchange_tokens: settings.exchangeTokens,
-            regions: settings.regions,
-        }
-
-        setPoolSettings(undefined)
-        onCreateOrSelect(payload)
-        onBack()
-    }, [ITO2_CONTRACT_ADDRESS, fillCallback, openShareTxDialog])
+    // TODO: 6002: use useOpenShareTxDialog.
+    const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
+    )
+
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+
+            // reset state
+            resetFillCallback()
+
+            // no contract is available
+            if (!ITO2_CONTRACT_ADDRESS) return
+
+            // the settings is not available
+            if (!fillSettings?.token) return
+
+            // early return happened
+            if (fillState.type !== TransactionStateType.CONFIRMED) return
+
+            const { receipt } = fillState
+            const FillSuccess = (receipt.events?.FillSuccess.returnValues ?? {}) as {
+                total: string
+                id: string
+                creator: string
+                creation_time: string
+                token_address: string
+                name: string
+                message: string
+            }
+
+            // assemble JSON payload
+            const payload: JSON_PayloadInMask = {
+                contract_address: ITO2_CONTRACT_ADDRESS,
+                pid: FillSuccess.id,
+                password: fillSettings.password,
+                message: FillSuccess.message,
+                limit: fillSettings.limit,
+                total: FillSuccess.total,
+                total_remaining: FillSuccess.total,
+                seller: {
+                    address: FillSuccess.creator,
+                },
+                chain_id: chainId,
+                start_time: fillSettings.startTime.getTime(),
+                end_time: fillSettings.endTime.getTime(),
+                unlock_time: fillSettings.unlockTime?.getTime() ?? 0,
+                qualification_address: fillSettings.qualificationAddress,
+                creation_time: Number.parseInt(FillSuccess.creation_time, 10) * 1000,
+                token: fillSettings.token,
+                exchange_amounts: fillSettings.exchangeAmounts,
+                exchange_tokens: fillSettings.exchangeTokens,
+                regions: fillSettings.regions,
+            }
+
+            setPoolSettings(undefined)
+            onCreateOrSelect(payload)
+            onBack()
+        },
     )
 
     // #region tabs
@@ -148,7 +156,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
+                payload.password =
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personaSign', {
+                        account,
+                    })) ?? ''
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')
@@ -220,6 +231,20 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }
     // #endregion
 
+    // open the transaction dialog
+    useEffect(() => {
+        if (!poolSettings?.token || fillState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            state: fillState,
+            summary: t('plugin_ito_transaction_dialog_summary', {
+                amount: formatBalance(poolSettings?.total, poolSettings?.token.decimals),
+                symbol: poolSettings.token.symbol,
+            }),
+        })
+    }, [fillState, poolSettings, setTransactionDialog])
+    // #endregion
+
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()
     }, [ITO2_CONTRACT_ADDRESS, onClose])
@@ -233,9 +258,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog
                         poolSettings={poolSettings}
-                        loading={filling}
                         onBack={onBack}
-                        onDone={fill}
+                        onDone={fillCallback}
                         onClose={onClose}
                     />
                 ) : null}

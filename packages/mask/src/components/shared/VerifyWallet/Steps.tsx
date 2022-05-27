@@ -13,8 +13,8 @@ import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
-import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type { Account } from '@masknet/web3-shared-base'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
@@ -99,7 +99,9 @@ export enum SignSteps {
 interface StepsProps {
     step: SignSteps
     nickname?: string
-    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    wallet: Account<ChainId> & {
+        providerType: ProviderType
+    }
     disableConfirm?: boolean
     confirmLoading: boolean
     notInPop?: boolean

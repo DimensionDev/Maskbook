@@ -1,5 +1,4 @@
 import { RefreshIcon } from '@masknet/icons'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -8,7 +7,9 @@ import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -61,7 +62,7 @@ interface PoolViewProps {
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region allowed tokens
     const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
@@ -132,7 +133,7 @@ export function PoolView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={pool.chainId} renderInTimeline />
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={pool.chainId} />
             </Box>
         </>
     )

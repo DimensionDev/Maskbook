@@ -1,27 +1,21 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useValueRef } from '@masknet/shared-base-ui'
 import {
-    AddressName,
-    ChainId,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
+    IdentityAddress,
     isSameAddress,
-    NonFungibleAssetProvider,
-    SocketState,
-    useCollectibles,
-    useCollections,
-    Wallet,
-} from '@masknet/web3-shared-evm'
+    NetworkPluginID,
+    NonFungibleAsset,
+    NonFungibleTokenContract,
+} from '@masknet/web3-shared-base'
+import { ChainId, NonFungibleAssetProvider, SchemaType, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ReversedAddress } from '@masknet/shared'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -115,7 +109,7 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps {
     provider: NonFungibleAssetProvider
     wallet?: Wallet
-    token: ERC721TokenDetailed
+    token: NonFungibleAsset<ChainId, SchemaType>
     readonly?: boolean
     renderOrder: number
 }
@@ -134,7 +128,7 @@ function CollectibleItem(props: CollectibleItemProps) {
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.info.name}
+                    {token.metadata?.name}
                 </Typography>
             </div>
         </div>
@@ -144,7 +138,7 @@ function CollectibleItem(props: CollectibleItemProps) {
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
     provider: NonFungibleAssetProvider
     wallet?: Wallet
-    collectibles: ERC721TokenDetailed[]
+    collectibles: Array<NonFungibleAsset<ChainId, SchemaType>>
     loading: boolean
     collectiblesRetry: () => void
     error: string | undefined
@@ -156,7 +150,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
+    // useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
@@ -209,7 +203,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
-    collectibles: ERC721TokenDetailed[]
+    collectibles: Array<NonFungibleAsset<ChainId, SchemaType>>
     error?: string
     loading: boolean
     retry(): void
@@ -217,13 +211,13 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
 
 export function CollectibleList(props: CollectibleListProps) {
     const { address, collectibles, error, loading, retry } = props
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
 
     return (
         <CollectibleListUI
             classes={classes}
-            provider={provider}
+            // TODO: create currentNonFungibleAssetDataProviderSettings for collectible plugin
+            // provider={}
             collectibles={collectibles}
             loading={loading}
             collectiblesRetry={retry}
@@ -238,25 +232,29 @@ export function CollectionList({
     addressName,
     onSelectAddress,
 }: {
-    addressName: AddressName
+    addressName: IdentityAddress
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
-    const { resolvedAddress: address } = addressName
+    const [selectedCollection, setSelectedCollection] = useState<
+        NonFungibleAsset<ChainId, SchemaType> | 'all' | undefined
+    >('all')
+    const { address } = addressName
 
     useEffect(() => {
         setSelectedCollection('all')
     }, [address])
 
-    const { data: collectionsFormRemote } = useCollections(address, chainId)
+    const { value: collectionsFormRemote } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, {
+        account: address,
+    })
     const {
-        data: collectibles,
+        value: collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId)
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, address, chainId)
 
     const isLoading = loadingCollectibleDone !== SocketState.done
 
@@ -282,12 +280,14 @@ export function CollectionList({
             const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
             if (item) {
                 return {
+                    id: item.address,
+                    chainId: ChainId.Mainnet,
+                    schema: SchemaType.ERC721,
                     name: item.name,
                     symbol: item.name,
-                    baseURI: item.iconURL,
-                    iconURL: item.iconURL,
+                    logoURL: item.iconURL,
                     address: item.address,
-                } as ERC721ContractDetailed
+                } as NonFungibleTokenContract<ChainId, SchemaType>
             }
             return x
         })
@@ -304,7 +304,7 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                <ReversedAddress address={addressName.resolvedAddress} />
+                                <ReversedAddress address={addressName.address} />
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -333,7 +333,7 @@ export function CollectionList({
                 </Stack>
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.resolvedAddress} />
+                        <ReversedAddress address={addressName.address} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
@@ -363,7 +363,7 @@ export function CollectionList({
                                     color="textPrimary"
                                     variant="body2"
                                     sx={{ fontSize: '16px' }}>
-                                    {selectedCollection.name}
+                                    {selectedCollection.metadata?.name}
                                     {loadingCollectibleDone && renderCollectibles.length
                                         ? `(${renderCollectibles.length})`
                                         : null}
@@ -374,7 +374,7 @@ export function CollectionList({
                             address={address}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
-                            loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
+                            loading={renderCollectibles.length === 0}
                         />
                     </Box>
                 </Box>

@@ -9,10 +9,27 @@ import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
 import { SwapColorfulIcon } from '@masknet/icons'
 import { PluginTraderMessages } from '../messages'
+import { setupStorage, storageDefaultValue } from '../storage'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SNSAdaptor.Definition<
+    ChainId,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown,
+    unknown
+> = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupStorage(context.createKVStorage('persistent', '', storageDefaultValue))
+    },
     SearchResultBox: SearchResultInspector,
     GlobalInjection: function Component() {
         return (

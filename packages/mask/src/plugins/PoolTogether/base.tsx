@@ -3,7 +3,7 @@ import { POOLTOGETHER_PLUGIN_ID, URL_PATTERN } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: POOLTOGETHER_PLUGIN_ID,
-    name: { fallback: 'Pooltogether' },
+    name: { fallback: 'PoolTogether' },
     description: { fallback: 'PoolTogether is a protocol for no-loss prize games on the Ethereum blockchain' },
     publisher: { name: { fallback: 'iRhonin' }, link: 'https://github.com/iRhonin' },
     enableRequirement: {

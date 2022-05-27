@@ -1,26 +1,16 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import {
-    formatBalance,
-    getChainName,
-    isNativeTokenAddress,
-    resolveTokenLinkOnExplorer,
-    useAccount,
-    useChainId,
-    useNetworkType,
-    useRedPacketConstants,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import { useEffect } from 'react'
+import { explorerResolver, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
+import { FormattedBalance } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
-import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
-import { RedPacketRPC } from '../messages'
 import { useI18N } from '../locales'
+import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -78,93 +68,19 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ConfirmRedPacketFormProps {
     onBack: () => void
-    onCreated: (payload: RedPacketJSONPayload) => void
+    onCreate: () => void
     onClose: () => void
     settings?: RedPacketSettings
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { onBack, settings, onClose, onCreated } = props
+    const { onBack, settings, onCreate, onClose } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
-
-    // #region blocking
-    // password should remain the same rather than change each time when createState change,
-    //  otherwise password in database would be different from creating red-packet.
-    const contract_version = 4
-    const web3 = useWeb3()
-    const account = useAccount()
-    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
-    const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
-    const openShareTxDialog = useOpenShareTxDialog()
-    const createRedpacket = useCallback(async () => {
-        const receipt = await createCallback()
-        if (typeof receipt?.transactionHash !== 'string') return
-        await openShareTxDialog({
-            hash: receipt.transactionHash,
-        })
-
-        // the settings is not available
-        if (!settings?.token) return
-
-        const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
-            creation_time: string
-            creator: string
-            id: string
-            token_address: string
-            total: string
-        }
-        payload.current.sender = {
-            address: account,
-            name: settings.name,
-            message: settings.message,
-        }
-        payload.current.is_random = settings.isRandom
-        payload.current.shares = settings.shares
-        payload.current.password = privateKey
-        payload.current.rpid = CreationSuccess.id
-        payload.current.total = CreationSuccess.total
-        payload.current.duration = settings.duration
-        payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-        payload.current.token = settings.token
-
-        const record: RedPacketRecord = {
-            id: receipt.transactionHash!,
-            from: '',
-            password: privateKey,
-            contract_version,
-        }
-        RedPacketRPC.discoverRedPacket(record)
-
-        // output the redpacket as JSON payload
-        onCreated(payload.current)
-    }, [createCallback, settings, openShareTxDialog, onCreated])
-    // #endregion
-
-    // assemble JSON payload
-    const payload = useRef<RedPacketJSONPayload>({
-        network: getChainName(chainId),
-    } as RedPacketJSONPayload)
-
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
-    const networkType = useNetworkType()
-    useEffect(() => {
-        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
-        if (!contractAddress) {
-            onClose()
-            return
-        }
-        payload.current.contract_address = contractAddress
-        payload.current.contract_version = contract_version
-        payload.current.network = getChainName(chainId)
-    }, [chainId, networkType, contract_version])
-
-    // #endregion
 
     return (
         <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
@@ -185,7 +101,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={resolveTokenLinkOnExplorer(settings?.token!)}
+                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
@@ -261,12 +177,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
 
             <Grid item xs={6}>
-                <ActionButton disabled={isCreating} variant="contained" size="large" fullWidth onClick={onBack}>
+                <ActionButton variant="contained" size="large" fullWidth onClick={onBack}>
                     {t.back()}
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton loading={isCreating} variant="contained" size="large" fullWidth onClick={createRedpacket}>
+                <ActionButton variant="contained" size="large" fullWidth onClick={onCreate}>
                     {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',

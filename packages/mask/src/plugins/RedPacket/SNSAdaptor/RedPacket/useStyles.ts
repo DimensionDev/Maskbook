@@ -166,15 +166,5 @@ to {
             fontSize: 24,
             marginTop: 210,
         },
-        walletButton: {
-            backgroundColor: theme.palette.maskColor.dark,
-            color: 'white',
-            fontSize: 14,
-            fontWeight: 700,
-            width: '100%',
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
-            },
-        },
     }
 })

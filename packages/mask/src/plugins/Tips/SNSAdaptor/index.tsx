@@ -12,7 +12,7 @@ import { TipsEntranceDialog } from './TipsEntranceDialog'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(_, context) {
-        setupStorage(context.createKVStorage('memory', storageDefaultValue))
+        setupStorage(context.createKVStorage('memory', '', storageDefaultValue))
     },
     ApplicationEntries: [
         (() => {

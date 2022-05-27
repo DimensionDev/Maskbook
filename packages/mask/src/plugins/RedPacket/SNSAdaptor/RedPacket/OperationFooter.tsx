@@ -1,21 +1,23 @@
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ChainId, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Box, useTheme } from '@mui/material'
+import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useI18N as useBaseI18n } from '../../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useI18N } from '../../locales'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { useStyles } from './useStyles'
 
 interface OperationFooterProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
-    isClaiming: boolean
-    isRefunding: boolean
+    claimState: TransactionState
+    refundState: TransactionState
     onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
@@ -23,16 +25,16 @@ export function OperationFooter({
     chainId,
     canClaim,
     canRefund,
-    isClaiming,
-    isRefunding,
+    claimState,
+    refundState,
     onShare,
     onClaimOrRefund,
 }: OperationFooterProps) {
     const { classes } = useStyles()
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const account = useAccount()
-    const chainIdValid = useChainIdValid()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
 
     // #region remote controlled select provider dialog
@@ -58,7 +60,9 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
-        const isLoading = isClaiming || isRefunding
+        const isLoading =
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
 
         return (
             <ActionButton
@@ -75,20 +79,25 @@ export function OperationFooter({
                 disabled={isLoading}
                 variant="contained"
                 onClick={onClaimOrRefund}>
-                {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
+                {canClaim
+                    ? claimState.type === TransactionStateType.HASH
+                        ? t.claiming()
+                        : t.claim()
+                    : refundState.type === TransactionStateType.HASH
+                    ? t.refunding()
+                    : t.refund()}
             </ActionButton>
         )
     }
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <EthereumChainBoundary chainId={chainId ?? ChainId.Mainnet} renderInTimeline>
-                <EthereumWalletConnectedBoundary
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet}>
+                <WalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                    renderInTimeline
                     classes={{
-                        button: classes.walletButton,
+                        connectWallet: classes.connectWallet,
                     }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (
@@ -110,8 +119,8 @@ export function OperationFooter({
                         )}
                         <ObtainButton />
                     </Box>
-                </EthereumWalletConnectedBoundary>
-            </EthereumChainBoundary>
+                </WalletConnectedBoundary>
+            </ChainBoundary>
         </Box>
     )
 }

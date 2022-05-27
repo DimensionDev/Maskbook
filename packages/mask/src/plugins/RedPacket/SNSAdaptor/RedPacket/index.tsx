@@ -1,29 +1,24 @@
-import { useOpenShareTxDialog } from '@masknet/shared'
-import {
-    ChainId,
-    formatBalance,
-    getChainIdFromName,
-    resolveNetworkName,
-    useAccount,
-    useNetworkType,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
-import { Card, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Card, Typography } from '@mui/material'
+import { ChainId, TransactionStateType, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
-import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
+import type { RedPacketJSONPayload } from '../../types'
+import { WalletMessages } from '../../../Wallet/messages'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -37,9 +32,9 @@ export function RedPacket(props: RedPacketProps) {
     const { classes } = useStyles()
 
     // context
-    const web3 = useWeb3()
-    const account = useAccount()
-    const networkType = useNetworkType()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
 
     // #region token detailed
     const {
@@ -57,11 +52,11 @@ export function RedPacket(props: RedPacketProps) {
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
+        payload.contract_version > 3 ? web3?.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
 
     const shareText = useMemo(() => {
@@ -70,10 +65,10 @@ export function RedPacket(props: RedPacketProps) {
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
-            network: resolveNetworkName(networkType),
+            network: networkResolver.networkName(networkType) || '',
             account: isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account'),
         }
-        if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
+        if (listOfStatus.includes(RedPacketStatus.claimed)) {
             return isOnTwitter || isOnFacebook
                 ? t.share_message_official_account(shareTextOption)
                 : t.share_message_not_twitter(shareTextOption)
@@ -82,44 +77,55 @@ export function RedPacket(props: RedPacketProps) {
         return isOnTwitter || isOnFacebook
             ? t.share_unclaimed_message_official_account(shareTextOption)
             : t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, postLink, networkType, claimTxHash, listOfStatus, activatedSocialNetworkUI, t, tr])
+    }, [payload, postLink, networkType, listOfStatus, activatedSocialNetworkUI, t, tr])
 
-    const [{ loading: isRefunding }, isRefunded, refundCallback] = useRefundCallback(
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
         account,
         payload.rpid,
     )
 
-    const openShareTxDialog = useOpenShareTxDialog()
+    // TODO: 6002: use useOpenShareTxDialog.
+    // close the transaction dialog
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+    )
+
+    // open the transaction dialog
+    useEffect(() => {
+        const state = canClaim ? claimState : refundState
+        if (state.type === TransactionStateType.UNKNOWN) return
+        if (!availability || !token) return
+        if (state.type === TransactionStateType.CONFIRMED) {
+            canClaim &&
+                setTransactionDialog({
+                    open: true,
+                    shareText,
+                    state,
+                    summary: t.claiming_from({ name: payload.sender.name }),
+                })
+            resetClaimCallback()
+            resetRefundCallback()
+            revalidateAvailability()
+        }
+    }, [claimState, refundState /* update tx dialog only if state changed */])
+    // #endregion
 
     const onClaimOrRefund = useCallback(async () => {
-        let hash: string | undefined
-        if (canClaim) {
-            hash = await claimCallback()
-        } else if (canRefund) {
-            hash = await refundCallback()
-        }
-        revalidateAvailability()
-        if (typeof hash !== 'string') return
-        openShareTxDialog({
-            hash,
-            onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
-            },
-        })
-    }, [canClaim, canRefund, claimCallback, isRefunded, openShareTxDialog])
+        resetClaimCallback()
+        resetRefundCallback()
+        if (canClaim) await claimCallback()
+        else if (canRefund) await refundCallback()
+    }, [canClaim, canRefund, claimCallback, refundCallback])
 
     const myStatus = useMemo(() => {
+        if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t.description_claimed(
-                (availability as RedPacketAvailability).claimed_amount
+                availability.claimed_amount
                     ? {
-                          amount: formatBalance(
-                              (availability as RedPacketAvailability).claimed_amount,
-                              token.decimals,
-                              8,
-                          ),
-                          symbol: token.symbol || '-',
+                          amount: formatBalance(availability.claimed_amount, token.decimals, 8),
+                          symbol: token.symbol,
                       }
                     : { amount: '-', symbol: '-' },
             )
@@ -190,11 +196,15 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
-                    chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={
+                        payload.token?.chainId ??
+                        networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
+                        ChainId.Mainnet
+                    }
                     canClaim={canClaim}
                     canRefund={canRefund}
-                    isClaiming={isClaiming}
-                    isRefunding={isRefunding}
+                    claimState={claimState}
+                    refundState={refundState}
                     onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />

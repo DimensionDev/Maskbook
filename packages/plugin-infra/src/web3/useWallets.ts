@@ -1,6 +1,9 @@
-import type { NetworkPluginID } from '../web3-types'
-import { usePluginWeb3StateContext } from './Context'
+import { useSubscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from './useWeb3State'
+import { EMPTY_ARRAY } from '../utils/subscription'
 
-export function useWallets(type?: string, pluginID?: NetworkPluginID) {
-    return usePluginWeb3StateContext(pluginID).wallets
+export function useWallets<T extends NetworkPluginID>(pluginID?: T) {
+    const { Wallet } = useWeb3State(pluginID)
+    return useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
 }

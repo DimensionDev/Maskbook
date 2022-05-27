@@ -1,16 +1,18 @@
-import { useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@mui/material'
-import { useCallback, useEffect } from 'react'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
+import { useI18N } from '../../../utils/i18n-next-ui'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ITO_CardProps extends withClasses<never> {
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     onUpdateAmount: (amount: string) => void
     onUpdateBalance: () => void
 }
@@ -61,8 +63,10 @@ export function ITO_Card(props: ITO_CardProps) {
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
     // #region claim
-    const [{ loading: isClaiming }, claimCallback] = useMaskClaimCallback()
-    const openShareTxDialog = useOpenShareTxDialog()
+    const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
+    // #endregion
+
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
     const shareText = [
@@ -77,19 +81,28 @@ export function ITO_Card(props: ITO_CardProps) {
         postLink,
     ].join('\n')
 
-    const claim = useCallback(async () => {
-        const hash = await claimCallback()
-        if (typeof hash !== 'string') return
-        await openShareTxDialog({
-            hash,
-            onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
-            },
-        })
+    // close the transaction dialog
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            onUpdateBalance()
+            packetRetry()
+            resetClaimCallback()
+        },
+    )
 
-        onUpdateBalance()
-        packetRetry()
-    }, [openShareTxDialog, claimCallback])
+    // open the transaction dialog
+    useEffect(() => {
+        if (!packet) return
+        if (claimState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            shareText,
+            state: claimState,
+            summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
+        })
+    }, [claimState /* update tx dialog only if state changed */])
     // #endregion
 
     // #region update parent amount
@@ -143,15 +156,13 @@ export function ITO_Card(props: ITO_CardProps) {
                 {packet ? (
                     <Box display="flex" alignItems="center">
                         <ActionButton
-                            loading={isClaiming}
                             className={classes.button}
                             variant="contained"
                             disabled={
                                 Number.parseInt(packet.unlockTime, 10) > Math.round(Date.now() / 1000) ||
-                                packet.claimable === '0' ||
-                                isClaiming
+                                packet.claimable === '0'
                             }
-                            onClick={claim}>
+                            onClick={claimCallback}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
                     </Box>

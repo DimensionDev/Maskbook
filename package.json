@@ -28,7 +28,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/kit": "0.0.0-20220228054820-f2378be",
+    "@dimensiondev/kit": "0.0.0-20220512140759-bed2b46",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/serialize": "^1.0.3",

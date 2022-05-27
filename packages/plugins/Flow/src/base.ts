@@ -1,8 +1,15 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import {
+    NETWORK_DESCRIPTORS,
+    PROVIDER_DESCRIPTORS,
+    ChainId,
+    NetworkType,
+    ProviderType,
+} from '@masknet/web3-shared-flow'
 import { languages } from './locales/languages'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_PROVIDERS, PLUGIN_NETWORKS } from './constants'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
 
-export const base: Plugin.Shared.Definition = {
+export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
@@ -13,7 +20,6 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
-    declareApplicationCategories: [],
-    declareWeb3Networks: PLUGIN_NETWORKS,
-    declareWeb3Providers: PLUGIN_PROVIDERS,
+    declareWeb3Networks: NETWORK_DESCRIPTORS,
+    declareWeb3Providers: PROVIDER_DESCRIPTORS,
 }

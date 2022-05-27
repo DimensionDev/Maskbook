@@ -1,7 +1,34 @@
 import { registerPlugin } from '@masknet/plugin-infra'
+import type {
+    ChainId,
+    NetworkType,
+    ProviderType,
+    SchemaType,
+    Signature,
+    GasOption,
+    Block,
+    Transaction,
+    TransactionDetailed,
+    TransactionParameter,
+    TransactionSignature,
+    Web3,
+} from '@masknet/web3-shared-flow'
 import { base } from './base'
 
-registerPlugin({
+registerPlugin<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    Signature,
+    GasOption,
+    Block,
+    Transaction,
+    TransactionDetailed,
+    TransactionSignature,
+    TransactionParameter,
+    Web3
+>({
     ...base,
     SNSAdaptor: {
         load: () => import('./UI/SNSAdaptor'),

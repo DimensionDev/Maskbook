@@ -1,36 +1,25 @@
-import {
-    EthereumTokenType,
-    useERC721ContractDetailed,
-    useERC721TokenDetailedCallback,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
-import { useCallback, useEffect } from 'react'
-import { WalletRPC } from '../../../Wallet/messages'
+import { useERC721TokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useWeb3Connection, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
 export function useNftTip(recipient: string, tokenId: string | null, contractAddress?: string): TipTuple {
-    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
-        EthereumTokenType.ERC721,
-        contractAddress || '',
-    )
-    const { value: contractDetailed } = useERC721ContractDetailed(contractAddress)
-    const [, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
-
-    useEffect(() => {
-        if (tokenId) {
-            setTokenId(tokenId)
-        }
-    }, [tokenId])
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const [transferState, transferCallback] = useERC721TokenTransferCallback(contractAddress || '')
 
     const sendTip = useCallback(async () => {
         if (!tokenId || !contractAddress) return
-        const hash = await transferCallback(tokenId, recipient)
-        const tokenDetailed = await erc721TokenDetailedCallback()
+        await transferCallback(tokenId, recipient)
+        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, {
+            chainId,
+        })
         if (tokenDetailed) {
-            await WalletRPC.removeToken(tokenDetailed)
+            await Token?.removeToken?.(tokenDetailed)
         }
-        return hash
-    }, [tokenId, contractAddress, erc721TokenDetailedCallback, recipient, transferCallback])
+    }, [tokenId, contractAddress, recipient, transferCallback])
 
-    return [isTransferring, sendTip]
+    return [transferState, sendTip]
 }

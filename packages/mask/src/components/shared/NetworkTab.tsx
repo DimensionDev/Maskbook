@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
 
 interface StyleProps {
@@ -59,7 +59,7 @@ export function NetworkTab(props: NetworkTabProps) {
     })
 
     const tabProps: AbstractTabProps = {
-        tabs: chains.map((chainId) => createTabItem(getChainDetailed(chainId)?.chain ?? 'Unknown', chainId)),
+        tabs: chains.map((chainId) => createTabItem(chainResolver.chainName(chainId) ?? 'Unknown', chainId)),
         index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,

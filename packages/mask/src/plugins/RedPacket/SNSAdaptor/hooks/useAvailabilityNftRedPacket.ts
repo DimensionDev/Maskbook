@@ -1,10 +1,9 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 
-export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: ChainId) {
-    const nftRedPacketContract = useNftRedPacketContract(chainId)
+export function useAvailabilityNftRedPacket(id: string, from: string) {
+    const nftRedPacketContract = useNftRedPacketContract()
     return useAsyncRetry(async () => {
         if (!id || !nftRedPacketContract) return null
         const availability = await nftRedPacketContract.methods.check_availability(id).call({

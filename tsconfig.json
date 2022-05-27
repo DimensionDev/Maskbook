@@ -92,6 +92,7 @@
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
       "@masknet/plugin-example": ["./packages/plugins/example/src"],
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
+      "@masknet/plugin-evm": ["./packages/plugins/EVM/src"],
       "@masknet/plugin-flow": ["./packages/plugins/Flow/src"],
       "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src"],
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],

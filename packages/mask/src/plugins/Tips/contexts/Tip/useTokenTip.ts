@@ -1,18 +1,12 @@
-import { rightShift } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    GasConfig,
-    isSameAddress,
-    useTokenConstants,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
+import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { FungibleToken, isSameAddress, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, GasConfig, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
 export function useTokenTip(
     recipient: string,
-    token: FungibleTokenDetailed | null,
+    token: FungibleToken<ChainId, SchemaType> | null,
     amount: string,
     gasConfig?: GasConfig,
 ): TipTuple {
@@ -20,13 +14,13 @@ export function useTokenTip(
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
-    const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
-    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
+    const assetType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
+    const [transferState, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {
         const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()
-        return transferCallback(transferAmount, recipient, gasConfig)
+        await transferCallback(transferAmount, recipient, gasConfig)
     }, [amount, token, recipient, transferCallback, gasConfig])
 
-    return [isTransferring, sendTip]
+    return [transferState, sendTip]
 }

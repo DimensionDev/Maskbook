@@ -1,24 +1,26 @@
+import { useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import { omit } from 'lodash-unified'
+import BigNumber from 'bignumber.js'
+import Web3Utils from 'web3-utils'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { isGreaterThan, ONE } from '@masknet/web3-shared-base'
 import {
-    ERC20TokenDetailed,
-    FAKE_SIGN_PASSWORD,
-    FungibleTokenDetailed,
     TransactionEventType,
-    useAccount,
-    useChainId,
-    useWeb3,
+    TransactionStateType,
+    TransactionState,
+    FAKE_SIGN_PASSWORD,
+    ChainId,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-unified'
-import { useAsync, useAsyncFn } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { FungibleToken, isGreaterThan, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
+import { useITO_Contract } from './useITO_Contract'
+import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
 import type { AdvanceSettingData } from '../AdvanceSetting'
-import { gcd, sortTokens } from '../helpers'
-import { useITO_Contract } from './useITO_Contract'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 export interface PoolSettings {
     password: string
@@ -32,8 +34,8 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token?: ERC20TokenDetailed
+    exchangeTokens: Array<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>>
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     advanceSettingData: AdvanceSettingData
 }
 
@@ -53,27 +55,40 @@ type paramsObjType = {
     now: number
     invalidTokenAt: number
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token: ERC20TokenDetailed | undefined
+    exchangeTokens: Array<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>>
+    token: FungibleToken<ChainId, SchemaType.ERC20> | undefined
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
-    const web3 = useWeb3()
-    const account = useAccount()
-    const chainId = useChainId()
-    const { contract: ITO_Contract } = useITO_Contract()
+    const { t } = useI18N()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
+    const [fillState, setFillState] = useTransactionState()
+    const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
 
-    const [state, fillCallback] = useAsyncFn(async () => {
-        if (!poolSettings) return
+    const fillCallback = useCallback(async () => {
+        if (!web3 || !poolSettings) {
+            setFillState({
+                type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
 
         const { password, startTime, endTime, token, unlockTime } = poolSettings
 
-        if (!token || !ITO_Contract || !paramResult) return
+        if (!token || !ITO_Contract || !paramResult) {
+            setFillState({
+                type: TransactionStateType.UNKNOWN,
+            })
+            return
+        }
 
         const { params, paramsObj } = paramResult
 
-        if (!checkParams(paramsObj)) return
+        if (!checkParams(paramsObj, setFillState)) return
 
         // error: unable to sign password
         let signedPassword = ''
@@ -83,19 +98,28 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             signedPassword = ''
         }
         if (!signedPassword) {
+            setFillState({
+                type: TransactionStateType.FAILED,
+                error: new Error(t('plugin_wallet_fail_to_sign')),
+            })
             return
         }
         params[0] = Web3Utils.sha3(signedPassword)!
 
         // the given settings is valid
-        const settings: PoolSettings = {
+        setFillSettings({
             ...poolSettings,
             startTime: new Date(Math.floor(startTime.getTime() / 1000) * 1000),
             endTime: new Date(Math.floor(endTime.getTime() / 1000) * 1000),
             unlockTime: unlockTime ? new Date(Math.floor(unlockTime.getTime() / 1000) * 1000) : undefined,
             password: signedPassword,
             exchangeAmounts: paramsObj.exchangeAmountsDivided.flatMap((x) => x).map((y) => y.toFixed()),
-        }
+        })
+
+        // start waiting for provider to confirm tx
+        setFillState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
 
         const config = {
             from: account,
@@ -104,30 +128,50 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                 .estimateGas({
                     from: account,
                 })
-                .catch(() => {
+                .catch((error: Error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
                     return
                 })) as number | undefined,
         }
 
         // send transaction and wait for hash
-        return new Promise<{ receipt: TransactionReceipt; settings: PoolSettings }>(async (resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             ;(ITO_Contract as ITO2).methods
                 .fill_pool(...params)
                 .send(config as NonPayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve({ receipt, settings })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setFillState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
                 .on(TransactionEventType.ERROR, (error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
                     reject(error)
                 })
         })
-    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult])
+    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
 
-    return [state, fillCallback] as const
+    const resetCallback = useCallback(() => {
+        setFillState({
+            type: TransactionStateType.UNKNOWN,
+        })
+    }, [])
+
+    return [fillSettings, fillState, fillCallback, resetCallback] as const
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
-    const { contract: ITO_Contract } = useITO_Contract()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
 
     return useAsync(async () => {
         if (!poolSettings || !ITO_Contract) return null
@@ -163,7 +207,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
         const now = Math.floor((Date.now() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000)
 
         const ONE_TOKEN = ONE.shiftedBy(token!.decimals ?? 0)
-        const exchangeAmountsDivided = exchangeAmounts.map((x) => {
+        const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)
             return [amount.dividedToIntegerBy(divisor), ONE_TOKEN.dividedToIntegerBy(divisor)] as const
@@ -215,54 +259,98 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
     }, [poolSettings]).value
 }
 
-function checkParams(paramsObj: paramsObjType) {
+function checkParams(paramsObj: paramsObjType, setFillState?: (value: TransactionState) => void) {
     // error: the start time before BASE TIMESTAMP
     if (paramsObj.startTime < 0) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Invalid start time.'),
+        })
         return false
     }
 
     // error: the end time before BASE TIMESTAMP
     if (paramsObj.endTime < 0) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Invalid end time.'),
+        })
         return false
     }
 
     // error: the unlock time before BASE TIMESTAMP
     if (paramsObj.unlockTime < 0) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Invalid unlock time.'),
+        })
         return false
     }
 
     // error: the start time after the end time
     if (paramsObj.startTime >= paramsObj.endTime) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('The start date should before the end date.'),
+        })
         return false
     }
 
     // error: the end time before now
     if (paramsObj.endTime <= paramsObj.now) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('The end date should be a future date.'),
+        })
         return false
     }
 
     // error: unlock time before end time
     if (paramsObj.endTime >= paramsObj.unlockTime && paramsObj.unlockTime !== 0) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('The unlock date should be later than end date.'),
+        })
         return false
     }
 
     // error: limit greater than the total supply
     if (isGreaterThan(paramsObj.limit, paramsObj.total)) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Limits should less than the total supply.'),
+        })
         return false
     }
 
     // error: exceed the max available total supply
     if (isGreaterThan(paramsObj.total, '2e128')) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Exceed the max available total supply'),
+        })
         return false
     }
 
     // error: The size of amounts and the size of tokens not match
     if (paramsObj.exchangeAmounts.length !== paramsObj.exchangeTokens.length) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error('Cannot match amounts with tokens.'),
+        })
         return false
     }
 
     // error: token amount is not enough for dividing into integral pieces
     if (paramsObj.invalidTokenAt >= 0) {
+        setFillState?.({
+            type: TransactionStateType.FAILED,
+            error: new Error(
+                `Cannot swap enough ${paramsObj.token!.symbol ?? ''} out with ${
+                    paramsObj.exchangeTokens[paramsObj.invalidTokenAt].symbol ?? ''
+                }`,
+            ),
+        })
         return false
     }
 

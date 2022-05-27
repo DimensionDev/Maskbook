@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { CircularProgress, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'

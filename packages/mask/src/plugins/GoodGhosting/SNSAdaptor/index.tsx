@@ -7,7 +7,8 @@ import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
@@ -51,9 +52,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <EthereumChainBoundary chainId={ChainId.Matic} renderInTimeline>
+        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic}>
             <PreviewCard id={id} />
-        </EthereumChainBoundary>
+        </ChainBoundary>
     )
 }
 

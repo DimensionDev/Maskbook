@@ -1,19 +1,44 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import type {
+    ChainId,
+    NetworkType,
+    ProviderType,
+    SchemaType,
+    Signature,
+    GasOption,
+    Block,
+    Transaction,
+    TransactionDetailed,
+    TransactionParameter,
+    TransactionSignature,
+    Web3,
+} from '@masknet/web3-shared-solana'
 import { base } from '../../base'
-import { setupStorage, StorageDefaultValue } from '../../storage'
-import { connectWallet, watchAccount } from '../../wallet'
-import { createWeb3State } from '../Web3State'
-import { Web3UI } from '../Web3UI'
+import { createWeb3State } from '../../state'
+import { SharedContextSettings, Web3StateSettings } from '../../settings'
 
-const sns: Plugin.SNSAdaptor.Definition = {
+const sns: Plugin.SNSAdaptor.Definition<
+    ChainId,
+    SchemaType,
+    ProviderType,
+    NetworkType,
+    Signature,
+    GasOption,
+    Block,
+    Transaction,
+    TransactionDetailed,
+    TransactionSignature,
+    TransactionParameter,
+    Web3
+> = {
     ...base,
     async init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', StorageDefaultValue))
-        sns.Web3State = createWeb3State(signal)
-        await connectWallet(true)
-        await watchAccount()
+        const Web3State = createWeb3State(context)
+
+        sns.Web3State = Web3State
+        Web3StateSettings.value = Web3State
+        SharedContextSettings.value = context
     },
-    Web3UI,
 }
 
 export default sns

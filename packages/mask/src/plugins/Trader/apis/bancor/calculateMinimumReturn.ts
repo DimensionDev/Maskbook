@@ -1,14 +1,14 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { leftShift, ONE, rightShift } from '@masknet/web3-shared-base'
+import { FungibleToken, leftShift, ONE, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { BIPS_BASE } from '../../constants'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 export const calculateMinimumReturn = ({
     toToken,
     toAmount,
     slippage,
 }: {
-    toToken: FungibleTokenDetailed
+    toToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     toAmount: string | undefined
     slippage: number
 }): string => {

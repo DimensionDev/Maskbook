@@ -2,25 +2,18 @@ import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
-import { useProviderDescriptor } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
-import {
-    formatBalance,
-    formatEthereumAddress,
-    useAccount,
-    useChainId,
-    useMaskBoxConstants,
-    EthereumTokenType,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
+import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
-import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -111,8 +104,8 @@ export function DrawDialog(props: DrawDialogProps) {
     } = useContainer(Context)
 
     const providerDescriptor = useProviderDescriptor()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const onCount = useCallback(
         (step: number) => {
@@ -262,13 +255,11 @@ export function DrawDialog(props: DrawDialogProps) {
                     </Box>
                 </Box>
 
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
-                        token={
-                            paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined
-                        }
+                        token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
                         ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
                         <ActionButton
                             size="medium"
@@ -280,7 +271,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </DialogContent>
         </InjectedDialog>
     )

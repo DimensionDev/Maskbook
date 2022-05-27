@@ -1,11 +1,7 @@
 import type BigNumber from 'bignumber.js'
-import type {
-    FungibleTokenDetailed,
-    NativeTokenDetailed,
-    ERC20TokenDetailed,
-    ChainIdOptionalRecord,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, ChainIdOptionalRecord, SchemaType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export enum WarningLevel {
     LOW = 1,
@@ -83,8 +79,8 @@ export enum ZrxTradePool {
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy
-    inputToken?: FungibleTokenDetailed
-    outputToken?: FungibleTokenDetailed
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     inputAmount: BigNumber
     outputAmount: BigNumber
     executionPrice: BigNumber
@@ -93,7 +89,10 @@ export interface TradeComputed<T = unknown> {
     minimumReceived: BigNumber
     fee: BigNumber
     path?: Array<
-        Array<PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>>
+        Array<
+            | PartialRequired<FungibleToken<ChainId, SchemaType.Native>, 'address'>
+            | PartialRequired<FungibleToken<ChainId, SchemaType.ERC20>, 'address'>
+        >
     >
     trade_?: T
 }
@@ -117,9 +116,13 @@ export interface TradeContext {
     ROUTER_CONTRACT_ADDRESS?: string
     FACTORY_CONTRACT_ADDRESS?: string
     SPENDER_CONTRACT_ADDRESS?: string
-    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
-    AGAINST_TOKENS?: ChainIdOptionalRecord<ERC20TokenDetailed[]>
-    CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
+    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<
+        Record<string, Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+    >
+    AGAINST_TOKENS?: ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+    CUSTOM_TOKENS?: ChainIdOptionalRecord<
+        Record<string, Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>>
+    >
 }
 
 export interface TradeInfo {

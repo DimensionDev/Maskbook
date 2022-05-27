@@ -15,8 +15,9 @@ import { TabState, TransactionType } from '../types'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared-evm'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -76,7 +77,7 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {
@@ -135,7 +136,7 @@ export function Collectible(props: CollectibleProps) {
                             target="_blank"
                             rel="noopener noreferrer">
                             <Avatar
-                                src={assetSource?.owner[0]?.ownerAvatar ?? assetSource?.creator?.avatarPath ?? ''}
+                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
                             />
                         </Link>
                     }
@@ -266,9 +267,9 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </CollectibleCard>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={expectChainId ?? chainId} renderInTimeline>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={expectChainId ?? chainId}>
                     <ActionBar />
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

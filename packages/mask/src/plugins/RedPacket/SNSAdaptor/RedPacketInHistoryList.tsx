@@ -1,30 +1,25 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
-    NativeTokenDetailed,
-    useAccount,
-    useFungibleTokenDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { Box, ListItem, Popper, Theme, Typography, useMediaQuery } from '@mui/material'
+import { useState, useCallback, useEffect, MouseEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import intervalToDuration from 'date-fns/intervalToDuration'
-import nextDay from 'date-fns/nextDay'
+import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { omit, pick } from 'lodash-unified'
-import { MouseEvent, useCallback, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { Translate, useI18N } from '../locales'
+import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { TransactionStateType, SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
-import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
+import { WalletMessages } from '../../Wallet/messages'
+import intervalToDuration from 'date-fns/intervalToDuration'
+import nextDay from 'date-fns/nextDay'
+import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -182,17 +177,18 @@ export interface RedPacketInHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const account = useAccount()
     const { history, onSelect } = props
+    const i18n = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
+        value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
+    const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         history.contract_version,
         account,
         history.rpid,
@@ -200,23 +196,49 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        tokenAddress ?? '',
-    )
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
         ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
-    } as ERC20TokenDetailed | NativeTokenDetailed
+    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
-    const onSendOrRefund = useCallback(async () => {
-        if (canRefund) {
-            await refundCallback()
+    // #region remote controlled transaction dialog
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+    )
+
+    useEffect(() => {
+        if (refundState.type === TransactionStateType.UNKNOWN || !availability) return
+        if (refundState.type === TransactionStateType.HASH) {
+            setTransactionDialog({
+                open: true,
+                state: refundState,
+                summary: availability
+                    ? `Refunding lucky drop for ${formatBalance(
+                          new BigNumber(availability.balance),
+                          historyToken?.decimals ?? 0,
+                          historyToken?.decimals ?? 0,
+                      )} ${historyToken?.symbol}`
+                    : '',
+            })
+        } else if (refundState.type === TransactionStateType.CONFIRMED) {
+            resetRefundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
-    }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
+    }, [refundState /* update tx dialog only if state changed */])
+    // #endregion
+
+    const onSendOrRefund = useCallback(async () => {
+        if (canRefund) await refundCallback()
+        if (canSend)
+            onSelect(
+                removeUselessSendParams({
+                    ...history,
+                    token: historyToken as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+                }),
+            )
+    }, [onSelect, refundCallback, canRefund, canSend, history])
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
@@ -238,7 +260,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURI}
+                    logoURI={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
@@ -257,7 +279,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_total_amount({
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -266,19 +288,24 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 })}
                             </Typography>
                         </div>
-                        {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
+                        {canRefund ||
+                        canSend ||
+                        listOfStatus.includes(RedPacketStatus.empty) ||
+                        refundState.type === TransactionStateType.HASH ? (
                             <>
                                 <ActionButton
-                                    loading={isRefunding}
                                     fullWidth={isSmall}
                                     onClick={canSend && !isPasswordValid ? () => undefined : onSendOrRefund}
                                     onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
                                         canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
                                     }}
-                                    onMouseLeave={() => {
+                                    onMouseLeave={(_event: MouseEvent<HTMLButtonElement>) => {
                                         canSend && !isPasswordValid ? setAnchorEl(null) : undefined
                                     }}
-                                    disabled={listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding}
+                                    disabled={
+                                        listOfStatus.includes(RedPacketStatus.empty) ||
+                                        refundState.type === TransactionStateType.HASH
+                                    }
                                     className={classNames(
                                         classes.actionButton,
                                         canSend && !isPasswordValid ? classes.disabledButton : '',
@@ -286,8 +313,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     variant="contained"
                                     size="large">
                                     {canSend
-                                        ? t.send()
-                                        : refunded
+                                        ? t.history_send()
+                                        : refundState.type === TransactionStateType.HASH
                                         ? t.refunding()
                                         : listOfStatus.includes(RedPacketStatus.empty)
                                         ? t.empty()
@@ -319,8 +346,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers?.length.toString() ?? '0',
-                                    shares: history.shares.toString(),
+                                    claimedShares: String(history.claimers?.length ?? 0),
+                                    shares: String(history.shares),
                                 }}
                             />
                         </Typography>
@@ -337,7 +364,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 }}
                             />
                         </Typography>
@@ -351,6 +378,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
     return {
         ...omit(payload, ['block_number', 'claimers']),
-        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+        token: omit(payload.token, ['logoURI']) as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     }
 }

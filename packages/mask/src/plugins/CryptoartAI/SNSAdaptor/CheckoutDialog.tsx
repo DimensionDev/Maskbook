@@ -1,19 +1,23 @@
-import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
+import { useCallback, useMemo, useEffect } from 'react'
+import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, useChainId, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { useCallback, useMemo } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import BigNumber from 'bignumber.js'
+import { TransactionStateType } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
+import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -83,13 +87,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
-    const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, selectedPaymentToken?.address)
 
-    const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
+    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
@@ -111,17 +115,29 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
               },
           )
         : ''
-    const openShareTxDialog = useOpenShareTxDialog()
-    const purchase = useCallback(async () => {
-        const hash = await purchaseCallback()
-        if (typeof hash !== 'string') return
-        await openShareTxDialog({
-            hash,
-            onShare() {
-                activatedSocialNetworkUI.utils.share?.(shareText)
+
+    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
+        WalletMessages.events.transactionDialogUpdated,
+        useCallback(
+            (ev: { open: boolean }) => {
+                if (!ev.open) {
+                    if (purchaseState.type === TransactionStateType.HASH) onClose()
+                }
+                resetCallback()
             },
+            [purchaseState, onClose],
+        ),
+    )
+
+    useEffect(() => {
+        if (purchaseState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            shareText,
+            state: purchaseState,
+            summary: t('plugin_cryptoartai_buy') + ' ' + asset?.value?.title,
         })
-    }, [purchaseCallback, openShareTxDialog])
+    }, [purchaseState])
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
@@ -177,17 +193,16 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <WalletConnectedBoundary>
                             <ActionButton
-                                loading={isPurchasing}
                                 className={classes.button}
                                 fullWidth
                                 variant="contained"
-                                disabled={!!validationMessage || isPurchasing}
-                                onClick={purchase}>
+                                disabled={!!validationMessage}
+                                onClick={onCheckout}>
                                 {validationMessage || t('plugin_cryptoartai_buy_now')}
                             </ActionButton>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

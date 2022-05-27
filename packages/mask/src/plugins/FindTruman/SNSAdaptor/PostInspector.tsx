@@ -11,7 +11,7 @@ import {
     UserPollStatus,
     UserStoryStatus,
 } from '../types'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { useEffect, useState } from 'react'
 import {
     fetchPollResult,
@@ -27,6 +27,7 @@ import {
 } from '../Worker/apis'
 import getUnixTime from 'date-fns/getUnixTime'
 import { useConst } from './hooks/useConst'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface PostInspectorProps {
     url: string
@@ -34,7 +35,7 @@ export interface PostInspectorProps {
 
 export function PostInspector(props: PostInspectorProps) {
     const { url } = props
-    const account = useAccount().toLowerCase()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM).toLowerCase()
     const { consts, t } = useConst()
 
     const [, , , _storyId, , _targetId] = new URL(url).hash.split('/')
