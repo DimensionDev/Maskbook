@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, useTokenSecurity, isHighRisk, TokenSecurityBar } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -30,6 +30,8 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
+import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -117,6 +119,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
+            marginBottom: '12px',
             backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
@@ -216,7 +219,18 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
+        const [isWarningOpen, setIsWarningOpen] = useState(false)
 
+        const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+        const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+
+        const { value: tokenSecurityInfo, error } = useTokenSecurity(
+            chainId,
+            outputToken?.address.trim(),
+            isTokenSecurityClosed,
+        )
+
+        const isRisky = isHighRisk(tokenSecurityInfo)
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
             focusedTrade?.value ?? null,
@@ -385,24 +399,29 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
 
                     <Box className={classes.card}>
-                        <SelectTokenChip
-                            classes={{
-                                chip: classes.selectedTokenChip,
-                                tokenIcon: classes.chipTokenIcon,
-                                noToken: classes.noToken,
-                            }}
-                            token={outputToken}
-                            ChipProps={{
-                                onClick: () => onTokenChipClick(TokenPanelType.Output),
-                                deleteIcon: (
-                                    <DropIcon
-                                        className={classes.dropIcon}
-                                        style={{ fill: !outputToken ? '#ffffff' : undefined }}
-                                    />
-                                ),
-                                onDelete: noop,
-                            }}
-                        />
+                        <Box>
+                            <SelectTokenChip
+                                classes={{
+                                    chip: classes.selectedTokenChip,
+                                    tokenIcon: classes.chipTokenIcon,
+                                    noToken: classes.noToken,
+                                }}
+                                token={outputToken}
+                                ChipProps={{
+                                    onClick: () => onTokenChipClick(TokenPanelType.Output),
+                                    deleteIcon: (
+                                        <DropIcon
+                                            className={classes.dropIcon}
+                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                        />
+                                    ),
+                                    onDelete: noop,
+                                }}
+                            />
+                            {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
+                                <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                            )}
+                        </Box>
 
                         {trades.filter((item) => !!item.value).length >= 1 ? (
                             <>
@@ -507,7 +526,19 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        isGreatThanSlippageSetting ? (
+                                        !isTokenSecurityClosed && isRisky ? (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                color="error"
+                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                onClick={() => setIsWarningOpen(true)}>
+                                                {t('plugin_trader_risk_warning', {
+                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                                })}
+                                            </ActionButton>
+                                        ) : isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
@@ -549,6 +580,17 @@ export const TradeForm = memo<AllTradeFormProps>(
                         </Box>
                     ) : null}
                 </Box>
+                {!isTokenSecurityClosed && tokenSecurityInfo && (
+                    <RiskWarningDialog
+                        open={isWarningOpen}
+                        onClose={() => setIsWarningOpen(false)}
+                        onConfirm={() => {
+                            onSwap()
+                            setIsWarningOpen(false)
+                        }}
+                        tokenInfo={tokenSecurityInfo}
+                    />
+                )}
             </Box>
         )
     },
