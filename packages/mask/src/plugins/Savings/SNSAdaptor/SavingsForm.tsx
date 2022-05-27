@@ -249,6 +249,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 failed={t('failed')}
                                 failedOnClick="use executor"
                                 complete={t('done')}
+                                completeOnClick={() => onClose?.()}
                                 disabled={validationMessage !== '' && !needsSwap}
                                 noUpdateEffect
                                 executor={executor}
@@ -282,6 +283,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         failed={t('failed')}
                         failedOnClick="use executor"
                         complete={t('done')}
+                        completeOnClick={() => onClose?.()}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
                         executor={executor}
