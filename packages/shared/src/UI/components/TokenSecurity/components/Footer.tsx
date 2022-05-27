@@ -1,12 +1,13 @@
 import { Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useSharedI18N } from '../../../../locales'
 import { GoPlusLabLogo } from '../icons/Logo'
-import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants'
+
+const PLUGIN_OFFICIAL_WEBSITE = 'https://gopluslabs.io'
 
 export const Footer = () => {
-    const t = useI18N()
+    const t = useSharedI18N()
     return (
-        <Stack justifyContent="flex-end" direction="row">
+        <Stack alignItems="center" direction="row">
             <Stack direction="row">
                 <Typography fontSize="14px" fontWeight="700" marginRight="4px">
                     {t.powered_by()}

@@ -5,6 +5,7 @@ import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
 import { SecurityCheckerIcon } from '@masknet/icons'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,7 +14,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SecurityCheckerIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
-            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
 
             return {
                 ApplicationEntryID: base.ID,
@@ -24,7 +24,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 disabled={disabled}
-                                iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => setOpen(true)}
                             />
@@ -34,9 +33,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
-                iconFilterColor,
+                category: 'dapp',
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 16,
+                description: <Trans i18nKey="plugin_goPlusSecurity_description" />,
             }
         })(),
     ],
