@@ -176,7 +176,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     loadingITO: {
         padding: '43px 16px 43px 16px',
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 12,
     },
     loadingITO_Button: {
         margin: 16,

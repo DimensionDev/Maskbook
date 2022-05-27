@@ -330,15 +330,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     if (availabilityError)
         return (
             <div className={classes.root}>
-                <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
-                    <img className={classes.errImage} src={rpNftImg} />
-                    <Typography className={classes.whiteText} variant="h5">
+                <Card className={classes.errorCard} component="article" elevation={0}>
+                    <Typography className={classes.whiteText} fontSize={12} color="error">
                         {t('loading_failed')}
                     </Typography>
-                    <Button
-                        onClick={retryAvailability}
-                        className={classNames(classes.errorButton, classes.whiteText)}
-                        variant="outlined">
+                    <Button onClick={retryAvailability} className={classes.button} variant="outlined">
                         {t('try_again')}
                     </Button>
                 </Card>
