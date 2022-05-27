@@ -25,6 +25,8 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
+    // TODO: 6002
+    // @ts-ignore Generic type 'ProviderState<ChainId, ProviderType, NetworkType>' requires 3 type argument(s).ts(2314)
 > implements Web3ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
 {
     protected site = getSiteType()
@@ -48,7 +50,7 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', 'Provider', defaultValue)
+        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('Provider', defaultValue)
         this.storage = storage
 
         this.setupSubscriptions()

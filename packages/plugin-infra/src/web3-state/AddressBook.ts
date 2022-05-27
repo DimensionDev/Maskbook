@@ -24,14 +24,14 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context.createKVStorage('persistent', 'AddressBook', {
+        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
             value: defaultValue,
         })
         this.storage = storage.value
 
         if (this.subscriptions.chainId) {
             this.addressBook = mapSubscription(
-                mergeSubscription<[ChainId, AddressBook]>(this.subscriptions.chainId, this.storage.subscription),
+                mergeSubscription(this.subscriptions.chainId, this.storage.subscription),
                 ([chainId, addressBook]) => addressBook[chainId],
             )
         }

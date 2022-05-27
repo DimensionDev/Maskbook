@@ -37,12 +37,12 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('persistent', 'Token', defaultValue)
+        const { storage } = context.createKVStorage('persistent', {}).createSubScope('Token', defaultValue)
         this.storage = storage
 
         if (this.subscriptions.account) {
             this.trustedFungibleTokens = mapSubscription(
-                mergeSubscription<[string, Array<FungibleToken<ChainId, SchemaType>>, Record<string, string[]>]>(
+                mergeSubscription(
                     this.subscriptions.account,
                     this.storage.fungibleTokens.subscription,
                     this.storage.fungibleTokenBlockedBy.subscription,
@@ -50,7 +50,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                 ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
             )
             this.trustedNonFungibleTokens = mapSubscription(
-                mergeSubscription<[string, Array<NonFungibleToken<ChainId, SchemaType>>, Record<string, string[]>]>(
+                mergeSubscription(
                     this.subscriptions.account,
                     this.storage.nonFungibleTokens.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,
@@ -58,7 +58,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                 ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
             )
             this.blockedFungibleTokens = mapSubscription(
-                mergeSubscription<[string, Array<FungibleToken<ChainId, SchemaType>>, Record<string, string[]>]>(
+                mergeSubscription(
                     this.subscriptions.account,
                     this.storage.fungibleTokens.subscription,
                     this.storage.fungibleTokenBlockedBy.subscription,
@@ -66,7 +66,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                 ([account, tokens, blockedBy]) => tokens.filter((x) => blockedBy[account]?.includes(x.address)),
             )
             this.blockedNonFungibleTokens = mapSubscription(
-                mergeSubscription<[string, Array<NonFungibleToken<ChainId, SchemaType>>, Record<string, string[]>]>(
+                mergeSubscription(
                     this.subscriptions.account,
                     this.storage.nonFungibleTokens.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,

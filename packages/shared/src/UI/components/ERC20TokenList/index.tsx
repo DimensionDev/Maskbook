@@ -1,6 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-unified'
+// TODO: 6002
 import {
     Asset,
     ChainId,
