@@ -255,6 +255,8 @@ interface Events {
 }
 
 function getEventTarget() {
+    // In Firefox, the listener is not triggered after dispatch event with EventTarget
+    // So here we use emitter
     const event = new Emitter<Events>()
     const EVENT = 'event'
     let timer: ReturnType<typeof setTimeout>
