@@ -8,11 +8,11 @@ export function createIsType<T extends TypedMessage>(x: T['type'], version?: num
     }
 }
 /** @internal */
-export function composeSome<Args extends any[]>(...fns: ((...args: Args) => boolean)[]) {
+export function composeSome<Args extends any[]>(...fns: Array<(...args: Args) => boolean>) {
     return (...args: Args) => fns.some((f) => f(...args))
 }
 
 /** @internal */
-export function composeEvery<Args extends any[]>(...fns: ((...args: Args) => boolean)[]) {
+export function composeEvery<Args extends any[]>(...fns: Array<(...args: Args) => boolean>) {
     return (...args: Args) => fns.every((f) => f(...args))
 }

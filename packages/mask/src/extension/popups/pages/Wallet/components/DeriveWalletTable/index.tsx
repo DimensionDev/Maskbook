@@ -41,7 +41,7 @@ const useStyles = makeStyles()({
 
 export interface DeriveWalletTableProps {
     loading: boolean
-    dataSource?: { address: string; added: boolean; selected: boolean }[]
+    dataSource?: Array<{ address: string; added: boolean; selected: boolean }>
     onCheck: (checked: boolean, index: number) => void
     confirmLoading: boolean
 }
