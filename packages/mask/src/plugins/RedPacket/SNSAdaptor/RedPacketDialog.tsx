@@ -158,7 +158,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             title={title}
             onClose={onClose}
             disableTitleBorder
-            titleTail={<HistoryIcon onClick={_onHistoryClick} />}>
+            titleTail={
+                step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={_onHistoryClick} /> : null
+            }>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                     !showHistory ? (

@@ -223,7 +223,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }
     return (
         <InjectedDialog
-            titleTail={<HistoryIcon onClick={onShowHistory} />}
+            titleTail={step === ITOCreateFormPageStep.NewItoPage ? <HistoryIcon onClick={onShowHistory} /> : null}
             disableBackdropClick
             open={props.open}
             title={t('plugin_ito_display_name')}
