@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     messageBox: {
         display: 'flex',
         borderRadius: 4,
-
+        padding: '12px 0',
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
         fontSize: 14,
         alignItems: 'center',
@@ -57,11 +57,11 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <InfoIcon />
+                            <InfoIcon style={{ fontSize: 20 }} />
                             <Typography style={{ marginLeft: 8 }} color="currentColor" variant="body1" fontSize={14}>
                                 {t.persona_hint()}
                             </Typography>
-                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
+                            <CloseIcon style={{ cursor: 'pointer', fontSize: 20 }} onClick={() => setVisible(false)} />
                         </Box>
                     ) : null}
                     {persona?.binds?.proofs
