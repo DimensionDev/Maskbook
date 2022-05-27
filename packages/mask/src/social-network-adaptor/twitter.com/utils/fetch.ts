@@ -121,8 +121,7 @@ export const postParser = (node: HTMLElement) => {
         ...postNameParser(node),
         avatar: postAvatarParser(node),
 
-        // FIXME:
-        // we get wrong pid for nested tweet
+        // FIXME: we get wrong pid for nested tweet
         pid: postIdParser(node),
 
         messages: postContentMessageParser(node).filter((x) => !isTypedMessageEmpty(x)),

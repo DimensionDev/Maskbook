@@ -91,8 +91,8 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         isSell,
         dataIndex,
         exchangeToken?.address,
-        excludeTokensAddress.sort((a, b) => a.localeCompare('en-US', b)).join(),
-        selectedTokensAddress.sort((a, b) => a.localeCompare('en-US', b)).join(),
+        excludeTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
+        selectedTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
     ])
     // #endregion
 

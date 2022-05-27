@@ -3,54 +3,100 @@ import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
-import { ImagePayloadIcon } from '@masknet/icons'
-import { Send } from '@mui/icons-material'
+import { SendIcon } from '@masknet/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
 import { useI18N } from '../../utils'
-import { Flags, PersistentStorages } from '../../../shared'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
-import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import type { ProfileInformation } from '@masknet/shared-base'
+import { PersistentStorages } from '../../../shared'
+import { ProfileInformation, EncryptionTargetType } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
-import { Trans } from 'react-i18next'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
+import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector'
+import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
-            marginBottom: '10px !important',
+            marginBottom: '18px !important',
         },
+        minHeight: 450,
+        overflowY: 'auto',
     },
     flex: {
+        width: '100%',
         display: 'flex',
+        alignItems: 'center',
         flexWrap: 'wrap',
     },
     sup: {
         paddingLeft: 2,
     },
     actions: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
         display: 'flex',
+        padding: '14px 16px',
+        boxSizing: 'border-box',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: '12px !important' },
+        background: theme.palette.background.paper,
+        boxShadow: `0px 0px 20px 0px ${theme.palette.background.messageShadow}`,
     },
-})
+    between: {
+        justifyContent: 'space-between',
+    },
+    popper: {
+        overflow: 'visible',
+        padding: 6,
+    },
+    popperText: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        cursor: 'pointer',
+    },
+    optionTitle: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.text.secondary,
+        marginRight: 12,
+    },
+    editorWrapper: {
+        minHeight: 338,
+        background: theme.palette.background.input,
+        padding: 14,
+        boxSizing: 'border-box',
+        borderRadius: 8,
+    },
+    sendIcon: {
+        width: 18,
+        height: 18,
+        fill: theme.palette.text.buttonText,
+    },
+}))
 
 export interface LazyRecipients {
     request(): void
     recipients?: ProfileInformation[]
-    hasRecipients: boolean
 }
 export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    disabledRecipients?: undefined | 'E2E' | 'Everyone'
+    onConnectPersona(): void
+    onCreatePersona(): void
+    e2eEncryptionDisabled: E2EUnavailableReason | undefined
     recipients: LazyRecipients
     // Enabled features
     supportTextEncoding: boolean
@@ -68,16 +114,17 @@ export interface SubmitComposition {
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
-    setEncryptionKind(kind: 'E2E' | 'Everyone'): void
+    setEncryptionKind(kind: EncryptionTargetType): void
     startPlugin(id: string): void
     reset(): void
 }
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 
+    const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
     const Editor = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
 
@@ -87,22 +134,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         startTransition(() => __updatePostSize(size))
     }, [])
 
-    const {
-        E2EDisabled,
-        setEncryptionKind,
-        encryptionKind,
-        everyoneDisabled,
-        recipientSelectorAvailable,
-        recipients,
-        setRecipients,
-    } = useSetEncryptionKind(props)
-    const { encodingKind, imagePayloadReadonly, imagePayloadSelected, imagePayloadVisible, setEncoding } =
-        useEncryptionEncode(props)
-
+    const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props)
+    const { encodingKind, setEncoding } = useEncryptionEncode(props)
     const reset = useCallback(() => {
         startTransition(() => {
             Editor.current?.reset()
-            setEncryptionKind('Everyone')
+            setEncryptionKind(EncryptionTargetType.Public)
             setRecipients([])
             // Don't clean up the image/text selection across different encryption.
             // setEncoding('text')
@@ -131,26 +168,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         }),
         [],
     )
-    const MoreOptions = [
-        imagePayloadVisible && (
-            <ClickableChip
-                key="image"
-                checked={imagePayloadSelected}
-                label={
-                    <>
-                        <ImagePayloadIcon style={{ width: 16, height: 16 }} />
-                        {t('post_dialog__image_payload')}
-                        {Flags.image_payload_marked_as_beta && (
-                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        )}
-                    </>
-                }
-                onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
-                disabled={imagePayloadReadonly || sending}
-            />
-        ),
-        ...useMetadataDebugger(context, Editor.current),
-    ].filter(Boolean)
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
@@ -161,67 +178,59 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 content: Editor.current.value,
                 encode: encodingKind,
                 target:
-                    encryptionKind === 'E2E'
-                        ? { type: 'E2E', target: recipients.map((x) => x.identifier) }
-                        : { type: 'public' },
+                    encryptionKind === EncryptionTargetType.Public
+                        ? { type: 'public' }
+                        : { type: 'E2E', target: recipients.map((x) => x.identifier) },
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <TypedMessageEditor
-                    autoFocus
-                    readonly={sending}
-                    ref={(e) => {
-                        Editor.current = e
-                        if (e) updatePostSize(e.estimatedLength)
-                    }}
-                    onChange={(message) => {
-                        startTransition(() => props.onChange?.(message))
-                        updatePostSize(Editor.current?.estimatedLength || 0)
-                    }}
-                />
-                <Typography>
-                    <Trans
-                        i18nKey="post_dialog_plugins_experimental"
-                        components={{
-                            sup: <sup />,
+                <div className={classes.editorWrapper}>
+                    <TypedMessageEditor
+                        autoFocus
+                        readonly={sending}
+                        ref={(element) => {
+                            Editor.current = element
+                            if (element) updatePostSize(element.estimatedLength)
+                        }}
+                        onChange={(message) => {
+                            startTransition(() => props.onChange?.(message))
+                            updatePostSize(Editor.current?.estimatedLength || 0)
                         }}
                     />
-                </Typography>
+                </div>
+
                 <div className={classes.flex}>
+                    <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
-                <Typography>{t('post_dialog__select_recipients_title')}</Typography>
-                <div className={classes.flex}>
-                    <ClickableChip
-                        checked={encryptionKind === 'Everyone'}
-                        disabled={everyoneDisabled || sending}
-                        label={t('post_dialog__select_recipients_share_to_everyone')}
-                        onClick={() => setEncryptionKind('Everyone')}
+                <div className={cx(classes.flex, classes.between)}>
+                    <EncryptionTargetSelector
+                        target={encryptionKind}
+                        onConnectPersona={props.onConnectPersona}
+                        onCreatePersona={props.onCreatePersona}
+                        e2eDisabled={props.e2eEncryptionDisabled}
+                        selectedRecipientLength={recipients.length}
+                        onChange={(target) => {
+                            setEncryptionKind(target)
+                            if (target === EncryptionTargetType.E2E) setSelectRecipientOpen(true)
+                        }}
                     />
-                    <ClickableChip
-                        checked={encryptionKind === 'E2E'}
-                        disabled={E2EDisabled || sending}
-                        label={t('post_dialog__select_recipients_end_to_end')}
-                        onClick={() => setEncryptionKind('E2E')}
+
+                    <SelectRecipientsUI
+                        open={isSelectRecipientOpen}
+                        onClose={() => setSelectRecipientOpen(false)}
+                        disabled={sending}
+                        items={props.recipients}
+                        selected={recipients}
+                        onSetSelected={setRecipients}
                     />
-                    {recipientSelectorAvailable && (
-                        <SelectRecipientsUI
-                            disabled={sending}
-                            items={props.recipients}
-                            selected={recipients}
-                            onSetSelected={setRecipients}
-                        />
-                    )}
                 </div>
-                {MoreOptions.length ? (
-                    <>
-                        <Typography>{t('post_dialog__more_options_title')}</Typography>
-                        <div className={classes.flex}>{MoreOptions}</div>
-                    </>
-                ) : null}
+                <div className={cx(classes.flex, classes.between)}>
+                    <EncryptionMethodSelector method={encodingKind} onChange={setEncoding} />
+                </div>
             </div>
             <div className={classes.actions}>
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
@@ -234,9 +243,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     disabled={!submitAvailable}
                     loading={sending}
                     loadingPosition="start"
-                    variant="contained"
+                    variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<Send />}>
+                    startIcon={<SendIcon className={classes.sendIcon} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>
@@ -244,44 +253,43 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     )
 })
 
-function useSetEncryptionKind(props: Pick<CompositionProps, 'disabledRecipients' | 'recipients'>) {
-    const [encryptionKind, setEncryptionKind] = useState<'Everyone' | 'E2E'>(
-        props.disabledRecipients === 'Everyone' ? 'E2E' : 'Everyone',
-    )
+export enum E2EUnavailableReason {
+    // These reasons only applies to E2E encryption.
+    NoPersona = 1,
+    NoLocalKey = 2,
+    NoConnection = 3,
+}
+function useSetEncryptionKind(props: Pick<CompositionProps, 'e2eEncryptionDisabled'>) {
+    const [internal_encryptionKind, setEncryptionKind] = useState<EncryptionTargetType>(EncryptionTargetType.Public)
     // TODO: Change to ProfileIdentifier
     const [recipients, setRecipients] = useState<ProfileInformation[]>([])
 
-    const everyoneDisabled = props.disabledRecipients === 'Everyone'
-    const E2EDisabled = props.disabledRecipients === 'E2E'
-
-    const everyoneSelected = props.disabledRecipients !== 'Everyone' && (E2EDisabled || encryptionKind === 'Everyone')
-    const _E2ESelected =
-        props.disabledRecipients !== 'E2E' && (props.disabledRecipients === 'Everyone' || encryptionKind === 'E2E')
-    const recipientSelectorAvailable = props.recipients.hasRecipients && !everyoneSelected
+    let encryptionKind = internal_encryptionKind
+    if (encryptionKind === EncryptionTargetType.E2E && recipients.length === 0)
+        encryptionKind = EncryptionTargetType.Self
+    if (props.e2eEncryptionDisabled) encryptionKind = EncryptionTargetType.Public
 
     return {
         recipients,
         setRecipients,
-        recipientSelectorAvailable,
-
-        everyoneDisabled,
-        E2EDisabled,
-
-        encryptionKind: everyoneSelected ? ('Everyone' as const) : ('E2E' as const),
+        encryptionKind,
         setEncryptionKind,
     }
 }
 
 function useEncryptionEncode(props: Pick<CompositionProps, 'supportImageEncoding' | 'supportTextEncoding'>) {
-    const [encoding, setEncoding] = useState<'text' | 'image'>(props.supportTextEncoding ? 'text' : 'image')
+    const [encoding, setEncoding] = useState<EncryptionMethodType>(
+        props.supportTextEncoding ? EncryptionMethodType.Text : EncryptionMethodType.Image,
+    )
 
-    const imagePayloadSelected = props.supportImageEncoding && (encoding === 'image' || !props.supportTextEncoding)
+    const imagePayloadSelected =
+        props.supportImageEncoding && (encoding === EncryptionMethodType.Image || !props.supportTextEncoding)
     // XOR
     const imagePayloadReadonly =
         (props.supportImageEncoding && !props.supportTextEncoding) ||
         (!props.supportImageEncoding && props.supportTextEncoding)
     const imagePayloadVisible = props.supportImageEncoding
-    const encodingKind: typeof encoding = imagePayloadSelected ? 'image' : 'text'
+    const encodingKind = imagePayloadSelected ? EncryptionMethodType.Image : EncryptionMethodType.Text
 
     return {
         encodingKind,

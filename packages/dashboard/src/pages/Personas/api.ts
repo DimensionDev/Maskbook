@@ -5,10 +5,7 @@ export type SocialNetwork = {
     networkIdentifier: string
 }
 
-export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs] = createGlobalState(
-    Services.SocialNetwork.getDefinedSocialNetworkUIs,
-    () => () => {},
-)
+export const [useSupportedSites] = createGlobalState(Services.SocialNetwork.getSupportedSites, () => () => {})
 
 export const [useOwnedPersonas] = createGlobalState(
     () => Services.Identity.queryOwnedPersonaInformation(false),

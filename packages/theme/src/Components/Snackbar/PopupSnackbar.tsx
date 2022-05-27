@@ -17,9 +17,9 @@ const useStyles = makeStyles()(() => ({
     container: {
         width: '100%!important',
         maxWidth: '100%!important',
-        top: '0px!important',
+        top: '0!important',
         [`& .${collapseClasses.wrapper}`]: {
-            padding: '0px !important',
+            padding: '0 !important',
         },
     },
     content: {

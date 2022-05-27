@@ -51,7 +51,7 @@ const useStyles = makeStyles()({
         height: '186px !important',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,

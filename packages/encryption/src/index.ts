@@ -47,12 +47,7 @@ export {
     appendEncryptionTarget,
 } from './encryption'
 
-export {
-    socialNetworkEncoder,
-    socialNetworkDecoder,
-    TwitterDecoder,
-    __TwitterEncoder,
-} from './social-network-encode-decode'
+export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './social-network-encode-decode'
 
 export {
     type DecodeImageOptions,

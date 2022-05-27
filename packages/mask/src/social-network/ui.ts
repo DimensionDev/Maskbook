@@ -1,5 +1,4 @@
 import '../utils/debug/general'
-import '../utils/debug/ui'
 import Services from '../extension/service'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import type { SocialNetworkUI } from './types'
@@ -31,10 +30,6 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     collecting: {},
     customization: {},
     configuration: {},
-    permission: {
-        has: async () => false,
-        request: async () => false,
-    },
     init: () => {
         throw new Error()
     },
@@ -168,11 +163,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}
-        for (const namespace in i18n) {
+        for (const namespace of Object.keys(i18n)) {
             const ns = i18n[namespace]
-            for (const i18nKey in ns) {
+            for (const i18nKey of Object.keys(ns)) {
                 const pair = i18n[namespace][i18nKey]
-                for (const language in pair) {
+                for (const language of Object.keys(pair)) {
                     const value = pair[language]
                     i18NextInstance.addResource(language, namespace, i18nKey, value)
                 }

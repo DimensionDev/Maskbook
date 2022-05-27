@@ -1,16 +1,15 @@
 {
   "name": "@masknet/shared-base",
   "description": "This package MUST be pure (have no side effects when imported).",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "sideEffect": false,
+  "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@masknet/public-api": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
@@ -34,5 +33,6 @@
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
-  }
+  },
+  "sideEffect": false
 }

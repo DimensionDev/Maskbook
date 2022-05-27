@@ -49,13 +49,15 @@ function assertString(x: unknown): asserts x is string {
     if (typeof x !== 'string') throw new TypeError(`${HEAD}Invalid TypedMessage`)
 }
 // Detach Uint8Array from it's underlying buffer
-function fixU8Array(obj: unknown) {
+function fixU8Array(input: unknown) {
     // for Array and object
-    if (typeof obj === 'object' && obj !== null) {
-        for (const key in obj) {
-            const val = (obj as any)[key]
-            if (val instanceof Uint8Array) (obj as any)[key] = val.slice()
-            else fixU8Array(val)
+    if (typeof input !== 'object' || input === undefined || input === null) return
+    for (const key of Object.keys(input)) {
+        const value = Reflect.get(input, key)
+        if (value instanceof Uint8Array) {
+            Reflect.set(input, key, value.slice())
+        } else {
+            fixU8Array(value)
         }
     }
 }

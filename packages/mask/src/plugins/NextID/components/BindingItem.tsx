@@ -21,8 +21,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     copy: {
+        color: theme.palette.text.primary,
         fontSize: 16,
-        stroke: theme.palette.text.primary,
         cursor: 'pointer',
     },
     address: {

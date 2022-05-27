@@ -10,9 +10,7 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-app')
 
 export const themeListItemSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>(
-        'm-usermenu__v3 > div.m-user-menu.m-dropdown > ul > li:nth-child(5) .ng-star-inserted',
-    )
+    querySelector<HTMLAnchorElement>('.m-sidebarMore__dropdown > li:nth-child(7)')
 
 export const composerModalSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-composer__modal')
 

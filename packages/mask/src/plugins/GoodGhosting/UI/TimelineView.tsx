@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         padding: theme.spacing(1.5, 2),
         margin: theme.spacing(1.5),
-        marginTop: '0px',
+        marginTop: 0,
         borderTop: '1px solid #D9E0F0',
         whiteSpace: 'nowrap',
     },
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     timelineEvent: {
         position: 'relative',
-        left: '0px',
+        left: 0,
         transform: 'translateX(50%)',
         display: 'flex',
         flexDirection: 'column',

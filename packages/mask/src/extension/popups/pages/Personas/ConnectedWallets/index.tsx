@@ -3,7 +3,7 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -12,12 +12,15 @@ import type { ConnectedWalletInfo } from '../type'
 import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
-    const { NameService } = useWeb3State()
+    const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallets = useWallets()
+    const navigate = useNavigate()
+    const location = useLocation()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -25,6 +28,7 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
+        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
@@ -107,6 +111,13 @@ const ConnectedWallets = memo(() => {
     )
 
     const navigateToConnectWallet = async () => {
+        const params = new URLSearchParams(location.search)
+        const internal = params.get('internal')
+
+        if (internal) {
+            navigate(PopupRoutes.ConnectWallet)
+            return
+        }
         await Service.Helper.openPopupWindow(PopupRoutes.ConnectWallet)
         window.close()
     }

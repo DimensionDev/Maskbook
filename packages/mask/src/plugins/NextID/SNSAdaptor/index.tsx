@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,
-            label: 'Wallet',
+            label: 'Wallets',
             priority: 10,
             UI: {
                 TabContent: ({ personaList = EMPTY_LIST }) => <NextIdPage personaList={personaList} />,

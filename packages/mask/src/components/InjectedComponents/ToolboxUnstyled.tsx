@@ -46,8 +46,8 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         boxShadow:
             theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
+                ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
+                : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
         backgroundImage: 'none',
     },
     menuItem: {
@@ -91,6 +91,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
+        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
@@ -104,7 +105,9 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    <ListItemIcon>
+                        <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    </ListItemIcon>
                     {mini ? null : (
                         <ListItemText
                             primary={

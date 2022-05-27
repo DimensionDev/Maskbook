@@ -137,7 +137,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                 {/* To support emoji */}
                                 {String.fromCodePoint(
                                     first.codePointAt(0) ?? SPACE_POINT,
-                                    last.codePointAt(0) ?? SPACE_POINT,
+                                    last?.codePointAt(0) ?? SPACE_POINT,
                                 )}
                             </Avatar>
                             {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}

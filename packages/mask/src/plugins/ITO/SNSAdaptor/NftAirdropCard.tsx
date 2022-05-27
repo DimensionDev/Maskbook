@@ -1,17 +1,11 @@
 import formatDateTime from 'date-fns/format'
-import {
-    ChainId,
-    TransactionStateType,
-    useAccount,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { ChainId, useAccount, resolveTransactionLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Box, Typography, Button, TextField, CircularProgress, Link } from '@mui/material'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
 import { useSpaceStationContractClaimCallback } from './hooks/useSpaceStationContractClaimCallback'
 import { useI18N } from '../../../utils'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { makeStyles, useCustomSnackbar, OptionsObject } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import CloseIcon from '@mui/icons-material/Close'
@@ -186,12 +180,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const currentChainId = useChainId()
     const { classes } = useStyles()
 
-    const claimableCount = campaignInfos
-        ? campaignInfos.reduce((acc, cur) => {
-              if (cur.claimableInfo.claimable) return acc + 1
-              return acc
-          }, 0)
-        : 0
+    const claimableCount = campaignInfos?.filter((info) => info.claimableInfo.claimable).length ?? 0
 
     useEffect(() => {
         setCheckAddress('')
@@ -292,8 +281,9 @@ function ClaimItem(props: ClaimItemProps) {
             horizontal: 'center',
         },
     }
-    useEffect(() => {
-        if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash === 'string') {
             showSnackbar(
                 <div className={classes.snackbarContent}>
                     <div className={classes.snackbarTipContent}>
@@ -304,10 +294,7 @@ function ClaimItem(props: ClaimItemProps) {
                                 className={classes.whiteText}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={resolveTransactionLinkOnExplorer(
-                                    ChainId.Mumbai,
-                                    claimState.receipt.transactionHash,
-                                )}>
+                                href={resolveTransactionLinkOnExplorer(ChainId.Mumbai, hash)}>
                                 <OpenInNewIcon className={classes.snackbarIcon} />
                             </Link>
                         </Typography>
@@ -321,7 +308,7 @@ function ClaimItem(props: ClaimItemProps) {
             )
 
             retry()
-        } else if (claimState.type === TransactionStateType.FAILED) {
+        } else {
             showSnackbar(
                 <div className={classes.snackbarContent}>
                     <div className={classes.snackbarTipContent}>
@@ -336,7 +323,7 @@ function ClaimItem(props: ClaimItemProps) {
                 } as OptionsObject,
             )
         }
-    }, [claimState])
+    }, [showSnackbar])
 
     const unClaimable =
         now < campaignInfo.startTime * 1000 ||
@@ -364,17 +351,10 @@ function ClaimItem(props: ClaimItemProps) {
                             unlockMetaMask: classNames(classes.actionButton, classes.connectWallet),
                         }}>
                         <ActionButton
-                            disabled={
-                                claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
-                                claimState.type === TransactionStateType.HASH ||
-                                unClaimable
-                            }
-                            loading={
-                                claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING ||
-                                claimState.type === TransactionStateType.HASH
-                            }
+                            disabled={claimState.loading || unClaimable}
+                            loading={claimState.loading || unClaimable}
                             classes={{ disabled: classes.disabledButton }}
-                            onClick={claimCallback}
+                            onClick={claim}
                             className={classes.actionButton}>
                             <span>
                                 {claimed

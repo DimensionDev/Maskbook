@@ -69,7 +69,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
                 display: 'inline-block',
                 width: 5,
                 height: 40,
-                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                boxShadow: '-2px 0 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
                 background: MaskColorVar.textLink,
                 position: 'absolute',

@@ -1,11 +1,11 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../utils'
-import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
 import { RainbowBox } from './RainbowBox'
 import type { RSS3_KEY_SNS } from '../constants'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -23,7 +23,7 @@ const useStyles = makeStyles()(() => ({
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId, width, height, snsKey } = props
-    const { loading, value: _avatar } = useNFTAvatar(userId, snsKey)
+    const { loading, value: _avatar } = usePersonaNFTAvatar(userId, avatarId, snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
     const classes = useStylesExtends(useStyles(), props)

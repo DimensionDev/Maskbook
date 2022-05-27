@@ -3,27 +3,27 @@ import {
     isTypedMessageText,
     makeTypedMessageText,
     TypedMessage,
-    editTypedMessageMeta,
     SerializableTypedMessages,
 } from '@masknet/typed-message'
+import { editTypedMessageMeta } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
-        minHeight: 108,
-        flexDirection: 'column',
-        padding: 10,
-        boxSizing: 'border-box',
+        padding: 0,
     },
     input: {
-        fontSize: 18,
+        fontSize: 15,
         minHeight: '8em',
     },
-})
+    badge: {
+        marginBottom: 12,
+    },
+}))
 export interface TypedMessageEditorProps {
     defaultValue?: SerializableTypedMessages
     onChange?(message: TypedMessage): void
@@ -120,7 +120,11 @@ export const TypedMessageEditor = memo(
         }
         return (
             <>
-                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                {value.meta && (
+                    <div className={classes.badge}>
+                        <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                    </div>
+                )}
                 <InputBase
                     readOnly={readonly}
                     classes={{

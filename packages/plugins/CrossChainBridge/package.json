@@ -2,18 +2,18 @@
     "name": "@masknet/plugin-cross-chain-bridge",
     "private": true,
     "exports": {
-      ".": {
-        "webpack": "./src/index.ts",
-        "default": "./dist/index.js"
-      }
+        ".": {
+            "webpack": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
     },
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@masknet/icons": "workspace:*",
         "@masknet/plugin-infra": "workspace:*",
         "@masknet/shared": "workspace:*",
         "@masknet/shared-base": "workspace:*",
         "@masknet/shared-base-ui": "workspace:*",
-        "@masknet/icons": "workspace:*",
         "@masknet/theme": "workspace:*",
         "react-use": "^17.3.2"
     }

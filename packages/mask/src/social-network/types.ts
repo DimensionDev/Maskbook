@@ -2,6 +2,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
+    EncryptionTargetType,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -15,29 +16,12 @@ import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
-// Don't define values in namespaces
-export namespace SocialNetwork {
-    export interface PayloadEncoding {
-        encoder(text: string): string
-        /**
-         * the result is candidates
-         */
-        decoder(text: string): string[]
-    }
-
+export declare namespace SocialNetwork {
     export interface Utils {
-        /** @returns the homepage url. e.g.: https://twitter.com/ */
-        getHomePage?(): string
-        /** @returns the profile url. e.g.: https://twitter.com/realMaskNetwork */
-        getProfilePage?(userId?: string): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
-        /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */
-        textPayloadPostProcessor?: PayloadEncoding
-        /** Given a text, return a URL that will allow user to share this text */
-        getShareLinkURL?(text: string): URL
         /** Handle share */
         share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
@@ -79,7 +63,6 @@ export namespace SocialNetworkUI {
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
         /** @returns the states */
         init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
-        permission?: RuntimePermission
         injection: InjectingCapabilities.Define
         automation: AutomationCapabilities.Define
         collecting: CollectingCapabilities.Define
@@ -90,12 +73,6 @@ export namespace SocialNetworkUI {
     export interface AutonomousState {
         /** My profiles at current network */
         readonly profiles: ValueRef<readonly ProfileInformation[]>
-    }
-    export interface RuntimePermission {
-        /** This function should check if Mask has the permission to the site */
-        has(): Promise<boolean>
-        /** This function should request the related permission, e.g. `browser.permissions.request()` */
-        request(): Promise<boolean>
     }
     export interface DeclarativePermission {
         origins: readonly string[]
@@ -122,8 +99,6 @@ export namespace SocialNetworkUI {
             userBadge?(signal: AbortSignal): void
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
-            /** Inject UI to the profile slider */
-            profileSlider?(signal: AbortSignal): void
             /** Inject UI to the profile tab */
             profileTab?(signal: AbortSignal): void
             /** Inject UI to the profile page */
@@ -146,13 +121,9 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileTip?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            postAvatar?(signal: AbortSignal, current: PostInfo): void
-            /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAndReplyNFTAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
-            collectionAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
             avatarClipNFT?(signal: AbortSignal): void
         }
@@ -200,7 +171,7 @@ export namespace SocialNetworkUI {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
-            target?: 'E2E' | 'Everyone'
+            target?: EncryptionTargetType
         }
         export interface NativeCommentBox {
             appendText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
@@ -221,7 +192,6 @@ export namespace SocialNetworkUI {
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
-        export type ProfileUI = { bioContent: string }
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
@@ -302,30 +272,4 @@ export namespace SocialNetworkUI {
             collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }
-}
-
-export namespace SocialNetworkWorker {
-    export interface WorkerBase {
-        /**
-         * Hint for partition when finding keys on Gun
-         *
-         * For Facebook.com, use ""
-         * For network with a large number of users, use something like "twitter-"
-         * For other networks, to keep the Anti-censor of the gun v2 design,
-         * use string like "anonymous-"
-         */
-        gunNetworkHint: string
-    }
-    export interface DeferredDefinition extends SocialNetwork.Base, WorkerBase {
-        load(): Promise<{ default: Definition }>
-        /**
-         * On Hot Module Reload. When call the callback, it will unload the current instance and load the new one.
-         */
-        hotModuleReload?(onHot: (hot: Definition) => void): void
-    }
-
-    /**
-     * A SocialNetworkWorker is running in the background page
-     */
-    export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared, WorkerBase {}
 }

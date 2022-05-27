@@ -155,6 +155,14 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
+    if (personaActionButton && isOwn) {
+        return (
+            <Stack justifyContent="center" direction="row" mt="24px">
+                {personaActionButton}
+            </Stack>
+        )
+    }
+
     if (loading || loadingPersona || loadingVerifyInfo) {
         return (
             <>

@@ -67,8 +67,7 @@ export function useNextIDConnectStatus() {
     const personaConnectStatus = usePersonaConnectStatus()
     const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
-    const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
-
+    const username = lastRecognized.identifier?.userId || lastState.username || ''
     const {
         value: VerificationStatus = NextIDVerificationStatus.Other,
         retry,
@@ -119,7 +118,7 @@ export function useNextIDConnectStatus() {
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, isOpenedVerifyDialog, currentPersonaIdentifier.value])
+    }, [username, enableNextID, isOpenedVerifyDialog, personaConnectStatus, currentPersonaIdentifier.value])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,

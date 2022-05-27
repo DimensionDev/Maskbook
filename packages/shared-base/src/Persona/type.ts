@@ -18,6 +18,12 @@ export interface ProfileInformation {
     linkedPersona?: PersonaIdentifier
 }
 
+export interface ProfileInformationFromNextID extends ProfileInformation {
+    fromNextID: boolean
+    linkedTwitterNames: string[]
+    walletAddress?: string
+}
+
 export enum RelationFavor {
     COLLECTED = -1,
     UNCOLLECTED = 1,

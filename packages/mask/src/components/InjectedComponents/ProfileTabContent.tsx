@@ -142,7 +142,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabId
         return getTabContent(tabId ?? '')
-    }, [selectedTabId, identity.identifier?.userId])
+    }, [selectedTabId, identity.identifier?.userId, currentAccountNotConnectPersona])
 
     const handleOpenDialog = () => {
         setSelectedTab(`${PluginId.Web3Profile}_web3_profile`)

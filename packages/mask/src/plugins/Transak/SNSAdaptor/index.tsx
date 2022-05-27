@@ -17,6 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <TransakIcon />
             const name = <Trans i18nKey="plugin_transak_name" />
+            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -26,6 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title={name}
                             icon={icon}
+                            iconFilterColor={iconFilterColor}
                             {...EntryComponentProps}
                             onClick={EntryComponentProps.onClick ?? openDialog}
                         />
@@ -38,6 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: <Trans i18nKey="plugin_transak_description" />,
                 name,
                 category: 'dapp',
+                iconFilterColor,
             }
         })(),
     ],

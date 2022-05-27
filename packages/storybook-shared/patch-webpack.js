@@ -1,4 +1,5 @@
 const { ProvidePlugin } = require('webpack')
+const resolveTypeScriptPlugin = require('resolve-typescript-plugin')
 module.exports = async function (config) {
     const transpile = config.module.rules
         .find((x) => x.test.toString().includes('tsx'))
@@ -24,6 +25,8 @@ module.exports = async function (config) {
         })
 
     config.experiments = { asyncWebAssembly: true, topLevelAwait: true }
+    if (!config.resolve.plugins) config.resolve.plugins = []
+    config.resolve.plugins.push(new resolveTypeScriptPlugin())
     config.resolve.fallback = {
         crypto: false,
         stream: 'stream-browserify',

@@ -3,7 +3,7 @@ export function css_var<T extends Record<string, unknown>>(
     unique_name: string,
     keys: T,
 ): { [key in keyof T]: string & ((defaultValue?: string) => string) } {
-    for (const k in keys) keys[k] = createVar(k) as any
+    for (const k of Object.keys(keys) as Array<keyof T>) keys[k] = createVar(k as string) as any
     return keys as any
     function createVar(name: string) {
         const val = '--' + unique_name + '-' + name

@@ -5,12 +5,12 @@ import { MaskMessages } from '../../../utils'
 
 export default function (signal: AbortSignal) {
     if (!isEnvironment(Environment.ManifestBackground)) return
-    const obj = ToBeListened()
-    for (const _key in obj) {
-        const key = _key as keyof MaskSettingsEvents
+    const listeners = ToBeListened()
+    const keys = Object.keys(listeners) as Array<keyof MaskSettingsEvents>
+    for (const key of keys) {
         signal.addEventListener(
             'abort',
-            obj[key].addListener((data: any) => MaskMessages.events[key].sendToAll(data as never)),
+            listeners[key].addListener((data) => MaskMessages.events[key].sendToAll(data as never)),
         )
     }
 }

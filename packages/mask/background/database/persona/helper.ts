@@ -155,7 +155,7 @@ export async function createPersonaByJsonWebKey(options: {
     mnemonic?: PersonaRecord['mnemonic']
     uninitialized?: boolean
 }): Promise<PersonaIdentifier> {
-    const identifier = ECKeyIdentifierFromJsonWebKey(options.publicKey)
+    const identifier = await ECKeyIdentifierFromJsonWebKey(options.publicKey)
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -184,7 +184,7 @@ export async function createProfileWithPersona(
         mnemonic?: PersonaRecord['mnemonic']
     },
 ): Promise<void> {
-    const ec_id = ECKeyIdentifierFromJsonWebKey(keys.publicKey)
+    const ec_id = await ECKeyIdentifierFromJsonWebKey(keys.publicKey)
     const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
