@@ -1,10 +1,10 @@
-import { HistoryIcon } from '@masknet/icons'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import {
@@ -131,7 +131,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])
 
-    const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
+    const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
     }, [])
 
@@ -146,44 +146,50 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
+    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
-    const [showHistory, setShowHistory] = useState(false)
-    const _onHistoryClick = () => {
-        setShowHistory((history) => !history)
-    }
-    const title = !showHistory ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
+    const [currentTab, onChange, tabs] = useTabs('new', 'past')
+
     return (
-        <InjectedDialog
-            open={props.open}
-            title={title}
-            onClose={onClose}
-            disableTitleBorder
-            titleTail={
-                step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={_onHistoryClick} /> : null
-            }>
-            <DialogContent className={classes.dialogContent}>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                    !showHistory ? (
-                        <RedPacketCreateNew
-                            origin={settings}
-                            onNext={onNext}
-                            state={tokenState}
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                open={props.open}
+                title={title}
+                titleTabs={
+                    <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                        <Tab label={t('plugin_red_packet_create_new')} value={tabs.new} />
+                        <Tab label={t('plugin_red_packet_select_existing')} value={tabs.past} />
+                    </MaskTabList>
+                }
+                onClose={onClose}
+                disableTitleBorder>
+                <DialogContent className={classes.dialogContent}>
+                    {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        <>
+                            <TabPanel value={tabs.new}>
+                                <RedPacketCreateNew
+                                    origin={settings}
+                                    onNext={onNext}
+                                    state={tokenState}
+                                    onClose={onClose}
+                                    onChange={_onChange}
+                                />
+                            </TabPanel>
+                            <TabPanel value={tabs.past}>
+                                <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
+                            </TabPanel>
+                        </>
+                    ) : null}
+                    {step === CreateRedPacketPageStep.ConfirmPage ? (
+                        <RedPacketConfirmDialog
                             onClose={onClose}
-                            onChange={onChange}
+                            onBack={onBack}
+                            onCreated={handleCreated}
+                            settings={settings}
                         />
-                    ) : (
-                        <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
-                    )
-                ) : null}
-                {step === CreateRedPacketPageStep.ConfirmPage ? (
-                    <RedPacketConfirmDialog
-                        onClose={onClose}
-                        onBack={onBack}
-                        onCreated={handleCreated}
-                        settings={settings}
-                    />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog>
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }
