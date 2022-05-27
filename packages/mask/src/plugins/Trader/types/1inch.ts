@@ -44,7 +44,7 @@ export interface SwapQuoteOneRequest {
     toTokenAddress: FungibleTokenDetailed
     amount: string | undefined
     fromAddress: string
-    slippage: number
+    slippage: number | string
     rpc?: string
     chainId: number
 }
