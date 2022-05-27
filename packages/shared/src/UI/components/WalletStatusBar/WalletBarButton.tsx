@@ -30,6 +30,7 @@ const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
         '&:hover': {
             backgroundColor: props.color === 'warning' ? MaskColorVar.errorPlugin : '',
         },
+        lineHeight: '18px',
     },
 }))
 

@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
@@ -21,7 +21,7 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { ArrowDownward } from '@mui/icons-material'
+import { ArrowDownward, HelpOutline } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
@@ -29,6 +29,7 @@ import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { PluginWalletStatusBar } from '../../../../utils/components/PluginWalletStatusBar'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { resolveTradeProviderName } from '../../pipes'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -165,10 +166,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             },
         },
         tooltip: {
-            padding: 16,
+            padding: 8,
             textAlign: 'left',
-            fontSize: 16,
-            lineHeight: '22px',
+            fontSize: 12,
+            lineHeight: '18px',
             fontWeight: 500,
         },
         dropIcon: {
@@ -492,6 +493,34 @@ export const TradeForm = memo<AllTradeFormProps>(
                             ActionButtonProps={{
                                 color: 'primary',
                             }}
+                            infiniteUnlockContent={
+                                <Box component="span" display="flex" alignItems="center">
+                                    <Typography fontSize={14} fontWeight={600} lineHeight="18px">
+                                        {t('plugin_trader_unlock_symbol', {
+                                            symbol: approveToken?.symbol,
+                                        })}
+                                    </Typography>
+                                    <Tooltip
+                                        classes={{
+                                            tooltip: classes.tooltip,
+                                        }}
+                                        PopperProps={{
+                                            disablePortal: true,
+                                        }}
+                                        title={t('plugin_trader_unlock_tips', {
+                                            provider: focusedTrade?.provider
+                                                ? resolveTradeProviderName(focusedTrade.provider)
+                                                : '',
+                                            symbol: approveToken?.symbol,
+                                        })}
+                                        placement="top"
+                                        arrow
+                                        disableFocusListener
+                                        disableTouchListener>
+                                        <HelpOutline style={{ marginLeft: 10, height: 18 }} />
+                                    </Tooltip>
+                                </Box>
+                            }
                             render={(disable: boolean) =>
                                 isGreatThanSlippageSetting ? (
                                     <PluginWalletStatusBar
