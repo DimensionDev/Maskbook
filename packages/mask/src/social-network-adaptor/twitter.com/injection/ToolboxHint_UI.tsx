@@ -47,7 +47,11 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
             mini={mini}
             ListItemIcon={Icon}
             Typography={({ children }) => <Text textMarginLeft={textMarginLeft}>{children}</Text>}
-            ListItemButton={({ children }) => <ListItem itemPadding={itemPadding}>{children}</ListItem>}
+            ListItemButton={({ children, onClick }) => (
+                <ListItem itemPadding={itemPadding} onClick={onClick}>
+                    {children}
+                </ListItem>
+            )}
             Container={Container}
             category={props.category}
         />
