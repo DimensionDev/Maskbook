@@ -18,9 +18,10 @@ import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { IconURLs } from './IconURL'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { RedPacketCreateNew } from './RedPacketCreateNew'
-import { RedPacketPast } from './RedPacketPast'
+import { RedPacketERC20Form } from './RedPacketERC20Form'
+import { RedPacketERC721Form } from './RedPacketERC721Form'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
-        height: 370,
+        height: 326,
     },
     tabPaper: {
         position: 'sticky',
@@ -53,6 +54,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     test: {
         backgroundColor: 'blue',
+    },
+    tabWrapper: {
+        padding: 0,
+    },
+    img: {
+        width: 20,
+        marginRight: 4,
+    },
+    labelWrapper: {
+        display: 'flex',
     },
 }))
 
@@ -157,8 +168,24 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 title={title}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                        <Tab label={t('plugin_red_packet_create_new')} value={tabs.new} />
-                        <Tab label={t('plugin_red_packet_select_existing')} value={tabs.past} />
+                        <Tab
+                            label={
+                                <div className={classes.labelWrapper}>
+                                    <img className={classes.img} src={IconURLs.erc20Token} />
+                                    <span>{t('plugin_red_packet_erc20_tab_title')}</span>
+                                </div>
+                            }
+                            value={tabs.new}
+                        />
+                        <Tab
+                            label={
+                                <div className={classes.labelWrapper}>
+                                    <img className={classes.img} src={IconURLs.erc721Token} />
+                                    <span>{t('plugin_red_packet_erc721_tab_title')}</span>
+                                </div>
+                            }
+                            value={tabs.past}
+                        />
                     </MaskTabList>
                 }
                 onClose={onClose}
@@ -166,17 +193,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <>
-                            <TabPanel value={tabs.new}>
-                                <RedPacketCreateNew
+                            <TabPanel value={tabs.new} style={{ padding: 0 }}>
+                                <RedPacketERC20Form
                                     origin={settings}
-                                    onNext={onNext}
-                                    state={tokenState}
                                     onClose={onClose}
+                                    onNext={onNext}
                                     onChange={_onChange}
                                 />
                             </TabPanel>
-                            <TabPanel value={tabs.past}>
-                                <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
+                            <TabPanel value={tabs.past} style={{ padding: 0 }}>
+                                <RedPacketERC721Form onClose={onClose} />
                             </TabPanel>
                         </>
                     ) : null}
