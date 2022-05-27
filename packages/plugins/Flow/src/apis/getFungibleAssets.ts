@@ -110,7 +110,7 @@ export async function getFungibleAssets(
         getAssetTether(network.chainId, address),
     ])
 
-    return allSettled
-        .map((x) => (x.status === 'fulfilled' ? x.value : null))
-        .filter(Boolean) as Array<Web3Plugin.Asset<Web3Plugin.FungibleToken>>
+    return allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Array<
+        Web3Plugin.Asset<Web3Plugin.FungibleToken>
+    >
 }

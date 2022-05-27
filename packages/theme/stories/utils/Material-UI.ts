@@ -2,7 +2,9 @@ import type { ButtonProps, SelectProps, TextFieldProps } from '@mui/material'
 import type { ArgType, ArgTypes } from '@storybook/addons'
 import { argsOfArr, ControlType } from './args'
 function enumIn<T>(enums: {
-    [Prop in keyof T]?: (argsFromEnum: (enumString: Array<NonNullable<T[Prop]>>, type?: ControlType) => ArgType) => ArgType
+    [Prop in keyof T]?: (
+        argsFromEnum: (enumString: Array<NonNullable<T[Prop]>>, type?: ControlType) => ArgType,
+    ) => ArgType
 }): ArgTypes {
     for (const key of Object.keys(enums) as Array<keyof T>) {
         enums[key] = (enums[key] as any)(argsOfArr)

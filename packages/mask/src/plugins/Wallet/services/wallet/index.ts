@@ -51,11 +51,13 @@ export async function getWallet(address?: string) {
 }
 
 export async function getWallets(providerType?: ProviderType): Promise<
-    Array<Omit<WalletRecord, 'type'> & {
-        configurable: boolean
-        hasStoredKeyInfo: boolean
-        hasDerivationPath: boolean
-    }>
+    Array<
+        Omit<WalletRecord, 'type'> & {
+            configurable: boolean
+            hasStoredKeyInfo: boolean
+            hasDerivationPath: boolean
+        }
+    >
 > {
     if (hasNativeAPI) {
         if (providerType && providerType !== ProviderType.MaskWallet) return []
