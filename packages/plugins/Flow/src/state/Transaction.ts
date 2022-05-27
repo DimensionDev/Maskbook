@@ -14,6 +14,8 @@ export class Transaction extends TransactionState<ChainId, MutateOptions> {
             chainId?: Subscription<ChainId>
         },
     ) {
+        // TODO: 6002
+        // eslint-disable-next-line unicorn/no-array-reduce
         const defaultValue: TransactionStorage<ChainId, MutateOptions> = getEnumAsArray(ChainId).reduce<
             TransactionStorage<ChainId, MutateOptions>
         >((accumulator, chainId) => {

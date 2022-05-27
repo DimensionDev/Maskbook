@@ -198,7 +198,7 @@ class Connection implements BaseConnection {
 
     async getTransactionNonce(account: string, options?: SolanaWeb3ConnectionOptions): Promise<number> {
         const response = await this.getWeb3Connection(options).getNonce(decodeAddress(account))
-        return response?.nonce ? Number.parseInt(response.nonce) : 0
+        return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
     getFungibleToken(

@@ -28,6 +28,9 @@ export class CoinGeckoAPI implements PriceAPI.Provider {
         const response = await fetch(requestPath).then(
             (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
         )
+
+        // TODO: 6002
+        // eslint-disable-next-line unicorn/no-array-reduce
         return Object.keys(response).reduce<Record<string, number>>((accumulate, address) => {
             accumulate[address] = response[address][currencyType]
             return accumulate

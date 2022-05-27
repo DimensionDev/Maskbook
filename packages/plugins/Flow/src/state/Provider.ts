@@ -18,6 +18,8 @@ import { Providers } from './Connection/provider'
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {
         const defaultValue = {
+            // TODO: 6002
+            // eslint-disable-next-line unicorn/no-array-reduce
             accounts: getEnumAsArray(ProviderType).reduce<Record<ProviderType, Account<ChainId>>>(
                 (accumulator, providerType) => {
                     accumulator[providerType.value] = {
@@ -28,6 +30,8 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
                 },
                 {},
             ),
+            // TODO: 6002
+            // eslint-disable-next-line unicorn/no-array-reduce
             providers: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce<
                 Record<EnhanceableSite | ExtensionSite, ProviderType>
             >((accumulator, site) => {

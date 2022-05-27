@@ -65,6 +65,8 @@ export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, plug
     const plugins = useActivatedPluginsSNSAdaptor('any')
 
     return useMemo(() => {
+        // TODO: 6002
+        // eslint-disable-next-line unicorn/no-array-reduce
         return plugins.reduce<Record<string, boolean>>((result, plugin) => {
             if (!plugin.enableRequirement.web3) {
                 result[plugin.ID] = true

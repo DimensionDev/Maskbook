@@ -7,6 +7,8 @@ export function useAllPluginsWeb3State<T extends NetworkPluginID>() {
     const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor('any')
     const pluginsDashboard = useActivatedPluginsDashboard()
 
+    // TODO: 6002
+    // eslint-disable-next-line unicorn/no-array-reduce
     return [...pluginsSNSAdaptor, ...pluginsDashboard].reduce<Record<string, Web3Helper.Web3State<T>>>(
         (accumulator, current) => {
             const Web3State = current.Web3State as Web3Helper.Web3State<T> | undefined

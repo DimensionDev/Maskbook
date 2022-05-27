@@ -15,6 +15,8 @@ import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from '
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
 
+    // TODO: 6002
+    // eslint-disable-next-line unicorn/no-array-reduce
     return data.reduce((list: Array<FungibleAsset<ChainId, SchemaType>>, y) => {
         if (!y.is_verified) return list
         const chainIdFromChain = chainResolver.chainId(y.chain)
