@@ -210,8 +210,10 @@ export function Steps(props: StepsProps) {
                     variant={notInPop ? 'roundedContained' : 'contained'}
                     fullWidth
                     onClick={onConfirm}>
-                    {disableConfirm && t.wallet_verify_persona_sign()}
-                    {!disableConfirm && step === 2 ? t.done() : t.confirm()}
+                    <>
+                        {disableConfirm && t.wallet_verify_persona_sign}
+                        {!disableConfirm && step === 2 ? t.done() : t.confirm()}
+                    </>
                 </LoadingButton>
             </div>
         </div>

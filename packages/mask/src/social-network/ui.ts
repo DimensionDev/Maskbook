@@ -23,6 +23,7 @@ import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 import { PluginId } from '@masknet/plugin-infra'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -155,6 +156,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
                 openPopupWindow: Services.Helper.openPopupWindow,
+                dialogUpdateMsg: WalletMessages.events.selectProviderDialogUpdated,
             }
         }),
     )

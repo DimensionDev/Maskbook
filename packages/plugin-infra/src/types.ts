@@ -11,8 +11,9 @@ import type {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
-import type { Web3Plugin } from './web3-types'
+import type { NetworkPluginID, Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -229,7 +230,18 @@ export namespace Plugin.SNSAdaptor {
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         /** Sign a message silently */
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
+        dialogUpdateMsg: UnboundedRegistry<SelectProviderDialogEvent>
     }
+
+    export type SelectProviderDialogEvent =
+        | {
+              open: true
+              pluginID?: NetworkPluginID
+          }
+        | {
+              open: false
+              address?: string
+          }
     export interface PersonaSignResult {
         /** The persona user selected to sign the message */
         persona: PersonaIdentifier

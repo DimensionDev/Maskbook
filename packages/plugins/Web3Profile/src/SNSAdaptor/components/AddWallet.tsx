@@ -1,5 +1,4 @@
 import { NextIDAction, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     ChainId,
@@ -148,7 +147,7 @@ const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open }: AddW
             return SignSteps.Ready
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { setDialog } = useRemoteControlledDialog(context.dialogUpdateMsg)
     const changeWallet = useCallback(() => {
         setDialog({
             open: true,
