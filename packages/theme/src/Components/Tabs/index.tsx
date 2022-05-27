@@ -88,7 +88,7 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         borderRadius: 0,
         background:
-            !isOpen && isOverflow
+            !isOpen && isOverflow && theme.palette.mode === 'light'
                 ? 'linear-gradient(270deg,rgba(255,255,255,1) 40px, rgba(223, 229, 244, 0.8) 40px, rgba(244, 247, 254, 0) 72px)'
                 : theme.palette.background.paper,
     }),

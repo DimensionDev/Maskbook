@@ -13,7 +13,6 @@ const FlexibleTabTabWrap = styled(Button, {
     minWidth: theme.spacing(3),
     background: activated ? get(theme.palette.background, 'input') ?? '#F2F6FA' : 'transparent',
     borderRadius: `${theme.spacing(1)} !important`,
-    // TODO: should remove 'get'
     color: activated ? get(theme.palette, 'public.primary') ?? '#1C68F3' : theme.palette.text.secondary,
     fontSize: 14,
     fontWeight: 'bold',
