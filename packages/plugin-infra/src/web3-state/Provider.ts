@@ -25,9 +25,7 @@ export class ProviderState<
     NetworkType extends string,
     Web3Provider,
     Web3,
-    // TODO: 6002
-    // @ts-ignore Generic type 'ProviderState<ChainId, ProviderType, NetworkType>' requires 3 type argument(s).ts(2314)
-> implements Web3ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3>
+> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
     protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>> = null!

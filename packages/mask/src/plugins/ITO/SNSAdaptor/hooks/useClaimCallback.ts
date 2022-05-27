@@ -7,7 +7,6 @@ import { useITO_Contract } from './useITO_Contract'
 import { checkAvailability } from '../utils/checkAvailability'
 import type { EVM_Connection } from '@masknet/plugin-evm'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -15,7 +14,6 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract } = useITO_Contract(chainId, contractAddress)
-    const [claimState, setClaimState] = useTransactionState()
 
     const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)
     return useAsyncFn(async () => {

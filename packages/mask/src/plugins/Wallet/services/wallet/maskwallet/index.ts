@@ -1,6 +1,6 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { OnDemandWorker } from '../../../../../../utils-pure'
-import type { Input, Output } from '../../../../../../web-workers/wallet'
+import { OnDemandWorker } from '@masknet/shared-base'
+import type { MaskBaseAPI } from '@masknet/web3-providers'
 
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
@@ -44,13 +44,13 @@ const ErrorMessage = {
 function send<I extends keyof Request, O extends keyof Response>(input: I, output: O) {
     return (value: Request[I]) => {
         return new Promise<Response[O]>((resolve, reject) => {
-            const req: Input = { id: Math.random(), data: { [input]: value } }
+            const req: MaskBaseAPI.Input = { id: Math.random(), data: { [input]: value } }
             Worker.postMessage(req)
             Worker.addEventListener('message', function f(message) {
                 if (message.data.id !== req.id) return
 
                 Worker.removeEventListener('message', f)
-                const data: Output = message.data
+                const data: MaskBaseAPI.Output = message.data
                 if (data.response.error)
                     return reject(
                         new Error(ErrorMessage[data.response.error.errorCode as ErrorCode] || 'Unknown Error'),

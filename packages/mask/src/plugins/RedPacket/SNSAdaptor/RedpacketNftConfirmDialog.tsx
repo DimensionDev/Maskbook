@@ -16,7 +16,7 @@ import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { useI18N as useBaseI18N } from '../../../../shared-ui/locales_legacy'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'

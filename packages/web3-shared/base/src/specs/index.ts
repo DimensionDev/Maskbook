@@ -910,7 +910,7 @@ export interface ConnectionState<
     /** Get web3 SDK */
     getWeb3?: (options?: Web3ConnectionOptions) => Promise<Web3>
     /** Get web3 provider instance */
-    getWeb3Provoder?: (options?: Web3ConnectionOptions) => Promise<Web3Provider>
+    getWeb3Provider?: (options?: Web3ConnectionOptions) => Promise<Web3Provider>
     /** Get connection */
     getConnection?: (options?: Web3ConnectionOptions) => Promise<Web3Connection>
 }

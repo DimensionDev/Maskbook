@@ -68,6 +68,7 @@ export declare namespace Plugin {
         TransactionSignature = unknown,
         TransactionParameter = unknown,
         Web3 = unknown,
+        Web3Provider = unknown,
     > extends Shared.Definition<ChainId, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
         SNSAdaptor?: Loader<
@@ -83,7 +84,8 @@ export declare namespace Plugin {
                 TransactionDetailed,
                 TransactionSignature,
                 TransactionParameter,
-                Web3
+                Web3,
+                Web3Provider
             >
         >
         /** Load the Dashboard part of the plugin. */
@@ -100,7 +102,8 @@ export declare namespace Plugin {
                 TransactionDetailed,
                 TransactionSignature,
                 TransactionParameter,
-                Web3
+                Web3,
+                Web3Provider
             >
         >
         /** Load the Worker part of the plugin. */

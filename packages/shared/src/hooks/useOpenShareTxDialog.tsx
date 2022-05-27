@@ -1,11 +1,11 @@
-import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/plugin-infra/web3'
+import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { Link, Typography } from '@mui/material'
 import { FC, memo, useCallback } from 'react'
-import { useShowConfirm } from '../contexts'
+import { useShowConfirm } from '../contexts/common'
 import { useSharedI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({

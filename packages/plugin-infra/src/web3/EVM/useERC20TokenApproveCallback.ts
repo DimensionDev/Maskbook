@@ -1,14 +1,14 @@
-import { useCallback, useMemo } from 'react'
-import { once } from 'lodash-unified'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
+import { once } from 'lodash-unified'
+import { useCallback, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { useERC20TokenContract } from './useERC20TokenContract'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
-import { useTransactionState } from './useTransactionState'
-import { useFungibleTokenBalance } from '../useFungibleTokenBalance'
-import { useAccount } from '../useAccount'
 import { useChainId } from '../useChainId'
+import { useAccount } from '../useAccount'
+import { useFungibleTokenBalance } from '../../entry-web3'
+import { TransactionEventType } from '@masknet/web3-shared-evm'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -25,7 +25,6 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const erc20Contract = useERC20TokenContract(chainId, address)
-    const [transactionState, setTransactionState] = useTransactionState()
 
     // read the approved information from the chain
     const {
@@ -46,42 +45,19 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
         if (!amount || !spender) return ApproveStateType.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
-        if (transactionState.type === TransactionStateType.WAIT_FOR_CONFIRMING) return ApproveStateType.PENDING
         return isLessThan(allowance, amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
-    }, [
-        amount,
-        spender,
-        balance,
-        allowance,
-        errorBalance,
-        errorAllowance,
-        loadingAllowance,
-        loadingBalance,
-        transactionState.type,
-    ])
+    }, [amount, spender, balance, allowance, errorBalance, errorAllowance, loadingAllowance, loadingBalance])
 
-    const approveCallback = useCallback(
+    const [state, approveCallback] = useAsyncFn(
         async (useExact = false) => {
-            setTransactionState({
-                type: TransactionStateType.UNKNOWN,
-            })
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
                 return
             }
 
             // error: failed to approve token
             if (approveStateType !== ApproveStateType.NOT_APPROVED) {
-                setTransactionState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Failed to approve token.'),
-                })
                 return
             }
-
-            // start waiting for provider to confirm tx
-            setTransactionState({
-                type: TransactionStateType.WAIT_FOR_CONFIRMING,
-            })
 
             // estimate gas and compose transaction
             const config = {
@@ -98,16 +74,12 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                         })
                     })
                     .catch((error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         throw error
                     }),
             }
 
             // send transaction and wait for hash
-            return new Promise<void>(async (resolve, reject) => {
+            return new Promise<string>(async (resolve, reject) => {
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
@@ -115,43 +87,25 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                 erc20Contract.methods
                     .approve(spender, useExact ? amount : MaxUint256)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.RECEIPT, (receipt) => {
-                        setTransactionState({
-                            type: TransactionStateType.CONFIRMED,
-                            no: 0,
-                            receipt,
-                        })
+                    .on(TransactionEventType.RECEIPT, () => {
                         revalidate()
-                        resolve()
                     })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                        setTransactionState({
-                            type: TransactionStateType.CONFIRMED,
-                            no,
-                            receipt,
-                        })
                         revalidate()
-                        resolve()
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
-                        setTransactionState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
                         revalidate()
                         reject(error)
                     })
             })
         },
-        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],
+        [account, amount, spender, erc20Contract, approveStateType],
     )
 
     const resetCallback = useCallback(() => {
         revalidateBalance()
         revalidateAllowance()
-        setTransactionState({
-            type: TransactionStateType.UNKNOWN,
-        })
     }, [revalidateBalance, revalidateAllowance])
 
     return [
@@ -162,7 +116,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
             spender,
             balance,
         },
-        transactionState,
+        state,
         approveCallback,
         resetCallback,
     ] as const

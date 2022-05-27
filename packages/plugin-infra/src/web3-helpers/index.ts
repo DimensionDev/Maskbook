@@ -197,7 +197,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['TransactionSignature'],
         Definition[NetworkPluginID]['TransactionParameter'],
         Definition[NetworkPluginID]['Web3'],
-        Definition[NetworkPluginID]['Web3Provider'],
+        Definition[NetworkPluginID]['Web3Provider']
     >
 
     export type Web3UIAll = Web3Plugin.UI.UI<
