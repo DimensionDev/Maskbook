@@ -1,5 +1,5 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack, Box } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -81,7 +81,7 @@ export function FurucomboView(props: PoolViewProps) {
     const investable = investables.find(
         (investable: Investable) =>
             isSameAddress(investable.address, props.address) &&
-            investable.chainId === currentChainId &&
+            investable.chainId === ChainId.Mainnet &&
             investable.category === props.category,
     )
 
