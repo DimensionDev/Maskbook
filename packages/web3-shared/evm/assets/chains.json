@@ -309,7 +309,7 @@
         "features": [],
         "nativeCurrency": {
             "name": "Ether",
-            "symbol": "OETH",
+            "symbol": "ETH",
             "decimals": 18
         },
         "infoURL": "https://Optimistic.etherscan.io/",
