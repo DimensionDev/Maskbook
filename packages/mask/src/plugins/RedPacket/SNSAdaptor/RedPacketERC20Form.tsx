@@ -29,7 +29,7 @@ const duration = 60 * 60 * 24
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        padding: theme.spacing(0, 2, 0, 2),
+        padding: theme.spacing(2),
     },
     field: {
         display: 'flex',

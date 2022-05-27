@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             height: 213,
             overflowY: 'auto',
-            padding: theme.spacing(0, 2),
+            padding: theme.spacing(2),
         },
         line: {
             display: 'flex',

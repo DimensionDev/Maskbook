@@ -1,10 +1,9 @@
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { TabContext, TabPanel } from '@mui/lab'
-import { DialogContent, Tab } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import {
@@ -12,16 +11,13 @@ import {
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
-import { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import Services from '../../../extension/service'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
-import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
-import { RedPacketPast } from './RedPacketPast'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -33,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
+        height: 370,
     },
     tabPaper: {
         position: 'sticky',
@@ -131,45 +128,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])
 
-    const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
+    const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
     }, [])
 
     const tokenState = useState(RpTypeTabs.ERC20)
-
-    // const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('plugin_red_packet_create_new'),
-                children: (
-                    <RedPacketCreateNew
-                        origin={settings}
-                        onNext={onNext}
-                        state={tokenState}
-                        onClose={onClose}
-                        onChange={_onChange}
-                    />
-                ),
-                sx: { p: 0 },
-            },
-            {
-                label: t('plugin_red_packet_select_existing'),
-                children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
-                sx: { p: 0 },
-            },
-        ],
-        state,
-        classes: {
-            focusTab: classes.focusTab,
-            tabPaper: classes.tabPaper,
-            tab: classes.tab,
-            flexContainer: classes.flexContainer,
-            indicator: classes.indicator,
-            tabs: classes.tabs,
-        },
-    }
 
     const handleCreated = useCallback(
         (payload: RedPacketJSONPayload) => {
@@ -182,39 +145,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
-    const [currentTab, onChange, tabs] = useTabs('new', 'past')
-
     return (
         <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                    <TabContext value={currentTab}>
-                        <MaskTabList variant="round" onChange={onChange} aria-label="Redpacket">
-                            <Tab label={t('plugin_red_packet_create_new')} value={tabs.new} />
-                            <Tab label={t('plugin_red_packet_select_existing')} value={tabs.past} />
-                        </MaskTabList>
-                        <TabPanel value={tabs.new}>
-                            <RedPacketCreateNew
-                                origin={settings}
-                                onNext={onNext}
-                                state={tokenState}
-                                onClose={onClose}
-                                onChange={_onChange}
-                            />
-                        </TabPanel>
-                        <TabPanel value={tabs.past}>
-                            <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
-                        </TabPanel>
-                    </TabContext>
-                ) : null}
-                {step === CreateRedPacketPageStep.ConfirmPage ? (
-                    <RedPacketConfirmDialog
-                        onClose={onClose}
-                        onBack={onBack}
-                        onCreated={handleCreated}
-                        settings={settings}
-                    />
-                ) : null}
+                <RedPacketCreateNew
+                    origin={settings}
+                    onNext={onNext}
+                    state={tokenState}
+                    onClose={onClose}
+                    onChange={onChange}
+                />
             </DialogContent>
         </InjectedDialog>
     )
