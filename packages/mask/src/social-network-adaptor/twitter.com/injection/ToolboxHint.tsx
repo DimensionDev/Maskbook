@@ -6,6 +6,7 @@ import { startWatch } from '../../../utils/watcher'
 import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI'
 
 const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
+const SideBarNativeItemIconSize = new ValueRef('24px')
 const SideBarNativeItemPaddingRef = new ValueRef('11px')
 
 export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'wallet' | 'application') {
@@ -25,10 +26,15 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
         const SideBarNativeItemText = document.querySelector(
             '[role="banner"] [role="navigation"] > div > div > div[dir="auto"]',
         )
+        const SideBarNativeItemIcon = document.querySelector(
+            '[role="banner"] [role="navigation"] > div > div > div:first-child',
+        )
         const SideBarNativeItemStyle = SideBarNativeItem ? window.getComputedStyle(SideBarNativeItem) : null
         const SideBarNativeItemTextStyle = SideBarNativeItemText ? window.getComputedStyle(SideBarNativeItemText) : null
-
+        const SideBarNativeItemIconStyle = SideBarNativeItemIcon ? window.getComputedStyle(SideBarNativeItemIcon) : null
+        console.log({ w: SideBarNativeItemIconStyle?.width, mw: SideBarNativeItemIconStyle?.minWidth })
         SideBarNativeItemPaddingRef.value = SideBarNativeItemStyle?.padding ?? '11px'
+        SideBarNativeItemIconSize.value = SideBarNativeItemIconStyle?.width ?? '24px'
         SideBarNativeItemTextMarginLeftRef.value = SideBarNativeItemTextStyle?.marginLeft ?? '20px'
     }
 
@@ -42,6 +48,7 @@ export function useSideBarNativeItemStyleVariants() {
     return {
         textMarginLeft: useValueRef(SideBarNativeItemTextMarginLeftRef),
         itemPadding: useValueRef(SideBarNativeItemPaddingRef),
+        iconSize: useValueRef(SideBarNativeItemIconSize),
     }
 }
 

@@ -15,8 +15,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     mainIcon: {
         display: 'block',
-        width: '100%',
-        height: '100%',
     },
     badgeIcon: {
         position: 'absolute',

@@ -38,11 +38,11 @@ const Icon = styled(ListItemIcon)`
 
 export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
-    const { textMarginLeft, itemPadding } = useSideBarNativeItemStyleVariants()
+    const { textMarginLeft, itemPadding, iconSize } = useSideBarNativeItemStyleVariants()
 
     return (
         <ToolboxHintUnstyled
-            iconSize={26}
+            iconSize={Number(iconSize.replace('px', '')) - 1}
             iconFontSize="1.75rem"
             mini={mini}
             ListItemIcon={Icon}
