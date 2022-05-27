@@ -53,24 +53,24 @@ export const getWalletList = (
     footprints?: Collection[],
     donations?: Collection[],
 ) => {
-    if (wallets?.length === 0 || !hiddenObj || accounts?.length === 0) return
+    if (accounts?.length === 0) return
     return accounts?.map((key) => ({
         ...key,
         walletList: {
-            NFTs: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.NFTs),
-            donations: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
+            NFTs: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.NFTs),
+            donations: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
                 ...wallet,
                 collections: addHiddenToArray(
                     donations?.find((donation) => donation?.address === wallet?.address)?.collections,
-                    hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Donations,
+                    hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Donations,
                 ),
             })),
-            footprints: deduplicateArray(wallets, hiddenObj.hiddenWallets[key?.identity]?.footprints)?.map(
+            footprints: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.footprints)?.map(
                 (wallet) => ({
                     ...wallet,
                     collections: addHiddenToArray(
                         footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
-                        hiddenObj.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
+                        hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
                     ),
                 }),
             ),
