@@ -1,3 +1,4 @@
+import { HistoryIcon } from '@masknet/icons'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
 import { EnhanceableSite } from '@masknet/shared-base'
@@ -20,6 +21,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { payloadOutMask } from './helpers'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
+import { PoolList } from './PoolList'
 
 interface StyleProps {
     snsId: string
@@ -215,16 +217,29 @@ export function CompositionDialog(props: CompositionDialogProps) {
         if (!ITO2_CONTRACT_ADDRESS) onClose()
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
+    const [showHistory, setShowHistory] = useState(false)
+    const onShowHistory = () => {
+        setShowHistory((history) => !history)
+    }
     return (
-        <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
+        <InjectedDialog
+            titleTail={<HistoryIcon onClick={onShowHistory} />}
+            disableBackdropClick
+            open={props.open}
+            title={t('plugin_ito_display_name')}
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
-                    <CreateForm
-                        onNext={onNext}
-                        onClose={onClose}
-                        origin={poolSettings}
-                        onChangePoolSettings={setPoolSettings}
-                    />
+                    !showHistory ? (
+                        <CreateForm
+                            onNext={onNext}
+                            onClose={onClose}
+                            origin={poolSettings}
+                            onChangePoolSettings={setPoolSettings}
+                        />
+                    ) : (
+                        <PoolList onSend={onCreateOrSelect} />
+                    )
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog
