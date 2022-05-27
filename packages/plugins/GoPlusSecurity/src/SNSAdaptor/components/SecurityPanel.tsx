@@ -13,7 +13,7 @@ import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
 import type { ERC20TokenDetailed, PriceRecord } from '@masknet/web3-shared-evm'
 import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultDarkTokenIcon, DefaultLightTokenIcon } from '@masknet/icons'
+import { DefaultTokenIcon } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -63,12 +63,6 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const { classes } = useStyles()
     const t = useI18N()
     const theme = useTheme()
-    const defaultIcon =
-        theme.palette.mode === 'light' ? (
-            <DefaultLightTokenIcon sx={{ fontSize: '48px' }} />
-        ) : (
-            <DefaultDarkTokenIcon sx={{ fontSize: '48px' }} />
-        )
 
     const price = tokenPrice?.usd ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
@@ -115,7 +109,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             chainId={tokenSecurity?.chainId}
                         />
                     ) : (
-                        defaultIcon
+                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
                     )}
                     <Stack>
                         <Typography className={classes.tokenName}>{tokenSecurity?.token_name || 'Unnamed'}</Typography>

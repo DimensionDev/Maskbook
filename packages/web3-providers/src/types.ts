@@ -34,7 +34,7 @@ export namespace TokenAPI {
         price: string
     }
     export interface Provider {
-        getTokenInfo(tokenName: string): Promise<tokenInfo>
+        getTokenInfo(tokenName: string): Promise<tokenInfo | undefined>
     }
 }
 export namespace RSS3BaseAPI {
