@@ -4,16 +4,14 @@ import {
     EthereumTokenType,
     GasOptionConfig,
     TransactionEventType,
-    TransactionState,
-    TransactionStateType,
     useAccount,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useState } from 'react'
+import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
-import { useTradeAmount } from './useTradeAmount'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -25,23 +23,12 @@ export function useTradeCallback(
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
 
-    const [tradeState, setTradeState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
-            setTradeState({
-                type: TransactionStateType.UNKNOWN,
-            })
             return
         }
-
-        // start waiting for provider to confirm tx
-        setTradeState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         const {
             swaps: [swaps],
@@ -100,10 +87,6 @@ export function useTradeCallback(
                     value: transactionValue,
                 })
                 .catch((error: Error) => {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
                     throw error
                 }),
             value: transactionValue,
@@ -111,39 +94,14 @@ export function useTradeCallback(
         }
 
         // send transaction and wait for hash
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             tx.send(config as PayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    setTradeState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                    setTradeState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                    resolve()
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
                     reject(error)
                 })
         })
     }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
-
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [tradeState, tradeCallback, resetCallback] as const
 }

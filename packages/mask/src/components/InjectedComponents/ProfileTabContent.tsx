@@ -124,7 +124,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabId
         return getTabContent(tabId ?? '')
-    }, [selectedTabId, identity.identifier?.userId])
+    }, [selectedTabId, identity.identifier?.userId, currentAccountNotConnectPersona])
 
     if (hidden) return null
 

@@ -96,6 +96,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
+        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,

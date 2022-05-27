@@ -49,6 +49,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         padding: 10,
     },
+    switchButton: {
+        borderRadius: 999,
+    },
 }))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
