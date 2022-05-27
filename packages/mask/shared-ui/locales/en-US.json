@@ -459,7 +459,7 @@
     "plugin_ito_swap_only_once_remind": "Each wallet can only participate once.",
     "plugin_ito_swap_title": "{{amount}} {{token}} per {{swap}} ",
     "plugin_ito_swap_end_date": "End in {{date}}.",
-    "plugin_ito_dialog_claim_reminder_agree": "I Understand",
+    "plugin_ito_dialog_claim_reminder_agree": "I understand",
     "plugin_ito_dialog_claim_reminder_text1": "Anyone can create a token on {{networkType}} with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.",
     "plugin_ito_dialog_claim_reminder_text2": "This interface can load arbitrary tokens by token address. Please take extra caution and do your own research when interacting with arbitrary tokens.",
     "plugin_ito_dialog_claim_reminder_text3": "If you purchase an arbitrary token, you might not be able to sell it back.",
