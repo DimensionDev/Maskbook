@@ -21,9 +21,10 @@ export function pollingTask(
         }
         if (!stop) resetTask()
     }
-    const resetTask = () => {
+    const resetTask = (immediate?: boolean) => {
         canceled = false
         clearTimeout(timer)
+        if (immediate) runTask()
         timer = setTimeout(runTask, delay)
     }
     const cancelTask = () => {

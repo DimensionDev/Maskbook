@@ -3,7 +3,7 @@ import { pollingTask } from '@masknet/shared-base'
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { currentTokenPricesSettings } from '../settings'
-import { uniq } from 'lodash-unified'
+import { noop } from 'lodash-unified'
 import { TokenPrice } from '@masknet/web3-providers'
 
 const { run } = startEffects(import.meta.webpackHot)
@@ -22,26 +22,31 @@ function updateCurrentPrices(data: CryptoPrice) {
 }
 
 let tokenTrackingCount = 0
-let nativeTokenCount = 0
+let nativeTokenTrackingCount = 0
 
-export function kickToUpdateTokenPrices() {
-    tokenTrackingCount += 1
-    nativeTokenCount += 1
+export function decreaseTokenTracking() {
+    if (tokenTrackingCount > 0) {
+        tokenTrackingCount -= 1
+    }
+}
+
+export function decreaseNativeTokenTracking() {
+    if (nativeTokenTrackingCount > 0) {
+        nativeTokenTrackingCount -= 1
+    }
 }
 
 const trackingContracts: Record<string, string[]> = Object.create(null)
 export function trackContract(platform: string, address: string) {
-    trackingContracts[platform] = uniq([...(trackingContracts[platform] ?? []), address])
+    tokenTrackingCount += 1
+    const addresses = trackingContracts[platform] ?? []
+    if (addresses.includes(address)) return
+
+    trackingContracts[platform] = [...addresses, address]
+    resetPoolTask(true)
 }
 
-export async function updateTokenPrices() {
-    // reset the polling task cause it will be called from service call
-    resetPoolTask()
-
-    // forget those passed beats
-    tokenTrackingCount = 0
-
-    // update chain state
+async function updateTokenPrices() {
     try {
         const platforms = Object.keys(trackingContracts)
         await Promise.allSettled(
@@ -50,48 +55,33 @@ export async function updateTokenPrices() {
                 updateCurrentPrices(prices)
             }),
         )
-    } finally {
-        // reset the polling if chain state updated successfully
-        resetPoolTask()
-    }
+    } catch {}
 }
 
-const trackingNativeTokenIds: string[] = []
+const trackingNativeTokenIds: string[] = ['ethereum']
 export function trackNativeToken(id: string) {
-    if (!trackingNativeTokenIds.includes(id)) {
-        trackingNativeTokenIds.push(id)
-    }
+    nativeTokenTrackingCount += 1
+    if (trackingNativeTokenIds.includes(id)) return
+
+    trackingNativeTokenIds.push(id)
+    resetPoolTask(true)
 }
 
-export async function updateNativeTokenPrices() {
-    // reset the polling task cause it will be called from service call
-    resetPoolTask()
-
-    // forget those passed beats
-    nativeTokenCount = 0
-
-    // update chain state
+async function updateNativeTokenPrices() {
     try {
         const prices = await TokenPrice.getNativeTokenPrice(trackingNativeTokenIds, CurrencyType.USD)
         updateCurrentPrices(prices)
-    } catch {
-        // do nothing
-    } finally {
-        // reset the polling if chain state updated successfully
-        resetPoolTask()
-    }
+    } catch {}
 }
 
-let resetPoolTask: () => void = () => {}
-
-// poll the newest chain state
+let resetPoolTask = noop
 run(() => {
     const { reset, cancel } = pollingTask(
         async () => {
             if (tokenTrackingCount > 0) {
                 await updateTokenPrices()
             }
-            if (nativeTokenCount > 0) {
+            if (nativeTokenTrackingCount > 0) {
                 await updateNativeTokenPrices()
             }
             return false
@@ -101,20 +91,5 @@ run(() => {
         },
     )
     resetPoolTask = reset
-    return cancel
-})
-const ETH_PRICE_POLLING_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
-run(() => {
-    trackNativeToken('ethereum')
-    const { cancel } = pollingTask(
-        async () => {
-            updateNativeTokenPrices()
-            return false
-        },
-        {
-            autoStart: true,
-            delay: ETH_PRICE_POLLING_DELAY,
-        },
-    )
     return cancel
 })

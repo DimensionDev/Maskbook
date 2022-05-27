@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react'
-import { pollingTask } from '@masknet/shared-base'
-import { UPDATE_CHAIN_STATE_DELAY } from '@masknet/plugin-wallet'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { ChainId, CurrencyType, getCoinGeckoCoinId, getCoinGeckoPlatformId } from '@masknet/web3-shared-evm'
+import { useEffect, useMemo } from 'react'
 import { WalletRPC } from '../messages'
 import { currentTokenPricesSettings } from '../settings'
-import { ChainId, CurrencyType, getCoinGeckoCoinId, getCoinGeckoPlatformId } from '@masknet/web3-shared-evm'
 
-const task = pollingTask(
-    async () => {
-        await WalletRPC.kickToUpdateTokenPrices()
-        return false
-    },
-    {
-        autoStart: false,
-        delay: UPDATE_CHAIN_STATE_DELAY,
-    },
-)
+function watchPage(onShow: () => any, onHide: () => any) {
+    onShow()
+    window.addEventListener('pageshow', onShow)
+    window.addEventListener('pagehide', onHide)
+    return () => {
+        onHide()
+        window.removeEventListener('pageshow', onShow)
+        window.removeEventListener('pagehide', onHide)
+    }
+}
+
 export function useTokenPrice(
     chainId: ChainId | undefined,
     contractAddress: string | undefined,
@@ -29,34 +29,27 @@ export function useTokenPrice(
 
     const category = (contractAddress || coinId)?.toLowerCase()
 
-    const [price, setPrice] = useState(0)
-    useEffect(() => {
-        // start the polling task
-        task.reset()
-        return () => task.cancel()
-    }, [])
+    const prices = useValueRef(currentTokenPricesSettings)
+    const price = useMemo(() => {
+        if (!category) return 0
+        return prices[category]?.[currencyType] ?? 0
+    }, [category, currencyType, prices])
 
     useEffect(() => {
-        if (!category) return
+        if (!contractAddress || !platformId) return
+        return watchPage(
+            () => WalletRPC.trackContract(platformId!, contractAddress),
+            () => WalletRPC.decreaseTokenTracking(),
+        )
+    }, [platformId, contractAddress])
 
-        if (contractAddress && platformId) {
-            WalletRPC.trackContract(platformId, contractAddress)
-            WalletRPC.updateTokenPrices()
-        }
-        if (!contractAddress) {
-            WalletRPC.trackNativeToken(category)
-            WalletRPC.updateNativeTokenPrices()
-        }
-        return currentTokenPricesSettings.addListener((newVal) => {
-            const value = newVal[category!]?.[currencyType] ?? 0
-            setPrice(value)
-        })
-    }, [platformId, category, contractAddress])
     useEffect(() => {
-        if (!category) return
-        const currentTokenPrices = currentTokenPricesSettings.value
-        setPrice(currentTokenPrices[category]?.[currencyType] ?? 0)
-    }, [category, currencyType])
+        if (contractAddress || !category) return
+        return watchPage(
+            () => WalletRPC.trackNativeToken(category),
+            () => WalletRPC.decreaseNativeTokenTracking(),
+        )
+    }, [category, contractAddress])
 
     if (!category) return 0
     return price
