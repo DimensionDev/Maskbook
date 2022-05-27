@@ -68,17 +68,18 @@ function registerPostCollectorInner(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
             const profileIdentifier = info.author.getCurrentValue()
+            if (!profileIdentifier) return
             Services.Identity.updateProfileInfo(profileIdentifier, {
                 nickname: info.nickname.getCurrentValue(),
                 avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
-                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
+                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona)
             }
         },
-        (info: PostInfo) => info.author.getCurrentValue()?.toText(),
+        (info: PostInfo) => info.author.getCurrentValue(),
     )
-    const watcher = new IntervalWatcher(postsContentSelector())
+    new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -92,10 +93,7 @@ function registerPostCollectorInner(
                 const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
                     actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
                 }
-                proxy.on('currentChanged', handleChanged)
-                unwatchPostNodeChange = () => {
-                    proxy.off('currentChanged', handleChanged)
-                }
+                unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
             }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
@@ -111,9 +109,9 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.containingMaskPayload.subscribe(() => {
-                    const payload = info.containingMaskPayload.getCurrentValue()
-                    if (payload.err && refs.postMetadataImages.size === 0) return
+                info.hasMaskPayload.subscribe(() => {
+                    const payload = info.hasMaskPayload.getCurrentValue()
+                    if (!payload && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),
             )
@@ -136,8 +134,7 @@ function registerPostCollectorInner(
             const tweetId = postIdParser(tweetNode)
             return `${parentTweetId}/${tweetId}`
         })
-    watcher.startWatch(250)
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch(250, cancel)
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
@@ -185,9 +182,9 @@ function collectPostInfo(
     const { pid, messages, handle, name, avatar } = postParser(tweetNode)
 
     if (!pid) return
-    const postBy = handle ? new ProfileIdentifier(twitterBase.networkIdentifier, handle) : ProfileIdentifier.unknown
+    const postBy = ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(null)
     info.postID.value = pid
-    if (!info.postBy.value.equals(postBy)) info.postBy.value = postBy
+    info.postBy.value = postBy
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 

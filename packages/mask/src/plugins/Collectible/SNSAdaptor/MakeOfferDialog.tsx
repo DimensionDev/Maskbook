@@ -13,14 +13,19 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    EthereumTokenType,
+    useAccount,
+    useFungibleTokenWatched,
+    useChainId,
+} from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
@@ -32,11 +37,14 @@ import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
+            borderRadius: 0,
         },
         footer: {
             display: 'flex',
@@ -86,7 +94,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { classes } = useStyles()
 
     const account = useAccount()
-
+    const chainId = useChainId()
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
@@ -111,7 +119,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
         })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+        activatedSocialNetworkUI.utils.share?.(t('promote_collectible'))
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, t])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -162,7 +171,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Card elevation={0}>
+                <Card elevation={0} className={classes.content}>
                     <CardContent>
                         {isVerified ? null : (
                             <Box sx={{ marginBottom: 2 }}>
@@ -236,7 +245,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         )}
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <EthereumChainBoundary chainId={chainId}>
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButtonPromise
                                     className={classes.button}
@@ -269,7 +278,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     </ActionButton>
                                 ) : null}
                             </Box>
-                        </EthereumWalletConnectedBoundary>
+                        </EthereumChainBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

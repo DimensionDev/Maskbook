@@ -1,38 +1,32 @@
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@dimensiondev/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType'
 import { fromBase64URL, toBase64URL } from '../convert'
-import { ECKeyIdentifier } from '../Identifier/type'
-import type { EC_CryptoKey } from '.'
+import { ECKeyIdentifier } from '../Identifier'
 
 // This module is only used in background.
 // Loading tiny-secp256k1 will instantiate a WebAssembly module which is not allowed in the content script for unknown reason and fail the whole module graph.
 
-// TODO: switch to holoflows-kit
-let secp256k1!: typeof import('tiny-secp256k1')
-const isContentScript = (() => {
-    try {
-        if (location.protocol.startsWith('http')) return true
-    } catch {}
-    return false
-})()
-if (!isContentScript) {
+async function loadLib(): Promise<typeof import('tiny-secp256k1')> {
     if (process.env.architecture === 'app') {
         // Note: mobile (Android and iOS does not return a correct MINE type, therefore we can not use streaming to initialize the WASM module).
         WebAssembly.instantiateStreaming = undefined!
         WebAssembly.compileStreaming = undefined!
     }
-    import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
+    // You should not load this module in the content script. If you find you're stuck here, please check your code why it is loading this lib.
+    const mod = await import('tiny-secp256k1')
+    return mod
 }
 
 /**
  * Compress x & y into a single x
  */
-export function compressSecp256k1Point(x: string, y: string): Uint8Array {
+export async function compressSecp256k1Point(x: string, y: string): Promise<Uint8Array> {
+    const { isPoint, pointCompress } = await loadLib()
     const xb = fromBase64URL(x)
     const yb = fromBase64URL(y)
     const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
-    if (secp256k1.isPoint(point)) {
-        return secp256k1.pointCompress(point, true)
+    if (isPoint(point)) {
+        return pointCompress(point, true)
     } else {
         throw new TypeError('Not a point on secp256k1!')
     }
@@ -40,33 +34,36 @@ export function compressSecp256k1Point(x: string, y: string): Uint8Array {
 /**
  * Decompress x into x & y
  */
-export function decompressSecp256k1Point(point: Uint8Array): { x: string; y: string } {
-    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
-    const uncompressed = secp256k1.isPointCompressed(point) ? secp256k1.pointCompress(point, false) : point
+export async function decompressSecp256k1Point(point: Uint8Array): Promise<{ x: string; y: string }> {
+    const { isPoint, isPointCompressed, pointCompress } = await loadLib()
+    if (!isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    const uncompressed = isPointCompressed(point) ? pointCompress(point, false) : point
     const len = (uncompressed.length - 1) / 2
     const x = uncompressed.slice(1, len + 1)
     const y = uncompressed.slice(len + 1)
     return { x: toBase64URL(x), y: toBase64URL(y) }
 }
 
-export function compressSecp256k1KeyRaw(point: Uint8Array) {
-    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
-    if (secp256k1.isPointCompressed(point)) return point
-    return secp256k1.pointCompress(point, true)
+export async function compressSecp256k1KeyRaw(point: Uint8Array) {
+    const { isPoint, isPointCompressed, pointCompress } = await loadLib()
+    if (!isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (isPointCompressed(point)) return point
+    return pointCompress(point, true)
 }
-export function decompressSecp256k1KeyRaw(point: Uint8Array) {
-    if (!secp256k1.isPoint(point)) throw new TypeError('Not a point on secp256k1!')
-    if (!secp256k1.isPointCompressed(point)) return point
-    return secp256k1.pointCompress(point, false)
+export async function decompressSecp256k1KeyRaw(point: Uint8Array) {
+    const { isPoint, isPointCompressed, pointCompress } = await loadLib()
+    if (!isPoint(point)) throw new TypeError('Not a point on secp256k1!')
+    if (!isPointCompressed(point)) return point
+    return pointCompress(point, false)
 }
 
-export function compressSecp256k1Key(key: EC_JsonWebKey): string {
-    const arr = compressSecp256k1Point(key.x!, key.y!)
+async function compressSecp256k1Key(key: EC_JsonWebKey): Promise<string> {
+    const arr = await compressSecp256k1Point(key.x!, key.y!)
     return encodeArrayBuffer(arr)
 }
-export function decompressSecp256k1Key(compressedPublic: string): EC_Public_JsonWebKey {
+export async function decompressSecp256k1Key(compressedPublic: string): Promise<EC_Public_JsonWebKey> {
     const arr = decodeArrayBuffer(compressedPublic)
-    const key = decompressSecp256k1Point(new Uint8Array(arr))
+    const key = await decompressSecp256k1Point(new Uint8Array(arr))
     const jwk: JsonWebKey = {
         crv: 'K-256',
         ext: true,
@@ -78,20 +75,17 @@ export function decompressSecp256k1Key(compressedPublic: string): EC_Public_Json
     return jwk as EC_Public_JsonWebKey
 }
 
-export function isSecp256k1Point(x: Uint8Array) {
-    return secp256k1.isPoint(x)
+export async function isSecp256k1Point(x: Uint8Array) {
+    const { isPoint } = await loadLib()
+    return isPoint(x)
 }
 
-export function isSecp256k1PrivateKey(d: Uint8Array) {
-    return secp256k1.isPrivate(d)
+export async function isSecp256k1PrivateKey(d: Uint8Array) {
+    const { isPrivate } = await loadLib()
+    return isPrivate(d)
 }
 
-export function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey) {
-    const x = compressSecp256k1Key(key)
+export async function ECKeyIdentifierFromJsonWebKey(key: EC_JsonWebKey) {
+    const x = await compressSecp256k1Key(key)
     return new ECKeyIdentifier('secp256k1', x)
-}
-
-export async function ECKeyIdentifierFromCryptoKey(key: EC_CryptoKey) {
-    const k = (await crypto.subtle.exportKey('jwk', key)) as EC_JsonWebKey
-    return ECKeyIdentifierFromJsonWebKey(k)
 }

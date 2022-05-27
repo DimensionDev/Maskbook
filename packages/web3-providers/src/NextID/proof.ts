@@ -38,7 +38,7 @@ const getPersonaQueryURL = (platform: string, identity: string) =>
         identity,
     })
 
-const geyExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
+const getExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
     urlcat(BASE_URL, '/v1/proof/exists', {
         platform,
         identity,
@@ -80,8 +80,8 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         })
 
         // Should delete cache when proof status changed
-        const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
-        const cacheKeyOfExistedBinding = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
+        const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         deleteCache(cacheKeyOfQueryPersona)
         deleteCache(cacheKeyOfExistedBinding)
 
@@ -89,7 +89,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
 
     async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
-        const url = getPersonaQueryURL(NextIDPlatform.NextId, personaPublicKey)
+        const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
         // Will have only one item when query by personaPublicKey
         return first(response.unwrap().ids)
@@ -98,9 +98,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }),
-        )
+        const response = await fetchJSON<NextIDBindings>(urlcat(BASE_URL, '/v1/proof', { platform, identity }))
 
         // TODO: merge Pagination into this
         return response.unwrap().ids
@@ -109,7 +107,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
         if (!platform && !identity) return false
 
-        const url = geyExistedBindingQueryURL(platform, identity, personaPublicKey)
+        const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         const result = await fetchJSON<BindingProof>(url, {}, enableCache)
 
         return result.map(() => true).unwrapOr(false)

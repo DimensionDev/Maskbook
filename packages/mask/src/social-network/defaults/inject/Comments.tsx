@@ -4,7 +4,6 @@ import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@masknet/theme'
-import { noop } from 'lodash-unified'
 import { collectNodeText } from '../../../utils'
 import { startWatch } from '../../../utils/watcher'
 
@@ -27,7 +26,7 @@ export function injectPostCommentsDefault<T extends string>(
     })
     return function injectPostComments(signal: AbortSignal, current: PostInfo) {
         const selector = current.comment?.commentsSelector
-        if (!selector) return noop
+        if (!selector) return
         const commentWatcher = new MutationObserverWatcher(selector, document.body).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
@@ -52,7 +51,5 @@ export function injectPostCommentsDefault<T extends string>(
             },
         )
         startWatch(commentWatcher, signal)
-
-        return () => commentWatcher.stopWatch()
     }
 }

@@ -25,7 +25,7 @@ const useStyles = makeStyles()(() => ({
         flexDirection: 'column',
         gap: 16,
         '& > *': {
-            marginLeft: '0px !important',
+            marginLeft: '0 !important',
         },
     },
     button: {
@@ -72,7 +72,7 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                     </Typography>
                     <Typography className={classes.content}>
                         {t('popups_persona')}:{' '}
-                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                        {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '', 10)}
                         <br />
                         {t('popups_twitter_id')}: @{unbundledIdentity.userId}
                     </Typography>

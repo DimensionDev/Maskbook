@@ -12,7 +12,7 @@ interface PlaceholderProps {
 
 export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const t = useDashboardI18N()
-    const url = urlcat('https://www.:network', { network: network })
+    const url = urlcat('https://www.:network', { network })
 
     const handleClick = () => openWindow(url)
 

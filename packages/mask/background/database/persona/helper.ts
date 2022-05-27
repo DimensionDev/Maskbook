@@ -7,7 +7,6 @@ import {
     EC_Private_JsonWebKey,
     EC_Public_CryptoKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -101,7 +100,7 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 // #region ECDH
 export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
-    const sameCurvePrivateKeys = new IdentifierMap<ECKeyIdentifier, EC_Private_JsonWebKey>(new Map(), ECKeyIdentifier)
+    const sameCurvePrivateKeys = new Map<ECKeyIdentifier, EC_Private_JsonWebKey>()
 
     await createPersonaDBReadonlyAccess(async (tx) => {
         const personas = await queryPersonasWithPrivateKey(tx)
@@ -112,14 +111,14 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
                 if (of instanceof ProfileIdentifier) {
                     if (!persona.linkedProfiles.has(of)) continue
                 } else if (of instanceof ECKeyIdentifier) {
-                    if (!persona.identifier.equals(of)) continue
+                    if (persona.identifier !== of) continue
                 } else safeUnreachable(of)
             }
             sameCurvePrivateKeys.set(persona.identifier, persona.privateKey)
         }
     })
 
-    const deriveResult = new IdentifierMap<ECKeyIdentifier, AESCryptoKey>(new Map(), ECKeyIdentifier)
+    const deriveResult = new Map<ECKeyIdentifier, AESCryptoKey>()
     const result = await Promise.allSettled(
         [...sameCurvePrivateKeys].map(async ([id, key]) => {
             const privateKey = await crypto.subtle.importKey(
@@ -156,12 +155,12 @@ export async function createPersonaByJsonWebKey(options: {
     mnemonic?: PersonaRecord['mnemonic']
     uninitialized?: boolean
 }): Promise<PersonaIdentifier> {
-    const identifier = ECKeyIdentifierFromJsonWebKey(options.publicKey)
+    const identifier = await ECKeyIdentifierFromJsonWebKey(options.publicKey)
     const record: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
-        identifier: identifier,
-        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        identifier,
+        linkedProfiles: new Map(),
         publicKey: options.publicKey,
         privateKey: options.privateKey,
         nickname: options.nickname,
@@ -185,12 +184,12 @@ export async function createProfileWithPersona(
         mnemonic?: PersonaRecord['mnemonic']
     },
 ): Promise<void> {
-    const ec_id = ECKeyIdentifierFromJsonWebKey(keys.publicKey)
+    const ec_id = await ECKeyIdentifierFromJsonWebKey(keys.publicKey)
     const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
         identifier: ec_id,
-        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        linkedProfiles: new Map(),
         nickname: keys.nickname,
         publicKey: keys.publicKey,
         privateKey: keys.privateKey,

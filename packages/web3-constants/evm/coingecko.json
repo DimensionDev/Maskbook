@@ -18,7 +18,9 @@
         "Fantom": "fantom",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -39,6 +41,8 @@
         "Fantom": "fantom",
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
-        "Conflux": ""
+        "Conflux": "conflux-token",
+        "Harmony": "harmony",
+        "Harmony_Test": ""
     }
 }

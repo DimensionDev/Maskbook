@@ -1,30 +1,27 @@
+import { fromHex, toHex } from '@masknet/shared-base'
 import type { ITO } from '@masknet/web3-contracts/types/ITO'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
+import { isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
 import {
     currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
+    isSameAddress,
     TransactionEventType,
-    TransactionStateType,
     useAccount,
     useChainId,
-    useTransactionState,
-    isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
-import { useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
-import { useI18N } from '../../../../utils'
-import { fromHex, toHex } from '@masknet/shared-base'
-import { useITO_Contract } from './useITO_Contract'
-import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
+import { useITO_Contract } from './useITO_Contract'
+import { useQualificationContract } from './useQualificationContract'
 
 export function useSwapCallback(
     payload: JSON_PayloadInMask,
@@ -32,64 +29,31 @@ export function useSwapCallback(
     token: Partial<FungibleTokenDetailed>,
     isQualificationHasLucky = false,
 ) {
-    const { t } = useI18N()
-
     const account = useAccount()
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract, version } = useITO_Contract(payload.contract_address)
-    const [swapState, setSwapState] = useTransactionState()
     const { contract: qualificationContract } = useQualificationContract(
         payload.qualification_address,
         payload.contract_address,
     )
 
-    const swapCallback = useCallback(async () => {
-        if (!ITO_Contract || !qualificationContract || !payload) {
-            setSwapState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
+    return useAsyncFn(async () => {
+        if (!ITO_Contract || !qualificationContract || !payload) return
 
         const { pid, password } = payload
 
-        // error: cannot find password
-        if (!password) {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error('Failed to swap token.'),
-            })
-            return
-        }
+        if (!password) return
 
         // error: poll has expired
-        if (payload.end_time < Date.now()) {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error('Pool has expired.'),
-            })
-            return
-        }
+        if (payload.end_time < Date.now()) return
 
         // error: invalid swap amount
-        if (!isPositive(total)) {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error('Invalid swap amount.'),
-            })
-            return
-        }
+        if (!isPositive(total)) return
 
         // error: invalid token
         const swapTokenAt = payload.exchange_tokens.findIndex(currySameAddress(token.address))
-        if (swapTokenAt === -1) {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error(`Unknown ${token.symbol} token.`),
-            })
-            return
-        }
+        if (swapTokenAt === -1) return
 
         // error: not qualified
         try {
@@ -100,24 +64,11 @@ export function useSwapCallback(
                 from: account,
             })
             if (!ifQualified) {
-                setSwapState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Not Qualified.'),
-                })
                 return
             }
         } catch {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error('Failed to read qualification.'),
-            })
             return
         }
-
-        // start waiting for provider to confirm tx
-        setSwapState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         // check remaining
         try {
@@ -129,17 +80,9 @@ export function useSwapCallback(
                 isSameAddress(payload.contract_address, ITO_CONTRACT_ADDRESS),
             )
             if (isZero(availability.remaining)) {
-                setSwapState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Out of Stock'),
-                })
                 return
             }
         } catch {
-            setSwapState({
-                type: TransactionStateType.FAILED,
-                error: new Error('Failed to check availability.'),
-            })
             return
         }
 
@@ -174,37 +117,19 @@ export function useSwapCallback(
                 : await (version === 1
                       ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
                       : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
-                  )
-                      .estimateGas({
-                          from: account,
-                          value,
-                      })
-                      .catch((error) => {
-                          setSwapState({
-                              type: TransactionStateType.FAILED,
-                              error,
-                          })
-                          throw error
-                      }),
+                  ).estimateGas({
+                      from: account,
+                      value,
+                  }),
             value,
         }
 
         // send transaction and wait for hash
-        return new Promise<void>((resolve, reject) => {
-            const onSucceed = (no: number, receipt: TransactionReceipt) => {
-                setSwapState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
-                    reason: !receipt.events?.SwapSuccess ? t('plugin_ito_swap_unlucky_fail') : undefined,
-                })
-                resolve()
+        return new Promise<TransactionReceipt>((resolve, reject) => {
+            const onSucceed = (_: number, receipt: TransactionReceipt) => {
+                resolve(receipt)
             }
             const onFailed = (error: Error) => {
-                setSwapState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
                 reject(error)
             }
             ;(version === 1
@@ -216,12 +141,4 @@ export function useSwapCallback(
                 .on(TransactionEventType.ERROR, onFailed)
         })
     }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
-
-    const resetCallback = useCallback(() => {
-        setSwapState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [swapState, swapCallback, resetCallback] as const
 }

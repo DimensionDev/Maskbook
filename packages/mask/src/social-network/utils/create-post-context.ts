@@ -16,7 +16,6 @@ import {
     ObservableMap,
     ObservableSet,
     parseURL,
-    Payload,
     PostIdentifier,
     ProfileIdentifier,
     createSubscriptionFromValueRef,
@@ -26,70 +25,34 @@ import {
     PostIVIdentifier,
     EnhanceableSite,
 } from '@masknet/shared-base'
-import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
+import { difference } from 'lodash-unified'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        // #region Post text content
-        const postContent = new ValueRef(extractText())
-        cancel.push(opt.rawMessage.subscribe(() => (postContent.value = extractText())))
-        function extractText() {
-            return extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('')
-        }
-        // #endregion
-
         // #region Mentioned links
-        const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
-        const links = new ObservableSet<string>()
-        cancel.push(
-            postContent.addListener((post) => {
-                links.clear()
-                parseURL(post).forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-            }),
-        )
-        cancel.push(
-            opt.postMentionedLinksProvider?.subscribe(() => {
-                // Not clean old links cause post content not changed
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(isFacebook ? resolveFacebookLink(link) : link))
-            }),
-        )
-        const linksSubscribe: Subscription<string[]> = debug({
-            getCurrentValue: () => (links.size ? [...links] : EMPTY_LIST),
-            subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
-        })
-        // #endregion
+        const linksSubscribe: Subscription<string[]> = (() => {
+            const isFacebook = activatedSocialNetworkUI.networkIdentifier === EnhanceableSite.Facebook
+            const links = new ValueRef<string[]>(EMPTY_LIST)
 
-        // #region Parse payload
-        const postPayload = new ValueRef<Result<Payload, unknown>>(Err(new Error('Empty')))
-        parsePayload()
-        cancel.push(postContent.addListener(parsePayload))
-        cancel.push(linksSubscribe.subscribe(parsePayload))
-        function parsePayload() {
-            // TODO: Also parse for payload in the image.
-            let lastResult: Result<Payload, unknown> = Err(new Error('No candidate'))
-            for (const each of (create.payloadDecoder || ((x) => [x]))(
-                postContent.value + linksSubscribe.getCurrentValue().join('\n'),
-            )) {
-                lastResult = create.payloadParser(each)
-                if (lastResult.ok) {
-                    postPayload.value = lastResult
-                    return
-                }
+            function evaluate() {
+                const text = parseURL(extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr(''))
+                    .concat(opt.postMentionedLinksProvider?.getCurrentValue() || EMPTY_LIST)
+                    .map(isFacebook ? resolveFacebookLink : (x) => x)
+                if (difference(text, links.value).length === 0) return
+                if (!text.length) links.value = EMPTY_LIST
+                else links.value = text
             }
-            if (postPayload.value.err) postPayload.value = lastResult
-        }
+            cancel.push(opt.rawMessage.subscribe(evaluate))
+            cancel.push(opt.postMentionedLinksProvider?.subscribe(evaluate))
+            return createSubscriptionFromValueRef(links)
+        })()
         // #endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
@@ -101,7 +64,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
                 const id = opt.snsID.getCurrentValue()
-                if (by.isUnknown || id === null) return null
+                if (!id || !by) return null
                 return new PostIdentifier(by, id)
             },
             subscribe: (sub) => {
@@ -110,7 +73,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
-        const postIVIdentifier = new ValueRef<PostIVIdentifier | null>(null, PostIVIdentifier.equals)
+        const postIVIdentifier = new ValueRef<PostIVIdentifier | null>(null)
         const isPublicShared = new ValueRef<boolean | undefined>(undefined)
         const isAuthorOfPost = new ValueRef<boolean | undefined>(undefined)
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
@@ -132,13 +95,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             decryptComment: new ValueRef(null),
 
             identifier: postIdentifier,
-            url: debug({
-                getCurrentValue: () => {
-                    const id = postIdentifier.getCurrentValue()
-                    if (id) return create.getURLFromPostIdentifier?.(id) || null
-                    return null
-                },
-                subscribe: (sub) => postIdentifier.subscribe(sub),
+            url: mapSubscription(postIdentifier, (id) => {
+                if (id) return create.getURLFromPostIdentifier?.(id) || null
+                return null
             }),
 
             mentionedLinks: linksSubscribe,
@@ -151,14 +110,28 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 
             rawMessage: opt.rawMessage,
 
-            containingMaskPayload: createSubscriptionFromValueRef(postPayload),
+            hasMaskPayload: (() => {
+                const hasMaskPayload = new ValueRef(false)
+                function evaluate() {
+                    const msg =
+                        extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('') +
+                        '\n' +
+                        [...linksSubscribe.getCurrentValue()].join('\n')
+                    hasMaskPayload.value = create.hasPayloadLike(msg)
+                }
+                evaluate()
+                cancel.push(linksSubscribe.subscribe(evaluate))
+                cancel.push(opt.rawMessage.subscribe(evaluate))
+                return createSubscriptionFromValueRef(hasMaskPayload)
+            })(),
             postIVIdentifier: createSubscriptionFromValueRef(postIVIdentifier),
             publicShared: createSubscriptionFromValueRef(isPublicShared),
             isAuthorOfPost: createSubscriptionFromValueRef(isAuthorOfPost),
             version: createSubscriptionFromValueRef(version),
             decryptedReport(opts) {
-                if (opts.iv)
-                    postIVIdentifier.value = new PostIVIdentifier(author.author.getCurrentValue().network, opts.iv)
+                const currentAuthor = author.author.getCurrentValue()
+                if (opts.iv && currentAuthor)
+                    postIVIdentifier.value = new PostIVIdentifier(currentAuthor.network, opts.iv)
                 if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
                 if (opts.isAuthorOfPost) isAuthorOfPost.value = opts.isAuthorOfPost.val
                 if (opts.version) version.value = opts.version
@@ -169,7 +142,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
 export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
-    const postBy = new ValueRef<ProfileIdentifier>(ProfileIdentifier.unknown, ProfileIdentifier.equals)
+    const postBy = new ValueRef<ProfileIdentifier | null>(null)
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()

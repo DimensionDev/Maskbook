@@ -12,12 +12,14 @@ import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()(() => ({
     container: {
-        padding: '8px 16px 0px 16px',
+        padding: '8px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         rowGap: 12,
         flex: 1,
         backgroundColor: '#F7F9FA',
+        overflow: 'auto',
+        maxHeight: 448,
     },
     loading: {
         flex: 1,
@@ -82,17 +84,18 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
     },
     button: {
-        backgroundColor: '#ffffff',
-        padding: '11px 20px',
-        borderRadius: 99,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        padding: '16px 0',
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         color: '#07101B',
         position: 'fixed',
-        bottom: 32,
-        left: 32,
-        right: 32,
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        boxShadow: '0 0 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
     },
 }))
 

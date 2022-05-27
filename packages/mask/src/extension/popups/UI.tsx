@@ -17,8 +17,8 @@ import { PopupSnackbarProvider } from '@masknet/theme'
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
 }
-const Wallet = lazy(() => import('./pages/Wallet'))
-const Personas = lazy(() => import('./pages/Personas'))
+const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet'))
+const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas'))
 const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))

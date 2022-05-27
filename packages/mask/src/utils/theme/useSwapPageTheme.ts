@@ -26,6 +26,7 @@ export function useSwapPageTheme() {
                 Object.assign(theme.palette[color], colorSchema[color])
             }
         })
+        theme.palette.maskColor = colorSchema.maskColor
         theme.palette.divider = colorSchema.divider
         theme.palette.secondaryDivider = colorSchema.secondaryDivider
         theme.components = theme.components || {}
@@ -37,22 +38,6 @@ export function useSwapPageTheme() {
                 variant: 'contained',
             },
             variants: [
-                {
-                    props: { variant: 'sns' },
-                    style: {
-                        backgroundColor: theme.palette.primary.main,
-                        color: theme.palette.common.white,
-                        '&:hover': {
-                            backgroundColor: theme.palette.primary.dark,
-                            color: theme.palette.common.white,
-                        },
-                        '&.Mui-disabled': {
-                            opacity: 0.5,
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.common.white,
-                        },
-                    },
-                },
                 {
                     props: { color: 'error' },
                     style: {
@@ -205,7 +190,7 @@ export function useSwapPageTheme() {
         theme.components.MuiSnackbar = {
             styleOverrides: {
                 root: {
-                    filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                    filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                 },
             },
         }

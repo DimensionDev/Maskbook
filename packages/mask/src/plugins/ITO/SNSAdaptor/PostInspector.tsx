@@ -9,11 +9,12 @@ import {
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
+import { useClassicMaskSNSPluginTheme } from '../../../utils'
+import { ThemeProvider } from '@mui/material'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -43,6 +44,8 @@ export function PostInspector(props: PostInspectorProps) {
     } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
+        undefined,
+        _payload.chain_id,
     )
 
     const exchangeFungibleTokens = useMemo(
@@ -54,6 +57,7 @@ export function PostInspector(props: PostInspectorProps) {
                         type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
                             ? EthereumTokenType.Native
                             : EthereumTokenType.ERC20,
+                        chainId: _payload.chain_id,
                     } as Pick<FungibleTokenInitial, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],
@@ -63,7 +67,7 @@ export function PostInspector(props: PostInspectorProps) {
         value: exchangeTokensDetailed,
         loading: loadingExchangeTokensDetailed,
         retry: retryExchangeTokensDetailed,
-    } = useFungibleTokensDetailed(exchangeFungibleTokens)
+    } = useFungibleTokensDetailed(exchangeFungibleTokens, _payload.chain_id)
 
     const retry = useCallback(() => {
         retryPayload()
@@ -92,5 +96,8 @@ export function PostInspector(props: PostInspectorProps) {
             />
         )
     }
-    return <EthereumChainBoundary chainId={chain_id}>{renderITO()}</EthereumChainBoundary>
+
+    const theme = useClassicMaskSNSPluginTheme()
+
+    return <ThemeProvider theme={theme}>{renderITO()}</ThemeProvider>
 }

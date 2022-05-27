@@ -1,5 +1,5 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ITO_MetaKey_1, ITO_MetaKey_2, ITO_PluginID } from './constants'
 
@@ -28,6 +28,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Aurora,
                     ChainId.Avalanche,
                     ChainId.Fantom,
+                    ChainId.Harmony,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

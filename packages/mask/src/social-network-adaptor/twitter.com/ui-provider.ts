@@ -2,7 +2,6 @@ import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-netwo
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
 import { twitterShared } from './shared'
-import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
@@ -14,7 +13,6 @@ import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customizat
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
-import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
@@ -26,12 +24,10 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { unreachable } from '@dimensiondev/kit'
+import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
-import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
@@ -53,7 +49,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '600px !important',
+            width: '612px !important',
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
@@ -63,11 +59,16 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogTitle: {
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
-            padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
-            '& > h2': {
+            padding: 16,
+            position: 'relative',
+            background: theme.palette.maskColor.modelTitleBg,
+            borderBottom: 'none',
+            '& > p': {
+                fontSize: 18,
+                lineHeight: '22px',
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -82,7 +83,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
-            padding: 16,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -146,18 +146,15 @@ const twitterUI: SocialNetworkUI.Definition = {
         i18nOverwrite: i18NOverwriteTwitter,
     },
     init(signal) {
-        const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
-        InitAutonomousStateFriends(signal, friends, twitterShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, twitterShared.networkIdentifier)
-        return { friends, profiles }
+        return { profiles }
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileTabContent: injectProfileTabContentAtTwitter,
-        profileSlider: injectProfileSliderAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
@@ -178,7 +175,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
@@ -193,14 +189,13 @@ const twitterUI: SocialNetworkUI.Definition = {
             collectVerificationPost,
         },
         steganography: {
+            // ! Change this might be a breaking change !
             password() {
-                // ! Change this might be a breaking change !
-                return new ProfileIdentifier(
-                    'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
-                        unreachable('Cannot figure out password' as never),
-                ).toText()
+                const id =
+                    IdentityProviderTwitter.recognized.value.identifier?.userId ||
+                    globalUIState.profiles.value?.[0].identifier.userId
+                if (!id) throw new Error('Cannot figure out password')
+                return ProfileIdentifier.of(EnhanceableSite.Twitter, id).unwrap().toText()
             },
         },
     },

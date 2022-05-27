@@ -22,7 +22,7 @@ import { useAsyncRetry } from 'react-use'
 const useStyles = makeStyles()({
     root: {
         flex: 1,
-        padding: '24px 26px 0px',
+        padding: '24px 26px 0',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, 140px)',
         gridGap: '20px',
@@ -60,8 +60,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         loading: isQuerying,
         retry,
     } = useAsyncRetry(
-        async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
+        async () => Asset?.getNonFungibleAssets?.(account, { page, size: 20 }, undefined, selectedNetwork || undefined),
         [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
     )
     useEffect(() => {

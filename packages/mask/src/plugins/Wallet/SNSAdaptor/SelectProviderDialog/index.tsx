@@ -19,6 +19,8 @@ import { WalletMessages, WalletRPC } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
+import { useUpdateEffect } from 'react-use'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -35,23 +37,30 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const [underPluginID, setUnderPluginID] = useState<NetworkPluginID | undefined>()
     // #region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     // #endregion
-
+    const { open, closeDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+        (ev?) => {
+            if (!ev?.open) return
+            setUnderPluginID(ev?.pluginID)
+        },
+    )
     // #region native app
     useEffect(() => {
         if (!open) return
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
-    }, [open])
+    }, [open, underPluginID])
     // #endregion
 
     const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()
+    const showNetworks = underPluginID ? networks.filter((x) => x.networkSupporterPluginID === underPluginID) : networks
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
+    const [confirmedState, setConfirmedState] = useState(false)
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? NetworkPluginID.PLUGIN_EVM)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
@@ -60,19 +69,23 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
 
-    const onSubmit = useCallback(
-        async (result?: Web3Plugin.ConnectionResult) => {
-            if (result)
-                await WalletRPC.updateAccount(result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>)
+    const onSubmit = useCallback(async (result?: Web3Plugin.ConnectionResult) => {
+        if (result)
+            await WalletRPC.updateAccount(result as Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>)
+        await delay(1000)
+        setConfirmedState(true)
+    }, [])
 
-            if (undeterminedNetwork?.type === networkType) {
-                pluginIDSettings.value = undeterminedPluginID
-            }
-            closeDialog()
-            if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
-        },
-        [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard],
-    )
+    useUpdateEffect(() => {
+        if (!confirmedState) return
+
+        if (undeterminedNetwork?.type === networkType) {
+            pluginIDSettings.value = undeterminedPluginID
+        }
+        setConfirmedState(false)
+        closeDialog()
+        if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
+    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard, confirmedState])
 
     // not available for the native app
     if (hasNativeAPI) return null
@@ -81,7 +94,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={networks}
+                    networks={showNetworks}
                     providers={providers}
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}

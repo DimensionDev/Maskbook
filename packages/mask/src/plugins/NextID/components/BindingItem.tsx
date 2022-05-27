@@ -9,7 +9,7 @@ import { ExternalLink } from 'react-feather'
 import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
-import { TipButton } from './Tip'
+import { TipButton } from '../../../plugins/Tips/components'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,8 +21,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     copy: {
+        color: theme.palette.text.primary,
         fontSize: 16,
-        stroke: theme.palette.text.primary,
         cursor: 'pointer',
     },
     address: {

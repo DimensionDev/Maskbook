@@ -1,39 +1,35 @@
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useEffect, useState, useLayoutEffect, useRef } from 'react'
-import { flatten, uniq } from 'lodash-unified'
-import formatDateTime from 'date-fns/format'
-import { SnackbarProvider, makeStyles } from '@masknet/theme'
-import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog, FormattedBalance } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { FormattedBalance, InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
+import { makeStyles, SnackbarProvider } from '@masknet/theme'
 import {
-    formatBalance,
-    useERC20TokenDetailed,
-    TransactionStateType,
-    resolveTransactionLinkOnExplorer,
-    useFungibleTokensDetailed,
-    EthereumTokenType,
-    isSameAddress,
-    useITOConstants,
     ChainId,
-    useChainId,
+    EthereumTokenType,
+    formatBalance,
+    isSameAddress,
     useAccount,
+    useChainId,
+    useERC20TokenDetailed,
+    useFungibleTokensDetailed,
+    useITOConstants,
 } from '@masknet/web3-shared-evm'
+import { CircularProgress, DialogContent, List, ListItem, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
+import formatDateTime from 'date-fns/format'
+import { flatten, uniq } from 'lodash-unified'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { Flags } from '../../../../shared'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
-import { Flags } from '../../../../shared'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import type { SwappedTokenType } from '../types'
+import { useClaimAll } from './hooks/useClaimAll'
+import { useClaimCallback } from './hooks/useClaimCallback'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
-import { useClaimAll } from './hooks/useClaimAll'
-import { WalletMessages } from '../../Wallet/messages'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import type { SwappedTokenType } from '../types'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -214,6 +210,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             margin: theme.spacing(3, 'auto'),
         },
         claimAllButton: {
+            height: 48,
+            borderRadius: 999,
             [smallQuery]: {
                 fontSize: 14,
             },
@@ -260,7 +258,19 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
+
+    const openShareTxDialog = useOpenShareTxDialog()
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash !== 'string') return
+        openShareTxDialog({
+            hash,
+            onShare() {
+                retry()
+            },
+        })
+    }, [claimCallback, openShareTxDialog, retry])
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
         shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
@@ -269,52 +279,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     useLayoutEffect(() => {
         setTimeout(() => setInitLoading(false), 1000)
     }, [])
-
-    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            if (claimState.type === TransactionStateType.CONFIRMED) {
-                resetClaimCallback()
-                retry()
-            }
-        },
-    )
-
-    useEffect(() => {
-        resetClaimCallback()
-    }, [chainId])
-
-    useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
-
-        if (claimState.type === TransactionStateType.FAILED) {
-            setClaimTransactionDialog({ open: false })
-            return
-        }
-
-        if (claimState.type === TransactionStateType.HASH) {
-            const { hash } = claimState
-            setTimeout(() => {
-                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
-            }, 2000)
-            return
-        }
-        const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
-        const summary = claimableTokens
-            ? 'Claim ' +
-              new Intl.ListFormat('en').format(
-                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-              )
-            : ''
-        setClaimTransactionDialog({
-            open: true,
-            state: claimState,
-            title: t('plugin_ito_claim_all_title'),
-            summary,
-        })
-    }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
     return (
         <SnackbarProvider
@@ -362,6 +326,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    ActionButtonPromiseProps={{
+                                        size: 'large',
+                                    }}
                                     disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
@@ -377,19 +344,10 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             <ActionButton
                                                 className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
-                                                loading={[
-                                                    TransactionStateType.HASH,
-                                                    TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                ].includes(claimState.type)}
-                                                disabled={
-                                                    claimablePids!.length === 0 ||
-                                                    [
-                                                        TransactionStateType.HASH,
-                                                        TransactionStateType.WAIT_FOR_CONFIRMING,
-                                                    ].includes(claimState.type)
-                                                }
+                                                loading={isClaiming}
+                                                disabled={claimablePids!.length === 0 || isClaiming}
                                                 size="small"
-                                                onClick={claimCallback}>
+                                                onClick={claim}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>
                                         </EthereumWalletConnectedBoundary>
@@ -435,9 +393,9 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
-
-    return token ? (
+    const { value: _token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
+    const token = _token ?? swappedToken.token
+    return (
         <ListItem key={i} className={classes.tokenCard}>
             <div
                 className={classNames(
@@ -488,5 +446,5 @@ function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
                 />
             </Typography>
         </ListItem>
-    ) : null
+    )
 }

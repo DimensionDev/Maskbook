@@ -15,8 +15,8 @@ function getScriptURL(content: string, name: string) {
     return url
 }
 
-function getScriptContentMatched(content: string, regexp: RegExp) {
-    const [, matched] = content.match(regexp) ?? []
+function getScriptContentMatched(content: string, pattern: RegExp) {
+    const [, matched] = content.match(pattern) ?? []
     return matched
 }
 
@@ -30,6 +30,22 @@ function getCSRFToken() {
 async function getScriptContent(url: string) {
     const response = await fetch(url)
     return response.text()
+}
+
+async function getTokens() {
+    const swContent = await getScriptContent('https://twitter.com/sw.js')
+    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
+    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
+
+    const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
+    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
+    const csrfToken = getCSRFToken()
+
+    return {
+        bearerToken,
+        queryToken,
+        csrfToken,
+    }
 }
 
 async function getUserNftContainer(
@@ -69,26 +85,38 @@ async function getUserNftContainer(
     return response.json()
 }
 
-async function getTokens() {
-    const swContent = await getScriptContent('https://twitter.com/sw.js')
-    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
-    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
-
-    const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
-    const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
-    const csrfToken = getCSRFToken()
-
-    return {
-        bearerToken,
-        queryToken,
-        csrfToken,
-    }
+async function getSettings(bearerToken: string, csrfToken: string): Promise<TwitterBaseAPI.Settings> {
+    const response = await fetch(
+        urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
+            include_mention_filter: false,
+            include_nsfw_user_flag: false,
+            include_nsfw_admin_flag: false,
+            include_ranked_timeline: false,
+            include_alt_text_compose: false,
+            include_country_code: false,
+            include_ext_dm_nsfw_media_filter: false,
+        }),
+        {
+            headers: {
+                authorization: `Bearer ${bearerToken}`,
+                'x-csrf-token': csrfToken,
+                'content-type': 'application/json',
+                'x-twitter-auth-type': 'OAuth2Session',
+                'x-twitter-active-user': 'yes',
+                referer: 'https://twitter.com/home',
+            },
+        },
+    )
+    return response.json()
 }
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
-    async getUserNftContainer(
-        screenName: string,
-    ): Promise<{ address: string; token_id: string; type_name: string } | undefined> {
+    async getSettings() {
+        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        if (!bearerToken || !csrfToken) return
+        return getSettings(bearerToken, csrfToken)
+    }
+    async getUserNftContainer(screenName: string) {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         if (!bearerToken || !queryToken || !csrfToken) return
         const result = await getUserNftContainer(screenName, queryToken, bearerToken, csrfToken)
@@ -100,7 +128,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async uploadUserAvatar(image: File | Blob) {
+    async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
@@ -123,21 +151,43 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
 
         // FINALIZE
         const finalizeURL = `${UPLOAD_AVATAR_URL}?command=FINALIZE&media_id=${mediaId}`
-        const data = await request<{
-            media_id: number
-            media_id_string: string
-            size: number
-            image: {
-                image_type: string
-                w: number
-                h: number
-            }
-        }>(finalizeURL, {
+        return request<TwitterBaseAPI.TwitterResult>(finalizeURL, {
             method: 'POST',
             credentials: 'include',
         })
+    }
+    async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
+        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        const headers = {
+            authorization: `Bearer ${bearerToken}`,
+            'x-csrf-token': csrfToken,
+            'content-type': 'application/json',
+            'x-twitter-auth-type': 'OAuth2Session',
+            'x-twitter-active-user': 'yes',
+            referer: `https://twitter.com/${screenName}`,
+        }
+        const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
+        if (!bearerToken || !queryToken || !csrfToken) return
+        const response = await fetch(
+            urlcat(updateProfileImageURL, {
+                media_id: media_id_str,
+                skip_status: 1,
+                return_user: true,
+            }),
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers,
+            },
+        )
 
-        return data
+        const updateInfo = await response.json()
+        return {
+            imageUrl: updateInfo.profile_image_url_https,
+            mediaId: updateInfo.id_str,
+            nickname: updateInfo.name,
+            userId: updateInfo.screen_name,
+        }
     }
 }
 

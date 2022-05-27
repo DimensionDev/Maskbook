@@ -112,7 +112,6 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-
     return (
         <>
             <Box className={classes.root}>

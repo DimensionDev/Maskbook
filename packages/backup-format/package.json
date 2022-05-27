@@ -1,6 +1,7 @@
 {
   "name": "@masknet/backup-format",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
@@ -8,9 +9,13 @@
     }
   },
   "types": "./dist/index.d.ts",
-  "type": "module",
   "dependencies": {
     "@masknet/shared-base": "workspace:*",
-    "@msgpack/msgpack": "^2.7.2"
+    "@msgpack/msgpack": "^2.7.2",
+    "elliptic": "^6.5.3",
+    "pvtsutils": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.14"
   }
 }

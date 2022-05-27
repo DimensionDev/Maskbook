@@ -2,7 +2,8 @@ import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { createRenderWithMetadata, createTypedMessageMetadataReader, type TypedMessage } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'
@@ -21,19 +22,19 @@ export function ITO_MetadataReader(meta: TypedMessage['meta']): Result<JSON_Payl
  * The greatest common divisor
  */
 export function gcd(a: BigNumber, b: BigNumber) {
-    let a_ = a.abs()
-    let b_ = b.abs()
-    if (b_.isGreaterThan(a_)) {
-        const temp = b_
-        b_ = a_
-        a_ = temp
+    a = a.abs()
+    b = b.abs()
+    if (b.isGreaterThan(a)) {
+        const temp = b
+        b = a
+        a = temp
     }
     // eslint-disable-next-line no-constant-condition
     while (true) {
-        if (b_.isZero()) return a_
-        a_ = a_.mod(b_)
-        if (a_.isZero()) return b_
-        b_ = b_.mod(a_)
+        if (b.isZero()) return a
+        a = a.mod(b)
+        if (a.isZero()) return b
+        b = b.mod(a)
     }
 }
 

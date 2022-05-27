@@ -9,6 +9,9 @@ import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
+import { cloneDeep, merge } from 'lodash-unified'
+import twitterColorSchema from '../../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
+import produce, { setAutoFreeze } from 'immer'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))
 const defaultUseTheme = (t: Theme) => t
@@ -21,8 +24,28 @@ export function useClassicMaskSNSTheme() {
     const palette = useSubscription(provider)
     const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
+    setAutoFreeze(false)
+    const maskTheme = produce(baseTheme, (theme) => {
+        const colorSchema = twitterColorSchema[theme.palette.mode]
+        theme.palette.maskColor = colorSchema.maskColor
+    })
     // TODO: support RTL?
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
-    const theme = unstable_createMuiStrictModeTheme(baseTheme, localization)
+    const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
     return usePostTheme(theme)
+}
+
+export function useClassicMaskSNSPluginTheme() {
+    const theme = useClassicMaskSNSTheme()
+    return unstable_createMuiStrictModeTheme(
+        merge(cloneDeep(theme), {
+            components: {
+                MuiButton: {
+                    defaultProps: {
+                        variant: 'roundedContained',
+                    },
+                },
+            },
+        }),
+    )
 }

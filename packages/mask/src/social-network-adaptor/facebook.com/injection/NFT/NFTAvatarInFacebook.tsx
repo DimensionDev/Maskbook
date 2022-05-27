@@ -63,7 +63,7 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.FACEBOOK)
+    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
 
@@ -104,6 +104,7 @@ function NFTAvatarInFacebook() {
         const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
         if (!wallet) return
+        if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
                 const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
@@ -165,7 +166,7 @@ function NFTAvatarInFacebook() {
         const node = searchFacebookAvatarSelector().closest<HTMLDivElement>(3).evaluate()
         if (!node) return
         if (showAvatar) {
-            node.setAttribute('style', 'padding: 0px')
+            node.setAttribute('style', 'padding: 0')
         } else {
             node.removeAttribute('style')
         }

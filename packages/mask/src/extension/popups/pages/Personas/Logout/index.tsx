@@ -15,7 +15,7 @@ import { useTitle } from '../../../hook/useTitle'
 const useStyles = makeStyles()((theme) => ({
     content: {
         flex: 1,
-        padding: '30px 16px 0px 16px',
+        padding: '30px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         linHeight: '18px',
     },
     controller: {
-        padding: '0px 16px 16px 16px',
+        padding: '0 16px 16px 16px',
         display: 'grid',
         gridTemplateColumns: 'repeat(2,1fr)',
         gap: 20,
@@ -148,7 +148,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                     <div>
                         <Typography className={classes.name}>{selectedPersona?.nickname}</Typography>
                         <Typography className={classes.identifier}>
-                            {formatPersonaFingerprint(selectedPersona?.identifier.compressedPoint ?? '', 10)}
+                            {formatPersonaFingerprint(selectedPersona?.identifier.rawPublicKey ?? '', 10)}
                         </Typography>
                     </div>
                 </div>

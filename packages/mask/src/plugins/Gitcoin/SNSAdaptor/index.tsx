@@ -1,19 +1,15 @@
-import { useMemo } from 'react'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { usePostInfoDetails, Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { parseURL } from '@masknet/shared-base'
 import { GitcoinIcon } from '@masknet/icons'
-import { PreviewCard } from './PreviewCard'
+import { Plugin, PluginId, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
-import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
+import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants'
 import { DonateDialog } from './DonateDialog'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { PreviewCard } from './PreviewCard'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
-const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -42,25 +38,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_gitcoin_description" />,
-            name: <Trans i18nKey="plugin_gitcoin_name" />,
+            description: <Trans ns={PluginId.Gitcoin} i18nKey="description" />,
+            name: <Trans ns={PluginId.Gitcoin} i18nKey="name" />,
             icon: <GitcoinIcon />,
             marketListSortingPriority: 9,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',
+            tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
         },
     ],
 }
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     usePluginWrapper(true)
-    return (
-        <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
-            <PreviewCard id={id} />
-        </EthereumChainBoundary>
-    )
+    return <PreviewCard id={id} />
 }
 
 export default sns

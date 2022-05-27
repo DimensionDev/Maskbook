@@ -16,12 +16,12 @@ import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../p
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
         },
         content: {
@@ -77,7 +77,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { asset, events, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {
         if (!asset.value || asset.error) return
@@ -135,7 +135,7 @@ export function Collectible(props: CollectibleProps) {
                             target="_blank"
                             rel="noopener noreferrer">
                             <Avatar
-                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
+                                src={assetSource?.owner[0]?.ownerAvatar ?? assetSource?.creator?.avatarPath ?? ''}
                             />
                         </Link>
                     }
@@ -224,7 +224,7 @@ export function Collectible(props: CollectibleProps) {
                                         <Trans
                                             i18nKey="plugin_cryptoartai_sold_description"
                                             values={{
-                                                soldPrice: soldPrice,
+                                                soldPrice,
                                                 symbol: ' \u039E',
                                                 soldNum:
                                                     assetSource?.soldNum === assetSource?.totalAvailable
@@ -265,7 +265,11 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <ActionBar />
+            <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
+                <EthereumChainBoundary chainId={expectChainId ?? chainId} renderInTimeline>
+                    <ActionBar />
+                </EthereumChainBoundary>
+            </Box>
         </>
     )
 }

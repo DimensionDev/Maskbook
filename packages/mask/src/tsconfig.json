@@ -31,6 +31,7 @@
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/Flow" },
+    { "path": "../../plugins/FileService" },
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },

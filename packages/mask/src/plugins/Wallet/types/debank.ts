@@ -32,8 +32,7 @@ export interface TokenItem {
 
 export interface HistoryItem {
     cate_id: keyof HistoryResponse['data']['cate_dict']
-    // TODO:
-    // implement debt_liquidated
+    // TODO: implement debt_liquidated
     debt_liquidated: null
     id: string
     other_addr: string

@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -17,33 +17,44 @@ import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
+import { isPopupPage } from '@masknet/shared-base'
+import { LoadingPlaceholder } from '../../../../extension/popups/components/LoadingPlaceholder'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2.5),
+    },
+    popupDialog: {
+        width: 200,
+        margin: 'auto',
+    },
+    popupDialogPaper: {
+        backgroundColor: 'transparent',
+    },
+    popupDialogContent: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
 }))
 
 export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
-
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
     // #region remote controlled dialog
-    const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.connectWalletDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setProviderType(ev.providerType)
-            setNetworkType(ev.networkType)
-        },
-    )
-    const onClose = useCallback(() => {
-        setConnectWalletDialog({ open: false })
-    }, [])
+    const {
+        open,
+        closeDialog,
+        setDialog: setConnectWalletDialog,
+    } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
+        if (!ev.open) return
+        setProviderType(ev.providerType)
+        setNetworkType(ev.networkType)
+    })
     // #endregion
 
     // #region walletconnect
@@ -117,10 +128,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // it will always add a new RPC provider even if the network exists
                 if (providerType !== ProviderType.Coin98) {
                     await Promise.race([
-                        (async () => {
-                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                        delay(30 /* seconds */ * 1000 /* milliseconds */).then(() => {
                             throw new Error('Timeout!')
-                        })(),
+                        }),
                         networkType === NetworkType.Ethereum
                             ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
                             : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
@@ -154,10 +164,40 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         return true
     }, [open, connectTo, setConnectWalletDialog])
 
+    const { showSnackbar } = usePopupCustomSnackbar()
+    useEffect(() => {
+        if (!isPopupPage() || !connection.error) return
+        setConnectWalletDialog({
+            open: false,
+        })
+        showSnackbar(connection.error.message, {
+            variant: 'error',
+        })
+    }, [connection.error, showSnackbar])
+
     if (!providerType) return null
 
+    if (isPopupPage()) {
+        return (
+            <InjectedDialog
+                className={classes.popupDialog}
+                open={open}
+                hideBackdrop
+                disableBackdropClick
+                PaperProps={{
+                    className: classes.popupDialogPaper,
+                    elevation: 0,
+                }}
+                BackdropProps={{}}>
+                <DialogContent className={classes.popupDialogContent}>
+                    <LoadingPlaceholder title={t('connecting')} titleColor="#ffffff" iconColor="#ffffff" />
+                </DialogContent>
+            </InjectedDialog>
+        )
+    }
+
     return (
-        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={onClose}>
+        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>

@@ -33,7 +33,7 @@ const Accounts = memo(() => {
                 ...profile,
                 platform: target?.platform,
                 identity: target?.identity,
-                is_valid: SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(profile.identifier.network)
+                is_valid: SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(profile.identifier.network as EnhanceableSite)
                     ? target?.is_valid
                     : true,
             }
@@ -42,17 +42,15 @@ const Accounts = memo(() => {
 
     const definedSocialNetworks = compact(
         getEnumAsArray(EnhanceableSite).map((x) => {
-            if (x.value === EnhanceableSite.Localhost) return null
+            if (x.value === EnhanceableSite.Localhost || x.value === EnhanceableSite.OpenSea) return null
             return x.value
         }),
     )
 
-    console.log(definedSocialNetworks)
-
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(currentPersona.identifier, networkIdentifier, 'local')
+                await Services.SocialNetwork.connectSite(currentPersona.identifier, networkIdentifier, 'local')
             }
         },
         [currentPersona],

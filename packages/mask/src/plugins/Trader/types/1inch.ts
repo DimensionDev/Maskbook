@@ -1,6 +1,6 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
-// Learn more from https://docs.1inch.io/api/quote-swap#swap
+// Learn more from https://docs.1inch.io/docs/aggregation-protocol/api/swap-params
 export interface SwapQuoteOneResponse {
     fromToken: TokenOneInch
     toToken: TokenOneInch
@@ -37,7 +37,7 @@ export interface OneInchProtocols {
     fromTokenAddress: string
     toTokenAddress: string
 }
-// more information https://docs.1inch.io/api/quote-swap#description-of-query-parameters-1
+// more information https://docs.1inch.io/docs/aggregation-protocol/api/quote-params
 export interface SwapQuoteOneRequest {
     isNativeSellToken: boolean
     fromTokenAddress: FungibleTokenDetailed

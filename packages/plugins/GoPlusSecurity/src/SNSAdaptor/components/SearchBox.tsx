@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         fontWeight: 400,
         borderColor: theme.palette.divider,
+        color: theme.palette.text.primary,
     },
     searchButton: {
         borderRadius: 8,
@@ -94,8 +95,8 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         placeholder={t.search_input_placeholder()}
                         autoFocus
                         fullWidth
-                        onKeyPress={(e: React.KeyboardEvent) => {
-                            if (e.key !== 'Enter') return
+                        onKeyPress={(event) => {
+                            if (event.key !== 'Enter') return
                             onSearch(selectedChain?.id ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}

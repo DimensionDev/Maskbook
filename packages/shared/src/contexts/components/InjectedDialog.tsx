@@ -10,6 +10,7 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
@@ -25,18 +26,34 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
-        padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        whiteSpace: 'nowrap',
+        display: 'flex',
+        gridTemplateColumns: '50px auto 50px',
+    },
+    dialogTitleEndingContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
     },
     dialogTitleTypography: {
-        marginLeft: 6,
+        flex: 1,
+        textAlign: 'center',
         verticalAlign: 'middle',
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 700,
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
+        padding: 0,
+        width: 24,
+        height: 24,
+        '& > svg': {
+            fontSize: 24,
+        },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
@@ -44,6 +61,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
+    | 'dialogTitleEndingContent'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -70,6 +88,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
+        dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -128,19 +147,25 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             }}>
                             <IconButton
                                 size="large"
+                                disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>
                                 <DialogDismissIcon
-                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
+                                    style={
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                            ? 'back'
+                                            : titleBarIconStyle
+                                    }
                                 />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            {titleTail}
+                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
                         </DialogTitle>
                     ) : null}
+
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
                     <span />

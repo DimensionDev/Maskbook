@@ -1,15 +1,8 @@
 import { ExternalLink } from 'react-feather'
-import classNames from 'classnames'
-import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, NetworkType, useAccount, useProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    useWeb3State,
-    useNetworkDescriptor,
-    useProviderDescriptor,
-    useReverseAddress,
-    Web3Plugin,
-} from '@masknet/plugin-infra/web3'
+import { useWeb3State, useNetworkDescriptor, useProviderDescriptor, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 
@@ -17,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
     currentAccount: {
         padding: '12px 8px 12px 12px',
         width: '100%',
-        background: '#fff',
+        background: theme.palette.background.input,
         boxSizing: 'border-box',
         marginBottom: theme.spacing(2),
         display: 'flex',
@@ -39,14 +32,19 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    connectButton: {
+        fontSize: 12,
+        marginLeft: theme.spacing(1),
+        padding: theme.spacing(1, 2),
+    },
     actionButton: {
         boxSizing: 'border-box',
         fontSize: 12,
         lineHeight: '16px',
         padding: '8px 12px',
         fontWeight: 'bold',
-        background: 'rgba(15, 20, 25, 1)',
-        color: '#fff',
+        background: theme.palette.text.primary,
+        color: theme.palette.background.paper,
         borderRadius: '6px',
         minWidth: 'unset',
         width: '69px',
@@ -91,18 +89,21 @@ interface CurrentWalletBox {
     wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
     walletName?: string
     changeWallet: () => void
+    notInPop?: boolean
 }
 export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { wallet, walletName } = props
-    const providerDescriptor = useProviderDescriptor(wallet.providerType)
+    const { wallet, walletName, notInPop, changeWallet } = props
+    const providerType = useProviderType()
+    const providerDescriptor = useProviderDescriptor(wallet.providerType ?? providerType)
     const networkDescriptor = useNetworkDescriptor(wallet.networkType)
+    const frontAccount = useAccount()
+    const account = notInPop ? frontAccount : wallet.account
     const { Utils } = useWeb3State() ?? {}
-    const { value: domain } = useReverseAddress(wallet.account)
 
-    return (
-        <section className={classNames(classes.currentAccount)}>
+    return account ? (
+        <section className={classes.currentAccount}>
             <WalletIcon
                 size={30}
                 badgeSize={12}
@@ -111,26 +112,11 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {wallet.providerType !== ProviderType.MaskWallet ? (
-                        <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
-                                : providerDescriptor?.name}
-                        </Typography>
-                    ) : (
-                        <>
-                            <Typography className={classes.accountName}>
-                                {walletName ?? providerDescriptor?.name}
-                            </Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
-                            ) : null}
-                        </>
-                    )}
+                    <Typography className={classes.accountName}>{walletName}</Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2" title={wallet.account}>
-                        <FormattedAddress address={wallet.account} size={4} formatter={Utils?.formatAddress} />
+                    <Typography className={classes.address} variant="body2" title={account}>
+                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
 
                     <Link
@@ -143,12 +129,19 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                     </Link>
                 </div>
             </div>
+            <Button className={classes.actionButton} variant="contained" size="small" onClick={changeWallet}>
+                {t('wallet_status_button_change')}
+            </Button>
+        </section>
+    ) : (
+        <section className={classes.connectButtonWrapper}>
             <Button
-                className={classNames(classes.actionButton)}
+                className={classes.connectButton}
+                color="primary"
                 variant="contained"
                 size="small"
-                onClick={props.changeWallet}>
-                {t('wallet_status_button_change')}
+                onClick={changeWallet}>
+                {t('plugin_wallet_on_connect')}
             </Button>
         </section>
     )

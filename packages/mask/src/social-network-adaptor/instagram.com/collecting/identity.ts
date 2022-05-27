@@ -20,7 +20,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: new ProfileIdentifier(instagramBase.networkIdentifier, handle),
+            identifier: ProfileIdentifier.of(instagramBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
@@ -28,21 +28,20 @@ function resolveCurrentVisitingIdentityInner(
         }
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src', 'content'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src', 'content'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()

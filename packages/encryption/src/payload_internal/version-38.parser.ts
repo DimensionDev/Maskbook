@@ -17,7 +17,6 @@ import { encodeText } from '@dimensiondev/kit'
 import {
     andThenAsync,
     CheckedError,
-    Identifier,
     OptionalResult,
     ProfileIdentifier,
     decompressSecp256k1Point,
@@ -66,8 +65,9 @@ export async function parse38(payload: string): PayloadParserResult {
     if (authorUserID.err) {
         normalized.author = authorUserID.mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     } else if (authorUserID.val.some) {
-        normalized.author = Identifier.fromString(`person:${authorUserID.val.val}`, ProfileIdentifier)
+        normalized.author = ProfileIdentifier.from(`person:${authorUserID.val.val}`)
             .map((x) => Some(x))
+            .toResult(undefined)
             .mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     }
     if (authorPublicKey) {
@@ -126,10 +126,10 @@ async function decodePublicSharedAESKey(
 }
 
 async function decodeECDHPublicKey(compressedPublic: string): Promise<OptionalResult<EC_Key, CryptoException>> {
-    const key = decodeUint8ArrayCrypto(compressedPublic).andThen((val) =>
-        Result.wrap(() => decompressSecp256k1Point(val)).mapErr(
-            (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
-        ),
+    const key = await andThenAsync(decodeUint8ArrayCrypto(compressedPublic), async (val) =>
+        (
+            await Result.wrapAsync(() => decompressSecp256k1Point(val))
+        ).mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e)),
     )
 
     if (key.err) return key

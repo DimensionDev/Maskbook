@@ -3,7 +3,7 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { NextIDAction, PopupRoutes } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDAction, PopupRoutes } from '@masknet/shared-base'
 import { AccountDetailUI } from './UI'
 import { useAsyncFn } from 'react-use'
 import Service from '../../../../service'
@@ -25,7 +25,7 @@ const AccountDetail = memo(() => {
             if (!selectedAccount?.identifier) return
 
             if (
-                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network) &&
+                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite) &&
                 selectedAccount.is_valid
             ) {
                 setOpen(true)
@@ -45,10 +45,11 @@ const AccountDetail = memo(() => {
 
     const [confirmState, onConfirmReleaseBind] = useAsyncFn(async () => {
         try {
-            if (!currentPersona?.publicHexKey || !selectedAccount?.identity || !selectedAccount?.platform) return
+            if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
+                return
 
             const result = await NextIDProof.createPersonaPayload(
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Delete,
                 selectedAccount.identity,
                 selectedAccount.platform,
@@ -62,7 +63,7 @@ const AccountDetail = memo(() => {
 
             await Service.Identity.detachProfileWithNextID(
                 result.uuid,
-                currentPersona.publicHexKey,
+                currentPersona.identifier.publicKeyAsHex,
                 selectedAccount.platform,
                 selectedAccount.identity,
                 result.createdAt,
@@ -83,7 +84,7 @@ const AccountDetail = memo(() => {
 
     const [, onVerify] = useAsyncFn(async () => {
         if (!selectedAccount?.identifier || !currentPersona?.identifier) return
-        await Service.SocialNetwork.connectSocialNetwork(
+        await Service.SocialNetwork.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,
             'nextID',

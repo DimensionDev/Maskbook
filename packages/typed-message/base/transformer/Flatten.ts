@@ -20,6 +20,7 @@ export function FlattenTypedMessage(message: TypedMessage, context: Transformati
             .map((x) => FlattenTypedMessage(x, context))
             .flatMap((x) => (isTypedMessageTuple(x) ? (x.meta ? x : x.items) : x))
             .filter((x) => !isTypedMessageEmpty(x))
+            // eslint-disable-next-line unicorn/no-array-reduce
             .reduce<TypedMessage[]>((result, current) => {
                 const lastItem = result.at(-1)
                 if (!lastItem || lastItem.meta || current.meta) return result.concat(current)

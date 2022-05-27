@@ -66,7 +66,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
         disabledNonCurrentNetwork = false,
         size = 30,
     }) => {
-        const { classes } = useStyles({ size: size })
+        const { classes } = useStyles({ size })
 
         return (
             <Stack direction="row">

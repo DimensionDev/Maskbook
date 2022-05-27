@@ -3,17 +3,15 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
-  },
-  "devDependencies": {
   },
   "dependencies": {
     "@emotion/server": "^11.4.0"

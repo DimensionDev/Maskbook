@@ -1,6 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, EMPTY_LIST, Identifier, PersonaIdentifier, PersonaInformation } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useAsync, useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
@@ -15,22 +15,18 @@ function usePersonaContext() {
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(
-        async () => Services.Identity.queryOwnedPersonaInformation(),
+        async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentPersonaIdentifier],
     )
     const { value: avatar } = useAsync(async () => {
-        return Services.Identity.getPersonaAvatar(
-            Identifier.fromString<PersonaIdentifier>(currentIdentifier, ECKeyIdentifier).unwrap(),
-        )
+        return Services.Identity.getPersonaAvatar(ECKeyIdentifier.from(currentIdentifier).unwrap())
     }, [currentIdentifier])
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
 
-    const currentPersona = personas?.find((x) =>
-        x.identifier.equals(
-            Identifier.fromString(currentIdentifier, ECKeyIdentifier).unwrapOr(head(personas)?.identifier),
-        ),
+    const currentPersona = personas?.find(
+        (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
 
     const {
@@ -39,9 +35,9 @@ function usePersonaContext() {
         loading: fetchProofsLoading,
     } = useAsyncRetry(async () => {
         try {
-            if (!currentPersona?.publicHexKey) return EMPTY_LIST
+            if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
 
-            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
+            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
 
             return binding?.proofs ?? EMPTY_LIST
         } catch {

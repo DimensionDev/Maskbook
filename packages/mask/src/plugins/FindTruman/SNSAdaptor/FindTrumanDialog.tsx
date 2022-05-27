@@ -15,8 +15,8 @@ import IntroductionPanel from './IntroductionPanel'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
-        paddingBottom: '0px !important',
-        paddingTop: '0px !important',
+        paddingBottom: '0 !important',
+        paddingTop: '0 !important',
     },
     walletStatusBox: {
         width: 535,

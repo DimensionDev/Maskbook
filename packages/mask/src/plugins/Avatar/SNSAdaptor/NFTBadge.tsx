@@ -34,6 +34,7 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
         avatar.address,
         avatar.tokenId,
+        avatar.chainId,
     )
 
     const { amount, symbol, name, slug } = value
@@ -45,7 +46,10 @@ export function NFTBadge(props: NFTBadgeProps) {
                 e.preventDefault()
                 openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
             }}>
-            <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
+            <Link
+                href={resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId)}
+                target="_blank"
+                rel="noopener noreferrer">
                 <NFTAvatarRing
                     id="NFTAvatarRing"
                     width={size}

@@ -117,12 +117,7 @@ export const ProfileList = memo(() => {
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(
-                    currentPersona.identifier,
-                    networkIdentifier,
-                    type,
-                    profile,
-                )
+                await Services.SocialNetwork.connectSite(currentPersona.identifier, networkIdentifier, type, profile)
             }
         },
         [currentPersona],
@@ -150,8 +145,8 @@ export const ProfileList = memo(() => {
 
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
         if (!currentPersona) return []
-        if (!currentPersona.publicHexKey) return currentPersona.linkedProfiles
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicHexKey)
+        if (!currentPersona.identifier.publicKeyAsHex) return currentPersona.linkedProfiles
+        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
         if (!response) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
@@ -174,7 +169,7 @@ export const ProfileList = memo(() => {
         // fetch signature payload
         try {
             if (!currentPersona) return
-            const publicHexKey = currentPersona.publicHexKey
+            const publicHexKey = currentPersona.identifier.publicKeyAsHex
 
             if (!publicHexKey || !unbind || !unbind.identity || !unbind.platform) return
             const result = await NextIDProof.createPersonaPayload(

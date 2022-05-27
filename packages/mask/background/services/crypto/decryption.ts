@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     decrypt,
     parsePayload,
@@ -19,7 +19,6 @@ import {
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
     EC_Public_JsonWebKey,
-    IdentifierMap,
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -62,7 +61,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     if (encoded.type === 'text') {
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
     } else {
-        if (!context.authorHint || context.authorHint.isUnknown) {
+        if (!context.authorHint) {
             return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
@@ -76,15 +75,12 @@ export async function* decryptionWithSocialNetworkDecoding(
     yield* decryption(decoded, context)
 }
 
-const inMemoryCache = new IdentifierMap<PostIVIdentifier, TypedMessage>(new Map(), PostIVIdentifier)
+const inMemoryCache = new Map<PostIVIdentifier, TypedMessage>()
 async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
-    const { currentSocialNetwork, postURL } = context
-    let { currentProfile, authorHint } = context
-    if (currentProfile?.isUnknown) currentProfile = null
-    if (authorHint?.isUnknown) authorHint = null
+    const { currentSocialNetwork, postURL, currentProfile, authorHint } = context
 
     // #region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
@@ -117,10 +113,9 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     // #region store author public key into the database
     try {
         const id = parse.unwrap().author.unwrap().unwrap()
-        const cacheKey = id.toText()
-        if (!hasStoredAuthorPublicKey.has(cacheKey)) {
+        if (!hasStoredAuthorPublicKey.has(id)) {
             storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap()).catch(noop)
-            hasStoredAuthorPublicKey.add(cacheKey)
+            hasStoredAuthorPublicKey.add(id)
         }
     } catch {}
     // #endregion
@@ -138,16 +133,13 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return savePostKeyToDB(id, key, {
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
-                    recipients: new IdentifierMap(new Map()),
-                    postBy:
-                        authorHint ||
-                        parse.safeUnwrap().author.unwrapOr(null)?.unwrapOr(null) ||
-                        ProfileIdentifier.unknown,
+                    recipients: new Map(),
+                    postBy: authorHint || parse.safeUnwrap().author.unwrapOr(undefined)?.unwrapOr(undefined),
                     url: postURL,
                 })
             },
-            hasLocalKeyOf: hasLocalKeyOf,
-            decryptByLocalKey: decryptByLocalKey,
+            hasLocalKeyOf,
+            decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
@@ -166,7 +158,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -38,
                     iv,
                     author,
-                    getNetworkHint(context.currentSocialNetwork),
+                    context.currentSocialNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -178,7 +170,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -39,
                     iv,
                     author,
-                    getNetworkHint(context.currentSocialNetwork),
+                    context.currentSocialNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -193,16 +185,6 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     return null
 }
 
-function getNetworkHint(x: SocialNetworkEnum) {
-    if (x === SocialNetworkEnum.Facebook) return ''
-    if (x === SocialNetworkEnum.Twitter) return 'twitter-'
-    if (x === SocialNetworkEnum.Minds) return 'minds-'
-    if (x === SocialNetworkEnum.Instagram) return 'instagram-'
-    if (x === SocialNetworkEnum.Unknown)
-        throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
-    unreachable(x)
-}
-
 /** @internal */
 export async function getPostKeyCache(id: PostIVIdentifier) {
     const post = await queryPostDB(id)
@@ -213,13 +195,13 @@ export async function getPostKeyCache(id: PostIVIdentifier) {
     return k as AESCryptoKey
 }
 
-const hasStoredAuthorPublicKey = new Set<string>()
+const hasStoredAuthorPublicKey = new Set<ProfileIdentifier>()
 async function storeAuthorPublicKey(
     payloadAuthor: ProfileIdentifier,
     postAuthor: ProfileIdentifier | null,
     pub: EC_Key,
 ) {
-    if (!payloadAuthor.equals(postAuthor)) {
+    if (payloadAuthor !== postAuthor) {
         // ! Author detected is not equal to AuthorHint.
         // ! Skip store the public key because it might be a security problem.
         return
@@ -234,7 +216,7 @@ async function storeAuthorPublicKey(
     if (persona?.privateKey) return
 
     const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
-    const otherPersona = await queryPersonaDB(ECKeyIdentifierFromJsonWebKey(key))
+    const otherPersona = await queryPersonaDB(await ECKeyIdentifierFromJsonWebKey(key))
     if (otherPersona?.privateKey) return
 
     return createProfileWithPersona(

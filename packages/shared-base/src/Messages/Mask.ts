@@ -9,7 +9,7 @@ import type {
     NonFungibleAssetProvider,
 } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {
@@ -35,17 +35,14 @@ export interface MaskMobileOnlyEvents {
 export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
-    requestComposition: CompositionRequest
     replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
     profileTabHidden: { hidden: boolean }
-    // TODO: move to plugin message
-    profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
-    Native_visibleSNS_currentDetectedProfileUpdated: string
+    Native_visibleSNS_currentDetectedProfileUpdated: ProfileIdentifier
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
@@ -62,7 +59,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     ownPersonaChanged: void
     ownProofChanged: void
     restoreSuccess: void
-    profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
@@ -85,9 +81,14 @@ export interface CompositionRequest {
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {
-        target?: 'E2E' | 'Everyone'
+        target?: EncryptionTargetType
         startupPlugin?: string
     }
+}
+export enum EncryptionTargetType {
+    Public = 'public',
+    Self = 'self',
+    E2E = 'e2e',
 }
 
 export interface NFTAvatarSettingDialogEvent {

@@ -55,8 +55,8 @@ function zipEncryptedPostContent(node: DOMProxy) {
 display: block;
 border-top: none;
 border-bottom: none;
-margin-bottom: 0px;
-padding: 0px 10px;`,
+margin-bottom: 0;
+padding: 0 10px;`,
         )
     }
     if (parent) {

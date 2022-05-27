@@ -1,12 +1,13 @@
 import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Grid, Typography, CircularProgress } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
+import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(1),
 
         '&:last-child': {
-            marginBottom: '0',
+            marginBottom: 0,
         },
     },
     tableItem: {
@@ -58,12 +59,35 @@ const useStyles = makeStyles()((theme, props) => ({
         right: '-5px',
     },
     protocolLabel: {},
-    loading: {
+    placeholder: {
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: 300,
         width: '100%',
+    },
+    loading: {
+        fontSize: 14,
+        color: theme.palette.text.primary,
+        lineHeight: '18px',
+        marginTop: 12,
+    },
+    animated: {
+        fontSize: 36,
+        '@keyframes loadingAnimation': {
+            '0%': {
+                transform: 'rotate(0deg)',
+            },
+            '100%': {
+                transform: 'rotate(360deg)',
+            },
+        },
+        animation: 'loadingAnimation 1s linear infinite',
+    },
+    direct: {
+        fill: theme.palette.secondaryDivider,
+        fontSize: 36,
     },
 }))
 
@@ -118,67 +142,74 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             </Grid>
 
             {loading || getAssetsLoading ? (
-                <div className={classes.loading}>
-                    <CircularProgress />
+                <div className={classes.placeholder}>
+                    <CircleLoadingIcon className={classes.animated} />
+                    <Typography className={classes.loading}>{t('popups_loading')}</Typography>
+                </div>
+            ) : protocols.length ? (
+                <div className={classes.tableContainer}>
+                    {protocols
+                        .filter((x) => !x.balance.isZero())
+                        .map((protocol, index) => (
+                            <Grid container spacing={0} className={classes.tableRow} key={index}>
+                                <Grid item xs={4} className={classes.tableCell}>
+                                    <div className={classes.logoWrap}>
+                                        <TokenIcon
+                                            name={protocol.bareToken.name}
+                                            address={protocol.bareToken.address}
+                                            classes={{ icon: classes.logo }}
+                                            chainId={chainId}
+                                        />
+                                        <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
+                                    </div>
+                                    <div>
+                                        <Typography variant="body1" className={classes.protocolLabel}>
+                                            {protocol.bareToken.symbol}
+                                        </Typography>
+                                    </div>
+                                </Grid>
+                                {tab === TabType.Deposit ? (
+                                    <Grid item xs={2} className={classes.tableCell}>
+                                        <Typography variant="body1">{protocol.apr}%</Typography>
+                                    </Grid>
+                                ) : null}
+                                <Grid xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
+                                    <Typography variant="body1">
+                                        <FormattedBalance
+                                            value={
+                                                tab === TabType.Deposit
+                                                    ? assets.find((x) =>
+                                                          isSameAddress(x.token.address, protocol.bareToken.address),
+                                                      )?.balance
+                                                    : protocol.balance
+                                            }
+                                            decimals={protocol.bareToken.decimals}
+                                            significant={6}
+                                            minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
+                                            formatter={formatBalance}
+                                        />
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={3} className={classes.tableCell}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
+                                        onClick={() => {
+                                            setTab(tab)
+                                            setSelectedProtocol(protocol)
+                                        }}>
+                                        {tab === TabType.Deposit
+                                            ? t('plugin_savings_deposit')
+                                            : t('plugin_savings_withdraw')}
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        ))}
                 </div>
             ) : (
-                <div className={classes.tableContainer}>
-                    {protocols.map((protocol, index) => (
-                        <Grid container spacing={0} className={classes.tableRow} key={index}>
-                            <Grid item xs={4} className={classes.tableCell}>
-                                <div className={classes.logoWrap}>
-                                    <TokenIcon
-                                        name={protocol.bareToken.name}
-                                        address={protocol.bareToken.address}
-                                        classes={{ icon: classes.logo }}
-                                        chainId={chainId}
-                                    />
-                                    <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
-                                </div>
-                                <div>
-                                    <Typography variant="body1" className={classes.protocolLabel}>
-                                        {protocol.bareToken.symbol}
-                                    </Typography>
-                                </div>
-                            </Grid>
-                            {tab === TabType.Deposit ? (
-                                <Grid item xs={2} className={classes.tableCell}>
-                                    <Typography variant="body1">{protocol.apr}%</Typography>
-                                </Grid>
-                            ) : null}
-                            <Grid xs={tab === TabType.Deposit ? 3 : 5} className={classes.tableCell}>
-                                <Typography variant="body1">
-                                    <FormattedBalance
-                                        value={
-                                            tab === TabType.Deposit
-                                                ? assets.find((x) =>
-                                                      isSameAddress(x.token.address, protocol.bareToken.address),
-                                                  )?.balance
-                                                : protocol.balance
-                                        }
-                                        decimals={protocol.bareToken.decimals}
-                                        significant={6}
-                                        minimumBalance={rightShift(10, protocol.bareToken.decimals - 6)}
-                                        formatter={formatBalance}
-                                    />
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={3} className={classes.tableCell}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
-                                    onClick={() => {
-                                        setTab(tab)
-                                        setSelectedProtocol(protocol)
-                                    }}>
-                                    {tab === TabType.Deposit
-                                        ? t('plugin_savings_deposit')
-                                        : t('plugin_savings_withdraw')}
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    ))}
+                <div className={classes.placeholder}>
+                    <DirectIcon className={classes.direct} />
                 </div>
             )}
         </Box>

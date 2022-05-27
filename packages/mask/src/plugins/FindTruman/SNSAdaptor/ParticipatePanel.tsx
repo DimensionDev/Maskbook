@@ -62,8 +62,8 @@ const useStyles = makeStyles()((theme, props) => ({
         padding: 0,
     },
     dialogWrapper: {
-        paddingBottom: '0px !important',
-        paddingTop: '0px !important',
+        paddingBottom: '0 !important',
+        paddingTop: '0 !important',
     },
 }))
 

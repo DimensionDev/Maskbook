@@ -23,9 +23,8 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const popper = useRef<HTMLDivElement | null>(null)
 
-    // #region select token and provider dialog could be open by trending view
+    // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
@@ -68,10 +67,11 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const position = useWindowScroll()
     useEffect(() => {
         if (!popper.current) return
-        const { top, height } = popper.current?.getBoundingClientRect()
-        if ((top < 0 && -1 * top > height) || top > document.documentElement.clientHeight)
+        const { top, height } = popper.current.getBoundingClientRect()
+        if ((top < 0 && -top > height) || top > document.documentElement.clientHeight) {
             // out off bottom bound
             setAnchorEl(null)
+        }
     }, [popper, Math.floor(position.y / 50)])
     // #endregion
 

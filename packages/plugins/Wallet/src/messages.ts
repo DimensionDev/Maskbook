@@ -1,4 +1,5 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { NetworkPluginID } from '@masknet/plugin-infra/src/web3-types'
 import type {
     ChainId,
     ERC721ContractDetailed,
@@ -33,6 +34,7 @@ export type GasPriceDialogEvent = {
 export type SelectProviderDialogEvent =
     | {
           open: true
+          pluginID?: NetworkPluginID
       }
     | {
           open: false
@@ -65,6 +67,10 @@ export type SelectWalletDialogEvent =
       }
 
 export type WalletStatusDialogEvent = {
+    open: boolean
+}
+
+export type ApplicationDialogEvent = {
     open: boolean
 }
 
@@ -154,6 +160,11 @@ export interface WalletMessage {
      * Wallet status dialog
      */
     walletStatusDialogUpdated: WalletStatusDialogEvent
+
+    /**
+     * Application dialog
+     */
+    ApplicationDialogUpdated: ApplicationDialogEvent
 
     /**
      * Wallet status dialog
