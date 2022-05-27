@@ -13,9 +13,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderType } from '../../hooks'
-import { browserName, browserVersion } from 'react-device-detect'
 
-const isOpera = browserName === 'Opera'
+const isOpera = window.navigator.userAgent.indexOf('OPR/') >= 0
 
 export function ProviderIconClickBait({
     network,
@@ -93,8 +92,6 @@ export function ProviderIconClickBait({
     if (providerType === ProviderType.Opera && isDashboardPage()) return null
 
     if (providerType === ProviderType.Opera && !isOpera) return null
-
-    console.log(`${browserName} ${browserVersion}`)
 
     // hide fortmatic for some networks because of incomplete supporting
     if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
