@@ -105,7 +105,7 @@ const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open }: AddW
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona || !wallet.account) return false
         try {
-            const walletSig = await context.privileged_silentSign()?.(payload.signPayload, wallet.account)
+            const walletSig = await context.walletSign?.(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
