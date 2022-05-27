@@ -3,8 +3,8 @@ import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-
 import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
-import { useI18N } from '../../../utils'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -99,7 +99,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 }
 
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
 
@@ -116,7 +116,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
                 setERC721TokenName={setName}
             />
             <Typography className={classes.name}>{name}</Typography>
-            {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
+            {claimed && <Typography className={classes.claimedBadge}>{t.claimed()}</Typography>}
         </div>
     )
 }

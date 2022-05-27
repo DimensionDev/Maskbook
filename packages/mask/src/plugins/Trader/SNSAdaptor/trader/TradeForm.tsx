@@ -29,6 +29,7 @@ import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -213,6 +214,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+        const { isSwapping } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
         // #region approve token
@@ -508,9 +510,15 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
+                                                loading={isSwapping}
                                                 variant="contained"
                                                 color="error"
-                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                disabled={
+                                                    focusedTrade?.loading ||
+                                                    !focusedTrade?.value ||
+                                                    disable ||
+                                                    isSwapping
+                                                }
                                                 classes={{ root: classes.button, disabled: classes.disabledButton }}
                                                 onClick={onSwap}>
                                                 {t('plugin_trader_confirm_price_impact', {
@@ -520,12 +528,14 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         ) : (
                                             <ActionButton
                                                 fullWidth
+                                                loading={isSwapping}
                                                 variant="contained"
                                                 disabled={
                                                     focusedTrade?.loading ||
                                                     !focusedTrade?.value ||
                                                     !!validationMessage ||
-                                                    disable
+                                                    disable ||
+                                                    isSwapping
                                                 }
                                                 classes={{ root: classes.button, disabled: classes.disabledButton }}
                                                 color="primary"

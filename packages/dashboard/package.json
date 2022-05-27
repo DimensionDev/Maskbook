@@ -2,16 +2,16 @@
   "name": "@masknet/dashboard",
   "private": true,
   "description": "New dashboard of Mask Network",
-  "types": "./dist/src/entry.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/entry.tsx",
       "default": "./dist/src/entry.js"
     }
   },
+  "types": "./dist/src/entry.d.ts",
   "scripts": {
-    "storybook": "dev -- start-storybook -p 6006",
-    "build-storybook": "build -- build-storybook"
+    "build-storybook": "build -- build-storybook",
+    "storybook": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",

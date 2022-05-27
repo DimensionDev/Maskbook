@@ -143,7 +143,7 @@ const VerifyWallet = memo(() => {
     }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
 
     const changeWallet = () => {
-        navigate(PopupRoutes.ConnectWallet)
+        navigate(urlcat(PopupRoutes.ConnectWallet, { goBack: true }))
     }
 
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {

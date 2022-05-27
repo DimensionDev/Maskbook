@@ -108,7 +108,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     order.current_price,
                                     order.payment_token_contract?.decimals,
                                     order.quantity,
-                                )}{' '}
+                                )?.toFixed()}{' '}
                                 {order.payment_token_contract?.symbol}
                             </>
                         </Typography>
