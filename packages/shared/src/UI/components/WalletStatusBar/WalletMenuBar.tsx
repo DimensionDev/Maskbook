@@ -1,9 +1,9 @@
-import { useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { BindingProof } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
-import { isSameAddress, useWallet } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, Divider, ListItemIcon, MenuItem, Stack, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -70,8 +70,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
     const t = useSharedI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const wallet = useWallet()
-
+    const wallet = useWallet(currentPluginId)
     const [selectedWallet, setSelectedWallet] = useState(wallet?.address || wallets[0].identity || '')
     const onClick = useCallback((address: string) => {
         onChange(address)

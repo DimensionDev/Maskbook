@@ -24,7 +24,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N, Translate } from '../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import ActionButton, { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton'
 import { PluginWalletConnectIcon } from '@masknet/icons'
@@ -37,7 +37,6 @@ import {
     WalletStatusBar,
     WalletStatusBarProps,
 } from '@masknet/shared'
-
 const useStyles = makeStyles()((theme) => ({
     action: {
         textAlign: 'center',
@@ -203,7 +202,7 @@ export function ChainBoundary(props: ChainBoundaryProps) {
         } as Partial<ActionButtonPromiseProps>
     }, [props.ActionButtonPromiseProps, props.renderInTimeline])
 
-    const renderBox = (children?: React.ReactNode, tips?: string) => {
+    const renderBox = (children?: React.ReactNode, tips?: string | React.ReactElement) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
                 <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
@@ -362,15 +361,33 @@ export function ChainBoundary(props: ChainBoundaryProps) {
                                     size={18}
                                 />
                             ),
-                            title: t.plugin_wallet_switch_network_under_going({
+
+                            title:
+                                providerType === ProviderType.WalletConnect
+                                    ? t.plugin_wallet_change_network({
+                                          network: expectedNetwork.replace('Mainnet', ''),
+                                      })
+                                    : t.plugin_wallet_switch_network({
+                                          network: expectedNetwork.replace('Mainnet', ''),
+                                      }),
+                            waiting: t.plugin_wallet_switch_network_under_going({
                                 network: expectedNetwork.replace('Mainnet', ''),
                             }),
+
                             action: onSwitchChain,
                         }}
                     />
                 )
             ) : null}
         </>,
-        providerType === ProviderType.WalletConnect ? t.plugin_wallet_connect_tips() : '',
+        providerType === ProviderType.WalletConnect ? (
+            <Translate.plugin_wallet_connect_tips
+                components={{
+                    br: <br />,
+                }}
+            />
+        ) : (
+            ''
+        ),
     )
 }

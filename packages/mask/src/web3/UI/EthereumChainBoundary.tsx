@@ -35,6 +35,7 @@ import Services from '../../extension/service'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletIcon } from '@masknet/shared'
 import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -49,6 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     tooltip: {
         borderRadius: 4,
         padding: 10,
+        fontSize: 14,
     },
 }))
 
@@ -183,7 +185,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         } as Partial<ActionButtonPromiseProps>
     }, [props.ActionButtonPromiseProps, props.renderInTimeline])
 
-    const renderBox = (children?: React.ReactNode, tips?: string) => {
+    const renderBox = (children?: React.ReactNode, tips?: string | React.ReactElement | React.ReactNode) => {
         const jsx = (
             <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
                 {children}
@@ -275,7 +277,13 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         />
                     ) : (
                         <PluginWalletStatusBar
-                            tooltip={providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : ''}
+                            tooltip={
+                                providerType === ProviderType.WalletConnect ? (
+                                    <Trans i18nKey="plugin_wallet_connect_tips" />
+                                ) : (
+                                    ''
+                                )
+                            }
                             actionProps={{
                                 startIcon: (
                                     <WalletIcon
@@ -338,7 +346,13 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     />
                 ) : (
                     <PluginWalletStatusBar
-                        tooltip={providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : ''}
+                        tooltip={
+                            providerType === ProviderType.WalletConnect ? (
+                                <Trans i18nKey="plugin_wallet_connect_tips" />
+                            ) : (
+                                ''
+                            )
+                        }
                         actionProps={{
                             disabled: providerType === ProviderType.WalletConnect,
                             startIcon: (
@@ -350,7 +364,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                             ),
                             title:
                                 providerType === ProviderType.WalletConnect
-                                    ? t('plugin_wallet_connect_network', {
+                                    ? t('plugin_wallet_change_network', {
                                           network: expectedNetwork.replace('Mainnet', ''),
                                       })
                                     : t('plugin_wallet_switch_network', {
@@ -365,6 +379,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 )
             ) : null}
         </>,
-        providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
+        providerType === ProviderType.WalletConnect ? <Trans i18nKey="plugin_wallet_connect_tips" /> : '',
     )
 }
