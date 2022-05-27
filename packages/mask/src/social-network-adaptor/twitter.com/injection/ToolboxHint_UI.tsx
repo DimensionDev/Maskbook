@@ -1,4 +1,5 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
+import { useSideBarNativeItemStyleVariants } from './ToolboxHint'
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, Box } from '@mui/material'
 import GuideStep from '../../../components/GuideStep'
 import { useI18N } from '../../../utils'
@@ -8,9 +9,9 @@ const Container = styled('div')`
     cursor: pointer;
     padding: 4px 0;
 `
-const ListItem = styled(ListItemButton)`
+const ListItem = styled(ListItemButton)<{ itemPadding?: string }>`
     border-radius: 9999px;
-    padding: 6px 12px;
+    padding: 6px ${(props) => props.itemPadding ?? '11px'};
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
@@ -21,8 +22,8 @@ const ListItem = styled(ListItemButton)`
         height: 50px;
     }
 `
-const Text = styled(Typography)`
-    margin-left: 20px;
+const Text = styled(Typography)<{ textMarginLeft?: string }>`
+    margin-left: ${(props) => props.textMarginLeft ?? '20px'};
     margin-right: 16px;
     font-size: 15px;
     font-family: inherit;
@@ -37,14 +38,16 @@ const Icon = styled(ListItemIcon)`
 
 export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
+    const { textMarginLeft, itemPadding } = useSideBarNativeItemStyleVariants()
+
     return (
         <ToolboxHintUnstyled
             iconSize={26}
-            connectWalletIconSize="1.8rem"
+            iconFontSize="1.75rem"
             mini={mini}
             ListItemIcon={Icon}
-            Typography={Text}
-            ListItemButton={ListItem}
+            Typography={({ children }) => <Text textMarginLeft={textMarginLeft}>{children}</Text>}
+            ListItemButton={({ children }) => <ListItem itemPadding={itemPadding}>{children}</ListItem>}
             Container={Container}
             category={props.category}
         />

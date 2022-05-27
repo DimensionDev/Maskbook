@@ -1,15 +1,48 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { sideBarProfileSelector, toolBoxInSideBarSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
 import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI'
+
+const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
+const SideBarNativeItemPaddingRef = new ValueRef('11px')
+
 export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'wallet' | 'application') {
     const watcher = new MutationObserverWatcher(toolBoxInSideBarSelector())
-    startWatch(watcher, signal)
+        .addListener('onAdd', updateStyle)
+        .addListener('onChange', updateStyle)
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+            },
+            signal,
+        )
+
+    function updateStyle() {
+        const SideBarNativeItem = document.querySelector('[role="banner"] [role="navigation"] > div > div')
+        const SideBarNativeItemText = document.querySelector(
+            '[role="banner"] [role="navigation"] > div > div > div[dir="auto"]',
+        )
+        const SideBarNativeItemStyle = SideBarNativeItem ? window.getComputedStyle(SideBarNativeItem) : null
+        const SideBarNativeItemTextStyle = SideBarNativeItemText ? window.getComputedStyle(SideBarNativeItemText) : null
+
+        SideBarNativeItemPaddingRef.value = SideBarNativeItemStyle?.padding ?? '11px'
+        SideBarNativeItemTextMarginLeftRef.value = SideBarNativeItemTextStyle?.marginLeft ?? '20px'
+    }
+
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <ToolboxHintAtTwitter category={category} />,
     )
     injectProfile(signal)
+}
+
+export function useSideBarNativeItemStyleVariants() {
+    return {
+        textMarginLeft: useValueRef(SideBarNativeItemTextMarginLeftRef),
+        itemPadding: useValueRef(SideBarNativeItemPaddingRef),
+    }
 }
 
 function injectProfile(signal: AbortSignal) {
