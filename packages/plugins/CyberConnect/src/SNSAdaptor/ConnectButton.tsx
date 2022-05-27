@@ -136,7 +136,7 @@ export default function ConnectButton({
 
     if (blockChainNetwork !== NetworkPluginID.PLUGIN_EVM) {
         return (
-            <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
+            <Typography variant="body2" sx={{ marginTop: 2 }}>
                 Please switch to EVM-based wallet to follow
             </Typography>
         )
