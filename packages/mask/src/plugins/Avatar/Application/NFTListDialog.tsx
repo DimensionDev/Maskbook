@@ -281,6 +281,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     }}
                     classes={{ button: classes.button }}
                     onChange={(address: string) => onChange(address)}
+                    haveMenu
                 />
             </DialogActions>
             <AddNFT

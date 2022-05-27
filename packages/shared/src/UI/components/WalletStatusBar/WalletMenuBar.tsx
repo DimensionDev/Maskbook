@@ -60,10 +60,11 @@ interface WalletMenuBarProps extends withClasses<'root'> {
     iconSize?: number
     badgeSize?: number
     pending?: string | React.ReactElement | React.ReactNode
+    haveMenu?: boolean
 }
 
 export function WalletMenuBar(props: WalletMenuBarProps) {
-    const { onChange, wallets, openPopupsWindow, iconSize, badgeSize, pending } = props
+    const { onChange, wallets, openPopupsWindow, iconSize, badgeSize, pending, haveMenu = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const onClose = () => setAnchorEl(null)
@@ -84,12 +85,12 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
         onChange(wallet?.address || wallets[0].identity)
     }, [wallet, wallets])
 
-    const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog, openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
     const onConnectWallet = useCallback(() => {
-        openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
+        setSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
         onClose()
     }, [openSelectProviderDialog, onClose])
 
@@ -131,7 +132,11 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
 
     return (
         <Stack className={classes.root}>
-            <Stack onClick={onOpen} direction="row" alignItems="center" className={classes.wrapper}>
+            <Stack
+                onClick={haveMenu ? onOpen : openSelectProviderDialog}
+                direction="row"
+                alignItems="center"
+                className={classes.wrapper}>
                 <WalletUI
                     name={wallet?.name ?? ''}
                     iconSize={iconSize}
@@ -146,69 +151,74 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                     pending={pending}
                 />
             </Stack>
-            <ShadowRootMenu
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={onClose}
-                disableRestoreFocus
-                PaperProps={{
-                    className: classes.paper,
-                }}>
-                {wallet?.address ? (
-                    walletItem(
-                        wallet.name ?? '',
-                        selectedWallet,
-                        wallet.address,
-                        Boolean(wallet.address),
-                        () => onClick(wallet.address),
-                        () => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM }),
-                        wallets.some((x) => isSameAddress(x.identity, wallet.address)),
-                        wallets.some((x) => isSameAddress(x.identity, wallet.address))
-                            ? true
-                            : currentPluginId === NetworkPluginID.PLUGIN_EVM,
-                    )
-                ) : (
-                    <MenuItem key="connect">
-                        <Button fullWidth onClick={onConnectWallet} sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
-                            {t.connect_your_wallet()}
-                        </Button>
-                    </MenuItem>
-                )}
-                <Divider className={classes.divider} />
-                {wallets
-                    .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
-                    ?.filter((x) => !isSameAddress(x.identity, wallet?.address))
-                    .map((x) => (
-                        <>
-                            {walletItem(
-                                wallet?.name ?? '',
-                                selectedWallet,
-                                x.identity,
-                                false,
-                                () => onClick(x.identity),
-                                () => noop,
-                                true,
-                                true,
-                            )}
-                            <Divider className={classes.divider} />
-                        </>
-                    ))}
-
-                <MenuItem
-                    key="settings"
-                    onClick={() => {
-                        openPopupsWindow?.()
-                        onClose()
+            {haveMenu ? (
+                <ShadowRootMenu
+                    open={Boolean(anchorEl)}
+                    anchorEl={anchorEl}
+                    onClose={onClose}
+                    disableRestoreFocus
+                    PaperProps={{
+                        className: classes.paper,
                     }}>
-                    <ListItemIcon>
-                        <WalletSettingIcon className={classes.icon} />
-                    </ListItemIcon>
-                    <Typography fontSize={14} fontWeight={700}>
-                        {t.wallet_settings()}
-                    </Typography>
-                    <Verify2Icon style={{ marginLeft: 24 }} />
-                </MenuItem>
-            </ShadowRootMenu>
+                    {wallet?.address ? (
+                        walletItem(
+                            wallet.name ?? '',
+                            selectedWallet,
+                            wallet.address,
+                            Boolean(wallet.address),
+                            () => onClick(wallet.address),
+                            () => setSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM }),
+                            wallets.some((x) => isSameAddress(x.identity, wallet.address)),
+                            wallets.some((x) => isSameAddress(x.identity, wallet.address))
+                                ? true
+                                : currentPluginId === NetworkPluginID.PLUGIN_EVM,
+                        )
+                    ) : (
+                        <MenuItem key="connect">
+                            <Button
+                                fullWidth
+                                onClick={onConnectWallet}
+                                sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
+                                {t.connect_your_wallet()}
+                            </Button>
+                        </MenuItem>
+                    )}
+                    <Divider className={classes.divider} />
+                    {wallets
+                        .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+                        ?.filter((x) => !isSameAddress(x.identity, wallet?.address))
+                        .map((x) => (
+                            <>
+                                {walletItem(
+                                    wallet?.name ?? '',
+                                    selectedWallet,
+                                    x.identity,
+                                    false,
+                                    () => onClick(x.identity),
+                                    () => noop,
+                                    true,
+                                    true,
+                                )}
+                                <Divider className={classes.divider} />
+                            </>
+                        ))}
+
+                    <MenuItem
+                        key="settings"
+                        onClick={() => {
+                            openPopupsWindow?.()
+                            onClose()
+                        }}>
+                        <ListItemIcon>
+                            <WalletSettingIcon className={classes.icon} />
+                        </ListItemIcon>
+                        <Typography fontSize={14} fontWeight={700}>
+                            {t.wallet_settings()}
+                        </Typography>
+                        <Verify2Icon style={{ marginLeft: 24 }} />
+                    </MenuItem>
+                </ShadowRootMenu>
+            ) : null}
         </Stack>
     )
 }

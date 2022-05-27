@@ -37,6 +37,7 @@ export interface WalletStatusBarProps extends withClasses<'button'> {
     iconSize?: number
     badgeSize?: number
     className?: string
+    haveMenu?: boolean
     actionProps?: {
         title?: string | React.ReactElement | React.ReactNode
         action?: () => Promise<void>
@@ -56,7 +57,16 @@ export interface WalletStatusBarProps extends withClasses<'button'> {
 
 export function WalletStatusBar(props: WalletStatusBarProps) {
     const t = useSharedI18N()
-    const { iconSize = 30, badgeSize = 12, actionProps, className, onChange, pending, tooltip } = props
+    const {
+        iconSize = 30,
+        badgeSize = 12,
+        actionProps,
+        className,
+        onChange,
+        pending,
+        tooltip,
+        haveMenu = false,
+    } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -68,6 +78,7 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
         <Box className={classNames(classes.root, className)}>
             <Box sx={{ flex: 1 }}>
                 <WalletMenuBar
+                    haveMenu={haveMenu}
                     openPopupsWindow={actionProps?.openPopupsWindow}
                     iconSize={iconSize}
                     badgeSize={badgeSize}

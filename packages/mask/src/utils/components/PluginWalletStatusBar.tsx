@@ -22,12 +22,13 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     }
     onChange?: (address: string) => void
     tooltip?: string | React.ReactElement | React.ReactNode
+    haveMenu?: boolean
 }
 
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     const { t } = useI18N()
     const theme = useTheme()
-    const { actionProps, className, onChange, tooltip } = props
+    const { actionProps, className, onChange, tooltip, haveMenu = false } = props
     const chainId = useChainId()
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
@@ -58,6 +59,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
 
     return (
         <WalletStatusBar
+            haveMenu={haveMenu}
             className={className}
             iconSize={30}
             badgeSize={12}
