@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     currentAccount: {
         padding: '12px 8px 12px 12px',
         width: '100%',
-        background: theme.palette.background.input,
+        background: theme.palette.background.paper,
         boxSizing: 'border-box',
         marginBottom: theme.spacing(2),
         display: 'flex',
