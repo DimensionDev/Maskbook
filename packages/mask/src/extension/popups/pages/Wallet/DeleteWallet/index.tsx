@@ -153,7 +153,7 @@ const DeleteWallet = memo(() => {
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet?.address} size={10} formatter={formatEthereumAddress} />
+                            <FormattedAddress address={wallet?.address} size={4} formatter={formatEthereumAddress} />
                         </Typography>
                     </div>
                 </div>
