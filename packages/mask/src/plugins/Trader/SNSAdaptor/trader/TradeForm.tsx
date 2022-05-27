@@ -171,6 +171,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: 12,
             lineHeight: '18px',
             fontWeight: 500,
+            marginBottom: '20px !important',
         },
         dropIcon: {
             width: 20,
