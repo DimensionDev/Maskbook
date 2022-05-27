@@ -25,7 +25,7 @@ export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20Tok
     }, [chainId, token, erc20TokenContract, erc20TokenBytes32Contract, address])
 }
 
-export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'address' | 'type'>[], _chainId?: ChainId) {
+export function useFungibleTokensDetailed(listOfToken: Array<Pick<FungibleToken, 'address' | 'type'>>, _chainId?: ChainId) {
     const currentChainId = useChainId()
     const chainId = _chainId ? _chainId : currentChainId
     const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])

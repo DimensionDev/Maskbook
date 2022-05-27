@@ -20,14 +20,14 @@ export async function fetchLatestBlocks() {
     type status = {
         synced: string
         health: string
-        chains: {
+        chains: Array<{
             chainHeadBlock: {
                 number: number
             }
             latestBlock: {
                 number: number
             }
-        }[]
+        }>
     }
     const response = await fetchFromUniswapV2Health<{
         indexingStatusForCurrentVersion: status

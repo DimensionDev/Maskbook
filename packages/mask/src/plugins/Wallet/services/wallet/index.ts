@@ -51,11 +51,11 @@ export async function getWallet(address?: string) {
 }
 
 export async function getWallets(providerType?: ProviderType): Promise<
-    (Omit<WalletRecord, 'type'> & {
+    Array<Omit<WalletRecord, 'type'> & {
         configurable: boolean
         hasStoredKeyInfo: boolean
         hasDerivationPath: boolean
-    })[]
+    }>
 > {
     if (hasNativeAPI) {
         if (providerType && providerType !== ProviderType.MaskWallet) return []
@@ -112,11 +112,11 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
 
-    const accounts: {
+    const accounts: Array<{
         index: number
         address: string
         derivationPath: string
-    }[] = []
+    }> = []
 
     for (let i = pageSize * page; i < pageSize * (page + 1); i += 1) {
         const derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${i}`

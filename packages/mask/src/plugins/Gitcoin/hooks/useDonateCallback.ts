@@ -24,7 +24,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
 
     const account = useAccount()
 
-    const donations = useMemo((): [string, string, string][] => {
+    const donations = useMemo((): Array<[string, string, string]> => {
         if (!address || !token) return []
         if (!GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return []
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
