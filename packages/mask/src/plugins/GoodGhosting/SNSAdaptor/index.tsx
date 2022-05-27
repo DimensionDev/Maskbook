@@ -51,7 +51,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <EthereumChainBoundary chainId={ChainId.Matic}>
+        <EthereumChainBoundary chainId={ChainId.Matic} renderInTimeline>
             <PreviewCard id={id} />
         </EthereumChainBoundary>
     )

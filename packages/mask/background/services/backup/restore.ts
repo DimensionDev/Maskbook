@@ -34,7 +34,7 @@ export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirme
 export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: BackupPreview; id: string }, unknown>> {
     return Result.wrapAsync(async () => {
         const backupObj: unknown = JSON.parse(raw)
-        const backup = normalizeBackup(backupObj)
+        const backup = await normalizeBackup(backupObj)
         const preview = getBackupPreviewInfo(backup)
         const id = uuid()
         unconfirmedBackup.set(id, backup)
@@ -44,7 +44,7 @@ export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: 
 
 export async function getUnconfirmedBackup(
     id: string,
-): Promise<undefined | { wallets: Array<{ address: string; name: string }> }> {
+): Promise<undefined | { wallets: { address: string; name: string }[] }> {
     if (!unconfirmedBackup.has(id)) return undefined
     const backup = unconfirmedBackup.get(id)!
     return {

@@ -1,14 +1,14 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/evm/index.js"
     }
   },
-  "sideEffects": false,
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",

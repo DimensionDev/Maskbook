@@ -9,7 +9,6 @@
     }
   },
   "types": "./dist",
-  "scripts": {},
   "dependencies": {
     "@masknet/theme": "workspace:*",
     "ef.js": "^0.14.2"

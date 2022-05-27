@@ -38,11 +38,13 @@ import type { Coin } from '../../Trader/types'
 import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: 0,
+            borderRadius: 0,
         },
         footer: {
             display: 'flex',
@@ -117,7 +119,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
         })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+        activatedSocialNetworkUI.utils.share?.(t('promote_collectible'))
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, t])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -168,7 +171,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Card elevation={0}>
+                <Card elevation={0} className={classes.content}>
                     <CardContent>
                         {isVerified ? null : (
                             <Box sx={{ marginBottom: 2 }}>

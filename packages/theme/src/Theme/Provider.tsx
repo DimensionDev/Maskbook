@@ -2,7 +2,7 @@ import { CssBaseline, Theme, ThemeProvider } from '@mui/material'
 import { MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
 import { CustomSnackbarProvider } from '../Components'
 
-function compose(init: React.ReactNode, ...f: Array<(children: React.ReactNode) => JSX.Element>) {
+function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     // eslint-disable-next-line unicorn/no-array-reduce
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
 }

@@ -14,6 +14,7 @@ import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { delay } from '@dimensiondev/kit'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface DecryptPostSuccessProps {
     message: TypedMessage
@@ -109,6 +110,7 @@ function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients;
                     iv,
                     profiles.map((x) => x.identifier),
                     props.whoAmI,
+                    activatedSocialNetworkUI.encryptionNetwork,
                 )
                 await delay(1500)
                 retry()

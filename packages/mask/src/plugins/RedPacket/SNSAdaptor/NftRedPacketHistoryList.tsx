@@ -7,7 +7,8 @@ import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
-import { useI18N } from '../../../utils'
+import { useI18N as useBaseI18n } from '../../../utils'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -80,7 +81,8 @@ interface Props {
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t: tr } = useBaseI18n()
+    const t = useI18N()
     const account = useAccount()
     const chainId = useChainId()
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
@@ -101,7 +103,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (chainId === ChainId.BSC) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('plugin_chain_not_supported', { chain: 'Binance Smart Chain' })}
+                {t.chain_not_supported({ chain: 'Binance Smart Chain' })}
             </Typography>
         )
     }
@@ -109,7 +111,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('loading')}
+                {tr('loading')}
             </Typography>
         )
     }
@@ -117,7 +119,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('plugin_red_packet_nft_no_history')}
+                {t.nft_no_history()}
             </Typography>
         )
     }

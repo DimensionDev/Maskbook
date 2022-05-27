@@ -97,9 +97,7 @@ export interface TradeComputed<T = unknown> {
     maximumSold: BigNumber
     minimumReceived: BigNumber
     fee: BigNumber
-    path?: Array<
-        Array<PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>>
-    >
+    path?: (PartialRequired<NativeTokenDetailed, 'address'> | PartialRequired<ERC20TokenDetailed, 'address'>)[][]
     trade_?: T
 }
 

@@ -38,6 +38,9 @@ const useStyles = makeStyles()(() => ({
         color: '#ffffff',
         lineHeight: '12px',
     },
+    icon: {
+        color: 'white',
+    },
 }))
 
 export function openNFTAvatarSettingDialog() {

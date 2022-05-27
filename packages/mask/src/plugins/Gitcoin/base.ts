@@ -1,5 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -10,6 +13,14 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+        web3: {
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic, ChainId.Mumbai],
+            },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
+        },
     },
     contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },
+    i18n: languages,
 }

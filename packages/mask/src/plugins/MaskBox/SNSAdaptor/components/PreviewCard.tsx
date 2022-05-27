@@ -1,20 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
+import { formatBalance, useChainId, useTransactionCallback } from '@masknet/web3-shared-evm'
 import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
-import { formatBalance, TransactionStateType, useChainId, useTransactionCallback } from '@masknet/web3-shared-evm'
+import { useCallback, useMemo, useState } from 'react'
+import { useContainer } from 'unstated-next'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { DrawDialog } from './DrawDialog'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Context } from '../../hooks/useContext'
 import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
+import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../../Wallet/messages'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -39,6 +37,17 @@ const useTabsStyles = makeStyles()((theme) => ({
     tabPanel: {
         marginTop: `${theme.spacing(2)} !important`,
     },
+    button: {
+        backgroundColor: theme.palette.maskColor.dark,
+        color: 'white',
+        fontSize: 14,
+        fontWeight: 700,
+        width: '100%',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.dark,
+        },
+        margin: '0 !important',
+    },
 }))
 
 export interface PreviewCardProps {}
@@ -52,22 +61,17 @@ export function PreviewCard(props: PreviewCardProps) {
     const theme = useTheme()
 
     const {
-        boxId,
         boxState,
         boxStateMessage,
         boxInfo,
         boxMetadata,
         contractDetailed,
-        paymentCount,
         setPaymentCount,
         paymentTokenAddress,
         setPaymentTokenAddress,
         paymentTokenPrice,
-        paymentTokenBalance,
         paymentTokenDetailed,
 
-        // token ids
-        lastPurchasedTokenIds,
         refreshLastPurchasedTokenIds,
 
         // transaction
@@ -93,59 +97,30 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
     // #region open box
-    const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
-        TransactionStateType.CONFIRMED,
-        txConfig,
-        openBoxTransaction?.method,
-    )
+    const [{ loading: isOpening }, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
     const onRefresh = useCallback(() => {
         state[1](CardTab.Articles)
         setPaymentCount(1)
         setPaymentTokenAddress('')
-        resetOpenBoxCallback()
         retryMaskBoxInfo()
         retryMaskBoxCreationSuccessEvent()
         retryMaskBoxTokensForSale()
         retryMaskBoxPurchasedTokens()
-    }, [
-        resetOpenBoxCallback,
-        retryMaskBoxInfo,
-        retryMaskBoxCreationSuccessEvent,
-        retryMaskBoxTokensForSale,
-        retryMaskBoxPurchasedTokens,
-    ])
+    }, [retryMaskBoxInfo, retryMaskBoxCreationSuccessEvent, retryMaskBoxTokensForSale, retryMaskBoxPurchasedTokens])
     const [drawing, setDrawing] = useState(false)
     const onDraw = useCallback(async () => {
         setDrawing(true)
         refreshLastPurchasedTokenIds()
         try {
             await openBoxCallback()
+            onRefresh()
+            setOpenDrawResultDialog(true)
             retryMaskBoxStatus()
             setOpenDrawDialog(false)
         } catch {}
         setDrawing(false)
-    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryMaskBoxStatus])
+    }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
 
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            const isConfirmed = openBoxState.type === TransactionStateType.CONFIRMED
-            if (isConfirmed) {
-                onRefresh()
-                setOpenDrawResultDialog(true)
-            }
-        },
-    )
-
-    useEffect(() => {
-        if (openBoxState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            state: openBoxState,
-            summary: `Open ${boxInfo?.name ?? 'box'}...`,
-        })
-    }, [openBoxState.type])
     // #endregion
 
     if (boxState === BoxState.UNKNOWN)
@@ -238,9 +213,13 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId}>
-                    <EthereumWalletConnectedBoundary ActionButtonProps={{ size: 'medium' }}>
+                <EthereumChainBoundary chainId={chainId} renderInTimeline>
+                    <EthereumWalletConnectedBoundary
+                        ActionButtonProps={{ size: 'medium' }}
+                        classes={{ button: tabClasses.button }}
+                        renderInTimeline>
                         <ActionButton
+                            loading={isOpening}
                             size="medium"
                             fullWidth
                             variant="contained"
@@ -252,7 +231,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     background: theme.palette.maskColor.dark,
                                 },
                             }}
-                            disabled={boxState !== BoxState.READY}
+                            disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>
                             {(() => {
                                 return boxState === BoxState.READY && paymentTokenAddress ? (

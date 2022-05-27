@@ -25,7 +25,7 @@ export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 
     return false
 }
 
-export function normalizeBackupVersion2(item: BackupJSONFileVersion2): NormalizedBackup.Data {
+export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Promise<NormalizedBackup.Data> {
     const backup = createEmptyNormalizedBackup()
 
     backup.meta.version = 2
@@ -38,7 +38,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     for (const persona of personas) {
         const { publicKey } = persona
         if (!isEC_Public_JsonWebKey(publicKey)) continue
-        const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
+        const identifier = await ECKeyIdentifierFromJsonWebKey(publicKey)
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
             linkedProfiles: new Map(),
@@ -322,7 +322,7 @@ interface BackupJSONFileVersion2 {
         privateKey?: JsonWebKey
         localKey?: JsonWebKey
         nickname?: string
-        linkedProfiles: Array<[/** ProfileIdentifier.toText() */ string, LinkedProfileDetails]>
+        linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
@@ -345,7 +345,7 @@ interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: JsonWebKey
-        recipients: 'everyone' | Array<[/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }]>
+        recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
         /** @deprecated */
         recipientGroups: never[]
         foundAt: number // Unix timestamp

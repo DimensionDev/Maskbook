@@ -109,7 +109,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
 }
 export interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
-    TxStores extends Array<StoreNames<DBTypes>> = Array<StoreNames<DBTypes>>,
+    TxStores extends StoreNames<DBTypes>[] = StoreNames<DBTypes>[],
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,
     Writable extends boolean = boolean,
 > extends Pick<
@@ -170,14 +170,14 @@ export interface IDBPSafeObjectStore<
 }
 export type IDBPSafeTransaction<
     DBTypes extends DBSchema,
-    TxStores extends Array<StoreNames<DBTypes>>,
+    TxStores extends StoreNames<DBTypes>[],
     Mode extends IDBTransactionMode = 'readonly',
 > = Omit<IDBPTransaction<DBTypes, TxStores, Mode>, 'mode' | 'objectStoreNames' | 'objectStore' | 'store'> & {
     readonly objectStoreNames: TypedDOMStringList<StoreNames<DBTypes> & string>
     readonly mode: IDBTransactionMode
     readonly __writable__?: Mode extends 'readwrite' ? true : boolean
     readonly __stores__?: Record<
-        TxStores extends ReadonlyArray<infer ValueOfUsedStoreName>
+        TxStores extends readonly (infer ValueOfUsedStoreName)[]
             ? ValueOfUsedStoreName extends string | number | symbol
                 ? ValueOfUsedStoreName
                 : never
@@ -194,7 +194,7 @@ export function createTransaction<DBType extends DBSchema, Mode extends 'readonl
     mode: Mode,
 ) {
     // It must be a high order function to infer the type of UsedStoreName correctly.
-    return <UsedStoreName extends Array<StoreNames<DBType>> = []>(...storeNames: UsedStoreName) => {
+    return <UsedStoreName extends StoreNames<DBType>[] = []>(...storeNames: UsedStoreName) => {
         return db.transaction(storeNames, mode) as IDBPSafeTransaction<DBType, UsedStoreName, Mode>
     }
 }

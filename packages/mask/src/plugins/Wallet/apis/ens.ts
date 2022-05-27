@@ -17,10 +17,10 @@ export async function fetchAddressNamesByTwitterId(twitterId: string) {
     if (!twitterId) return []
     const data = await fetchFromENSTextResolverSubgraph<{
         twitterHandle?: {
-            domains: Array<{
+            domains: {
                 id: string
                 owner: string
-            }>
+            }[]
         }
     }>(`
         query twitterHandle {

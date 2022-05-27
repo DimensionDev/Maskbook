@@ -2,7 +2,7 @@ import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
@@ -58,7 +58,7 @@ interface Props {
 }
 
 export function RedPacketPast({ onSelect, onClose }: Props) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
     const chainId = useChainId()
@@ -95,7 +95,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 label: (
                     <div className={classes.labelWrapper}>
                         <img className={classes.img} src={IconURLs.erc20Token} />
-                        <span>{t('plugin_red_packet_erc20_tab_title')}</span>
+                        <span>{t.erc20_tab_title()}</span>
                     </div>
                 ),
                 children: <RedPacketHistoryList onSelect={onSelect} />,
@@ -105,7 +105,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 label: (
                     <div className={classes.labelWrapper}>
                         <img className={classes.img} src={IconURLs.erc721Token} />
-                        <span>{t('plugin_red_packet_erc721_tab_title')}</span>
+                        <span>{t.erc721_tab_title()}</span>
                     </div>
                 ),
                 children: <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />,

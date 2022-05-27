@@ -10,7 +10,7 @@ interface File {
 interface Folder {
     type: 'folder'
     id: string
-    files: Array<File['id']>
+    files: File['id'][]
 }
 let storage: Plugin.Worker.DatabaseStorage<File | Folder> | undefined
 const worker: Plugin.Worker.Definition = {

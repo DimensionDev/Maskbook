@@ -89,11 +89,11 @@ export interface VoteItem {
     choice: string | undefined
     totalWeight: number | undefined
     choices:
-        | Array<{
+        | {
               index: number
               weight: number
               name: string
-          }>
+          }[]
         | undefined
     address: string
     authorIpfsHash: string
@@ -115,10 +115,10 @@ export type VoteItemList = {
 
 export interface ProposalResult {
     choice: string
-    powerDetail: Array<{
+    powerDetail: {
         power: number
         name: string
-    }>
+    }[]
     power: number
     percentage: number
 }
