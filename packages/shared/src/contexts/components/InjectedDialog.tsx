@@ -32,7 +32,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         gridTemplateColumns: '50px auto 50px',
     },
     dialogTitleWithTabs: {
-        paddingBottom: 0,
+        paddingBottom: '0 !important',
         gridRowGap: 16,
         gridTemplateRows: '1fr 1fr',
         gridTemplateAreas: `
@@ -156,8 +156,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
+                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             style={{
                                 border: isDashboard || disableTitleBorder ? 'none' : undefined,
                                 fontSize: isDashboard ? 24 : undefined,

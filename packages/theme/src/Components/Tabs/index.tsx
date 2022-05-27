@@ -71,7 +71,10 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     overflow: 'hidden',
     flex: 1,
     gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    padding: theme.spacing(1, 1, 0, 1),
+    margin: theme.spacing(-1, -1, 0, -1),
     background: 'transparent',
+    borderRadius: 0,
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
@@ -85,6 +88,7 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
         overflow: 'hidden',
         flex: 1,
         maxWidth: '100%',
+        paddingRight: isOpen ? 40 : 0,
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         borderRadius: 0,
         background:
