@@ -14,6 +14,8 @@ import {
 import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderType } from '../../hooks'
 
+const isOpera = window.navigator.userAgent.indexOf('OPR/') >= 0
+
 export function ProviderIconClickBait({
     network,
     provider,
@@ -88,6 +90,8 @@ export function ProviderIconClickBait({
     if (isInjectedProvider(providerType) && isDashboardPage()) return null
 
     if (providerType === ProviderType.Opera && isDashboardPage()) return null
+
+    if (providerType === ProviderType.Opera && !isOpera) return null
 
     // hide fortmatic for some networks because of incomplete supporting
     if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
