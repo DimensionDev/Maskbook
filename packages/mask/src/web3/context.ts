@@ -38,6 +38,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { AbiItem } from 'web3-utils'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
+import { Emitter } from '@servie/events'
 
 const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
 async function getTokenOwner(address: string, tokenId: string) {
@@ -248,18 +249,22 @@ function createSubscriptionFromAsync<T>(
         },
     }
 }
+
+interface Events {
+    event: []
+}
+
 function getEventTarget() {
-    const event = new EventTarget()
+    const event = new Emitter<Events>()
     const EVENT = 'event'
     let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 600)
+        timer = setTimeout(() => event.emit(EVENT), 600)
     }
     function subscribe(f: () => void) {
-        event.addEventListener(EVENT, f)
-        return () => event.removeEventListener(EVENT, f)
+        return event.on(EVENT, f)
     }
     return { trigger, subscribe }
 }
