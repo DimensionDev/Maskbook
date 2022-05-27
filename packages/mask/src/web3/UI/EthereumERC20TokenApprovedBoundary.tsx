@@ -11,6 +11,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginWalletStatusBar } from '../../utils/components/PluginWalletStatusBar'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: '13px 0',
         fontSize: 18,
+    },
+    infiniteUnlockButton: {
+        lineHeight: '18px',
+        margin: 0,
     },
     buttonLabel: {
         display: 'block',
@@ -123,10 +128,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     <>
                         <Box style={{ flex: 1, padding: 16 }}>
                             <ActionButton
-                                className={classes.button}
+                                className={classNames(classes.button, classes.infiniteUnlockButton)}
                                 fullWidth
                                 variant="contained"
-                                size="large"
                                 onClick={() => onApprove(true)}
                                 {...props.ActionButtonProps}>
                                 <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
@@ -137,10 +141,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         </Box>
                         <Box style={{ flex: 1, padding: 16 }}>
                             <ActionButton
-                                className={classes.button}
+                                className={classNames(classes.button, classes.infiniteUnlockButton)}
                                 fullWidth
                                 variant="contained"
-                                size="large"
                                 onClick={() => onApprove(false)}
                                 {...props.ActionButtonProps}>
                                 {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock')}
