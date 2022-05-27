@@ -164,7 +164,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         />
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography component="span" lineHeight="14px" fontSize={12}>
+                        <Typography component="span" lineHeight="14px" fontSize={14}>
                             {t.more_details()}
                         </Typography>
                         <Link
@@ -189,7 +189,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.High].icon(16)}
-                                <Typography component="span" color="#C4C7CD">
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {riskyFactors > 1
                                         ? t.risky_factors({ quantity: riskyFactors.toString() })
                                         : t.risky_factor({ quantity: riskyFactors.toString() })}
@@ -199,7 +199,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
-                                <Typography component="span" color="#C4C7CD">
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {attentionFactors > 1
                                         ? t.attention_factors({ quantity: attentionFactors.toString() })
                                         : t.attention_factor({ quantity: attentionFactors.toString() })}
