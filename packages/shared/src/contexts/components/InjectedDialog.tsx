@@ -19,6 +19,7 @@ import { Children, cloneElement } from 'react'
 import { useSharedI18N } from '../../locales'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
+import classnames from 'classnames'
 
 interface StyleProps {
     clean: boolean
@@ -29,6 +30,18 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gridTemplateColumns: '50px auto 50px',
+    },
+    dialogTitleWithTabs: {
+        paddingBottom: 0,
+        gridRowGap: 16,
+        gridTemplateRows: '1fr 1fr',
+        gridTemplateAreas: `
+            ". . ."
+            "tabs tabs tabs"
+        `,
+    },
+    dialogTitleTabs: {
+        gridArea: 'tabs',
     },
     dialogTitleEndingContent: {
         display: 'flex',
@@ -73,6 +86,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     titleTail?: React.ReactChild | null
+    titleTabs?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
@@ -88,6 +102,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
+        dialogTitleWithTabs,
+        dialogTitleTabs,
         dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
@@ -106,6 +122,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         onClose,
         title,
         titleTail = null,
+        titleTabs = null,
         disableTitleBorder,
         ...rest
     } = props
@@ -139,7 +156,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className="dashboard-dialog-title-hook"
+                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
                                 border: isDashboard || disableTitleBorder ? 'none' : undefined,
@@ -163,6 +180,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {title}
                             </Typography>
                             <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
+                            {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
                         </DialogTitle>
                     ) : null}
 
