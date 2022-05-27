@@ -43,7 +43,7 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
                     {nickname}
                 </Typography>
                 <Typography variant="caption" lineHeight={1.2}>
-                    {formatPersonaFingerprint(fingerprint ?? '', 6)}
+                    {formatPersonaFingerprint(fingerprint ?? '', 4)}
                 </Typography>
             </Stack>
             <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
