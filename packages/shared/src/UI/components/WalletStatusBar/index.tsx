@@ -47,6 +47,7 @@ export interface WalletStatusBarProps extends withClasses<'button'> {
         color?: 'warning'
         openPopupsWindow?: () => void
         wallets?: BindingProof[]
+        waiting?: string | React.ReactElement | React.ReactNode
     }
     onChange?: (address: string) => void
     pending?: string | React.ReactElement | React.ReactNode
@@ -91,6 +92,7 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                             loading={actionProps.loading}
                             action={actionProps.action}
                             color={actionProps.color}
+                            waiting={actionProps.waiting}
                         />
                     )}
                 </Box>

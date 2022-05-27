@@ -15,6 +15,7 @@ interface WalletButtonProps extends withClasses<'root'> {
     disabled?: boolean
     action?: () => Promise<void>
     title?: string | React.ReactElement | React.ReactNode
+    waiting?: string | React.ReactElement | React.ReactNode
 }
 
 const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
@@ -37,7 +38,7 @@ const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 
 export function WalletButton(props: WalletButtonProps) {
-    const { color, startIcon, endIcon, loading = false, disabled = false, action, title } = props
+    const { color, startIcon, endIcon, loading = false, disabled = false, action, title, waiting } = props
     const classes = useStylesExtends(useStyles({ color }), props)
     const t = useSharedI18N()
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -67,7 +68,7 @@ export function WalletButton(props: WalletButtonProps) {
             disabled={loading || disabled || state === 'wait'}
             onClick={run ?? connectWalletDialog}>
             {loading || state === 'wait' ? <CircularProgress size={24} className={classes.progress} /> : null}
-            {title ?? t.change()}
+            {(state === 'wait' ? waiting : undefined) ?? title ?? t.change()}
         </Button>
     )
 }

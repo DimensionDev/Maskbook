@@ -18,6 +18,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
         endIcon?: React.ReactNode
         loading?: boolean
         color?: 'warning'
+        waiting?: string | React.ReactElement | React.ReactNode
     }
     onChange?: (address: string) => void
     tooltip?: string | React.ReactElement | React.ReactNode

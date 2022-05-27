@@ -353,9 +353,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                     ? t('plugin_wallet_connect_network', {
                                           network: expectedNetwork.replace('Mainnet', ''),
                                       })
-                                    : t('plugin_wallet_switch_network_under_going', {
+                                    : t('plugin_wallet_switch_network', {
                                           network: expectedNetwork.replace('Mainnet', ''),
                                       }),
+                            waiting: t('plugin_wallet_switch_network_under_going', {
+                                network: expectedNetwork.replace('Mainnet', ''),
+                            }),
                             action: onSwitchChain,
                         }}
                     />
