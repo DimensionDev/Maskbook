@@ -340,6 +340,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     <PluginWalletStatusBar
                         tooltip={providerType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : ''}
                         actionProps={{
+                            disabled: providerType === ProviderType.WalletConnect,
                             startIcon: (
                                 <WalletIcon
                                     networkIcon={networkDescriptor?.icon} // switch the icon to meet design
@@ -347,9 +348,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                     size={18}
                                 />
                             ),
-                            title: t('plugin_wallet_switch_network_under_going', {
-                                network: expectedNetwork.replace('Mainnet', ''),
-                            }),
+                            title:
+                                providerType === ProviderType.WalletConnect
+                                    ? t('plugin_wallet_connect_network', {
+                                          network: expectedNetwork.replace('Mainnet', ''),
+                                      })
+                                    : t('plugin_wallet_switch_network_under_going', {
+                                          network: expectedNetwork.replace('Mainnet', ''),
+                                      }),
                             action: onSwitchChain,
                         }}
                     />

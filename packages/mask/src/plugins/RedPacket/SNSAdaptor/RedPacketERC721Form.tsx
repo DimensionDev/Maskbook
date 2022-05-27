@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
-            height: 213,
+            height: 219,
             overflowY: 'auto',
             padding: theme.spacing(2),
         },

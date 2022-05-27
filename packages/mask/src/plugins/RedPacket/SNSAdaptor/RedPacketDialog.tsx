@@ -1,3 +1,4 @@
+import { HistoryIcon } from '@masknet/icons'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -17,7 +18,9 @@ import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
+import { RedPacketPast } from './RedPacketPast'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -143,18 +146,41 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
+    const [showHistory, setShowHistory] = useState(false)
+    const _onHistoryClick = () => {
+        setShowHistory((history) => !history)
+    }
+    const title = !showHistory ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
     return (
-        <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
+        <InjectedDialog
+            open={props.open}
+            title={title}
+            onClose={onClose}
+            disableTitleBorder
+            titleTail={<HistoryIcon onClick={_onHistoryClick} />}>
             <DialogContent className={classes.dialogContent}>
-                <RedPacketCreateNew
-                    origin={settings}
-                    onNext={onNext}
-                    state={tokenState}
-                    onClose={onClose}
-                    onChange={onChange}
-                />
+                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    !showHistory ? (
+                        <RedPacketCreateNew
+                            origin={settings}
+                            onNext={onNext}
+                            state={tokenState}
+                            onClose={onClose}
+                            onChange={onChange}
+                        />
+                    ) : (
+                        <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
+                    )
+                ) : null}
+                {step === CreateRedPacketPageStep.ConfirmPage ? (
+                    <RedPacketConfirmDialog
+                        onClose={onClose}
+                        onBack={onBack}
+                        onCreated={handleCreated}
+                        settings={settings}
+                    />
+                ) : null}
             </DialogContent>
         </InjectedDialog>
     )

@@ -117,7 +117,7 @@ export function WalletUI(props: WalletUIProps) {
                             ? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : providerType === ProviderType.MaskWallet
                             ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
-                            : providerDescriptor?.name ?? formatAddress(address, 4)}
+                            : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}
                     {showMenuDrop ? <DownIcon /> : null}

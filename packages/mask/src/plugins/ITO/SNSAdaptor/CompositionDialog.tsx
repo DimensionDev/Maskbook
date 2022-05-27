@@ -9,7 +9,6 @@ import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
@@ -21,7 +20,6 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { payloadOutMask } from './helpers'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
-import { PoolList } from './PoolList'
 
 interface StyleProps {
     snsId: string
@@ -32,7 +30,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         ...(snsId === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
         padding: 0,
-        paddingTop: 50,
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
@@ -212,28 +209,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
         props.onClose()
     }, [props, state])
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('plugin_ito_create_new'),
-                children: (
-                    <CreateForm
-                        onNext={onNext}
-                        onClose={onClose}
-                        origin={poolSettings}
-                        onChangePoolSettings={setPoolSettings}
-                    />
-                ),
-                sx: { p: 0 },
-            },
-            {
-                label: t('plugin_ito_select_existing'),
-                children: <PoolList onSend={onCreateOrSelect} />,
-                sx: { p: 0 },
-            },
-        ],
-        state,
-    }
     // #endregion
 
     useEffect(() => {
@@ -244,7 +219,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
         <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
-                    <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
+                    <CreateForm
+                        onNext={onNext}
+                        onClose={onClose}
+                        origin={poolSettings}
+                        onChangePoolSettings={setPoolSettings}
+                    />
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog

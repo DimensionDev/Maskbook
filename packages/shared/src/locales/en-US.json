@@ -39,5 +39,5 @@
     "plugin_wallet_connect_network_under_going": "Connect {{network}} wallet",
     "plugin_wallet_connect_wallet": "Connect wallet",
     "plugin_wallet_connect_retry": "Retry",
-    "plugin_wallet_connect_tips": "You’re connected to a walletConnect \nwallet. Please switch network in that \nwallet, or switch to another wallet."
+    "plugin_wallet_connect_tips": "Please switch to this network in the mobile \napplication wallet you are connected to."
 }
