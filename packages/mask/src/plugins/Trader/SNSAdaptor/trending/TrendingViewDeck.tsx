@@ -131,7 +131,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         coin.contract_address?.trim(),
         isTokenSecurityClosed,
     )
-
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,

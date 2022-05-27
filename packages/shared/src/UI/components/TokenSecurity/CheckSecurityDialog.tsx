@@ -78,7 +78,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 tokenInfo={contractDetailed}
                                 tokenPrice={tokenPrice?.[tokenSecurity?.contract]}
                                 tokenSecurity={tokenSecurity}
-                                tokenMarketCap={tokenMarketCapInfo?.market_cap}
+                                tokenMarketCap={tokenMarketCapInfo}
                             />
                         )}
                     </Stack>

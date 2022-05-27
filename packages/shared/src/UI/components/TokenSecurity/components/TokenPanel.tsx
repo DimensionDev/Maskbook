@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     tooltip: {
-        color: theme.palette.text.buttonText,
         fontSize: 12,
     },
 }))
@@ -60,7 +59,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 PopperProps={{ container }}
                 arrow
                 title={
-                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
+                    <Typography color={(theme) => theme.palette.info.contrastText} className={classes.tooltip}>
                         {tokenSecurity.total_supply}
                     </Typography>
                 }>
@@ -150,7 +149,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
-                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : '--'}
+                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
                     </Stack>
                 </Stack>
             </Stack>

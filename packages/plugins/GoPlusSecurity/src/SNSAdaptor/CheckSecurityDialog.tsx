@@ -14,7 +14,8 @@ import {
     ChainId,
     CurrencyType,
     getCoinGeckoPlatformId,
-    useERC721ContractDetailed,
+    isSameAddress,
+    useERC20TokenDetailed,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
@@ -64,17 +65,25 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
 
-    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: ChainId, content: string) => {
-        if (!content || content.trim() === ZERO_ADDRESS) return
-        let values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
-        values ??= {}
-        if (isEmpty(values)) throw new Error('Contract Not Found')
-        const entity = first(Object.entries(values ?? {}))
-        if (!entity) return
-        return { ...entity[1], contract: entity[0], chainId } as TokenSecurity
-    }, [])
+    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(
+        async (chainId: ChainId, content: string): Promise<TokenSecurity | undefined> => {
+            if (!content || isSameAddress(content.trim(), ZERO_ADDRESS)) return
+            let values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
+            values ??= {}
+            if (isEmpty(values)) throw new Error('Contract Not Found')
+            const entity = first(Object.entries(values ?? {}))
+            if (!entity) return
+            return { ...entity[1], contract: entity[0], chainId }
+        },
+        [],
+    )
 
-    const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(value?.contract)
+    const { value: contractDetailed, loading: loadingToken } = useERC20TokenDetailed(
+        value?.contract,
+        undefined,
+        value?.chainId,
+    )
+
     const { value: tokenPrice } = useAsync(async () => {
         if (!value) return
         const platformId = getCoinGeckoPlatformId(value.chainId)
@@ -85,6 +94,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         if (!value?.token_symbol) return
         return TokenView.getTokenInfo(value.token_symbol)
     }, [value])
+
     return (
         <InjectedDialog title={t.__plugin_name()} classes={{ paper: classes.paperRoot }} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
@@ -104,7 +114,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 tokenInfo={contractDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice?.[value?.contract]}
-                                tokenMarketCap={tokenMarketCapInfo?.market_cap}
+                                tokenMarketCap={tokenMarketCapInfo}
                             />
                         )}
                         {!error && !searching && !loadingToken && !value && (

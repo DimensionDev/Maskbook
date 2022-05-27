@@ -33,7 +33,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const [open, setOpen] = useState(false)
 
     const makeMessageList =
-        tokenSecurity.is_whitelisted === '1'
+        tokenSecurity.trust_list === '1'
             ? []
             : SecurityMessages.filter(
                   (x) =>

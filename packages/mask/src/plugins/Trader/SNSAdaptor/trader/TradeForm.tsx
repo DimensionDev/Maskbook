@@ -15,7 +15,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, isHighRisk, SelectTokenChip, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, useTokenSecurity, isHighRisk, TokenSecurityBar } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -34,8 +34,8 @@ import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
-import { RiskWarningDialog } from './RiskWarningDialog'
 import { useActivatedPluginsSNSAdaptor, PluginId } from '@masknet/plugin-infra/content-script'
+import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -531,6 +531,18 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     }
                                     render={(disable: boolean) =>
                                         !isTokenSecurityClosed && isRisky ? (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                color="error"
+                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                onClick={() => setIsWarningOpen(true)}>
+                                                {t('plugin_trader_risk_warning', {
+                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                                })}
+                                            </ActionButton>
+                                        ) : isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 variant="contained"

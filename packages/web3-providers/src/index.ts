@@ -12,7 +12,7 @@ import { TokenPriceAPI } from './token-price'
 import { InstagramAPI } from './instagram'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
-import { TokenViewAPI } from './tokenview'
+import { TokenViewAPI } from './token-view'
 
 export * from './types'
 export * from './hooks'

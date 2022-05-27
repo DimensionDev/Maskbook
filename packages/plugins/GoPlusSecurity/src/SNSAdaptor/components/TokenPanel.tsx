@@ -150,7 +150,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
-                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : '--'}
+                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
                     </Stack>
                 </Stack>
             </Stack>

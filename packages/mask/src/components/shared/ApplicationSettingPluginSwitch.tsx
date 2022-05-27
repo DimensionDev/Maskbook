@@ -10,7 +10,7 @@ import {
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
-import { CheckSecurityConfirmDialog } from './CheckSecurityConfirmDialog'
+import CheckSecurityConfirmDialog from './CheckSecurityConfirmDialog'
 import { useState } from 'react'
 interface Props {}
 const useStyles = makeStyles()((theme) => ({

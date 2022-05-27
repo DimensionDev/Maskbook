@@ -19,6 +19,7 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "react-use": "^17.3.2",
-    "urlcat": "^2.0.4"
+    "urlcat": "^2.0.4",
+    "wallet.ts":"1.0.1"
   }
 }

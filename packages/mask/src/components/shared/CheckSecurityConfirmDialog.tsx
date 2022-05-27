@@ -24,13 +24,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CheckSecurityConfirmDialogProps extends withClasses<never> {
+interface CheckSecurityConfirmDialogProps extends withClasses<never> {
     open: boolean
     onConfirm: () => void
     onClose: () => void
 }
 
-export function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {
+function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {
     const { t } = useI18N()
     const { open, onConfirm, onClose } = props
     const { classes } = useStyles()
@@ -65,3 +65,4 @@ export function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProp
         </>
     )
 }
+export default CheckSecurityConfirmDialog
