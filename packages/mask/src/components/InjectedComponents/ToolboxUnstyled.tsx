@@ -37,7 +37,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
 import { MaskIcon } from '../../resources/MaskIcon'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ connectWalletIconSize?: string }>()((theme, { connectWalletIconSize = '1.5rem' }) => ({
     title: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
         display: 'flex',
@@ -73,6 +73,9 @@ const useStyles = makeStyles()((theme) => ({
     maskFilledIcon: {
         marginRight: 6,
     },
+    accountBalanceWalletIcon: {
+        fontSize: connectWalletIconSize,
+    },
 }))
 export interface ToolboxHintProps {
     Container?: React.ComponentType<React.PropsWithChildren<{}>>
@@ -82,6 +85,7 @@ export interface ToolboxHintProps {
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
     iconSize?: number
     badgeSize?: number
+    connectWalletIconSize?: string
     mini?: boolean
     category: 'wallet' | 'application'
 }
@@ -95,10 +99,12 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
+        connectWalletIconSize,
         mini,
         ListItemText = MuiListItemText,
     } = props
-    const { classes } = useStyles()
+    console.log({ connectWalletIconSize })
+    const { classes } = useStyles({ connectWalletIconSize })
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     return (
@@ -134,12 +140,13 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         ListItemText = MuiListItemText,
         ListItemIcon = MuiListItemIcon,
         Container = 'div',
+        connectWalletIconSize,
         Typography = MuiTypography,
         iconSize = 24,
         badgeSize = 12,
         mini,
     } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ connectWalletIconSize })
     const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
     const theme = useTheme()
     const networkDescriptor = useNetworkDescriptor()
@@ -168,7 +175,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                     badgeIconBorderColor={theme.palette.background.paper}
                                 />
                             ) : (
-                                <AccountBalanceWalletIcon />
+                                <AccountBalanceWalletIcon className={classes.accountBalanceWalletIcon} />
                             )}
                         </ListItemIcon>
                         {mini ? null : (

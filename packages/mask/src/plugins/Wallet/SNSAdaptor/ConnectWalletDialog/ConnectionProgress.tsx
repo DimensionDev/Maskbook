@@ -48,6 +48,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         paddingRight: theme.spacing(1),
     },
     progress: {
+        fontSize: 14,
         color: theme.palette.common.black,
     },
     warningTriangleIcon: {

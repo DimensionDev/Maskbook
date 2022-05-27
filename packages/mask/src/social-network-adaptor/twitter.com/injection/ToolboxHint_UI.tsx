@@ -10,7 +10,7 @@ const Container = styled('div')`
 `
 const ListItem = styled(ListItemButton)`
     border-radius: 9999px;
-    padding: 6px 14px;
+    padding: 6px 12px;
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
@@ -40,6 +40,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     return (
         <ToolboxHintUnstyled
             iconSize={26}
+            connectWalletIconSize="1.8rem"
             mini={mini}
             ListItemIcon={Icon}
             Typography={Text}
