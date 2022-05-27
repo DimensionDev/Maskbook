@@ -71,9 +71,7 @@
         "Harmony_Test": ["https://api.s0.b.hmny.io/"],
         "Moonbeam": [
             "https://moonbeam.api.onfinality.io/rpc?apikey=e5e810e6-6162-4427-8ba3-d5ad8b9cf4c0",
-            "https://moonbeam.blastapi.io/905553b4-5acd-4f24-b473-ebca226a76c4",
-            "https://moonbeam.public.blastapi.io",
-            "https://moonbeam.api.onfinality.io/public"
+            "https://moonbeam.blastapi.io/905553b4-5acd-4f24-b473-ebca226a76c4"
         ]
     },
     "RPC_WEIGHTS": {

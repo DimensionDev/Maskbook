@@ -23,13 +23,13 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
-import { pow10 } from '@masknet/web3-shared-base'
+import { scale10 } from '@masknet/web3-shared-base'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
-    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
-    [ChainId.Moonbeam]: pow10(9).multipliedBy(1), // 1 Gwei
+    [ChainId.BSC]: scale10(5, 9), // 5 Gwei
+    [ChainId.Conflux]: scale10(5, 9), // 5 Gwei
+    [ChainId.Matic]: scale10(30, 9), // 30 Gwei
+    [ChainId.Moonbeam]: scale10(1, 9), // 1 Gwei
 }
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(

@@ -21,6 +21,6 @@
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
         "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
         "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"],
-        "Moonbeam": ["https://token-list.sushi.com/"]
+        "Moonbeam": ["https://token-list.sushi.com/", "https://tokens.r2d2.to/latest/1284/tokens.json"]
     }
 }
