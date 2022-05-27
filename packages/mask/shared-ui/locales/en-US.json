@@ -689,7 +689,7 @@
     "plugin_collectible_invalid_reserve_price": "Invalid reserve price",
     "plugin_collectible_place_a_bid": "Place a Bid",
     "plugin_collectible_make_an_offer": "Make an Offer",
-    "plugin_collectible_approved_by_open_sea": "By checking this box, I acknowledge that this item has not been reviewed or approved by OpenSea.",
+    "plugin_collectible_approved_by_opensea": "By checking this box, I acknowledge that this item has not been reviewed or approved by OpenSea.",
     "plugin_collectible_legal_text": "By checking this box, I agree to OpenSea's <terms>Terms of Service</terms>.",
     "plugin_collectibles_name": "Collectibles",
     "plugin_collectibles_description": "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.",

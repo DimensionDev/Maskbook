@@ -249,9 +249,8 @@ export function ITO(props: ITO_Props) {
     // context
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const postLink = usePostLink()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
+    const [, destructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
@@ -418,23 +417,8 @@ export function ITO(props: ITO_Props) {
         return () => clearTimeout(timer)
     }, [endTime, listOfStatus])
 
-    useEffect(() => {
-        if (destructState.type === TransactionStateType.UNKNOWN || !canWithdraw) return
-        let summary = t('plugin_ito_withdraw')
-        if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
-        }
-        availability?.exchange_addrs.forEach((addr, i) => {
-            const token = exchange_tokens.find(currySameAddress(addr))
-            const comma = noRemain && i === 0 ? ' ' : ', '
-            if (token) {
-                summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
-            }
-        })
-    }, [destructState, canWithdraw])
-
     const onWithdraw = useCallback(async () => {
-        destructCallback(payload.pid)
+        await destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     // #endregion
 

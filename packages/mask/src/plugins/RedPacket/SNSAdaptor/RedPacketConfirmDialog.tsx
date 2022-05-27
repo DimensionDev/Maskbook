@@ -11,7 +11,7 @@ import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import type { RedPacketJSONPayload, RedPacketRecord,  } from '../types'
+import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -260,7 +260,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={6}>
                 <ActionButton loading={isCreating} variant="contained" size="large" fullWidth onClick={createRedpacket}>
-                    {t.send_symbol( {
+                    {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',
                     })}

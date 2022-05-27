@@ -127,7 +127,11 @@ export function Snapshot() {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline />
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    renderInTimeline
+                />
             </Box>
         </>
     )

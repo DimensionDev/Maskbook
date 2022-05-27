@@ -109,12 +109,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
 
     if (!chainIdValid && !offChain)
         return (
-            <ActionButton
-                className={buttonClass}
-                disabled
-                fullWidth
-                variant="contained"
-                {...props.ActionButtonProps}>
+            <ActionButton className={buttonClass} disabled fullWidth variant="contained" {...props.ActionButtonProps}>
                 {t('plugin_wallet_invalid_network')}
             </ActionButton>
         )

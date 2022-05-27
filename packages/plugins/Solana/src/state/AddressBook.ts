@@ -12,12 +12,9 @@ export class AddressBook extends AddressBookState<ChainId, Record<ChainId, strin
             chainId?: Subscription<ChainId>
         },
     ) {
-        // TODO: 6002
-        // eslint-disable-next-line unicorn/no-array-reduce
-        const defaultValue = getEnumAsArray(ChainId).reduce<Record<ChainId, string[]>>((accumulator, chainId) => {
-            accumulator[chainId.value] = []
-            return accumulator
-        }, {})
+        const defaultValue = Object.fromEntries(
+            getEnumAsArray(ChainId).map((x) => [x.value, []] as [ChainId, string[]]),
+        ) as Record<ChainId, string[]>
 
         super(context, defaultValue, subscriptions, {
             isValidAddress,

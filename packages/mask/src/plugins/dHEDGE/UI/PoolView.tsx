@@ -134,7 +134,11 @@ export function PoolView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={pool?.chainId ?? ChainId.Mainnet} renderInTimeline />
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={pool?.chainId ?? ChainId.Mainnet}
+                    renderInTimeline
+                />
             </Box>
         </>
     )

@@ -87,7 +87,6 @@ export function RedPacket(props: RedPacketProps) {
 
     const openShareTxDialog = useOpenShareTxDialog()
 
-
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {

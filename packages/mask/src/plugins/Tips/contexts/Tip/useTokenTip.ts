@@ -15,7 +15,7 @@ export function useTokenTip(
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
     const assetType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
-    const [{loading: isTransferring}, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {
         const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()

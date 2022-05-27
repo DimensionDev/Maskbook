@@ -107,7 +107,6 @@ export const TransferERC721 = memo(() => {
         handleSubmit,
         setValue,
         watch,
-        setError,
         clearErrors,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
@@ -173,7 +172,7 @@ export const TransferERC721 = memo(() => {
     }, [erc721GasLimit.value])
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
+    const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(
         SchemaType.ERC721,
         contract?.address ?? '',
     )
@@ -210,21 +209,17 @@ export const TransferERC721 = memo(() => {
     const tokenDetailedOwnerList: Array<NonFungibleToken<ChainId, SchemaType>> = []
     const refreshing = false
 
-    useEffect(() => {
-        if (transferState.type === TransactionStateType.HASH) {
-            navigate(DashboardRoutes.WalletsHistory)
-        }
-    }, [transferState])
-
     const onTransfer = useCallback(
         async (data: FormInputs) => {
+            let hash: string | undefined
             if (EthereumAddress.isValid(data.recipient)) {
-                await transferCallback(data.tokenId, data.recipient, gasConfig)
-                return
+                hash = await transferCallback(data.tokenId, data.recipient, gasConfig)
             } else if (Others?.isValidDomain?.(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
-                await transferCallback(data.tokenId, registeredAddress, gasConfig)
+                hash = await transferCallback(data.tokenId, registeredAddress, gasConfig)
             }
-            return
+            if (typeof hash === 'string') {
+                navigate(DashboardRoutes.WalletsHistory)
+            }
         },
         [transferCallback, contract?.address, gasConfig, registeredAddress, Others?.isValidDomain],
     )
@@ -422,10 +417,7 @@ export const TransferERC721 = memo(() => {
                         </Box>
                     </Box>
                     <Box mt={4}>
-                        <Button
-                            sx={{ width: 240 }}
-                            type="submit"
-                            disabled={isSubmitting || transferState.type === TransactionStateType.WAIT_FOR_CONFIRMING}>
+                        <Button sx={{ width: 240 }} type="submit" disabled={isSubmitting || isTransferring}>
                             {t.wallets_transfer_send()}
                         </Button>
                     </Box>

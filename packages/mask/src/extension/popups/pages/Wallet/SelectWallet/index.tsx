@@ -149,24 +149,20 @@ const SelectWallet = memo(() => {
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
-    }, [selected, wallets])
+    }, [selected, wallets, location.state])
 
-    if (!wallets.length) {
-        return (
-            <div className={classes.placeholder}>
-                <Typography>{t('popups_wallet_no_wallet')}</Typography>
-            </div>
-        )
-    }
-
-    return chainId && chainIdValid ? (
+    return chainIdValid ? (
         <>
             <div className={classes.content}>
                 {currentNetwork ? (
                     <div className={classes.header}>
                         <div className={classes.network}>
                             <div className={classes.iconWrapper}>
-                                <ChainIcon color={currentNetwork.iconColor} />
+                                <ChainIcon
+                                    color={currentNetwork.iconColor}
+                                    size={20}
+                                    classes={{ point: classes.colorChainICon }}
+                                />
                             </div>
                             <Typography className={classes.title}>{currentNetwork.name}</Typography>
                         </div>

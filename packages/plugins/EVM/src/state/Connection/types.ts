@@ -22,12 +22,6 @@ export interface EVM_Provider extends WalletProvider<ChainId, ProviderType, Web3
 
 export interface EVM_Connection extends Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM> {
     estimateTransaction(config: Transaction, fallback?: number, options?: EVM_Web3ConnectionOptions): Promise<string>
-    getTransactionReceipt(hash: string, options?: EVM_Web3ConnectionOptions): Promise<TransactionReceipt | null>
-
-    confirmRequest(options?: EVM_Web3ConnectionOptions): Promise<void>
-    rejectRequest(options?: EVM_Web3ConnectionOptions): Promise<void>
-    replaceRequest(hash: string, config: Transaction, options?: EVM_Web3ConnectionOptions): Promise<void>
-    cancelRequest(hash: string, config: Transaction, options?: EVM_Web3ConnectionOptions): Promise<void>
 }
 
 export interface Context {

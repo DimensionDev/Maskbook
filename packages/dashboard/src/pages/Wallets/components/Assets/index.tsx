@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from 'react'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
@@ -39,7 +39,7 @@ export enum AssetTab {
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
 interface TokenAssetsProps {
-    network: NetworkDescriptor<number, string> | null
+    network: Web3Helper.NetworkDescriptorAll | null
 }
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {

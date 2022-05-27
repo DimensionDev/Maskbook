@@ -48,7 +48,9 @@ export class ProviderState<
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('Provider', defaultValue)
+        const { storage } = this.context
+            .createKVStorage('memory', 'Provider', {})
+            .createSubScope('Provider', defaultValue)
         this.storage = storage
 
         this.setupSubscriptions()

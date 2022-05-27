@@ -94,7 +94,11 @@ export function FurucomboView(props: PoolViewProps) {
                 </Typography>
 
                 <Box sx={{ padding: 1.5 }}>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} renderInTimeline />
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={props.chainId}
+                        renderInTimeline
+                    />
                 </Box>
             </>
         )
@@ -120,7 +124,11 @@ export function FurucomboView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} renderInTimeline />
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={props.chainId}
+                    renderInTimeline
+                />
             </Box>
         </>
     )

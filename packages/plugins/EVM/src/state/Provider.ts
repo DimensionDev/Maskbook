@@ -20,26 +20,21 @@ import { Providers } from './Connection/provider'
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedContext) {
         const defaultValue: ProviderStorage<Account<ChainId>, ProviderType> = {
-            // TODO: 6002
-            // eslint-disable-next-line unicorn/no-array-reduce
-            accounts: getEnumAsArray(ProviderType).reduce<Record<ProviderType, Account<ChainId>>>(
-                (accumulator, providerType) => {
-                    accumulator[providerType.value] = {
+            accounts: Object.fromEntries(
+                getEnumAsArray(ProviderType).map((x) => [
+                    x.value,
+                    {
                         account: '',
                         chainId: ChainId.Mainnet,
-                    }
-                    return accumulator
-                },
-                {},
-            ),
-            // TODO: 6002
-            // eslint-disable-next-line unicorn/no-array-reduce
-            providers: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce<
-                Record<EnhanceableSite | ExtensionSite, ProviderType>
-            >((accumulator, site) => {
-                accumulator[site.value] = ProviderType.MaskWallet
-                return accumulator
-            }, {}),
+                    },
+                ]),
+            ) as Record<ProviderType, Account<ChainId>>,
+            providers: Object.fromEntries(
+                [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
+                    x.value,
+                    ProviderType.MaskWallet,
+                ]),
+            ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
         }
 
         super(context, Providers, defaultValue, {

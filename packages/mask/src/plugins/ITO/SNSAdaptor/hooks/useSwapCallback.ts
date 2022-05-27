@@ -6,12 +6,7 @@ import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { Qualification } from '@masknet/web3-contracts/types/Qualification'
 import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification2'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    ChainId,
-    SchemaType,
-    TransactionEventType,
-    useITOConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
     isPositive,
@@ -27,7 +22,6 @@ import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
 import { checkAvailability } from '../utils/checkAvailability'
-import type { EVM_Connection } from '@masknet/plugin-evm'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 export function useSwapCallback(
@@ -40,7 +34,7 @@ export function useSwapCallback(
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
     const { contract: ITO_Contract, version } = useITO_Contract(chainId, payload.contract_address)
     const { contract: qualificationContract } = useQualificationContract(
@@ -50,7 +44,7 @@ export function useSwapCallback(
     )
 
     return useAsyncFn(async () => {
-        if (!ITO_Contract || !qualificationContract || !payload) return
+        if (!ITO_Contract || !qualificationContract || !payload || !connection) return
 
         const { pid, password } = payload
 

@@ -46,6 +46,7 @@ export type Signature = CompositeSignature[]
 export type GasOption = never
 export type Block = BlockObject
 export type Transaction = MutateOptions
+export type TransactionReceipt = never
 export type TransactionDetailed = TransactionObject
 export type TransactionSignature = never
 export type TransactionParameter = string

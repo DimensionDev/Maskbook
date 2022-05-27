@@ -5,11 +5,7 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { omit, pick } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
-import {
-    ChainId,
-    SchemaType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import { Trans } from 'react-i18next'

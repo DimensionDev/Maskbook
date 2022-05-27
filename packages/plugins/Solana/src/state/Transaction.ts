@@ -12,15 +12,10 @@ export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        // TODO: 6002
-        // eslint-disable-next-line unicorn/no-array-reduce
-        const defaultValue = getEnumAsArray(ChainId).reduce<TransactionStorage<ChainId, SolanaTransaction>>(
-            (accumulator, chainId) => {
-                accumulator[chainId.value] = {}
-                return accumulator
-            },
-            {},
-        )
+        const defaultValue = Object.fromEntries(
+            getEnumAsArray(ChainId).map((x) => [x.value, {}]),
+        ) as TransactionStorage<ChainId, SolanaTransaction>
+
         super(context, defaultValue, subscriptions, {
             formatAddress,
         })

@@ -1,11 +1,6 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    SchemaType,
-    GasOptionConfig,
-    TransactionEventType,
-    useTraderConstants,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, GasOptionConfig, TransactionEventType, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'

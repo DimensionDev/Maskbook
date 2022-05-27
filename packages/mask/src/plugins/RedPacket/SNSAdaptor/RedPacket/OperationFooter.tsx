@@ -84,7 +84,10 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet} renderInTimeline>
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={chainId ?? ChainId.Mainnet}
+                renderInTimeline>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}

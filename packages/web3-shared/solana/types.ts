@@ -61,6 +61,7 @@ export type Signature = string
 export type GasOption = never
 export type Block = BlockResponse
 export type Transaction = SolanaTransaction
+export type TransactionReceipt = never
 export type TransactionDetailed = TransactionResponse
 export type TransactionSignature = SolanaTransaction
 export type TransactionParameter = string

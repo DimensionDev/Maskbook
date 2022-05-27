@@ -316,7 +316,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         loadingOwnerList,
     } = props
     const { t: tr } = useBaseI18N()
-    const { t } = useI18N()
+    const t = useI18N()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [tokenDetailed, setTokenDetailed] = useState<OrderedERC721Token>()
     const [searched, setSearched] = useState(false)
@@ -451,6 +451,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         />
     )
 
+    const maxSharesOptions = { amount: NFT_RED_PACKET_MAX_SHARES.toString() }
+
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.nft_select_collection()} maxWidth="xs">
             {tokenDetailedOwnerList.length === 0 ? (
@@ -503,15 +505,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     </Box>
                     <div className={classes.selectSharesExceedBox}>
                         <Typography className={classes.selectSharesExceed}>
-                            {isSelectSharesExceed ? t.nft_max_shares_tip({ amountL: NFT_RED_PACKET_MAX_SHARES }) : null}
+                            {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
                         </Typography>
                         <Box className={classes.selectAmountBox}>
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
                                         {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
-                                            ? t.nft_max_shares_tip({ amount: NFT_RED_PACKET_MAX_SHARES })
-                                            : t.nft_max_shares({ amount: NFT_RED_PACKET_MAX_SHARES })}
+                                            ? t.nft_max_shares_tip(maxSharesOptions)
+                                            : t.nft_max_shares(maxSharesOptions)}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -589,7 +591,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                             </div>
                                             <Typography className={classNames(classes.selectAllCheckBoxText)}>
-                                                {t('select_all')}
+                                                {tr('select_all')}
                                             </Typography>
                                         </div>
                                         <Typography>
@@ -652,9 +654,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 ) : null}
                             </Typography>
                             <Typography className={classes.selectSharesExceed}>
-                                {isSelectSharesExceed
-                                    ? t.nft_max_shares_tip({ amount: NFT_RED_PACKET_MAX_SHARES })
-                                    : null}
+                                {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
                             </Typography>
                         </div>
 
@@ -663,8 +663,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 title={
                                     <Typography className={classes.tooltipText}>
                                         {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
-                                            ? t.nft_max_shares_tip({ amount: NFT_RED_PACKET_MAX_SHARES })
-                                            : t.nft_max_shares({ amount: NFT_RED_PACKET_MAX_SHARES })}
+                                            ? t.nft_max_shares_tip(maxSharesOptions)
+                                            : t.nft_max_shares(maxSharesOptions)}
                                     </Typography>
                                 }
                                 placement="top-end"

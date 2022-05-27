@@ -4,7 +4,7 @@ import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID,  } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {

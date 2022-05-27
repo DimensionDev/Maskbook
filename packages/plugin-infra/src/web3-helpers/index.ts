@@ -25,6 +25,7 @@ export declare namespace Web3Helper {
             GasOption: EVM.GasOption
             Block: EVM.Block
             Transaction: EVM.Transaction
+            TransactionReceipt: EVM.TransactionReceipt
             TransactionDetailed: EVM.TransactionDetailed
             TransactionSignature: EVM.TransactionSignature
             TransactionParameter: EVM.TransactionParameter
@@ -40,6 +41,7 @@ export declare namespace Web3Helper {
             GasOption: Flow.GasOption
             Block: Flow.Block
             Transaction: Flow.Transaction
+            TransactionReceipt: Flow.TransactionReceipt
             TransactionDetailed: Flow.TransactionDetailed
             TransactionSignature: Flow.TransactionSignature
             TransactionParameter: Flow.TransactionParameter
@@ -55,6 +57,7 @@ export declare namespace Web3Helper {
             GasOption: Solana.GasOption
             Block: Solana.Block
             Transaction: Solana.Transaction
+            TransactionReceipt: Solana.TransactionReceipt
             TransactionDetailed: Solana.TransactionDetailed
             TransactionSignature: Solana.TransactionSignature
             TransactionParameter: Solana.TransactionParameter
@@ -90,6 +93,7 @@ export declare namespace Web3Helper {
               Definition[T]['Signature'],
               Definition[T]['Block'],
               Definition[T]['Transaction'],
+              Definition[T]['TransactionReceipt'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
               Definition[T]['Web3'],
@@ -109,6 +113,7 @@ export declare namespace Web3Helper {
               Definition[T]['Signature'],
               Definition[T]['Block'],
               Definition[T]['Transaction'],
+              Definition[T]['TransactionReceipt'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
               Definition[T]['Web3'],
@@ -131,6 +136,7 @@ export declare namespace Web3Helper {
               Definition[T]['GasOption'],
               Definition[T]['Block'],
               Definition[T]['Transaction'],
+              Definition[T]['TransactionReceipt'],
               Definition[T]['TransactionDetailed'],
               Definition[T]['TransactionSignature'],
               Definition[T]['TransactionParameter'],
@@ -150,6 +156,7 @@ export declare namespace Web3Helper {
     export type GasOptionAll = Definition[NetworkPluginID]['GasOption']
     export type BlockAll = Definition[NetworkPluginID]['Block']
     export type TransactionAll = Definition[NetworkPluginID]['Transaction']
+    export type TransactionReceiptAll = Definition[NetworkPluginID]['TransactionReceipt']
     export type TransactionDetailedAll = Definition[NetworkPluginID]['TransactionDetailed']
     export type TransactionSignatureAll = Definition[NetworkPluginID]['TransactionSignature']
     export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
@@ -172,6 +179,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Signature'],
         Definition[NetworkPluginID]['Block'],
         Definition[NetworkPluginID]['Transaction'],
+        Definition[NetworkPluginID]['TransactionReceipt'],
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],
         Definition[NetworkPluginID]['Web3'],
@@ -193,6 +201,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['GasOption'],
         Definition[NetworkPluginID]['Block'],
         Definition[NetworkPluginID]['Transaction'],
+        Definition[NetworkPluginID]['TransactionReceipt'],
         Definition[NetworkPluginID]['TransactionDetailed'],
         Definition[NetworkPluginID]['TransactionSignature'],
         Definition[NetworkPluginID]['TransactionParameter'],

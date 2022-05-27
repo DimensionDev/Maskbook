@@ -1,13 +1,14 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { memo, useMemo } from 'react'
 import { Box, ImageList, Typography, ImageListItem, Stack } from '@mui/material'
 import { NFTCard } from './NFTCard'
 import { LoadingAnimation } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 interface SelectNFTListProps {
-    list: ERC721TokenDetailed[]
+    list: NonFungibleToken<ChainId, SchemaType>[]
     selectedTokenId: string
     loading: boolean
     error?: boolean

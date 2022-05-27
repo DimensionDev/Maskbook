@@ -2,7 +2,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { Account, isSameAddress } from '@masknet/web3-shared-base'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ProviderState } from '@masknet/plugin-infra/web3'
+import { ProviderState, ProviderStorage } from '@masknet/plugin-infra/web3'
 import {
     isValidChainId,
     isValidAddress,
@@ -17,28 +17,22 @@ import { Providers } from './Connection/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(override context: Plugin.Shared.SharedContext) {
-        const defaultValue = {
-            // TODO: 6002
-            // eslint-disable-next-line unicorn/no-array-reduce
-            accounts: getEnumAsArray(ProviderType).reduce<Record<ProviderType, Account<ChainId>>>(
-                (accumulator, providerType) => {
-                    accumulator[providerType.value] = {
+        const defaultValue: ProviderStorage<Account<ChainId>, ProviderType> = {
+            accounts: Object.fromEntries(
+                getEnumAsArray(ProviderType).map((x) => [
+                    x.value,
+                    {
                         account: '',
                         chainId: ChainId.Mainnet,
-                    }
-                    return accumulator
-                },
-                {},
-            ),
-
-            // TODO: 6002
-            // eslint-disable-next-line unicorn/no-array-reduce
-            providers: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce<
-                Record<EnhanceableSite | ExtensionSite, ProviderType>
-            >((accumulator, site) => {
-                accumulator[site.value] = ProviderType.Phantom
-                return accumulator
-            }, {}),
+                    },
+                ]),
+            ) as Record<ProviderType, Account<ChainId>>,
+            providers: Object.fromEntries(
+                [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
+                    x.value,
+                    ProviderType.Phantom,
+                ]),
+            ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
         }
 
         super(context, Providers, defaultValue, {

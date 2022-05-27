@@ -13,15 +13,10 @@ export class Transaction extends TransactionState<ChainId, EVM_Transaction> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        // TODO: 6002
-        // eslint-disable-next-line unicorn/no-array-reduce
-        const defaultValue = getEnumAsArray(ChainId).reduce<TransactionStorage<ChainId, EVM_Transaction>>(
-            (accumulator, chainId) => {
-                accumulator[chainId.value] = {}
-                return accumulator
-            },
-            {},
-        )
+        const defaultValue = Object.fromEntries(
+            getEnumAsArray(ChainId).map((x) => [x.value, {}]),
+        ) as TransactionStorage<ChainId, EVM_Transaction>
+
         super(context, defaultValue, subscriptions, {
             formatAddress: formatEthereumAddress,
         })

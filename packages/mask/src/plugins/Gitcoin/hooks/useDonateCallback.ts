@@ -3,12 +3,7 @@ import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    TransactionEventType,
-    useGitcoinConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionEventType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 

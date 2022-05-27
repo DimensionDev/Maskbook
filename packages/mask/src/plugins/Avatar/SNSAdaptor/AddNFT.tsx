@@ -1,20 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-<<<<<<< HEAD
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-=======
-import { ChainId, ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
->>>>>>> develop
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-<<<<<<< HEAD
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-=======
-import { createNFT } from '../utils'
-import { WalletRPC } from '../../Wallet/messages'
->>>>>>> develop
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -70,7 +61,6 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-<<<<<<< HEAD
         const token = await connection?.getNonFungibleToken(address, tokenId, { chainId })
         if (token) {
             if (chainId && token && token.contract?.chainId !== chainId) {
@@ -85,24 +75,6 @@ export function AddNFT(props: AddNFTProps) {
             handleClose()
         }
     }, [tokenId, address, onAddClick, onClose, connection, chainId])
-=======
-        createNFT(address, tokenId, chainId)
-            .then(async (token) => {
-                if (chainId && token && token.contractDetailed.chainId !== chainId) {
-                    setMessage('chain does not match.')
-                    return
-                }
-                if (!token || !isSameAddress(token?.info.owner, account ?? _account)) {
-                    setMessage(t('nft_owner_hint'))
-                    return
-                }
-                await WalletRPC.addToken(token)
-                onAddClick?.(token)
-                handleClose()
-            })
-            .catch((error) => setMessage(t('nft_owner_hint')))
-    }, [tokenId, address, onAddClick, onClose])
->>>>>>> develop
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

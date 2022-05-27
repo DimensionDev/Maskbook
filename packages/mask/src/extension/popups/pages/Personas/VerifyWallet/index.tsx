@@ -62,7 +62,8 @@ const VerifyWallet = memo(() => {
 
     const walletName = () => {
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
-        if (wallet.providerType !== ProviderType.MaskWallet) return `${providerResolver.providerName(wallet.providerType)} Wallet`
+        if (wallet.providerType !== ProviderType.MaskWallet)
+            return `${providerResolver.providerName(wallet.providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
     }
 

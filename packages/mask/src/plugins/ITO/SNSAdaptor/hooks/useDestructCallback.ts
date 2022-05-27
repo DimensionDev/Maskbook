@@ -1,11 +1,14 @@
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType, useAccount } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { TransactionEventType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useITO_Contract } from './useITO_Contract'
 
 export function useDestructCallback(ito_address: string) {
-    const account = useAccount()
-    const { contract: ITO_Contract } = useITO_Contract(ito_address)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId, ito_address)
 
     return useAsyncFn(
         async (id: string) => {

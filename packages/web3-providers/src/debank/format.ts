@@ -15,36 +15,31 @@ import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from '
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
 
-    // TODO: 6002
-    // eslint-disable-next-line unicorn/no-array-reduce
-    return data.reduce((list: Array<FungibleAsset<ChainId, SchemaType>>, y) => {
-        if (!y.is_verified) return list
-        const chainIdFromChain = chainResolver.chainId(y.chain)
-        if (!chainIdFromChain) return list
-        const address = supportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
+    return data
+        .filter((x) => x.is_verified && chainResolver.chainId(x.chain))
+        .map((x) => {
+            const chainId = chainResolver.chainId(x.chain)!
+            const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
 
-        return [
-            ...list,
-            {
+            return {
                 id: address,
                 address: formatEthereumAddress(address),
-                chainId: chainIdFromChain,
+                chainId,
                 type: TokenType.Fungible,
                 schema: SchemaType.ERC20,
-                decimals: y.decimals,
-                name: y.name,
-                symbol: y.symbol,
-                balance: rightShift(y.amount, y.decimals).toFixed(),
+                decimals: x.decimals,
+                name: x.name,
+                symbol: x.symbol,
+                balance: rightShift(x.amount, x.decimals).toFixed(),
                 price: {
-                    [CurrencyType.USD]: toFixed(y.price),
+                    [CurrencyType.USD]: toFixed(x.price),
                 },
                 value: {
-                    [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
+                    [CurrencyType.USD]: multipliedBy(x.price ?? 0, x.amount).toFixed(),
                 },
-                logoURL: y.logo_url,
-            },
-        ]
-    }, [])
+                logoURL: x.logo_url,
+            }
+        })
 }
 
 export function formatTransactions(

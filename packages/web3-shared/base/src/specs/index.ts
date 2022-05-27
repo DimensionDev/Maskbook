@@ -437,6 +437,8 @@ export interface Transaction<ChainId, SchemaType> {
     status: 0 | 1
     /** transferred tokens */
     tokens: Array<Token<ChainId, SchemaType> & {
+        name: string
+        symbol: string
         amount: string
         direction: string
     }>
@@ -530,6 +532,7 @@ export interface Connection<
     Signature,
     Block,
     Transaction,
+    TransactionReceipt,
     TransactionDetailed,
     TransactionSignature,
     Web3,
@@ -596,6 +599,8 @@ export interface Connection<
     getTransactionStatus(id: string, options?: Web3ConnectionOptions): Promise<TransactionStatusType>
     /** Get the latest transaction nonce. */
     getTransactionNonce(address: string, options?: Web3ConnectionOptions): Promise<number>
+    /** Get the transaction receipt. */
+    getTransactionReceipt(id: string, options?: Web3ConnectionOptions): Promise<TransactionReceipt | null>
     /** Get the source code of a on-chain program. */
     getCode(address: string, options?: Web3ConnectionOptions): Promise<string>
     /** Switch to sub network */
@@ -888,6 +893,7 @@ export interface ConnectionState<
     Signature,
     Block,
     Transaction,
+    TransactionReceipt,
     TransactionDetailed,
     TransactionSignature,
     Web3,
@@ -900,6 +906,7 @@ export interface ConnectionState<
         Signature,
         Block,
         Transaction,
+        TransactionReceipt,
         TransactionDetailed,
         TransactionSignature,
         Web3,

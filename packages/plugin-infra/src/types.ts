@@ -13,7 +13,7 @@ import type {
     Wallet,
     Web3EnableRequirement,
 } from '@masknet/web3-shared-base'
-import type { SchemaType, Transaction, Web3Provider } from '@masknet/web3-shared-evm'
+import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -64,6 +64,7 @@ export declare namespace Plugin {
         GasOption = unknown,
         Block = unknown,
         Transaction = unknown,
+        TransactionReceipt = unknown,
         TransactionDetailed = unknown,
         TransactionSignature = unknown,
         TransactionParameter = unknown,
@@ -81,6 +82,7 @@ export declare namespace Plugin {
                 GasOption,
                 Block,
                 Transaction,
+                TransactionReceipt,
                 TransactionDetailed,
                 TransactionSignature,
                 TransactionParameter,
@@ -99,6 +101,7 @@ export declare namespace Plugin {
                 GasOption,
                 Block,
                 Transaction,
+                TransactionReceipt,
                 TransactionDetailed,
                 TransactionSignature,
                 TransactionParameter,
@@ -121,7 +124,11 @@ export namespace Plugin.Shared {
         /**
          * A lightweight K/V storage used to store some simple data.
          */
-        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+        createKVStorage<T extends object>(
+            type: 'memory' | 'persistent',
+            name: string,
+            defaultValues: T,
+        ): ScopedStorage<T>
         /** The selected account of Mask Wallet */
         account: Subscription<string>
         /** The selected chainId of Mask Wallet */
@@ -336,6 +343,7 @@ export namespace Plugin.SNSAdaptor {
         GasOption = unknown,
         Block = unknown,
         Transaction = unknown,
+        TransactionReceipt = unknown,
         TransactionDetailed = unknown,
         TransactionSignature = unknown,
         TransactionParameter = unknown,
@@ -364,6 +372,7 @@ export namespace Plugin.SNSAdaptor {
             GasOption,
             Block,
             Transaction,
+            TransactionReceipt,
             TransactionDetailed,
             TransactionSignature,
             TransactionParameter,
@@ -564,6 +573,7 @@ export namespace Plugin.Dashboard {
         GasOption = unknown,
         Block = unknown,
         Transaction = unknown,
+        TransactionReceipt = unknown,
         TransactionDetailed = unknown,
         TransactionSignature = unknown,
         TransactionParameter = unknown,
@@ -584,6 +594,7 @@ export namespace Plugin.Dashboard {
             GasOption,
             Block,
             Transaction,
+            TransactionReceipt,
             TransactionDetailed,
             TransactionSignature,
             TransactionParameter,

@@ -29,6 +29,7 @@ export declare namespace Web3Plugin {
             GasOption,
             Block,
             Transaction,
+            TransactionReceipt,
             TransactionDetailed,
             TransactionSignature,
             TransactionParameter,
@@ -45,8 +46,6 @@ export declare namespace Web3Plugin {
             Transaction?: TransactionState<ChainId, Transaction>
             TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
             TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-            // TODO: 6002
-            // @ts-ignore Generic type 'ConnectionState<ChainId, SchemaType, ProviderType, Signature, Block, Transaction, TransactionDetailed, ... 4 more ..., Web3Connection>' requires between 10 and 12 type arguments.ts(2707)
             Connection?: ConnectionState<
                 ChainId,
                 SchemaType,
@@ -54,6 +53,7 @@ export declare namespace Web3Plugin {
                 Signature,
                 Block,
                 Transaction,
+                TransactionReceipt,
                 TransactionDetailed,
                 TransactionSignature,
                 Web3,

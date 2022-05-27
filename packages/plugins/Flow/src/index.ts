@@ -12,6 +12,7 @@ import type {
     TransactionParameter,
     TransactionSignature,
     Web3,
+    TransactionReceipt,
 } from '@masknet/web3-shared-flow'
 import { base } from './base'
 
@@ -24,6 +25,7 @@ registerPlugin<
     GasOption,
     Block,
     Transaction,
+    TransactionReceipt,
     TransactionDetailed,
     TransactionSignature,
     TransactionParameter,

@@ -15,15 +15,10 @@ export class NameService extends NameServiceState<ChainId> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        // TODO: 6002
-        // eslint-disable-next-line unicorn/no-array-reduce
-        const defaultValue = getEnumAsArray(ChainId).reduce<Record<ChainId, Record<string, string>>>(
-            (accumulator, chainId) => {
-                accumulator[chainId.value] = {}
-                return accumulator
-            },
-            {},
-        )
+        const defaultValue = Object.fromEntries(getEnumAsArray(ChainId).map((x) => [x.value, {}])) as Record<
+            ChainId,
+            Record<string, string>
+        >
 
         super(context, defaultValue, subscriptions, {
             isValidName: (x) => x !== '0x',

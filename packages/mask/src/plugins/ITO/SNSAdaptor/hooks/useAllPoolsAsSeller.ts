@@ -1,17 +1,17 @@
-import { useBlockNumber, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useBlockNumber, useChainId, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { EVM_Connection } from '@masknet/plugin-evm'
 import type { PoolFromNetwork } from '../../types'
 import * as chain from '../utils/chain'
 import { PluginITO_RPC } from '../../messages'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useAllPoolsAsSeller(address: string) {
     const allPoolsRef = useRef<PoolFromNetwork[]>([])
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId }) as EVM_Connection
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { value: blockNumber = 0 } = useBlockNumber(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
@@ -19,6 +19,11 @@ export function useAllPoolsAsSeller(address: string) {
     }, [chainId])
 
     return useAsyncRetry(async () => {
+        if (!connection)
+            return {
+                pools: EMPTY_LIST,
+                loadMore: false,
+            }
         const _pools = await getAllPoolsAsSeller(address, blockNumber, chainId, connection)
         const pools = _pools.filter((a) => !allPoolsRef.current.map((b) => b.pool.pid).includes(a.pool.pid))
         allPoolsRef.current = allPoolsRef.current.concat(pools)
@@ -26,7 +31,14 @@ export function useAllPoolsAsSeller(address: string) {
     }, [address, blockNumber, chainId, connection])
 }
 
-async function getAllPoolsAsSeller(address: string, endBlock: number, chainId: ChainId, connection: EVM_Connection) {
+async function getAllPoolsAsSeller(
+    address: string,
+    endBlock: number,
+    chainId: ChainId,
+    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
+) {
+    if (!connection) return []
+
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
     // #region Get data from chain.

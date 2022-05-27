@@ -36,6 +36,7 @@ import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
 import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -179,11 +180,14 @@ export function PoolInList(props: PoolInListProps) {
     // #endregion
 
     // #region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
-    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
-        onRetry()
-        resetDestructCallback()
-    })
+    const [{ loading: destructing }, destructCallback] = useDestructCallback(pool.contract_address)
+    const destruct = useCallback(
+        async (pid: string) => {
+            await destructCallback(pid)
+            onRetry()
+        },
+        [destructCallback, onRetry],
+    )
     // #endregion
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -206,7 +210,13 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton
+                        loading={destructing}
+                        disabled={destructing}
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (

@@ -121,16 +121,16 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         return {
             ...(props.renderInTimeline
                 ? {
-                        variant: 'contained',
-                        fullWidth: true,
-                        sx: {
-                            backgroundColor: theme.palette.maskColor.dark,
-                            color: theme.palette.maskColor.white,
-                            '&:hover': {
-                                backgroundColor: theme.palette.maskColor.dark,
-                            },
-                        },
-                    }
+                      variant: 'contained',
+                      fullWidth: true,
+                      sx: {
+                          backgroundColor: theme.palette.maskColor.dark,
+                          color: theme.palette.maskColor.white,
+                          '&:hover': {
+                              backgroundColor: theme.palette.maskColor.dark,
+                          },
+                      },
+                  }
                 : {}),
             ...props.ActionButtonPromiseProps,
         } as Partial<ActionButtonPromiseProps>

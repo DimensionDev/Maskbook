@@ -142,6 +142,9 @@ class Connection implements BaseConnection {
         const web3 = await this.getWeb3(options)
         return web3.getTransaction(id)
     }
+    async getTransactionReceipt(id: string, options?: FlowConnectionOptions) {
+        return null
+    }
     async getTransactionStatus(id: string, options?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const web3 = await this.getWeb3(options)
         const { status } = await web3.getTransactionStatus(id)

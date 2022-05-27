@@ -27,6 +27,7 @@ export class Connection extends ConnectionState<
     Signature,
     Block,
     Transaction,
+    never,
     TransactionDetailed,
     never,
     Web3,

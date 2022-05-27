@@ -64,7 +64,6 @@ function untilInner(name: string) {
     return new Promise<true>((resolve) => {
         function check() {
             restCheckTimes -= 1
-            // TODO: 6002: This promise never resolve?
             if (restCheckTimes < 0) return
             if (has(window, name)) return resolve(true)
             apply(setTimeout, window, [check, 200])

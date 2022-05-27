@@ -3,6 +3,7 @@ import {
     Connection as SolanaConnection,
     sendAndConfirmRawTransaction,
     Transaction,
+    TransactionResponse,
 } from '@solana/web3.js'
 import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
 import { Providers } from './provider'
@@ -153,6 +154,10 @@ class Connection implements BaseConnection {
 
     getTransaction(id: string, options?: SolanaWeb3ConnectionOptions) {
         return this.getWeb3Connection(options).getTransaction(id)
+    }
+
+    async getTransactionReceipt(id: string, options?: SolanaWeb3ConnectionOptions) {
+        return null
     }
 
     async getTransactionStatus(id: string, options?: SolanaWeb3ConnectionOptions) {

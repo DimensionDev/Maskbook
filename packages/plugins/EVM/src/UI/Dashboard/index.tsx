@@ -8,9 +8,10 @@ import type {
     SchemaType,
     Signature,
     Transaction,
+    TransactionSignature,
     TransactionDetailed,
     TransactionParameter,
-    TransactionSignature,
+    TransactionReceipt,
     Web3,
 } from '@masknet/web3-shared-evm'
 import { base } from '../../base'
@@ -26,6 +27,7 @@ const dashboard: Plugin.Dashboard.Definition<
     GasOption,
     Block,
     Transaction,
+    TransactionReceipt,
     TransactionDetailed,
     TransactionSignature,
     TransactionParameter,

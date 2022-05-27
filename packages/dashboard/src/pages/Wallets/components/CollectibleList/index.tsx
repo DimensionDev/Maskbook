@@ -35,10 +35,7 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedNetwork: NetworkDescriptor<
-        Web3Helper.Definition[NetworkPluginID]['ChainId'],
-        Web3Helper.Definition[NetworkPluginID]['NetworkType']
-    > | null
+    selectedNetwork: Web3Helper.NetworkDescriptorAll | null
 }
 
 const ITEM_SIZE = {

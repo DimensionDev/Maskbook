@@ -28,7 +28,7 @@ export function useTradeCallback(
 
     return useAsyncFn(async () => {
         // validate config
-        if (!account || !config) {
+        if (!account || !config || !web3) {
             return
         }
 

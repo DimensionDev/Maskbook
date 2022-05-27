@@ -4,12 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import {
-    useAccount,
-    useChainId,
-    useFungibleToken,
-    useFungibleTokenBalance,
-} from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'

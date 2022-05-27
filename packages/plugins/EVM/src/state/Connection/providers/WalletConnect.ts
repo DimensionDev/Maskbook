@@ -47,10 +47,11 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         this.connectorId += 1
 
         const connectorId = this.connectorId
-        const createListener = (listener: (...args: unknown[]) => void) => {
-            return (...args: unknown[]) => {
+
+        const createListener = <T>(listener: (error: Error | null, payload: T) => void) => {
+            return (error: Error | null, payload: T) => {
                 if (connectorId !== this.connectorId) return
-                return listener(...args)
+                return listener(error, payload)
             }
         }
 

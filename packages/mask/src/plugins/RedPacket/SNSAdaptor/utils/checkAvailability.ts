@@ -1,8 +1,9 @@
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { EVM_Connection } from '@masknet/plugin-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedpacketAvailability } from '../../types'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -12,7 +13,7 @@ export async function checkAvailability(
     from: string,
     to: string,
     chainId: ChainId,
-    connection: EVM_Connection,
+    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
 ) {
     const callData = interFace.encodeFunctionData('check_availability', [pid])
     const data = await connection.callTransaction(

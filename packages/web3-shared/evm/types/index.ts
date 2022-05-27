@@ -4,8 +4,8 @@ import type EVM_Web3 from 'web3'
 import type {
     RequestArguments,
     Transaction as Web3Transaction,
+    TransactionReceipt as Web3TransactionReceipt,
     TransactionConfig as TransactionConfig_,
-    TransactionReceipt,
 } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -357,6 +357,7 @@ export type Transaction = TransactionConfig_ & {
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
+export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
 export type TransactionParameter = string | undefined

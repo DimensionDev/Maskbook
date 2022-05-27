@@ -217,10 +217,12 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
             <Box style={{ padding: 12 }}>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
-                    <WalletConnectedBoundary ActionButtonProps={{ size: 'medium' }} classes={{ button: tabClasses.button }}
+                    <WalletConnectedBoundary
+                        ActionButtonProps={{ size: 'medium' }}
+                        classes={{ button: tabClasses.button }}
                         renderInTimeline>
                         <ActionButton
-                        loading={isOpening}
+                            loading={isOpening}
                             size="medium"
                             fullWidth
                             variant="contained"

@@ -15,7 +15,7 @@ import {
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { createPluginHost } from '../plugin-infra/host'
+import { createPluginHost, createSharedContext } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
@@ -114,12 +114,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(signal, (pluginID, signal) => {
-            const personaSub = createSubscriptionFromAsync(
-                Services.Settings.getCurrentPersonaIdentifier,
-                undefined as PersonaIdentifier | undefined,
-                MaskMessages.events.currentPersonaIdentifier.on,
-                signal,
-            )
             const empty = new ValueRef<IdentityResolved | undefined>(undefined)
             const lastRecognizedSub = createSubscriptionFromValueRef(
                 ui.collecting.identityProvider?.recognized || empty,
@@ -130,14 +124,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 signal,
             )
             return {
-                createKVStorage(type, defaultValues) {
-                    if (type === 'memory')
-                        return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                    else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-                },
-                personaSign: Services.Identity.signWithPersona,
-                walletSign: Services.Ethereum.personalSign,
-                currentPersona: personaSub,
+                ...createSharedContext(pluginID, signal),
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
             }
