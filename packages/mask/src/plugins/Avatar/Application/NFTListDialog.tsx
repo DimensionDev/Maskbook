@@ -262,9 +262,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             left: 0,
                             bottom: 89,
                         }}>
-                        <Typography variant="body1" color="textPrimary">
-                            {t.collectible_not_found()}
-                        </Typography>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"
