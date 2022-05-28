@@ -324,10 +324,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         MintTeam
                     </Typography>
                     <img className={classes.icon} src={new URL('../assets/pets.png', import.meta.url).toString()} />
-                    <Typography fontSize={14} color="textSeconary" fontWeight={700} className={classes.des}>
+                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         &
                     </Typography>
-                    <Typography fontSize={14} color="textSeconary" fontWeight={700} className={classes.des}>
+                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
                     <RSS3Icon style={{ fontSize: 24 }} />
