@@ -382,6 +382,7 @@
     "plugin_trader_user_warning": "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.",
     "plugin_savings": "Savings",
     "plugin_savings_asset": "Asset",
+    "plugin_no_protocol_available": "No savings protocols available on this network",
     "plugin_savings_apr": "APR",
     "plugin_savings_wallet": "Wallet",
     "plugin_savings_operation": "Operation",

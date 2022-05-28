@@ -89,6 +89,11 @@ const useStyles = makeStyles()((theme, props) => ({
         fill: theme.palette.secondaryDivider,
         fontSize: 36,
     },
+    unavailable: {
+        fontSize: 14,
+        color: theme.palette.secondaryDivider,
+        marginTop: 12,
+    },
 }))
 
 export interface SavingsTableProps {
@@ -210,6 +215,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             ) : (
                 <div className={classes.placeholder}>
                     <DirectIcon className={classes.direct} />
+                    <Typography className={classes.unavailable}>{t('plugin_no_protocol_available')}</Typography>
                 </div>
             )}
         </Box>

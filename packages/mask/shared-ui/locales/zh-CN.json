@@ -320,6 +320,7 @@
     "plugin_trader_data_source": "数据源",
     "plugin_trader_price_updated": "价格已更新",
     "plugin_savings": "储蓄",
+    "plugin_no_protocol_available": "储蓄功能尚未在此网络支持",
     "plugin_savings_wallet": "钱包",
     "plugin_savings_operation": "操作",
     "plugin_savings_amount": "数额",
