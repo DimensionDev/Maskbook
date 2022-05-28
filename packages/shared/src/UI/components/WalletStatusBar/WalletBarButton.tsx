@@ -65,7 +65,7 @@ export function WalletButton(props: WalletButtonProps) {
             variant="contained"
             className={classNames(classes.button, classes.root)}
             fullWidth
-            disabled={loading || disabled || state === 'wait'}
+            disabled={loading || disabled || state === 'wait' || state === 'complete'}
             onClick={run ?? connectWalletDialog}>
             {loading || state === 'wait' ? <CircularProgress size={24} className={classes.progress} /> : null}
             {(state === 'wait' ? waiting : undefined) ?? title ?? t.change()}
