@@ -7,7 +7,6 @@ import Services from '../../../../service'
 import { head } from 'lodash-unified'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
-import { NextIDProof } from '@masknet/web3-providers'
 import type { Account } from '../type'
 
 function usePersonaContext() {
@@ -37,7 +36,7 @@ function usePersonaContext() {
         try {
             if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
 
-            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
+            const binding = await Services.Helper.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
 
             return binding?.proofs ?? EMPTY_LIST
         } catch {

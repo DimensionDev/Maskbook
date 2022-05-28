@@ -3,7 +3,6 @@ import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
 import {
     ChainId,
     EthereumRpcType,
@@ -49,7 +48,7 @@ const VerifyWallet = memo(() => {
 
     const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
+        return Services.Helper.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
     }, [wallet])
     const isBound = useMemo(() => {
         if (!bounds || !bounds.length) return false
@@ -79,7 +78,7 @@ const VerifyWallet = memo(() => {
 
     const { value: payload } = useAsync(async () => {
         if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
-        return NextIDProof.createPersonaPayload(
+        return Services.Helper.createPersonaPayload(
             currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
             wallet.account,
@@ -120,7 +119,7 @@ const VerifyWallet = memo(() => {
             )
 
             if (!walletSig) throw new Error('Wallet sign failed')
-            await NextIDProof.bindProof(
+            await Services.Helper.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,

@@ -1,5 +1,4 @@
 import { ECKeyIdentifier, NextIDAction, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncFn } from 'react-use'
 import { Services, Messages } from '../../../API'
 
@@ -10,7 +9,7 @@ export function useDeleteBound() {
             const username = profile.userId.toLowerCase()
             const platform = network.split('.')[0] || NextIDPlatform.Twitter
             if (!persona_) throw new Error('Failed to get persona')
-            const payload = await NextIDProof.createPersonaPayload(
+            const payload = await Services.Helper.createPersonaPayload(
                 persona_.identifier.publicKeyAsHex,
                 action,
                 username,
@@ -24,7 +23,7 @@ export function useDeleteBound() {
             })
             if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature
-            await NextIDProof.bindProof(
+            await Services.Helper.bindProof(
                 payload.uuid,
                 persona_.identifier.publicKeyAsHex,
                 action,

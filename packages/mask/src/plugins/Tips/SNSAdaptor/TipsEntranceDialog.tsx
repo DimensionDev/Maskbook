@@ -10,7 +10,6 @@ import {
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
@@ -205,7 +204,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             try {
                 if (!currentPersona?.identifier.publicKeyAsHex || !wallet) throw new Error('create payload error')
 
-                const result = await NextIDProof.createPersonaPayload(
+                const result = await Services.Helper.createPersonaPayload(
                     currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.identity,
@@ -219,7 +218,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 )
 
                 if (!signature) throw new Error('sign error')
-                await NextIDProof.bindProof(
+                await Services.Helper.bindProof(
                     result.uuid,
                     currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,

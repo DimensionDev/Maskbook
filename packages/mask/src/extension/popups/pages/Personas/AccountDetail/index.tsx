@@ -8,7 +8,6 @@ import { AccountDetailUI } from './UI'
 import { useAsyncFn } from 'react-use'
 import Service from '../../../../service'
 import { DisconnectDialog } from '../components/DisconnectDialog'
-import { NextIDProof } from '@masknet/web3-providers'
 import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 
@@ -48,7 +47,7 @@ const AccountDetail = memo(() => {
             if (!currentPersona?.identifier.publicKeyAsHex || !selectedAccount?.identity || !selectedAccount?.platform)
                 return
 
-            const result = await NextIDProof.createPersonaPayload(
+            const result = await Service.Helper.createPersonaPayload(
                 currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Delete,
                 selectedAccount.identity,

@@ -1,9 +1,9 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo, ProfileIdentifier } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { first, uniq } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
+import Services from '../../../extension/service'
 import { MaskMessages } from '../../../utils'
 import { useKvGet } from './useKv'
 import { useProfilePublicKey } from './useProfilePublicKey'
@@ -14,7 +14,7 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
     const [NextIDWalletsState, queryWallets] = useAsyncFn(async () => {
         if (!publicKey) return EMPTY_LIST
 
-        const bindings = await NextIDProof.queryExistedBindingByPersona(publicKey, true)
+        const bindings = await Services.Helper.queryExistedBindingByPersona(publicKey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)

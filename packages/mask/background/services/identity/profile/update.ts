@@ -13,7 +13,7 @@ import {
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db'
-import { NextIDProof } from '@masknet/web3-providers'
+import { bindProof } from '../../helper'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -45,7 +45,7 @@ export async function detachProfileWithNextID(
     createdAt: string,
     options?: { signature?: string },
 ): Promise<void> {
-    await NextIDProof.bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
+    await bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
         signature: options?.signature,
     })
     MaskMessages.events.ownProofChanged.sendToAll(undefined)

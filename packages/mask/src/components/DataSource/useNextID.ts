@@ -9,13 +9,12 @@ import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service'
 import { MaskMessages } from '../../utils'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
     return useAsyncRetry(() => {
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
+        return Services.Helper.queryExistedBindingByPersona(personaPublicKey)
     }, [personaPublicKey])
 }
 
@@ -34,7 +33,7 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity?: string) => {
     const res = useAsyncRetry(() => {
         if (!identity) return Promise.resolve([])
-        return NextIDProof.queryExistedBindingByPlatform(platform, identity)
+        return Services.Helper.queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
@@ -103,7 +102,7 @@ export function useNextIDConnectStatus() {
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return NextIDVerificationStatus.Other
 
-        const isBound = await NextIDProof.queryIsBound(
+        const isBound = await Services.Helper.queryIsBound(
             currentConnectedPersona.identifier.publicKeyAsHex,
             platform,
             username,

@@ -11,8 +11,8 @@ import { delay } from '@dimensiondev/kit'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
-import { NextIDProof } from '@masknet/web3-providers'
 import { MaskMessages } from '../../../../shared'
+import Services from '../../../extension/service'
 
 interface BindDialogProps {
     open: boolean
@@ -43,7 +43,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
         )
             return
         try {
-            await NextIDProof.bindProof(
+            await Services.Helper.bindProof(
                 message.uuid,
                 persona.identifier.publicKeyAsHex,
                 NextIDAction.Create,

@@ -2,7 +2,6 @@ import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
@@ -79,7 +78,7 @@ export const TipButton: FC<Props> = ({
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(() => {
         if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
-        return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
+        return Services.Helper.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
     }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
 
     useEffect(() => {

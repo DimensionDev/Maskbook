@@ -1,6 +1,5 @@
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
@@ -86,7 +85,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         if (!currentPersona?.identifier.publicKeyAsHex) return
         if (!currentPersona.identifier) return
         if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
+        return Services.Helper.queryIsBound(
             currentPersona.identifier.publicKeyAsHex,
             platform,
             visitingPersonaIdentifier.identifier.userId,
@@ -99,7 +98,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
+        return Services.Helper.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
     }, [currentPersona, isOwn])
 
     const onVerify = async () => {

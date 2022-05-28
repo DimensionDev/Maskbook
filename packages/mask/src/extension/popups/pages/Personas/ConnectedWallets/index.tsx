@@ -9,8 +9,7 @@ import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
 import { compact, sortBy } from 'lodash-unified'
 import type { ConnectedWalletInfo } from '../type'
-import { NextIDProof } from '@masknet/web3-providers'
-import Service from '../../../../service'
+import Service, { Services } from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -75,7 +74,7 @@ const ConnectedWallets = memo(() => {
             try {
                 if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
 
-                const result = await NextIDProof.createPersonaPayload(
+                const result = await Services.Helper.createPersonaPayload(
                     currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,
                     wallet.identity,
@@ -91,7 +90,7 @@ const ConnectedWallets = memo(() => {
 
                 if (!signature) return
 
-                await NextIDProof.bindProof(
+                await Services.Helper.bindProof(
                     result.uuid,
                     currentPersona.identifier.publicKeyAsHex,
                     NextIDAction.Delete,

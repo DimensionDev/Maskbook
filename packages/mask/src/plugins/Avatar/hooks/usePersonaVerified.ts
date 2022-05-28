@@ -1,5 +1,4 @@
 import type { NextIDPlatform } from '@masknet/shared-base'
-import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
@@ -13,7 +12,7 @@ export function usePersonaVerify() {
         if (!visitingPersonaIdentifier?.identifier) return
         const persona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
         if (!persona?.identifier.publicKeyAsHex) return
-        const isVerified = await NextIDProof.queryIsBound(
+        const isVerified = await Services.Helper.queryIsBound(
             persona.identifier.publicKeyAsHex,
             platform,
             visitingPersonaIdentifier.identifier.userId,

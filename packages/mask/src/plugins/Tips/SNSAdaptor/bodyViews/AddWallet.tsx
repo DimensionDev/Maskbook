@@ -16,7 +16,6 @@ import {
 import { memo, useCallback } from 'react'
 import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
 import { useAsync, useAsyncFn } from 'react-use'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
@@ -62,7 +61,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
         if (!currentPersona || !wallet.account) return
-        return NextIDProof.createPersonaPayload(
+        return Services.Helper.createPersonaPayload(
             currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
             wallet.account,
@@ -97,7 +96,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
         try {
             const walletSig = await Services.Ethereum.personalSign(payload.signPayload, wallet.account)
             if (!walletSig) throw new Error('Wallet sign failed')
-            await NextIDProof.bindProof(
+            await Services.Helper.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,

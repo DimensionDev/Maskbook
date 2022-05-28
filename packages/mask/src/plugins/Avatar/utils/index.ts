@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
-import { getOrderUnitPrice, NextIDProof, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { getOrderUnitPrice, NextIDStorage, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { ZERO } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -181,7 +181,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
 
 export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
+    const bindings = await Services.Helper.queryExistedBindingByPlatform(platform, userId.toLowerCase())
 
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
         const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(

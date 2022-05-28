@@ -32,7 +32,6 @@ import { SetupGuideStep } from './SetupGuide/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
 import { PinExtension } from './SetupGuide/PinExtension'
-import { NextIDProof } from '@masknet/web3-providers'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 // #region setup guide ui
@@ -135,9 +134,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return
 
-        const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
+        const isBound = await Services.Helper.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
         if (!isBound) {
-            const payload = await NextIDProof.createPersonaPayload(
+            const payload = await Services.Helper.createPersonaPayload(
                 persona_.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 username,
@@ -160,7 +159,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     const post = collectVerificationPost?.(postContent)
                     if (post && persona_.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
-                        await NextIDProof.bindProof(
+                        await Services.Helper.bindProof(
                             payload.uuid,
                             persona_.identifier.publicKeyAsHex,
                             NextIDAction.Create,
@@ -183,7 +182,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
-            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
+            const isBound = await Services.Helper.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
@@ -196,7 +195,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onConnected = async () => {
         if (enableNextID && persona_?.identifier.publicKeyAsHex && platform && username) {
-            const isBound = await NextIDProof.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
+            const isBound = await Services.Helper.queryIsBound(persona_.identifier.publicKeyAsHex, platform, username)
             if (!isBound) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.VerifyOnNextID,
