@@ -36,9 +36,9 @@
     "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}",
     "plugin_wallet_connect_network": "Connect {{network}} wallet",
-    "plugin_wallet_change_network": "Change to {{network}} wallet",
+    "plugin_wallet_change_network": "Change to {{network}}",
     "plugin_wallet_connect_network_under_going": "Connect {{network}} wallet",
     "plugin_wallet_connect_wallet": "Connect wallet",
     "plugin_wallet_connect_retry": "Retry",
-    "plugin_wallet_connect_tips": "Please switch to this network in the mobile<br/>application wallet you are connected to."
+    "plugin_wallet_connect_tips": "Please switch to this network in the mobile<br/>application wallet you connected to."
 }

@@ -149,6 +149,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                     }
                     showMenuDrop
                     pending={pending}
+                    showWalletIcon
                 />
             </Stack>
             {haveMenu ? (

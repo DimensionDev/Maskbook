@@ -6,7 +6,7 @@ import {
     useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { WalletIcon } from '@masknet/shared'
+import { ImageIcon, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useChainColor, useChainId, useProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
@@ -71,6 +71,7 @@ interface WalletUIProps {
     isETH?: boolean
     showMenuDrop?: boolean
     pending?: string | React.ReactElement | React.ReactNode
+    showWalletIcon?: boolean
 }
 
 function formatAddress(address: string, size = 0) {
@@ -88,6 +89,7 @@ export function WalletUI(props: WalletUIProps) {
         address,
         showMenuDrop = false,
         pending,
+        showWalletIcon = false,
     } = props
     const chainColor = useChainColor()
     const { classes } = useStyles({ filterColor: chainColor })
@@ -100,16 +102,23 @@ export function WalletUI(props: WalletUIProps) {
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
+    console.log(providerDescriptor)
+    console.log(networkDescriptor)
+    console.log(isETH)
     return (
         <Box className={classes.root}>
-            <WalletIcon
-                classes={{ root: classes.icon }}
-                size={iconSize}
-                badgeSize={badgeSize}
-                networkIcon={providerDescriptor?.icon}
-                providerIcon={networkDescriptor?.icon}
-                isBorderColorNotDefault
-            />
+            {showWalletIcon ? (
+                <WalletIcon
+                    classes={{ root: classes.icon }}
+                    size={iconSize}
+                    badgeSize={badgeSize}
+                    networkIcon={providerDescriptor?.icon}
+                    providerIcon={networkDescriptor?.icon}
+                    isBorderColorNotDefault
+                />
+            ) : (
+                <ImageIcon size={30} icon={networkDescriptor?.icon} />
+            )}
             <Box className={classes.domain}>
                 <Box className={classes.name}>
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
