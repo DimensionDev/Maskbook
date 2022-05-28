@@ -42,7 +42,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 3,
+                appBoardSortingDefaultPriority: 2,
+                marketListSortingPriority: 2,
                 name,
                 icon,
                 ApplicationEntryID: base.ID,
