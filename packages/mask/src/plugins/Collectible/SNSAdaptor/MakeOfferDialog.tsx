@@ -5,10 +5,10 @@ import {
     Checkbox,
     Card,
     CardContent,
-    CardActions,
     FormControlLabel,
     Typography,
     Link,
+    DialogActions,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first, uniqBy } from 'lodash-unified'
@@ -39,6 +39,7 @@ import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,8 +60,8 @@ const useStyles = makeStyles()((theme) => {
         },
         label: {},
         buttons: {
-            width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
+            flex: 1,
+            margin: 0,
         },
         button: {
             flex: 1,
@@ -164,6 +165,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         return ''
     }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
+    const makeOfferCallback = async () => {
+        await onMakeOffer()
+        onClose()
+    }
     if (!asset?.value) return null
     return (
         <InjectedDialog
@@ -244,9 +249,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             />
                         )}
                     </CardContent>
-                    <CardActions className={classes.footer}>
-                        <EthereumChainBoundary chainId={chainId}>
-                            <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
+                </Card>
+            </DialogContent>
+            <DialogActions style={{ padding: 0 }}>
+                <EthereumChainBoundary chainId={chainId}>
+                    <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
+                        {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ||
+                        insufficientBalance ? (
+                            <>
                                 <ActionButtonPromise
                                     className={classes.button}
                                     variant="contained"
@@ -265,23 +275,34 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ||
-                                insufficientBalance ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConvertClick}>
-                                        {insufficientBalance
-                                            ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
-                                            : t('plugin_collectible_convert_eth')}
-                                    </ActionButton>
-                                ) : null}
-                            </Box>
-                        </EthereumChainBoundary>
-                    </CardActions>
-                </Card>
-            </DialogContent>
+                                <ActionButton
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onConvertClick}>
+                                    {insufficientBalance
+                                        ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
+                                        : t('plugin_collectible_convert_eth')}
+                                </ActionButton>
+                            </>
+                        ) : (
+                            <PluginWalletStatusBar
+                                actionProps={{
+                                    disabled: !!validationMessage,
+                                    title:
+                                        validationMessage ||
+                                        t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer'),
+                                    waiting: t(
+                                        isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
+                                    ),
+                                    action: makeOfferCallback,
+                                }}
+                                classes={{ button: classes.button }}
+                            />
+                        )}
+                    </Box>
+                </EthereumChainBoundary>
+            </DialogActions>
         </InjectedDialog>
     )
 }
