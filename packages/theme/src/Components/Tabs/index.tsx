@@ -18,6 +18,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
 import { get } from 'lodash-unified'
+import { parseColor } from '../../entry'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -35,6 +36,7 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     padding: theme.spacing(1.5),
     height: 38,
     width: 38,
+    minWidth: '38px !important',
     background: get(theme.palette.background, 'input') ?? '#F2F6FA',
 
     '&:hover': {
@@ -58,7 +60,8 @@ const FlexibleButtonGroupPanel = styled(Box, {
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
     boxShadow: isOpen ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
-    background: theme.palette.background.paper,
+    background: parseColor(theme.palette.background.paper).setAlpha(0.8).toRgbString(),
+    backdropFilter: 'blur(20px)',
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {
@@ -88,13 +91,13 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
         overflow: 'hidden',
         flex: 1,
         maxWidth: '100%',
-        paddingRight: isOpen ? 40 : 0,
+        paddingRight: isOpen ? 38 : 0,
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         borderRadius: 0,
         background:
             !isOpen && isOverflow && theme.palette.mode === 'light'
-                ? 'linear-gradient(270deg,rgba(255,255,255,1) 40px, rgba(223, 229, 244, 0.8) 40px, rgba(244, 247, 254, 0) 72px)'
-                : theme.palette.background.paper,
+                ? 'linear-gradient(270deg,rgba(255,255,255,1) 38px, rgba(223, 229, 244, 0.8) 38px, rgba(244, 247, 254, 0) 72px)'
+                : 'transparent',
     }),
 )
 

@@ -35,9 +35,12 @@ export function NetworkTab(props: NetworkTabProps) {
                             key={x.chainId}
                             value={x.chainId.toString()}
                             label={
-                                <Stack display="inline-flex" flexDirection="row" gap={0.5}>
-                                    <WalletIcon networkIcon={x.icon} size={16} />
-                                    <Typography variant="body2" fontSize={14} fontWeight="bold">
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <WalletIcon networkIcon={x.icon} size={18} />
+                                    <Typography
+                                        variant="body2"
+                                        fontSize={14}
+                                        fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
                                         {x.name}
                                     </Typography>
                                 </Stack>
