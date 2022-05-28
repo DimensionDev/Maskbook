@@ -82,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     link: {
-        color: theme.palette.maskColor.main,
+        color: 'white',
         textDecoration: 'none',
         '&:hover': {
             textDecoration: 'none',

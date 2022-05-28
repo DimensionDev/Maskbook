@@ -12,13 +12,13 @@ import {
     useGitcoinConstants,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { DialogContent, Link, Typography } from '@mui/material'
+import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N as useBaseI18N } from '../../../utils'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -46,6 +46,12 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1.5, 0, 0),
         padding: 12,
+    },
+    content: {
+        padding: 16,
+    },
+    actions: {
+        padding: 0,
     },
 }))
 
@@ -149,7 +155,7 @@ export function DonateDialog(props: DonateDialogProps) {
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={closeDonationDialog} title={title} maxWidth="xs">
-                <DialogContent>
+                <DialogContent className={classes.content}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
@@ -172,24 +178,24 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </Typography>
+                </DialogContent>
+                <DialogActions className={classes.actions}>
                     <EthereumWalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.type === EthereumTokenType.ERC20 ? token : undefined}>
-                            <ActionButton
-                                loading={loading}
-                                className={classes.button}
-                                fullWidth
-                                size="large"
-                                disabled={!!validationMessage || loading}
-                                onClick={donate}
-                                variant="contained">
-                                {validationMessage || t.donate()}
-                            </ActionButton>
+                            <PluginWalletStatusBar
+                                actionProps={{
+                                    disabled: !!validationMessage || loading,
+                                    loading,
+                                    action: async () => donate(),
+                                    title: validationMessage || t.donate(),
+                                }}
+                            />
                         </EthereumERC20TokenApprovedBoundary>
                     </EthereumWalletConnectedBoundary>
-                </DialogContent>
+                </DialogActions>
             </InjectedDialog>
         </div>
     )
