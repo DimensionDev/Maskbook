@@ -199,7 +199,6 @@ export function InvestDialog() {
                                     loading: loadingTokenBalance || isInvesting,
                                     title: t('plugin_dhedge_buy_token', { symbol: token?.symbol }),
                                 }}
-                                classes={{ button: classes.button }}
                             />
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
@@ -213,7 +212,6 @@ export function InvestDialog() {
                                         disabled: !!validationMessage || isInvesting,
                                         loading: loadingTokenBalance || isInvesting,
                                     }}
-                                    classes={{ button: classes.button }}
                                 />
                             </EthereumERC20TokenApprovedBoundary>
                         )}

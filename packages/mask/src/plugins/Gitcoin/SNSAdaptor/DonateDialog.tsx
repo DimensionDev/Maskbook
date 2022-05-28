@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
     },
     actions: {
-        padding: 0,
+        padding: '0 !important',
     },
 }))
 

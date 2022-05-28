@@ -19,6 +19,8 @@ const useStyles = makeStyles()((theme) => ({
                 : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         padding: theme.spacing(2),
         borderRadius: theme.spacing(0, 0, 1.5, 1.5),
+        alignItems: 'center',
+        lineHeight: '18px',
     },
     button: {
         borderRadius: 8,
