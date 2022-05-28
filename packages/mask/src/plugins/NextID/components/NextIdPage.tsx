@@ -183,14 +183,20 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         }
         if (!isAccountVerified) {
             return (
-                <Button style={{ borderRadius: '99px' }} variant="contained" onClick={onVerify}>
+                <Button
+                    style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
+                    variant="contained"
+                    onClick={onVerify}>
                     <VerifyIcon />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
         return (
-            <Button style={{ borderRadius: '99px' }} variant="contained" onClick={() => toggleBindDialog(true)}>
+            <Button
+                style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
+                variant="contained"
+                onClick={() => toggleBindDialog(true)}>
                 <WalletUnderTabsIcon />
                 {t.verify_wallet_button()}
             </Button>
