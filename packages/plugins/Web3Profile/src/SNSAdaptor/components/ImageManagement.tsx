@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     titleTailButton: {
         marginLeft: 'auto',
         justifyContent: 'center',
+        borderRadius: '99px',
     },
     content: {
         width: 480,
@@ -37,6 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 420,
         position: 'relative',
         paddingBottom: theme.spacing(3),
+        backgroundColor: theme.palette.background.paper,
     },
     bottomFixed: {
         width: '100%',
@@ -59,6 +61,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     actions: {
         padding: '0px !important',
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `1px solid ${theme.palette.divider}`,
     },
 }))
 

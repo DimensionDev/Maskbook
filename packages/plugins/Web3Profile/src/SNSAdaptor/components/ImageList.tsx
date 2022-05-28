@@ -47,6 +47,10 @@ const useStyles = makeStyles()((theme) => {
             maxHeight: 420,
             position: 'relative',
             paddingBottom: theme.spacing(3),
+            backgroundColor: theme.palette.background.paper,
+        },
+        actions: {
+            backgroundColor: theme.palette.background.paper,
         },
         buttonWrapper: {
             padding: '16px',
@@ -55,8 +59,19 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             flexGrow: 1,
         },
+        cancelButton: {
+            width: '48%',
+            borderRadius: '99px',
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
+            border: `1px solid ${theme.palette.divider}`,
+            '&:hover': {
+                backgroundColor: theme.palette.background.paper,
+            },
+        },
         button: {
             width: '48%',
+            borderRadius: '99px',
         },
     }
 })
@@ -148,11 +163,6 @@ export function ImageListDialog(props: ImageListDialogProps) {
             title={title}
             fullWidth={false}
             open={open}
-            titleTail={
-                <Button className={classes.titleTailButton} size="small">
-                    Settings
-                </Button>
-            }
             onClose={handleClose}>
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
@@ -180,9 +190,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     </Box>
                 </div>
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 <div className={classes.buttonWrapper}>
-                    <Button className={classes.button} onClick={onClose}>
+                    <Button className={classes.cancelButton} onClick={onClose}>
                         Cancel
                     </Button>
                     <Button className={classes.button} onClick={onConfirm}>

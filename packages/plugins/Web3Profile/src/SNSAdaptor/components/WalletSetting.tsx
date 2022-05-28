@@ -17,6 +17,10 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 420,
         position: 'relative',
         paddingBottom: theme.spacing(3),
+        backgroundColor: theme.palette.background.paper,
+    },
+    actions: {
+        backgroundColor: theme.palette.background.paper,
     },
     titleBox: {
         display: 'flex',
@@ -40,8 +44,19 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         flexGrow: 1,
     },
+    cancelButton: {
+        width: '48%',
+        borderRadius: '99px',
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
+        border: `1px solid ${theme.palette.divider}`,
+        '&:hover': {
+            backgroundColor: theme.palette.background.paper,
+        },
+    },
     button: {
         width: '48%',
+        borderRadius: '99px',
     },
 }))
 
@@ -109,7 +124,7 @@ const WalletSetting = memo(
                 fullWidth={false}
                 open={open}
                 titleTail={
-                    <Button size="small" onClick={openPopupsWindow}>
+                    <Button size="small" sx={{ borderRadius: '99px' }} onClick={openPopupsWindow}>
                         Wallets
                     </Button>
                 }
@@ -184,9 +199,9 @@ const WalletSetting = memo(
                         </div>
                     </div>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={classes.actions}>
                     <div className={classes.buttonWrapper}>
-                        <Button className={classes.button} onClick={onClose}>
+                        <Button className={classes.cancelButton} onClick={onClose}>
                             Cancel
                         </Button>
                         <Button className={classes.button} onClick={onConfirm}>

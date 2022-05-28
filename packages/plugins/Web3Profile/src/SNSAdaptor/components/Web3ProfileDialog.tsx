@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 420,
         position: 'relative',
         paddingBottom: theme.spacing(3),
+        backgroundColor: theme.palette.background.paper,
     },
     link: {
         color: theme.palette.text.primary,
@@ -50,11 +51,12 @@ const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
         width: '100%',
         display: 'flex',
-        boxShadow: '0px 0px 16px rgba(101, 119, 134, 0.2)',
         padding: '19px 16px',
     },
     actions: {
         padding: '0px !important',
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `1px solid ${theme.palette.divider}`,
     },
     buttonWrapper: {
         padding: '16px',
@@ -128,7 +130,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     return (
         <>
             <InjectedDialog
-                classes={{ paper: classes.root, dialogContent: classes.content, dialogActions: classes.actions }}
+                classes={{ paper: classes.root }}
                 title={title}
                 fullWidth={false}
                 open={open}
@@ -145,7 +147,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                         accountList={accountList}
                     />
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={classes.actions}>
                     <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
                 </DialogActions>
             </InjectedDialog>
