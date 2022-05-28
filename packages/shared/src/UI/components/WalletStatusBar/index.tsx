@@ -99,10 +99,10 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                             startIcon={actionProps.startIcon}
                             endIcon={actionProps.endIcon}
                             classes={{ root: actionProps.disabled ? classes.disabled : classes.button }}
-                            title={actionProps.title}
+                            title={actionProps.title ?? t.change()}
                             disabled={actionProps.loading || actionProps.disabled}
                             loading={actionProps.loading}
-                            action={actionProps.action}
+                            action={actionProps.action ?? (async () => connectWalletDialog())}
                             color={actionProps.color}
                             waiting={actionProps.waiting}
                         />

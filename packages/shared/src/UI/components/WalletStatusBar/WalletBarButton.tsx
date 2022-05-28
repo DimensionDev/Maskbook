@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
@@ -44,7 +43,6 @@ export function WalletButton(props: WalletButtonProps) {
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const connectWalletDialog = () => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
     const [state, setState] = useState<ActionButtonPromiseState>('init')
     const run = () => {
         setState('wait')
@@ -66,9 +64,9 @@ export function WalletButton(props: WalletButtonProps) {
             className={classNames(classes.button, classes.root)}
             fullWidth
             disabled={loading || disabled || state === 'wait' || state === 'complete'}
-            onClick={run ?? connectWalletDialog}>
+            onClick={run}>
             {loading || state === 'wait' ? <CircularProgress size={24} className={classes.progress} /> : null}
-            {(state === 'wait' ? waiting : undefined) ?? title ?? t.change()}
+            {(state === 'wait' ? waiting : undefined) ?? title}
         </Button>
     )
 }
