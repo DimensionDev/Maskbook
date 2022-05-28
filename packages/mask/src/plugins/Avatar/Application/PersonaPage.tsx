@@ -16,11 +16,12 @@ const useStyles = makeStyles()((theme) => ({
     messageBox: {
         display: 'flex',
         borderRadius: 4,
-        padding: '12px 0',
+        padding: 12,
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
         fontSize: 14,
         alignItems: 'center',
         color: theme.palette.text.primary,
+        letterSpacing: '-0.5px',
     },
 }))
 
@@ -48,7 +49,7 @@ export function PersonaPage(props: PersonaPageProps) {
     )
 
     return (
-        <DialogContent sx={{ height: 612, padding: 2 }}>
+        <DialogContent style={{ height: 612, padding: 20 }}>
             {loading ? (
                 <Stack justifyContent="center" alignItems="center">
                     <CircularProgress />

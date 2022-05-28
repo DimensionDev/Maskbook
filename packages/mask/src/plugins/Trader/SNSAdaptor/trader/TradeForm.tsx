@@ -38,7 +38,8 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             flexDirection: 'column',
             alignItems: 'center',
             padding: 16,
-            height: 514,
+            height: 400,
+            minHeight: 400,
             overflowY: 'auto',
             marginBottom: 76,
             '::-webkit-scrollbar': {
