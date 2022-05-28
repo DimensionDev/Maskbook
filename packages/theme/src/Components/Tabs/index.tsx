@@ -59,7 +59,9 @@ const FlexibleButtonGroupPanel = styled(Box, {
     zIndex: 100,
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
-    boxShadow: isOpen ? '0px 0px 20px rgba(0, 0, 0, 0.05)' : 'none',
+    boxShadow: isOpen
+        ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
+        : 'none',
     background: parseColor(theme.palette.background.paper).setAlpha(0.8).toRgbString(),
     backdropFilter: 'blur(20px)',
 }))
