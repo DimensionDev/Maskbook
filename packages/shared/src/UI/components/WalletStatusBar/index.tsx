@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusBarProps extends withClasses<'button'> {
+export interface WalletStatusBarProps extends withClasses<'button' | 'disabled'> {
     iconSize?: number
     badgeSize?: number
     className?: string
@@ -98,7 +98,7 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
                         <WalletButton
                             startIcon={actionProps.startIcon}
                             endIcon={actionProps.endIcon}
-                            classes={{ root: classes.button }}
+                            classes={{ root: actionProps.disabled ? classes.disabled : classes.button }}
                             title={actionProps.title}
                             disabled={actionProps.loading || actionProps.disabled}
                             loading={actionProps.loading}

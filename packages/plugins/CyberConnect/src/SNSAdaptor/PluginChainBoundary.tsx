@@ -1,6 +1,6 @@
 import { context } from '../context'
 import { useSubscription } from 'use-subscription'
-import { ChainBoundaryProps, ChainBoundary, useNextIDWallets } from '@masknet/shared'
+import { ChainBoundary, ChainBoundaryProps, useNextIDWallets } from '@masknet/shared'
 
 interface CyberConnectChainBoundaryProps extends ChainBoundaryProps {
     children?: React.ReactElement

@@ -10,9 +10,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
+import { TokenIcon } from '@masknet/shared'
+import type { ERC20TokenDetailed, PriceRecord } from '@masknet/web3-shared-evm'
+import type { TokenAPI } from '@masknet/web3-providers'
+import { DefaultTokenIcon } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
+    tokenInfo?: ERC20TokenDetailed
+    tokenPrice?: PriceRecord
+    tokenMarketCap?: TokenAPI.tokenInfo
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,6 +39,19 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+    icon: {
+        width: '48px',
+        height: '48px',
+    },
+    tokenName: {
+        fontSize: '16px',
+        fontWeight: 700,
+    },
+    tokenPrice: {
+        fontSize: '16px',
+        fontWeight: 700,
+        color: theme.palette.text.secondary,
+    },
 }))
 
 const LIST_HEIGHT = {
@@ -39,15 +59,16 @@ const LIST_HEIGHT = {
     max: 308,
 }
 
-export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
+export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const theme = useTheme()
 
+    const price = tokenPrice?.usd ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
     const makeMessageList =
-        tokenSecurity.is_whitelisted === '1'
+        tokenSecurity.trust_list === '1'
             ? []
             : SecurityMessages.filter(
                   (x) =>
@@ -67,6 +88,64 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
 
     return (
         <Stack spacing={2}>
+            <Stack
+                spacing={1}
+                direction="row"
+                justifyContent="space-between"
+                boxShadow={(theme) =>
+                    theme.palette.mode === 'light'
+                        ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                        : '0px 0px 20px rgba(255, 255, 255, 0.12);'
+                }
+                padding="16px"
+                borderRadius="16px">
+                <Stack direction="row" spacing={0.8}>
+                    {tokenSecurity?.token_name ? (
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            address={tokenSecurity?.contract ?? ''}
+                            name={tokenSecurity?.token_name}
+                            logoURI={tokenInfo?.logoURI}
+                            chainId={tokenSecurity?.chainId}
+                        />
+                    ) : (
+                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
+                    )}
+                    <Stack>
+                        <Typography className={classes.tokenName}>{tokenSecurity?.token_name || 'Unnamed'}</Typography>
+                        <Typography className={classes.tokenPrice}> {price ? `$${price} USD` : '--'}</Typography>
+                    </Stack>
+                </Stack>
+                <Stack>
+                    {(riskyFactors !== 0 || attentionFactors !== 0) && (
+                        <div
+                            style={{
+                                backgroundColor:
+                                    DefineMapping[
+                                        riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                    ].bgColor,
+                                padding: '16px 12px 16px 18px',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}>
+                            {DefineMapping[
+                                riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                            ].icon(24)}
+                            <Typography
+                                sx={{ fontSize: '16px', fontWeight: 500, marginLeft: '8px' }}
+                                color={
+                                    DefineMapping[
+                                        riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
+                                    ].titleColor
+                                }>
+                                {' '}
+                                {riskyFactors !== 0 ? t.high_risk() : t.medium_risk()}
+                            </Typography>
+                        </div>
+                    )}
+                </Stack>
+            </Stack>
             <Stack spacing={1}>
                 <Stack direction="row" justifyContent="space-between">
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.6}>
@@ -79,7 +158,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         />
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography component="span" lineHeight="14px" fontSize={12}>
+                        <Typography component="span" lineHeight="14px" fontSize={14}>
                             {t.more_details()}
                         </Typography>
                         <Link
@@ -92,19 +171,19 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     </Stack>
                 </Stack>
                 <Collapse in={!isCollapse}>
-                    <TokenPanel tokenSecurity={tokenSecurity} securityMessageLevel={securityMessageLevel} />
+                    <TokenPanel tokenSecurity={tokenSecurity} tokenMarketCap={tokenMarketCap?.market_cap} />
                 </Collapse>
             </Stack>
             <Stack spacing={1.5} flex={1}>
-                <Stack direction="row" alignItems="center" spacing={3.5}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
                         {t.security_detection()}
                     </Typography>
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.High].icon(14)}
-                                <Typography component="span">
+                                {DefineMapping[SecurityMessageLevel.High].icon(16)}
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {riskyFactors > 1
                                         ? t.risky_factors({ quantity: riskyFactors.toString() })
                                         : t.risky_factor({ quantity: riskyFactors.toString() })}
@@ -113,8 +192,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         )}
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
-                                <Typography component="span">
+                                {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {attentionFactors > 1
                                         ? t.attention_factors({ quantity: attentionFactors.toString() })
                                         : t.attention_factor({ quantity: attentionFactors.toString() })}

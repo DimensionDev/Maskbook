@@ -1,5 +1,6 @@
 import { useNextIDWallets, WalletStatusBar } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { CircularProgress, Typography, useTheme } from '@mui/material'
 import { useCallback } from 'react'
@@ -8,7 +9,7 @@ import Services from '../../extension/service'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks'
 import { useI18N } from '../i18n-next-ui'
 
-interface WalletStatusBarProps extends withClasses<'button'> {
+interface WalletStatusBarProps extends withClasses<'button' | 'disabled'> {
     className?: string
     actionProps?: {
         title?: string | React.ReactElement | React.ReactNode
@@ -25,6 +26,7 @@ interface WalletStatusBarProps extends withClasses<'button'> {
     haveMenu?: boolean
 }
 
+const useStyles = makeStyles()((theme) => ({}))
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     const { t } = useI18N()
     const theme = useTheme()
@@ -41,7 +43,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     })
     const lastRecognized = useLastRecognizedIdentity()
     const { loading, value: wallets = [] } = useNextIDWallets(lastRecognized)
-
+    const classes = useStylesExtends(useStyles(), props)
     function renderButtonText() {
         if (pendingTransactions.length <= 0) return
         return (
@@ -61,6 +63,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
         <WalletStatusBar
             haveMenu={haveMenu}
             className={className}
+            classes={classes}
             iconSize={30}
             badgeSize={12}
             actionProps={{ ...actionProps, openPopupsWindow, wallets, loading }}
