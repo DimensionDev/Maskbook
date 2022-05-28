@@ -484,7 +484,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                             fullWidth: true,
                             classes: { root: classes.button, disabled: classes.disabledButton },
                             color: 'primary',
-                            style: { padding: '13px 0', marginTop: 0 },
                         }}>
                         <EthereumERC20TokenApprovedBoundary
                             amount={approveAmount.toFixed()}
