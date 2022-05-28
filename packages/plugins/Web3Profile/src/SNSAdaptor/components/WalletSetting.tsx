@@ -7,6 +7,7 @@ import { memo } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 import type { accountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
+import { useChainId } from '@masknet/plugin-infra/web3'
 const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
@@ -74,6 +75,7 @@ interface WalletSettingProp {
 const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
+        const chainId = useChainId()
 
         const hiddenList = {
             NFTs: wallets?.filter(
@@ -115,7 +117,10 @@ const WalletSetting = memo(
         }
 
         const openPopupsWindow = () => {
-            context.openPopupWindow(PopupRoutes.ConnectedWallets)
+            context.openPopupWindow(PopupRoutes.ConnectedWallets, {
+                chainId,
+                internal: true,
+            })
         }
         return (
             <InjectedDialog
