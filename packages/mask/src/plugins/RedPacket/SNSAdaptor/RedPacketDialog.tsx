@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
-        height: 326,
+        minHeight: 326,
     },
     tabPaper: {
         position: 'sticky',
