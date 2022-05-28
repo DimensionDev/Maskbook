@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     tooltip: {
         borderRadius: 4,
         padding: 10,
+        fontSize: 14,
     },
 }))
 
