@@ -1,15 +1,15 @@
 import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance, useChainId, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
+import { Box, Card, CardContent, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { useCallback, useMemo } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
@@ -23,11 +23,9 @@ const useStyles = makeStyles()((theme) => {
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+            padding: 0,
         },
-        walletBar: {
-            margin: theme.spacing(0, -2, -2),
-        },
+        walletBar: {},
         panel: {
             marginTop: theme.spacing(2),
             '&:first-child': {
@@ -63,6 +61,9 @@ const useStyles = makeStyles()((theme) => {
             maxWidth: '100%',
             maxHeight: '100%',
             border: 'none',
+        },
+        actions: {
+            padding: '0 !important',
         },
     }
 })
@@ -179,21 +180,21 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         </Box>
                     </CardContent>
-                    <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
-                            <ActionButton
-                                loading={isPurchasing}
-                                className={classes.button}
-                                fullWidth
-                                variant="contained"
-                                disabled={!!validationMessage || isPurchasing}
-                                onClick={purchase}>
-                                {validationMessage || t('plugin_cryptoartai_buy_now')}
-                            </ActionButton>
-                        </EthereumWalletConnectedBoundary>
-                    </CardActions>
                 </Card>
             </DialogContent>
+            <DialogActions className={classes.actions}>
+                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            loading: isPurchasing,
+                            disabled: !!validationMessage || isPurchasing,
+                            action: async () => purchase(),
+                            title: validationMessage || t('plugin_cryptoartai_buy_now'),
+                        }}
+                        classes={{ button: classes.button }}
+                    />
+                </EthereumWalletConnectedBoundary>
+            </DialogActions>
         </InjectedDialog>
     )
 }
