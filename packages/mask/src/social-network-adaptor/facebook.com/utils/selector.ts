@@ -106,12 +106,12 @@ export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
 // fot inserting web3 tab
 export const searchProfileTabSelector = () => {
     if (!location.pathname.includes('profile.php')) return querySelector('')
-    return querySelector<E>('div[role="main"] div[role="tablist"] > div > div > a:nth-child(7)')
+    return querySelector<E>('div[role="main"] div[role="tablist"] > div > div > :nth-child(7)')
 }
 
 // fot getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('div[role="main"] div[role="tablist"] > div > div > a:nth-child(7)+span')
+    querySelector<HTMLSpanElement>('div[role="main"] div[role="tablist"] > div > div > :nth-child(7)+span')
 
 // fot inserting web3 tab content
 export const searchProfileTabPageSelector = () => {
