@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { FormattedCurrency, LoadingAnimation, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
@@ -20,6 +20,8 @@ import {
     useWeb3,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useMemo, useState } from 'react'
@@ -34,7 +36,6 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsFormStyles'
 
@@ -42,7 +43,7 @@ export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
     tab: TabType
-    onClose?: () => void
+    onClose?: (reset?: boolean) => void
 }
 
 export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
@@ -175,7 +176,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             case TabType.Deposit:
                 const hash = await protocol.deposit(account, chainId, web3, tokenAmount)
                 if (typeof hash !== 'string') {
-                    throw new Error('Failed to deposit token.')
+                    // eslint-disable-next-line
+                    return Promise.reject(Promise.reject('Failed to deposit token.'))
                 } else {
                     await protocol.updateBalance(chainId, web3, account)
                 }
@@ -185,7 +187,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         activatedSocialNetworkUI.utils.share?.(shareText)
                     },
                 })
-                break
+                return
             case TabType.Withdraw:
                 switch (protocol.type) {
                     case ProtocolType.Lido:
@@ -194,7 +196,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         return
                     default:
                         if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                            throw new Error('Failed to withdraw token.')
+                            // eslint-disable-next-line
+                            return Promise.reject(Promise.reject('Failed to withdraw token.'))
                         } else {
                             await protocol.updateBalance(chainId, web3, account)
                         }
@@ -242,6 +245,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 failed={t('failed')}
                                 failedOnClick="use executor"
                                 complete={t('done')}
+                                completeOnClick={() => onClose?.(true)}
                                 disabled={validationMessage !== '' && !needsSwap}
                                 noUpdateEffect
                                 executor={executor}
@@ -275,6 +279,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         failed={t('failed')}
                         failedOnClick="use executor"
                         complete={t('done')}
+                        completeOnClick={() => onClose?.(true)}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
                         executor={executor}

@@ -69,7 +69,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         amount,
         maxAmount,
         maxAmountShares = 1,
-        maxAmountSignificant,
+        maxAmountSignificant = 6,
         balance,
         token,
         onAmountChange,
