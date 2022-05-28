@@ -10,7 +10,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, TokenIcon } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -185,6 +185,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: 12,
             lineHeight: '16px',
             color: theme.palette.text.secondary,
+        },
+        tokenIcon: {
+            width: 18,
+            height: 18,
+            marginRight: 8,
         },
     }
 })
@@ -496,6 +501,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                             }}
                             infiniteUnlockContent={
                                 <Box component="span" display="flex" alignItems="center">
+                                    <TokenIcon
+                                        classes={{ icon: classes.tokenIcon }}
+                                        address={approveToken?.address ?? ''}
+                                        logoURI={approveToken?.logoURI}
+                                    />
                                     <Typography fontSize={14} fontWeight={600} lineHeight="18px">
                                         {t('plugin_trader_unlock_symbol', {
                                             symbol: approveToken?.symbol,
