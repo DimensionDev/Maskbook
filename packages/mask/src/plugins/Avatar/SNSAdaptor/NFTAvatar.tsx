@@ -16,7 +16,7 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -101,7 +101,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
-    const { Utils } = useWeb3State()
     const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
 
     const onClick = useCallback(async () => {

@@ -13,7 +13,7 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
 import Services from '../../../extension/service'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
@@ -78,7 +78,7 @@ interface RedPacketDialogProps extends withClasses<never> {
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const chainId = useChainId()
     const account = useAccount()
     const { classes } = useStyles()
@@ -157,7 +157,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
+    const title = isCreateStep ? t.display_name() : t.details()
 
     const [currentTab, onChange, tabs] = useTabs('new', 'past')
 
@@ -172,7 +172,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             label={
                                 <div className={classes.labelWrapper}>
                                     <img className={classes.img} src={IconURLs.erc20Token} />
-                                    <span>{t('plugin_red_packet_erc20_tab_title')}</span>
+                                    <span>{t.erc20_tab_title()}</span>
                                 </div>
                             }
                             value={tabs.new}
@@ -181,7 +181,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             label={
                                 <div className={classes.labelWrapper}>
                                     <img className={classes.img} src={IconURLs.erc721Token} />
-                                    <span>{t('plugin_red_packet_erc721_tab_title')}</span>
+                                    <span>{t.erc721_tab_title()}</span>
                                 </div>
                             }
                             value={tabs.past}

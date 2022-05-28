@@ -114,8 +114,9 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     } = props
 
     const [state, setState] = useState<ActionButtonPromiseState>('init')
-    const completeClass = classNames(classes.success, b.className)
-    const failClass = classNames(classes.failed, b.className)
+    const basicClass = classNames(classes.button, b.className)
+    const completeClass = classNames(basicClass, classes.success)
+    const failClass = classNames(basicClass, classes.failed)
 
     const run = () => {
         setState('wait')
@@ -144,7 +145,16 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return <Button {...b} startIcon={circle} disabled={!waitingOnClick} children={waiting} onClick={cancel} />
+        return (
+            <Button
+                {...b}
+                startIcon={circle}
+                disabled={!waitingOnClick}
+                children={waiting}
+                onClick={cancel}
+                className={basicClass}
+            />
+        )
     if (state === 'complete')
         return (
             <Button
@@ -167,7 +177,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onClick={failClick}
             />
         )
-    return <Button {...b} children={init} onClick={run} />
+    return <Button {...b} children={init} onClick={run} className={basicClass} />
 }
 const useStyles = makeStyles()({
     success: {
@@ -183,5 +193,8 @@ const useStyles = makeStyles()({
         '&:hover': {
             backgroundColor: red[700],
         },
+    },
+    button: {
+        borderRadius: 999,
     },
 })

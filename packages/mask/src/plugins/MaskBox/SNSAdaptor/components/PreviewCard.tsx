@@ -100,7 +100,7 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
     // #region open box
-    const [isOpening, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
+    const [{ loading: isOpening }, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
     const onRefresh = useCallback(() => {
         state[1](CardTab.Articles)
         setPaymentCount(1)

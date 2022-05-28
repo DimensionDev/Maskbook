@@ -208,6 +208,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         },
         abstractTabWrapper: {},
         claimAllButton: {
+            height: 48,
+            borderRadius: 999,
             [smallQuery]: {
                 fontSize: 14,
             },

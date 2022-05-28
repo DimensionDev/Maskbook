@@ -16,7 +16,8 @@ import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
+import { useI18N as useBaseI18n } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -85,7 +86,8 @@ export interface RedPacketFormProps extends withClasses<never> {
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
-    const { t } = useI18N()
+    const t = useI18N()
+    const { t: tr } = useBaseI18n()
     const classes = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
@@ -108,7 +110,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // #region packet settings
     const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
-    const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
+    const [message, setMessage] = useState(origin?.message || t.best_wishes())
     const currentIdentity = useCurrentIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -156,32 +158,32 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #endregion
 
     const validationMessage = useMemo(() => {
-        if (!token) return t('plugin_wallet_select_a_token')
-        if (!account) return t('plugin_wallet_connect_a_wallet')
+        if (!token) return t.select_a_token()
+        if (!account) return tr('plugin_wallet_connect_a_wallet')
         if (isZero(shares || '0')) return 'Enter shares'
         if (isGreaterThan(shares || '0', 255)) return 'At most 255 recipients'
-        if (isZero(amount)) return t('plugin_dhedge_enter_an_amount')
+        if (isZero(amount)) return tr('plugin_dhedge_enter_an_amount')
         if (isGreaterThan(totalAmount, tokenBalance))
-            return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
+            return tr('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
         if (!isDivisible)
-            return t('plugin_red_packet_indivisible', {
-                symbol: token.symbol,
+            return t.indivisible({
+                symbol: token.symbol!,
                 amount: formatBalance(1, token.decimals),
             })
         return ''
-    }, [account, amount, totalAmount, shares, token, tokenBalance])
+    }, [account, amount, totalAmount, shares, token, tokenBalance, t, tr])
 
     const creatingParams = useMemo(
         () => ({
             duration,
             isRandom: Boolean(isRandom),
             name: senderName,
-            message: message || t('plugin_red_packet_best_wishes'),
+            message: message || t.best_wishes(),
             shares: shares || 0,
             token: token ? (omit(token, ['logoURI']) as FungibleTokenDetailed) : undefined,
             total: totalAmount.toFixed(),
         }),
-        [isRandom, senderName, message, t('plugin_red_packet_best_wishes'), shares, token, totalAmount],
+        [isRandom, senderName, message, t.best_wishes(), shares, token, totalAmount],
     )
 
     const onClick = useCallback(() => {
@@ -197,9 +199,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             <div className={classes.root}>
                 <div className={classes.field}>
                     <FormControl className={classes.input} variant="outlined">
-                        <InputLabel className={classes.selectShrinkLabel}>
-                            {t('plugin_red_packet_split_mode')}
-                        </InputLabel>
+                        <InputLabel className={classes.selectShrinkLabel}>{t.split_mode()}</InputLabel>
                         <Select
                             ref={selectRef}
                             value={isRandom ? 1 : 0}
@@ -217,8 +217,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 container: selectRef.current,
                                 anchorEl: selectRef.current,
                             }}>
-                            <MenuItem value={0}>{t('plugin_red_packet_average')}</MenuItem>
-                            <MenuItem value={1}>{t('plugin_red_packet_random')}</MenuItem>
+                            <MenuItem value={0}>{t.average()}</MenuItem>
+                            <MenuItem value={1}>{t.random()}</MenuItem>
                         </Select>
                     </FormControl>
                     <TextField
@@ -239,7 +239,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 shrink: classes.inputShrinkLabel,
                             },
                         }}
-                        label={t('plugin_red_packet_shares')}
+                        label={t.shares()}
                         value={shares}
                         onChange={onShareChange}
                     />
@@ -247,7 +247,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 <div className={classes.field}>
                     <TokenAmountPanel
                         classes={{ root: classes.input }}
-                        label={isRandom ? 'Total Amount' : t('plugin_red_packet_amount_per_share')}
+                        label={isRandom ? 'Total Amount' : t.amount_per_share()}
                         amount={rawAmount}
                         balance={tokenBalance}
                         token={token}
@@ -271,8 +271,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 shrink: classes.inputShrinkLabel,
                             },
                         }}
-                        inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
-                        label={t('plugin_red_packet_attached_message')}
+                        inputProps={{ placeholder: t.best_wishes() }}
+                        label={t.attached_message()}
                         value={message}
                     />
                 </div>
@@ -285,7 +285,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     <PluginWalletStatusBar
                         actionProps={{
                             disabled: !!validationMessage,
-                            title: validationMessage || t('plugin_red_packet_next'),
+                            title: validationMessage || t.next(),
                             action: async () => onClick(),
                         }}
                         classes={{ button: classes.button }}

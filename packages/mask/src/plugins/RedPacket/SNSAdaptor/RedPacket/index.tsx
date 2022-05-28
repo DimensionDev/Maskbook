@@ -15,7 +15,7 @@ import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
@@ -31,7 +31,7 @@ export interface RedPacketProps {
 export function RedPacket(props: RedPacketProps) {
     const { payload } = props
 
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     // context
@@ -54,12 +54,6 @@ export function RedPacket(props: RedPacketProps) {
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareTextOption = {
-        sender: payload.sender.name,
-        payload: postLink,
-        network: resolveNetworkName(networkType),
-        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-    }
 
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
         payload.contract_version,
@@ -68,15 +62,25 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
 
-    const shareText = (
-        listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash
-            ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? t('plugin_red_packet_share_message_official_account', shareTextOption)
-                : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
-            : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-            ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
-            : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
-    ).trim()
+    const shareText = useMemo(() => {
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        const shareTextOption = {
+            sender: payload.sender.name,
+            payload: postLink.toString(),
+            network: resolveNetworkName(networkType),
+            account: isTwitter(activatedSocialNetworkUI) ? t.twitter_account() : t.facebook_account(),
+        }
+        if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
+            return isOnTwitter || isOnFacebook
+                ? t.share_message_official_account(shareTextOption)
+                : t.share_message_not_twitter(shareTextOption)
+        }
+
+        return isOnTwitter || isOnFacebook
+            ? t.share_unclaimed_message_official_account(shareTextOption)
+            : t.share_unclaimed_message_not_twitter(shareTextOption)
+    }, [payload, postLink, networkType, claimTxHash, listOfStatus, activatedSocialNetworkUI, t])
 
     const [{ loading: isRefunding }, isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
@@ -105,8 +109,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return t(
-                'plugin_red_packet_description_claimed',
+            return t.description_claimed(
                 (availability as RedPacketAvailability).claimed_amount
                     ? {
                           amount: formatBalance(
@@ -114,9 +117,9 @@ export function RedPacket(props: RedPacketProps) {
                               token.decimals,
                               8,
                           ),
-                          symbol: token.symbol,
+                          symbol: token.symbol || '-',
                       }
-                    : { amount: '', symbol: '' },
+                    : { amount: '-', symbol: '-' },
             )
         return ''
     }, [listOfStatus, t, token])
@@ -125,18 +128,18 @@ export function RedPacket(props: RedPacketProps) {
         if (!availability || !token) return
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t('plugin_red_packet_description_refund', {
+            return t.description_refund({
                 balance: formatBalance(availability.balance, token.decimals),
-                symbol: token.symbol,
+                symbol: token.symbol ?? '-',
             })
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return t('plugin_red_packet_description_refunded')
-        if (listOfStatus.includes(RedPacketStatus.expired)) return t('plugin_red_packet_description_expired')
-        if (listOfStatus.includes(RedPacketStatus.empty)) return t('plugin_red_packet_description_empty')
-        if (!payload.password) return t('plugin_red_packet_description_broken')
-        return t('plugin_red_packet_description_failover', {
+        if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
+        if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
+        if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
+        if (!payload.password) return t.description_broken()
+        return t.description_failover({
             total: formatBalance(payload.total, token.decimals),
-            symbol: token.symbol,
-            shares: payload.shares ?? '-',
+            symbol: token.symbol ?? '-',
+            shares: payload.shares.toString() ?? '-',
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
@@ -176,7 +179,7 @@ export function RedPacket(props: RedPacketProps) {
                             {myStatus}
                         </Typography>
                         <Typography className={classes.from} variant="body1">
-                            {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
+                            {t.from({ name: payload.sender.name ?? '-' })}
                         </Typography>
                     </div>
                 </div>

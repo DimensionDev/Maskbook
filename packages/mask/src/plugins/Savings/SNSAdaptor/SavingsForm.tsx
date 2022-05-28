@@ -13,6 +13,7 @@ import {
     formatCurrency,
     getAaveConstants,
     isSameAddress,
+    resolveChainName,
     useAccount,
     useFungibleTokenBalance,
     useTokenConstants,
@@ -26,7 +27,6 @@ import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -164,16 +164,12 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     }, [protocol.bareToken, inputAmount, chainId])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = [
-        `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with ${resolveProtocolName(protocol.type)}. ${
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? `Follow @${
-                      isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                  } (mask.io) to deposit.`
-                : ''
-        }`,
-        '#mask_io',
-    ].join('\n')
+    const shareText = t('promote_savings', {
+        amount: inputAmount,
+        symbol: protocol.bareToken.symbol,
+        chain: resolveChainName(chainId),
+        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+    })
     const [, executor] = useAsyncFn(async () => {
         switch (tab) {
             case TabType.Deposit:

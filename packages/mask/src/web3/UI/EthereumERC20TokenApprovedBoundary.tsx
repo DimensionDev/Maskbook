@@ -166,17 +166,17 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 ) : null}
             </Box>
         )
-    if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
         return (
             <PluginWalletStatusBar
                 actionProps={{
                     title:
-                        approveStateType === ApproveStateType.PENDING
+                        approveStateType === ApproveStateType.UPDATING
                             ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                             : `Updating ${token.symbol}`,
                     action: async () => resetApproveCallback(),
                     disabled: true,
-                    loading: approveStateType === ApproveStateType.PENDING,
+                    loading: approveStateType === ApproveStateType.UPDATING,
                 }}
                 classes={{ button: classes.button }}
             />
