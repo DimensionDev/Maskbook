@@ -1,6 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
@@ -93,12 +93,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
     const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
-    const chainId = ChainId.Mainnet
 
     useEffect(() => {
         setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
         setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
-    }, [collectionList])
+    }, [collectionList, open])
 
     const unList = (url: string | undefined) => {
         if (!url) return
@@ -121,10 +120,6 @@ export function ImageListDialog(props: ImageListDialogProps) {
         const currentUnListed = unListedCollections
         currentUnListed?.splice(listingIndex!, 1)
         setUnListedCollections([...currentUnListed])
-    }
-    const handleClose = () => {
-        setUnListedCollections([])
-        onClose()
     }
 
     const onConfirm = async () => {
@@ -163,7 +158,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
             title={title}
             fullWidth={false}
             open={open}
-            onClose={handleClose}>
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
                     <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
