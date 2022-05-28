@@ -231,6 +231,7 @@ export namespace Plugin.SNSAdaptor {
         /** Sign a message silently */
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         dialogUpdateMsg: UnboundedRegistry<SelectProviderDialogEvent>
+        getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
     }
 
     export type SelectProviderDialogEvent =

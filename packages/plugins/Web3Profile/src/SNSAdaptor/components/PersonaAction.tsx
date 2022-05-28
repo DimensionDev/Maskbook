@@ -1,13 +1,14 @@
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
 import { Copy } from 'react-feather'
-import { useCopyToClipboard } from 'react-use'
+import { useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
 import { PlatformAvatar } from './PlatformAvatar'
 import { useSnackbarCallback } from '@masknet/shared'
 import { formatPublicKey } from '../utils'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
@@ -38,6 +39,12 @@ export function PersonaAction(props: PersonaActionProps) {
     const classes = useStylesExtends(useStyles(), {})
     const { currentPersona, currentVisitingProfile } = props
     const t = useI18N()
+
+    const { value: avatar } = useAsyncRetry(async () => {
+        const avatar = await context.getPersonaAvatar(currentPersona?.identifier)
+        if (!avatar) return undefined
+        return avatar
+    })
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -53,7 +60,7 @@ export function PersonaAction(props: PersonaActionProps) {
 
     return (
         <div className={classes.bottomFixed}>
-            <PlatformAvatar networkIcon={currentVisitingProfile?.avatar} size={36} />
+            <PlatformAvatar networkIcon={avatar} size={36} />
             <div style={{ marginLeft: '4px' }}>
                 <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
                     {currentPersona?.nickname}

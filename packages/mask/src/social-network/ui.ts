@@ -157,6 +157,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 currentVisitingProfile: currentVisitingSub,
                 openPopupWindow: Services.Helper.openPopupWindow,
                 dialogUpdateMsg: WalletMessages.events.selectProviderDialogUpdated,
+                getPersonaAvatar: Services.Identity.getPersonaAvatar,
             }
         }),
     )
