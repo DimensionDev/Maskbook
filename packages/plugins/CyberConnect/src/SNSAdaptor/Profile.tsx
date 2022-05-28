@@ -6,7 +6,7 @@ import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
 import { useAsyncRetry } from 'react-use'
-import { CyberConnectChainBoundary } from './PluginChainBoudary'
+import { CyberConnectChainBoundary } from './PluginChainBoundary'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
