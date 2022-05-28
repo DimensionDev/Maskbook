@@ -22,6 +22,8 @@ import { IconURLs } from './IconURL'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
+import { HistoryIcon } from '@masknet/icons'
+import { RedPacketPast } from './RedPacketPast'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -84,10 +86,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
-
+    const [showHistory, setShowHistory] = useState(false)
+    const onShowHistory = () => {
+        setShowHistory((history) => !history)
+    }
     const [settings, setSettings] = useState<RedPacketSettings>()
 
     const onClose = useCallback(() => {
+        if (showHistory) {
+            setShowHistory(false)
+            return
+        }
         if (step === CreateRedPacketPageStep.ConfirmPage) {
             setStep(CreateRedPacketPageStep.NewRedPacketPage)
             return
@@ -97,7 +106,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props, state, showHistory])
 
     const currentIdentity = useCurrentIdentity()
 
@@ -136,10 +145,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
+        if (showHistory) {
+            setShowHistory(false)
+            return
+        }
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
-    }, [step])
+        setShowHistory(false)
+    }, [step, showHistory])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
+        setShowHistory(false)
     }, [step])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
@@ -166,45 +181,54 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             <InjectedDialog
                 open={props.open}
                 title={title}
+                titleTail={
+                    step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={onShowHistory} /> : null
+                }
                 titleTabs={
-                    <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                        <Tab
-                            label={
-                                <div className={classes.labelWrapper}>
-                                    <img className={classes.img} src={IconURLs.erc20Token} />
-                                    <span>{t.erc20_tab_title()}</span>
-                                </div>
-                            }
-                            value={tabs.new}
-                        />
-                        <Tab
-                            label={
-                                <div className={classes.labelWrapper}>
-                                    <img className={classes.img} src={IconURLs.erc721Token} />
-                                    <span>{t.erc721_tab_title()}</span>
-                                </div>
-                            }
-                            value={tabs.past}
-                        />
-                    </MaskTabList>
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                            <Tab
+                                label={
+                                    <div className={classes.labelWrapper}>
+                                        <img className={classes.img} src={IconURLs.erc20Token} />
+                                        <span>{t.erc20_tab_title()}</span>
+                                    </div>
+                                }
+                                value={tabs.new}
+                            />
+                            <Tab
+                                label={
+                                    <div className={classes.labelWrapper}>
+                                        <img className={classes.img} src={IconURLs.erc721Token} />
+                                        <span>{t.erc721_tab_title()}</span>
+                                    </div>
+                                }
+                                value={tabs.past}
+                            />
+                        </MaskTabList>
+                    ) : null
                 }
                 onClose={onClose}
                 disableTitleBorder>
                 <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                        <>
-                            <TabPanel value={tabs.new} style={{ padding: 0 }}>
-                                <RedPacketERC20Form
-                                    origin={settings}
-                                    onClose={onClose}
-                                    onNext={onNext}
-                                    onChange={_onChange}
-                                />
-                            </TabPanel>
-                            <TabPanel value={tabs.past} style={{ padding: 0 }}>
-                                <RedPacketERC721Form onClose={onClose} />
-                            </TabPanel>
-                        </>
+                        !showHistory ? (
+                            <>
+                                <TabPanel value={tabs.new} style={{ padding: 0 }}>
+                                    <RedPacketERC20Form
+                                        origin={settings}
+                                        onClose={onClose}
+                                        onNext={onNext}
+                                        onChange={_onChange}
+                                    />
+                                </TabPanel>
+                                <TabPanel value={tabs.past} style={{ padding: 0 }}>
+                                    <RedPacketERC721Form onClose={onClose} />
+                                </TabPanel>
+                            </>
+                        ) : (
+                            <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
+                        )
                     ) : null}
                     {step === CreateRedPacketPageStep.ConfirmPage ? (
                         <RedPacketConfirmDialog
