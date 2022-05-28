@@ -1,4 +1,4 @@
-import type { BindingProof } from '@masknet/shared-base'
+import { BindingProof, NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import type { Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
@@ -35,6 +35,7 @@ const addHiddenToArray = (listA?: CollectionTypes[], listB?: string[]) => {
 export const getWalletList = (
     accounts: BindingProof[],
     wallets: WalletTypes[],
+    allPersona: PersonaInformation[],
     hiddenObj:
         | {
               hiddenWallets: Record<string, WalletsCollection>
@@ -54,7 +55,24 @@ export const getWalletList = (
     donations?: Collection[],
 ) => {
     if (accounts?.length === 0) return
-    return accounts?.map((key) => ({
+    let allLinkedProfiles: ProfileInformation[] = []
+    allPersona?.forEach((persona) => {
+        if (persona?.linkedProfiles) {
+            allLinkedProfiles = [...allLinkedProfiles, ...persona.linkedProfiles]
+        }
+    })
+    const detailedAccounts = accounts?.map((account) => {
+        const linkedProfile = allLinkedProfiles?.find(
+            (profile) =>
+                profile?.identifier?.network?.replace('.com', '') === NextIDPlatform.Twitter &&
+                profile?.identifier?.userId === account?.identity,
+        )
+        return {
+            ...account,
+            linkedProfile,
+        }
+    })
+    return detailedAccounts?.map((key) => ({
         ...key,
         walletList: {
             NFTs: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.NFTs),

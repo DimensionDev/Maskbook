@@ -5,6 +5,7 @@ import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
 import type { accountType } from '../types'
+const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -65,10 +66,14 @@ export function PlatformCard(props: PlatformCardProps) {
             <Stack height="100%" spacing={1} divider={<Divider className={classes.divider} />}>
                 <div className={classes.flexItem}>
                     <div style={{ display: 'flex' }}>
-                        <PlatformAvatar providerIcon={new URL('../assets/twitter.png', import.meta.url)} size={36} />
+                        <PlatformAvatar
+                            networkIcon={account?.linkedProfile?.avatar}
+                            providerIcon={new URL('../assets/twitter.png', import.meta.url)}
+                            size={36}
+                        />
                         <div style={{ marginLeft: '20px' }}>
                             <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
-                                kk
+                                {account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
                                 {isCurrent && <Typography className={classes.currentTag}>{t.current()}</Typography>}
                             </Typography>
                             <Typography>@{account?.identity}</Typography>

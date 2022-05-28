@@ -86,7 +86,6 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const persona = useCurrentPersona()
     const currentVisitingProfile = useCurrentVisitingProfile()
     const allPersona = useAllPersona()
-    console.log({ persona, allPersona })
     const currentPersona = allPersona?.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )
@@ -125,7 +124,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         return getWalletHiddenList(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
 
-    const accountList = getWalletList(accounts, wallets, hiddenObj, footprintList, donationList)
+    const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList)
 
     return (
         <>

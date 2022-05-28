@@ -1,4 +1,4 @@
-import type { BindingProof, NextIDPlatform } from '@masknet/shared-base'
+import type { BindingProof, NextIDPlatform, ProfileInformation } from '@masknet/shared-base'
 
 export interface GeneralAsset {
     platform: string
@@ -77,6 +77,7 @@ export interface WalletTypes {
 
 export interface accountType extends BindingProof {
     walletList: WalletsCollection
+    linkedProfile?: ProfileInformation
 }
 
 export interface personaInfo {
