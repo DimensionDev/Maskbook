@@ -7,6 +7,7 @@ import { Web3ProfileDialog } from './components/Web3ProfileDialog'
 import { setupContext } from './context'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { PLUGIN_ID } from '../constants'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,25 +18,34 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <Web3ProfileIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'Web3-Profile' }
+            const recommendFeature = {
+                description: <Trans i18nKey="plugin_web3_profile_recommend_feature_description" />,
+                backgroundGradient: 'linear-gradient(181.28deg, #6BA3FF 1.76%, #C2E9FB 99.59%)',
+            }
             return {
-                ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={disabled}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                {...EntryComponentProps}
+                                recommendFeature={recommendFeature}
+                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />
                             <Web3ProfileDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 12,
+                ApplicationEntryID: base.ID,
+                appBoardSortingDefaultPriority: 3,
+                marketListSortingPriority: 3,
                 name,
                 icon,
+                nextIdRequired: true,
+                category: 'dapp',
+                recommendFeature,
             }
         })(),
     ],
