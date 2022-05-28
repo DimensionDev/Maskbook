@@ -28,9 +28,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     return (
                         <>
                             <ApplicationEntry
+                                {...EntryComponentProps}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
-                                {...EntryComponentProps}
                                 recommendFeature={recommendFeature}
                                 onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
                             />

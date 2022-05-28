@@ -145,6 +145,7 @@ function ApplicationBoardContent(props: Props) {
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
 
+    console.log({ snsAdaptorPlugins, applicationList })
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
