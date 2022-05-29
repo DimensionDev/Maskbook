@@ -29,8 +29,17 @@ export async function jsonReq(url: string, opts: any) {
     return json
 }
 
-export async function rpcCall(host: string, method: string, params: any) {
-    const res = await jsonReq(`${host}/v1/rpc`, {
+/**
+ *
+ * @param host url of the Oracle
+ * @param method get/post/put
+ * @param params params
+ * @param porRequest true if this is Proof of Recommendations request (requires different route for max uptime)
+ * @returns result of request
+ */
+ export async function rpcCall(host: string, method: string, params: any, porRequest = false) {
+    const url = porRequest ? `${host}/v1/rpc` : `${host}/v1/recommendations/rpc`
+    const res = await jsonReq(url, {
         method: 'POST',
         body: JSON.stringify({
             jsonrpc: '2.0',
@@ -42,3 +51,4 @@ export async function rpcCall(host: string, method: string, params: any) {
 
     return res
 }
+
