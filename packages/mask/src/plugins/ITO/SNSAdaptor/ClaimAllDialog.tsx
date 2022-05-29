@@ -25,8 +25,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
-import { useSpaceStationCampaignInfo } from './useSpaceStationCampaignInfo'
-import { NftAirdropCard } from './NftAirdropCard'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -231,12 +229,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const {
-        value: campaignInfos,
-        loading: loadingAirdrop,
-        retry: retryAirdrop,
-    } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
-
     const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokens(
@@ -268,9 +260,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             },
         })
     }, [claimCallback, openShareTxDialog, retry])
-    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
-        shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
+        shortITOwrapper: !swappedTokens || swappedTokens.length === 0,
     })
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
@@ -293,16 +284,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {(showNftAirdrop || loadingAirdrop) &&
-                        chainId === ChainId.Matic &&
-                        Flags.nft_airdrop_enabled ? (
-                            <NftAirdropCard
-                                campaignInfos={campaignInfos!}
-                                loading={loadingAirdrop}
-                                retry={retryAirdrop}
-                            />
-                        ) : null}
-
                         {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
                                 <CircularProgress size={24} />
@@ -311,11 +292,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             <div className={classes.content}>
                                 <Content swappedTokens={swappedTokens} chainId={chainId} />
                             </div>
-                        ) : !showNftAirdrop && !loadingAirdrop ? (
+                        ) : (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
-                        ) : null}
+                        )}
                         {(swappedTokens && swappedTokens.length > 0) ||
                         (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     formatEthereumAddress,
-    TransactionStateType,
     useTokenConstants,
     isNativeTokenAddress,
     explorerResolver,
