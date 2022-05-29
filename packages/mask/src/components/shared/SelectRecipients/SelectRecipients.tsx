@@ -59,7 +59,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
-        console.log(item, 'select')
 
         if (!item || !item.fromNextID) return
         await Services.Crypto.setRecipients(item as ProfileRecord)
