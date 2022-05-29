@@ -14,7 +14,7 @@ importers:
       '@commitlint/cli': ^17.0.0
       '@commitlint/config-conventional': ^17.0.0
       '@dimensiondev/eslint-plugin': 0.0.2-20220516081411-2649814
-      '@dimensiondev/kit': 0.0.0-20220512140759-bed2b46
+      '@dimensiondev/kit': 0.0.0-20220501022859-60d5533
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.9.0
@@ -68,7 +68,7 @@ importers:
       web3-core: 1.7.3
       web3-core-method: 1.7.3
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20220512140759-bed2b46
+      '@dimensiondev/kit': 0.0.0-20220501022859-60d5533
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.9.0_7cpxmzzodpxnolj5zcc5cr63ji
       '@emotion/serialize': 1.0.3
@@ -4892,8 +4892,8 @@ packages:
       webextension-polyfill: 0.9.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220512140759-bed2b46:
-    resolution: {integrity: sha512-3FJy3d+yvSpZhmiFzbLv+dMhRQvjzs3KC2lJ/QOJffBmmUfuQt6Nxf21eTjc0zqPGcYb0iHN6YIM15HtQeR3CA==, tarball: download/@dimensiondev/kit/0.0.0-20220512140759-bed2b46/6fae0cca3b21d0d9a0ddc4630a11e0a5f29db1d6bc9b20d4d2ac8f9d4ff9c13c}
+  /@dimensiondev/kit/0.0.0-20220501022859-60d5533:
+    resolution: {integrity: sha512-Uff6um/tvEEm4eE8eAXxCM/NUhor2cpheS9EVwPCuPMybKd8cMZEsCroIi7xVAxqZsf9pejUW2oCYeLhCAe5TA==, tarball: download/@dimensiondev/kit/0.0.0-20220501022859-60d5533/961397d39ba5221918e28ad5e84b871d2d23c872f9fad0e014dfb4bf021d2697}
     dependencies:
       lodash-es: 4.17.21
     dev: false
@@ -15643,7 +15643,7 @@ packages:
       isobject: 3.0.1
 
   /defined/1.0.0:
-    resolution: {integrity: sha1-yY2bzvdWdBiOEQlpFRGZ45sfppM=}
+    resolution: {integrity: sha512-Y2caI5+ZwS5c3RiNDJ6u53VhQHv+hHKwhkI1iHvceKUHw9Df6EK2zRLfjejRgMuCuxK7PfSWIMwWecceVvThjQ==}
     dev: false
 
   /del/4.1.1:
@@ -15719,7 +15719,7 @@ packages:
     dev: true
 
   /detect-indent/4.0.0:
-    resolution: {integrity: sha1-920GQ1LN9Docts5hnE7jqUdd4gg=}
+    resolution: {integrity: sha512-BDKtmHlOzwI7iRuEkhzsnPoi5ypEhWAJB5RvHWe1kMr06js3uK5B3734i3ui5Yd+wOJV1cpE4JnivPD283GU/A==}
     engines: {node: '>=0.10.0'}
     dependencies:
       repeating: 2.0.1
@@ -15865,7 +15865,7 @@ packages:
     dev: false
 
   /doctrine/0.7.2:
-    resolution: {integrity: sha1-fLhgNZujvpDgQLJrcpzkv6ZUxSM=}
+    resolution: {integrity: sha512-qiB/Rir6Un6Ad/TIgTRzsremsTGWzs8j7woXvp14jgq00676uBiBT5eUOi+FgRywZFVy5Us/c04ISRpZhRbS6w==}
     engines: {node: '>=0.10.0'}
     dependencies:
       esutils: 1.1.6
@@ -16120,7 +16120,7 @@ packages:
     optional: true
 
   /emailjs/2.2.0:
-    resolution: {integrity: sha1-ulsj5KSwpFEPZS6HOxVOlAe2ygM=}
+    resolution: {integrity: sha512-J9HNx13GA5DnJma10YxsSqYCErTyB0KoVflTddPTyKlEVHM0MckZXn/zDqovdacwWkHCxqC9AKVY8GMPaGvaGQ==}
     dependencies:
       addressparser: 0.3.2
       emailjs-mime-codec: 2.0.9
@@ -16896,7 +16896,7 @@ packages:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
   /esutils/1.1.6:
-    resolution: {integrity: sha1-wBzKqa5LiXxtDD4hCuUvPHqEQ3U=}
+    resolution: {integrity: sha512-RG1ZkUT7iFJG9LSHr7KDuuMSlujfeTtMNIcInURxKAxhMtwQhI3NrQhz26gZQYlsYZQKzsnwtpKrFKj9K9Qu1A==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -16961,7 +16961,7 @@ packages:
     dev: false
 
   /eth-query/2.1.2:
-    resolution: {integrity: sha1-1nQdkAAQa1FRDHLbktY2VFam2l4=}
+    resolution: {integrity: sha512-srES0ZcvwkR/wd5OQBRA1bIJMww1skfGS0s8wlwK3/oNP4+wnds60krvu5R1QbpRQjMmpG5OMIWro5s7gvDPsA==}
     dependencies:
       json-rpc-random-id: 1.0.1
       xtend: 4.0.2
@@ -16974,7 +16974,7 @@ packages:
     dev: false
 
   /eth-sig-util/1.4.2:
-    resolution: {integrity: sha1-jZWCAsftuq6Dlwf7pvCf8ydgYhA=}
+    resolution: {integrity: sha512-iNZ576iTOGcfllftB73cPB5AN+XUQAT/T8xzsILsghXC1o8gJUqe3RHlcDqagu+biFpYQ61KQrZZJza8eRSYqw==}
     deprecated: Deprecated in favor of '@metamask/eth-sig-util'
     dependencies:
       ethereumjs-abi: github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0
@@ -16991,7 +16991,7 @@ packages:
       js-sha3: 0.8.0
 
   /ethereum-common/0.0.18:
-    resolution: {integrity: sha1-L9w1dvIykDNYl26znaeDIT/5Uj8=}
+    resolution: {integrity: sha512-EoltVQTRNg2Uy4o84qpa2aXymXDJhxm7eos/ACOg0DG4baAbMjhbdAEsx9GeE8sC3XCxnYvrrzZDH8D8MtA2iQ==}
     dev: false
 
   /ethereum-common/0.2.0:
@@ -17619,7 +17619,7 @@ packages:
     dev: false
 
   /fake-merkle-patricia-tree/1.0.1:
-    resolution: {integrity: sha1-S4w6z7Ugr635hgsfFM2M40As3dM=}
+    resolution: {integrity: sha512-Tgq37lkc9pUIgIKw5uitNUKcgcYL3R6JvXtKQbOf/ZSavXbidsksgp/pAY6p//uhw0I4yoMsvTSovvVIsk/qxA==}
     dependencies:
       checkpoint-store: 1.1.0
     dev: false
@@ -17764,7 +17764,7 @@ packages:
     dev: false
 
   /fetch-ponyfill/4.1.0:
-    resolution: {integrity: sha1-rjzl9zLGReq4fkroeTQUcJsjmJM=}
+    resolution: {integrity: sha512-knK9sGskIg2T7OnYLdZ2hZXn0CtDrAIBxYQLpmEf0BqfdWnwmM1weccUl5+4EdA44tzNSFAuxITPbXtPehUB3g==}
     dependencies:
       node-fetch: 1.7.3
     dev: false
@@ -17915,7 +17915,7 @@ packages:
     dev: true
 
   /find-versions/2.0.0:
-    resolution: {integrity: sha1-KtkNSQ9oKMGqQCks9wmsMxghDDw=}
+    resolution: {integrity: sha512-nzvoTkgyiTcXOT9PNHYWP2wlAoNbXanK/FnlHnB6v2yA1HoyDNTxN08+NobUIXL0qnBZPtegjXgohsQa8YiT+Q==}
     engines: {node: '>=0.10.0'}
     dependencies:
       array-uniq: 1.0.3
@@ -18898,7 +18898,7 @@ packages:
     engines: {node: '>=6'}
 
   /has-ansi/2.0.0:
-    resolution: {integrity: sha1-NPUEnOHs3ysGSa8+8k5F7TVBbZE=}
+    resolution: {integrity: sha512-C8vBJ8DwUCx19vhm7urhTuUsr4/IyP6l4VzNQDv+ryHQObW3TTTp9yB68WpYgRe2bbaGuZ/se74IqFeVnMnLZg==}
     engines: {node: '>=0.10.0'}
     dependencies:
       ansi-regex: 2.1.1
@@ -19125,7 +19125,7 @@ packages:
       react-is: 16.13.1
 
   /home-or-tmp/2.0.0:
-    resolution: {integrity: sha1-42w/LSyufXRqhX440Y1fMqeILbg=}
+    resolution: {integrity: sha512-ycURW7oUxE2sNiPVw1HVEFsW+ecOpJ5zaj7eC0RlwhibhRBod20muUN8qu/gzx956YrLolVvs1MTXwKgC2rVEg==}
     engines: {node: '>=0.10.0'}
     dependencies:
       os-homedir: 1.0.2
