@@ -1,8 +1,8 @@
 import { getAddress } from '@ethersproject/address'
 
-import { EvmAddress, RpcMethod } from '../../types'
+import type { EvmAddress } from '../../types'
 
-import { getOracle, rpcCall } from './oracle'
+import { getOracle, rpcCall, RpcRoutes, RecommendationsRpcMethod } from './oracle'
 
 // Get a time signature from the oracle (all fields required, send sized 0x000....00 when not used)
 type TPropsTimeSignature = {
@@ -18,16 +18,9 @@ export async function getTimeSignature(props: TPropsTimeSignature) {
     const host = props.host || (await getOracle())
 
     const { result } = await rpcCall(
-        host,
-        RpcMethod.oracle_getTimePromise,
-        [
-            account,
-            tokenAddress,
-            referrer,
-            dapp,
-            router,
-        ],
-        true, // PoR request
+        `${host}/v1/${RpcRoutes.recommendations}`,
+        RecommendationsRpcMethod.oracle_getTimePromise,
+        [account, tokenAddress, referrer, dapp, router],
     )
 
     return {
@@ -49,8 +42,8 @@ export async function postProofOfRecommendationOrigin(
 
     // Post signed proof of recommendation which has a time promise from the store.
     const res = await rpcCall(
-        host,
-        RpcMethod.oracle_sendProofOfRecommendationOrigin,
+        `${host}/v1/${RpcRoutes.recommendations}`,
+        RecommendationsRpcMethod.oracle_sendProofOfRecommendationOrigin,
         [
             {
                 signer: getAddress(account),
@@ -61,7 +54,6 @@ export async function postProofOfRecommendationOrigin(
                 timePromises: [timePromise],
             },
         ],
-        true, // PoR request
     )
     return res
 }
@@ -80,8 +72,8 @@ export async function postProofOfRecommendationWithReferrer(
     const host = await getOracle()
 
     const res = await rpcCall(
-        host,
-        RpcMethod.oracle_sendProofOfRecommendation,
+        `${host}/v1/${RpcRoutes.recommendations}`,
+        RecommendationsRpcMethod.oracle_sendProofOfRecommendation,
         [
             {
                 signer: getAddress(account),
@@ -95,7 +87,6 @@ export async function postProofOfRecommendationWithReferrer(
                 linkReferrer: document.referrer,
             },
         ],
-        true, // PoR request
     )
     return res
 }
