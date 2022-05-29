@@ -500,9 +500,9 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     readonly readyPromise: Promise<void>
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
-    /** Create an web3 instance. */
+    /** Create an instance that creates from the network SDK. */
     createWeb3(chainId?: ChainId): Promise<Web3>
-    /** Create an provider instance. */
+    /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(chainId?: ChainId): Promise<Web3Provider>
     /** Create the connection. */
     connect(chainId?: ChainId): Promise<Account<ChainId>>
