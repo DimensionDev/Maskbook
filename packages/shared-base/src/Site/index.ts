@@ -2,8 +2,6 @@ import { EnhanceableSite, ExtensionSite } from './type'
 
 export * from './type'
 
-const { host, pathname } = location
-
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
     [EnhanceableSite.Facebook]: /facebook\.com/i,
@@ -19,6 +17,7 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
 }
 
 function getEnhanceableSiteType() {
+    const { host, pathname } = location
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (host.match(regexp)) return type as EnhanceableSite
         continue
@@ -27,6 +26,7 @@ function getEnhanceableSiteType() {
 }
 
 function getExtensionSiteType() {
+    const { host, pathname } = location
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (pathname.match(regexp)) return type as ExtensionSite
         continue
