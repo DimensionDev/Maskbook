@@ -79,7 +79,7 @@ function isNativeTokenAddress(chainId: ChainId, address: string) {
 class Connection implements EVM_Connection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
-    // Hijack RPC requests and process them with koa like middlewares
+    // Hijack RPC requests and process them with koa like middleware
     private get hijackedRequest() {
         return <T extends unknown>(requestArguments: RequestArguments, options?: EVM_Web3ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {

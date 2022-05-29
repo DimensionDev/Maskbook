@@ -1,3 +1,4 @@
+// cspell:disable
 /// <reference types="@masknet/global-types/webpack" />
 
 // After https://github.com/louisguitton/DefinitelyTyped/pull/1

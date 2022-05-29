@@ -1,4 +1,4 @@
-import type { RiskWanringBaseAPI } from '../types'
+import type { RiskWarningBaseAPI } from '../types'
 
 const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
     production: 'https://backup.mask.io/api',
@@ -9,7 +9,7 @@ const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
 
 const BASE_URL = BASE_URL_MAP[process.env.NODE_ENV]
 
-export class RiskWanringAPI implements RiskWanringBaseAPI.Provider {
+export class RiskWarningAPI implements RiskWarningBaseAPI.Provider {
     async approve(address: string, pluginID = '') {
         await fetch(`${BASE_URL}/v1/risk_warning/confirm`, {
             method: 'POST',

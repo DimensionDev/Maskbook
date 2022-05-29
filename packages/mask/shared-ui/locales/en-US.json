@@ -292,7 +292,7 @@
     "plugin_wallet_connected_with": "Connected with",
     "plugin_wallet_connecting_with": "Connecting with",
     "plugin_wallet_metamask_error_already_request": "You've opened the popup, please confirm.",
-    "plugin_wallet_connect_tip": "Please make sure that your {{providerName}} wallet is provided by the offical <providerLink>{{providerShortenLink}}</providerLink>.",
+    "plugin_wallet_connect_tip": "Please make sure that your {{providerName}} wallet is provided by the official <providerLink>{{providerShortenLink}}</providerLink>.",
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",
     "plugin_wallet_select_a_nft_owner": "Select an NFT Contract Owner",
     "plugin_wallet_select_a_nft_operator": "Select an NFT Contract Operator",

@@ -4,7 +4,7 @@ import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
 import { NativeExplorerAPI } from './explorer'
-import { RiskWanringAPI } from './risk-warning'
+import { RiskWarningAPI } from './risk-warning'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 import { TwitterAPI } from './twitter'
@@ -27,7 +27,7 @@ export const NFTScan = new NFTScanAPI()
 export const Zora = new ZoraAPI()
 export const CoinGecko = new CoinGeckoAPI()
 export const Explorer = new NativeExplorerAPI()
-export const RiskWanring = new RiskWanringAPI()
+export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()

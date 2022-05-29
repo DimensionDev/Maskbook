@@ -20,7 +20,7 @@ export function useEvents(token?: Token) {
         return {
             data: assetEvents.map((event: any) => {
                 return {
-                    avatorPath: event.avatorPath,
+                    avatarPath: event.avatarPath,
                     award: event.award,
                     createTime: event.createTime,
                     operatorAddress: event.operatorAddress,

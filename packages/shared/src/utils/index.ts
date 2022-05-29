@@ -45,7 +45,7 @@ export function createFungibleAsset<ChainId, SchemaType>(
     }
 }
 
-export function createNonFungileToken<ChainId, SchemaType>(
+export function createNonFungibleToken<ChainId, SchemaType>(
     chainId: ChainId,
     schema: SchemaType,
     address: string,

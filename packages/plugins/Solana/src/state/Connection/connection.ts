@@ -143,6 +143,7 @@ class Connection implements BaseConnection {
     }
 
     async getBlockNumber(options?: SolanaWeb3ConnectionOptions) {
+        // cspell:disable-next-line
         const response = await this.getWeb3Connection(options).getLatestBlockhash()
         return response.lastValidBlockHeight
     }

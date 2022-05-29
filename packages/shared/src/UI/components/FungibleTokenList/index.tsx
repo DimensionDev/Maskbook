@@ -161,10 +161,10 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             itemRender={getFungibleTokenItem<T>(
                 account,
                 (address) => {
-                    if (isSameAddress(nativeToken?.address, address)) return 'offcial'
+                    if (isSameAddress(nativeToken?.address, address)) return 'official'
 
-                    const inOffcialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
-                    if (inOffcialList) return 'offcial'
+                    const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
+                    if (inOfficialList) return 'official'
 
                     const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
                     if (inPersonaList) return 'personal'

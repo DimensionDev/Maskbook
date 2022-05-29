@@ -25,7 +25,7 @@ const isTorusSupported = (chainId: ChainId): chainId is ChainIdTorus => {
 export default class TorusProvider extends BaseProvider implements EVM_Provider {
     /**
      * If the internal chain id exists, it means the connection was created.
-     * Otherwxise, no connection was created before.
+     * Otherwise, no connection was created before.
      */
     private chainId_: ChainIdTorus | null = null
     private providerPool = new Map<ChainId, Torus.TorusInpageProvider>()

@@ -59,14 +59,14 @@ async function getNftList(chainId: ChainId, account: string): Promise<Array<NonF
             tokenId: pubkey,
             chainId,
             type: TokenType.NonFungible,
-            schema: SchemaType.NonFungile,
+            schema: SchemaType.NonFungible,
             address: '',
             contract: {
                 chainId,
                 name: metadata.data.data.name,
                 symbol: metadata.data.data.symbol,
                 address: pubkey,
-                schema: SchemaType.NonFungile,
+                schema: SchemaType.NonFungible,
             },
             metadata: {
                 chainId,

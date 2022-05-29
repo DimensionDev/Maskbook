@@ -3,10 +3,10 @@ import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
-    RetrunChainResolver,
-    RetrunExplorerResolver,
-    RetrunNetworkResolver,
-    RetrunProviderResolver,
+    ReturnChainResolver,
+    ReturnExplorerResolver,
+    ReturnNetworkResolver,
+    ReturnProviderResolver,
 } from '../utils'
 
 export interface Pageable<T> {
@@ -380,11 +380,11 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     to: string
     /** the value amount (polyfill to 0x0 if absent in the original transaction) */
     value: string
-    /** code to depoly */
+    /** code to deploy */
     code?: string
     /** method name */
     name?: string
-    /** acutal parameters */
+    /** actual parameters */
     parameters?: {
         [key: string]: Parameter
     }
@@ -703,17 +703,17 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         options?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get all fungible assets of given account and ignore the pagnation options. */
+    /** Get all fungible assets of given account and ignore the pagination options. */
     getAllFungibleAssets?: (
         address: string,
         options?: Web3HubOptions,
     ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible assets of given account and ignore the pagnation options. */
+    /** Get all non-fungible assets of given account and ignore the pagination options. */
     getAllNonFungibleAssets?: (
         address: string,
         options?: Web3HubOptions,
     ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible collections of given account and ignore the pagnation options. */
+    /** Get all non-fungible collections of given account and ignore the pagination options. */
     getAllNonFungibleCollections?: (
         address: string,
         options?: Web3HubOptions,
@@ -822,7 +822,7 @@ export interface TransactionState<ChainId, Transaction> {
 
     /** Add a transaction record. */
     addTransaction?: (chainId: ChainId, address: string, id: string, transaction: Transaction) => Promise<void>
-    /** Reaplace a transaction with new record. */
+    /** Replace a transaction with new record. */
     replaceTransaction?: (
         chainId: ChainId,
         address: string,
@@ -934,10 +934,10 @@ export interface WalletState {
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
 
     // #region resolvers
-    chainResolver: RetrunChainResolver<ChainId, SchemaType, NetworkType>
-    explorerResolver: RetrunExplorerResolver<ChainId, SchemaType, NetworkType>
-    providerResolver: RetrunProviderResolver<ChainId, ProviderType>
-    networkResolver: RetrunNetworkResolver<ChainId, NetworkType>
+    chainResolver: ReturnChainResolver<ChainId, SchemaType, NetworkType>
+    explorerResolver: ReturnExplorerResolver<ChainId, SchemaType, NetworkType>
+    providerResolver: ReturnProviderResolver<ChainId, ProviderType>
+    networkResolver: ReturnNetworkResolver<ChainId, NetworkType>
     // #endregion
 
     // #region validators

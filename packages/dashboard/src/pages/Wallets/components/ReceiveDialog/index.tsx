@@ -59,7 +59,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(({ open, chainId, addr
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
-    const copyaddress = useSnackbarCallback({
+    const copyAddress = useSnackbarCallback({
         executor: async (address: string) => copyToClipboard(address),
         deps: [],
         successText: t.wallets_address_copied(),
@@ -101,7 +101,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(({ open, chainId, addr
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button size="medium" onClick={() => copyaddress(address)}>
+                <Button size="medium" onClick={() => copyAddress(address)}>
                     {t.wallets_address_copy()}
                 </Button>
             </DialogActions>

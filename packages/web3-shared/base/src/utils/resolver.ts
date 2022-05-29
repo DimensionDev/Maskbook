@@ -145,15 +145,15 @@ class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
     }
 }
 
-export type RetrunChainResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+export type ReturnChainResolver<ChainId, SchemaType, NetworkType> = ReturnType<
     Wrapper<ChainId, SchemaType, never, NetworkType>['createChainResolver']
 >
-export type RetrunExplorerResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+export type ReturnExplorerResolver<ChainId, SchemaType, NetworkType> = ReturnType<
     Wrapper<ChainId, SchemaType, never, NetworkType>['createExplorerResolver']
 >
-export type RetrunNetworkResolver<ChainId, NetworkType> = ReturnType<
+export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
     Wrapper<ChainId, never, never, NetworkType>['createNetworkResolver']
 >
-export type RetrunProviderResolver<ChainId, ProviderType> = ReturnType<
+export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
     Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
 >

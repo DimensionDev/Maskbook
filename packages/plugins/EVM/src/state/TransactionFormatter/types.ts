@@ -16,9 +16,9 @@ export interface TransactionComputationContext {
     to: string
     /** the value amount (polyfill to 0x0 if absent in the original transaction) */
     value: string
-    /** the data paylaod of transaction */
+    /** the data payload of transaction */
     data?: string
-    /** code to depoly */
+    /** code to deploy */
     code?: string
     /** method name */
     name?: string

@@ -30,7 +30,7 @@ export function createFungibleToken<ChainId, SchemaType>(
         logoURL,
     }
 }
-export function createNonFungibelTokenMetadata<ChainId>(
+export function createNonFungibleTokenMetadata<ChainId>(
     chainId: ChainId,
     name: string,
     symbol: string,

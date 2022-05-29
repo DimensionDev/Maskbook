@@ -9,7 +9,7 @@ export enum ChainId {
 export enum SchemaType {
     Native = 1,
     Fungible = 2,
-    NonFungile = 3,
+    NonFungible = 3,
 }
 
 export enum NetworkType {

@@ -55,11 +55,11 @@ class Storage<ChainId, Transaction> {
     }
 }
 
-class Watcher<ChainId, Trnasaction> {
+class Watcher<ChainId, Transaction> {
     static LATEST_TRANSACTION_SIZE = 5
 
     private timer: NodeJS.Timeout | null = null
-    private storage = new Storage<ChainId, Trnasaction>()
+    private storage = new Storage<ChainId, Transaction>()
 
     constructor(
         protected checkers: Array<TransactionChecker<ChainId>>,
@@ -105,7 +105,7 @@ class Watcher<ChainId, Trnasaction> {
         this.timer = null
     }
 
-    public watchTransaction(chainId: ChainId, id: string, transaction: Trnasaction) {
+    public watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
         if (!this.storage.hasItem(chainId, id)) {
             this.storage.setItem(chainId, id, {
                 at: Date.now(),

@@ -20,7 +20,7 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
     }
 
     override get readyPromise() {
-        if (isExtensionSiteType()) return Promise.reject(new Error('Not avaiable on extension site.'))
+        if (isExtensionSiteType()) return Promise.reject(new Error('Not available on extension site.'))
         return this.bridge.untilAvailable().then(() => undefined)
     }
 

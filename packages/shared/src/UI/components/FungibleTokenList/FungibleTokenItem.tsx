@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 export const getFungibleTokenItem =
     <T extends NetworkPluginID>(
         account: string,
-        getSource: (address: string) => 'personal' | 'offcial' | 'external',
+        getSource: (address: string) => 'personal' | 'official' | 'external',
         getBalance: (address: string) => string,
         isSelected: (address: string) => boolean,
         isLoading: (address: string) => boolean,

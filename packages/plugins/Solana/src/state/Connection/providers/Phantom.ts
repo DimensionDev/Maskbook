@@ -24,7 +24,7 @@ export class PhantomProvider extends BaseInjectedProvider implements SolanaProvi
         return this.bridge.request({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
-                mesasage: bs58.encode(transaction.serializeMessage()),
+                message: bs58.encode(transaction.serializeMessage()),
             },
         }) as Promise<Transaction>
     }
