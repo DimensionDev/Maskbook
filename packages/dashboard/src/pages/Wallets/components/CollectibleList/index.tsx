@@ -2,7 +2,7 @@ import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useStat
 import { useNavigate } from 'react-router-dom'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkDescriptor, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'

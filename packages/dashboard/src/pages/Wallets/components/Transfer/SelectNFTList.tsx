@@ -8,7 +8,7 @@ import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 interface SelectNFTListProps {
-    list: NonFungibleToken<ChainId, SchemaType>[]
+    list: Array<NonFungibleToken<ChainId, SchemaType>>
     selectedTokenId: string
     loading: boolean
     error?: boolean

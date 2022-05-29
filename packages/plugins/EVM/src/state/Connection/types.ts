@@ -1,4 +1,4 @@
-import type { RequestArguments, TransactionReceipt } from 'web3-core'
+import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'

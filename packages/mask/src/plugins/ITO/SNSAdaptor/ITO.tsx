@@ -15,7 +15,6 @@ import {
     NetworkPluginID,
     isSameAddress,
     formatBalance,
-    currySameAddress,
     FungibleToken,
 } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -46,7 +45,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useAccount, useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'

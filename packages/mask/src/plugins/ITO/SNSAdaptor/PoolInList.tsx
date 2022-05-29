@@ -1,5 +1,5 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { SchemaType, TransactionStateType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
 import {
     isZero,
     formatBalance,
@@ -31,7 +31,6 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
