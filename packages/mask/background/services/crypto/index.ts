@@ -9,4 +9,4 @@ export { encryptComment, decryptComment } from './comment'
 export { steganographyEncodeImage } from './steganography'
 
 export { queryPagedPostHistory, type QueryPagedPostHistoryOptions } from './posts'
-export { getRecipients, setRecipients, hasRecipientAvailable, getIncompleteRecipientsOfPost } from './recipients'
+export { getRecipients, hasRecipientAvailable, getIncompleteRecipientsOfPost } from './recipients'

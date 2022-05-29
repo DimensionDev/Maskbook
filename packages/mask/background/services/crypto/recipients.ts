@@ -1,10 +1,5 @@
 import type { PostIVIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
-import {
-    consistentPersonaDBWriteAccess,
-    createOrUpdateProfileDB,
-    ProfileRecord,
-    queryProfilesDB,
-} from '../../database/persona/db'
+import { queryProfilesDB } from '../../database/persona/db'
 import { queryPostDB } from '../../database/post'
 import { toProfileInformation } from '../__utils__/convert'
 
@@ -17,14 +12,8 @@ export async function hasRecipientAvailable(whoAmI: ProfileIdentifier): Promise<
 }
 
 export async function getRecipients(whoAmI: ProfileIdentifier): Promise<ProfileInformation[]> {
-    const profiles = (await queryProfilesDB({ hasLinkedPersona: true, network: whoAmI.network })).filter(
-        (x) => x.identifier !== whoAmI && x.linkedPersona,
-    )
+    const profiles = (await queryProfilesDB({ network: whoAmI.network })).filter((x) => x.identifier !== whoAmI)
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
-}
-
-export async function setRecipients(value: ProfileRecord) {
-    await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(value, t))
 }
 
 export async function getIncompleteRecipientsOfPost(id: PostIVIdentifier): Promise<ProfileInformation[]> {

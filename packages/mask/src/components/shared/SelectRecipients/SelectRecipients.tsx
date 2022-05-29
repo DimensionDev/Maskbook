@@ -15,7 +15,6 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { cloneDeep, uniqBy } from 'lodash-unified'
 import Services from '../../../extension/service'
-import type { ProfileRecord } from '../../../../background/database/persona/type'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -60,8 +59,9 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
 
-        if (!item || !item.fromNextID) return
-        await Services.Crypto.setRecipients(item as ProfileRecord)
+        if (!item || !item.fromNextID || !item.linkedPersona) return
+        console.log('relation', item)
+        await Services.Identity.createNewRelation(item.identifier, item.linkedPersona)
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])
@@ -81,7 +81,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
             onClose={onClose}
             onSelect={(item) => onSelect(item as ProfileInformationFromNextID)}
             onDeselect={(item) => {
-                7823
                 onSetSelected(
                     cloneDeep(selected).filter(
                         (x) => x.linkedPersona?.publicKeyAsHex !== item.linkedPersona?.publicKeyAsHex,
