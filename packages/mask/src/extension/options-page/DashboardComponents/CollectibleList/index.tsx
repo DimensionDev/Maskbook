@@ -1,21 +1,15 @@
-import { createContext, useEffect, useMemo, useState } from 'react'
-import type {
-    IdentityAddress,
-    isSameAddress,
-    NetworkPluginID,
-    NonFungibleAsset,
-    NonFungibleTokenContract,
-} from '@masknet/web3-shared-base'
+import { createContext } from 'react'
+import type { IdentityAddress, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, NonFungibleAssetProvider, SchemaType, Wallet } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
+import { Button, styled, Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { CollectibleCard } from './CollectibleCard'
-import { CollectionIcon } from './CollectionIcon'
-import { uniqBy } from 'lodash-unified'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReversedAddress } from '@masknet/shared'
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+// import { useI18N } from '../../../../utils'
+// import { CollectionIcon } from './CollectionIcon'
+// import { uniqBy } from 'lodash-unified'
+// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+// import { ReversedAddress } from '@masknet/shared'
+// import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void

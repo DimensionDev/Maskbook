@@ -3,7 +3,6 @@ import {
     Connection as SolanaConnection,
     sendAndConfirmRawTransaction,
     Transaction,
-    TransactionResponse,
 } from '@solana/web3.js'
 import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
 import { Providers } from './provider'
