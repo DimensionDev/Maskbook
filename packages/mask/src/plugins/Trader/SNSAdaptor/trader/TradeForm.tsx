@@ -200,7 +200,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         tokenIcon: {
             width: 18,
             height: 18,
-            marginRight: 8,
+            marginRight: '8px !important',
         },
     }
 })
