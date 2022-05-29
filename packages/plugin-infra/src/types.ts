@@ -1,8 +1,19 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
+import type {
+    ChainDescriptor,
+    IdentityAddress,
+    NetworkDescriptor,
+    ProviderDescriptor,
+    SocialIdentity,
+    Wallet,
+    Web3EnableRequirement,
+} from '@masknet/web3-shared-base'
+import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -44,11 +55,60 @@ export declare namespace Plugin {
      * DeferredDefinition should not contain any functionality of the plugin expects the loader.
      * If the plugin is not providing some of the functionality, please can omit that field.
      */
-    export interface DeferredDefinition extends Shared.Definition {
+    export interface DeferredDefinition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+        Signature = unknown,
+        GasOption = unknown,
+        Block = unknown,
+        Transaction = unknown,
+        TransactionReceipt = unknown,
+        TransactionDetailed = unknown,
+        TransactionSignature = unknown,
+        TransactionParameter = unknown,
+        Web3 = unknown,
+        Web3Provider = unknown,
+    > extends Shared.Definition<ChainId, ProviderType, NetworkType> {
         /** Load the SNSAdaptor part of the plugin. */
-        SNSAdaptor?: Loader<SNSAdaptor.Definition>
+        SNSAdaptor?: Loader<
+            SNSAdaptor.Definition<
+                ChainId,
+                SchemaType,
+                ProviderType,
+                NetworkType,
+                Signature,
+                GasOption,
+                Block,
+                Transaction,
+                TransactionReceipt,
+                TransactionDetailed,
+                TransactionSignature,
+                TransactionParameter,
+                Web3,
+                Web3Provider
+            >
+        >
         /** Load the Dashboard part of the plugin. */
-        Dashboard?: Loader<Dashboard.Definition>
+        Dashboard?: Loader<
+            Dashboard.Definition<
+                ChainId,
+                SchemaType,
+                ProviderType,
+                NetworkType,
+                Signature,
+                GasOption,
+                Block,
+                Transaction,
+                TransactionReceipt,
+                TransactionDetailed,
+                TransactionSignature,
+                TransactionParameter,
+                Web3,
+                Web3Provider
+            >
+        >
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
         /** Load the General UI of the plugin. */
@@ -64,14 +124,69 @@ export namespace Plugin.Shared {
         /**
          * A lightweight K/V storage used to store some simple data.
          */
-        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
-        /** Sign a message with persona */
-        personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
-        /** Sign a message with wallet */
-        walletSign(message: string, address: string): Promise<string>
+        createKVStorage<T extends object>(
+            type: 'memory' | 'persistent',
+            name: string,
+            defaultValues: T,
+        ): ScopedStorage<T>
+        /** The selected account of Mask Wallet */
+        account: Subscription<string>
+        /** The selected chainId of Mask Wallet */
+        chainId: Subscription<number>
+        /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
+        /** Get all wallets */
+        wallets: Subscription<Wallet[]>
+        /** Get the primary wallet */
+        walletPrimary: Subscription<Wallet | null>
+
+        /** Native platform type */
+        nativeType?: 'Android' | 'iOS'
+        /** Native API supported */
+        hasNativeAPI: boolean
+        /** Send request to native API */
+        send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+
+        /** Open popup window */
+        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
+        /** Close popup window */
+        closePopupWindow(): Promise<void>
+
+        /** Update Mask Wallet account */
+        updateAccount(account: {
+            account?: string
+            chainId?: number
+            networkType?: string
+            providerType?: string
+        }): Promise<void>
+        /** Reset Mask Wallet account */
+        resetAccount(): Promise<void>
+        /** Prepare to select a Mask Wallet account */
+        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
+
+        /** Sign a message with persona */
+        personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
+
+        /** Sign transaction */
+        signTransaction(address: string, transaction: Transaction): Promise<string>
+        /** Sign personal message, aka. eth.personal.sign() */
+        signPersonalMessage(address: string, message: string): Promise<string>
+        /** Sign typed data */
+        signTypedData(address: string, message: string): Promise<string>
+
+        /** Add a new wallet */
+        addWallet(id: string, wallet: Wallet): Promise<void>
+        /** Update a wallet */
+        updateWallet(id: string, wallet: Partial<Wallet>): Promise<void>
+        /** Remove a old wallet */
+        removeWallet(id: string, password?: string): Promise<void>
+
+        /** get the latest unconfirmed request */
+        shiftUnconfirmedRequest(): Promise<JsonRpcPayload | undefined>
+        /** add an unconfirmed request */
+        pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
-    export interface Definition {
+    export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
@@ -106,12 +221,12 @@ export namespace Plugin.Shared {
         experimentalMark?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
+        /** Introduce sub-network information. */
+        declareWeb3Chains?: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>
         /** Introduce networks information. */
-        declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
+        declareWeb3Networks?: Array<NetworkDescriptor<ChainId, NetworkType>>
         /** Introduce wallet providers information. */
-        declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
-        /** Introduce application category information. */
-        declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
+        declareWeb3Providers?: Array<ProviderDescriptor<ChainId, ProviderType>>
         /**
          * Declare what this plugin provides.
          *
@@ -157,7 +272,7 @@ export namespace Plugin.Shared {
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
         /** The Web3 Network this plugin supports */
-        web3?: Web3Plugin.EnableRequirement
+        web3?: Web3EnableRequirement
     }
     export interface SupportedNetworksDeclare {
         /**
@@ -219,7 +334,22 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
     }
-    export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
+    export interface Definition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+        Signature = unknown,
+        GasOption = unknown,
+        Block = unknown,
+        Transaction = unknown,
+        TransactionReceipt = unknown,
+        TransactionDetailed = unknown,
+        TransactionSignature = unknown,
+        TransactionParameter = unknown,
+        Web3 = unknown,
+        Web3Provider = unknown,
+    > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for action of each post found. */
@@ -231,9 +361,24 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI
+        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            Signature,
+            GasOption,
+            Block,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            TransactionParameter,
+            Web3,
+            Web3Provider
+        >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -249,7 +394,12 @@ export namespace Plugin.SNSAdaptor {
          */
         enhanceTag?: {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
-            onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
+            onHover?: (
+                kind: 'cash' | 'hash',
+                content: string,
+                event: React.MouseEvent<HTMLAnchorElement>,
+                chainId: ChainId,
+            ) => () => void
         }
     }
     // #region Composition entry
@@ -357,19 +507,21 @@ export namespace Plugin.SNSAdaptor {
         title?: string
         backgroundGradient?: string
     }
+    export interface ProfileSlider {
+        ID: string
 
-    export interface ProfileIdentity {
-        avatar?: string
-        bio?: string
-        homepage?: string
-        nickname?: string
-        identifier?: ProfileIdentifier
-    }
-
-    export interface ProfileAddress {
-        type: string
-        label: string
-        resolvedAddress: string
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
     }
 
     export interface ProfileTab {
@@ -389,8 +541,8 @@ export namespace Plugin.SNSAdaptor {
              * The injected tab content
              */
             TabContent: InjectUI<{
-                identity?: ProfileIdentity
-                addressNames?: ProfileAddress[]
+                identity?: SocialIdentity
+                addressNames?: IdentityAddress[]
                 personaList?: string[]
             }>
         }
@@ -398,12 +550,12 @@ export namespace Plugin.SNSAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: ProfileIdentity, addressNames?: ProfileAddress[]): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: IdentityAddress[]): boolean
 
             /**
              * Sort address name in expected order.
              */
-            addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number
+            addressNameSorter?: (a: IdentityAddress, z: IdentityAddress) => number
         }
     }
 }
@@ -412,15 +564,43 @@ export namespace Plugin.SNSAdaptor {
 export namespace Plugin.Dashboard {
     export interface DashboardContext extends Shared.SharedContext {}
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionDeferred<DashboardContext> {
+    export interface Definition<
+        ChainId = unknown,
+        SchemaType = unknown,
+        ProviderType = unknown,
+        NetworkType = unknown,
+        Signature = unknown,
+        GasOption = unknown,
+        Block = unknown,
+        Transaction = unknown,
+        TransactionReceipt = unknown,
+        TransactionDetailed = unknown,
+        TransactionSignature = unknown,
+        TransactionParameter = unknown,
+        Web3 = unknown,
+        Web3Provider = unknown,
+    > extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /**
-         * This is a chunk of web3 UIs to be rendered into various places of Mask UI.
-         */
-        Web3UI?: Web3Plugin.UI.UI
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+            ChainId,
+            SchemaType,
+            ProviderType,
+            NetworkType,
+            Signature,
+            GasOption,
+            Block,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            TransactionParameter,
+            Web3,
+            Web3Provider
+        >
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }

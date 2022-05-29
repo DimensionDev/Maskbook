@@ -1,11 +1,7 @@
+import { useImageChecker } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import {
-    ChainId,
-    createERC721Token,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    useImageChecker,
-} from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, createERC721Token, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
@@ -49,31 +45,19 @@ interface NFTListPageProps {
     chainId: ChainId
     address: string
     tokenInfo?: TokenInfo
-    tokens: ERC721TokenDetailed[]
-    onSelect?: (token: ERC721TokenDetailed) => void
+    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
+    onSelect?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     children?: React.ReactElement
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
     const { onSelect, chainId, tokenInfo, tokens, children } = props
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>(
-        tokenInfo
-            ? createERC721Token(
-                  {
-                      name: '',
-                      address: tokenInfo.address,
-                      chainId,
-                      symbol: '',
-                      type: EthereumTokenType.ERC721,
-                  },
-                  {},
-                  tokenInfo.tokenId,
-              )
-            : undefined,
+    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(
+        tokenInfo ? createERC721Token(chainId, tokenInfo.address, tokenInfo.tokenId) : undefined,
     )
 
-    const onChange = (token: ERC721TokenDetailed) => {
+    const onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {
         if (!token) return
         setSelectedToken(token)
         onSelect?.(token)
@@ -84,7 +68,7 @@ export function NFTListPage(props: NFTListPageProps) {
             <Box className={classes.root}>
                 <Box className={classes.gallery}>
                     {children ??
-                        tokens.map((token: ERC721TokenDetailed, i) => (
+                        tokens.map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
                             <NFTImageCollectibleAvatar
                                 key={i}
                                 token={token}
@@ -99,14 +83,14 @@ export function NFTListPage(props: NFTListPageProps) {
 }
 
 interface NFTImageCollectibleAvatarProps {
-    token: ERC721TokenDetailed
-    onChange: (token: ERC721TokenDetailed) => void
-    selectedToken?: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType>
+    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    selectedToken?: NonFungibleToken<ChainId, SchemaType>
 }
 
 function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
-    const { value: isImageToken, loading } = useImageChecker(token.info?.imageURL)
+    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
 
     if (loading)
         return (

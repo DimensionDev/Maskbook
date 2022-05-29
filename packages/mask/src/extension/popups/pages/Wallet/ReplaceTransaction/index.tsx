@@ -3,17 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ReplaceType } from '../type'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
-import {
-    EthereumTransactionConfig,
-    formatGweiToEther,
-    formatGweiToWei,
-    formatWeiToGwei,
-    getChainIdFromNetworkType,
-    isEIP1559Supported,
-    useNativeTokenDetailed,
-    useNetworkType,
-} from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils'
@@ -23,11 +13,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import Services from '../../../../service'
-import { isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    useChainId,
+    useWeb3State,
+    useNativeToken,
+    useNativeTokenPrice,
+    useChainIdSupport,
+    useWeb3Connection,
+} from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
@@ -69,18 +66,29 @@ const ReplaceTransaction = memo(() => {
     const type = search.get('type') as ReplaceType
     const [errorMessage, setErrorMessage] = useState('')
     const { transaction } = useContainer(WalletContext)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { value: formatterTransaction } = useAsync(async () => {
+        if (!TransactionFormatter?.formatTransaction || !transaction) return
 
-    const defaultGas = transaction?.computedPayload?._tx.gas ?? 0
-    const defaultGasPrice = transaction?.computedPayload?._tx.gasPrice ?? 0
+        return TransactionFormatter.formatTransaction(chainId, transaction)
+    }, [transaction, TransactionFormatter, chainId])
 
-    const defaultMaxFeePerGas = (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxFeePerGas ?? 0
-    const defaultMaxPriorityFeePerGas =
-        (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxPriorityFeePerGas ?? 0
+    const { value: transactionContext } = useAsync(async () => {
+        if (!TransactionFormatter?.createContext || !transaction) return
+        return TransactionFormatter.createContext(chainId, transaction)
+    }, [transaction, TransactionFormatter, chainId])
 
-    const { value: nativeToken } = useNativeTokenDetailed()
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const networkType = useNetworkType()
-    const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
+    const defaultGas = formatterTransaction?._tx.gas ?? 0
+    const defaultGasPrice = formatterTransaction?._tx.gasPrice ?? 0
+
+    const defaultMaxFeePerGas = formatterTransaction?._tx.maxFeePerGas ?? 0
+    const defaultMaxPriorityFeePerGas = formatterTransaction?._tx.maxPriorityFeePerGas ?? 0
+
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+    const is1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
 
     const schema = useMemo(() => {
         return zod
@@ -145,9 +153,9 @@ const ReplaceTransaction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (transaction?.payload) {
-                    const config = transaction.payload.params!.map((param) => ({
-                        ...param,
+                if (transactionContext?.parameters) {
+                    const config = {
+                        ...formatterTransaction?._tx,
                         gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559
                             ? {
@@ -157,18 +165,14 @@ const ReplaceTransaction = memo(() => {
                                   maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
                               }
                             : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-                    }))
+                    }
+
+                    if (!transaction || !formatterTransaction) return
 
                     if (type === ReplaceType.CANCEL) {
-                        await Services.Ethereum.cancelRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await connection?.cancelRequest(transaction?.id, config)
                     } else {
-                        await Services.Ethereum.replaceRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await connection?.replaceRequest(transaction?.id, config)
                     }
 
                     navigate(-1)
@@ -183,7 +187,7 @@ const ReplaceTransaction = memo(() => {
                 }
             }
         },
-        [transaction, is1559, type],
+        [transactionContext, is1559, type, transaction],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
@@ -202,7 +206,9 @@ const ReplaceTransaction = memo(() => {
                     </Typography>
                     <Typography>
                         {t('popups_wallet_gas_fee_settings_usd', {
-                            usd: formatGweiToEther(gasFee).times(nativeTokenPrice).toPrecision(3),
+                            usd: formatGweiToEther(gasFee)
+                                .times(nativeTokenPrice ?? 0)
+                                .toPrecision(3),
                         })}
                     </Typography>
                 </Box>

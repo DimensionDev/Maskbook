@@ -1,29 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOption,
-    useChainId,
-    useNativeTokenDetailed,
-    ChainIdOptionalRecord,
-    ChainId,
-} from '@masknet/web3-shared-evm'
+import { formatWeiToEther, formatWeiToGwei, ChainIdOptionalRecord, ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { toWei } from 'web3-utils'
 import { z as zod } from 'zod'
-import { StyledInput } from '../../../../extension/popups/components/StyledInput'
+// import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils'
-import { WalletRPC } from '../../../Wallet/messages'
-import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
-import { pow10 } from '@masknet/web3-shared-base'
+import { GasOptionType, NetworkPluginID, pow10 } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleToken, useGasOptions, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
@@ -32,28 +23,18 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 }
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
+    ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
-        const chainId = useChainId()
-        const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
-        const { value: nativeToken } = useNativeTokenDetailed()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
+        const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const { value: nativeTokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, '', {
+            chainId: nativeToken?.chainId,
+        })
 
-        // #region Get gas options from debank
-        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-
-            if (!response) return null
-
-            return {
-                slow: response.data.slow.price,
-                standard: response.data.normal.price,
-                fast: response.data.fast.price,
-            }
-        }, [chainId])
-        // #endregion
+        const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 
         const options = useMemo(
             () =>
@@ -61,18 +42,18 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     ? [
                           {
                               title: t('popups_wallet_gas_fee_settings_low'),
-                              gasOption: GasOption.Low,
-                              gasPrice: gasOptions?.slow ?? 0,
+                              gasOption: GasOptionType.SLOW,
+                              gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas ?? '0',
                           },
                           {
                               title: t('popups_wallet_gas_fee_settings_medium'),
-                              gasOption: GasOption.Medium,
-                              gasPrice: gasOptions?.standard ?? 0,
+                              gasOption: GasOptionType.NORMAL,
+                              gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? '0',
                           },
                           {
                               title: t('popups_wallet_gas_fee_settings_high'),
-                              gasOption: GasOption.High,
-                              gasPrice: gasOptions?.fast ?? 0,
+                              gasOption: GasOptionType.FAST,
+                              gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
                           },
                       ]
                     : null,
@@ -144,7 +125,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                         {options.map(({ title, gasPrice, gasOption }, index) => (
                             <div
                                 key={gasOption}
-                                onClick={() => setGasOption(gasOption)}
+                                onClick={() => setGasOptionType(gasOption)}
                                 className={selectedGasOption === gasOption ? classes.selected : undefined}>
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
                                 <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
@@ -165,40 +146,44 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     <Controller
                         control={control}
                         render={({ field }) => {
-                            return (
-                                <StyledInput
-                                    {...field}
-                                    onChange={(e) => {
-                                        setGasOption(null)
-                                        field.onChange(e)
-                                    }}
-                                    error={!!errors.gasLimit?.message}
-                                    helperText={errors.gasLimit?.message}
-                                    inputProps={{
-                                        pattern: '^[0-9]*[.,]?[0-9]*$',
-                                    }}
-                                />
-                            )
+                            return <></>
+                            // return (
+                            //     <StyledInput
+                            //         {...field}
+                            //         onChange={(e) => {
+                            //             setGasOptionType(null)
+                            //             field.onChange(e)
+                            //         }}
+                            //         error={!!errors.gasLimit?.message}
+                            //         helperText={errors.gasLimit?.message}
+                            //         inputProps={{
+                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
+                            //         }}
+                            //     />
+                            // )
                         }}
                         name="gasLimit"
                     />
                     <Typography className={classes.label}>{t('popups_wallet_gas_price')}</Typography>
                     <Controller
                         control={control}
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                onChange={(e) => {
-                                    setGasOption(null)
-                                    field.onChange(e)
-                                }}
-                                error={!!errors.gasPrice?.message}
-                                helperText={errors.gasPrice?.message}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
-                            />
-                        )}
+                        render={({ field }) => {
+                            return <></>
+                            // return (
+                            //     <StyledInput
+                            //         {...field}
+                            //         onChange={(e) => {
+                            //             setGasOptionType(null)
+                            //             field.onChange(e)
+                            //         }}
+                            //         error={!!errors.gasPrice?.message}
+                            //         helperText={errors.gasPrice?.message}
+                            //         inputProps={{
+                            //             pattern: '^[0-9]*[.,]?[0-9]*$',
+                            //         }}
+                            //     />
+                            // )
+                        }}
                         name="gasPrice"
                     />
                 </form>

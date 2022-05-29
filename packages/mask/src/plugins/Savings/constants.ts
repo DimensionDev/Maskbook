@@ -1,16 +1,17 @@
-import { ChainId, createERC20Tokens, createNativeToken, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, createERC20Tokens, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
 
 export const SAVINGS_PLUGIN_NAME = 'Savings'
 export const SAVINGS_PLUGIN_ID = 'com.savings'
 
-export const LDO_PAIRS: Array<[FungibleTokenDetailed, FungibleTokenDetailed]> = [
+export const LDO_PAIRS: Array<[FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]> = [
     [
         createNativeToken(ChainId.Mainnet),
         createERC20Tokens('LDO_stETH_ADDRESS', 'Liquid staked Ether 2.0', 'stETH', 18)[ChainId.Mainnet],
     ],
 ]
 
-export const AAVE_PAIRS: Array<[FungibleTokenDetailed, FungibleTokenDetailed]> = [
+export const AAVE_PAIRS: Array<[FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]> = [
     [
         createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)[ChainId.Mainnet],
         createERC20Tokens('aUSDT_ADDRESS', 'Aave Interest bearing USDT', 'aUSDT', 6)[ChainId.Mainnet],

@@ -1,4 +1,5 @@
-import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import {
     ArtBlocksRopstenUrl,

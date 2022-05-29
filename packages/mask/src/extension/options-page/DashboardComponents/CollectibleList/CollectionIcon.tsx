@@ -4,8 +4,8 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection?: ERC721ContractDetailed
+    collection?: NonFungibleToken<ChainId, SchemaType>
     onClick?(): void
 }
 
@@ -49,7 +49,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             PopperProps={{
                 disablePortal: true,
             }}
-            title={collection.name}
+            title={collection.metadata?.name ?? ''}
             arrow>
             <Box
                 className={classNames(
@@ -57,18 +57,18 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                {collection.iconURL ? (
+                {collection.collection?.iconURL ? (
                     <Image
                         width={24}
                         height={24}
                         component="img"
                         className={classes.collectionImg}
-                        src={collection.iconURL}
+                        src={collection.collection?.iconURL}
                     />
                 ) : (
                     <TokenIcon
                         classes={{ icon: classes.collectionImg }}
-                        name={collection.name}
+                        name={collection.collection?.name}
                         address={collection.address}
                     />
                 )}

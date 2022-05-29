@@ -1,7 +1,9 @@
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
@@ -76,15 +78,15 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
     const { t: tr } = useBaseI18n()
     const t = useI18N()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
     const containerRef = useRef(null)
     const [popperText, setPopperText] = useState('')

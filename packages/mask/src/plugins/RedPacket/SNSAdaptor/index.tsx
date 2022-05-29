@@ -1,12 +1,5 @@
 import { type Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
-import {
-    ChainId,
-    EthereumTokenType,
-    formatBalance,
-    getChainDetailed,
-    getChainIdFromName,
-    useERC20TokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -23,6 +16,8 @@ import { Trans } from 'react-i18next'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
+import { useFungibleToken } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
@@ -149,12 +144,13 @@ interface ERC20RedpacketBadgeProps {
 
 function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const { payload } = props
-    const { value: fetchedToken } = useERC20TokenDetailed(payload.token?.address ?? payload.token_address)
-    const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
-    const chainDetailed = getChainDetailed(chainId)
-    const tokenDetailed =
-        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : fetchedToken ?? payload.token
-
+    const { value: fetchedToken } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        payload.token?.address ?? payload.token?.address,
+    )
+    const chainId = networkResolver.networkChainId((payload.network ?? '') as NetworkType) ?? ChainId.Mainnet
+    const nativeCurrency = chainResolver.nativeCurrency(chainId)
+    const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
             <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}

@@ -1,4 +1,4 @@
-import { useBlockie } from '@masknet/web3-shared-evm'
+import { useBlockie } from '@masknet/plugin-infra/web3'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 

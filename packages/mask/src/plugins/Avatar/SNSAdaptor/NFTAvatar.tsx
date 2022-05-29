@@ -3,21 +3,16 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    ChainId,
-    SocketState,
-    ERC721TokenDetailed,
-    useChainId,
-    useCollectibles,
-    useImageChecker,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useImageChecker } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useCollectibles } from '../hooks/useCollectibles'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -88,20 +83,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: ERC721TokenDetailed) => void
+    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
     hideWallet?: boolean
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
-    const account = useAccount()
-    const chainId = useChainId()
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>()
     const [open_, setOpen_] = useState(false)
-    const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
+    const [collectibles_, setCollectibles_] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
     const { t } = useI18N()
-    const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
+    const { collectibles, error, retry, loading } = useCollectibles()
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -109,9 +104,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token: ERC721TokenDetailed) => {
+    const onAddClick = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
         setSelectedToken(token)
-        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
+        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -155,17 +150,17 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </Typography>
                     ) : null}
                 </Box>
-                <EthereumChainBoundary hiddenConnectButton chainId={chainId}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {state !== SocketState.done && collectibles.length === 0
+                            {loading && !collectibles?.length
                                 ? LoadStatus
-                                : error || (collectibles.length === 0 && collectibles_.length === 0)
+                                : error || (!collectibles?.length && !collectibles_.length)
                                 ? Retry
                                 : uniqBy(
-                                      [...collectibles_, ...collectibles],
-                                      (x) => x.contractDetailed.address && x.tokenId,
-                                  ).map((token: ERC721TokenDetailed, i) => (
+                                      [...collectibles_, ...(collectibles ?? [])],
+                                      (x) => x.contract?.address && x.tokenId,
+                                  ).map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
                                       <NFTImageCollectibleAvatar
                                           key={i}
                                           token={token}
@@ -184,21 +179,21 @@ export function NFTAvatar(props: NFTAvatarProps) {
                             </Button>
                         </Box>
                     </Box>
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
             <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
 }
 interface NFTImageCollectibleAvatarProps {
-    token: ERC721TokenDetailed
-    setSelectedToken: React.Dispatch<React.SetStateAction<ERC721TokenDetailed | undefined>>
-    selectedToken?: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType>
+    setSelectedToken: React.Dispatch<React.SetStateAction<NonFungibleToken<ChainId, SchemaType> | undefined>>
+    selectedToken?: NonFungibleToken<ChainId, SchemaType>
 }
 
 function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
-    const { value: isImageToken, loading } = useImageChecker(token.info?.imageURL)
+    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
     if (loading)
         return (
             <div className={classes.skeletonBox}>

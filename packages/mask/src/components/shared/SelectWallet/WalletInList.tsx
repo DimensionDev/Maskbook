@@ -3,7 +3,8 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
-import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
+import { useBlockie } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
 
 const useStyle = makeStyles()((theme) => ({

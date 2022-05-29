@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Binding, PersonaInformation } from '@masknet/shared-base'
 import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { BindPanelUI } from './BindPanelUI'
@@ -23,7 +23,7 @@ interface BindDialogProps {
 }
 
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier

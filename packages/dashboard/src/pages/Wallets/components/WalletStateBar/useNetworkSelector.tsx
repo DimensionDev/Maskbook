@@ -2,7 +2,14 @@ import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SuccessIcon } from '@masknet/icons'
 import { WalletIcon, useMenu } from '@masknet/shared'
-import { useChainId, useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    useChainId,
+    useNetworkDescriptors,
+    useProviderDescriptor,
+    useWeb3UI,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -18,13 +25,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const useNetworkSelector = () => {
+export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const { classes } = useStyles()
 
     const currentChainId = useChainId()
-    const providerDescriptor = useProviderDescriptor()
-    const networkDescriptors = useNetworkDescriptors()
-    const { NetworkIconClickBait } = useWeb3UI().SelectNetworkMenu ?? {}
+    const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
+    const networkDescriptors = useNetworkDescriptors() as Web3Helper.NetworkDescriptorAll[]
+    const Web3UI = useWeb3UI() as Web3Helper.Web3UIAll
+    const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
 
     const networkMenu = useMenu(
         ...(networkDescriptors
