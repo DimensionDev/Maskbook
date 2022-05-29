@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
         },
         lineHeight: '18px',
         fontSize: 14,
-        padding: 11,
+        height: 40,
     },
 }))
 

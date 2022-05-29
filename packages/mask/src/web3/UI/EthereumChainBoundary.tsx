@@ -52,15 +52,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         fontSize: 14,
     },
-    switchButton: {
-        borderRadius: 999,
-    },
+    switchButton: {},
     button: {
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
         padding: 0,
         height: 40,
+        borderRadius: 10,
     },
 }))
 
@@ -83,7 +82,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
-    const account = useAccount()
+    const account1 = useAccount()
+    const account = ''
     const chainId = useChainId()
 
     const allowTestnet = useAllowTestnet()
@@ -210,7 +210,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             <ActionButton
                 fullWidth
                 startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                variant="contained"
                 size={props.ActionButtonPromiseProps?.size}
                 sx={{ marginTop: 1.5 }}
                 onClick={openSelectProviderDialog}
@@ -225,7 +224,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     props.renderInTimeline ? (
                         jsx
                     ) : (
-                        <Box style={{ padding: 12 }}>{jsx}</Box>
+                        <Box style={{ padding: 16 }}>{jsx}</Box>
                     )
                 ) : null}
             </>,

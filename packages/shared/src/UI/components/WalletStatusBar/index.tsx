@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: MaskColorVar.buttonPluginBackground,
         lineHeight: '18px',
         fontSize: 14,
-        padding: 11,
+        height: 40,
     },
     tooltip: {
         borderRadius: 4,
