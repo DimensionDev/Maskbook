@@ -300,7 +300,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             return t.nft_share_claimed_message(options)
         }
         return t.nft_share_foreshow_message(options)
-    }, [availability?.isClaimed, t, i18n])
+    }, [availability?.isClaimed, t])
 
     const onShare = useCallback(() => {
         if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)

@@ -7,7 +7,7 @@
     "erc20_token_list_loading": "Loading token lists...",
     "erc20_search_token_loading": "Loading token...",
     "erc20_search_not_token_found": "No results or contract address does not meet the query criteria.",
-    "address_viewer_binding_rules_title": "The NFT gallary will show NFTs as below rules:",
+    "address_viewer_binding_rules_title": "The NFT gallery will show NFTs as below rules:",
     "address_viewer_binding_rule1": "The nickname is ENS or RNS.",
     "address_viewer_binding_rule2": "The bio contains ENS, RNS or a valid address.",
     "address_viewer_binding_rule3": "The ID + suffix is ENS or RNS.",
