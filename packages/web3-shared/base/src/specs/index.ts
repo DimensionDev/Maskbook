@@ -693,12 +693,12 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId: string,
         options?: Web3HubOptions,
     ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get fungible assets of given account with pagnaition supported. */
+    /** Get fungible assets of given account with pagination supported. */
     getFungibleAssets?: (
         account: string,
         options?: Web3HubOptions,
     ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
-    /** Get non-fungible assets of given account with pagnaition supported. */
+    /** Get non-fungible assets of given account with pagination supported. */
     getNonFungibleAssets?: (
         account: string,
         options?: Web3HubOptions,
