@@ -24,11 +24,9 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context
-            .createKVStorage('persistent', 'AddressBook', {})
-            .createSubScope('AddressBook', {
-                value: defaultValue,
-            })
+        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
+            value: defaultValue,
+        })
         this.storage = storage.value
 
         if (this.subscriptions.chainId) {

@@ -24,7 +24,7 @@ export class NameServiceState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = context.createKVStorage('memory', 'NameService', {}).createSubScope('NameService', {
+        const { storage } = context.createKVStorage('memory', {}).createSubScope('NameService', {
             value: defaultValue,
         })
         this.storage = storage.value
