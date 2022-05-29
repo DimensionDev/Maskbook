@@ -4,7 +4,7 @@ import { keccak256 } from 'web3-utils'
 
 import { expandEvmAddressToBytes32 } from '../../helpers'
 import type { Entitlement } from '../../types'
-import { getOracle, rpcCall, RpcMethod, RpcRoutes } from './oracle'
+import { getOracle, rpcCall, RpcMethod, RpcRoute } from './oracle'
 import { supportedOracleChainId } from '../../constants'
 
 const Entitlement = 'Entitlement'
@@ -29,7 +29,7 @@ export async function getAccountEntitlements(account: string): Promise<Entitleme
     const host = await getOracle()
     const topics = [eventIdsEntitlement.Entitlement, '', expandEvmAddressToBytes32(account)]
 
-    const res = await rpcCall(`${host}/v1/${RpcRoutes.rpc}`, RpcMethod.oracle_getLogs, [
+    const res = await rpcCall(`${host}/v1/${RpcRoute.rpc}`, RpcMethod.oracle_getLogs, [
         { topics, chainId: [supportedOracleChainId] },
     ])
 

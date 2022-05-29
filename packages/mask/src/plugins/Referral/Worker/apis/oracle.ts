@@ -3,7 +3,7 @@ import type { JsonRpcResponse } from 'web3-core-helpers'
 import { getFarmOraclesDiscovery } from './discovery'
 import { supportedOracleChainId } from '../../constants'
 
-export enum RpcRoutes {
+export enum RpcRoute {
     rpc = 'rpc',
     recommendations = 'recommendations/rpc',
 }
