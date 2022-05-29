@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react'
-import { TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, TransactionEventType } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
 
@@ -14,12 +14,10 @@ import { Pool, PoolType } from '../types'
 export function useInvestCallback(pool: Pool | undefined, amount: string, token?: FungibleToken<ChainId, SchemaType>) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [loading, setLoading] = useState(false)
-
     const poolV1Contract = useDHedgePoolV1Contract(chainId, pool?.address ?? '')
     const poolV2Contract = useDHedgePoolV2Contract(chainId, pool?.address ?? '')
 
-    const investCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !poolV1Contract || !poolV2Contract) return
 
         // step 1: estimate gas
@@ -34,11 +32,9 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 : poolV2Contract.methods.deposit(token.address, amount)
         }
 
-        setLoading(true)
         const estimatedGas = await deposit()
             .estimateGas(config)
             .catch((error) => {
-                setLoading(false)
                 throw error
             })
 
@@ -55,6 +51,4 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 .on(TransactionEventType.ERROR, reject)
         })
     }, [pool, account, amount, token])
-
-    return [loading, investCallback] as const
 }

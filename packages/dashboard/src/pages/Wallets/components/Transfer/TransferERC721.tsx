@@ -10,14 +10,7 @@ import {
     multipliedBy,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    formatWeiToEther,
-    NetworkType,
-    TransactionStateType,
-    ChainId,
-    explorerResolver,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, formatWeiToEther, NetworkType, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -187,15 +180,15 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            if (ev.open || !ev.contract || ev.uuid !== id) return
-            if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
-                if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
-                    setDefaultToken(null)
-                }
-                setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
-                setContract(ev.contract)
-                setValue('tokenId', '')
-            }
+            // if (ev.open || !ev.contract || ev.uuid !== id) return
+            // if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
+            //     if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
+            //         setDefaultToken(null)
+            //     }
+            //     setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
+            //     setContract(ev.contract)
+            //     setValue('tokenId', '')
+            // }
         },
     )
 

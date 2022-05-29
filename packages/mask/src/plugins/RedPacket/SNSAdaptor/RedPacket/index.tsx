@@ -105,7 +105,7 @@ export function RedPacket(props: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, isRefunded, openShareTxDialog])
 
     const myStatus = useMemo(() => {
-        if (!availability) return ''
+        if (!availability) return { amount: '-', symbol: '-' }
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t.description_claimed(
                 availability.claimed_amount

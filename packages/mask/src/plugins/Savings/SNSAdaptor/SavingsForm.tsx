@@ -18,10 +18,9 @@ import {
     createERC20Token,
     SchemaType,
     getAaveConstants,
-    TransactionStateType,
-    TransactionState,
     useTokenConstants,
     ZERO_ADDRESS,
+    chainResolver,
 } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
@@ -39,7 +38,6 @@ import { useStyles } from './SavingsFormStyles'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { Typography } from '@mui/material'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface SavingsFormProps {
@@ -66,9 +64,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
-    const [tradeState, setTradeState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
 
@@ -170,16 +165,12 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     }, [protocol.bareToken, inputAmount, chainId])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = [
-        `I just deposit ${inputAmount} ${protocol.bareToken.symbol} with ${resolveProtocolName(protocol.type)}. ${
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? `Follow @${
-                      isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                  } (mask.io) to deposit.`
-                : ''
-        }`,
-        '#mask_io',
-    ].join('\n')
+    const shareText = t('promote_savings', {
+        amount: inputAmount,
+        symbol: protocol.bareToken.symbol,
+        chain: chainResolver.chainName(chainId),
+        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+    })
     const [, executor] = useAsyncFn(async () => {
         if (!web3) return
         switch (tab) {

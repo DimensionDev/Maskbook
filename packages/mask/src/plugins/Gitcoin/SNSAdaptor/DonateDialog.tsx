@@ -97,7 +97,6 @@ export function DonateDialog(props: DonateDialogProps) {
     const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     // #endregion
 
-    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
 
     const openShareTxDialog = useOpenShareTxDialog()

@@ -197,9 +197,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             }}
                             FungibleTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: paymentTokens as Array<
-                                    FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
-                                >,
+                                tokens: paymentTokens,
                                 whitelist: paymentTokens.map((x: any) => x.address),
                             }}
                         />
