@@ -1,18 +1,28 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, ERC721TokenDetailed, isSameAddress, SocketState, useCollectibles } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    ERC721TokenDetailed,
+    getChainIdFromNetworkType,
+    isSameAddress,
+    SocketState,
+    useChainId,
+    useCollectibles,
+} from '@masknet/web3-shared-evm'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { downloadUrl } from '../../../utils'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
-import type { BindingProof } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { NFTList } from './NFTList'
-import { Application_NFT_LIST_PAGE } from '../constants'
 import { NetworkPluginID, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
+import { useAsync } from 'react-use'
+import { WalletRPC } from '../../Wallet/messages'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -83,6 +93,38 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+    abstractTabWrapper: {
+        width: '100%',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+    },
+    tableTabWrapper: {
+        padding: theme.spacing(2),
+    },
+    tab: {
+        height: 36,
+        minHeight: 36,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
+    },
+    tabs: {
+        height: 36,
+        minHeight: 36,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderRadius: 4,
+        '& .Mui-selected': {
+            color: '#ffffff',
+            backgroundColor: `${theme.palette.primary.main}!important`,
+        },
+    },
+    indicator: {
+        display: 'none',
+    },
+    tabPanel: {
+        marginTop: theme.spacing(3),
+    },
 }))
 
 function isSameToken(token?: ERC721TokenDetailed, tokenInfo?: TokenInfo) {
@@ -107,19 +149,17 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
-    const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
-        Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
-    )
 
-    const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
+    const currentChainId = useChainId()
+    const [chainId, setChainId] = useState<ChainId>(currentChainId)
+
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
+        const networks = await WalletRPC.getSupportedNetworks()
+        return networks.map((network) => getChainIdFromNetworkType(network))
+    }, [])
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const {
-        data: collectibles,
-        error,
-        retry,
-        state,
-    } = useCollectibles(selectedAccount, currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic)
+    const { data: collectibles, error, retry, state } = useCollectibles(selectedAccount, chainId)
 
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
@@ -162,11 +202,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contractDetailed.address && x.tokenId))
     }
 
-    const onChangePage = (name: Application_NFT_LIST_PAGE) => {
-        setCurrentPage(name)
-        setSelectedToken(undefined)
-    }
-
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography
@@ -180,7 +215,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             br: <br />,
                         }}
                     />
-                ) : currentPage === POLYGON_PAGE ? (
+                ) : chainId === ChainId.Matic ? (
                     <Translate.collectible_on_polygon
                         components={{
                             br: <br />,
@@ -216,8 +251,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (currentPage === POLYGON_PAGE && tokens.length === 0) return AddCollectible
-        else if (currentPage === POLYGON_PAGE && tokens.length) return
+        if (chainId === ChainId.Matic && tokens.length === 0) return AddCollectible
+        else if (chainId === ChainId.Matic && tokens.length) return
         if (state !== SocketState.done) {
             return LoadStatus
         }
@@ -242,14 +277,22 @@ export function NFTListDialog(props: NFTListDialogProps) {
         <>
             <DialogContent className={classes.content}>
                 {((account && currentPluginId === NetworkPluginID.PLUGIN_EVM) || Boolean(wallets?.length)) && (
-                    <NFTList
-                        tokenInfo={tokenInfo}
-                        address={selectedAccount}
-                        onSelect={onSelect}
-                        onChangePage={onChangePage}
-                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contractDetailed.address && x.tokenId)}
-                        children={NoNFTList()}
-                    />
+                    <>
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab chains={chains} chainId={chainId} setChainId={setChainId} classes={classes} />
+                        </div>
+                        <NFTList
+                            tokenInfo={tokenInfo}
+                            address={selectedAccount}
+                            chainId={chainId}
+                            onSelect={onSelect}
+                            tokens={uniqBy(
+                                [...tokens, ...collectibles],
+                                (x) => x.contractDetailed.address && x.tokenId,
+                            )}
+                            children={NoNFTList()}
+                        />
+                    </>
                 )}
                 {tokens.length || collectibles.length ? (
                     <Stack
@@ -286,7 +329,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
-                chainId={currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic}
+                chainId={chainId}
                 title={t.add_collectible()}
                 open={open_}
                 onClose={() => setOpen_(false)}

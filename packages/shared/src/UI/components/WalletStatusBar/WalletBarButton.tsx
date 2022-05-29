@@ -1,5 +1,3 @@
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress } from '@mui/material'
 import classNames from 'classnames'
@@ -31,6 +29,8 @@ const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
             backgroundColor: props.color === 'warning' ? MaskColorVar.errorPlugin : '',
         },
         lineHeight: '18px',
+        fontSize: 14,
+        padding: 11,
     },
 }))
 
@@ -40,9 +40,7 @@ export function WalletButton(props: WalletButtonProps) {
     const { color, startIcon, endIcon, loading = false, disabled = false, action, title, waiting } = props
     const classes = useStylesExtends(useStyles({ color }), props)
     const t = useSharedI18N()
-    const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
+
     const [state, setState] = useState<ActionButtonPromiseState>('init')
     const run = () => {
         setState('wait')

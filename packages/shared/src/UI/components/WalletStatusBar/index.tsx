@@ -28,6 +28,9 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         margin: 0,
         backgroundColor: MaskColorVar.buttonPluginBackground,
+        lineHeight: '18px',
+        fontSize: 14,
+        padding: 11,
     },
     tooltip: {
         borderRadius: 4,

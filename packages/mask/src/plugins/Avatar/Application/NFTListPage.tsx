@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        margin: 10,
     },
     skeleton: {
         width: 97,
