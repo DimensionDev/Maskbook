@@ -1,7 +1,7 @@
-import { MaskTabList, useTabs } from '@masknet/theme'
+import { MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
 import TabContext from '@mui/lab/TabContext'
-import { Stack, Tab, Typography } from '@mui/material'
+import { Stack, Tab, Typography, useTheme } from '@mui/material'
 import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
 import { WalletIcon } from '@masknet/shared'
 
@@ -14,7 +14,7 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
 export function NetworkTab(props: NetworkTabProps) {
     const isDashboard = isDashboardPage()
     const { chainId, setChainId, chains } = props
-
+    const theme = useTheme()
     const networks = useNetworkDescriptors()
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
@@ -40,6 +40,7 @@ export function NetworkTab(props: NetworkTabProps) {
                                     <Typography
                                         variant="body2"
                                         fontSize={14}
+                                        style={{ color: MaskColorVar.textPrimary }}
                                         fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
                                         {x.name}
                                     </Typography>

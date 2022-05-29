@@ -102,9 +102,6 @@ export function WalletUI(props: WalletUIProps) {
     const [lock, setLock] = useState(false)
 
     const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
-    console.log(providerDescriptor)
-    console.log(networkDescriptor)
-    console.log(isETH)
     return (
         <Box className={classes.root}>
             {showWalletIcon ? (

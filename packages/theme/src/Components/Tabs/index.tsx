@@ -18,7 +18,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
 import { get } from 'lodash-unified'
-import { parseColor } from '../../entry'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -62,7 +61,7 @@ const FlexibleButtonGroupPanel = styled(Box, {
     boxShadow: isOpen
         ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
         : 'none',
-    background: parseColor(theme.palette.background.paper).setAlpha(0.8).toRgbString(),
+    // background: parseColor(theme.palette.background.paper).setAlpha(0.8).toRgbString(),
     backdropFilter: 'blur(20px)',
 }))
 
