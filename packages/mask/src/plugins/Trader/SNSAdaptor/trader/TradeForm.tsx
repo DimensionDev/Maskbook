@@ -584,7 +584,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                 percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
                                             }),
                                         }}
-                                        classes={{ button: classes.button }}
                                     />
                                 ) : (
                                     <PluginWalletStatusBar
@@ -599,7 +598,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             title: validationMessage || nativeWrapMessage,
                                             action: async () => onSwap(),
                                         }}
-                                        classes={{ button: classes.button }}
                                     />
                                 )
                             }

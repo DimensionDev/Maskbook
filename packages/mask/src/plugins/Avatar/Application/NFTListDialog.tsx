@@ -63,6 +63,7 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
             backgroundClip: 'padding-box',
         },
+        flexBasis: '100%',
     },
     error: {
         display: 'flex',
@@ -97,6 +98,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+        flex: 1,
+        flexShrink: 0,
     },
     tableTabWrapper: {
         padding: theme.spacing(2),
