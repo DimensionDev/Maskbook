@@ -174,7 +174,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const title = isCreateStep ? t.display_name() : t.details()
 
-    const [currentTab, onChange, tabs] = useTabs('new', 'past')
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
         <TabContext value={currentTab}>
@@ -185,7 +185,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={onShowHistory} /> : null
                 }
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                             <Tab
                                 label={
@@ -194,7 +194,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         <span>{t.erc20_tab_title()}</span>
                                     </div>
                                 }
-                                value={tabs.new}
+                                value={tabs.tokens}
                             />
                             <Tab
                                 label={
@@ -203,7 +203,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         <span>{t.erc721_tab_title()}</span>
                                     </div>
                                 }
-                                value={tabs.past}
+                                value={tabs.collectibles}
                             />
                         </MaskTabList>
                     ) : null
@@ -214,7 +214,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         !showHistory ? (
                             <>
-                                <TabPanel value={tabs.new} style={{ padding: 0 }}>
+                                <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
                                     <RedPacketERC20Form
                                         origin={settings}
                                         onClose={onClose}
@@ -222,12 +222,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         onChange={_onChange}
                                     />
                                 </TabPanel>
-                                <TabPanel value={tabs.past} style={{ padding: 0 }}>
+                                <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
                                     <RedPacketERC721Form onClose={onClose} />
                                 </TabPanel>
                             </>
                         ) : (
-                            <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />
+                            <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
                         )
                     ) : null}
                     {step === CreateRedPacketPageStep.ConfirmPage ? (
