@@ -82,8 +82,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
-    const account1 = useAccount()
-    const account = ''
+    const account = useAccount()
     const chainId = useChainId()
 
     const allowTestnet = useAllowTestnet()
