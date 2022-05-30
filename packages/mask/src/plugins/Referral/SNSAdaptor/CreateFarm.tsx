@@ -2,15 +2,9 @@ import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import {
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    useAccount,
-    useChainId,
-    useFungibleTokenBalance,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -19,14 +13,23 @@ import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divi
 import { TabContext, TabPanel } from '@mui/lab'
 
 import { useI18N } from '../locales'
-import { TabsCreateFarm, TokenType, TransactionStatus, PageInterface, PagesType, ReferralMetaData } from '../types'
+import {
+    TabsCreateFarm,
+    TokenType,
+    TransactionStatus,
+    PageInterface,
+    PagesType,
+    ReferralMetaData,
+    FungibleTokenDetailed,
+} from '../types'
 import { ATTRACE_FEE_PERCENT, NATIVE_TOKEN, META_KEY } from '../constants'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { PluginReferralMessages, SelectTokenUpdated } from '../messages'
 import { roundValue, getRequiredChainId } from '../helpers'
 import { runCreateERC20PairFarm } from './utils/referralFarm'
 
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { CreatedFarms } from './CreatedFarms'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
@@ -93,7 +96,7 @@ export function CreateFarm(props: PageInterface) {
     const [tokenReward, setTokenReward] = useState<FungibleTokenDetailed>()
     const [focusedTokenType, setFocusedTokenType] = useState(TokenType.REFER)
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(
-        tokenReward?.type ?? EthereumTokenType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         tokenReward?.address ?? '',
     )
     const [dailyFarmReward, setDailyFarmReward] = useState('')
@@ -176,14 +179,14 @@ export function CreateFarm(props: PageInterface) {
             return
         }
 
-        const { address, name = '', symbol = '', logoURI = [''] } = tokenRefer
+        const { address, name = '', symbol = '', logoURL = '' } = tokenRefer
 
         const metadata = new Map<string, ReferralMetaData>()
         metadata.set(META_KEY, {
             referral_token: address,
             referral_token_name: name,
             referral_token_symbol: symbol,
-            referral_token_icon: logoURI,
+            referral_token_icon: logoURL,
             referral_token_chain_id: currentChainId,
             sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? '',
         })
@@ -236,9 +239,9 @@ export function CreateFarm(props: PageInterface) {
                 onConfirmDeposit,
                 onErrorDeposit,
                 onConfirmedDeposit,
-                web3,
+                web3 as Web3,
                 account,
-                currentChainId,
+                currentChainId as ChainId,
                 tokenReward,
                 tokenRefer,
                 totalFarmRewardNum,
@@ -378,27 +381,29 @@ export function CreateFarm(props: PageInterface) {
                             />
                         </Grid>
                     </Grid>
-                    <EthereumChainBoundary
-                        chainId={requiredChainId}
-                        noSwitchNetworkTip
-                        classes={{ switchButton: sharedClasses.switchButton }}>
-                        <ActionButton
-                            fullWidth
-                            variant="contained"
-                            size="medium"
-                            disabled={createFarmBtnDisabled}
-                            onClick={onClickCreateFarm}>
-                            {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
-                                <>
-                                    {insufficientFunds
-                                        ? t.error_insufficient_balance({ symbol: tokenReward?.symbol ?? '' })
-                                        : t.error_daily_rewards()}
-                                </>
-                            ) : (
-                                t.create_referral_farm()
-                            )}
-                        </ActionButton>
-                    </EthereumChainBoundary>
+                    <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                        <WalletConnectedBoundary
+                            classes={{
+                                connectWallet: sharedClasses.switchButton,
+                            }}>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={createFarmBtnDisabled}
+                                onClick={onClickCreateFarm}>
+                                {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
+                                    <>
+                                        {insufficientFunds
+                                            ? t.error_insufficient_balance({ symbol: tokenReward?.symbol ?? '' })
+                                            : t.error_daily_rewards()}
+                                    </>
+                                ) : (
+                                    t.create_referral_farm()
+                                )}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </TabPanel>
                 <TabPanel value={TabsCreateFarm.CREATED} className={classes.tab}>
                     <CreatedFarms continue={props.continue} />

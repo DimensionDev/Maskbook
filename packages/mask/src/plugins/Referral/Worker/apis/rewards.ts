@@ -41,11 +41,7 @@ function makeLeafHash(
     )
 }
 
-export async function getAccountRewards(
-    account: string,
-    chainId: ChainId,
-    tokenLists: string[],
-): Promise<AccountRewards | undefined> {
+export async function getAccountRewards(account: string, chainId: ChainId): Promise<AccountRewards | undefined> {
     const entitlements = await getAccountEntitlements(account)
     const rewardsHarvested = await getMyRewardsHarvested(account, chainId)
     const farms = await getFarmExistEvents(chainId)
@@ -56,7 +52,7 @@ export async function getAccountRewards(
     )
 
     // Query tokens
-    const tokensMap = await fetchERC20TokensFromTokenListsMap(tokenLists, chainId)
+    const tokensMap = await fetchERC20TokensFromTokenListsMap(chainId)
 
     // Query addresses
     const {

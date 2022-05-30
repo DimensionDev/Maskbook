@@ -1,12 +1,14 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { FungibleTokenDetailed, useAccount, useChainId, useWeb3, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
@@ -15,11 +17,12 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
-import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType } from '../types'
+import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types'
 import type { Coin } from '../../Trader/types'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { MyRewards } from './MyRewards'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
@@ -63,7 +66,6 @@ export function BuyToFarm(props: PageInterface) {
     const web3 = useWeb3()
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
-    const { ERC20 } = useTokenListConstants()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [id] = useState(uuid())
@@ -82,10 +84,8 @@ export function BuyToFarm(props: PageInterface) {
 
     const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
         async () =>
-            token?.address && ERC20
-                ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20)
-                : EMPTY_LIST,
-        [token?.address, currentChainId, ERC20],
+            token?.address ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address) : EMPTY_LIST,
+        [token?.address, currentChainId],
     )
 
     const onClickTokenSelect = useCallback(() => {
@@ -146,7 +146,7 @@ export function BuyToFarm(props: PageInterface) {
 
         try {
             onConfirmReferFarm()
-            await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
+            await singAndPostProofOfRecommendationWithReferrer(web3 as Web3, account, token.address, MASK_REFERRER)
             props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             swapToken()
         } catch (error: any) {
@@ -204,19 +204,18 @@ export function BuyToFarm(props: PageInterface) {
                             </Box>
                         </Grid>
                     </Grid>
-                    <EthereumChainBoundary
-                        chainId={requiredChainId}
-                        noSwitchNetworkTip
-                        classes={{ switchButton: sharedClasses.switchButton }}>
-                        <ActionButton
-                            fullWidth
-                            variant="contained"
-                            size="medium"
-                            disabled={!token}
-                            onClick={onClickBuyToFarm}>
-                            {t.buy_to_farm()}
-                        </ActionButton>
-                    </EthereumChainBoundary>
+                    <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                        <WalletConnectedBoundary offChain classes={{ connectWallet: sharedClasses.switchButton }}>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={!token}
+                                onClick={onClickBuyToFarm}>
+                                {t.buy_to_farm()}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </TabPanel>
                 <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>
                     <MyRewards pageType={PagesType.BUY_TO_FARM} {...props} />

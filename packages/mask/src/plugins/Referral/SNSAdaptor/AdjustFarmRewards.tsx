@@ -3,19 +3,13 @@ import { useAsync } from 'react-use'
 import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/system'
-import {
-    EthereumTokenType,
-    formatBalance,
-    useAccount,
-    useChainId,
-    useFungibleTokenBalance,
-    useWeb3,
-    FungibleTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
-import { AdjustFarmRewardsInterface, TransactionStatus, PagesType } from '../types'
+import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleTokenDetailed } from '../types'
 import { useI18N } from '../locales'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { roundValue, getRequiredChainId } from '../helpers'
 import { ATTRACE_FEE_PERCENT } from '../constants'
@@ -25,6 +19,7 @@ import { ReferralRPC } from '../messages'
 import { FarmTokenDetailed } from './shared-ui/FarmTokenDetailed'
 
 import { useSharedStyles } from './styles'
+import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     valueCol: {
@@ -63,12 +58,12 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
     const chainId = useChainId()
-    const web3 = useWeb3({ chainId })
+    const web3 = useWeb3()
     const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
     const requiredChainId = getRequiredChainId(chainId)
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(
-        rewardToken?.type ?? EthereumTokenType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         rewardToken?.address ?? '',
     )
 
@@ -162,9 +157,9 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
             onConfirmAdjustFarm,
             onErrorDeposit,
             onConfirmedAdjustFarm,
-            web3,
+            web3 as Web3,
             account,
-            chainId,
+            chainId as ChainId,
             rewardToken,
             referredToken,
             depositValue,
@@ -341,27 +336,26 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                     />
                 </Grid>
                 <Grid item xs={12} marginTop="24px">
-                    <EthereumChainBoundary
-                        chainId={requiredChainId}
-                        noSwitchNetworkTip
-                        classes={{ switchButton: sharedClasses.switchButton }}>
-                        <ActionButton
-                            fullWidth
-                            variant="contained"
-                            size="medium"
-                            disabled={adjustRewardsBtnDisabled}
-                            onClick={onClickAdjustRewards}>
-                            {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
-                                <>
-                                    {insufficientFunds
-                                        ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
-                                        : t.error_daily_rewards()}
-                                </>
-                            ) : (
-                                t.adjust_rewards()
-                            )}
-                        </ActionButton>
-                    </EthereumChainBoundary>
+                    <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                        <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }}>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={adjustRewardsBtnDisabled}
+                                onClick={onClickAdjustRewards}>
+                                {insufficientFunds || totalFarmRewardLessThanDailyFarmReward ? (
+                                    <>
+                                        {insufficientFunds
+                                            ? t.error_insufficient_balance({ symbol: rewardToken?.symbol ?? '' })
+                                            : t.error_daily_rewards()}
+                                    </>
+                                ) : (
+                                    t.adjust_rewards()
+                                )}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </Grid>
             </Grid>
         </Box>

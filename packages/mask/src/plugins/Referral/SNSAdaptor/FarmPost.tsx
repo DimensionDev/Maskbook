@@ -3,11 +3,12 @@ import { useAsync } from 'react-use'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useAccount, useWeb3, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { useWeb3, useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TokenIcon } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import type { ReferralMetaData } from '../types'
 import type { Coin } from '../../Trader/types'
@@ -21,7 +22,8 @@ import {
     singAndPostProofOfRecommendationWithReferrer,
 } from './utils/proofOfRecommendation'
 
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
 import { IconURLs } from '../assets'
@@ -73,14 +75,11 @@ export function FarmPost(props: FarmPostProps) {
     const { value: linkedPersona } = useCurrentLinkedPersona()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
-    const { ERC20 } = useTokenListConstants(farmChainId)
 
     const { value: rewards = EMPTY_LIST, error } = useAsync(
         async () =>
-            farmChainId && ERC20
-                ? ReferralRPC.getRewardsForReferredToken(farmChainId, payload.referral_token, ERC20)
-                : EMPTY_LIST,
-        [farmChainId, ERC20],
+            farmChainId ? ReferralRPC.getRewardsForReferredToken(farmChainId, payload.referral_token) : EMPTY_LIST,
+        [farmChainId],
     )
 
     const openComposeBox = useCallback(
@@ -99,7 +98,7 @@ export function FarmPost(props: FarmPostProps) {
 
     const onClickReferToFarm = useCallback(async () => {
         try {
-            await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
+            await singAndPostProofOfRecommendationOrigin(web3 as Web3, account, payload.referral_token)
 
             const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? ''
 
@@ -144,7 +143,7 @@ export function FarmPost(props: FarmPostProps) {
         try {
             const tokenAddress = payload.referral_token
             const referrer = payload?.promoter_address ?? MASK_REFERRER
-            await singAndPostProofOfRecommendationWithReferrer(web3, account, tokenAddress, referrer)
+            await singAndPostProofOfRecommendationWithReferrer(web3 as Web3, account, tokenAddress, referrer)
             swapToken()
         } catch (error: any) {
             onError(error?.message)
@@ -196,22 +195,20 @@ export function FarmPost(props: FarmPostProps) {
                 )}
             </Card>
             <Grid container className={classes.actions}>
-                <EthereumChainBoundary
-                    chainId={SWAP_CHAIN_ID}
-                    noSwitchNetworkTip
-                    className={classes.switchButtonBox}
-                    classes={{ switchButton: sharedClasses.switchButton }}>
-                    <Grid item xs={6} display="flex" textAlign="center">
-                        <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
-                            {t.buy_to_farm()}
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                        <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
-                            {t.refer_to_farm()}
-                        </Button>
-                    </Grid>
-                </EthereumChainBoundary>
+                <ChainBoundary expectedChainId={SWAP_CHAIN_ID} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                    <WalletConnectedBoundary offChain classes={{ connectWallet: classes.switchButtonBox }}>
+                        <Grid item xs={6} display="flex" textAlign="center">
+                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
+                                {t.buy_to_farm()}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
+                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
+                                {t.refer_to_farm()}
+                            </Button>
+                        </Grid>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             </Grid>
         </div>
     )

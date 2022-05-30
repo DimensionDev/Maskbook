@@ -1,5 +1,4 @@
 import { orderBy } from 'lodash-unified'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { keccak256, asciiToHex, padRight } from 'web3-utils'
 import { defaultAbiCoder, Interface } from '@ethersproject/abi'
 import { formatUnits } from '@ethersproject/units'
@@ -16,6 +15,7 @@ import type {
     RewardsHarvested,
     RewardData,
     FarmDepositIncreasedEvent,
+    FungibleTokenDetailed,
 } from '../../types'
 import {
     expandBytes24ToBytes32,
@@ -127,7 +127,6 @@ interface TokenFilter {
 export async function getAccountFarms(
     account: string,
     chainId: ChainId,
-    tokenLists?: string[],
     filter?: TokenFilter,
 ): Promise<FarmDetailed[]> {
     // Allow filtering your own tokens
@@ -163,7 +162,7 @@ export async function getAccountFarms(
     })
     const farmsDeposits = parseEvents(farmsDepositEvents?.items)
 
-    const tokensMap = tokenLists && (await fetchERC20TokensFromTokenListsMap(tokenLists, chainId))
+    const tokensMap = await fetchERC20TokensFromTokenListsMap(chainId)
 
     const farmsMap = new Map(
         farms.map((farm) => [
@@ -262,7 +261,6 @@ export async function getMyRewardsHarvested(
 async function getFarmsForReferredToken(
     chainId: ChainId,
     referredToken: EvmAddress,
-    tokenLists: string[],
 ): Promise<Map<string, FarmDetailed>> {
     const farmsAddr = await getReferralFarmsV1Address()
 
@@ -275,7 +273,7 @@ async function getFarmsForReferredToken(
     })
     const farms = parseFarmExistsEvents(farmExistsEvents.items)
 
-    const tokensMap = tokenLists?.length ? await fetchERC20TokensFromTokenListsMap(tokenLists, chainId) : undefined
+    const tokensMap = await fetchERC20TokensFromTokenListsMap(chainId)
 
     const farmsMap = new Map(
         farms.map((farm) => [
@@ -303,12 +301,8 @@ async function getFarmsForReferredToken(
 
     return farmsData
 }
-export async function getRewardsForReferredToken(
-    chainId: ChainId,
-    referredToken: EvmAddress,
-    tokenLists: string[],
-): Promise<RewardData[]> {
-    const farmsData = await getFarmsForReferredToken(chainId, referredToken, tokenLists)
+export async function getRewardsForReferredToken(chainId: ChainId, referredToken: EvmAddress): Promise<RewardData[]> {
+    const farmsData = await getFarmsForReferredToken(chainId, referredToken)
 
     const rewards = new Map<
         ChainAddress,

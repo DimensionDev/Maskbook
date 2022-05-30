@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { FungibleTokenDetailed, useAccount, useChainId, useWeb3, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { Web3 } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -10,6 +11,7 @@ import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import { META_KEY } from '../constants'
@@ -17,14 +19,22 @@ import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
-import { ReferralMetaData, TabsReferAndBuy, TransactionStatus, PageInterface, PagesType } from '../types'
+import {
+    ReferralMetaData,
+    TabsReferAndBuy,
+    TransactionStatus,
+    PageInterface,
+    PagesType,
+    FungibleTokenDetailed,
+} from '../types'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MyRewards } from './MyRewards'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 import { useTabStyles, useSharedStyles } from './styles'
 
@@ -81,7 +91,6 @@ export function ReferToFarm(props: PageInterface) {
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
     const { classes: sharedClasses } = useSharedStyles()
-    const { ERC20 } = useTokenListConstants()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -109,10 +118,8 @@ export function ReferToFarm(props: PageInterface) {
 
     const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
         async () =>
-            token?.address && ERC20
-                ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address, ERC20)
-                : EMPTY_LIST,
-        [token?.address, currentChainId, ERC20],
+            token?.address ? ReferralRPC.getRewardsForReferredToken(currentChainId, token.address) : EMPTY_LIST,
+        [token?.address, currentChainId],
     )
 
     const onClickTokenSelect = useCallback(() => {
@@ -154,14 +161,14 @@ export function ReferToFarm(props: PageInterface) {
         try {
             onConfirmReferFarm()
 
-            await singAndPostProofOfRecommendationOrigin(web3, account, token.address)
+            await singAndPostProofOfRecommendationOrigin(web3 as Web3, account, token.address)
 
             const metadata = new Map<string, ReferralMetaData>()
             metadata.set(META_KEY, {
                 referral_token: token?.address ?? '',
                 referral_token_name: token?.name ?? '',
                 referral_token_symbol: token?.symbol ?? '',
-                referral_token_icon: token?.logoURI ?? [''],
+                referral_token_icon: token?.logoURL ?? '',
                 referral_token_chain_id: currentChainId,
                 promoter_address: account,
                 sender: currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? '',
@@ -237,19 +244,22 @@ export function ReferToFarm(props: PageInterface) {
                             </Grid>
                         ))}
                     </Grid>
-                    <EthereumChainBoundary
-                        chainId={requiredChainId}
-                        noSwitchNetworkTip
-                        classes={{ switchButton: sharedClasses.switchButton }}>
-                        <ActionButton
-                            fullWidth
-                            variant="contained"
-                            size="medium"
-                            disabled={!token}
-                            onClick={onClickReferFarm}>
-                            {t.refer_to_farm()}
-                        </ActionButton>
-                    </EthereumChainBoundary>
+                    <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                        <WalletConnectedBoundary
+                            offChain
+                            classes={{
+                                connectWallet: sharedClasses.switchButton,
+                            }}>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={!token}
+                                onClick={onClickReferFarm}>
+                                {t.refer_to_farm()}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </TabPanel>
                 <TabPanel value={TabsReferAndBuy.MY_REWARDS} className={classes.tab}>
                     <MyRewards pageType={PagesType.REFER_TO_FARM} {...props} />
