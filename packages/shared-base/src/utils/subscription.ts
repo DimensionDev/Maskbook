@@ -2,8 +2,9 @@ import { noop } from 'lodash-unified'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
+import {Emitter} from "@servie/events";
 
-export function createConstantSubscription<T>(value: T) {
+export function createConstantSubscription<T>(value: T): Subscription<T> {
     return {
         getCurrentValue: () => value,
         subscribe: () => noop,
@@ -63,18 +64,23 @@ export function createSubscriptionFromAsyncSuspense<T>(
     }
 }
 
+interface Events {
+    event: []
+}
+
 function getEventTarget() {
-    const event = new EventTarget()
+    // In Firefox, the listener is not triggered after dispatch event with EventTarget
+    // So here we use emitter
+    const event = new Emitter<Events>()
     const EVENT = 'event'
     let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
-        // delay to update state to ensure that all data to be synced globally
-        timer = setTimeout(() => event.dispatchEvent(new Event(EVENT)), 500)
+        // delay to update state to ensure that all settings to be synced globally
+        timer = setTimeout(() => event.emit(EVENT), 600)
     }
     function subscribe(f: () => void) {
-        event.addEventListener(EVENT, f)
-        return () => event.removeEventListener(EVENT, f)
+        return event.on(EVENT, f)
     }
     return { trigger, subscribe }
 }
@@ -85,6 +91,22 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
             return mapper(sub.getCurrentValue())
         },
         subscribe: sub.subscribe,
+    }
+}
+
+export function mergeSubscription<T extends Array<Subscription<unknown>>>(
+    ...subscriptions: T
+): Subscription<{
+    [key in keyof T]: T[key] extends Subscription<infer U> ? U : never
+}> {
+    return {
+        getCurrentValue() {
+            return subscriptions.map((x) => x.getCurrentValue()) as any
+        },
+        subscribe: (callback: () => void) => {
+            const removeListeners = subscriptions.map((x) => x.subscribe(callback))
+            return () => removeListeners.forEach((x) => x())
+        },
     }
 }
 

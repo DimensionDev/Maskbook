@@ -1,14 +1,16 @@
-import { useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useTokenTransferCallback } from '@masknet/web3-shared-evm'
 import { Button, TextField } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../../utils'
 import { Image } from '../../../../components/shared/Image'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
-import { useI18N } from '../../../../utils'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useOpenShareTxDialog } from '@masknet/shared'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {
@@ -24,7 +26,9 @@ const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     },
 }))
 
-export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ token: ERC721TokenDetailed }>) {
+export function DashboardWalletTransferDialogNFT(
+    props: WrappedDialogProps<{ token: NonFungibleToken<ChainId, SchemaType> }>,
+) {
     const { token } = props.ComponentProps!
     const { onClose } = props
 
@@ -35,10 +39,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const { collectiblesRetry } = useContext(CollectibleContext)
 
     // #region transfer tokens
-    const [{ loading }, transferCallback] = useTokenTransferCallback(
-        token.contractDetailed.type,
-        token.contractDetailed.address,
-    )
+    const [{ loading }, transferCallback] = useTokenTransferCallback(token.schema, token.address)
 
     const openShareTxDialog = useOpenShareTxDialog()
     const onTransfer = useCallback(async () => {
@@ -66,13 +67,13 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.info.mediaUrl ? (
+                    token.metadata?.mediaURL ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.info.mediaUrl}
+                            src={token.metadata.mediaURL}
                         />
                     ) : (
                         <MaskIconOutlined className={classes.placeholder} />

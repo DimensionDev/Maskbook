@@ -1,8 +1,8 @@
-import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { AvatarMetaDB } from '../types'
 import addSeconds from 'date-fns/addSeconds'
 import { RSS3 } from '@masknet/web3-providers'
 import type { RSS3_KEY_SNS } from '../constants'
+import { WalletRPC } from '../../Wallet/messages'
 
 interface NFTRSSNode {
     signature: string
@@ -34,7 +34,7 @@ async function _getNFTAvatarFromRSS(
     snsKey: RSS3_KEY_SNS,
 ): Promise<NFTRSSNode | undefined> {
     const rss = RSS3.createRSS3(address, async (message: string) => {
-        return personalSign(message, address)
+        return WalletRPC.signPersonalMessage(message, address)
     })
 
     const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
@@ -46,7 +46,7 @@ async function _getNFTAvatarFromRSS(
 
 export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS) {
     const rss = RSS3.createRSS3(address, async (message: string) => {
-        return personalSign(message, address)
+        return WalletRPC.signPersonalMessage(message, address)
     })
 
     let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)

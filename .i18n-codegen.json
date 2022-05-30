@@ -146,6 +146,17 @@
             }
         },
         {
+            "input": "./packages/plugins/EVM/src/locales/en-US.json",
+            "output": "./packages/plugins/EVM/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.evm",
+                "trans": "Translate"
+            }
+        },
+        {
             "input": "./packages/plugins/Solana/src/locales/en-US.json",
             "output": "./packages/plugins/Solana/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },

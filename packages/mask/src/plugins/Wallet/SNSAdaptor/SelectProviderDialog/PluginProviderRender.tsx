@@ -1,14 +1,18 @@
+import { useMemo } from 'react'
+import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
+import { getSiteType } from '@masknet/shared-base'
+import type { Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+
     return {
         root: {
             display: 'flex',
@@ -88,15 +92,29 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PluginProviderRenderProps {
-    networks: Web3Plugin.NetworkDescriptor[]
-    providers: Web3Plugin.ProviderDescriptor[]
-    undeterminedPluginID?: string
+    networks: Web3Helper.NetworkDescriptorAll[]
+    providers: Web3Helper.ProviderDescriptorAll[]
+    undeterminedPluginID?: NetworkPluginID
     undeterminedNetworkID?: string
-    setUndeterminedPluginID: (id: NetworkPluginID) => void
-    setUndeterminedNetworkID: (id: string) => void
-    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
-    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
-    onSubmit: (result?: Web3Plugin.ConnectionResult) => Promise<void>
+    onNetworkIconClicked: (network: Web3Helper.NetworkDescriptorAll) => void
+    onProviderIconClicked: (
+        network: Web3Helper.NetworkDescriptorAll,
+        provider: Web3Helper.ProviderDescriptorAll,
+    ) => void
+    NetworkIconClickBait?: React.ComponentType<
+        Web3Plugin.UI.NetworkIconClickBaitProps<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        >
+    >
+    ProviderIconClickBait?: React.ComponentType<
+        Web3Plugin.UI.ProviderIconClickBaitProps<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        >
+    >
 }
 
 export function PluginProviderRender({
@@ -104,14 +122,18 @@ export function PluginProviderRender({
     providers,
     undeterminedPluginID,
     undeterminedNetworkID,
-    setUndeterminedPluginID,
-    setUndeterminedNetworkID,
     NetworkIconClickBait,
     ProviderIconClickBait,
-    onSubmit,
+    onNetworkIconClicked,
+    onProviderIconClicked,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
+
+    const selectedNetwork = useMemo(() => {
+        return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+    }, [undeterminedNetworkID, networks.map((x) => x.ID).join()])
+
     return (
         <>
             <Box className={classes.root}>
@@ -127,8 +149,7 @@ export function PluginProviderRender({
                                     className={classes.networkItem}
                                     key={network.ID}
                                     onClick={() => {
-                                        setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
-                                        setUndeterminedNetworkID(network.ID)
+                                        onNetworkIconClicked(network)
                                     }}>
                                     <ShadowRootTooltip title={network.name} placement="top">
                                         <div className={classes.iconWrapper}>
@@ -155,35 +176,42 @@ export function PluginProviderRender({
                     <List className={classes.wallets}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .map((provider) =>
-                                ProviderIconClickBait ? (
-                                    <ProviderIconClickBait
-                                        key={provider.ID}
-                                        network={
-                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-                                        }
-                                        provider={provider}
-                                        onSubmit={(network, provider, result) => {
-                                            onSubmit(result)
-                                        }}>
-                                        <ListItem className={classes.walletItem} key={provider.ID}>
+                            .filter((y) => y.enableRequirements?.supportedChainIds?.includes(selectedNetwork.chainId))
+                            .filter((z) => {
+                                const siteType = getSiteType()
+                                if (!siteType) return false
+                                return [
+                                    ...(z.enableRequirements?.supportedEnhanceableSites ?? []),
+                                    ...(z.enableRequirements?.supportedExtensionSites ?? []),
+                                ].includes(siteType)
+                            })
+                            .map((provider) => (
+                                <ListItem
+                                    className={classes.walletItem}
+                                    key={provider.ID}
+                                    onClick={() => {
+                                        onProviderIconClicked(selectedNetwork, provider)
+                                    }}>
+                                    {ProviderIconClickBait ? (
+                                        <ProviderIconClickBait
+                                            key={provider.ID}
+                                            network={selectedNetwork}
+                                            provider={provider}>
                                             <ProviderIcon
                                                 className={classes.providerIcon}
                                                 icon={provider.icon}
                                                 name={provider.name}
                                             />
-                                        </ListItem>
-                                    </ProviderIconClickBait>
-                                ) : (
-                                    <ListItem className={classes.walletItem} key={provider.ID}>
+                                        </ProviderIconClickBait>
+                                    ) : (
                                         <ProviderIcon
                                             className={classes.providerIcon}
                                             icon={provider.icon}
                                             name={provider.name}
                                         />
-                                    </ListItem>
-                                ),
-                            )}
+                                    )}
+                                </ListItem>
+                            ))}
                     </List>
                 </section>
             </Box>

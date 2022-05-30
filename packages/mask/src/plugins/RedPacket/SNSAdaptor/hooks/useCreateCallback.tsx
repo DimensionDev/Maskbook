@@ -1,19 +1,13 @@
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { isLessThan, toFixed } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    TransactionEventType,
-    useAccount,
-    useChainId,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { omit } from 'lodash-unified'
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
+import type { TransactionReceipt } from 'web3-core'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import type { PayableTx } from '@masknet/web3-contracts/types/types'
+import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, TransactionEventType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { omit } from 'lodash-unified'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -23,7 +17,7 @@ export interface RedPacketSettings {
     total: string
     name: string
     message: string
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
 type ParamsObjType = {
@@ -37,7 +31,7 @@ type ParamsObjType = {
     tokenType: number
     tokenAddress: string
     total: string
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
 function checkParams(paramsObj: ParamsObjType) {
@@ -49,7 +43,7 @@ function checkParams(paramsObj: ParamsObjType) {
         throw new Error('At least 1 person should be able to claim the lucky drop.')
     }
 
-    if (paramsObj.tokenType !== EthereumTokenType.Native && paramsObj.tokenType !== EthereumTokenType.ERC20) {
+    if (paramsObj.tokenType !== SchemaType.Native && paramsObj.tokenType !== SchemaType.ERC20) {
         throw new Error('Token not supported')
     }
 
@@ -65,15 +59,16 @@ interface CreateParams {
 }
 
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
-    const redPacketContract = useRedPacketContract(version)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
-        const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
-        const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
+        const tokenType = token!.schema === SchemaType.Native ? 0 : 1
+        const tokenAddress = token!.schema === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
         if (!tokenAddress) {
             return null
         }
@@ -101,7 +96,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
         let gasError: Error | null = null
-        const value = toFixed(paramsObj.token?.type === EthereumTokenType.Native ? total : 0)
+        const value = toFixed(paramsObj.token?.schema === SchemaType.Native ? total : 0)
 
         const gas = await (redPacketContract as HappyRedPacketV4).methods
             .create_red_packet(...params)
@@ -117,9 +112,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const redPacketContract = useRedPacketContract(version)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
     return useAsyncFn(async () => {
@@ -141,7 +136,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         }
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
+        const value = toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0)
         const config: PayableTx = {
             from: account,
             value,

@@ -12,11 +12,12 @@ Request to depoly contracts on <!-- Replace it with the chain name -->.
 
 ## Chain Info
 
-| Name | Content |
-| ---- | ------- |
-| Name | \- |
-| ChainId | \- |
-| Website | \- |
+| Name         | Content |
+| ------------ | ------- |
+| Name         | \- |
+| ChainId      | \- |
+| Website      | \- |
+| RPC Endponit | \- |
 
 
 ## Checklist

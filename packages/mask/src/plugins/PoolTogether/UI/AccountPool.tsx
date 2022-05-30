@@ -1,6 +1,7 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/base'
-import { formatBalance, useChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PoolTogetherTrophy } from '@masknet/icons'
@@ -115,7 +116,7 @@ export function AccountPool(props: AccountPoolProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const poolURL = useManagePoolURL(accountPool.pool)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const balance = formatBalance(
         accountPool.account.ticketBalance,

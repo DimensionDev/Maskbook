@@ -10,6 +10,7 @@
     { "path": "../../plugin-infra" },
     { "path": "../../theme" },
     { "path": "../../shared-base" },
+    { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../typed-message/base" }
   ]

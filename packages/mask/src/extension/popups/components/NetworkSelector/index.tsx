@@ -2,13 +2,20 @@ import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
-import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { ChainId, ProviderType, NetworkType } from '@masknet/web3-shared-evm'
+import {
+    getRegisteredWeb3Networks,
+    useAccount,
+    useChainId,
+    Web3Helper,
+    useWeb3State,
+    useProviderType,
+} from '@masknet/plugin-infra/web3'
+import { currentMaskWalletAccountSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base-ui'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
+import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -50,16 +57,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkSelector = memo(() => {
-    const networks = getRegisteredWeb3Networks()
-    const account = useAccount()
-    const chainId = useChainId()
-    const providerType = useValueRef(currentProviderSettings)
+    const networks = getRegisteredWeb3Networks().filter(
+        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+    ) as Array<NetworkDescriptor<ChainId, NetworkType>>
+
+    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
     const onChainChange = useCallback(
-        async (chainId: ChainId) => {
+        async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             if (providerType === ProviderType.MaskWallet) {
-                await WalletRPC.updateAccount({
-                    chainId,
-                })
+                await web3State.Provider?.connect(chainId, ProviderType.MaskWallet)
             }
             return WalletRPC.updateMaskAccount({
                 chainId,
@@ -79,14 +88,13 @@ export const NetworkSelector = memo(() => {
 })
 
 export interface NetworkSelectorUIProps {
-    currentNetwork: Web3Plugin.NetworkDescriptor
-    networks: Web3Plugin.NetworkDescriptor[]
+    currentNetwork: NetworkDescriptor<ChainId, NetworkType>
+    networks: Array<NetworkDescriptor<ChainId, NetworkType>>
     onChainChange: (chainId: ChainId) => void
 }
 
-export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange }) => {
+export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange, networks }) => {
     const { classes } = useStyles()
-    const networks = getRegisteredWeb3Networks()
 
     const [menu, openMenu] = useMenuConfig(
         networks

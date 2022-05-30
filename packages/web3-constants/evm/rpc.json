@@ -1,5 +1,5 @@
 {
-    "RPC": {
+    "RPC_URLS": {
         "Mainnet": [
             "https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
             "https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",

@@ -22,7 +22,7 @@ export class ECKeyIdentifier extends Identifier {
         if (!hex) return None
         hex = String(hex)
         if (hex.startsWith('0x')) hex = hex.slice(2)
-        const publicKey = encodeArrayBuffer(Convert.FromHex(hex))
+        const publicKey = encodeArrayBuffer(new Uint8Array(Convert.FromHex(hex)))
         return Some(new ECKeyIdentifier('secp256k1', publicKey))
     }
 

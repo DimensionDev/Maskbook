@@ -1,14 +1,8 @@
 import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles } from '@masknet/theme'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    useAccount,
-    useFungibleTokenBalance,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -17,7 +11,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
@@ -25,6 +19,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const rainbow_animation = keyframes`
     0% {
@@ -79,11 +74,11 @@ export function DepositDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [pool, setPool] = useState<Pool>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
     const [odds, setOdds] = useState<string>()
 
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, closeDialog: onClose } = useRemoteControlledDialog(
@@ -116,7 +111,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
 
     useEffect(() => {
@@ -240,7 +235,7 @@ export function DepositDialog() {
                             }}
                         />
                     </form>
-                    <EthereumWalletConnectedBoundary>
+                    <WalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
                             <ActionButton
                                 className={classes.button}
@@ -255,7 +250,7 @@ export function DepositDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.prizePool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
@@ -267,7 +262,7 @@ export function DepositDialog() {
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         )}
-                    </EthereumWalletConnectedBoundary>
+                    </WalletConnectedBoundary>
                     {odds ? (
                         <Grid container direction="column" className={classes.odds}>
                             <Grid item>

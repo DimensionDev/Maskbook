@@ -23,7 +23,7 @@ export async function topUnconfirmedRequest() {
     return first(await getUnconfirmedRequests())
 }
 
-export async function popUnconfirmedRequest() {
+export async function shiftUnconfirmedRequest() {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 

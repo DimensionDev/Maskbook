@@ -1,30 +1,23 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
-    NativeTokenDetailed,
-    useAccount,
-    useFungibleTokenDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { Box, ListItem, Popper, Theme, Typography, useMediaQuery } from '@mui/material'
+import { MouseEvent, useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
+import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { omit, pick } from 'lodash-unified'
+import { TokenIcon } from '@masknet/shared'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
-import { omit, pick } from 'lodash-unified'
-import { MouseEvent, useCallback, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
+import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -182,10 +175,11 @@ export interface RedPacketInHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const account = useAccount()
     const { history, onSelect } = props
+    const i18n = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
@@ -200,22 +194,19 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        tokenAddress ?? '',
-    )
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
         ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
-    } as ERC20TokenDetailed | NativeTokenDetailed
+    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken }))
     }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
 
     // #region password lost tips
@@ -238,7 +229,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURI}
+                    logoURI={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
@@ -257,7 +248,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_total_amount({
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -319,8 +310,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers?.length.toString() ?? '0',
-                                    shares: history.shares.toString(),
+                                    claimedShares: String(history.claimers?.length ?? 0),
+                                    shares: String(history.shares),
                                 }}
                             />
                         </Typography>
@@ -337,7 +328,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 }}
                             />
                         </Typography>
@@ -351,6 +342,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
     return {
         ...omit(payload, ['block_number', 'claimers']),
-        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+        token: omit(payload.token, ['logoURI']) as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     }
 }

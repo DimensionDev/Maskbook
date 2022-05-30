@@ -101,7 +101,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     }
     const id = new PostIVIdentifier(
         SocialNetworkEnumToProfileDomain(currentSocialNetwork),
-        encodeArrayBuffer(iv.buffer),
+        encodeArrayBuffer(new Uint8Array(iv.buffer)),
     )
     // #endregion
 

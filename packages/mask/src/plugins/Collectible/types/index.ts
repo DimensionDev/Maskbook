@@ -1,9 +1,6 @@
 import type { WyvernSchemaName } from 'opensea-js/lib/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export * from './opensea'
-export * from './rarible'
-
 export interface CollectibleJSON_Payload {
     chain_id: ChainId
     address: string

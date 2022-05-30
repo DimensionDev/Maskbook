@@ -3,7 +3,9 @@ import { API_URL } from '../constants'
 import { PluginDHedgeRPC } from '../messages'
 import { Period, Pool, PoolType } from '../types'
 import { useDHedgePoolManagerContract } from '../contracts/useDHedgePool'
-import { useChainId, useTokenConstants } from '@masknet/web3-shared-evm'
+import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useFetchPool(address: string) {
     return useAsyncRetry(async () => {
@@ -20,9 +22,9 @@ export function useFetchPoolHistory(address: string, period: Period, sort = true
 }
 
 export function usePoolDepositAssets(pool?: Pool) {
-    const chainId = useChainId()
     const { sUSD_ADDRESS } = useTokenConstants()
-    const poolManagerContract = useDHedgePoolManagerContract(pool?.managerLogicAddress)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const poolManagerContract = useDHedgePoolManagerContract(chainId, pool?.managerLogicAddress)
     return useAsyncRetry(async () => {
         if (!pool) return
         if (pool.poolType === PoolType.v1) return sUSD_ADDRESS ? [sUSD_ADDRESS] : undefined

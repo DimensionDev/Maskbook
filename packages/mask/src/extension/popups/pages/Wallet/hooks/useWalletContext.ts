@@ -1,24 +1,20 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
-import type { RecentTransaction } from '../../../../../plugins/Wallet/services'
+import { useChainId, useRecentTransactions, useFungibleAssets } from '@masknet/plugin-infra/web3'
+import { FungibleAsset, NetworkPluginID, RecentTransaction, Wallet } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 
 function useWalletContext() {
-    const chainDetailed = useChainDetailed()
-    const erc20Tokens = useTrustedERC20Tokens()
-    const { value: assets, loading } = useAssets(erc20Tokens)
-    const { value: transactions } = useRecentTransactions({
-        receipt: true,
-        computedPayload: true,
-    })
-    const [currentToken, setCurrentToken] = useState<Asset>()
-    const [transaction, setTransaction] = useState<RecentTransaction | null>()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
+    const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
+    const [transaction, setTransaction] = useState<RecentTransaction<ChainId, Transaction>>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
     return {
         currentToken,
         setCurrentToken,
-        assets: assets.filter((asset) => asset.token.chainId === chainDetailed?.chainId),
+        assets: assets?.filter((asset) => asset.chainId === chainId) ?? [],
         transactions,
         assetsLoading: loading,
         transaction,

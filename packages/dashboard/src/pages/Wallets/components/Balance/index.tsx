@@ -1,13 +1,14 @@
+import { memo } from 'react'
+import { noop } from 'lodash-unified'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
+import type { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { noop } from 'lodash-unified'
-import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { useIsMatched } from '../../hooks'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
@@ -75,10 +76,23 @@ export interface BalanceCardProps {
     onBuy(): void
     onSwap(): void
     onReceive(): void
-    networks: Web3Plugin.NetworkDescriptor[]
-    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    networks: Array<
+        NetworkDescriptor<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        >
+    >
+    selectedNetwork: NetworkDescriptor<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['NetworkType']
+    > | null
     showOperations: boolean
-    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
+    onSelectNetwork(
+        network: NetworkDescriptor<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['NetworkType']
+        > | null,
+    ): void
 }
 
 export const Balance = memo<BalanceCardProps>(
@@ -114,9 +128,12 @@ export const Balance = memo<BalanceCardProps>(
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
                             networks={networks}
-                            onSelect={(network: Web3Plugin.NetworkDescriptor | null) =>
-                                networks.length <= 1 ? noop : onSelectNetwork(network)
-                            }
+                            onSelect={(
+                                network: NetworkDescriptor<
+                                    Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                                    Web3Helper.Definition[NetworkPluginID]['NetworkType']
+                                > | null,
+                            ) => (networks.length <= 1 ? noop : onSelectNetwork(network))}
                         />
                     </BalanceDisplayContainer>
                 </Box>

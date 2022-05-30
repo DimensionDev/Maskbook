@@ -1,26 +1,18 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import {
-    formatBalance,
-    getChainName,
-    isNativeTokenAddress,
-    resolveTokenLinkOnExplorer,
-    useAccount,
-    useChainId,
-    useNetworkType,
-    useRedPacketConstants,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
+import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
-import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -85,10 +77,9 @@ export interface ConfirmRedPacketFormProps {
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
-    const { onBack, settings, onClose, onCreated } = props
+    const { onBack, settings, onCreated, onClose } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
@@ -97,9 +88,13 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
     const contract_version = 4
-    const web3 = useWeb3()
-    const account = useAccount()
-    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const { address: publicKey, privateKey } = useMemo(
+        () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
+        [web3],
+    )!
     const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
@@ -139,7 +134,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             password: privateKey,
             contract_version,
         }
-        RedPacketRPC.discoverRedPacket(record)
+        RedPacketRPC.discoverRedPacket(record, chainId)
 
         // output the redpacket as JSON payload
         onCreated(payload.current)
@@ -148,11 +143,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        network: getChainName(chainId),
+        network: chainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
-    const networkType = useNetworkType()
+
     useEffect(() => {
         const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
         if (!contractAddress) {
@@ -161,10 +156,8 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = getChainName(chainId)
+        payload.current.network = chainResolver.chainName(chainId)
     }, [chainId, networkType, contract_version])
-
-    // #endregion
 
     return (
         <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
@@ -185,7 +178,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={resolveTokenLinkOnExplorer(settings?.token!)}
+                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>
