@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin } from '@masknet/plugin-infra'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
@@ -42,6 +42,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
             UI: {
                 TabContent: ({ addressNames = [] }) => {
                     return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Footprint} />
+                },
+            },
+            Utils: {
+                addressNameSorter,
+                shouldDisplay,
+            },
+        },
+        {
+            ID: `${PLUGIN_ID}_profile`,
+            label: 'Profile',
+            priority: 2,
+            UI: {
+                TabContent: ({ addressNames = [] }) => {
+                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Profile} />
                 },
             },
             Utils: {
