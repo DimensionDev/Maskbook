@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', '', storageDefaultValue))
+        setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
     SearchResultBox: SearchResultInspector,
     GlobalInjection: function Component() {

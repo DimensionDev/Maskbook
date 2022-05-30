@@ -20,10 +20,9 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
-        createKVStorage<T extends object>(type: 'memory' | 'persistent', name: string, defaultValues: T) {
-            if (type === 'memory')
-                return InMemoryStorages.Plugin.createSubScope(`${pluginID}_${name}`, defaultValues, signal)
-            else return PersistentStorages.Plugin.createSubScope(`${pluginID}_${name}`, defaultValues, signal)
+        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
+            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
         },
 
         nativeType: nativeAPI?.type,

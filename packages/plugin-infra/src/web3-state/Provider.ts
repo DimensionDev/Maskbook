@@ -1,6 +1,6 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { delay } from '@dimensiondev/kit'
+import { delay, getEnumAsArray } from '@dimensiondev/kit'
 import {
     EnhanceableSite,
     ExtensionSite,
@@ -38,19 +38,34 @@ export class ProviderState<
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
-        protected defaultValue: ProviderStorage<Account<ChainId>, ProviderType>,
         protected options: {
             isValidAddress(a?: string): boolean
             isValidChainId(a?: number): boolean
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
+            getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const { storage } = this.context
-            .createKVStorage('memory', 'Provider', {})
-            .createSubScope('Provider', defaultValue)
+        const defaultValue: ProviderStorage<Account<ChainId>, ProviderType> = {
+            accounts: Object.fromEntries(
+                Object.keys(providers).map((x) => [
+                    x,
+                    {
+                        account: '',
+                        chainId: options.getDefaultChainId(),
+                    },
+                ]),
+            ) as Record<ProviderType, Account<ChainId>>,
+            providers: Object.fromEntries(
+                [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
+                    x.value,
+                    options.getDefaultProviderType(),
+                ]),
+            ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
+        }
+        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('Provider', defaultValue)
         this.storage = storage
 
         this.setupSubscriptions()

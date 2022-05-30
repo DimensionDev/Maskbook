@@ -1,7 +1,5 @@
-import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { ProviderState, ProviderStorage } from '@masknet/plugin-infra/web3'
-import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { ProviderState } from '@masknet/plugin-infra/web3'
 import { Account, isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -19,30 +17,13 @@ import { Providers } from './Connection/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedContext) {
-        const defaultValue: ProviderStorage<Account<ChainId>, ProviderType> = {
-            accounts: Object.fromEntries(
-                getEnumAsArray(ProviderType).map((x) => [
-                    x.value,
-                    {
-                        account: '',
-                        chainId: ChainId.Mainnet,
-                    },
-                ]),
-            ) as Record<ProviderType, Account<ChainId>>,
-            providers: Object.fromEntries(
-                [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
-                    x.value,
-                    ProviderType.MaskWallet,
-                ]),
-            ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
-        }
-
-        super(context, Providers, defaultValue, {
+        super(context, Providers, {
             isSameAddress,
             isValidAddress,
             isValidChainId,
             getDefaultChainId: () => ChainId.Mainnet,
             getDefaultNetworkType: () => NetworkType.Ethereum,
+            getDefaultProviderType: () => ProviderType.MaskWallet,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
         })

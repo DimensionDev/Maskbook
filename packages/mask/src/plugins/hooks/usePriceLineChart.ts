@@ -10,7 +10,7 @@ export function usePriceLineChart(
     id: string,
     opts: { color?: string; sign?: string },
 ) {
-    const { color = 'steelblue', sign = '$' } = opts
+    const { color = 'steelblue', sign = 'USD' } = opts
 
     useLineChart(svgRef, data, dimension, id, {
         color,
