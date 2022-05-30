@@ -4,11 +4,12 @@ import { useSharedI18N } from '../../../locales'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
-import { CurrencyType, getCoinGeckoPlatformId, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { chainResolver } from '@masknet/web3-shared-evm'
 import { Searching } from './components/Searching'
 import { useAsync } from 'react-use'
-import { TokenPrice, TokenView } from '@masknet/web3-providers'
+import { TokenView } from '@masknet/web3-providers'
 import { InjectedDialog } from '../../../contexts'
+import { CurrencyType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -55,7 +56,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
 
     const { value: contractDetailed, loading: loadingToken } = useERC721ContractDetailed(tokenSecurity?.contract)
     const { value: tokenPrice } = useAsync(async () => {
-        const platformId = getCoinGeckoPlatformId(tokenSecurity.chainId)
+        const platformId = chainResolver.coinGeckoChainId(tokenSecurity.chainId)
         return TokenPrice.getTokenPrices(platformId, [tokenSecurity.contract], CurrencyType.USD)
     }, [tokenSecurity])
     const { value: tokenMarketCapInfo } = useAsync(async () => {

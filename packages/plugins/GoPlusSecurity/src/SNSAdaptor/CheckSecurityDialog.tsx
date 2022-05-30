@@ -10,16 +10,10 @@ import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
-import {
-    ChainId,
-    CurrencyType,
-    getCoinGeckoPlatformId,
-    isSameAddress,
-    useERC20TokenDetailed,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, useERC20TokenDetailed, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
 import { first, isEmpty } from 'lodash-unified'
+import { CurrencyType, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,7 +80,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
 
     const { value: tokenPrice } = useAsync(async () => {
         if (!value) return
-        const platformId = getCoinGeckoPlatformId(value.chainId)
+        const platformId = chainResolver.coinGeckoChainId(value.chainId)
         return TokenPrice.getTokenPrices(platformId, [value.contract], CurrencyType.USD)
     }, [value])
 
