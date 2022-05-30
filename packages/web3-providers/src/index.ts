@@ -16,6 +16,7 @@ import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
+import { TokenViewAPI } from './token-view'
 
 export * from './helpers'
 export * from './types'
@@ -33,6 +34,7 @@ export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
+export const TokenView = new TokenViewAPI()
 export const TokenList = new TokenListAPI()
 export const Mask = new MaskAPI()
 export const DeBank = new DeBankAPI()

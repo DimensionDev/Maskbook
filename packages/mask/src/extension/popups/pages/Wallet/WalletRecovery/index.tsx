@@ -150,7 +150,7 @@ const WalletRecovery = memo(() => {
                                 <Typography className={classes.address}>
                                     <FormattedAddress
                                         address={wallet.address}
-                                        size={16}
+                                        size={4}
                                         formatter={formatEthereumAddress}
                                     />
                                 </Typography>

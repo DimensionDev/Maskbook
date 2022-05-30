@@ -180,7 +180,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     )}
 
                     <Box fontSize={12}>
-                        <FormattedAddress address={address} size={10} formatter={Others?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

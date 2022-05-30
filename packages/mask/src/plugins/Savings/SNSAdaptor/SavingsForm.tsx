@@ -44,7 +44,7 @@ export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
     tab: TabType
-    onClose?: () => void
+    onClose?: (reset?: boolean) => void
 }
 
 export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
@@ -177,7 +177,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             case TabType.Deposit:
                 const hash = await protocol.deposit(account, chainId, web3, tokenAmount)
                 if (typeof hash !== 'string') {
-                    throw new Error('Failed to deposit token.')
+                    // eslint-disable-next-line
+                    return Promise.reject(Promise.reject('Failed to deposit token.'))
                 } else {
                     await protocol.updateBalance(chainId, web3, account)
                 }
@@ -187,7 +188,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         activatedSocialNetworkUI.utils.share?.(shareText)
                     },
                 })
-                break
+                return
             case TabType.Withdraw:
                 switch (protocol.type) {
                     case ProtocolType.Lido:
@@ -196,7 +197,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         return
                     default:
                         if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                            throw new Error('Failed to withdraw token.')
+                            // eslint-disable-next-line
+                            return Promise.reject(Promise.reject('Failed to withdraw token.'))
                         } else {
                             await protocol.updateBalance(chainId, web3, account)
                         }
@@ -244,6 +246,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 failed={t('failed')}
                                 failedOnClick="use executor"
                                 complete={t('done')}
+                                completeOnClick={() => onClose?.(true)}
                                 disabled={validationMessage !== '' && !needsSwap}
                                 noUpdateEffect
                                 executor={executor}
@@ -277,6 +280,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         failed={t('failed')}
                         failedOnClick="use executor"
                         complete={t('done')}
+                        completeOnClick={() => onClose?.(true)}
                         disabled={validationMessage !== ''}
                         noUpdateEffect
                         executor={executor}

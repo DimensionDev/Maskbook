@@ -1,12 +1,17 @@
 import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import type { TokenSecurity } from './Common'
-import { useI18N } from '../../locales'
+import { useSharedI18N } from '../../../../locales'
 import React from 'react'
 import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import {
+    ERC20Token,
+    formatCurrency,
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    resolveTokenLinkOnExplorer,
+} from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -27,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     tooltip: {
-        color: theme.palette.text.buttonText,
         fontSize: 12,
     },
 }))
@@ -45,7 +49,7 @@ interface TokenPanelProps {
 }
 
 export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
-    const t = useI18N()
+    const t = useSharedI18N()
     const { classes } = useStyles()
     const theme = useTheme()
 
@@ -55,7 +59,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 PopperProps={{ container }}
                 arrow
                 title={
-                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
+                    <Typography color={(theme) => theme.palette.info.contrastText} className={classes.tooltip}>
                         {tokenSecurity.total_supply}
                     </Typography>
                 }>
@@ -72,7 +76,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                         <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                         <Typography className={classes.cardValue}>
                             {tokenSecurity.token_symbol}
-                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}{' '}
+                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}
                         </Typography>
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
@@ -85,7 +89,10 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             </Typography>
                             <Link
                                 lineHeight="14px"
-                                href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
+                                href={resolveTokenLinkOnExplorer({
+                                    chainId: tokenSecurity.chainId,
+                                    address: tokenSecurity.contract,
+                                } as ERC20Token)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <ExternalLink color={theme.palette.text.strong} size={14} />
@@ -103,7 +110,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             {tokenSecurity.creator_address && (
                                 <Link
                                     lineHeight="14px"
-                                    href={explorerResolver.addressLink(
+                                    href={resolveAddressLinkOnExplorer(
                                         tokenSecurity.chainId,
                                         tokenSecurity.creator_address,
                                     )}
@@ -125,7 +132,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             {tokenSecurity.owner_address && (
                                 <Link
                                     lineHeight="14px"
-                                    href={explorerResolver.addressLink(
+                                    href={resolveAddressLinkOnExplorer(
                                         tokenSecurity.chainId,
                                         tokenSecurity.owner_address,
                                     )}
@@ -141,7 +148,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                         {totalSupply}
                     </Stack>
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
+                        <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
                         {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
                     </Stack>
                 </Stack>

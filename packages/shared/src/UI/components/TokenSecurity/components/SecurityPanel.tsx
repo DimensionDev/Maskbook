@@ -1,5 +1,5 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useSharedI18N } from '../../../../locales'
 import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
@@ -8,16 +8,15 @@ import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
-import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
-import type { ERC20TokenDetailed, PriceRecord } from '@masknet/web3-shared-evm'
+import type { ChainId, ERC721ContractDetailed, PriceRecord } from '@masknet/web3-shared-evm'
+import urlcat from 'urlcat'
 import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultTokenIcon } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
-    tokenInfo?: ERC20TokenDetailed
+    tokenInfo?: ERC721ContractDetailed
     tokenPrice?: PriceRecord
     tokenMarketCap?: TokenAPI.tokenInfo
 }
@@ -59,11 +58,14 @@ const LIST_HEIGHT = {
     max: 308,
 }
 
+function resolveGoLabLink(chainId: ChainId, address: string) {
+    return urlcat('https://gopluslabs.io/token-security/:chainId/:address', { chainId, address })
+}
+
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useSharedI18N()
     const theme = useTheme()
-
     const price = tokenPrice?.usd ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
@@ -97,23 +99,19 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
                         : '0px 0px 20px rgba(255, 255, 255, 0.12);'
                 }
+                marginTop="8px"
                 padding="16px"
                 borderRadius="16px">
                 <Stack direction="row" spacing={0.8}>
-                    {tokenSecurity?.token_name ? (
-                        <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={tokenSecurity?.contract ?? ''}
-                            name={tokenSecurity?.token_name}
-                            logoURI={tokenInfo?.logoURI}
-                            chainId={tokenSecurity?.chainId}
-                        />
-                    ) : (
-                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
-                    )}
+                    <TokenIcon
+                        classes={{ icon: classes.icon }}
+                        address={tokenSecurity?.contract}
+                        name={tokenSecurity?.token_name}
+                        logoURI={tokenInfo?.iconURL}
+                    />
                     <Stack>
                         <Typography className={classes.tokenName}>{tokenSecurity?.token_name || 'Unnamed'}</Typography>
-                        <Typography className={classes.tokenPrice}> {price ? `$${price} USD` : '--'}</Typography>
+                        <Typography className={classes.tokenPrice}>{price ? `$ ${price} USD` : '--'}</Typography>
                     </Stack>
                 </Stack>
                 <Stack>
@@ -124,7 +122,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                     DefineMapping[
                                         riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
                                     ].bgColor,
-                                padding: '16px 12px 16px 18px',
+                                padding: '14px 12px 14px 18px',
                                 borderRadius: '12px',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -182,48 +180,38 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.High].icon(16)}
+                                {DefineMapping[SecurityMessageLevel.High].icon(14)}
                                 <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {riskyFactors > 1
-                                        ? t.risky_factors({ quantity: riskyFactors.toString() })
-                                        : t.risky_factor({ quantity: riskyFactors.toString() })}
+                                        ? t.risky_items({ quantity: riskyFactors.toString() })
+                                        : t.risky_item({ quantity: riskyFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
+                                {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
                                 <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {attentionFactors > 1
-                                        ? t.attention_factors({ quantity: attentionFactors.toString() })
-                                        : t.attention_factor({ quantity: attentionFactors.toString() })}
+                                        ? t.attention_items({ quantity: attentionFactors.toString() })
+                                        : t.attention_item({ quantity: attentionFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
                     </Stack>
                 </Stack>
-                <Collapse
-                    in={isCollapse}
-                    timeout={{
-                        enter: 1200,
-                        exit: 10,
-                    }}
-                    collapsedSize={LIST_HEIGHT.min}
-                    className={classes.detectionCollection}
-                    sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
-                    <Stack spacing={1}>
-                        {makeMessageList.map((x, i) => (
-                            <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
-                        ))}
-                        {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
-                            <RiskCardUI
-                                icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                                title={t.risk_safe_description()}
-                                titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
-                            />
-                        )}
-                    </Stack>
-                </Collapse>
+                <Stack className={classes.detectionCollection} sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
+                    {makeMessageList.map((x, i) => (
+                        <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
+                    ))}
+                    {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
+                        <RiskCardUI
+                            icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
+                            title={t.risk_safe_description()}
+                            titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
+                        />
+                    )}
+                </Stack>
             </Stack>
         </Stack>
     )

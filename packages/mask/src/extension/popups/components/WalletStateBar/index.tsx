@@ -80,7 +80,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         <Box fontSize={12}>
                             <FormattedAddress
                                 address={walletAddress ?? '-'}
-                                size={10}
+                                size={4}
                                 formatter={formatEthereumAddress}
                             />
                         </Box>

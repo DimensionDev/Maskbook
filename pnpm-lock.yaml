@@ -955,6 +955,7 @@ importers:
       react-feather: ^2.0.9
       react-use: ^17.3.2
       urlcat: ^2.0.4
+      wallet.ts: 1.0.1
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -968,6 +969,7 @@ importers:
       react-feather: 2.0.9
       react-use: 17.3.2
       urlcat: 2.0.4
+      wallet.ts: 1.0.1
 
   packages/plugins/RSS3:
     specifiers:
@@ -1176,6 +1178,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       '@types/qrcode': ^1.4.2
@@ -1196,6 +1199,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
+      '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@types/qrcode': 1.4.2
@@ -19987,7 +19991,7 @@ packages:
     dev: false
 
   /is-fn/1.0.0:
-    resolution: {integrity: sha1-lUPV3nvPWwiiLsiiC65uKG1RDYw=}
+    resolution: {integrity: sha512-XoFPJQmsAShb3jEQRfzf2rqXavq7fIqF/jOekp308JlThqrODnMpweVSGilKTCXELfLhltGP2AGgbQGVP8F1dg==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -21073,7 +21077,7 @@ packages:
     resolution: {integrity: sha1-DU/9gALVMzqrr0oj7tL2N0yfKOc=}
 
   /js-sha3/0.6.1:
-    resolution: {integrity: sha1-W4n3enR3Z5h39YxKB1JAk0sflcA=}
+    resolution: {integrity: sha512-2OHj7sAZ9gnJS4lQsgIsTslmqVrNQdDC99bvwYGQKU1w6k/gwsTLeGBfWt8yHCuTOGqk7DXzuVlK8J+dDXnG7A==}
     dev: false
 
   /js-sha3/0.7.0:
@@ -21093,7 +21097,7 @@ packages:
     dev: true
 
   /js-tokens/3.0.2:
-    resolution: {integrity: sha1-mGbfOVECEw449/mWvOtlRDIJwls=}
+    resolution: {integrity: sha512-RjTcuD4xjtthQkaWH7dFlH85L+QaVtSoOyGdZ3g6HFhS9dFNDfLyqgm2NFe2X6cQpeFmt0452FJjFG5UameExg==}
     dev: false
 
   /js-tokens/4.0.0:
@@ -21168,7 +21172,7 @@ packages:
     hasBin: true
 
   /jsesc/1.3.0:
-    resolution: {integrity: sha1-RsP+yMGJKxKwgz25vHYiF226s0s=}
+    resolution: {integrity: sha512-Mke0DA0QjUWuJlhsE0ZPPhYiJkRap642SmI/4ztCFaUs6V2AiH1sfecc+57NgaryfAA2VR3v6O+CSjC1jZJKOA==}
     hasBin: true
     dev: false
 
@@ -21214,7 +21218,7 @@ packages:
     dev: false
 
   /json-rpc-error/2.0.0:
-    resolution: {integrity: sha1-p6+cICg4tekFxyUOVH8a/3cligI=}
+    resolution: {integrity: sha512-EwUeWP+KgAZ/xqFpaP6YDAXMtCJi+o/QQpCQFIYyxr01AdADi2y413eM8hSqJcoQym9WMePAJWoaODEJufC4Ug==}
     dependencies:
       inherits: 2.0.4
     dev: false
@@ -21346,14 +21350,6 @@ packages:
   /just-debounce/1.1.0:
     resolution: {integrity: sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==}
     dev: true
-
-  /keccak/3.0.1:
-    resolution: {integrity: sha512-epq90L9jlFWCW7+pQa6JOnKn2Xgl2mtI664seYR6MHskvI9agt7AnDqmAlp9TqU4/caMYbA08Hi5DMZAl5zdkA==}
-    engines: {node: '>=10.0.0'}
-    dependencies:
-      node-addon-api: 2.0.2
-      node-gyp-build: 4.2.3
-    dev: false
 
   /keccak/3.0.2:
     resolution: {integrity: sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==}
@@ -22897,11 +22893,6 @@ packages:
 
   /node-gyp-build/3.9.0:
     resolution: {integrity: sha512-zLcTg6P4AbcHPq465ZMFNXx7XpKKJh+7kkN699NiQWisR2uWYOWNWqRHAmbnmKiL4e9aLSlmy5U7rEMUXV59+A==}
-    hasBin: true
-    dev: false
-
-  /node-gyp-build/4.2.3:
-    resolution: {integrity: sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==}
     hasBin: true
     dev: false
 
@@ -27403,7 +27394,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.1
-      webpack: 5.72.1
+      webpack: 5.72.1_webpack-cli@4.9.2
     dev: true
 
   /terser-webpack-plugin/5.3.1_x4y5r4zvu22k667e7z56zns5yi:
@@ -28939,7 +28930,7 @@ packages:
       bn.js: 5.2.0
       bs58: 4.0.1
       elliptic: 6.5.4
-      keccak: 3.0.1
+      keccak: 3.0.2
     dev: false
 
   /warning/4.0.3:

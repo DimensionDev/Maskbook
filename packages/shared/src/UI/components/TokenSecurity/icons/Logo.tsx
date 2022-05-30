@@ -25,6 +25,6 @@ export const GoPlusLabLogo = createIcon(
             </clipPath>
         </defs>
     </>,
-    '0 -2 34 34',
+    '0 -8 34 34',
     [29, 24],
 )
