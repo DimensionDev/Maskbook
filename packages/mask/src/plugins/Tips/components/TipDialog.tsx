@@ -1,8 +1,11 @@
 import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
+    useAccount,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
+    useNonFungibleToken,
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
@@ -11,7 +14,7 @@ import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/s
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useAccount, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
@@ -25,6 +28,7 @@ import { TipType } from '../types'
 import { AddDialog } from './AddDialog'
 import { ConfirmModal } from './common/ConfirmModal'
 import { TipForm } from './TipForm'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -185,9 +189,13 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
 
-    const { tokenDetailed: erc721Token } = useERC721TokenDetailed(erc721Contract, erc721TokenId)
+    const { value: erc721Token } = useNonFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        erc721Contract?.address,
+        erc721TokenId ?? '',
+    )
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const successMessage = useMemo(() => {
         if (isTokenTip) return t.send_tip_successfully()
         if (erc721Token)
@@ -196,8 +204,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <div className={classes.nftContainer}>
                         <NFTCardStyledAssetPlayer
                             chainId={chainId}
-                            contractAddress={erc721Token.contractDetailed.address}
-                            url={erc721Token.info.mediaUrl}
+                            contractAddress={erc721Token.address}
+                            url={erc721Token.metadata?.mediaURL}
                             tokenId={erc721Token.tokenId}
                             classes={{
                                 loadingFailImage: classes.loadingFailImage,
@@ -207,7 +215,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <Typography className={classes.nftMessageText}>
                         {t.send_specific_tip_successfully({
                             amount: '1',
-                            name: erc721Token.info.name || 'NFT',
+                            name: erc721Token.contract?.name || 'NFT',
                         })}
                     </Typography>
                 </div>
@@ -223,11 +231,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
-    const { Utils } = useWeb3State()
-    const account = useAccount()
-    const { value: domain } = useReverseAddress(account)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
     const walletTitle =
-        Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || providerDescriptor?.name
+        Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || providerDescriptor?.name
 
     // #region change provider
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -239,8 +247,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return openSelectProviderDialog()
     }, [openSelectProviderDialog, hasNativeAPI])
 
-    const handleAddToken = useCallback((token: ERC721TokenDetailed) => {
-        setErc721Address(token.contractDetailed.address ?? '')
+    const handleAddToken = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+        setErc721Address(token.address ?? '')
         setErc721TokenId(token.tokenId)
         openAddTokenDialog(false)
     }, [])
@@ -259,10 +267,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 </Typography>
 
                 <Typography ml={1} className={classes.walletAddress}>
-                    {Utils?.formatAddress?.(account, 4)}
+                    {Others?.formatAddress?.(account, 4)}
                     <Link
                         className={classes.link}
-                        href={account ? Utils?.resolveAddressLink?.(chainId, account) ?? '' : ''}
+                        href={account ? Others?.explorerResolver.addressLink(chainId, account) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />

@@ -14,7 +14,11 @@ export async function encryptUnlockData(content: string): Promise<{
     )
     const exportKey = await crypto.subtle.exportKey('raw', key)
 
-    return { iv: encodeArrayBuffer(iv), key: encodeArrayBuffer(exportKey), encrypted: encodeArrayBuffer(encrypted) }
+    return {
+        iv: encodeArrayBuffer(new Uint8Array(iv)),
+        key: encodeArrayBuffer(new Uint8Array(exportKey)),
+        encrypted: encodeArrayBuffer(encrypted),
+    }
 }
 
 export async function decryptUnlockData(

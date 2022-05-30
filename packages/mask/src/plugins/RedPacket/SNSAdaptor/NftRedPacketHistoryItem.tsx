@@ -5,7 +5,9 @@ import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
@@ -142,25 +144,28 @@ const useStyles = makeStyles()((theme) => {
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketHistory
-    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
-        const account = useAccount()
+        const account = useAccount(NetworkPluginID.PLUGIN_EVM)
         const t = useI18N()
         const { classes } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
-        const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
+        const { value: contractDetailed } = useNonFungibleTokenContract(
+            NetworkPluginID.PLUGIN_EVM,
+            history.token_contract.address,
+        )
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
             WalletMessages.events.ApplicationDialogUpdated,
         )
         const handleSend = useCallback(() => {
             if (!(canSend && contractDetailed && isPasswordValid)) return
-            onSend(history, contractDetailed)
+            onSend(history, contractDetailed as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
             closeApplicationBoardDialog()
         }, [onSend, closeApplicationBoardDialog, canSend, history, contractDetailed, isPasswordValid])
 
@@ -224,12 +229,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={
-                                    {
-                                        address: history.token_contract.address,
-                                        chainId: history.token_contract.chain_id,
-                                    } as ERC721ContractDetailed
-                                }
+                                contract={history.token_contract}
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />

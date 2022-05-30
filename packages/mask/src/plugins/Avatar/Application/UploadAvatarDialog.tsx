@@ -3,7 +3,8 @@ import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
@@ -33,7 +34,7 @@ interface UploadAvatarDialogProps {
     account?: string
     isBindAccount?: boolean
     image?: string | File
-    token?: ERC721TokenDetailed
+    token?: NonFungibleToken<ChainId, SchemaType>
     proof?: BindingProof
     onBack: () => void
     onClose: () => void
@@ -84,22 +85,23 @@ async function saveToNextID(info: NextIDAvatarMeta, persona?: PersonaIdentifier,
 async function Save(
     account: string,
     isBindAccount: boolean,
-    token: ERC721TokenDetailed,
+    token: NonFungibleToken<ChainId, SchemaType>,
     data: AvatarInfo,
     persona: PersonaIdentifier,
     proof: BindingProof,
     identifier: ProfileIdentifier,
 ) {
-    if (!data) return false
+    if (!data || !token.contract?.address) return false
 
     const info: NextIDAvatarMeta = {
         nickname: data.nickname,
         userId: data.userId,
         imageUrl: data.imageUrl,
         avatarId: data.avatarId,
-        address: token.contractDetailed.address,
+        address: token.contract?.address,
         tokenId: token.tokenId,
-        chainId: token.contractDetailed.chainId,
+        chainId: token.contract?.chainId ?? ChainId.Mainnet,
+        schema: token.contract?.schema ?? SchemaType.ERC20,
     }
 
     if (isBindAccount) {

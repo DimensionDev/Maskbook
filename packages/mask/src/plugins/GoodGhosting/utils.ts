@@ -12,9 +12,9 @@ import addSeconds from 'date-fns/addSeconds'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
-import { CurrencyType, TransactionStateType } from '@masknet/web3-shared-evm'
+import { TransactionStateType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
+import { CurrencyType, isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -99,7 +99,7 @@ export function getGameFinancialData(
         ? ZERO
         : new BigNumber(poolData.totalAdai).minus(info.totalGamePrincipal)
     const gameInterest = new BigNumber(info.gameHasEnded ? info.totalGameInterest : rawPoolInterest).multipliedBy(
-        assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] : 1,
+        assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] ?? 1 : 1,
     )
 
     const gameRewards = new BigNumber(poolData.reward)
@@ -108,7 +108,7 @@ export function getGameFinancialData(
                 ? new BigNumber(playerStandings.winning).multipliedBy(info.rewardsPerPlayer)
                 : poolData.incentives,
         )
-        .multipliedBy(assets.rewardAsset?.price ? assets.rewardAsset?.price[CurrencyType.USD] : 0)
+        .multipliedBy(assets.rewardAsset?.price ? assets.rewardAsset?.price[CurrencyType.USD] ?? 0 : 0)
 
     const totalEarnings = gameInterest.plus(gameRewards)
     const winnerGains = totalEarnings.div(playerStandings.winning || 1)
@@ -121,7 +121,7 @@ export function getGameFinancialData(
     const dividend = winnerGains.multipliedBy(365)
     const divisor = expectedPayment
         .multipliedBy(gameDuration)
-        .multipliedBy(assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] : 1)
+        .multipliedBy(assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] ?? 1 : 1)
 
     const poolAPY = dividend.dividedBy(divisor).multipliedBy(100)
 

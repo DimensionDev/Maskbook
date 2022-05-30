@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
-import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3 } from '@masknet/plugin-infra/web3'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
@@ -91,8 +91,8 @@ export default function ConnectButton({
     refreshFollowList: () => void
 }) {
     const { classes, cx } = useStyles()
-    const web3 = useWeb3()
-    const myAddress = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const myAddress = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
@@ -104,7 +104,7 @@ export default function ConnectButton({
     }, [address, myAddress])
 
     useEffect(() => {
-        if (!web3.eth.currentProvider) return
+        if (!web3?.eth.currentProvider) return
         const ccInstance = new CyberConnect({
             provider: web3.eth.currentProvider,
             namespace: 'Mask',

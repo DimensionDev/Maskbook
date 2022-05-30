@@ -32,8 +32,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedI18N",
                 "namespace": "shared",
-                "trans": "SharedTrans",
-                "sourceMap": "inline"
+                "trans": "SharedTrans"
             }
         },
         {
@@ -44,8 +43,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useSharedBaseI18N",
                 "namespace": "shareBase",
-                "trans": "SharedBaseTrans",
-                "sourceMap": "inline"
+                "trans": "SharedBaseTrans"
             }
         },
         {
@@ -56,8 +54,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useDashboardI18N",
                 "namespace": "dashboard",
-                "trans": "DashboardTrans",
-                "sourceMap": "inline"
+                "trans": "DashboardTrans"
             }
         },
         {
@@ -68,8 +65,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "io.mask.example",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -80,8 +76,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "io.mask.debugger",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -92,8 +87,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.wallet",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -104,8 +98,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.mask.flow",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -116,8 +109,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.fileservice",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -128,8 +120,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.cyberconnect",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -140,8 +131,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "bio.rss3",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -152,8 +142,18 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "money.juicebox",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
+            }
+        },
+        {
+            "input": "./packages/plugins/EVM/src/locales/en-US.json",
+            "output": "./packages/plugins/EVM/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.evm",
+                "trans": "Translate"
             }
         },
         {
@@ -164,8 +164,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.solana",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -176,8 +175,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.mask.next_id",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -188,8 +186,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "__template__",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -200,8 +197,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "io.gopluslabs.security",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -212,8 +208,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "io.mask.cross-chain-bridge",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -224,8 +219,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.red_packet",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -236,8 +230,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.tip",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -248,8 +241,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.avatar",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -260,8 +252,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.trader",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         },
         {
@@ -272,8 +263,7 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.gitcoin",
-                "trans": "Translate",
-                "sourceMap": "inline"
+                "trans": "Translate"
             }
         }
     ]

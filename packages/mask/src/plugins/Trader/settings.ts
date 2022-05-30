@@ -14,14 +14,6 @@ export const currentSlippageSettings = createGlobalSettings(`${PLUGIN_ID}+slippa
  */
 export const currentSingleHopOnlySettings = createGlobalSettings(`${PLUGIN_ID}+singleHopOnly`, false)
 
-/**
- * The default data provider
- */
-export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
-    `${PLUGIN_ID}+dataProvider`,
-    DataProvider.COIN_GECKO,
-)
-
 // #region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]

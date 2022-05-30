@@ -1,3 +1,5 @@
-export * from './zerion'
-export * from './debank'
-export * from './portfolio'
+export enum LockStatus {
+    INIT = 0,
+    UNLOCK = 1,
+    LOCKED = 2,
+}

@@ -1,14 +1,13 @@
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPluginsDashboard } from '../manager/dashboard'
 import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor'
-import type { Web3Plugin } from '../web3-types'
+import type { Web3Helper } from '../web3-helpers'
 
-type Capabilities = Web3Plugin.ObjectCapabilities.Capabilities
-
-export function useAllPluginsWeb3State() {
+export function useAllPluginsWeb3State<T extends NetworkPluginID>() {
     const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor('any')
     const pluginsDashboard = useActivatedPluginsDashboard()
     const entries = [...pluginsSNSAdaptor, ...pluginsDashboard]
         .filter((definition) => definition.Web3State)
-        .map((definition): [string, Capabilities] => [definition.ID, definition.Web3State!])
-    return Object.fromEntries(entries) as Record<string, Capabilities>
+        .map((definition) => [definition.ID, definition.Web3State])
+    return Object.fromEntries(entries) as Record<string, Web3Helper.Web3State<T>>
 }

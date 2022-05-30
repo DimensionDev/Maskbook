@@ -1,4 +1,4 @@
-import { useChainId, ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -10,7 +10,8 @@ import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -61,7 +62,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const currentIdentity = useCurrentIdentity()
 
@@ -70,7 +71,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
     const { attachMetadata } = useCompositionContext()
     const handleSendNftRedpacket = useCallback(
-        (history: NftRedPacketHistory, contractDetailed: ERC721ContractDetailed) => {
+        (history: NftRedPacketHistory, contractDetailed: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => {
             const { rpid, txid, duration, message, payload } = history
             attachMetadata(RedPacketNftMetaKey, {
                 id: rpid,
@@ -80,7 +81,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 senderName,
                 contractName: contractDetailed.name,
                 contractAddress: contractDetailed.address,
-                contractTokenURI: contractDetailed.iconURL ?? '',
+                contractTokenURI: contractDetailed.logoURL ?? '',
                 privateKey: payload.password,
                 chainId: history.chain_id,
             })

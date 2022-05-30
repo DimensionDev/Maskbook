@@ -13,9 +13,6 @@
     "build": "rollup -c",
     "start": "rollup -c -w"
   },
-  "dependencies": {
-    "web3-core-helpers": "1.7.3"
-  },
   "devDependencies": {
     "@rollup/plugin-sucrase": "^4.0.4",
     "rollup": "^2.73.0",

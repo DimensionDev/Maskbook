@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { pluginDescription, pluginName, pluginId, pluginMetaKey } from './constants'

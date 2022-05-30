@@ -1,49 +1,43 @@
-import {
-    getChainIdFromNetworkType,
-    getCoinGeckoConstants,
-    getCoinMarketCapConstants,
-    NetworkType,
-} from '@masknet/web3-shared-evm'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
-import { currentNetworkSettings } from '../../../Wallet/settings'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 const BLACKLIST_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: string[]
+        [key in ChainId]?: string[]
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
-        [NetworkType.Ethereum]: [
+        [ChainId.Mainnet]: [
             '8410', // NFTX Hashmasks Index
         ],
     },
     [DataProvider.COIN_GECKO]: {
-        [NetworkType.Ethereum]: ['swaptoken', 'nftx-hashmasks-index'],
+        [ChainId.Mainnet]: ['swaptoken', 'nftx-hashmasks-index'],
     },
     // use token address as id and all letters should be lower-case
     [DataProvider.UNISWAP_INFO]: {
-        [NetworkType.Ethereum]: [],
+        [ChainId.Mainnet]: [],
     },
 }
 
 const KEYWORD_ALIAS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: Record<string, string>
+        [key in ChainId]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             NYFI: 'n0031',
         },
     },
     [DataProvider.COIN_GECKO]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             NYFI: 'n0031',
         },
     },
@@ -52,17 +46,17 @@ const KEYWORD_ALIAS_MAP: {
 
 const KEYWORD_ID_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: Record<string, string>
+        [key in ChainId]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             UNI: '7083',
             YAM: '7131', // YAM v3
         },
     },
     [DataProvider.COIN_GECKO]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             UNI: 'uniswap',
         },
     },
@@ -71,23 +65,23 @@ const KEYWORD_ID_MAP: {
 
 const ID_ADDRESS_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: Record<string, string>
+        [key in ChainId]?: Record<string, string>
     }
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
         },
-        [NetworkType.Polygon]: {
+        [ChainId.Matic]: {
             '8536': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
     [DataProvider.COIN_GECKO]: {
-        [NetworkType.Ethereum]: {
+        [ChainId.Mainnet]: {
             'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
         },
-        [NetworkType.Polygon]: {
+        [ChainId.Matic]: {
             'mask-network': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
@@ -96,7 +90,7 @@ const ID_ADDRESS_MAP: {
 
 const NETWORK_ID_MAP: {
     [key in DataProvider]: {
-        [key in NetworkType]?: string
+        [key in ChainId]?: string
     }
 } = {
     [DataProvider.COIN_GECKO]: {},
@@ -104,33 +98,32 @@ const NETWORK_ID_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-getEnumAsArray(NetworkType).map(({ value: networkType }) => {
-    const chainId = getChainIdFromNetworkType(networkType)
-    NETWORK_ID_MAP[DataProvider.COIN_GECKO][networkType] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
-    NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][networkType] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
+getEnumAsArray(ChainId).map(({ value: chainId }) => {
+    NETWORK_ID_MAP[DataProvider.COIN_GECKO][chainId] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
+    NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
 })
 
-export function resolveAlias(keyword: string, dataProvider: DataProvider) {
+export function resolveAlias(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return keyword
-    return KEYWORD_ALIAS_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()] ?? keyword
+    return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
 }
 
-export function resolveCoinId(keyword: string, dataProvider: DataProvider) {
-    return KEYWORD_ID_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()]
+export function resolveCoinId(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
+    return KEYWORD_ID_MAP[dataProvider][chainId]?.[keyword.toUpperCase()]
 }
 
-export function resolveCoinAddress(id: string, dataProvider: DataProvider) {
-    return ID_ADDRESS_MAP[dataProvider][currentNetworkSettings.value]?.[id]
+export function resolveCoinAddress(chainId: ChainId, id: string, dataProvider: DataProvider) {
+    return ID_ADDRESS_MAP[dataProvider][chainId]?.[id]
 }
 
-export function resolveNetworkType(id: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UNISWAP_INFO) return NetworkType.Ethereum
-    const networks = NETWORK_ID_MAP[dataProvider]
-    return Object.entries(networks).find(([_, key]) => key === id)?.[0]
+export function resolveChainId(id: string, dataProvider: DataProvider) {
+    if (dataProvider === DataProvider.UNISWAP_INFO) return ChainId.Mainnet
+    const chainIds = NETWORK_ID_MAP[dataProvider]
+    return Object.entries(chainIds).find(([_, key]) => key === id)?.[0]
 }
 
-export function isBlockedId(id: string, dataProvider: DataProvider) {
-    return BLACKLIST_MAP[dataProvider][currentNetworkSettings.value]?.includes(id)
+export function isBlockedId(chainId: ChainId, id: string, dataProvider: DataProvider) {
+    return BLACKLIST_MAP[dataProvider][chainId]?.includes(id)
 }
 
 export function isBlockedKeyword(type: TagType, keyword: string) {

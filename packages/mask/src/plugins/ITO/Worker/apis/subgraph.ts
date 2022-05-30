@@ -1,7 +1,6 @@
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-unified'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 import { payloadIntoMask } from '../../SNSAdaptor/helpers'
 import type { JSON_PayloadOutMask, PoolFromNetwork } from '../../types'
 
@@ -45,8 +44,8 @@ const POOL_FIELDS = `
     }
 `
 
-async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
-    const subgraphURL = getITOConstants(chainId ? chainId : currentChainIdSettings.value).SUBGRAPH_URL
+async function fetchFromMarketSubgraph<T>(chainId: ChainId, query: string) {
+    const subgraphURL = getITOConstants(chainId).SUBGRAPH_URL
     if (!subgraphURL) return null
     try {
         const response = await fetch(subgraphURL, {
@@ -66,7 +65,7 @@ async function fetchFromMarketSubgraph<T>(query: string, chainId?: ChainId) {
     }
 }
 
-export async function getTradeInfo(pid: string, trader: string) {
+export async function getTradeInfo(chainId: ChainId, pid: string, trader: string) {
     const data = await fetchFromMarketSubgraph<{
         buyInfos: Array<{
             buyer: {
@@ -94,7 +93,9 @@ export async function getTradeInfo(pid: string, trader: string) {
             token: JSON_PayloadOutMask['token']
             amount: string
         }>
-    }>(`
+    }>(
+        chainId,
+        `
     {
         buyInfos (where: { pool: "${pid.toLowerCase()}", buyer: "${trader.toLowerCase()}" }) {
             buyer {
@@ -120,7 +121,8 @@ export async function getTradeInfo(pid: string, trader: string) {
             amount
         }
     }
-    `)
+    `,
+    )
 
     if (!data?.buyInfos) throw new Error('Failed to load trade info.')
     return {
@@ -130,22 +132,25 @@ export async function getTradeInfo(pid: string, trader: string) {
     }
 }
 
-export async function getPool(pid: string) {
+export async function getPool(chainId: ChainId, pid: string) {
     const data = await fetchFromMarketSubgraph<{
         pool: JSON_PayloadOutMask | null
-    }>(`
+    }>(
+        chainId,
+        `
     {
         pool (id: "${pid.toLowerCase()}") {
             ${POOL_FIELDS}
         }
     }
-    `)
+    `,
+    )
 
     if (!data?.pool) throw new Error('Failed to load payload.')
     return payloadIntoMask(data.pool)
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number, chainId: ChainId) {
+export async function getAllPoolsAsSeller(chainId: ChainId, address: string, page: number) {
     const data = await fetchFromMarketSubgraph<{
         sellInfos: Array<{
             pool: JSON_PayloadOutMask & {
@@ -154,6 +159,7 @@ export async function getAllPoolsAsSeller(address: string, page: number, chainId
             }
         }>
     }>(
+        chainId,
         `
     {
         sellInfos ( orderBy: timestamp, orderDirection: desc, first: 50, skip: ${
@@ -167,7 +173,6 @@ export async function getAllPoolsAsSeller(address: string, page: number, chainId
         }
     }
     `,
-        chainId,
     )
     if (!data?.sellInfos) return []
 
@@ -181,7 +186,7 @@ export async function getAllPoolsAsSeller(address: string, page: number, chainId
     })
 }
 
-export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
+export async function getAllPoolsAsBuyer(chainId: ChainId, address: string) {
     const data = await fetchFromMarketSubgraph<{
         buyInfos: Array<{
             pool: JSON_PayloadOutMask & {
@@ -190,6 +195,7 @@ export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
             }
         }>
     }>(
+        chainId,
         `
     {
         buyInfos (where: { buyer: "${address.toLowerCase()}" }) {
@@ -201,7 +207,6 @@ export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
         }
     }
     `,
-        chainId,
     )
     if (!data?.buyInfos) return []
     return data.buyInfos.map((x) => {

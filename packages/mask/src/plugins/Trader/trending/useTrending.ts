@@ -1,12 +1,13 @@
-import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../messages'
 import type { Coin, TagType } from '../types'
 import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,
@@ -15,9 +16,9 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     } = useAsync(async () => {
         if (!keyword) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingByKeyword(keyword, tagType, currency, dataProvider)
+        return PluginTraderRPC.getCoinTrendingByKeyword(chainId, keyword, tagType, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, keyword])
-    const { value: detailedToken } = useERC20TokenDetailed(trending?.coin.contract_address)
+    const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
     const coin = {
         ...trending?.coin,
         decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
@@ -38,7 +39,7 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
 }
 
 export function useTrendingById(id: string, dataProvider: DataProvider) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,
@@ -47,10 +48,10 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingById(id, currency, dataProvider)
+        return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, id])
 
-    const { value: detailedToken } = useERC20TokenDetailed(trending?.coin.contract_address)
+    const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
 
     const coin = {
         ...trending?.coin,

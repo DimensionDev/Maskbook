@@ -1,20 +1,14 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    formatWeiToEther,
-    GasOption,
-    isEIP1559Supported,
-    useChainId,
-    useGasPrice,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { chainResolver, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { GasOptionType, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleToken, useGasPrice } from '@masknet/plugin-infra/web3'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -27,15 +21,15 @@ export interface GasSettingBarProps {
 export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
-    const chainId = useChainId()
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
-    const { value: gasPriceDefault = '0' } = useGasPrice()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: gasPriceDefault = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
-    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
+    const [gasOption, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
     const onOpenGasSettingDialog = useCallback(() => {
         setGasSettingDialog(
-            isEIP1559Supported(chainId)
+            chainResolver.isSupport(chainId, 'EIP1559')
                 ? {
                       open: true,
                       gasLimit,
@@ -56,9 +50,9 @@ export function GasSettingBar(props: GasSettingBarProps) {
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
             if (evt.open) return
-            if (evt.gasOption) setGasOption(evt.gasOption)
+            if (evt.gasOption) setGasOptionType(evt.gasOption)
             onChange(
-                (isEIP1559Supported(chainId)
+                (chainResolver.isSupport(chainId, 'EIP1559')
                     ? {
                           gas: evt.gasLimit,
                           maxFeePerGas: evt.maxFee,
@@ -75,7 +69,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const gasFee = useMemo(() => {
         return multipliedBy(
             gasLimit,
-            isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
+            chainResolver.isSupport(chainId, 'EIP1559') && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
         )
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 

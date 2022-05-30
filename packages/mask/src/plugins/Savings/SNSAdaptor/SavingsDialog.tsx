@@ -6,14 +6,10 @@ import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import {
     createContract,
     ChainId,
-    FungibleTokenDetailed,
-    getChainIdFromNetworkType,
-    useChainId,
-    useWeb3,
-    EthereumTokenType,
-    useFungibleTokensDetailed,
+    SchemaType,
     getAaveConstants,
     ZERO_ADDRESS,
+    networkResolver,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
@@ -33,7 +29,8 @@ import { AAVEProtocol } from '../protocols/AAVEProtocol'
 import { LDO_PAIRS } from '../constants'
 import type { AbiItem } from 'web3-utils'
 import { flatten, compact, chunk } from 'lodash-unified'
-
+import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
@@ -44,16 +41,16 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const web3 = useWeb3({ chainId })
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => getChainIdFromNetworkType(network))
+        return networks.map((network) => networkResolver.networkChainId(network))
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
@@ -78,18 +75,20 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         })
     }, [web3, chainId])
 
-    const { value: detailedAaveTokens } = useFungibleTokensDetailed(
-        compact(flatten(aaveTokens ?? [])).map((m) => {
-            return { address: m, type: EthereumTokenType.ERC20 }
-        }) ?? [],
-        chainId,
+    const { value: detailedAaveTokens } = useFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        compact(flatten(aaveTokens ?? [])),
+        {
+            chainId,
+        },
     )
 
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
             ...chunk(detailedAaveTokens, 2).map(
-                (pair) => new AAVEProtocol(pair as [FungibleTokenDetailed, FungibleTokenDetailed]),
+                (pair) =>
+                    new AAVEProtocol(pair as [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]),
             ),
         ],
         [chainId, detailedAaveTokens, tab],
@@ -128,7 +127,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         chainId={chainId}
                                         setChainId={setChainId}
                                         classes={classes}
-                                        chains={chains}
+                                        chains={chains.filter(Boolean) as ChainId[]}
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>

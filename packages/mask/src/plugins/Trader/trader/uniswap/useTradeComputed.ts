@@ -1,5 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { TradeType } from '@uniswap/sdk-core'
 import {
@@ -12,11 +11,12 @@ import {
 import { Trade, TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { useTradeBreakdown } from './useTradeBreakdown'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export function useTradeComputed(
     trade: Trade | null,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeComputed<Trade> | null {
     const slippageSetting = useSlippageTolerance()
