@@ -55,7 +55,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return response?.result as T
     }
 
-    override async connect(chainId: ChainId, popupsWindow?: boolean) {
+    override async connect(chainId: ChainId, popupsWindow = true) {
         const { account, chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
         const wallets = await getWallets()
         if (popupsWindow) {
