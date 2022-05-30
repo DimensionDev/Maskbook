@@ -3,7 +3,7 @@ import { InputAdornment } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
@@ -27,12 +27,13 @@ export interface ExchangeTokenPanelGroupProps {
     token: FungibleTokenDetailed | undefined
     origin: ExchangeTokenAndAmountState[]
     onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
+    chainId: ChainId
 }
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { onTokenAmountChange } = props
+    const { onTokenAmountChange, chainId } = props
     const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
     const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(props.origin)
 
@@ -89,6 +90,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                             dataIndex={item.key}
                             disableBalance={idx !== 0}
                             isSell={idx === 0}
+                            chainId={chainId}
                             inputAmount={item.amount}
                             selectedTokensAddress={selectedTokensAddress}
                             onAmountChange={onAmountChange}

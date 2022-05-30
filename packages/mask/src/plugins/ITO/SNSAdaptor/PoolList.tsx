@@ -10,7 +10,7 @@ import { useI18N } from '../../../utils'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
-        height: '100%',
+        minHeight: 400,
         overflow: 'auto',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         display: 'flex',
+        minHeight: 400,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',

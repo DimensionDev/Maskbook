@@ -1,15 +1,19 @@
 import { HistoryIcon } from '@masknet/icons'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { PluginId } from '@masknet/plugin-infra'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
@@ -20,6 +24,7 @@ import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { payloadOutMask } from './helpers'
+import { useUpdateEffect } from 'react-use'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { PoolList } from './PoolList'
 
@@ -43,12 +48,21 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
             backgroundClip: 'padding-box',
         },
+        overflowX: 'hidden',
     },
     tabs: {
         top: 0,
         left: 0,
         right: 0,
         position: 'absolute',
+    },
+    abstractTabWrapper: {
+        width: '100%',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+    },
+    tail: {
+        cursor: 'pointer',
     },
 }))
 
@@ -66,10 +80,13 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
     const account = useAccount()
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
-
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
     // #region step
@@ -125,7 +142,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             seller: {
                 address: FillSuccess.creator,
             },
-            chain_id: chainId,
+            chain_id: currentChainId,
             start_time: settings.startTime.getTime(),
             end_time: settings.endTime.getTime(),
             unlock_time: settings.unlockTime?.getTime() ?? 0,
@@ -196,7 +213,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             const [, setValue] = state
             setValue(DialogTabs.create)
         },
-        [account, chainId, props.onConfirm, state],
+        [account, currentChainId, props.onConfirm, state],
     )
 
     const onClose = useCallback(() => {
@@ -217,26 +234,47 @@ export function CompositionDialog(props: CompositionDialogProps) {
         if (!ITO2_CONTRACT_ADDRESS) onClose()
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
+    useUpdateEffect(() => {
+        if (currentChainId) {
+            setChainId(currentChainId)
+        }
+    }, [currentChainId])
+
     const [showHistory, setShowHistory] = useState(false)
     const onShowHistory = () => {
         setShowHistory((history) => !history)
     }
     return (
         <InjectedDialog
-            titleTail={step === ITOCreateFormPageStep.NewItoPage ? <HistoryIcon onClick={onShowHistory} /> : null}
+            titleTail={
+                step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
+                    <HistoryIcon onClick={onShowHistory} className={classes.tail} />
+                ) : null
+            }
             disableBackdropClick
             open={props.open}
             title={t('plugin_ito_display_name')}
-            onClose={onClose}>
+            onClose={showHistory ? () => setShowHistory(false) : onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
                     !showHistory ? (
-                        <CreateForm
-                            onNext={onNext}
-                            onClose={onClose}
-                            origin={poolSettings}
-                            onChangePoolSettings={setPoolSettings}
-                        />
+                        <>
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    chainId={chainId}
+                                    setChainId={setChainId}
+                                    classes={classes}
+                                    chains={chainIdList}
+                                />
+                            </div>
+                            <CreateForm
+                                onNext={onNext}
+                                chainId={chainId}
+                                onClose={onClose}
+                                origin={poolSettings}
+                                onChangePoolSettings={setPoolSettings}
+                            />
+                        </>
                     ) : (
                         <PoolList onSend={onCreateOrSelect} />
                     )

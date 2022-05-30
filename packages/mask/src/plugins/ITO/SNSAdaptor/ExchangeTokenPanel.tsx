@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance, ChainId } from '@masknet/web3-shared-evm'
 import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface ExchangeTokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
-
+    chainId: ChainId
     disableBalance: boolean
     isSell: boolean
     exchangeToken: FungibleTokenDetailed | undefined
@@ -75,6 +75,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         selectedTokensAddress = [],
         onRemove,
         onAdd,
+        chainId,
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -83,6 +84,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
             disableNativeToken: isSell,
+            chainId,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
         })
@@ -90,6 +92,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     }, [
         isSell,
         dataIndex,
+        chainId,
         exchangeToken?.address,
         excludeTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
         selectedTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),

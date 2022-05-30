@@ -1,6 +1,7 @@
 import {
     ERC20TokenDetailed,
     EthereumTokenType,
+    ChainId,
     formatAmount,
     formatBalance,
     useAccount,
@@ -22,6 +23,7 @@ import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate'
 import type { PoolSettings } from './hooks/useFill'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
@@ -140,15 +142,16 @@ export interface CreateFormProps extends withClasses<never> {
     onNext: () => void
     onClose: () => void
     origin?: PoolSettings
+    chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, onClose } = props
+    const { onChangePoolSettings, onNext, origin, onClose, chainId } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount()
-    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()
 
@@ -203,6 +206,7 @@ export function CreateForm(props: CreateFormProps) {
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
         tokenAndAmount?.token?.address ?? '',
+        chainId,
     )
 
     const RE_MATCH_WHOLE_AMOUNT = useMemo(
@@ -382,6 +386,7 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.root}>
                 <Box className={classes.line} style={{ display: 'block' }}>
                     <ExchangeTokenPanelGroup
+                        chainId={chainId}
                         token={tokenAndAmount?.token}
                         origin={tokenAndAmounts}
                         onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
@@ -493,23 +498,35 @@ export function CreateForm(props: CreateFormProps) {
                     </Box>
                 ) : null}
             </Box>
-
-            <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
-                <EthereumERC20TokenApprovedBoundary
-                    amount={inputTokenAmount}
-                    spender={ITO2_CONTRACT_ADDRESS}
-                    token={tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined}>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            disabled: !!validationMessage,
-                            action: async () => onNext(),
-                            title: validationMessage || t('plugin_ito_next'),
-                        }}
-                        classes={{ button: classes.button }}
-                        className={classes.walletBar}
-                    />
-                </EthereumERC20TokenApprovedBoundary>
-            </EthereumWalletConnectedBoundary>
+            <EthereumChainBoundary
+                chainId={chainId}
+                noSwitchNetworkTip
+                disablePadding
+                className={classes.chainBoundary}
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                    classes: { root: classes.button, disabled: classes.disabledButton },
+                    color: 'primary',
+                }}>
+                <EthereumWalletConnectedBoundary classes={{ walletBar: classes.walletBar }}>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={inputTokenAmount}
+                        spender={ITO2_CONTRACT_ADDRESS}
+                        token={
+                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
+                        }>
+                        <PluginWalletStatusBar
+                            actionProps={{
+                                disabled: !!validationMessage,
+                                action: async () => onNext(),
+                                title: validationMessage || t('plugin_ito_next'),
+                            }}
+                            classes={{ button: classes.button }}
+                            className={classes.walletBar}
+                        />
+                    </EthereumERC20TokenApprovedBoundary>
+                </EthereumWalletConnectedBoundary>
+            </EthereumChainBoundary>
         </>
     )
 }
