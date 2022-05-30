@@ -256,15 +256,3 @@ export type DiscoveryFarmOracles = {
     referralFarmsV1: Contract[]
     confirmationsV1: Contract[]
 }
-
-export enum RpcMethod {
-    oracle_chainId = 'oracle_chainId',
-    oracle_getDerivedBlockByHash = 'oracle_getDerivedBlockByHash',
-    oracle_getBundleReceipt = 'oracle_getBundleReceipt',
-    oracle_getDerivedBlockByNumber = 'oracle_getDerivedBlockByNumber',
-    oracle_getOperationalAddress = 'oracle_getOperationalAddress',
-    oracle_getTimePromise = 'oracle_getTimePromise',
-    oracle_sendProofOfRecommendationOrigin = 'oracle_sendProofOfRecommendationOrigin',
-    oracle_sendProofOfRecommendation = 'oracle_sendProofOfRecommendation',
-    oracle_getLogs = 'oracle_getLogs',
-}

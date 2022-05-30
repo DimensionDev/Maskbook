@@ -1,8 +1,8 @@
 import { getAddress } from '@ethersproject/address'
 
-import { EvmAddress, RpcMethod } from '../../types'
+import type { EvmAddress } from '../../types'
 
-import { getOracle, rpcCall } from './oracle'
+import { getOracle, rpcCall, RpcRoute, RecommendationsRpcMethod } from './oracle'
 
 // Get a time signature from the oracle (all fields required, send sized 0x000....00 when not used)
 type TPropsTimeSignature = {
@@ -17,13 +17,11 @@ export async function getTimeSignature(props: TPropsTimeSignature) {
     const { account, tokenAddress, referrer, dapp, router } = props
     const host = props.host || (await getOracle())
 
-    const { result } = await rpcCall(host, RpcMethod.oracle_getTimePromise, [
-        account,
-        tokenAddress,
-        referrer,
-        dapp,
-        router,
-    ])
+    const { result } = await rpcCall(
+        `${host}/v1/${RpcRoute.recommendations}`,
+        RecommendationsRpcMethod.oracle_getTimePromise,
+        [account, tokenAddress, referrer, dapp, router],
+    )
 
     return {
         time: Number(result.time),
@@ -43,16 +41,20 @@ export async function postProofOfRecommendationOrigin(
     const host = await getOracle()
 
     // Post signed proof of recommendation which has a time promise from the store.
-    const res = await rpcCall(host, RpcMethod.oracle_sendProofOfRecommendationOrigin, [
-        {
-            signer: getAddress(account),
-            token: getAddress(tokenAddress),
-            router: getAddress(router),
-            time,
-            sig,
-            timePromises: [timePromise],
-        },
-    ])
+    const res = await rpcCall(
+        `${host}/v1/${RpcRoute.recommendations}`,
+        RecommendationsRpcMethod.oracle_sendProofOfRecommendationOrigin,
+        [
+            {
+                signer: getAddress(account),
+                token: getAddress(tokenAddress),
+                router: getAddress(router),
+                time,
+                sig,
+                timePromises: [timePromise],
+            },
+        ],
+    )
     return res
 }
 
@@ -69,19 +71,22 @@ export async function postProofOfRecommendationWithReferrer(
 ) {
     const host = await getOracle()
 
-    const res = await rpcCall(host, RpcMethod.oracle_sendProofOfRecommendation, [
-        {
-            signer: getAddress(account),
-            token: getAddress(tokenAddress),
-            referrer: getAddress(referrer),
-            dapp,
-            router: getAddress(router),
-            time,
-            sig,
-            timePromises: [timePromise],
-            linkReferrer: document.referrer,
-        },
-    ])
-
+    const res = await rpcCall(
+        `${host}/v1/${RpcRoute.recommendations}`,
+        RecommendationsRpcMethod.oracle_sendProofOfRecommendation,
+        [
+            {
+                signer: getAddress(account),
+                token: getAddress(tokenAddress),
+                referrer: getAddress(referrer),
+                dapp,
+                router: getAddress(router),
+                time,
+                sig,
+                timePromises: [timePromise],
+                linkReferrer: document.referrer,
+            },
+        ],
+    )
     return res
 }
