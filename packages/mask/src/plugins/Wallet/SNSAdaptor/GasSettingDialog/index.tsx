@@ -4,9 +4,9 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { GasOption } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { GasSetting } from './GasSetting'
+import { GasOptionType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -17,14 +17,14 @@ const useStyles = makeStyles()((theme) => ({
 export const GasSettingDialog: FC = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
+    const [gasOptionType, setGasOptionType] = useState<GasOptionType>(GasOptionType.NORMAL)
     const [gasLimit, setGasLimit] = useState(0)
     const [minGasLimit, setMinGasLimit] = useState(0)
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
         (evt) => {
             if (!evt.open) return
-            if (evt.gasOption) setGasOption(evt.gasOption)
+            if (evt.gasOption) setGasOptionType(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
             if (evt.minGasLimit !== undefined) setMinGasLimit(evt.minGasLimit)
         },
@@ -37,8 +37,8 @@ export const GasSettingDialog: FC = () => {
                     gasLimit={gasLimit}
                     minGasLimit={minGasLimit}
                     onGasLimitChange={setGasLimit}
-                    gasOption={gasOption}
-                    onGasOptionChange={setGasOption}
+                    gasOptionType={gasOptionType}
+                    onGasOptionChange={setGasOptionType}
                     onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
                         setDialog({
                             open: false,

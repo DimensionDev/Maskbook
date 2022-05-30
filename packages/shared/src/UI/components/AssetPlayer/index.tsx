@@ -1,17 +1,18 @@
-import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-unified'
+import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
+import { getRPCConstants } from '@masknet/web3-shared-evm'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, SvgIconProps } from '@mui/material'
 import { AssetLoadingIcon, MaskPlaceholder } from '@masknet/icons'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ERC721TokenQuery {
     contractAddress: string
     tokenId: string
-    chainId: ChainId
+    chainId?: Web3Helper.ChainIdAll
 }
 
 interface AssetPlayerProps
@@ -57,8 +58,8 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const { url, type, options, iconProps, isFixedIframeSize = true, fallbackResourceLoader } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
-    const { RPC: RPC_Entries } = getRPCConstants(props.erc721Token?.chainId)
-    const rpc = first(RPC_Entries)
+    const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
+    const rpc = first(RPC_URLS)
     const erc721Token = rpc ? ({ ...props.erc721Token, rpc } as ERC721TokenQuery) : undefined
     const [playerState, setPlayerState] = useState(
         url || erc721Token ? AssetPlayerState.LOADING : AssetPlayerState.ERROR,

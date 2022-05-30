@@ -1,11 +1,7 @@
+import { useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { usePickToken } from '@masknet/shared'
-import {
-    EthereumTokenType,
-    isNativeTokenAddress,
-    useFungibleTokenBalance,
-    useGasPrice,
-    isEIP1559Supported,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
@@ -16,14 +12,16 @@ const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
     const { token, setToken, amount, setAmount, isSending, setGasConfig } = useTip()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || EthereumTokenType.Native,
-        token?.address || '',
-        chainId,
+        NetworkPluginID.PLUGIN_EVM,
+        token?.address,
+        { chainId },
     )
     const { gasPrice, gasConfig } = useGasConfig(chainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(chainId)
+    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
 
     const maxAmount = useMemo(() => {
@@ -36,7 +34,7 @@ export const TokenSection: FC = () => {
     useEffect(() => {
         if (isNativeToken) {
             setGasConfig(
-                isEIP1559Supported(chainId)
+                Others?.chainResolver.isSupport(chainId, '1559')
                     ? {
                           gas: GAS_LIMIT,
                           maxFeePerGas: gasConfig?.maxFeePerGas || defaultGasPrice,

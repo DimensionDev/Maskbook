@@ -3,7 +3,7 @@ export * from '../../../background/services/backup'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
 
-import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
 import {
     exportMnemonic,
     exportPrivateKey,
@@ -96,14 +96,16 @@ delegateWalletRestore(async function (backup) {
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
     const allSettled = await Promise.allSettled(
         (
-            await getWallets(ProviderType.MaskWallet)
-        ).map(async (wallet) => {
-            return {
-                ...wallet,
-                mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
-                privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
-            }
-        }),
+            await getWallets()
+        )
+            .filter((x) => x.storedKeyInfo)
+            .map(async (wallet) => {
+                return {
+                    ...wallet,
+                    mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
+                    privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
+                }
+            }),
     )
     const wallets_ = allSettled.map((x) => (x.status === 'fulfilled' ? WalletRecordToJSONFormat(x.value) : null))
     if (wallets_.some((x) => !x)) throw new Error('Failed to backup wallets.')
@@ -111,7 +113,7 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
 }
 
 async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const x = await getLegacyWallets(ProviderType.MaskWallet)
+    const x = await getLegacyWallets()
     return x.map(LegacyWalletRecordToJSONFormat)
 }
 

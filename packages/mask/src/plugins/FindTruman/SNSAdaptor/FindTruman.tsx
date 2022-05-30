@@ -19,9 +19,10 @@ import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
 import { PluginWalletConnectIcon } from '@masknet/icons'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -30,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
             '--tabHeight': '35px',
 
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
             position: 'relative',
         },
@@ -152,7 +152,7 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         postType,
         clueId,
@@ -272,13 +272,13 @@ export function FindTruman(props: FindTrumanProps) {
             </Card>
 
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId} renderInTimeline>
-                    <EthereumWalletConnectedBoundary
-                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                    <WalletConnectedBoundary
                         classes={{ button: classes.button }}
                         renderInTimeline
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     />
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

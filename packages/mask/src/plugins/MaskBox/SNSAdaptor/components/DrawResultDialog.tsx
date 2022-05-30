@@ -2,7 +2,6 @@ import { difference } from 'lodash-unified'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, DialogContent } from '@mui/material'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import type { BoxInfo } from '../../type'
 import { TokenCard } from './TokenCard'
 import { InjectedDialog } from '@masknet/shared'
@@ -10,6 +9,8 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { Context } from '../../hooks/useContext'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SharedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,7 +32,7 @@ export interface DrawResultDialogProps {
     open: boolean
     onClose: () => void
     boxInfo: BoxInfo
-    contractDetailed?: ERC721ContractDetailed
+    contractDetailed?: NonFungibleTokenContract<ChainId, SchemaType>
 }
 
 export function DrawResultDialog(props: DrawResultDialogProps) {

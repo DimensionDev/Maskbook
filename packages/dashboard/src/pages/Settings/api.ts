@@ -1,14 +1,8 @@
 import { createGlobalState } from '@masknet/shared-base-ui'
 import { Messages, Services } from '../../API'
-import type { DataProvider } from '@masknet/public-api'
 import type { AccountType, BackupFileInfo, Scenario, Locale } from './type'
 
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
-
-export const [useTrendingDataSource] = createGlobalState<DataProvider>(
-    Services.Settings.getTrendingDataSource,
-    Messages.events.currentDataProviderSettings.on,
-)
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 

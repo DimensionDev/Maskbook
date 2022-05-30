@@ -1,8 +1,9 @@
 import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import type { Wallet, NonFungibleAssetProvider, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -56,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     provider: NonFungibleAssetProvider
     wallet?: Wallet
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType>
     readonly?: boolean
     renderOrder: number
 }
@@ -66,20 +67,16 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { classes } = useStyles()
     const theme = useTheme()
     return (
-        <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.linkWrapper}
-            href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+        <Link target="_blank" rel="noopener noreferrer" className={classes.linkWrapper}>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
                 <NFTCardStyledAssetPlayer
-                    contractAddress={token.contractDetailed.address}
-                    chainId={token.contractDetailed.chainId}
-                    url={token.info.mediaUrl}
+                    contractAddress={token.address}
+                    chainId={token.chainId}
+                    url={token.metadata?.mediaURL}
                     renderOrder={renderOrder}
                     tokenId={token.tokenId}
                     classes={{

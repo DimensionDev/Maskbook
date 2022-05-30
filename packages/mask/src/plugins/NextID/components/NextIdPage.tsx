@@ -1,7 +1,8 @@
-import { NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
+import { uniqBy } from 'lodash-unified'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -109,6 +110,11 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
+    const ethereumProofs = useMemo(() => {
+        const proofs = bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+        return proofs ? uniqBy(proofs, (v) => v.identity) : EMPTY_LIST
+    }, [bindings?.proofs])
+
     if (personaActionButton) {
         return (
             <Stack justifyContent="center" direction="row" mt="24px">
@@ -148,12 +154,12 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum).length) {
+    if (ethereumProofs.length) {
         return (
             <>
                 <Box>
                     <Box>
-                        {bindings.proofs.map((x) => (
+                        {ethereumProofs.map((x) => (
                             <BindingItem
                                 deletable={isOwn}
                                 tipable={tipable}

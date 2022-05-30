@@ -1,4 +1,5 @@
-import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { API_URL } from '../constants'
 import type { Pool, TokenFaucet } from '../types'
 

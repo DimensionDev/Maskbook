@@ -4,14 +4,12 @@ import BigNumber from 'bignumber.js'
 import {
     ChainId,
     createContract,
-    FungibleTokenDetailed,
     getLidoConstants,
+    SchemaType,
     TransactionEventType,
-    TransactionState,
-    TransactionStateType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import { ProtocolType, SavingsProtocol } from '../types'
@@ -22,7 +20,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     readonly type = ProtocolType.Lido
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]) {}
 
     get apr() {
         return this._apr
@@ -83,48 +81,25 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(
-        account: string,
-        chainId: ChainId,
-        web3: Web3,
-        value: BigNumber.Value,
-        onChange: (state: TransactionState) => void,
-    ) {
-        try {
+    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        return new Promise<string>((resolve, reject) => {
             const contract = createContract<Lido>(
                 web3,
                 getLidoConstants(chainId).LIDO_stETH_ADDRESS || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
-            await contract?.methods
+            return contract?.methods
                 .submit(getLidoConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS)
                 .send({
                     from: account,
                     value: value.toString(),
                     gas: 300000,
                 })
-                .on(TransactionEventType.ERROR, (error) => {
-                    onChange({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
+                .once(TransactionEventType.ERROR, reject)
+                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
                 })
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                    onChange({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
-                    })
-                })
-            return true
-        } catch (error) {
-            onChange({
-                type: TransactionStateType.FAILED,
-                error: new Error('deposit failed'),
-            })
-            console.error('LDO `deposit()` Error', error)
-            return false
-        }
+        })
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
@@ -146,6 +121,6 @@ export class LidoProtocol implements SavingsProtocol {
          *         gasLimit: 2100000,
          *     })
          */
-        return false
+        return '0x'
     }
 }

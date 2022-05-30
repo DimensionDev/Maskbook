@@ -1,5 +1,6 @@
-import type { Asset, TransactionStateType } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
+import type { FungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType, TransactionStateType } from '@masknet/web3-shared-evm'
 
 export interface GameMetaData {
     contractAddress: string
@@ -61,8 +62,8 @@ export interface GameFinancialData {
 }
 
 export interface GameAssets {
-    gameAsset: Asset
-    rewardAsset: Asset
+    gameAsset: FungibleAsset<ChainId, SchemaType>
+    rewardAsset: FungibleAsset<ChainId, SchemaType>
 }
 
 export interface GameActionError {

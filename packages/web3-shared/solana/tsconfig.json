@@ -6,5 +6,10 @@
     "tsBuildInfoFile": "../dist/solana.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
-  "references": [{ "path": "../../web3-shared/base" }]
+  "references": [
+    { "path": "../../icons" },
+    { "path": "../../theme" },
+    { "path": "../../web3-shared/base" },
+    { "path": "../../web3-shared/evm" }
+  ]
 }

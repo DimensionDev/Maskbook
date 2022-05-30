@@ -1,11 +1,11 @@
 import { Typography, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
-import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -39,13 +39,9 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const chainId = useChainId()
-    const { value: histories, loading, retry } = useRedPacketHistory(account, chainId)
-
-    useEffect(() => {
-        retry()
-    }, [chainId])
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { value: histories, loading } = useRedPacketHistory(account, chainId)
 
     if (loading) {
         return (

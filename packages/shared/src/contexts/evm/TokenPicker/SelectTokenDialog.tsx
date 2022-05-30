@@ -1,9 +1,8 @@
+import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
-import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
@@ -47,13 +46,13 @@ export interface PickTokenOptions {
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: FungibleTokenDetailed[]
+    tokens?: Array<FungibleToken<ChainId, SchemaType>>
     selectedTokens?: string[]
+    onSubmit?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
     open: boolean
-    onSelect?(token: FungibleTokenDetailed): void
     onClose?(): void
 }
 
@@ -66,7 +65,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSelect,
+    onSubmit,
     onClose,
     title,
 }) => {
@@ -76,7 +75,6 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -88,15 +86,15 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             onClose={onClose}
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                <ERC20TokenList
+                <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSelect}
+                    onSelect={onSubmit}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }
-                    targetChainId={chainId}
+                    chainId={chainId}
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     FixedSizeListProps={{
