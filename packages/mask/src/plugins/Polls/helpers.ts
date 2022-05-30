@@ -1,4 +1,4 @@
-import { createTypedMessageMetadataReader, createRenderWithMetadata } from '@masknet/typed-message'
+import { createTypedMessageMetadataReader, createRenderWithMetadata } from '@masknet/typed-message/dom'
 import type { PollMetaData } from './types'
 import { PLUGIN_META_KEY } from './constants'
 import schema from './schema.json'

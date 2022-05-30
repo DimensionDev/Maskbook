@@ -1,12 +1,12 @@
 {
   "name": "@masknet/shared",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@masknet/icons": "workspace:*",
@@ -16,6 +16,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@types/qrcode": "^1.4.2",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",

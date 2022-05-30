@@ -78,7 +78,7 @@ export default function Welcome() {
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={async () => {
-                const url = await Services.SocialNetwork.setupSocialNetwork('twitter.com', false)
+                const url = await Services.SocialNetwork.setupSite('twitter.com', false)
                 if (url) location.assign(url)
             }}
             cancelHandler={() => window.close()}

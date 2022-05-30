@@ -1,20 +1,13 @@
 import { useCallback, useMemo } from 'react'
-import {
-    useChainId,
-    useFungibleTokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleTokenInitial,
-    useFungibleTokensDetailed,
-    isSameAddress,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
-import { useClassicMaskSNSPluginTheme } from '../../../utils'
+import { NetworkPluginID, isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ThemeProvider } from '@mui/material'
+import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useClassicMaskSNSPluginTheme } from '../../../utils'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -25,7 +18,7 @@ export function PostInspector(props: PostInspectorProps) {
     const isCompactPayload_ = isCompactPayload(props.payload)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         value: payload,
         error,
@@ -36,16 +29,15 @@ export function PostInspector(props: PostInspectorProps) {
     const _payload = payload ?? props.payload
     // To meet the max allowance of the data size of image steganography, we need to
     //  cut off some properties, such as save the token address string only.
-    const token = _payload.token as unknown as string | FungibleTokenDetailed
+    const token = _payload.token as unknown as string | FungibleToken<ChainId, SchemaType>
     const {
         value: tokenDetailed,
         loading: _loadingToken,
         retry: retryToken,
-    } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
-        typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
-        undefined,
-        _payload.chain_id,
+    } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        typeof token === 'string' ? (token as string) : (token as FungibleToken<ChainId, SchemaType>).address,
+        { chainId: _payload.chain_id },
     )
 
     const exchangeFungibleTokens = useMemo(
@@ -54,11 +46,13 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
-                            ? EthereumTokenType.Native
-                            : EthereumTokenType.ERC20,
+                        schema: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                         chainId: _payload.chain_id,
-                    } as Pick<FungibleTokenInitial, 'address' | 'type'>),
+                        type: TokenType.Fungible,
+                    } as Pick<
+                        FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                        'address' | 'type' | 'schema' | 'chainId'
+                    >),
             ),
         [JSON.stringify(_payload.exchange_tokens)],
     )
@@ -67,7 +61,9 @@ export function PostInspector(props: PostInspectorProps) {
         value: exchangeTokensDetailed,
         loading: loadingExchangeTokensDetailed,
         retry: retryExchangeTokensDetailed,
-    } = useFungibleTokensDetailed(exchangeFungibleTokens, _payload.chain_id)
+    } = useFungibleTokens(NetworkPluginID.PLUGIN_EVM, (exchangeFungibleTokens ?? []).map((t) => t.address) ?? [], {
+        chainId: _payload.chain_id,
+    })
 
     const retry = useCallback(() => {
         retryPayload()
@@ -90,7 +86,13 @@ export function PostInspector(props: PostInspectorProps) {
                 pid={pid}
                 payload={
                     typeof token === 'string'
-                        ? { ..._payload, token: tokenDetailed!, exchange_tokens: exchangeTokensDetailed! }
+                        ? {
+                              ..._payload,
+                              token: tokenDetailed! as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                              exchange_tokens: exchangeTokensDetailed! as Array<
+                                  FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
+                              >,
+                          }
                         : _payload
                 }
             />

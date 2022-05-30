@@ -1,9 +1,10 @@
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack, Box } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useFetchPools } from '../hooks/usePool'
 import type { Investable } from '../types'
 import { InvestmentsView } from './InvestmentsView'
@@ -14,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'Muli,Helvetica,-apple-system,system-ui,"sans-serif"',
         width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
     },
     content: {
@@ -54,7 +54,7 @@ export function FurucomboView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const { value, loading, error, retry } = useFetchPools()
 
@@ -94,14 +94,18 @@ export function FurucomboView(props: PoolViewProps) {
                 </Typography>
 
                 <Box sx={{ padding: 1.5 }}>
-                    <EthereumChainBoundary chainId={props.chainId} renderInTimeline />
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={props.chainId}
+                        renderInTimeline
+                    />
                 </Box>
             </>
         )
 
     return (
         <>
-            <Card className={classes.root}>
+            <Card className={classes.root} elevation={0}>
                 <CardContent className={classes.content}>
                     <Tabs
                         value={tabIndex}
@@ -120,7 +124,11 @@ export function FurucomboView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ padding: 1.5 }}>
-                <EthereumChainBoundary chainId={props.chainId} renderInTimeline />
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={props.chainId}
+                    renderInTimeline
+                />
             </Box>
         </>
     )

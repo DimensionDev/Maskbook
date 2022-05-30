@@ -1,5 +1,7 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, ERC721TokenDetailed, isSameAddress, SocketState, useCollectibles } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useCollectibles } from '../hooks/useCollectibles'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { downloadUrl } from '../../../utils'
@@ -11,7 +13,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { NetworkPluginID, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,9 +75,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isSameToken(token?: ERC721TokenDetailed, tokenInfo?: TokenInfo) {
+function isSameToken(token?: NonFungibleToken<ChainId, SchemaType>, tokenInfo?: TokenInfo) {
     if (!token && !tokenInfo) return false
-    return isSameAddress(token?.contractDetailed.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
+    return isSameAddress(token?.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
 }
 interface NFTListDialogProps {
     onNext: () => void
@@ -87,14 +89,14 @@ interface NFTListDialogProps {
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets, onSelected, tokenInfo } = props
     const { classes } = useStyles()
-
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed>()
+    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType>>()
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
-    const [tokens, setTokens] = useState<ERC721TokenDetailed[]>([])
+    const [tokens, setTokens] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
     const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
@@ -102,27 +104,22 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const {
-        data: collectibles,
-        error,
-        retry,
-        state,
-    } = useCollectibles(selectedAccount, currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic)
+    const { collectibles, retry, error, loading } = useCollectibles()
 
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
     }, [])
 
-    const onSelect = (token: ERC721TokenDetailed) => {
+    const onSelect = (token: NonFungibleToken<ChainId, SchemaType>) => {
         setSelectedToken(token)
     }
 
     const onSave = useCallback(async () => {
-        if (!selectedToken?.info?.imageURL) return
+        if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
         try {
-            const image = await downloadUrl(selectedToken.info.imageURL)
+            const image = await downloadUrl(selectedToken.metadata.imageURL)
             onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
             onNext()
             setDisabled(false)
@@ -146,8 +143,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
-    const onAddClick = (token: ERC721TokenDetailed) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contractDetailed.address && x.tokenId))
+    const onAddClick = (token: NonFungibleToken<ChainId, SchemaType>) => {
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
     const onChangePage = (name: Application_NFT_LIST_PAGE) => {
@@ -206,7 +203,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const NoNFTList = () => {
         if (currentPage === POLYGON_PAGE && tokens.length === 0) return AddCollectible
         else if (currentPage === POLYGON_PAGE && tokens.length) return
-        if (state !== SocketState.done) {
+        if (loading) {
             return LoadStatus
         }
         if (error) {
@@ -241,7 +238,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         address={selectedAccount}
                         onSelect={onSelect}
                         onChangePage={onChangePage}
-                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contractDetailed.address && x.tokenId)}
+                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contract?.address && x.id)}
                         children={NoNFTList()}
                     />
                 )}

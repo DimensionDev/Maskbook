@@ -18,15 +18,7 @@ setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
 setup('Identity', () => import(/* webpackPreload: true */ './identity'))
 setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
-setup('SocialNetwork', () =>
-    Promise.resolve({
-        // TODO: migration in process
-        getDefinedSocialNetworkUIs() {
-            return [{ networkIdentifier: 'twitter.com' }]
-        },
-        setupSocialNetwork() {},
-    }),
-)
+setup('SocialNetwork', () => import(/* webpackPreload: true */ './site-adaptors'))
 setup('Settings', () => import(/* webpackPreload: true */ './settings'))
 setup('ThirdPartyPlugin', () => Promise.resolve({}))
 

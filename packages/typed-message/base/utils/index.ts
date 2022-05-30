@@ -1,4 +1,3 @@
-export * from './metadata.js'
 export * from './extract.js'
 
 import type {

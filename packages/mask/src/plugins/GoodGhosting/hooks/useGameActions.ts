@@ -1,12 +1,15 @@
-import { TransactionEventType, TransactionStateType, useAccount, useGasPrice } from '@masknet/web3-shared-evm'
+import { TransactionEventType, TransactionStateType } from '@masknet/web3-shared-evm'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
 import type { TransactionReceipt } from 'web3-core'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useJoinGame(info: GoodGhostingInfo) {
-    const account = useAccount()
-    const contract = useGoodGhostingContract(info.contractAddress)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
     const canJoinGame =
         (!info.currentPlayer || info.currentPlayer.canRejoin) &&
         info.currentSegment === 0 &&
@@ -51,9 +54,9 @@ export function useJoinGame(info: GoodGhostingInfo) {
 }
 
 export function useMakeDeposit(info: GoodGhostingInfo) {
-    const account = useAccount()
-    const contract = useGoodGhostingContract(info.contractAddress)
-    const gasPrice = useGasPrice()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const status = getPlayerStatus(info, info.currentPlayer)
     const canMakeDeposit =
@@ -95,9 +98,9 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 }
 
 export function useWithdraw(info: GoodGhostingInfo) {
-    const account = useAccount()
-    const contract = useGoodGhostingContract(info.contractAddress)
-    const gasPrice = useGasPrice()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const canWithdraw = info.currentPlayer && !info.currentPlayer.withdrawn && info.gameHasEnded
 
@@ -133,9 +136,9 @@ export function useWithdraw(info: GoodGhostingInfo) {
 }
 
 export function useEarlyWithdraw(info: GoodGhostingInfo) {
-    const account = useAccount()
-    const contract = useGoodGhostingContract(info.contractAddress)
-    const gasPrice = useGasPrice()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const canEarlyWithdraw =
         info.currentPlayer && !info.currentPlayer.withdrawn && info.currentSegment < info.lastSegment

@@ -1,11 +1,7 @@
-import {
-    useAssets,
-    useChainId,
-    useERC20TokenContract,
-    useERC20TokenDetailed,
-    DAI,
-    WNATIVE as WETH,
-} from '@masknet/web3-shared-evm'
+import { useERC20TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { useChainId, useFungibleToken, useFungibleAssets } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { DAI, WNATIVE as WETH } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -14,11 +10,12 @@ import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIn
 import type { GameAssets, GoodGhostingInfo, LendingPoolData } from '../types'
 
 export function usePoolData(info: GoodGhostingInfo) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const rewardToken = useRewardToken()
-    const contract = useGoodGhostingContract(info.contractAddress)
-    const adaiContract = useERC20TokenContract(info.adaiTokenAddress)
-    const rewardTokenContract = useERC20TokenContract(rewardToken.address)
-    const incentivesContract = useGoodGhostingIncentiveContract()
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
+    const adaiContract = useERC20TokenContract(chainId, info.adaiTokenAddress)
+    const rewardTokenContract = useERC20TokenContract(chainId, rewardToken.address)
+    const incentivesContract = useGoodGhostingIncentiveContract(chainId)
     const [currentData, setCurrentData] = useState<LendingPoolData>()
 
     const asyncResult = useAsyncRetry(async () => {
@@ -45,16 +42,17 @@ export function usePoolData(info: GoodGhostingInfo) {
 }
 
 export function useGameToken() {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return DAI[chainId]
 }
 
 export function useRewardToken() {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return WETH[chainId]
 }
 
 export function usePoolAssets(): AsyncStateRetry<GameAssets> {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const gameToken = useGameToken()
     const rewardToken = useRewardToken()
 
@@ -63,17 +61,19 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
         loading: gameTokenLoading,
         error: gameTokenError,
         retry: gameTokenRetry,
-    } = useERC20TokenDetailed(gameToken.address)
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, gameToken.address, {
+        chainId,
+    })
     const {
         value: rewardTokenDetailed,
         loading: rewardTokenLoading,
         error: rewardTokenError,
         retry: rewardTokenRetry,
-    } = useERC20TokenDetailed(rewardToken.address)
+    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, rewardToken.address, {
+        chainId,
+    })
 
-    const assets = gameTokenDetailed && rewardTokenDetailed ? [gameTokenDetailed, rewardTokenDetailed] : []
-
-    const { value, loading, error, retry } = useAssets(assets)
+    const { value, loading, error, retry } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const assetRetry = () => {
         if (gameTokenError) gameTokenRetry()
@@ -83,8 +83,8 @@ export function usePoolAssets(): AsyncStateRetry<GameAssets> {
 
     let gameAssets
     if (value?.length) {
-        const gameAsset = value.find((asset) => asset.token.address === gameToken.address)
-        const rewardAsset = value.find((asset) => asset.token.address === rewardToken.address)
+        const gameAsset = value.find((asset) => asset.address === gameToken.address)
+        const rewardAsset = value.find((asset) => asset.address === rewardToken.address)
         gameAssets = {
             gameAsset,
             rewardAsset,

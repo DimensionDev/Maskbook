@@ -2,16 +2,16 @@
   "name": "@masknet/dashboard",
   "private": true,
   "description": "New dashboard of Mask Network",
-  "types": "./dist/src/entry.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/entry.tsx",
       "default": "./dist/src/entry.js"
     }
   },
+  "types": "./dist/src/entry.d.ts",
   "scripts": {
-    "storybook": "dev -- start-storybook -p 6006",
-    "build-storybook": "build -- build-storybook"
+    "build-storybook": "build -- build-storybook",
+    "storybook": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
@@ -19,6 +19,7 @@
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
+    "@masknet/plugin-evm": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
@@ -32,6 +33,8 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.3",

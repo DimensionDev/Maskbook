@@ -5,7 +5,7 @@ import {
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
@@ -13,7 +13,6 @@ import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 const useStyles = makeStyles()((theme) => ({
     sup: {

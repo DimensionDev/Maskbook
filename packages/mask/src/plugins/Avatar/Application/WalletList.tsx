@@ -1,6 +1,6 @@
 import { ImageIcon, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, MaskColorVar, ShadowRootMenu, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, Divider, IconProps, Link, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useEffect, useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -11,7 +11,6 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import {
-    NetworkPluginID,
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
@@ -28,6 +27,7 @@ import { VerifyIcon } from '../assets/verify'
 import { noop } from 'lodash-unified'
 import { Verify2Icon } from '../assets/Verify2'
 import { formatAddress } from '../utils'
+import { explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -111,7 +111,7 @@ export function AddressNames(props: AddressNamesProps) {
     }, [chainId])
 
     const onConnectWallet = useCallback(() => {
-        openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })
+        openSelectProviderDialog({ open: true })
         onClose()
     }, [openSelectProviderDialog, onClose])
 
@@ -260,14 +260,14 @@ interface WalletUIProps {
 }
 
 function WalletUI(props: WalletUIProps) {
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const { isETH, address, verify = false } = props
 
     const { classes } = useWalletUIStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const networkDescriptor = useNetworkDescriptor(chainId, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
-    const { value: domain } = useReverseAddress(address, NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
@@ -291,7 +291,7 @@ function WalletUI(props: WalletUIProps) {
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(chainId, address) ?? ''}
+                        href={explorerResolver.addressLink?.(chainId, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">

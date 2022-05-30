@@ -1,4 +1,5 @@
-import { type TypedMessage, createTypedMessageMetadataReader } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
+import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { META_KEY_1, META_KEY_2 } from './constants'
 import { FileInfo, FileInfoV1, Provider } from './types'
 import schemaV1 from './schema-v1.json'
@@ -29,7 +30,10 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
     const key = await crypto.subtle.generateKey({ name: 'HMAC', hash: { name: 'SHA-256' } }, true, ['sign', 'verify'])
     const exportedKey = await crypto.subtle.exportKey('raw', key)
     const signed = await crypto.subtle.sign({ name: 'HMAC' }, key, encodedKey)
-    return [signed, exportedKey].map(encodeArrayBuffer)
+    const buf = new Uint8Array(exportedKey.byteLength + signed.byteLength)
+    buf.set(new Uint8Array(exportedKey), 0)
+    buf.set(new Uint8Array(signed), exportedKey.byteLength)
+    return encodeArrayBuffer(buf)
 }
 
 export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(

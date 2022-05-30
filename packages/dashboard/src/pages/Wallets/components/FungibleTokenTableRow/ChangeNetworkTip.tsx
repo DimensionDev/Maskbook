@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Link, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@masknet/theme'
-import { useNetworkDescriptors, useProviderDescriptor, useWeb3UI } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptors, useProviderDescriptor, useWeb3UI, Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ChangeNetworkTipProps {
     chainId?: number
@@ -11,9 +11,10 @@ interface ChangeNetworkTipProps {
 export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
     const t = useDashboardI18N()
 
-    const providerDescriptor = useProviderDescriptor()
-    const { NetworkIconClickBait } = useWeb3UI().SelectNetworkMenu ?? {}
-    const networkDescriptors = useNetworkDescriptors()
+    const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
+    const networkDescriptors = useNetworkDescriptors() as Web3Helper.NetworkDescriptorAll[]
+    const Web3UI = useWeb3UI() as Web3Helper.Web3UIAll
+    const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
     const targetNetwork = networkDescriptors.find((x) => x.chainId === chainId)
 
     if (!chainId) return null
