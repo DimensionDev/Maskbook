@@ -29,7 +29,7 @@ export interface TokenProps {
     address: string
     symbol?: string
     name?: string
-    logoURI?: string | string[]
+    logoURI?: string
     chainId?: ChainId
 }
 

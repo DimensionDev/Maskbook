@@ -38,7 +38,7 @@ export interface PageHistory {
     title: string
 }
 
-export type FungibleTokenDetailed = FungibleToken<ChainIdEnum, SchemaType.ERC20>
+export type FungibleTokenDetailed = FungibleToken<ChainIdEnum, SchemaType>
 
 export interface DepositProps {
     totalFarmReward: string

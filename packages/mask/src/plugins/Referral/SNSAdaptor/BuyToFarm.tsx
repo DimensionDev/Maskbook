@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Web3 } from '@masknet/web3-shared-evm'
+import type { Web3 } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

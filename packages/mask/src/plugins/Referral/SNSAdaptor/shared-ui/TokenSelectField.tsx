@@ -1,7 +1,8 @@
 import { useCallback, CSSProperties } from 'react'
 import { TextField, InputAdornment } from '@mui/material'
 import { ChevronDown } from 'react-feather'
-import type { EthereumTokenDetailedType, EthereumTokenType } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles()(() => ({
 
 interface TokenSelectField {
     label: string
-    token?: EthereumTokenDetailedType<EthereumTokenType.Native | EthereumTokenType.ERC20>
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     disabled?: boolean
     style?: CSSProperties
     onClick: () => void

@@ -3,7 +3,8 @@ import { useAsync } from 'react-use'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useWeb3, useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useWeb3, useAccount } from '@masknet/plugin-infra/web3'
+import type { Web3 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TokenIcon } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
@@ -27,8 +28,6 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
 import { IconURLs } from '../assets'
-
-import { useSharedStyles } from './styles'
 
 interface FarmPostProps {
     payload: ReferralMetaData
@@ -66,8 +65,6 @@ export function FarmPost(props: FarmPostProps) {
     const farmChainId = payload.referral_token_chain_id
 
     const { classes } = useStyles()
-    const { classes: sharedClasses } = useSharedStyles()
-    const chainId = useChainId()
     const web3 = useWeb3()
     const account = useAccount()
     const t = useI18N()
