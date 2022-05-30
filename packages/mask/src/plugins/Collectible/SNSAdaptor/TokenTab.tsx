@@ -4,16 +4,12 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import {
-    resolveAddressLinkOnExplorer,
-    getChainName,
-    ChainId,
-    useChainId,
-    formatEthereumAddress,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea, resolveUserUrlOnCurrentProvider } from '../pipes'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -66,10 +62,11 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider } = CollectibleState.useContainer()
 
     if (!asset.value) return null
+
     return (
         <CollectibleTab classes={{ content: classes.content }}>
             <Box className={classes.container}>
@@ -82,16 +79,13 @@ export function TokenTab(props: TokenTabProps) {
                         <Link
                             href={resolveUserUrlOnCurrentProvider(
                                 chainId,
-                                asset.value.creator.address,
+                                asset.value.creator?.address ?? '',
                                 provider,
-                                asset.value.creator.user?.username,
+                                asset.value.creator.nickname,
                             )}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Account
-                                address={asset.value.creator.address}
-                                username={asset.value.creator.user?.username}
-                            />
+                            <Account address={asset.value.creator.address} username={asset.value.creator.nickname} />
                         </Link>
                     </Typography>
                 ) : asset.value.owner ? (
@@ -100,20 +94,17 @@ export function TokenTab(props: TokenTabProps) {
                         <Link
                             href={resolveUserUrlOnCurrentProvider(
                                 chainId,
-                                asset.value.owner?.address,
+                                asset.value.owner?.address ?? '',
                                 provider,
-                                asset.value.owner?.user?.username,
+                                asset.value.owner?.nickname,
                             )}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Account
-                                address={asset.value.owner?.user?.username}
-                                username={asset.value.owner?.address}
-                            />
+                            <Account address={asset.value.owner?.nickname} username={asset.value.owner?.address} />
                         </Link>
                     </Typography>
                 ) : null}
-                <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
+                <Markdown classes={{ root: classes.markdown }} content={asset.value?.metadata?.description ?? ''} />
             </Box>
 
             {asset.value.traits?.length ? (
@@ -123,20 +114,20 @@ export function TokenTab(props: TokenTabProps) {
                     </Typography>
 
                     <Box className={classes.trait_content}>
-                        {asset.value.traits.map(({ trait_type, value }, key) => (
+                        {asset.value.traits.map(({ type, value }, key) => (
                             <Link
                                 underline="none"
                                 key={key}
                                 href={
-                                    asset.value?.slug
-                                        ? resolveTraitLinkOnOpenSea(chainId, asset.value.slug, trait_type, value)
+                                    asset.value?.collection?.slug
+                                        ? resolveTraitLinkOnOpenSea(chainId, asset.value.collection?.slug, type, value)
                                         : ''
                                 }
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Paper className={classes.trait} variant="outlined">
                                     <Typography variant="body2" color="primary">
-                                        {trait_type}
+                                        {type}
                                     </Typography>
                                     <Typography variant="body2">{value}</Typography>
                                 </Paper>
@@ -146,13 +137,13 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
             ) : null}
 
-            {asset.value.asset_contract ? (
+            {asset.value.contract ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                        {t('plugin_collectible_about')} {asset.value.asset_contract.name}
+                        {t('plugin_collectible_about')} {asset.value.contract.name}
                     </Typography>
                     <Typography className={classes.description} variant="body2">
-                        {asset.value.asset_contract?.description}
+                        {asset.value.metadata?.description}
                     </Typography>
                 </Box>
             ) : null}
@@ -165,7 +156,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, token?.contractAddress ?? '')}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
@@ -185,7 +176,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">{getChainName(chainId)}</Typography>
+                    <Typography variant="body2">{chainResolver.chainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>

@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
@@ -9,6 +9,7 @@ import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@maskne
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -122,7 +123,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
         }, [])
 
         // TODO: remove this after next dot id support multiple chain
-        const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+        const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
 
         if (loading)
             return (
@@ -152,7 +153,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                     <CopyIconButton text={wallet.identity} className={classes.icon} />
                                     <Link
                                         style={{ width: 16, height: 16 }}
-                                        href={resolveAddressLinkOnExplorer(chainId, wallet.identity ?? '')}
+                                        href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <PopupLinkIcon className={classes.icon} />

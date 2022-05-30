@@ -30,7 +30,10 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
     const key = await crypto.subtle.generateKey({ name: 'HMAC', hash: { name: 'SHA-256' } }, true, ['sign', 'verify'])
     const exportedKey = await crypto.subtle.exportKey('raw', key)
     const signed = await crypto.subtle.sign({ name: 'HMAC' }, key, encodedKey)
-    return [signed, exportedKey].map(encodeArrayBuffer)
+    const buf = new Uint8Array(exportedKey.byteLength + signed.byteLength)
+    buf.set(new Uint8Array(exportedKey), 0)
+    buf.set(new Uint8Array(signed), exportedKey.byteLength)
+    return encodeArrayBuffer(buf)
 }
 
 export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(

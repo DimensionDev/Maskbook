@@ -1,24 +1,16 @@
 import { makeStyles } from '@masknet/theme'
-import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, isGreaterThan, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatBalance,
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-    useFungibleTokenBalance,
-    useITOConstants,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { usePickToken } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -36,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface UnlockDialogProps {
-    tokens: ERC20TokenDetailed[]
+    tokens: Array<FungibleToken<ChainId, SchemaType.ERC20>>
 }
 
 export function UnlockDialog(props: UnlockDialogProps) {
@@ -45,10 +37,10 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { classes } = useStyles()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region select token
-    const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
+    const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
     const pickToken = usePickToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
@@ -57,14 +49,14 @@ export function UnlockDialog(props: UnlockDialogProps) {
             selectedTokens: token?.address ? [token.address] : [],
             whitelist: tokens.map((x) => x.address),
         })
-        if (picked) setToken(picked as ERC20TokenDetailed)
+        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.ERC20>)
     }, [tokens, token?.address])
     // #endregion
     // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type ?? EthereumTokenType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         token?.address ?? '',
     )
     // #endregion
@@ -93,7 +85,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}
+                                    href={explorerResolver.addressLink(chainId, ITO2_CONTRACT_ADDRESS)}
                                 />
                             ),
                         }}
@@ -104,7 +96,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     />
                 </Typography>
             ) : null}
-            <EthereumWalletConnectedBoundary>
+            <WalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={amount.toFixed()}
                     spender={ITO2_CONTRACT_ADDRESS}
@@ -122,7 +114,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                         </ActionButton>
                     )}
                 </EthereumERC20TokenApprovedBoundary>
-            </EthereumWalletConnectedBoundary>
+            </WalletConnectedBoundary>
         </div>
     )
 }

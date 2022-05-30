@@ -1,41 +1,31 @@
-import { unreachable } from '@dimensiondev/kit'
-import { getOrderUnitPrice } from '@masknet/web3-providers'
-import { ZERO } from '@masknet/web3-shared-base'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { head } from 'lodash-unified'
-import type { Order } from 'opensea-js/lib/types'
 import { useAsyncRetry } from 'react-use'
-import { PluginCollectibleRPC } from '../messages'
-import type { AssetOrder, CollectibleToken } from '../types'
+import type { Order } from 'opensea-js/lib/types'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import type { AssetOrder } from '../../../../../web3-providers/src/opensea/types'
+import { isOpenSeaSupportedChainId } from '../pipes'
+import { useOpenSea } from './useOpenSea'
 
-export function useAssetOrder(provider: NonFungibleAssetProvider, token?: CollectibleToken) {
+export function useAssetOrder(address?: string, tokenId?: string) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const SDK = useOpenSea(isOpenSeaSupportedChainId(chainId) ? chainId : undefined)
     return useAsyncRetry(async () => {
-        if (!token?.contractAddress || !token?.tokenId) return
-        switch (provider) {
-            case NonFungibleAssetProvider.OPENSEA:
-                const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
-                const getPrice = (order: Order | AssetOrder) => {
-                    const _order = order as AssetOrder
-                    return (
-                        getOrderUnitPrice(
-                            _order.currentPrice,
-                            _order.paymentTokenContract?.decimals,
-                            _order.quantity,
-                        ) ?? ZERO
-                    )
-                }
-
-                const sellOrders = openSeaResponse.sellOrders ?? []
-                const desktopOrder = head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
-                return desktopOrder
-            case NonFungibleAssetProvider.RARIBLE:
-                return
-            case NonFungibleAssetProvider.NFTSCAN:
-                return
-            case NonFungibleAssetProvider.ZORA:
-                return
-            default:
-                unreachable(provider)
+        if (!address || !tokenId) return
+        const asset = await SDK?.api.getAsset({
+            tokenAddress: address,
+            tokenId,
+        })
+        const getPrice = (order: Order | AssetOrder) => {
+            const _order = order as AssetOrder
+            return (
+                getOrderUnitPrice(_order.current_bounty, _order.payment_token_contract?.decimals, _order.quantity) ??
+                ZERO
+            )
         }
-    }, [provider, token?.contractAddress, token?.tokenId])
+
+        const sellOrders = asset?.sellOrders ?? []
+        return head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
+    }, [address, tokenId, SDK])
 }

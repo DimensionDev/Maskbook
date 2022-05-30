@@ -1,6 +1,8 @@
 import { compact } from 'lodash-unified'
-import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
-import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../../types'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { RedPacketJSONPayload, RedPacketStatus } from '../../types'
 import { useAvailability } from './useAvailability'
 
 /**
@@ -8,12 +10,19 @@ import { useAvailability } from './useAvailability'
  * @param payload
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
-    const chainId = useChainId()
-    const parsedChainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
-    const asyncResult = useAvailability(payload.contract_version, account, payload.rpid, parsedChainId)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const parsedChainId =
+        payload.token?.chainId ??
+        networkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
+        ChainId.Mainnet
+
+    const asyncResult = useAvailability(payload.rpid, payload.contract_address, payload.contract_version, {
+        account,
+        chainId: parsedChainId,
+    })
 
     const result = asyncResult
-    const availability = result.value as RedPacketAvailability
+    const availability = result.value
 
     if (!availability)
         return {
@@ -27,8 +36,8 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = availability.claimed_amount ? availability.claimed_amount !== '0' : availability.ifclaimed
-    const isRefunded = isEmpty && Number.parseInt(availability.claimed, 10) < Number.parseInt(availability.total, 10)
+    const isClaimed = availability.claimed_amount !== '0'
+    const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = Boolean(payload.password && payload.password !== 'PASSWORD INVALID')
     return {

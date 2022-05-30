@@ -1,16 +1,17 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId, useWeb3State } from '.'
-import type { NetworkPluginID } from '../web3-types'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '../web3-helpers'
+import { useAccount } from './useAccount'
+import { useWeb3Connection } from './useWeb3Connection'
 
-export function useBalance(expectedChainId?: number, expectedAccount?: string, pluginID?: NetworkPluginID) {
-    const { Utils } = useWeb3State()
-    const defaultChainId = useChainId(pluginID)
-    const defaultAccount = useAccount(pluginID)
+export function useBalance<T extends NetworkPluginID>(pluginID?: T, options?: Web3Helper.Web3ConnectionOptions<T>) {
+    type GetBalance = (account: string, options?: Web3Helper.Web3ConnectionOptions<T>) => Promise<string>
 
-    const chainId = expectedChainId ?? defaultChainId
-    const account = expectedAccount ?? defaultAccount
+    const account = useAccount(pluginID, options?.account)
+    const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        return Utils?.getLatestBalance?.(chainId, account) ?? '0'
-    }, [account, chainId, Utils])
+        if (!connection) return '0'
+        return (connection.getBalance as GetBalance)(account)
+    }, [account, connection])
 }

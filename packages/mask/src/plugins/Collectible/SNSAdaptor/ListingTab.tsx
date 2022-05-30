@@ -6,10 +6,9 @@ import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
-import { TableListPagination } from './Pagination'
-import { NonFungibleAssetProvider, useAccount } from '@masknet/web3-shared-evm'
-import { isOne, isZero } from '@masknet/web3-shared-base'
+import { CurrencyType, isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
 import { LoadingAnimation } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -40,18 +39,18 @@ const useStyles = makeStyles()((theme) => {
 export function ListingTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const { token, asset, provider, orders, orderPage, setOrderPage } = CollectibleState.useContainer()
+    const { asset, provider } = CollectibleState.useContainer()
+
+    const orders = asset.value?.orders?.filter((x) => x.side === OrderSide.Sell) ?? EMPTY_LIST
 
     const isDifferenceToken = useMemo(() => {
-        if (provider === NonFungibleAssetProvider.OPENSEA) {
+        if (provider === SourceType.OpenSea) {
             return (
-                orders.value?.data.some(
+                orders.some(
                     (item) =>
-                        (item.payment_token_contract?.symbol !== 'WETH' &&
-                            item.payment_token_contract?.symbol !== 'ETH') ||
+                        (item.paymentToken?.symbol !== 'WETH' && item.paymentToken?.symbol !== 'ETH') ||
                         (item.quantity && !isOne(item.quantity)),
-                ) && orders.value?.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && orders.filter((item) => isZero(item.expiredAt ?? 0)).length === 0
             )
         } else {
             return false
@@ -59,17 +58,17 @@ export function ListingTab() {
     }, [provider, orders])
 
     const dataSource = useMemo(() => {
-        if (!orders.value || !orders.value?.data.length) return []
-        return orders.value.data.sort((a, b) => {
-            const current = new BigNumber(a.current_price ?? 0)
-            const next = new BigNumber(b.current_price ?? 0)
+        if (!orders.length) return []
+        return orders.sort((a, b) => {
+            const current = new BigNumber(a.price?.[CurrencyType.USD] ?? 0)
+            const next = new BigNumber(b.price?.[CurrencyType.USD] ?? 0)
             if (current.isLessThan(next)) return -1
             else if (current.isGreaterThan(next)) return 1
             return 0
         })
     }, [orders, asset.value])
 
-    if (asset.loading || orders.loading)
+    if (asset.loading)
         return (
             <div className={classes.empty}>
                 <LoadingAnimation />
@@ -112,7 +111,7 @@ export function ListingTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                {provider === NonFungibleAssetProvider.OPENSEA ? (
+                                {provider === SourceType.OpenSea ? (
                                     <TableCell>{t('plugin_collectible_expiration')}</TableCell>
                                 ) : null}
                             </>
@@ -121,19 +120,9 @@ export function ListingTab() {
                 </TableHead>
                 <TableBody>
                     {dataSource.map((order) => (
-                        <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
+                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === NonFungibleAssetProvider.OPENSEA && dataSource.length) || orderPage > 0 ? (
-                    <TableListPagination
-                        handlePrevClick={() => setOrderPage((prev) => prev - 1)}
-                        handleNextClick={() => setOrderPage((prev) => prev + 1)}
-                        prevDisabled={orderPage === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={orderPage}
-                        pageCount={10}
-                    />
-                ) : null}
             </Table>
         </CollectibleTab>
     )

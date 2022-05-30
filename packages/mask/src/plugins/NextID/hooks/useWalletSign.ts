@@ -1,6 +1,6 @@
 import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
-import Services from '../../../extension/service'
+import { WalletRPC } from '../../Wallet/messages'
 import { useI18N } from '../locales'
 
 export const useWalletSign = (message?: string, address?: string) => {
@@ -13,7 +13,7 @@ export const useWalletSign = (message?: string, address?: string) => {
             if (!address || !message) return
             try {
                 showSnackbar(t.notify_wallet_sign(), { processing: true, message: t.notify_wallet_sign_confirm() })
-                const result = await Services.Ethereum.personalSign(message, address)
+                const result = await WalletRPC.signPersonalMessage(message, address)
                 return result
             } catch {
                 showSnackbar(t.notify_wallet_sign(), { variant: 'error', message: t.notify_wallet_sign_cancel() })

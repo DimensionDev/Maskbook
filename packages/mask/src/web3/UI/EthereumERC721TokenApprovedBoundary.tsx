@@ -1,17 +1,16 @@
-import {
-    useERC721ContractIsApproveForAll,
-    useERC721ContractSetApproveForAllCallback,
-    TransactionStateType,
-    ERC721ContractDetailed,
-    resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared-evm'
+import { explorerResolver, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { useMemo, useEffect } from 'react'
+import { useMemo, useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import {
+    useERC721ContractIsApproveForAll,
+    useERC721ContractSetApproveForAllCallback,
+} from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()(() => ({
     snackBarText: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles()(() => ({
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
     owner: string | undefined
-    contractDetailed: ERC721ContractDetailed | undefined
+    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | undefined
     validationMessage?: string
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps
@@ -48,45 +47,39 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
-    const [approveState, approveCallback, resetCallback] = useERC721ContractSetApproveForAllCallback(
+    const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
         contractDetailed?.address,
         operator,
         true,
     )
     const { showSnackbar } = useCustomSnackbar()
 
-    useEffect(() => {
-        if (approveState.type === TransactionStateType.CONFIRMED && approveState.no === 0) {
-            showSnackbar(
-                <div className={classes.snackBar}>
-                    <Typography className={classes.snackBarText}>
-                        {t('plugin_wallet_approve_all_nft_successfully', { symbol: contractDetailed?.symbol })}
-                    </Typography>
-                    <Link
-                        href={resolveTransactionLinkOnExplorer(
-                            contractDetailed!.chainId,
-                            approveState.receipt.transactionHash,
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={classes.snackBarLink}>
-                        <OpenInNewIcon className={classes.openIcon} />
-                    </Link>
-                </div>,
-                {
-                    variant: 'success',
-                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                },
-            )
-            resetCallback()
-            retry()
-        } else if (approveState.type === TransactionStateType.FAILED) {
-            showSnackbar(approveState.error.message, {
-                variant: 'error',
-            })
-            resetCallback()
+    const approve = useCallback(async () => {
+        const hash = await approveCallback()
+        if (typeof hash !== 'string') {
+            showSnackbar(approveState.error?.message)
+            return
         }
-    }, [approveState, contractDetailed])
+        showSnackbar(
+            <div className={classes.snackBar}>
+                <Typography className={classes.snackBarText}>
+                    {t('plugin_wallet_approve_all_nft_successfully', { symbol: contractDetailed?.symbol })}
+                </Typography>
+                <Link
+                    href={explorerResolver.transactionLink(contractDetailed!.chainId, hash)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.snackBarLink}>
+                    <OpenInNewIcon className={classes.openIcon} />
+                </Link>
+            </div>,
+            {
+                variant: 'success',
+                anchorOrigin: { horizontal: 'right', vertical: 'top' },
+            },
+        )
+        retry()
+    }, [showSnackbar, approveState, retry, contractDetailed])
 
     const validationMessage = useMemo(() => {
         if (!contractDetailed?.address || !EthereumAddress.isValid(contractDetailed?.address))
@@ -97,7 +90,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         return ''
     }, [contractDetailed, owner, operator, _validationMessage])
 
-    if ([TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(approveState.type)) {
+    if (approveState.loading) {
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -111,7 +104,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                     symbol: contractDetailed?.symbol
                         ? contractDetailed.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed.symbol
+                            : contractDetailed?.symbol
                         : 'All',
                 })}
             </ActionButton>
@@ -147,13 +140,13 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 variant="contained"
                 size="large"
                 fullWidth
-                onClick={approveCallback}
+                onClick={approve}
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_approve_all_nft', {
                     symbol: contractDetailed?.symbol
-                        ? contractDetailed.symbol.toLowerCase() === 'unknown'
+                        ? contractDetailed?.symbol.toLowerCase() === 'unknown'
                             ? 'All'
-                            : contractDetailed.symbol
+                            : contractDetailed?.symbol
                         : 'All',
                 })}
             </ActionButton>

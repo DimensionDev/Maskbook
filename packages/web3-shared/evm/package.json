@@ -1,22 +1,24 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/evm/index.js"
     }
   },
-  "sideEffects": false,
+  "types": "./dist/index.d.ts",
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
-    "@types/ethereum-blockies": "^0.1.0",
-    "@types/punycode": "^2.1.0",
+    "@toruslabs/torus-embed": "^1.22.6",
+    "@walletconnect/client": "^1.7.5",
+    "@walletconnect/qrcode-modal": "^1.7.5",
     "bignumber.js": "9.0.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
@@ -30,9 +32,13 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.7.3",
     "web3-core-helpers": "1.7.3",
+    "web3-eth-contract": "1.7.3",
     "web3-utils": "1.7.3"
   },
   "devDependencies": {
+    "@masknet/injected-script": "*",
+    "@types/ethereum-blockies": "^0.1.0",
+    "@types/punycode": "^2.1.0",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4"
   }

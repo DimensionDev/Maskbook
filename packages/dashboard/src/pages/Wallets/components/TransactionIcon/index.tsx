@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
-import { FilterTransactionType, isSameAddress, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import classNames from 'classnames'
@@ -29,7 +30,7 @@ const useStyles = makeStyles()(() => ({
 
 export interface TransactionIconProps {
     type?: string
-    transactionType: string
+    transactionType?: string
     address: string
     failed: boolean
 }
@@ -52,7 +53,7 @@ export interface TransactionIconUIProps {
     isRedPacket: boolean
     isFailed: boolean
     type?: string
-    transactionType: string
+    transactionType?: string
 }
 
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, type, transactionType }) => {

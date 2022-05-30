@@ -4,9 +4,15 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    FungibleToken,
+    isLessThan,
+    formatBalance,
+    NetworkPluginID,
+    rightShift,
+    Wallet,
+} from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -24,11 +30,12 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -173,10 +180,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 })
 
 export interface AllTradeFormProps {
-    wallet?: Wallet
+    wallet?: Wallet | null
     inputAmount: string
-    inputToken?: FungibleTokenDetailed
-    outputToken?: FungibleTokenDetailed
+    inputToken?: FungibleToken<ChainId, SchemaType>
+    outputToken?: FungibleToken<ChainId, SchemaType>
     inputTokenBalance?: string
     outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
@@ -213,6 +220,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+        const { isSwapping } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
         // #region approve token
@@ -450,10 +458,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                     {wallet ? (
                         <Box className={classes.section}>
-                            <EthereumChainBoundary
-                                chainId={chainId}
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                expectedChainId={chainId}
                                 noSwitchNetworkTip
-                                disablePadding
                                 className={classes.chainBoundary}
                                 ActionButtonPromiseProps={{
                                     fullWidth: true,
@@ -465,7 +473,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     amount={approveAmount.toFixed()}
                                     token={
                                         !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.type === EthereumTokenType.ERC20 &&
+                                        approveToken?.schema === SchemaType.ERC20 &&
                                         !!approveAmount.toNumber()
                                             ? approveToken
                                             : undefined
@@ -508,9 +516,15 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
+                                                loading={isSwapping}
                                                 variant="contained"
                                                 color="error"
-                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                disabled={
+                                                    focusedTrade?.loading ||
+                                                    !focusedTrade?.value ||
+                                                    disable ||
+                                                    isSwapping
+                                                }
                                                 classes={{ root: classes.button, disabled: classes.disabledButton }}
                                                 onClick={onSwap}>
                                                 {t('plugin_trader_confirm_price_impact', {
@@ -520,12 +534,14 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         ) : (
                                             <ActionButton
                                                 fullWidth
+                                                loading={isSwapping}
                                                 variant="contained"
                                                 disabled={
                                                     focusedTrade?.loading ||
                                                     !focusedTrade?.value ||
                                                     !!validationMessage ||
-                                                    disable
+                                                    disable ||
+                                                    isSwapping
                                                 }
                                                 classes={{ root: classes.button, disabled: classes.disabledButton }}
                                                 color="primary"
@@ -535,7 +551,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         )
                                     }
                                 />
-                            </EthereumChainBoundary>
+                            </ChainBoundary>
                         </Box>
                     ) : null}
                 </Box>

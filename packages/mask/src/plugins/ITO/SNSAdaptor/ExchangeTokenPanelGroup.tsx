@@ -3,7 +3,6 @@ import { InputAdornment } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {
@@ -12,6 +11,8 @@ import {
     useExchangeTokenAndAmount,
 } from './hooks/useExchangeTokenAmountstate'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     arrow: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ExchangeTokenPanelGroupProps {
-    token: FungibleTokenDetailed | undefined
+    token: FungibleToken<ChainId, SchemaType> | undefined
     origin: ExchangeTokenAndAmountState[]
     onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
 }
@@ -58,7 +59,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     )
 
     const onTokenChange = useCallback(
-        (token: FungibleTokenDetailed, key: string) => {
+        (token: FungibleToken<ChainId, SchemaType>, key: string) => {
             dispatchExchangeTokenArray({
                 type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN,
                 token,

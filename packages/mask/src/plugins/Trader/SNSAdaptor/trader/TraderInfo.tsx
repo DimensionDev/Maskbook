@@ -1,27 +1,21 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import {
-    createNativeToken,
-    formatBalance,
-    formatPercentage,
-    formatUSD,
-    formatWeiToEther,
-} from '@masknet/web3-shared-evm'
+import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
 import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
@@ -105,7 +99,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     // #endregion
 
     const nativeToken = createNativeToken(targetChainId)
-    const tokenPrice = useNativeTokenPrice(targetChainId)
+    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
 
     const gasFee = useMemo(() => {
         return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0

@@ -1,17 +1,8 @@
-import {
-    ChainId,
-    FungibleTokenDetailed,
-    FungibleTokenOutMask,
-    getTokenConstants,
-    getRedPacketConstants,
-    resolveChainName,
-    isSameAddress,
-    getChainDetailed,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, getTokenConstants, getRedPacketConstants, chainResolver } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 import type { RedPacketJSONPayload } from '../../types'
 
 const TOKEN_FIELDS = `
@@ -68,14 +59,16 @@ type RedpacketFromSubgraphType = {
     message: string
     rpid: string
     shares: number
-    token: FungibleTokenOutMask
+    token: Omit<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>, 'chainId'> & {
+        chain_id: ChainId
+    }
     total: string
     total_remaining: string
     txid: string
 }
 
-async function fetchFromRedPacketSubgraph<T>(query: string) {
-    const { SUBGRAPH_URL } = getRedPacketConstants(currentChainIdSettings.value)
+async function fetchFromRedPacketSubgraph<T>(chainId: ChainId, query: string) {
+    const { SUBGRAPH_URL } = getRedPacketConstants(chainId)
     if (!SUBGRAPH_URL) return null
     try {
         const response = await fetch(SUBGRAPH_URL, {
@@ -92,36 +85,45 @@ async function fetchFromRedPacketSubgraph<T>(query: string) {
     }
 }
 
-export async function getRedPacketTxid(rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+export async function getRedPacketTxid(chainId: ChainId, rpid: string) {
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+        chainId,
+        `
     {
         redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
             txid
         }
     }
-    `)
+    `,
+    )
     return first(data?.redPackets)?.txid
 }
 
-export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(currentChainIdSettings.value)
+export async function getRedPacketHistory(chainId: ChainId, address: string) {
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
 
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
+        chainId,
+        `
     {
         redPackets (where: { creator: "${address.toLowerCase()}" }) {
             ${RED_PACKET_FIELDS}
         }
     }
-    `)
+    `,
+    )
 
     if (!data?.redPackets) return []
 
     return data.redPackets
         .map((x) => {
-            const token = tokenIntoMask({ ...x.token }) as FungibleTokenDetailed
+            const token = tokenIntoMask({ ...x.token }) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
             if (isSameAddress(x.token.address, NATIVE_TOKEN_ADDRESS)) {
-                token.name = getChainDetailed(x.token.chain_id)?.nativeCurrency.name
-                token.symbol = getChainDetailed(chainId)?.nativeCurrency.symbol
+                const nativeCurrency = chainResolver.nativeCurrency(x.token.chain_id ?? chainId)
+                if (nativeCurrency) {
+                    token.name = nativeCurrency.name
+                    token.symbol = nativeCurrency.symbol
+                }
             }
 
             const redpacketPayload: RedPacketJSONPayload = {
@@ -140,7 +142,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                     message: x.message,
                 },
                 contract_version: x.contract_version,
-                network: resolveChainName(x.chain_id),
+                network: chainResolver.chainName(x.chain_id),
                 token,
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,

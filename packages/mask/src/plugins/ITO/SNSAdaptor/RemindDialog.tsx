@@ -5,17 +5,10 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import {
-    ChainId,
-    FungibleTokenDetailed,
-    resolveLinkOnExplorer,
-    resolveNetworkName,
-    formatEthereumAddress,
-    useERC20TokenDetailedFromTokenLists,
-    useNetworkType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, explorerResolver, networkResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide'
-import urlcat from 'urlcat'
+import { useNetworkType } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     reminderText: {
@@ -120,7 +113,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RemindDialogProps extends withClasses<'root'> {
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType>
     chainId: ChainId
     setStatus: (status: SwapStatus) => void
 }
@@ -131,15 +124,14 @@ export function RemindDialog(props: RemindDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const [agreeReminder, setAgreeReminder] = useState(false)
-    const networkType = useNetworkType()
-    const { tokensDetailed } = useERC20TokenDetailedFromTokenLists(token.address)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <>
             <section className={classes.wrapper}>
                 <Typography variant="body1" className={classNames(classes.reminderText, classes.reminderTextFirst)}>
                     {t('plugin_ito_dialog_claim_reminder_text1', {
-                        networkType: resolveNetworkName(networkType),
+                        networkType: networkResolver.networkName(networkType),
                     })}
                 </Typography>
                 <Typography variant="body1" className={classes.reminderText}>
@@ -153,11 +145,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 </Typography>
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
-                <TokenIcon
-                    address={token.address}
-                    classes={{ icon: classes.tokenIcon }}
-                    logoURI={tokensDetailed?.logoURI}
-                />
+                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} logoURI={token?.logoURL} />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}
@@ -166,7 +154,7 @@ export function RemindDialog(props: RemindDialogProps) {
                         target="_blank"
                         className={classes.tokenLink}
                         rel="noopener noreferrer"
-                        href={urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address: token.address })}>
+                        href={explorerResolver.fungibleTokenLink(chainId, token.address)}>
                         <Typography variant="body2">
                             <FormattedAddress address={token.address} size={4} formatter={formatEthereumAddress} /> (
                             {t('plugin_ito_view_on_explorer')})

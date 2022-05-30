@@ -1,6 +1,7 @@
 // DO NOT import React in this file. This file is also used by worker.
 import type { Plugin } from '../types'
 import { memoize } from 'lodash-unified'
+import type { Web3Helper } from '../web3-helpers'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()
 
@@ -11,9 +12,40 @@ export function getPluginDefine(id: string) {
     return __registered.get(id)
 }
 
-export function registerPlugin(def: Plugin.DeferredDefinition) {
+export function registerPlugin<
+    ChainId = unknown,
+    SchemaType = unknown,
+    ProviderType = unknown,
+    NetworkType = unknown,
+    Signature = unknown,
+    GasOption = unknown,
+    Block = unknown,
+    Transaction = unknown,
+    TransactionReceipt = unknown,
+    TransactionDetailed = unknown,
+    TransactionSignature = unknown,
+    TransactionParameter = unknown,
+    Web3 = unknown,
+>(
+    def: Plugin.DeferredDefinition<
+        ChainId,
+        SchemaType,
+        ProviderType,
+        NetworkType,
+        Signature,
+        GasOption,
+        Block,
+        Transaction,
+        TransactionReceipt,
+        TransactionDetailed,
+        TransactionSignature,
+        TransactionParameter,
+        Web3
+    >,
+) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def)) return
+    // @ts-ignore
     __registered.set(def.ID, def)
     getRegisteredWeb3Networks_memo.cache.clear?.()
     getRegisteredWeb3Providers_memo.cache.clear?.()
@@ -34,11 +66,13 @@ const getRegisteredWeb3Networks_memo = memoize(() => {
 const getRegisteredWeb3Providers_memo = memoize(() => {
     return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Providers || [])
 })
+
 export function getRegisteredWeb3Networks() {
-    return getRegisteredWeb3Networks_memo()
+    return getRegisteredWeb3Networks_memo() as Web3Helper.NetworkDescriptorAll[]
 }
+
 export function getRegisteredWeb3Providers() {
-    return getRegisteredWeb3Providers_memo()
+    return getRegisteredWeb3Providers_memo() as Web3Helper.ProviderDescriptorAll[]
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {
