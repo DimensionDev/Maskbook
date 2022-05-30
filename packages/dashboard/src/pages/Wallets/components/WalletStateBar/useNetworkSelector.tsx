@@ -1,15 +1,17 @@
 import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SuccessIcon } from '@masknet/icons'
-import { WalletIcon, useMenu } from '@masknet/shared'
+import { useMenu, WalletIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     useChainId,
     useNetworkDescriptors,
     useProviderDescriptor,
+    useWeb3State,
     useWeb3UI,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -33,13 +35,31 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const networkDescriptors = useNetworkDescriptors() as Web3Helper.NetworkDescriptorAll[]
     const Web3UI = useWeb3UI() as Web3Helper.Web3UIAll
     const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
+    const { Connection } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
 
-    const networkMenu = useMenu(
+    const onConnect = useCallback(
+        async (chainId: number) => {
+            if (!chainId || !Connection) throw new Error('Failed to connect to provider.')
+            const connection = await Connection.getConnection?.({
+                providerType: providerDescriptor.type,
+            })
+            if (!connection) throw new Error('Failed to build connection.')
+
+            await connection.switchChain?.({ chainId })
+        },
+        [Connection, providerDescriptor],
+    )
+
+    return useMenu(
         ...(networkDescriptors
             ?.filter((x) => x.isMainnet)
             .map((network) => {
                 const menuItem = (
-                    <MenuItem sx={{ mx: 2, py: 1 }} classes={{ root: classes.item }} key={network.ID}>
+                    <MenuItem
+                        sx={{ mx: 2, py: 1 }}
+                        classes={{ root: classes.item }}
+                        key={network.ID}
+                        onClick={() => onConnect(network.chainId)}>
                         <Stack direction="row" gap={0.5} alignItems="center">
                             <Stack justifyContent="center" width={18}>
                                 {network.chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
@@ -61,6 +81,4 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                 )
             }) ?? []),
     )
-
-    return networkMenu
 }
