@@ -1,25 +1,21 @@
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatBalance,
-    FungibleTokenDetailed,
-    isNativeTokenAddress,
-    useChainId,
-    useFungibleTokenWatched,
-} from '@masknet/web3-shared-evm'
-import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
-import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import BigNumber from 'bignumber.js'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
@@ -87,12 +83,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const is24Auction = assetSource?.is24Auction ?? false
     const isVerified = (!assetSource?.isSoldOut && !assetSource?.is_owner) ?? false
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
 
-    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
+    const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        selectedPaymentToken?.address,
+    )
 
     const [atLeastBidValue, setAtLeastBidValue] = useState(0)
     useEffect(() => {
@@ -189,10 +188,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <SelectTokenAmountPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
-                            token={token.value as FungibleTokenDetailed}
+                            token={token.value}
                             disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
-                            onTokenChange={setToken}
+                            onTokenChange={(x) => setAddress(x.address)}
                             TokenAmountPanelProps={{
                                 label: t('plugin_collectible_price'),
                             }}
@@ -226,7 +225,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         ) : null}
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <WalletConnectedBoundary>
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButton
                                     loading={isPlacingBid}
@@ -243,7 +242,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         )}
                                 </ActionButton>
                             </Box>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

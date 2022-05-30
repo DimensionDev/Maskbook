@@ -15,6 +15,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "boring-avatars": "^1.6.3",
     "react-use": "^17.3.2"

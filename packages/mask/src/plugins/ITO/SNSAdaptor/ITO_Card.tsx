@@ -1,7 +1,7 @@
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
-import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -11,6 +11,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ITO_CardProps extends withClasses<never> {
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     onUpdateAmount: (amount: string) => void
     onUpdateBalance: () => void
 }

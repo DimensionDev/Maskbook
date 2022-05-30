@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { parseUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
 import type { TransactionReceipt } from 'web3-core'
-import { ChainId, createContract, TransactionEventType, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, TransactionEventType } from '@masknet/web3-shared-evm'
 import type Web3 from 'web3'
 import { AbiItem, asciiToHex, padRight, toWei } from 'web3-utils'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
@@ -10,6 +10,7 @@ import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 import { roundValue, toChainAddressEthers } from '../../helpers'
 import { ReferralRPC } from '../../messages'
+import type { FungibleTokenDetailed } from '../../types'
 
 async function resolveReferralFarmsV1Address(onError: (error?: string) => void) {
     try {

@@ -1,5 +1,6 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Typography, CircularProgress } from '@mui/material'
 
 import { useI18N } from '../../locales'
@@ -7,7 +8,8 @@ import { getRequiredChainId } from '../../helpers'
 import type { PageInterface } from '../../types'
 import { ReferralRPC } from '../../messages'
 
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { Rewards } from './Rewards'
 
 import { useSharedStyles, useMyFarmsStyles } from '../styles'
@@ -19,24 +21,21 @@ export function MyRewards(props: PageInterface) {
     const currentChainId = useChainId()
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
-    const { ERC20 } = useTokenListConstants()
 
     const {
         value: accountRewards,
         loading,
         error,
     } = useAsync(
-        async () => (account && ERC20 ? ReferralRPC.getAccountRewards(account, currentChainId, ERC20) : undefined),
-        [account, currentChainId, ERC20],
+        async () => (account && currentChainId ? ReferralRPC.getAccountRewards(account, currentChainId) : undefined),
+        [account, currentChainId],
     )
 
     if (currentChainId !== requiredChainId) {
         return (
-            <EthereumChainBoundary
-                chainId={requiredChainId}
-                noSwitchNetworkTip
-                classes={{ switchButton: sharedClasses.switchButton }}
-            />
+            <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }} />
+            </ChainBoundary>
         )
     }
 

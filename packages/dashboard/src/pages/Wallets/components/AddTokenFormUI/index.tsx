@@ -2,13 +2,14 @@ import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { Button, DialogActions, DialogContent, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useFormContext, Controller } from 'react-hook-form'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export interface AddTokenFormUIProps {
     onNext: () => void
     onClose: () => void
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
 }
 
 const useStyles = makeStyles()((theme) => ({

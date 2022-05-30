@@ -1,9 +1,10 @@
-import { type Web3Plugin, NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { memo, useEffect, useState } from 'react'
+import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
-import { memo, useEffect, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { useDashboardI18N } from '../../../../locales'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
@@ -38,7 +39,7 @@ export enum AssetTab {
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
 interface TokenAssetsProps {
-    network: Web3Plugin.NetworkDescriptor | null
+    network: Web3Helper.NetworkDescriptorAll | null
 }
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {

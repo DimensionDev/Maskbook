@@ -1,8 +1,9 @@
 import { useAsync } from 'react-use'
-import { useAccount, useChainId, useTokenListConstants } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import { PageInterface, PagesType, FarmDetailed } from '../types'
@@ -10,7 +11,8 @@ import { getRequiredChainId } from '../helpers'
 import { ReferralRPC } from '../messages'
 
 import { AccordionFarm } from './shared-ui/AccordionFarm'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 import { useSharedStyles, useMyFarmsStyles } from './styles'
 
@@ -88,15 +90,14 @@ export function CreatedFarms(props: PageInterface) {
     const currentChainId = useChainId()
     const requiredChainId = getRequiredChainId(currentChainId)
     const account = useAccount()
-    const { ERC20 } = useTokenListConstants()
 
     const {
         value: farms = EMPTY_LIST,
         loading,
         error,
     } = useAsync(
-        async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId, ERC20) : []),
-        [currentChainId, account, ERC20],
+        async () => (account ? ReferralRPC.getAccountFarms(account, currentChainId) : []),
+        [currentChainId, account],
     )
 
     const onAdjustRewardButtonClick = (farm: FarmDetailed) => {
@@ -112,11 +113,9 @@ export function CreatedFarms(props: PageInterface) {
 
     if (currentChainId !== requiredChainId) {
         return (
-            <EthereumChainBoundary
-                chainId={requiredChainId}
-                noSwitchNetworkTip
-                classes={{ switchButton: sharedClasses.switchButton }}
-            />
+            <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                <WalletConnectedBoundary offChain classes={{ connectWallet: sharedClasses.switchButton }} />
+            </ChainBoundary>
         )
     }
 

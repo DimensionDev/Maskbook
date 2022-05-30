@@ -1,4 +1,5 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId as ChainIdEnum, SchemaType } from '@masknet/web3-shared-evm'
 import type { FarmExists, FarmDepositIncreased, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1'
 import type { BigNumberish } from '@ethersproject/bignumber'
 
@@ -36,6 +37,8 @@ export interface PageHistory {
     page: PagesType
     title: string
 }
+
+export type FungibleTokenDetailed = FungibleToken<ChainIdEnum, SchemaType.ERC20>
 
 export interface DepositProps {
     totalFarmReward: string
@@ -117,7 +120,7 @@ export interface ReferralMetaData {
     referral_token: string
     referral_token_name: string
     referral_token_symbol: string
-    referral_token_icon: string | string[]
+    referral_token_icon: string
     referral_token_chain_id: ChainId
     promoter_address?: string
     sender: string

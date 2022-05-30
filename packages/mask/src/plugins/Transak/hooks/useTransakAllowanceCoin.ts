@@ -1,5 +1,4 @@
 import { useAsync } from 'react-use'
-import type { Coin } from '../../Trader/types/trending'
 
 const ENV = {
     production: 'https://api.transak.com/api/v2/currencies/crypto-currencies',
@@ -9,13 +8,13 @@ const ENV = {
 
 const URL = ENV[process.env.NODE_ENV]
 
-export function useTransakAllowanceCoin(coin: Coin): boolean {
+export function useTransakAllowanceCoin(token: { address?: string; symbol: string }): boolean {
     return useAsync(async () => {
-        if (coin.contract_address) {
+        if (token.address) {
             const allowanceList = await fetch(URL, { method: 'GET' })
                 .then((res) => res.json())
                 .then((res) => res.response)
-            return allowanceList.map((val: Coin) => val.symbol).includes(coin.symbol)
+            return allowanceList.map((val: { symbol: string }) => val.symbol).includes(token.symbol)
         }
         return false
     }).value

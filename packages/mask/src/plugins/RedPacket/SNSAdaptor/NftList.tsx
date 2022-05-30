@@ -1,10 +1,11 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { ChainId, formatTokenId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
+import { useI18N } from '../../../utils'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { useI18N } from '../locales'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -92,16 +93,16 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: ERC721ContractDetailed
+    contract: NonFungibleTokenContract<ChainId, SchemaType>
     tokenId: string
     claimed?: boolean
     renderOrder: number
 }
 
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
-    const t = useI18N()
+    const { t } = useI18N()
     const { classes } = useStyles()
-    const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
+    const [name, setName] = useState(formatTokenId(tokenId, 2))
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
@@ -116,13 +117,13 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
                 setERC721TokenName={setName}
             />
             <Typography className={classes.name}>{name}</Typography>
-            {claimed && <Typography className={classes.claimedBadge}>{t.claimed()}</Typography>}
+            {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>
     )
 }
 
 interface NftListProps extends ListProps {
-    contract: ERC721ContractDetailed
+    contract: NonFungibleTokenContract<ChainId, SchemaType>
     statusList: boolean[]
     tokenIds: string[]
 }

@@ -1,15 +1,17 @@
-import { useI18N } from '../../../utils'
-import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { useState } from 'react'
+import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils'
 import { CollectionView } from './CollectionView'
 import { DetailsView } from './DetailsView'
-import { ChainId, formatWeiToEther, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -60,7 +62,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId)
@@ -68,7 +70,7 @@ export function Collectible(props: CollectibleProps) {
 
     if (loading) return <Typography align="center">{t('loading')}</Typography>
 
-    if (error || !value)
+    if (error || !project)
         return (
             <Typography align="center" color="textPrimary">
                 {t('plugin_artblocks_smt_wrong')}
@@ -132,9 +134,12 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </Card>
             <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
-                <EthereumChainBoundary chainId={props.chainId ?? chainId} renderInTimeline>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={props.chainId ?? chainId}
+                    renderInTimeline>
                     <ActionBar project={project} />
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

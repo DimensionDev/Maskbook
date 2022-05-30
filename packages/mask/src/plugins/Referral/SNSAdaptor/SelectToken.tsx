@@ -1,7 +1,7 @@
 import { useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { delay } from '@dimensiondev/kit'
-import { FungibleTokenDetailed, useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
@@ -12,8 +12,9 @@ import { useI18N } from '../locales'
 import { PluginReferralMessages, ReferralRPC } from '../messages'
 import { NATIVE_TOKEN } from '../constants'
 import { parseChainAddress } from '../helpers'
+import type { FungibleTokenDetailed } from '../types'
 
-import { ERC20TokenList } from './shared-ui/ERC20TokenList'
+import { FungibleTokenList } from './shared-ui/FungibleTokenList'
 
 import { useSharedStyles } from './styles'
 
@@ -98,9 +99,9 @@ export function SelectToken() {
                 {onlyFarmTokens && error ? (
                     <Typography className={sharedClasses.msg}>{t.blockchain_error_your_referral_farms()}</Typography>
                 ) : (
-                    <ERC20TokenList
+                    <FungibleTokenList
                         whitelist={onlyFarmTokens ? referredTokens : undefined}
-                        dataLoading={loading}
+                        loading={loading}
                         referredTokensDefn={referredTokensDefn}
                         FixedSizeListProps={{ height: 340, itemSize: 54 }}
                         onSelect={onSubmit}

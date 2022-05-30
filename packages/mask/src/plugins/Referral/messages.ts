@@ -1,5 +1,5 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from './types'
 import type { _AsyncVersionOf } from 'async-call-rpc/full'
 
 import { META_KEY, PLUGIN_ID } from './constants'

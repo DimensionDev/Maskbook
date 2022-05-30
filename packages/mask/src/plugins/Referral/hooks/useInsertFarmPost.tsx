@@ -1,12 +1,13 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
 import { useI18N } from '../locales'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { META_KEY } from '../constants'
+import type { FungibleTokenDetailed } from '../types'
 
 export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chainId: ChainId, onClose?: () => void) {
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -24,12 +25,12 @@ export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chai
         return
     }
 
-    const { address, name = '', symbol = '', logoURI = [''] } = token
+    const { address, name = '', symbol = '', logoURL = '' } = token
     const selectedReferralData = {
         referral_token: address,
         referral_token_name: name,
         referral_token_symbol: symbol,
-        referral_token_icon: logoURI,
+        referral_token_icon: logoURL,
         referral_token_chain_id: chainId,
         sender: senderName ?? '',
     }

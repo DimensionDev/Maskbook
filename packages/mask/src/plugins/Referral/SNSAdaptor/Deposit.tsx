@@ -1,13 +1,15 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import type { DepositDialogInterface } from '../types'
 import { roundValue } from '../helpers'
 
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 import { useSharedStyles } from './styles'
 
@@ -71,14 +73,13 @@ export function Deposit(props: DepositDialogInterface | undefined) {
                 </span>
             </Grid>
             <Grid item xs={12} marginTop="24px">
-                <EthereumChainBoundary
-                    chainId={deposit.requiredChainId}
-                    noSwitchNetworkTip
-                    classes={{ switchButton: sharedClasses.switchButton }}>
-                    <ActionButton fullWidth variant="contained" size="medium" onClick={onClickDeposit}>
-                        {t.deposit()} {totalDeposit} {deposit.token?.symbol}
-                    </ActionButton>
-                </EthereumChainBoundary>
+                <ChainBoundary expectedChainId={deposit.requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                    <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }}>
+                        <ActionButton fullWidth variant="contained" size="medium" onClick={onClickDeposit}>
+                            {t.deposit()} {totalDeposit} {deposit.token?.symbol}
+                        </ActionButton>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             </Grid>
         </Grid>
     )

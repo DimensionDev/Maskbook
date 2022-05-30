@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import { formatUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
-import { useWeb3, type ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
+import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
 
@@ -29,7 +30,7 @@ export function Rewards({
     onChangePage,
 }: RewardsProps) {
     const t = useI18N()
-    const web3 = useWeb3({ chainId: currentChainId })
+    const web3 = useWeb3()
     const { showSnackbar } = useCustomSnackbar()
 
     const onStartHarvestRewards = useCallback(
@@ -92,7 +93,7 @@ export function Rewards({
                 onConfirmHarvestRewards,
                 () => onStartHarvestRewards(totalRewards, rewardTokenSymbol),
                 onErrorHarvestRewards,
-                web3,
+                web3 as Web3,
                 account,
                 rewardsClaimable,
                 rewardTokenDefn,

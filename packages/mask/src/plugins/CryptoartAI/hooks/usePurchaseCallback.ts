@@ -1,13 +1,14 @@
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { toFixed } from '@masknet/web3-shared-base'
-import { TransactionEventType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { TransactionEventType } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 
 export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract(chainId)
 
     return useAsyncFn(async () => {
         if (!knownOriginDigitalAssetV2_contract) return

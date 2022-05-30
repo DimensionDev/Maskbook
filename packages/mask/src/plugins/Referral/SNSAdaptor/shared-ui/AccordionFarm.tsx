@@ -1,6 +1,7 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { Grid, Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
+import type { FungibleTokenDetailed } from '../../types'
 
 import { FarmTokenDetailed } from './FarmTokenDetailed'
 

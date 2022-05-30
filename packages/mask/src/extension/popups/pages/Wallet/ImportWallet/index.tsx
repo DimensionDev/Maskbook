@@ -17,8 +17,10 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
-import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
@@ -110,7 +112,7 @@ const useStyles = makeStyles()({
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')
@@ -175,32 +177,22 @@ const ImportWallet = memo(() => {
                                     account: wallet,
                                 })
                             }
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: wallet,
-                                    providerType: ProviderType.MaskWallet,
-                                })
-                            }
-                            await WalletRPC.selectAccount([wallet], chainId)
+                            await WalletRPC.selectMaskAccount([wallet])
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
                         case tabs.privateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
-                            if (!currentMaskWalletAccountSettings.value) {
-                                await WalletRPC.updateMaskAccount({
-                                    account: privateKeyWallet,
-                                })
-                            }
+                            await WalletRPC.updateMaskAccount({
+                                account: privateKeyWallet,
+                            })
+                            await WalletRPC.selectMaskAccount([privateKeyWallet])
 
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: privateKeyWallet,
-                                    providerType: ProviderType.MaskWallet,
-                                })
-                            }
+                            await connection?.connect({
+                                account: privateKeyWallet,
+                                providerType: ProviderType.MaskWallet,
+                            })
 
-                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             await Services.Helper.removePopupWindow()
                             navigate(PopupRoutes.Wallet, { replace: true })
                             break
@@ -214,7 +206,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history, tabs],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

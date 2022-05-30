@@ -1,10 +1,10 @@
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
-import type { ScopedStorage } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { remove } from 'lodash-unified'
+import type { ScopedStorage } from '@masknet/shared-base'
+import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 interface StorageValue {
-    addedTokens: Web3Plugin.NonFungibleToken[]
+    addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
 }
 
 export const storageDefaultValue = {
@@ -26,7 +26,7 @@ export function getTokens() {
     return storage.storage.addedTokens.value
 }
 
-export function storeToken(token: Web3Plugin.NonFungibleToken) {
+export function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
     const tokens = [token, ...getTokens()]
     storage.storage.addedTokens.setValue(tokens)
 }

@@ -1,19 +1,16 @@
+import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    resolveTransactionLinkOnExplorer,
-    TransactionState,
-    TransactionStateType,
-    useChainId,
-} from '@masknet/web3-shared-evm'
-import DoneIcon from '@mui/icons-material/Done'
-import WarningIcon from '@mui/icons-material/Warning'
 import { Button, CircularProgress, DialogActions, DialogContent, Link, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import WarningIcon from '@mui/icons-material/Warning'
+import DoneIcon from '@mui/icons-material/Done'
+import { TransactionState, TransactionStateType, explorerResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../messages'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -46,7 +43,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const [state, setState] = useState<TransactionState | null>(null)
@@ -94,7 +91,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnExplorer(chainId, state.hash)}
+                                href={explorerResolver.transactionLink(chainId, state.hash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_explorer')}
@@ -117,7 +114,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                         <Typography>
                             <Link
                                 className={classes.link}
-                                href={resolveTransactionLinkOnExplorer(chainId, state.receipt.transactionHash)}
+                                href={explorerResolver.transactionLink(chainId, state.receipt.transactionHash)}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {t('plugin_wallet_view_on_explorer')}

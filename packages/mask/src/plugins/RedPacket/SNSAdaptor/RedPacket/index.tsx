@@ -1,29 +1,23 @@
-import { useOpenShareTxDialog } from '@masknet/shared'
-import {
-    ChainId,
-    formatBalance,
-    getChainIdFromName,
-    resolveNetworkName,
-    useAccount,
-    useNetworkType,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
-import { Card, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useCallback, useMemo } from 'react'
+import { Card, Typography } from '@mui/material'
+import { ChainId, chainResolver, networkResolver } from '@masknet/web3-shared-evm'
+import { useOpenShareTxDialog } from '@masknet/shared'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
-import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
+import type { RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -37,9 +31,9 @@ export function RedPacket(props: RedPacketProps) {
     const { classes } = useStyles()
 
     // context
-    const web3 = useWeb3()
-    const account = useAccount()
-    const networkType = useNetworkType()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
 
     // #region token detailed
     const {
@@ -61,7 +55,7 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
+        payload.contract_version > 3 ? web3?.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
 
     const shareText = useMemo(() => {
@@ -70,7 +64,7 @@ export function RedPacket(props: RedPacketProps) {
         const shareTextOption = {
             sender: payload.sender.name,
             payload: postLink.toString(),
-            network: resolveNetworkName(networkType),
+            network: networkResolver.networkName(networkType) ?? 'Mainnet',
             account: isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account'),
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
@@ -110,16 +104,13 @@ export function RedPacket(props: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, isRefunded, openShareTxDialog])
 
     const myStatus = useMemo(() => {
+        if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t.description_claimed(
-                (availability as RedPacketAvailability).claimed_amount
+                availability.claimed_amount
                     ? {
-                          amount: formatBalance(
-                              (availability as RedPacketAvailability).claimed_amount,
-                              token.decimals,
-                              8,
-                          ),
-                          symbol: token.symbol || '-',
+                          amount: formatBalance(availability.claimed_amount, token.decimals, 8),
+                          symbol: token.symbol,
                       }
                     : { amount: '-', symbol: '-' },
             )
@@ -190,7 +181,7 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
-                    chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming}

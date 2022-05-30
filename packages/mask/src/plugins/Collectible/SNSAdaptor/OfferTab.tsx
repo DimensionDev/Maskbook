@@ -5,9 +5,8 @@ import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
-import { TableListPagination } from './Pagination'
-import { isOne, isZero } from '@masknet/web3-shared-base'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
@@ -39,35 +38,31 @@ const useStyles = makeStyles()((theme) => {
 export function OfferTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
+    const { asset, provider } = CollectibleState.useContainer()
+
+    const offers = asset.value?.orders?.filter((x) => x.side === OrderSide.Buy) ?? EMPTY_LIST
 
     const isDifferenceToken = useMemo(() => {
-        if (provider === NonFungibleAssetProvider.OPENSEA) {
+        if (provider === SourceType.OpenSea) {
             return (
-                offers.value?.data.some(
+                offers.some(
                     (item) =>
-                        (item.payment_token_contract?.symbol !== 'WETH' &&
-                            item.payment_token_contract?.symbol !== 'ETH') ||
+                        (item.paymentToken?.symbol !== 'WETH' && item.paymentToken?.symbol !== 'ETH') ||
                         (item.quantity && !isOne(item.quantity)),
-                ) && offers.value.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && offers.filter((item) => isZero(item.expiredAt ?? 0)).length === 0
             )
         } else {
             return false
         }
     }, [provider, offers])
 
-    const dataSource = useMemo(() => {
-        if (!offers.value?.data.length) return []
-        return offers.value.data
-    }, [offers])
-
-    if (asset.loading || offers.loading)
+    if (asset.loading)
         return (
             <div className={classes.empty}>
                 <LoadingAnimation />
             </div>
         )
-    if (!offers.value?.data.length || asset.error || !dataSource.length)
+    if (!offers.length || asset.error)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -102,7 +97,7 @@ export function OfferTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                {provider === NonFungibleAssetProvider.OPENSEA ? (
+                                {provider === SourceType.OpenSea ? (
                                     <TableCell>{t('plugin_collectible_expiration')}</TableCell>
                                 ) : null}
                             </>
@@ -110,20 +105,10 @@ export function OfferTab() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {dataSource.map((order) => (
-                        <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
+                    {offers.map((order) => (
+                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === NonFungibleAssetProvider.OPENSEA && dataSource.length) || offerPage > 0 ? (
-                    <TableListPagination
-                        handlePrevClick={() => setOfferPage((prev) => prev - 1)}
-                        handleNextClick={() => setOfferPage((prev) => prev + 1)}
-                        prevDisabled={offerPage === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={offerPage}
-                        pageCount={10}
-                    />
-                ) : null}
             </Table>
         </CollectibleTab>
     )

@@ -1,13 +1,14 @@
-import { LinkOutIcon } from '@masknet/icons'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { Transaction } from '@masknet/web3-shared-evm'
-import { ChainId, DebankTransactionDirection, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
-import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material'
+import { memo } from 'react'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { memo } from 'react'
+import { LinkOutIcon } from '@masknet/icons'
+import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
+import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon'
+import type { Transaction } from '@masknet/web3-shared-base'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -48,12 +49,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface HistoryTableRowProps {
-    transaction: Transaction
-    selectedChainId: ChainId
+    transaction: Transaction<ChainId, SchemaType>
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, selectedChainId }) => {
-    const { value: domain } = useReverseAddress(transaction.toAddress)
+    const { value: domain } = useReverseAddress(undefined, transaction.to)
 
     const transactionType = (transaction.type ?? '').replace(/_/g, ' ')
 
@@ -68,7 +69,7 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, select
 })
 
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
     formattedType: string
     domain?: string
 }
@@ -76,29 +77,29 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes } = useStyles()
-        const { Utils } = useWeb3State()
+        const { Others } = useWeb3State() as Web3Helper.Web3StateAll
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
                         <TransactionIcon
-                            transactionType={transaction.transactionType}
+                            transactionType={transaction.type}
                             type={transaction.type}
-                            address={transaction.toAddress}
-                            failed={transaction.failed}
+                            address={transaction.to}
+                            failed={transaction.status === 0}
                         />
                         <Stack pl={2}>
                             <Typography textAlign="left" className={classes.type} variant="body2">
                                 {formattedType}
                             </Typography>
                             <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
-                                {formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}
+                                {formatDateTime(transaction.timestamp, 'yyyy-MM-dd HH:mm')}
                             </Typography>
                         </Stack>
                     </Box>
                 </TableCell>
                 <TableCell className={classes.cell} align="center">
-                    {transaction.pairs.map((pair, index) => {
+                    {transaction.tokens.map((pair, index) => {
                         const direction =
                             pair.direction === DebankTransactionDirection.SEND ||
                             pair.direction === ZerionTransactionDirection.OUT
@@ -111,7 +112,11 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                                 direction="row">
                                 <Box width="50%" flexGrow={0} flexShrink={0} textAlign="right">
                                     <span>{direction ? '-' : '+'}</span>
-                                    <span>{pair.amount.toFixed(pair.amount < 1 ? 6 : 2)}</span>
+                                    <span>
+                                        {new BigNumber(pair.amount).toFixed(
+                                            new BigNumber(pair.amount).toNumber() < 1 ? 6 : 2,
+                                        )}
+                                    </span>
                                 </Box>
                                 <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
                                     <Typography variant="body2" color={MaskColorVar.textPrimary}>
@@ -125,13 +130,11 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                 <TableCell className={classes.cell} align="center">
                     <Box className={classes.link}>
                         <Typography variant="body2">
-                            {domain
-                                ? Utils?.formatDomainName?.(domain)
-                                : Utils?.formatAddress?.(transaction.toAddress, 4)}
+                            {domain ? Others?.formatDomainName?.(domain) : Others?.formatAddress?.(transaction.to, 4)}
                         </Typography>
                         <Link
                             sx={{ height: 21 }}
-                            href={Utils?.resolveTransactionLink?.(selectedChainId, transaction.id)}
+                            href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LinkOutIcon className={classes.linkIcon} />

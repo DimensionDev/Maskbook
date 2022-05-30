@@ -1,9 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { resolveTransactionLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { explorerResolver } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Typography, CircularProgress, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 
-import { TransactionStatus, TransactionDialogInterface } from '../types'
+import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types'
 import { useI18N } from '../locales'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
@@ -67,7 +68,10 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                 </Grid>
                 <Grid item xs={12}>
                     <Link
-                        href={resolveTransactionLinkOnExplorer(currentChainId, transaction.transactionHash)}
+                        href={explorerResolver.transactionLink?.(
+                            currentChainId as ChainId,
+                            transaction.transactionHash,
+                        )}
                         fontSize="16px"
                         lineHeight="22px"
                         target="_blank">

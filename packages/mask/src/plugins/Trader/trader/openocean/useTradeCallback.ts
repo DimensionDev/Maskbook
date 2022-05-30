@@ -1,18 +1,20 @@
-import { GasOptionConfig, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export function useTradeCallback(
     tradeComputed: TradeComputed<SwapOOSuccessResponse> | null,
     gasConfig?: GasOptionConfig,
 ) {
-    const web3 = useWeb3()
-    const account = useAccount()
-    const chainId = useChainId()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // compose transaction config
     const config = useMemo(() => {
@@ -25,7 +27,7 @@ export function useTradeCallback(
 
     return useAsyncFn(async () => {
         // validate config
-        if (!account || !config) {
+        if (!account || !config || !web3) {
             return
         }
 
