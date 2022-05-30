@@ -377,6 +377,5 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 />
             )}
         </>,
-        providerType === ProviderType.WalletConnect ? <Trans i18nKey="plugin_wallet_connect_tips" /> : '',
     )
 }
