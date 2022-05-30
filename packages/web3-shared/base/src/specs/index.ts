@@ -644,10 +644,6 @@ export interface Connection<
     connect(options?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(options?: Web3ConnectionOptions): Promise<void>
-    /** Confirm request */
-    confirmRequest?: (options?: Web3ConnectionOptions) => Promise<void>
-    /** Reject request */
-    rejectRequest?: (options?: Web3ConnectionOptions) => Promise<void>
     /** Replace request */
     replaceRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
     /** Cancel request */

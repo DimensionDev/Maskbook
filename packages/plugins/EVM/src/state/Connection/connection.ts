@@ -618,26 +618,6 @@ class Connection implements EVM_Connection {
         )
     }
 
-    confirmRequest(options?: EVM_Web3ConnectionOptions) {
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
-                params: [],
-            },
-            options,
-        )
-    }
-
-    rejectRequest(options?: EVM_Web3ConnectionOptions) {
-        return this.hijackedRequest<void>(
-            {
-                method: EthereumMethodType.MASK_REJECT_TRANSACTION,
-                params: [],
-            },
-            options,
-        )
-    }
-
     replaceRequest(hash: string, transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
         return this.hijackedRequest<void>(
             {

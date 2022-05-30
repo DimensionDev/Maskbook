@@ -33,6 +33,10 @@ export async function selectMaskAccountPrepare(callback: (accounts: string[]) =>
 export async function selectMaskAccount(accounts: string[]) {
     callbackMemorized?.(accounts)
 }
+
+export async function rejectMaskAccount() {
+    callbackMemorized?.([])
+}
 // #endregion
 
 export async function getSupportedNetworks() {

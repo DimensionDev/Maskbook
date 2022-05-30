@@ -219,12 +219,6 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    confirmRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
-    rejectRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
     replaceRequest(
         hash: string,
         config: Transaction,

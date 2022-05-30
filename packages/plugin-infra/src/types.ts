@@ -13,7 +13,7 @@ import type {
     Wallet,
     Web3EnableRequirement,
 } from '@masknet/web3-shared-base'
-import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -141,7 +141,14 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
         /** Send request to native API */
-        send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+        send(
+            payload: JsonRpcPayload,
+            options?: {
+                account?: string
+                chainId?: ChainId
+                popupsWindow?: boolean
+            },
+        ): Promise<JsonRpcResponse>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -176,11 +183,6 @@ export namespace Plugin.Shared {
         updateWallet(id: string, wallet: Partial<Wallet>): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
-
-        /** get the latest unconfirmed request */
-        shiftUnconfirmedRequest(): Promise<JsonRpcPayload | undefined>
-        /** add an unconfirmed request */
-        pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
     export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
         /**
