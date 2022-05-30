@@ -136,7 +136,7 @@ const TokenDetail = memo(() => {
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" formatter={formatCurrency} />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken)} formatter={formatCurrency} />
                 </Typography>
                 <div className={classes.controller}>
                     <div onClick={openBuyDialog}>

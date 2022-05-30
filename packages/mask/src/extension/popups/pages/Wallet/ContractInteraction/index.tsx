@@ -377,7 +377,7 @@ const ContractInteraction = memo(() => {
                                 </Typography>
                                 <Typography>
                                     {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                        <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                                        <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
                                     ) : null}
                                 </Typography>
                             </>
@@ -412,7 +412,7 @@ const ContractInteraction = memo(() => {
                             </Typography>
 
                             <Typography className={classes.gasPrice}>
-                                <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
+                                <FormattedCurrency value={totalUSD} formatter={formatCurrency} />
                             </Typography>
                         </div>
                     ) : null}

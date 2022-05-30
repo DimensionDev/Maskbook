@@ -310,7 +310,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         </Typography>
                     ) : (
                         <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                            &asymp; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
                             {estimatedGas > 0 ? (
                                 <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
                             ) : (
