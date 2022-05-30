@@ -1,17 +1,18 @@
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
-import type { PriceAPI } from '..'
+import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
+import type { PriceAPI } from '..'
 
 const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
 const COINGECKO_CHAIN_ID_MAPPING: { [key: string]: string } = {
-    1: 'ethereum',
-    56: 'binancecoin',
-    100: 'xdai',
-    137: 'matic-network',
-    250: 'fantom',
-    1030: 'conflux',
-    43114: 'avalanche-2',
-    1313161554: 'aurora-near',
+    [ChainId.Mainnet]: 'ethereum',
+    [ChainId.BSC]: 'binancecoin',
+    [ChainId.xDai]: 'xdai',
+    [ChainId.Matic]: 'matic-network',
+    [ChainId.Fantom]: 'fantom',
+    [ChainId.Conflux]: 'conflux',
+    [ChainId.Avalanche]: 'avalanche-2',
+    [ChainId.Aurora]: 'aurora-near',
 }
 export class CoinGeckoAPI implements PriceAPI.Provider {
     /**
