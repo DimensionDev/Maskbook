@@ -1,4 +1,5 @@
-import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import type BigNumber from 'bignumber.js'
 
 export interface JSON_PayloadInMask {
@@ -19,9 +20,9 @@ export interface JSON_PayloadInMask {
     unlock_time?: number
     qualification_address: string
     creation_time: number
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     exchange_amounts: string[]
-    exchange_tokens: FungibleTokenDetailed[]
+    exchange_tokens: Array<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>>
     regions: string
     block_number?: number
 }
@@ -39,15 +40,19 @@ export interface PoolFromNetwork {
 
 export interface ClaimablePool {
     pid: string
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
 export interface SwappedTokenType {
     pids: string[]
     amount: BigNumber
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     isClaimable: boolean
     unlockTime: Date
+}
+
+export type FungibleTokenOutMask = Omit<FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>, 'chainId'> & {
+    chain_id: ChainId
 }
 
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
@@ -57,7 +62,7 @@ export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 
 
 export interface JSON_PayloadComposeMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: string
-    exchange_tokens: { address: string }[]
+    exchange_tokens: Array<{ address: string }>
 }
 
 export enum ITO_Status {
@@ -113,7 +118,7 @@ export interface CampaignInfo {
     chain: string
     endTime: number
     startTime: number
-    nfts: { image: string }[]
+    nfts: Array<{ image: string }>
 }
 
 export interface ClaimParams {

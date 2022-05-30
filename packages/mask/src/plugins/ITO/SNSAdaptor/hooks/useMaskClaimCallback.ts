@@ -1,12 +1,14 @@
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { TransactionEventType } from '@masknet/web3-shared-evm'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useMaskClaimCallback() {
-    const account = useAccount()
-    const chainId = useChainId()
-    const MaskITO_Contract = useMaskITO_Contract()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const MaskITO_Contract = useMaskITO_Contract(chainId)
 
     return useAsyncFn(async () => {
         if (!MaskITO_Contract) return

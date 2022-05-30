@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { Controller } from 'react-hook-form'
-import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
@@ -88,7 +88,7 @@ const WalletRecovery = memo(() => {
 
     const { value: legacyWallets = [], loading: getLegacyWalletsLoading } = useAsyncRetry(async () => {
         const now = new Date()
-        const wallets = await WalletRPC.getLegacyWallets(ProviderType.MaskWallet)
+        const wallets = await WalletRPC.getLegacyWallets()
         if (!wallets.length) return []
         return wallets.filter((x) => (x.mnemonic || x._public_key_) && x.updatedAt < now)
     }, [])

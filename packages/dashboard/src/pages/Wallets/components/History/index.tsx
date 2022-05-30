@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { HistoryTable } from '../HistoryTable'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     container: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles()({
 })
 
 interface HistoryProps {
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const History = memo<HistoryProps>(({ selectedChainId }) => {

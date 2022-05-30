@@ -1,17 +1,18 @@
 import { useCallback } from 'react'
+import urlcat from 'urlcat'
 import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
-import urlcat from 'urlcat'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -83,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PreviewCardProps {
+export interface PreviewCardProps {
     id: string
 }
 
@@ -93,7 +94,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
     const theme = useTheme()
 
     // #region the donation dialog
@@ -187,9 +187,13 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Button>
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
-                    <EthereumChainBoundary
-                        chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}
-                        renderInTimeline>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={ChainId.Mainnet}
+                        predicate={(pluginID, chainId) =>
+                            pluginID === NetworkPluginID.PLUGIN_EVM &&
+                            [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                        }>
                         <Button
                             variant="contained"
                             fullWidth
@@ -203,7 +207,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             onClick={onDonate}>
                             {t.donate()}
                         </Button>
-                    </EthereumChainBoundary>
+                    </ChainBoundary>
                 </Box>
             </Box>
         </>

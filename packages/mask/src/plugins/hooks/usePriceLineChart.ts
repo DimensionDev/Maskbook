@@ -1,16 +1,16 @@
 import type { RefObject } from 'react'
 import type { Dimension } from './useDimension'
-import { formatCurrency } from '@masknet/web3-shared-evm'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import { useLineChart } from './useLineChart'
 
 export function usePriceLineChart(
     svgRef: RefObject<SVGSVGElement>,
-    data: { date: Date; value: number }[],
+    data: Array<{ date: Date; value: number }>,
     dimension: Dimension,
     id: string,
     opts: { color?: string; sign?: string },
 ) {
-    const { color = 'steelblue', sign = '$' } = opts
+    const { color = 'steelblue', sign = 'USD' } = opts
 
     useLineChart(svgRef, data, dimension, id, {
         color,

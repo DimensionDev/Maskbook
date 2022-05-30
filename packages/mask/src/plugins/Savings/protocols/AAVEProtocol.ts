@@ -1,21 +1,21 @@
+import BigNumber from 'bignumber.js'
+import type Web3 from 'web3'
+import type { AbiItem } from 'web3-utils'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
-import { pow10, ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createContract,
-    FungibleTokenDetailed,
     getAaveConstants,
+    SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import type Web3 from 'web3'
-import type { AbiItem } from 'web3-utils'
 import { ProtocolType, SavingsProtocol } from '../types'
 
 export class AAVEProtocol implements SavingsProtocol {
@@ -24,7 +24,7 @@ export class AAVEProtocol implements SavingsProtocol {
     private _apr = '0.00'
     private _balance = ZERO
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]) {}
 
     get type() {
         return ProtocolType.AAVE
@@ -78,13 +78,13 @@ export class AAVEProtocol implements SavingsProtocol {
             })
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         id: string
                         name: string
                         decimals: number
                         underlyingAsset: string
                         liquidityRate: number
-                    }[]
+                    }>
                 }
             } = await response.json()
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
@@ -129,11 +129,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
             const fullResponse: {
                 data: {
-                    reserves: {
+                    reserves: Array<{
                         aToken: {
                             id: string
                         }
-                    }[]
+                    }>
                 }
             } = await response.json()
 

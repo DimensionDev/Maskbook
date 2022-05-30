@@ -61,7 +61,7 @@ export interface NextIDStoragePayload {
 }
 export interface NextIDStorageInfo<T = unknown> {
     persona: string
-    proofs: NextIDStorageProofs<T>[]
+    proofs: Array<NextIDStorageProofs<T>>
 }
 export interface NextIDStorageProofs<T> {
     content: {

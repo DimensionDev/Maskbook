@@ -3,7 +3,6 @@ import { Alert, Box, Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -115,14 +114,10 @@ const CreateMnemonic = memo(() => {
         const account = await Services.Settings.getSelectedWalletAddress()
 
         if (!account) {
-            await PluginServices.Wallet.updateAccount({
+            await PluginServices.Wallet.updateMaskAccount({
                 account: address_,
-                providerType: ProviderType.MaskWallet,
             })
-            const chainId = searchParams.get('chainId')
-            if (chainId) {
-                await PluginServices.Wallet.selectAccount([address_], Number(chainId) as ChainId)
-            }
+            await PluginServices.Wallet.selectMaskAccount([address_])
         }
 
         return address_

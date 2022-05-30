@@ -1,20 +1,22 @@
 import { useMemo } from 'react'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { EthereumTokenType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared-evm'
+import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
-import { multipliedBy } from '@masknet/web3-shared-base'
 
 export function useOpenBoxTransaction(
     boxId: string,
     amount: number,
     paymentTokenIndex: number,
     paymentTokenPrice: string,
-    paymentTokenDetailed: FungibleTokenDetailed | null,
+    paymentTokenDetailed: FungibleToken<ChainId, SchemaType> | null,
     proof?: string,
     overrides?: NonPayableTx | null,
 ) {
-    const account = useAccount()
-    const maskBoxContract = useMaskBoxContract()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const maskBoxContract = useMaskBoxContract(chainId)
     return useMemo(() => {
         if (!boxId || amount <= 0 || !maskBoxContract) return
         return {
@@ -22,7 +24,7 @@ export function useOpenBoxTransaction(
                 ...overrides,
                 from: account,
                 value:
-                    paymentTokenDetailed?.type === EthereumTokenType.Native
+                    paymentTokenDetailed?.schema === SchemaType.Native
                         ? multipliedBy(paymentTokenPrice, amount).toFixed()
                         : undefined,
             },

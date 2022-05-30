@@ -2,8 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { ZoraIcon } from '../../../resources/ZoraIcon'
-import { unreachable } from '@dimensiondev/kit'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     opensea: {
@@ -26,21 +25,21 @@ const useStyles = makeStyles()({
 const NFTScanIcon = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
 
 export interface CollectibleProviderIconProps {
-    provider: NonFungibleAssetProvider
+    provider: SourceType
 }
 
 export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
     const { classes } = useStyles()
     switch (props.provider) {
-        case NonFungibleAssetProvider.NFTSCAN:
+        case SourceType.NFTScan:
             return <img src={NFTScanIcon} className={classes.NFTScan} />
-        case NonFungibleAssetProvider.OPENSEA:
+        case SourceType.OpenSea:
             return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
-        case NonFungibleAssetProvider.RARIBLE:
+        case SourceType.Rarible:
             return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
-        case NonFungibleAssetProvider.ZORA:
+        case SourceType.Zora:
             return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         default:
-            unreachable(props.provider)
+            return <></>
     }
 }

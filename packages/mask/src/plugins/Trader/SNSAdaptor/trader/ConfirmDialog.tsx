@@ -2,18 +2,16 @@ import { CramIcon, InfoIcon, RetweetIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import type { TradeComputed } from '../../types'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { isZero, multipliedBy } from '@masknet/web3-shared-base'
 import {
     createNativeToken,
-    formatBalance,
     formatEthereumAddress,
     formatPercentage,
     formatUSD,
     formatWeiToEther,
-    FungibleTokenDetailed,
-    resolveAddressLinkOnExplorer,
-    Wallet,
+    explorerResolver,
 } from '@masknet/web3-shared-evm'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
@@ -21,12 +19,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
-import { ONE_BIPS } from '../../constants'
-import { currentSlippageSettings } from '../../settings'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { FungibleToken, isZero, multipliedBy, NetworkPluginID, formatBalance, Wallet } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import type { TradeComputed } from '../../types'
+import { currentSlippageSettings } from '../../settings'
+import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { ONE_BIPS } from '../../constants'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -120,13 +118,13 @@ const MAX_SLIPPAGE = 1000
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
-    inputToken: FungibleTokenDetailed
-    outputToken: FungibleTokenDetailed
+    inputToken: FungibleToken<ChainId, SchemaType>
+    outputToken: FungibleToken<ChainId, SchemaType>
     gas?: number
     gasPrice?: string
     onConfirm: () => void
     onClose?: () => void
-    wallet?: Wallet
+    wallet?: Wallet | null
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
@@ -152,7 +150,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     // #region gas price
     const nativeToken = createNativeToken(chainId)
-    const tokenPrice = useNativeTokenPrice(chainId)
+    const { value: tokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const gasFee = useMemo(() => {
         return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
@@ -233,7 +231,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     style={{ color: 'inherit', height: 20 }}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveAddressLinkOnExplorer(chainId, wallet.address)}>
+                                    href={explorerResolver.addressLink(chainId, wallet.address)}>
                                     <ExternalLink style={{ marginLeft: 5 }} size={20} />
                                 </Link>
                             ) : null}
@@ -245,7 +243,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={inputToken.address}
-                                logoURI={inputToken.logoURI}
+                                logoURI={inputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={inputAmount.toFixed() ?? '0'}
@@ -262,7 +260,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={outputToken.address}
-                                logoURI={outputToken.logoURI}
+                                logoURI={outputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={outputAmount.toFixed() ?? '0'}

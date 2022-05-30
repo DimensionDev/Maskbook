@@ -20,8 +20,8 @@ export default class FindTrumanConstPromise {
     value?: FindTrumanConst
     err?: any
 
-    successCallback: ((value?: FindTrumanConst) => void)[] = []
-    failCallback: ((err: any) => void)[] = []
+    successCallback: Array<(value?: FindTrumanConst) => void> = []
+    failCallback: Array<(err: any) => void> = []
 
     resolve = (value: FindTrumanConst) => {
         if (this.status !== Status.PENDING) return

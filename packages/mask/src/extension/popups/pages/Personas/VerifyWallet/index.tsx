@@ -1,19 +1,11 @@
+import urlcat from 'urlcat'
 import { memo, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import {
-    ChainId,
-    EthereumRpcType,
-    isSameAddress,
-    NetworkType,
-    ProviderType,
-    resolveProviderName,
-    useWallets,
-} from '@masknet/web3-shared-evm'
-import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
+import { ChainId, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
@@ -21,8 +13,8 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
-import urlcat from 'urlcat'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -40,13 +32,18 @@ const VerifyWallet = memo(() => {
     const { signed, setSigned } = PopupContext.useContainer()
     const navigate = useNavigate()
     const location = useLocation()
+
+    const wallet: Account<ChainId> & {
+        providerType: ProviderType
+        address?: string
+    } = location.state.usr
+
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
-    const wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
-    const { value: domain } = useReverseAddress(wallet.account)
-    const { Utils } = useWeb3State() ?? {}
-    const wallets = useWallets()
-
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
     const { value: bounds } = useAsync(async () => {
         if (!wallet.account) return EMPTY_LIST
         return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
@@ -64,13 +61,14 @@ const VerifyWallet = memo(() => {
     }, [bounds])
 
     const walletName = () => {
-        if (domain && Utils?.formatDomainName) return Utils.formatDomainName(domain)
-        if (wallet.providerType !== ProviderType.MaskWallet) return `${resolveProviderName(wallet.providerType)} Wallet`
+        if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
+        if (wallet.providerType !== ProviderType.MaskWallet)
+            return `${providerResolver.providerName(wallet.providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, wallet.account))?.name ?? 'Wallet'
     }
 
     useEffect(() => {
-        if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
+        // if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
 
         navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
             state: wallet,
@@ -107,19 +105,14 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSig = await Services.Ethereum.personalSign(
-                payload.signPayload,
-                wallet.account,
-                '',
-                {
-                    chainId: wallet.chainId,
-                    account: wallet.account,
-                    providerType: wallet.providerType,
-                },
-                { popupsWindow: false },
-            )
+            const walletSignature = await connection?.signMessage(payload.signPayload, 'personaSign', {
+                chainId: wallet.chainId,
+                account: wallet.account,
+                providerType: wallet.providerType,
+                popupsWindow: false,
+            })
 
-            if (!walletSig) throw new Error('Wallet sign failed')
+            if (!walletSignature) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
@@ -128,7 +121,7 @@ const VerifyWallet = memo(() => {
                 wallet.account,
                 payload.createdAt,
                 {
-                    walletSignature: walletSig,
+                    walletSignature,
                     signature,
                 },
             )
@@ -140,10 +133,10 @@ const VerifyWallet = memo(() => {
             showSnackbar(t('popups_verify_wallet_sign_failed'), { variant: 'error' })
             return false
         }
-    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature])
+    }, [currentPersona?.identifier.publicKeyAsHex, payload, wallet, signature, connection])
 
     const changeWallet = () => {
-        navigate(urlcat(PopupRoutes.ConnectWallet, { goBack: true }))
+        navigate(PopupRoutes.ConnectWallet)
     }
 
     const [{ loading: confirmLoading, value: step = SignSteps.Ready }, handleConfirm] = useAsyncFn(async () => {

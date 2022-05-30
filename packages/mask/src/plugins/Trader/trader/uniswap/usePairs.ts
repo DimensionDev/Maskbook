@@ -4,13 +4,13 @@ import { numberToHex } from 'web3-utils'
 import { Pair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { getPairAddress } from '../../helpers'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -39,7 +39,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
     const { value: targetBlockNumber } = useTargetBlockNumber(targetChainId)
 
     // get reserves for each pair
-    const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])], targetChainId)
+    const contracts = usePairContracts(targetChainId, [...new Set(listOfPairAddress.filter(Boolean) as string[])])
 
     const [results, calls, _, callback] = useMultipleContractSingleData(
         contracts,

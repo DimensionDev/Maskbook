@@ -1,12 +1,15 @@
-import { useSingleContractMultipleData } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo, Player } from '../types'
 
 export function useOtherPlayerInfo(info: GoodGhostingInfo) {
-    const contract = useGoodGhostingContract(info.contractAddress)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const contract = useGoodGhostingContract(chainId, info.contractAddress)
 
     const { addressNames, addressCallDatas } = useMemo(
         () => ({

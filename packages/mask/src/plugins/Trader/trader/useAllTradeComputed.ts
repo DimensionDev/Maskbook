@@ -1,6 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
 import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
@@ -28,11 +27,12 @@ import { useAvailableTraderProviders } from '../trending/useAvailableTraderProvi
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
 import type { TradeComputed } from '../types'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export function useAllTradeComputed(
     inputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeInfo[] {
     const { targetChainId } = TargetChainIdContext.useContainer()

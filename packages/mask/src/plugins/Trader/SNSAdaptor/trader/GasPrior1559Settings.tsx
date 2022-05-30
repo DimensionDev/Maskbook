@@ -1,24 +1,17 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../Wallet/messages'
-import {
-    formatGweiToWei,
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOptionConfig,
-    useChainId,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { useUpdateEffect } from 'react-use'
+import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import classnames from 'classnames'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -117,7 +110,8 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
         const { t } = useI18N()
@@ -125,27 +119,24 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const [customGasPrice, setCustomGasPrice] = useState('0')
 
         // #region Get gas options from debank
-        const { value: gasOptions } = useAsync(async () => {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (!response) return { slow: 0, standard: 0, fast: 0 }
-
+        const gasOptions = useMemo(() => {
             return {
-                slow: response.data.slow.price,
-                standard: response.data.normal.price,
-                fast: response.data.fast.price,
+                slow: gasOptions_?.[GasOptionType.SLOW].suggestedMaxFeePerGas ?? 0,
+                standard: gasOptions_?.[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0,
+                fast: gasOptions_?.[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
             }
-        }, [chainId])
+        }, [chainId, gasOptions_])
         // #endregion
 
         const options = useMemo(
             () => [
                 {
                     title: t('plugin_trader_gas_setting_standard'),
-                    gasPrice: gasOptions?.standard ?? 0,
+                    gasPrice: gasOptions?.standard,
                 },
                 {
                     title: t('plugin_trader_gas_setting_fast'),
-                    gasPrice: gasOptions?.fast ?? 0,
+                    gasPrice: gasOptions?.fast,
                 },
                 {
                     title: t('plugin_trader_gas_setting_custom'),
@@ -156,8 +147,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             [gasOptions, customGasPrice],
         )
 
-        const { value: nativeToken } = useNativeTokenDetailed()
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+        const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+            chainId: nativeToken?.chainId,
+        })
 
         // #region Confirm function
         const handleConfirm = useCallback(() => {

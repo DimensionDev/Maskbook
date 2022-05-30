@@ -1,24 +1,18 @@
-import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { isGreaterThan, ONE } from '@masknet/web3-shared-base'
-import {
-    ERC20TokenDetailed,
-    FAKE_SIGN_PASSWORD,
-    FungibleTokenDetailed,
-    TransactionEventType,
-    useAccount,
-    useChainId,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
+import BigNumber from 'bignumber.js'
+import { sha3 } from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
+import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { TransactionEventType, ChainId, SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { FungibleToken, isGreaterThan, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
 import type { AdvanceSettingData } from '../AdvanceSetting'
 import { gcd, sortTokens } from '../helpers'
 import { useITO_Contract } from './useITO_Contract'
+import { useI18N } from '../../../../utils'
 
 export interface PoolSettings {
     password: string
@@ -32,8 +26,8 @@ export interface PoolSettings {
     total: string
     qualificationAddress: string
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token?: ERC20TokenDetailed
+    exchangeTokens: Array<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>>
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     advanceSettingData: AdvanceSettingData
 }
 
@@ -49,23 +43,24 @@ type paramsObjType = {
     total: string
     limit: string
     qualificationAddress: string
-    exchangeAmountsDivided: (readonly [BigNumber, BigNumber])[]
+    exchangeAmountsDivided: Array<readonly [BigNumber, BigNumber]>
     now: number
     invalidTokenAt: number
     exchangeAmounts: string[]
-    exchangeTokens: FungibleTokenDetailed[]
-    token: ERC20TokenDetailed | undefined
+    exchangeTokens: Array<FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>>
+    token: FungibleToken<ChainId, SchemaType.ERC20> | undefined
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
-    const web3 = useWeb3()
-    const account = useAccount()
-    const chainId = useChainId()
-    const { contract: ITO_Contract } = useITO_Contract()
+    const { t } = useI18N()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
     const paramResult = useFillParams(poolSettings)
 
     const [state, fillCallback] = useAsyncFn(async () => {
-        if (!poolSettings) return
+        if (!web3 || !poolSettings) return
 
         const { password, startTime, endTime, token, unlockTime } = poolSettings
 
@@ -85,7 +80,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         if (!signedPassword) {
             return
         }
-        params[0] = Web3Utils.sha3(signedPassword)!
+        params[0] = sha3(signedPassword)!
 
         // the given settings is valid
         const settings: PoolSettings = {
@@ -127,7 +122,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 }
 
 export function useFillParams(poolSettings: PoolSettings | undefined) {
-    const { contract: ITO_Contract } = useITO_Contract()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { contract: ITO_Contract } = useITO_Contract(chainId)
 
     return useAsync(async () => {
         if (!poolSettings || !ITO_Contract) return null
