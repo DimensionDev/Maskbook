@@ -1,11 +1,12 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useContext } from 'react'
 import { createUITaskManager } from '../../UITaskManager'
 import { PickTokenOptions, SelectTokenDialog, SelectTokenDialogProps } from './SelectTokenDialog'
 
 const { TaskManagerContext, TaskManagerProvider: TokenPickerProvider } = createUITaskManager<
     PickTokenOptions,
-    FungibleTokenDetailed,
+    FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     SelectTokenDialogProps
 >(SelectTokenDialog)
 

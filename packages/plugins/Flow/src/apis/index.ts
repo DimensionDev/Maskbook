@@ -1,1 +1,1 @@
-export * from './getFungibleAssets'
+export * from './fungibleAssets'

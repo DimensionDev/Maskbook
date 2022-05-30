@@ -1,0 +1,22 @@
+{
+    "NAME": {
+        "Mainnet": "Solana",
+        "Testnet": "Solana Testnet",
+        "Devnet": "Solana Devnet"
+    },
+    "FULL_NAME": {
+        "Mainnet": "Solana",
+        "Testnet": "Solana Testnet",
+        "Devnet": "Solana Devnet"
+    },
+    "SHORT_NAME": {
+        "Mainnet": "SOL",
+        "Testnet": "SOL",
+        "Devnet": "SOL"
+    },
+    "COLOR": {
+        "Mainnet": "#25c2a0",
+        "Testnet": "#25c2a0",
+        "Devnet": "#25c2a0"
+    }
+}

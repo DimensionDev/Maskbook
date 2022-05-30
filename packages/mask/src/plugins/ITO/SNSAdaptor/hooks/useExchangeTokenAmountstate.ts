@@ -1,11 +1,12 @@
 import { v4 as uuid } from 'uuid'
 import { useReducer } from 'react'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface ExchangeTokenAndAmountState {
     key: string
     amount: string
-    token?: FungibleTokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
 }
 
 export enum ExchangeTokenAndAmountActionType {
@@ -20,7 +21,7 @@ export type ExchangeTokenAndAmountAction =
           type: ExchangeTokenAndAmountActionType.ADD
           key: string
           amount: string
-          token?: FungibleTokenDetailed
+          token?: FungibleToken<ChainId, SchemaType>
       }
     | {
           type: ExchangeTokenAndAmountActionType.REMOVE
@@ -33,7 +34,7 @@ export type ExchangeTokenAndAmountAction =
       }
     | {
           type: ExchangeTokenAndAmountActionType.UPDATE_TOKEN
-          token?: FungibleTokenDetailed
+          token?: FungibleToken<ChainId, SchemaType>
           key: string
       }
 

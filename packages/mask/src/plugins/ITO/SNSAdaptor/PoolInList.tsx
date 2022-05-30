@@ -1,16 +1,13 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import { SchemaType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
 import {
-    EthereumTokenType,
+    isZero,
     formatBalance,
-    FungibleTokenInitial,
-    getChainDetailed,
+    NetworkPluginID,
     isSameAddress,
-    useAccount,
-    useFungibleTokenDetailed,
-    useFungibleTokensDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+    FungibleToken,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -37,6 +34,7 @@ import { useDestructCallback } from './hooks/useDestructCallback'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
+import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
 import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
@@ -142,8 +140,8 @@ export function PoolInList(props: PoolInListProps) {
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
-    const { value: _tokenDetailed } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+    const { value: _tokenDetailed } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )
     const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
@@ -153,12 +151,19 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-                  } as Pick<FungibleTokenInitial, 'address' | 'type'>),
+                      schema: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                      type: TokenType.Fungible,
+                  } as Pick<
+                      FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                      'address' | 'type' | 'schema'
+                  >),
           )
         : []
 
-    const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
+    const { value: _exchangeTokens } = useFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        _poolTokens.map((x) => x.address),
+    )
     const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
     // #endregion
 
@@ -184,7 +189,7 @@ export function PoolInList(props: PoolInListProps) {
     )
     // #endregion
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
@@ -210,7 +215,7 @@ export function PoolInList(props: PoolInListProps) {
                         fullWidth
                         size="small"
                         variant="contained"
-                        onClick={() => destruct(pool.pid)}>
+                        onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
@@ -244,8 +249,8 @@ export function PoolInList(props: PoolInListProps) {
                     <TokenIcon
                         classes={{ icon: classes.icon }}
                         address={poolToken.address}
-                        logoURI={poolToken.logoURI}
                         name={poolToken.symbol}
+                        logoURI={poolToken.logoURL}
                     />
                 </Box>
                 <Box className={classes.content}>
@@ -333,7 +338,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -347,7 +352,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     6,
                                                 )}{' '}
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}
                                             </TableCell>

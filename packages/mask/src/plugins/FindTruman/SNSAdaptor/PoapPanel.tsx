@@ -1,10 +1,11 @@
-import { useAccount } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { fetchUserPoap } from '../Worker/apis'
 import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
     skeleton: {
@@ -37,7 +38,7 @@ interface PoapPanelProps {}
 export default function PoapPanel(props: PoapPanelProps) {
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { value: poaps, loading } = useAsync(async () => {
         return account ? fetchUserPoap(account) : undefined

@@ -1,10 +1,11 @@
+import { useCallback, useState } from 'react'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
-import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
@@ -12,7 +13,6 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import Services from '../../../extension/service'
 import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
@@ -64,12 +64,12 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
-    const chainId = useChainId()
-    const account = useAccount()
     const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
 
     const onClose = useCallback(() => {
@@ -81,9 +81,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props, state])
 
     const currentIdentity = useCurrentIdentity()
-
-    const { value: linkedPersona } = useCurrentLinkedPersona()
     const lastRecognized = useLastRecognizedIdentity()
+    const { value: linkedPersona } = useCurrentLinkedPersona()
     const senderName =
         lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -97,9 +96,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await Services.Ethereum.personalSign(
+                    if (!connection) return
+                    payload.password = await connection.signMessage(
                         Web3Utils.sha3(payload.sender.message) ?? '',
-                        account,
+                        'personaSign',
+                        { account },
                     )
                     payload.password = payload.password!.slice(2)
                 }
@@ -112,7 +113,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             onClose()
             closeApplicationBoardDialog()
         },
-        [onClose, chainId, senderName],
+        [onClose, chainId, senderName, connection],
     )
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)

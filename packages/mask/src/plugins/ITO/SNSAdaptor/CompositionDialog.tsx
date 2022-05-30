@@ -3,14 +3,13 @@ import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@mask
 import { EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import { useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
@@ -20,8 +19,10 @@ import { DialogTabs, JSON_PayloadInMask } from '../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { payloadOutMask } from './helpers'
-import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { PoolList } from './PoolList'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PoolSettings, useFillCallback } from './hooks/useFill'
 
 interface StyleProps {
     snsId: string
@@ -54,8 +55,9 @@ export interface CompositionDialogProps extends withClasses<'root'>, Omit<Inject
 export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
@@ -148,7 +150,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
-                payload.password = await Services.Ethereum.personalSign(Web3Utils.sha3(title) ?? '', account)
+                payload.password =
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personaSign', {
+                        account,
+                    })) ?? ''
             }
             if (!payload.password) {
                 alert('Failed to sign the password.')

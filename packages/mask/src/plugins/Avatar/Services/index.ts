@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'

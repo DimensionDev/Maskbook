@@ -1,17 +1,16 @@
-import type { NetworkPluginID } from '../web3-types'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNetworkType } from './useNetworkType'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
 
-export function useNetworkDescriptor(
-    expectedChainIdOrNetworkTypeOrID?: number | string,
-    expectedPluginID?: NetworkPluginID,
+export function useNetworkDescriptor<T extends NetworkPluginID>(
+    expectedPluginID?: T,
+    expectedChainIdOrNetworkTypeOrID?: string | number,
 ) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const pid = expectedPluginID ?? pluginID
-    const networkType = useNetworkType(pid)
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    const networkType = useNetworkType(pluginID)
 
-    return getPluginDefine(pid)?.declareWeb3Networks?.find((x) =>
+    return getPluginDefine(pluginID)?.declareWeb3Networks?.find((x) =>
         [x.chainId, x.type, x.ID].includes(expectedChainIdOrNetworkTypeOrID ?? networkType ?? ''),
     )
 }

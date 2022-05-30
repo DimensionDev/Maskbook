@@ -1,8 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { languages } from './locales/languages'
 import { PLUGIN_NAME, PLUGIN_ID, PLUGIN_DESCRIPTION } from './constants'
 
-export const base: Plugin.Shared.Definition = {
+export const base: Plugin.Shared.Definition<ChainId> = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },

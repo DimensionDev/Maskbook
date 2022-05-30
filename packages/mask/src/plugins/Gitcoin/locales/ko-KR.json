@@ -1,1 +1,10 @@
-{}
+{
+    "select_a_token": "토큰 선택",
+    "grant_not_available": "이용 불가",
+    "enter_an_amount": "수액 입력",
+    "insufficient_balance": "{{symbol}} 잔액 부족",
+    "gitcoin_readme": "이 서비스를 이용하면 <fund>Gitcoin 개발 기금에 당신의 기여금</fund>의 5%를 기부할 것이다.",
+    "donate": "기부",
+    "last_updated": "신규 업데이트",
+    "view_on": "Gitcoin에서 보기"
+}
