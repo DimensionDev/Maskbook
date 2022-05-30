@@ -38,7 +38,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const { Connection } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
 
     const onConnect = useCallback(
-        async (chainId: number) => {
+        async (chainId: Web3Helper.ChainIdAll) => {
             if (!chainId || !Connection) throw new Error('Failed to connect to provider.')
             const connection = await Connection.getConnection?.({
                 providerType: providerDescriptor.type,
