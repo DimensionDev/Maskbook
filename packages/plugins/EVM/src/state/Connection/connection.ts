@@ -101,6 +101,7 @@ class Connection implements EVM_Connection {
                                         await Web3StateSettings.value.Provider?.connect(
                                             context.chainId,
                                             context.providerType,
+                                            options?.popupsWindow,
                                         ),
                                     )
                                     break

@@ -55,12 +55,17 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         return response?.result as T
     }
 
-    override async connect(chainId: ChainId) {
+    override async connect(chainId: ChainId, popupsWindow?: boolean) {
         const { account, chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
         const wallets = await getWallets()
-        SharedContextSettings.value.openPopupWindow(wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
-            chainId,
-        })
+        if (popupsWindow) {
+            SharedContextSettings.value.openPopupWindow(
+                wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
+                {
+                    chainId,
+                },
+            )
+        }
         const accounts = await SharedContextSettings.value.selectAccount()
         if (!accounts.length) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 

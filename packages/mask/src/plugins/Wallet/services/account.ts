@@ -37,10 +37,9 @@ export async function resetMaskAccount() {
 }
 
 // #region select wallet with popups
-let deferred: DeferTuple<string[], Error>
+const deferred: DeferTuple<string[], Error> = defer<string[], Error>()
 
 export async function selectMaskAccount(): Promise<string[]> {
-    deferred = defer<string[], Error>()
     return deferred[0]
 }
 

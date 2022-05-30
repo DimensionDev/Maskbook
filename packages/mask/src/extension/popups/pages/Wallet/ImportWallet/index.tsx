@@ -191,6 +191,7 @@ const ImportWallet = memo(() => {
                             await connection?.connect({
                                 account: privateKeyWallet,
                                 providerType: ProviderType.MaskWallet,
+                                popupsWindow: false,
                             })
 
                             await Services.Helper.removePopupWindow()
