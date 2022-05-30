@@ -107,7 +107,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 20,
         },
         label: {
             flex: 1,
@@ -158,11 +157,12 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         controller: {
             width: '100%',
-            paddingBottom: 16,
+            flex: 1,
             // Just for design
             backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
-            position: 'sticky',
-            bottom: isPopup ? -12 : -20,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
         },
         noToken: {
             borderRadius: '18px !important',

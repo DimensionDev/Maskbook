@@ -24,7 +24,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import { SharedTrans, useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import ActionButton, { ActionButtonPromise, ActionButtonPromiseProps } from '../ActionButton'
 import { PluginWalletConnectIcon } from '@masknet/icons'
@@ -380,14 +380,5 @@ export function ChainBoundary(props: ChainBoundaryProps) {
                 )
             ) : null}
         </>,
-        providerType === ProviderType.WalletConnect ? (
-            <SharedTrans.plugin_wallet_connect_tips
-                components={{
-                    br: <br />,
-                }}
-            />
-        ) : (
-            ''
-        ),
     )
 }
