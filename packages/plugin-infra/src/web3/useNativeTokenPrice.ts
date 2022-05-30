@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useNativeTokenAddress } from './useNativeTokenAddress'
 import { useChainId } from '../entry-web3'
@@ -17,6 +17,8 @@ export function useNativeTokenPrice<T extends NetworkPluginID>(pluginID: T, opti
     const nativeTokenAddress = useNativeTokenAddress(pluginID, options)
 
     return useAsyncRetry(async () => {
-        return (hub?.getFungibleTokenPrice as GetFungibleTokenPrice)(chainId, nativeTokenAddress)
+        return (hub?.getFungibleTokenPrice as GetFungibleTokenPrice)(chainId, nativeTokenAddress, {
+            currencyType: CurrencyType.NATIVE,
+        } as Web3Helper.Web3HubOptions)
     }, [chainId, nativeTokenAddress, hub])
 }
