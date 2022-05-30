@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { MaskMessages, useI18N } from '../../../../../utils'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate, useRoutes } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import { ChainId, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
@@ -20,6 +20,7 @@ import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -78,6 +79,7 @@ const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
+    const navigate = useNavigate()
 
     const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -127,7 +129,8 @@ const WalletRecovery = memo(() => {
                 await Services.Backup.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 // Set default wallet
-                if (json.wallets) await web3State.Provider?.connect(ChainId.Mainnet, ProviderType.MaskWallet)
+                if (json.wallets) await WalletRPC.setDefaultMaskAccount()
+
                 // Send event after successful recovery
                 MaskMessages.events.restoreSuccess.sendToAll(undefined)
 

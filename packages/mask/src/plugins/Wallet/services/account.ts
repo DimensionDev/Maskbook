@@ -1,3 +1,4 @@
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import {
@@ -6,6 +7,18 @@ import {
     currentMaskWalletNetworkSettings,
 } from '../settings'
 import { Flags } from '../../../../shared'
+import { WalletRPC } from '../messages'
+import { defer, DeferTuple } from '@dimensiondev/kit'
+
+export async function setDefaultMaskAccount() {
+    if (currentMaskWalletAccountSettings.value) return
+    const wallets = await WalletRPC.getWallets()
+    const address = first(wallets)?.address
+    if (address)
+        await updateMaskAccount({
+            account: address,
+        })
+}
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
     if (options.chainId && !options.networkType) options.networkType = chainResolver.chainNetworkType(options.chainId)
@@ -24,18 +37,21 @@ export async function resetMaskAccount() {
 }
 
 // #region select wallet with popups
-let callbackMemorized: (accounts: string[]) => void | undefined
+let deferred: DeferTuple<string[], Error>
 
-export async function selectMaskAccountPrepare(callback: (accounts: string[]) => void) {
-    callbackMemorized = callback
+export async function selectMaskAccount(): Promise<string[]> {
+    deferred = defer<string[], Error>()
+    return deferred[0]
 }
 
-export async function selectMaskAccount(accounts: string[]) {
-    callbackMemorized?.(accounts)
+export async function resolveMaskAccount(accounts: string[]) {
+    const [, resolve] = deferred
+    resolve?.(accounts)
 }
 
 export async function rejectMaskAccount() {
-    callbackMemorized?.([])
+    const [, resolve] = deferred
+    resolve?.([])
 }
 // #endregion
 

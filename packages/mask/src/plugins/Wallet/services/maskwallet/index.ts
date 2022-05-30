@@ -5,7 +5,7 @@ import { OnDemandWorker } from '@masknet/shared-base'
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
 
-const Worker = new OnDemandWorker(new URL('../../../../../../web-workers/wallet.ts', import.meta.url), {
+const Worker = new OnDemandWorker(new URL('../../../../../web-workers/wallet.ts', import.meta.url), {
     name: 'MaskWallet',
 })
 

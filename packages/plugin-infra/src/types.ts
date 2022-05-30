@@ -155,6 +155,8 @@ export namespace Plugin.Shared {
         /** Close popup window */
         closePopupWindow(): Promise<void>
 
+        /** Select a Mask Wallet account */
+        selectAccount(): Promise<string[]>
         /** Update Mask Wallet account */
         updateAccount(account: {
             account?: string
@@ -164,8 +166,6 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
-        /** Prepare to select a Mask Wallet account */
-        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
@@ -177,6 +177,10 @@ export namespace Plugin.Shared {
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
 
+        /** Get all wallets */
+        getWallets(): Promise<Wallet[]>
+        /** Get the primary wallet */
+        getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
         /** Update a wallet */
