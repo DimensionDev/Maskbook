@@ -154,7 +154,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
         const current = innerRef.current
         setIsTabsOverflow(current?.scrollWidth > current?.clientWidth)
-    }, [innerRef.current, width])
+    }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
     const children = Children.map(props.children, (child) => {
