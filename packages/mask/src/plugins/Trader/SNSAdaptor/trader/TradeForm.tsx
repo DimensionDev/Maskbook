@@ -417,7 +417,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         <Typography component="span" className={classes.amount} color="primary">
                                             <FormattedBalance
                                                 value={outputTokenBalance}
-                                                decimals={outputToken?.decimals}
+                                                decimals={outputToken?.decimals ?? 18}
                                                 significant={6}
                                                 formatter={formatBalance}
                                             />
