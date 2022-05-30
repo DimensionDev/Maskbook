@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared-evm'
-import { ERC20TokenList } from '@masknet/shared'
+import { FungibleTokenList } from '@masknet/shared'
+import { useBlockedFungibleTokens } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../../utils'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hook/useTitle'
@@ -40,11 +40,9 @@ const useStyles = makeStyles()({
 
 const AddToken = memo(() => {
     const { t } = useI18N()
-    const wallet = useWallet()
     const { classes } = useStyles()
     const navigate = useNavigate()
-
-    const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
+    const blackList = useBlockedFungibleTokens()
 
     useTitle(t('add_token'))
 
@@ -52,7 +50,10 @@ const AddToken = memo(() => {
         <>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />
+                <FungibleTokenList
+                    blacklist={blackList.map((x) => x.address)}
+                    FixedSizeListProps={{ height: 340, itemSize: 54 }}
+                />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>

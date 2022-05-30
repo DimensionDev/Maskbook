@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import type { DataProvider } from '@masknet/public-api'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { currentDataProviderSettings } from '../settings'
+import { useSubscription } from 'use-subscription'
+import { getDataProvider } from '../storage'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
-    const currentDataProvider = useValueRef<DataProvider>(currentDataProviderSettings)
+    const currentDataProvider = useSubscription(getDataProvider().subscription)
+
     const [dataProvider, setDataProvider] = useState(currentDataProvider)
 
     // sync data provider

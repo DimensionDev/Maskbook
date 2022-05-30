@@ -1,6 +1,8 @@
-import { EthereumTokenType, FungibleTokenDetailed, TransactionEventType, useAccount } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
+import { TransactionEventType, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -16,11 +18,11 @@ export function useDepositCallback(
     amount: string,
     controlledToken: string,
     referrer: string,
-    token?: FungibleTokenDetailed,
+    token?: FungibleToken<ChainId, SchemaType>,
 ) {
-    const poolContract = usePoolTogetherPoolContract(address)
-
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const poolContract = usePoolTogetherPoolContract(chainId, address)
 
     return useAsyncFn(async () => {
         if (!token || !poolContract) {
@@ -30,7 +32,7 @@ export function useDepositCallback(
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(token.schema === SchemaType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await poolContract.methods
             .depositTo(account, amount, controlledToken, referrer)

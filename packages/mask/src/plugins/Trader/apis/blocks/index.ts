@@ -1,14 +1,13 @@
-import { getTrendingConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { chunk, first, flatten } from 'lodash-unified'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 
 interface Block {
     number: string
 }
 
-async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
-    const subgraphURL = getTrendingConstants(currentChainIdSettings.value).ETHEREUM_BLOCKS_SUBGRAPH_URL
+async function fetchFromEthereumBlocksSubgraph<T>(chainId: ChainId, query: string) {
+    const subgraphURL = getTrendingConstants(chainId).ETHEREUM_BLOCKS_SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
@@ -25,10 +24,12 @@ async function fetchFromEthereumBlocksSubgraph<T>(query: string) {
  * Fetches the block number near the given timestamp.
  * @param timestamp
  */
-export async function fetchBlockNumberByTimestamp(timestamp: number) {
+export async function fetchBlockNumberByTimestamp(chainId: ChainId, timestamp: number) {
     const data = await fetchFromEthereumBlocksSubgraph<{
         blocks: Block[]
-    }>(`
+    }>(
+        chainId,
+        `
     {
         blocks (
             first: 1,
@@ -41,7 +42,8 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
             number
         }
     }
-    `)
+    `,
+    )
     return first(data?.blocks)?.number
 }
 
@@ -50,7 +52,7 @@ export async function fetchBlockNumberByTimestamp(timestamp: number) {
  * @param timestamps
  * @param skipCount
  */
-export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCount = 100) {
+export async function fetchBlockNumbersByTimestamps(chainId: ChainId, timestamps: number[], skipCount = 100) {
     // avoiding request entity too large
     const chunkTimestamps = chunk(timestamps, skipCount)
 
@@ -72,11 +74,14 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
                 `
             })
 
-            return fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
+            return fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(
+                chainId,
+                `
                 query blocks {
                     ${queries}
                 }
-            `)
+            `,
+            )
         }),
     )
 
@@ -96,7 +101,7 @@ export async function fetchBlockNumbersByTimestamps(timestamps: number[], skipCo
  * the timestamps can't have too much item
  * @param timestamps
  */
-export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) {
+export async function fetchBlockNumbersObjectByTimestamps(chainId: ChainId, timestamps: number[]) {
     const queries = timestamps.map((x) => {
         return `
             t${x}: blocks(
@@ -112,11 +117,14 @@ export async function fetchBlockNumbersObjectByTimestamps(timestamps: number[]) 
         `
     })
 
-    const data = await fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(`
+    const data = await fetchFromEthereumBlocksSubgraph<Record<string, Block[]>>(
+        chainId,
+        `
         query blocks {
             ${queries}
         }
-    `)
+    `,
+    )
 
     const result: Record<string, string | undefined> = {}
     if (!data) return result

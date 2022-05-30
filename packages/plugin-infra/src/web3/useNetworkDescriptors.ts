@@ -1,7 +1,9 @@
-import { useCurrentWeb3NetworkPluginID } from '.'
-import { getPluginDefine } from '../entry'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getPluginDefine } from '../manager/store'
+import { useCurrentWeb3NetworkPluginID } from './Context'
 
-export function useNetworkDescriptors(expectedPluginID?: string) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    return getPluginDefine(expectedPluginID ?? pluginID)?.declareWeb3Networks ?? []
+export function useNetworkDescriptors<T extends NetworkPluginID>(expectedPluginID?: T) {
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    return getPluginDefine(pluginID)?.declareWeb3Networks ?? EMPTY_LIST
 }

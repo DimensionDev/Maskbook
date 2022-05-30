@@ -1,5 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import { isLessThan, scale10 } from '@masknet/web3-shared-base'
+import {
+    GasOptionType,
+    isLessThan,
+    NetworkPluginID,
+    TransactionDescriptorType,
+    scale10,
+} from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -7,13 +13,9 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     ChainId,
-    EthereumRpcType,
     formatGweiToWei,
     formatWeiToEther,
     formatWeiToGwei,
-    useChainId,
-    useNativeTokenDetailed,
-    useWeb3,
     ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
@@ -25,9 +27,9 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
-import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
+import { useChainId, useGasOptions, useNativeToken, useNativeTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -103,28 +105,26 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const web3 = useWeb3()
-    const chainId = useChainId()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
-    const { value: nativeToken } = useNativeTokenDetailed()
-
-    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
 
     // #region Get gas options from debank
-    const { value: gasOptions } = useAsync(async () => {
-        const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-
-        if (!response) return null
-
+    const gasOptions = useMemo(() => {
         return {
-            slow: response.data.slow.price,
-            standard: response.data.normal.price,
-            fast: response.data.fast.price,
+            slow: gasOptions_?.[GasOptionType.SLOW].suggestedMaxFeePerGas ?? 0,
+            standard: gasOptions_?.[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0,
+            fast: gasOptions_?.[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
         }
-    }, [chainId])
+    }, [chainId, gasOptions_])
     // #endregion
 
     const options = useMemo(
@@ -133,15 +133,15 @@ export const Prior1559GasSetting = memo(() => {
                 ? [
                       {
                           title: t('popups_wallet_gas_fee_settings_low'),
-                          gasPrice: gasOptions?.slow ?? 0,
+                          gasPrice: gasOptions.slow,
                       },
                       {
                           title: t('popups_wallet_gas_fee_settings_medium'),
-                          gasPrice: gasOptions?.standard ?? 0,
+                          gasPrice: gasOptions.standard,
                       },
                       {
                           title: t('popups_wallet_gas_fee_settings_high'),
-                          gasPrice: gasOptions?.fast ?? 0,
+                          gasPrice: gasOptions.fast,
                       },
                   ]
                 : null,
@@ -151,10 +151,10 @@ export const Prior1559GasSetting = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
-            return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
+            return new BigNumber(value?.formatterTransaction?._tx.gas ?? 0).toNumber()
         }
         return 0
     }, [value])
@@ -162,11 +162,11 @@ export const Prior1559GasSetting = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return web3.eth.estimateGas(value.computedPayload._tx)
+                return web3?.eth.estimateGas(value.formatterTransaction._tx) ?? 0
             } catch {
                 return 0
             }
@@ -208,17 +208,17 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-            value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
+            value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+            value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
             // if rpc payload contain gas price, set it to default values
-            if (value?.computedPayload._tx.gasPrice) {
-                const minGasPrice = minGasPriceOfChain[chainId]
+            if (value?.formatterTransaction._tx.gasPrice) {
+                const minGasPrice = minGasPriceOfChain[chainId as ChainId]
                 // if the gas price in payload is lower than minimum value
-                if (minGasPrice && isLessThan(value.computedPayload._tx.gasPrice as number, minGasPrice)) {
+                if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice as number, minGasPrice)) {
                     setValue('gasPrice', formatWeiToGwei(minGasPrice).toString())
                 }
-                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
+                setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }

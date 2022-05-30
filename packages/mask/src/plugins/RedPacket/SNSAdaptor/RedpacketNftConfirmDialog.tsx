@@ -2,34 +2,32 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-    useWallet,
-    useAccount,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
-    useWeb3,
+    explorerResolver,
+    ChainId,
+    SchemaType,
     TransactionStateType,
     isNativeTokenAddress,
-    formatNFT_TokenId,
+    formatTokenId,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N as useBaseI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
-import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -155,25 +153,23 @@ export interface RedpacketNftConfirmDialogProps {
     open: boolean
     onBack: () => void
     onClose: () => void
-    contract: ERC721ContractDetailed
-    tokenList: ERC721TokenDetailed[]
+    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>
+    tokenList: Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
     message: string
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
     const { classes } = useStyles()
     const { open, onBack, onClose, message, contract, tokenList } = props
-    const wallet = useWallet()
-    const account = useAccount()
-    const chainId = useChainId()
-    const web3 = useWeb3()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata } = useCompositionContext()
 
     const { t: i18n } = useBaseI18N()
     const t = useI18N()
-    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
     const duration = 60 * 60 * 24
     const currentIdentity = useCurrentIdentity()
-
     const { value: linkedPersona } = useAsync(async () => {
         if (!currentIdentity?.linkedPersona) return
         return Services.Identity.queryPersona(currentIdentity.linkedPersona)
@@ -205,7 +201,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 senderName,
                 contractName: contract.name,
                 contractAddress: contract.address,
-                contractTokenURI: contract.iconURL ?? '',
+                contractTokenURI: contract.logoURL ?? '',
                 contractVersion: 1,
                 privateKey,
                 chainId: contract.chainId,
@@ -253,11 +249,11 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNativeTokenAddress(wallet) ? null : (
+                            {isNativeTokenAddress(wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
-                                    href={resolveAddressLinkOnExplorer(chainId, account)}
+                                    href={explorerResolver.addressLink(chainId, account)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={stop}>
@@ -333,7 +329,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <EthereumWalletConnectedBoundary
+                        <WalletConnectedBoundary
                             classes={{
                                 connectWallet: classNames(classes.button, classes.sendButton),
                                 unlockMetaMask: classNames(classes.button, classes.sendButton),
@@ -351,7 +347,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                     symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
                                 })}
                             </ActionButton>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </Grid>
                 </Grid>
             </DialogContent>
@@ -360,19 +356,19 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 }
 
 interface NFTCardProps {
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType.ERC721>
     renderOrder: number
 }
 
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
+    const [name, setName] = useState(formatTokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
-                contractAddress={token.contractDetailed.address}
-                chainId={token.contractDetailed.chainId}
+                contractAddress={token.contract?.address}
+                chainId={token.contract?.chainId}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}

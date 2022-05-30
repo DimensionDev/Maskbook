@@ -1,15 +1,12 @@
 import React, { useCallback } from 'react'
 import { Grid, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    ApproveStateType,
-    ERC20TokenDetailed,
-    formatBalance,
-    useERC20TokenApproveCallback,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -43,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender?: string
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
     fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
     render?: (disable: boolean) => React.ReactNode

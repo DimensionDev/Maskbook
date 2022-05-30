@@ -1,21 +1,18 @@
-import {
-    useAccount,
-    useChainId,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
-import { useCallback } from 'react'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
 
 const EXTRA_GAS_PER_NFT = 335
 
 export function useClaimNftRedpacketCallback(id: string, totalAmount: number | undefined, signedMsg: string) {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const nftRedPacketContract = useNftRedPacketContract()
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {

@@ -1,16 +1,12 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    EthereumTokenType,
-    GasOptionConfig,
-    TransactionEventType,
-    useAccount,
-    useTraderConstants,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, GasOptionConfig, TransactionEventType, useTraderConstants } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
@@ -19,7 +15,7 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_DEFAULT,
     gasConfig?: GasOptionConfig,
 ) {
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
 
@@ -51,9 +47,9 @@ export function useTradeCallback(
 
         // balancer use a different address for the native token
         const inputTokenAddress =
-            trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
+            trade.inputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
-            trade.outputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+            trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
         const tx =
             trade.strategy === TradeStrategy.ExactIn
@@ -73,9 +69,9 @@ export function useTradeCallback(
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash

@@ -4,7 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
@@ -16,9 +16,12 @@ import { trim } from 'lodash-unified'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
-import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -54,7 +57,7 @@ function NFTAvatarInTwitter() {
     const rainBowElement = useRef<Element | null>()
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { value: _avatar } = usePersonaNFTAvatar(
         identity.identifier?.userId ?? '',
         getAvatarId(identity.avatar ?? ''),

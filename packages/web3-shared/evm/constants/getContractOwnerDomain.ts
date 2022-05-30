@@ -13,7 +13,10 @@ import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import Trader from '@masknet/web3-constants/evm/trader.json'
 import { filter, flatten, pick, uniq, values } from 'lodash-unified'
 
-const collect = <T extends Record<string, Record<string, string | number>>>(data: T, fields: (keyof T)[]): string[] => {
+const collect = <T extends Record<string, Record<string, string | number>>>(
+    data: T,
+    fields: Array<keyof T>,
+): string[] => {
     const groupedByFields = values(pick(data, fields))
     const listOfAddresses = groupedByFields.map((v) => values(v))
     const listOfAddress = flatten(listOfAddresses)

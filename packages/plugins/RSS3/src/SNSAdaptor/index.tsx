@@ -1,20 +1,17 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { IdentityAddress, IdentityAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { TabCard, TabCardType } from './TabCard'
 
-function addressNameSorter(a: Plugin.SNSAdaptor.ProfileAddress, z: Plugin.SNSAdaptor.ProfileAddress) {
-    if (a.type === AddressNameType.RSS3) return -1
-    if (z.type === AddressNameType.RSS3) return 1
+function addressNameSorter(a: IdentityAddress, z: IdentityAddress) {
+    if (a.type === IdentityAddressType.RSS3) return -1
+    if (z.type === IdentityAddressType.RSS3) return 1
     return 0
 }
 
-function shouldDisplay(
-    identity?: Plugin.SNSAdaptor.ProfileIdentity,
-    addressNames?: Plugin.SNSAdaptor.ProfileAddress[],
-) {
-    return addressNames?.some((x) => x.type === AddressNameType.RSS3) ?? false
+function shouldDisplay(identity?: SocialIdentity, addressNames?: IdentityAddress[]) {
+    return addressNames?.some((x) => x.type === IdentityAddressType.RSS3) ?? false
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -27,7 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 1,
             UI: {
                 TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Donation} />
+                    return <TabCard addressNames={addressNames as IdentityAddress[]} type={TabCardType.Donation} />
                 },
             },
             Utils: {
@@ -41,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 2,
             UI: {
                 TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Footprint} />
+                    return <TabCard addressNames={addressNames as IdentityAddress[]} type={TabCardType.Footprint} />
                 },
             },
             Utils: {
