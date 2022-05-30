@@ -16,12 +16,14 @@ import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 import { EthereumWeb3API } from './web3'
+import { MagicEdenAPI } from './MagicEden'
 
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()
+export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
 export const Zora = new ZoraAPI()
