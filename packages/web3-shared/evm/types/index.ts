@@ -272,6 +272,7 @@ export enum ProviderType {
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',
     CustomNetwork = 'CustomNetwork',
+    Opera = 'Opera',
 }
 
 /**
