@@ -317,7 +317,7 @@
     "plugin_ito_claiming": "認領中",
     "plugin_ito_claim_all": "認領全部",
     "plugin_ito_qualification_start_time": "資格開始時間：",
-    "plugin_ito_error_qualification_start_time": "錯誤：資格開始時間應早於 ITO 結束時間",
+    "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_error_invalid_qualification": "錯誤的資格地址",
     "plugin_ito_unlock_time": "解鎖時間 {{zone}}",
     "plugin_ito_total_claimable_count": "總計: ",

@@ -474,7 +474,7 @@
     "plugin_ito_claiming": "认领中...",
     "plugin_ito_claim_all": "认领全部",
     "plugin_ito_qualification_start_time": "资格认证开始时间：",
-    "plugin_ito_error_qualification_start_time": "无效：资格认证开始时间应该早于ITO结束时间",
+    "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_error_invalid_qualification": "无效的资格认证地址",
     "plugin_ito_unlock_time_cert": "ITO Mask 解锁时间为 {{date}}。",
     "plugin_ito_unlock_time": "解锁时间 {{zone}}",

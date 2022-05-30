@@ -362,7 +362,7 @@
     "plugin_ito_claiming": "수령 중",
     "plugin_ito_claim_all": "모두 수령",
     "plugin_ito_qualification_start_time": "자격 인정 시작 시간",
-    "plugin_ito_error_qualification_start_time": "주의: 자격 인정 시작 시간이 ITO 종료 시간보다 빨아야 합니다.",
+    "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_error_invalid_qualification": "무효한 인증 주소입니다.",
     "plugin_ito_unlock_time_cert": "ITO Mask 언락 시간은 {{date}}.",
     "plugin_ito_unlock_time": "언락 시간 {{zone}}",

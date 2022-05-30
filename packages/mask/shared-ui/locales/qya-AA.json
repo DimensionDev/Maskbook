@@ -535,7 +535,7 @@
     "plugin_ito_claiming": "crwdns5051:0crwdne5051:0",
     "plugin_ito_claim_all": "crwdns5053:0crwdne5053:0",
     "plugin_ito_qualification_start_time": "crwdns5061:0crwdne5061:0",
-    "plugin_ito_error_qualification_start_time": "crwdns5063:0crwdne5063:0",
+    "plugin_ito_error_qualification_start_time": "",
     "plugin_ito_end_time_title": "crwdns13173:0crwdne13173:0",
     "plugin_ito_error_invalid_qualification": "crwdns5067:0crwdne5067:0",
     "plugin_ito_unlock_time_cert": "crwdns10245:0{{date}}crwdne10245:0",
