@@ -2,7 +2,7 @@ import { noop } from 'lodash-unified'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
-import {Emitter} from "@servie/events";
+import { Emitter } from '@servie/events'
 
 export function createConstantSubscription<T>(value: T): Subscription<T> {
     return {
