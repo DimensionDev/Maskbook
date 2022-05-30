@@ -48,11 +48,11 @@ export interface PickTokenOptions {
     blacklist?: string[]
     tokens?: Array<FungibleToken<ChainId, SchemaType>>
     selectedTokens?: string[]
+    onSubmit?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
     open: boolean
-    onSelect?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
     onClose?(): void
 }
 
@@ -65,7 +65,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSelect,
+    onSubmit,
     onClose,
     title,
 }) => {
@@ -88,7 +88,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSelect}
+                    onSelect={onSubmit}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
