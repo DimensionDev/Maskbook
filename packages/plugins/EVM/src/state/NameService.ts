@@ -15,16 +15,16 @@ export class NameService extends NameServiceState<ChainId> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        const defaultValue = Object.fromEntries(getEnumAsArray(ChainId).map((x) => [x.value, {}])) as Record<
-            ChainId,
-            Record<string, string>
-        >
-
-        super(context, defaultValue, subscriptions, {
-            isValidName: (x) => x !== '0x',
-            isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
-            formatAddress: formatEthereumAddress,
-        })
+        super(
+            context,
+            getEnumAsArray(ChainId).map((x) => x.value),
+            subscriptions,
+            {
+                isValidName: (x) => x !== '0x',
+                isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
+                formatAddress: formatEthereumAddress,
+            },
+        )
     }
 
     private async createENS() {

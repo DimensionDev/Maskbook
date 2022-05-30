@@ -14,7 +14,7 @@ export class NameServiceState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: DomainBooks,
+        protected chainIds: ChainId[],
         protected subscriptions: {
             chainId?: Subscription<ChainId>
         },
@@ -24,6 +24,7 @@ export class NameServiceState<
             formatAddress(a: string): string
         },
     ) {
+        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as DomainBooks
         const { storage } = context.createKVStorage('memory', {}).createSubScope('NameService', {
             value: defaultValue,
         })

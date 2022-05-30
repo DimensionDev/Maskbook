@@ -27,7 +27,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: TransactionStorage<ChainId, Transaction>,
+        protected chainIds: ChainId[],
         protected subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
@@ -36,6 +36,10 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
             formatAddress(a: string): string
         },
     ) {
+        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<
+            ChainId,
+            Transaction
+        >
         const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('Transaction', {
             value: defaultValue,
         })
