@@ -1,10 +1,10 @@
 import { useCallback, CSSProperties } from 'react'
 import { TextField, InputAdornment } from '@mui/material'
 import { ChevronDown } from 'react-feather'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
+
+import type { FungibleTokenDetailed } from '../../types'
 
 import { useI18N } from '../../locales'
 
@@ -27,7 +27,7 @@ const useStyles = makeStyles()(() => ({
 
 interface TokenSelectField {
     label: string
-    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    token?: FungibleTokenDetailed
     disabled?: boolean
     style?: CSSProperties
     onClick: () => void
