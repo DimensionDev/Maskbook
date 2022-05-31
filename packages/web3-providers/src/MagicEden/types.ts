@@ -1,7 +1,50 @@
+interface Creator {
+    /** address */
+    address: string
+    verified: true
+    share: number
+}
+interface Attribute {
+    trait_type: string
+    value: string | number
+}
+interface File {
+    uri: string
+    type: 'image/png' | 'video/mp4' | 'image/jpeg' | string
+}
+
+interface Properties {
+    files: File[]
+    category: 'image' | string
+    creators: Creator[]
+}
+
+interface Rarity {
+    [key: string]: {
+        rank: number
+        absolute_rarity?: number
+        crawl?: {
+            id: string
+            first_mint_ts: number
+            last_mint_ts: number
+            first_mint: string
+            last_mint: string
+            until_tx: string
+            until_slot: number
+            expected_pieces: number
+            seen_pieces: number
+            last_crawl_id: number
+            complete: boolean
+            blocked: boolean
+            unblock_at_ts: number
+        }
+    }
+}
+
 /**
  * /tokens/:token_mint
  */
-export interface Token {
+export interface MagicEdenToken {
     /** address */
     mintAddress: string
     /** address */
@@ -16,23 +59,8 @@ export interface Token {
     image: string
     animationUrl: string
     externalUrl: string
-    attributes: Array<{
-        trait_type: string
-        value: string
-    }>
-    properties: {
-        files: Array<{
-            uri: string
-            type: 'image/png' | 'video/mp4' | 'image/jpeg' | string
-        }>
-        category: string
-        creators: Array<{
-            /** address */
-            address: string
-            verified: true
-            share: number
-        }>
-    }
+    attributes: Attribute[]
+    properties: Properties
 }
 
 /**
@@ -72,7 +100,7 @@ export interface TokenOffer {
 }
 
 /**
- * /tokens/:token_mint/activities
+ * /v2/tokens/:token_mint/activities
  *
  */
 export interface TokenActivity {
@@ -83,6 +111,7 @@ export interface TokenActivity {
     collectionSymbol: string
     slot: number
     blockTime: number
+    buyer?: string
     buyerReferral: string
     /** address */
     seller: string
@@ -94,7 +123,7 @@ export interface TokenActivity {
  * /tokens/:token_mint/activities
  * Token owned by a wallet.
  */
-export interface WalletToken extends Omit<Token, 'animationUrl'> {
+export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
     /** Either "listed", "unlisted" or "both". Default "both". */
     listStatus: 'listed' | 'unlisted' | 'both'
 }
@@ -146,8 +175,7 @@ export interface WalletAddress {
  * Collection
  * /collections
  */
-export interface Collection {
-    symbol: string
+export interface MagicEdenCollection extends CollectionStats {
     name: string
     description: string
     /** url */
@@ -155,7 +183,37 @@ export interface Collection {
     twitter: string
     discord: string
     website: string
+    isFlagged: boolean
+    flagMessage: string
     categories: string[]
+    createdAt: string
+    updateAt: string
+}
+
+export interface MagicEdenNFT {
+    id: string
+    price: number
+    owner: string
+    collectionName: string
+    collectionTittle: string
+    img: string
+    title: string
+    content: string
+    externalURL: string
+    propertyCategory: 'image' | string
+    creators: Creator[]
+    sellerFeeBasisPoints: number
+    mintAddress: string
+    attributes: Attribute[]
+    properties: Properties
+    supply: number
+    /** address */
+    updateAuthority: string
+    primarySaleHappened: boolean
+    onChainCollection: {}
+    isTradeable: boolean
+    tokenDelegateValid: boolean
+    rarity: Rarity
 }
 
 /**
@@ -174,12 +232,13 @@ export interface CollectionActivity extends TokenActivity {
 
 /**
  * Stats of a collection
- * /collections/:symbol/activities
+ * /collections/:symbol/stats
  */
 export interface CollectionStats {
     symbol: string
     floorPrice: number
     listedCount: number
+    avgPrice24hr: number
     volumeAll: number
 }
 
@@ -187,7 +246,8 @@ export interface CollectionStats {
  * launchpad collections
  * /launchpad/collections
  */
-export interface LaunchpadCollection extends Omit<Collection, 'twitter' | 'discord' | 'website' | 'categories'> {
+export interface LaunchpadCollection
+    extends Omit<MagicEdenCollection, 'twitter' | 'discord' | 'website' | 'categories'> {
     featured: boolean
     edition: string
     price: number
