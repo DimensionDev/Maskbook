@@ -37,20 +37,23 @@ export async function resetMaskAccount() {
 }
 
 // #region select wallet with popups
-const deferred: DeferTuple<string[], Error> = defer<string[], Error>()
+let deferred: DeferTuple<string[], Error> | null
 
 export async function selectMaskAccount(): Promise<string[]> {
-    return deferred[0]
+    deferred = defer()
+    return deferred?.[0] ?? []
 }
 
 export async function resolveMaskAccount(accounts: string[]) {
-    const [, resolve] = deferred
+    const [, resolve] = deferred ?? []
     resolve?.(accounts)
+    deferred = null
 }
 
 export async function rejectMaskAccount() {
-    const [, resolve] = deferred
+    const [, resolve] = deferred ?? []
     resolve?.([])
+    deferred = null
 }
 // #endregion
 
