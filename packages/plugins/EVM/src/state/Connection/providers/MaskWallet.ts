@@ -50,6 +50,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
             createPayload(0, requestArguments.method, requestArguments.params),
             {
                 popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
+                chainId: SharedContextSettings.value.chainId.getCurrentValue(),
             },
         )
         return response?.result as T

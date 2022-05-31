@@ -24,7 +24,6 @@ import {
     useNetworkType,
     useReverseAddress,
     useSchemaType,
-    useWeb3Connection,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -155,93 +154,78 @@ const ContractInteraction = memo(() => {
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
-    const {
-        tokenAddress,
-        typeName,
-        to,
-        gas,
-        gasPrice,
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-        amount,
-        isNativeTokenInteraction,
-        contractAddress,
-    } = useMemo(() => {
-        const type = request?.formatterTransaction?.type
-        if (!type) return {}
+    const { tokenAddress, typeName, to, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, amount, contractAddress } =
+        useMemo(() => {
+            const type = request?.formatterTransaction?.type
+            if (!type) return {}
 
-        switch (type) {
-            case TransactionDescriptorType.INTERACTION:
-                switch (request.transactionContext?.name) {
-                    case 'approve':
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: request.formatterTransaction?.title,
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
-                        }
-                    case 'transfer':
-                    case 'transferFrom':
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: t('popups_wallet_contract_interaction_transfer'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.transactionContext.parameters?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
-                            contractAddress: request.computedPayload?.to,
-                        }
-                    default:
-                        return {
-                            isNativeTokenInteraction: true,
-                            typeName: t('popups_wallet_contract_interaction'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.computedPayload?.value,
-                        }
-                }
-            case TransactionDescriptorType.TRANSFER:
-                return {
-                    isNativeTokenInteraction: true,
-                    typeName: t('wallet_transfer_send'),
-                    tokenAddress: request.computedPayload?.to,
-                    to: request.computedPayload?.to,
-                    gas: request.computedPayload?.gas,
-                    gasPrice: request.computedPayload?.gasPrice,
-                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: request.computedPayload?.value,
-                }
-            case TransactionDescriptorType.DEPLOYMENT:
-            case TransactionDescriptorType.RETRY:
-            case TransactionDescriptorType.CANCEL:
-                throw new Error('To be implemented.')
-            default:
-                unreachable(type)
-        }
-    }, [request, t])
+            switch (type) {
+                case TransactionDescriptorType.INTERACTION:
+                    switch (request.transactionContext?.name) {
+                        case 'approve':
+                            return {
+                                typeName: request.formatterTransaction?.title,
+                                tokenAddress: request.computedPayload?.to,
+                                to: request.computedPayload?.to,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: request.transactionContext.parameters?.value,
+                            }
+                        case 'transfer':
+                        case 'transferFrom':
+                            return {
+                                typeName: t('popups_wallet_contract_interaction_transfer'),
+                                tokenAddress: request.computedPayload?.to,
+                                to: request.transactionContext.parameters?.to,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: request.transactionContext.parameters?.value,
+                                contractAddress: request.computedPayload?.to,
+                            }
+                        default:
+                            return {
+                                typeName: t('popups_wallet_contract_interaction'),
+                                tokenAddress: request.computedPayload?.to,
+                                to: request.computedPayload?.to,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: request.computedPayload?.value,
+                            }
+                    }
+                case TransactionDescriptorType.TRANSFER:
+                    return {
+                        typeName: t('wallet_transfer_send'),
+                        tokenAddress: request.computedPayload?.to,
+                        to: request.computedPayload?.to,
+                        gas: request.computedPayload?.gas,
+                        gasPrice: request.computedPayload?.gasPrice,
+                        maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                        maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                        amount: request.computedPayload?.value,
+                    }
+                case TransactionDescriptorType.DEPLOYMENT:
+                case TransactionDescriptorType.RETRY:
+                case TransactionDescriptorType.CANCEL:
+                    throw new Error('To be implemented.')
+                default:
+                    unreachable(type)
+            }
+        }, [request, t])
 
     const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, isNativeTokenInteraction ? '' : tokenAddress)
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 
     // gas price
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
@@ -267,14 +251,14 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await WalletRPC.confirmRequest(request.payload)
+                await WalletRPC.confirmRequest(request.payload, { chainId, popupsWindow: false })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
         return
-    }, [request, location.search, history])
+    }, [request, location.search, history, chainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
@@ -292,19 +276,20 @@ const ContractInteraction = memo(() => {
 
     // token decimals
     const tokenAmount = (amount ?? 0) as number
-    const tokenDecimals = isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals
+    const tokenDecimals = token?.decimals
 
     // token estimated value
-    const { value: tokenPrice } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        !isNativeTokenInteraction ? token?.address : undefined,
-    )
+    const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, {
+        chainId,
+    })
+
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+
     const tokenValueUSD =
         contractType && [SchemaType.ERC721, SchemaType.ERC1155].includes(contractType)
             ? ZERO
             : leftShift(tokenAmount, tokenDecimals)
-                  .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
+                  .times(tokenPrice ?? 0)
                   .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee))
@@ -319,7 +304,20 @@ const ContractInteraction = memo(() => {
     }, [request, requestLoading])
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-
+    console.log('DEBUG: ContractInteraction')
+    console.log({
+        amount,
+        gasFee,
+        gas,
+        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
+        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
+        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
+        request,
+        tokenPrice,
+        tokenAmount,
+        tokenDecimals,
+        tokenAddress,
+    })
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
 
     return requestLoading ? (
@@ -343,10 +341,7 @@ const ContractInteraction = memo(() => {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
-                        <TokenIcon
-                            address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
-                            classes={{ icon: classes.tokenIcon }}
-                        />
+                        <TokenIcon address={token?.address ?? ''} classes={{ icon: classes.tokenIcon }} />
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>

@@ -5,7 +5,7 @@ import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { encodeText } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { Transaction } from '@masknet/web3-shared-evm'
+import { Transaction, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as database from './database'
@@ -121,21 +121,22 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
 export async function signTransaction(address: string, config: Transaction) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
+    const sign_input = {
+        amount: (config.value as string) ?? '0x0',
+        gas_limit: config.gas ? toHex(config.gas) : '0x0',
+        gas_price: config.gasPrice?.toString() ?? '0x0',
+        chain_id: config.chainId,
+        max_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
+        max_inclusion_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
+        nonce: config.nonce ? toHex(config.nonce) : '0x0',
+        to_address: config.to ? formatEthereumAddress(config.to) : '0x0',
+        payload: config.data ? encodeText(config.data) : new Uint8Array(),
+    }
     const signed = await Mask.signTransaction({
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
-        sign_input: {
-            amount: (config.value as string) ?? '0x0',
-            gas_limit: config.gas?.toString() ?? '0x0',
-            gas_price: config.gasPrice?.toString() ?? '0x0',
-            chain_id: config.chainId ? toHex(config.chainId?.toString()) : '0x1',
-            max_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
-            max_inclusion_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? '0x0',
-            nonce: config.nonce ? toHex(config.nonce) : '0x0',
-            to_address: config.to,
-            payload: config.data ? encodeText(config.data) : new Uint8Array(),
-        },
+        sign_input,
     })
 
     if (!signed?.sign_output?.encoded) throw new Error('Failed to sign transaction.')
