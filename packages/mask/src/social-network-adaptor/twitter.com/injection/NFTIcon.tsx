@@ -21,6 +21,36 @@ function Icon(props: { size: number }) {
     )
 }
 
+function isProfilePage() {
+    const aa = document.querySelectorAll('a')
+    let flag = false
+    aa.forEach((a: any) => {
+        if (a.href === 'https://twitter.com/settings/profile') {
+            flag = true
+        }
+    })
+    return flag
+}
+
+function isCurrentUser(nickname: string | null) {
+    if (!nickname) return false
+    const d = document.querySelectorAll('div')
+    let flag = false
+    d.forEach((v) => {
+        if (!(Object.hasOwn(v.dataset, 'testid') && v.dataset.testid === 'UserName')) return;
+            console.log(typeof v)
+            console.log(v.toString())
+            const spans = v.querySelectorAll('span')
+            spans.forEach((s) => {
+                if (s.innerText === nickname) {
+                    flag = true
+                }
+            })
+        
+    })
+    return flag
+}
+
 function HolderBadge(t: any) {
     return `<div style="margin-top: 20px; display: flex;">
                 <div style="display:flex;">
@@ -101,7 +131,7 @@ function Badge({ v }: { v: any }) {
                         const data: any = await _res.json()
                         if (data.data.tts) {
                             data.data.tts.map((t: any, i: number) => {
-                                if (t.twitter_user_id) holder += HolderBadge(t)
+                                if (t.twitter_user_id && t.twitter_nickname) holder += HolderBadge(t)
                             })
                         }
                         el.innerHTML = holder
@@ -179,8 +209,10 @@ export async function injectNFTBadgeToPostTwitter(post: PostInfo, signal: AbortS
     const userId = post.author.getCurrentValue()?.userId
     const avatar = post.avatarURL.getCurrentValue()?.href
     const nickname = post.nickname.getCurrentValue()
+    const myProfile = isProfilePage() && isCurrentUser(nickname)
+    const wallet_address = myProfile ? account : 'a'
     const res = await fetch(
-        `https://soul.sustainablebtc.org/get_badges_by_address?wallet_address=${account}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
+        `https://soul.sustainablebtc.org/get_badges_by_address?wallet_address=${wallet_address}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
         // `http://localhost:8080/get_badges_by_address?wallet_address=${account}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
     )
     let badges = await res.json()
