@@ -120,7 +120,7 @@ const SelectWallet = memo(() => {
         if (isPopup) {
             navigate(-1)
         } else {
-            await WalletRPC.selectMaskAccount([])
+            await WalletRPC.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isPopup])
@@ -142,7 +142,7 @@ const SelectWallet = memo(() => {
             account: selected,
         })
         if (chainId) {
-            await WalletRPC.selectMaskAccount([selected])
+            await WalletRPC.resolveMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isPopup])
