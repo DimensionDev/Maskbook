@@ -11,7 +11,6 @@ export function TabCard({ addressNames }: TabCardProps) {
     const addressName = addressNames[0]
     const userAddress = addressName?.resolvedAddress || ''
 
-    console.log('TabCard', addressNames, userAddress)
     if (!addressName) return null
 
     return (
