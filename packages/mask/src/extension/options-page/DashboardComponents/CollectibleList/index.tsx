@@ -15,8 +15,8 @@ import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReversedAddress } from '@masknet/shared'
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { ReversedAddress, useElementOnScreen } from '@masknet/shared'
+import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 export const CollectibleContext = createContext<{
@@ -249,9 +249,20 @@ export function CollectionList({
 
     const {
         value: collectibles = EMPTY_LIST,
-        loading: isLoading,
+        done,
+        next,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
+    } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
+
+    const anchorRef = useElementOnScreen((isIntersecting) => {
+        if (isIntersecting) next()
+    }, {})
+
+    useEffect(() => {
+        if (next) next()
+    }, [next])
+
+    const isLoading = false
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles
@@ -267,7 +278,7 @@ export function CollectionList({
 
     const collections = useMemo(() => {
         return uniqBy(collectibles, (x) => x?.contract?.address.toLowerCase())
-            .map((x) => x.collection)
+            .map((x) => x?.collection)
             .filter(Boolean) as Array<NonFungibleTokenCollection<ChainId>>
     }, [collectibles.length, collectibles.length])
 
@@ -351,6 +362,7 @@ export function CollectionList({
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
                         />
+                        <Box ref={anchorRef} />
                     </Box>
                 </Box>
                 <Box>
