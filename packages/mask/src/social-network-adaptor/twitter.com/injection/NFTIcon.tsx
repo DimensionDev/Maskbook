@@ -56,7 +56,7 @@ function HolderBadge(t: any) {
                             </div>
                         </div>
                         <div style="margin-top: 10px; font-size: 12px; color: #333333;">
-                            WEB 3.0 CONTRIBUTORWEB 3.0 CONTRIBUTORWEB 3.0 CONTRIBUTORWEB 3.0 CONTRIBUTOR
+                            WEB 3.0 CONTRIBUTOR
                         </div>
                     </div>
                 </div>
