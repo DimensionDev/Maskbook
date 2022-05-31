@@ -23,26 +23,26 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
     useAsync(queryWallets, [queryWallets])
 
     const walletsFromCloud = useMemo(() => {
-        if (kv?.ok) {
-            if (!kv.val.proofs.length) return null
-            const tipWallets = first(
-                kv.val.proofs.map((x) =>
-                    x.content[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum),
-                ),
-            )
-            if (!tipWallets) return EMPTY_LIST
-            return tipWallets
-                .filter((x) => {
-                    if (NextIDWalletsState.value) {
-                        // Sometimes, the wallet might get deleted from next.id
-                        return x.isPublic && NextIDWalletsState.value.includes(x.identity)
-                    } else {
-                        return x.isPublic
-                    }
-                })
-                .map((x) => x.identity)
-        }
-        return null
+        if (!kv?.ok) return null
+        const { proofs } = kv.val
+        if (!proofs.length) return null
+        const configuredTipsWallets = proofs.some((x) => x.content[PluginId.Tips])
+        if (!configuredTipsWallets) return null
+
+        const tipWallets = first(
+            proofs.map((x) => x.content[PluginId.Tips].filter((y) => y.platform === NextIDPlatform.Ethereum)),
+        )
+        if (!tipWallets) return null
+        return tipWallets
+            .filter((x) => {
+                if (NextIDWalletsState.value) {
+                    // Sometimes, the wallet might get deleted from next.id
+                    return x.isPublic && NextIDWalletsState.value.includes(x.identity)
+                } else {
+                    return x.isPublic
+                }
+            })
+            .map((x) => x.identity)
     }, [kv, NextIDWalletsState.value])
 
     useEffect(() => {
@@ -52,6 +52,7 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
     }, [])
 
     return useMemo(() => {
+        // If user configured wallets for tips, it couldn't be null.
         return walletsFromCloud || uniq(NextIDWalletsState.value || [])
     }, [NextIDWalletsState.value, walletsFromCloud])
 }
