@@ -32,7 +32,7 @@ interface ModalClosePayload {
 
 export default class WalletConnectProvider extends BaseProvider implements EVM_Provider {
     private connectorId = 0
-    private connector: WalletConnect = null!
+    private connector: WalletConnect = this.createConnector()
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
@@ -42,7 +42,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         reject: (error: unknown) => void
     } | null = null
 
-    private async createConnector() {
+    private createConnector() {
         // disable legacy listeners
         this.connectorId += 1
 
@@ -58,16 +58,14 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
             qrcodeModal: {
-                open(uri: string, cb) {
-                    SharedContextSettings.value.openWalletConnectDialog(uri, cb)
+                open(uri: string, callback) {
+                    SharedContextSettings.value.openWalletConnectDialog(uri, callback)
                 },
                 close() {
                     SharedContextSettings.value.closeWalletConnectDialog()
                 },
             },
         })
-
-        if (connector.connected) await connector.killSession()
 
         connector.on('connect', createListener(this.onConnect.bind(this)))
         connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
@@ -122,7 +120,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
 
-        this.connector = await this.createConnector()
+        this.connector = this.createConnector()
 
         await this.connector.createSession({
             chainId,
