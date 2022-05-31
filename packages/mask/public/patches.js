@@ -90,7 +90,6 @@ globalThis.regeneratorRuntime = undefined
                 return string
             },
             createScriptURL: (string) => string,
-            createScript: (string) => string,
         })
     }
 }
