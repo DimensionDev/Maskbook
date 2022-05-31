@@ -1,13 +1,14 @@
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { toFixed } from '@masknet/web3-shared-base'
-import { TransactionEventType, useAccount, useChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import { ZERO_ADDRESS, TransactionEventType } from '@masknet/web3-shared-evm'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const { artistAcceptingBidsV2_contract, cANFTMarket_contract } = useCryptoArtAI_Contract()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { artistAcceptingBidsV2_contract, cANFTMarket_contract } = useCryptoArtAI_Contract(chainId)
 
     return useAsyncFn(
         async (priceInWei: number) => {

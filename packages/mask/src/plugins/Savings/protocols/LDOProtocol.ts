@@ -4,12 +4,12 @@ import BigNumber from 'bignumber.js'
 import {
     ChainId,
     createContract,
-    FungibleTokenDetailed,
     getLidoConstants,
+    SchemaType,
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import { ProtocolType, SavingsProtocol } from '../types'
@@ -20,7 +20,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     readonly type = ProtocolType.Lido
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]) {}
 
     get apr() {
         return this._apr

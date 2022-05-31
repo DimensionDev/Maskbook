@@ -1,31 +1,23 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    isSameAddress,
-    NativeTokenDetailed,
-    useAccount,
-    useFungibleTokenDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { Box, ListItem, Popper, Theme, Typography, useMediaQuery } from '@mui/material'
+import { MouseEvent, useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
+import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { omit, pick } from 'lodash-unified'
+import { TokenIcon } from '@masknet/shared'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
-import { omit, pick } from 'lodash-unified'
-import { MouseEvent, useCallback, useState } from 'react'
-import { Trans } from 'react-i18next'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils'
+import { useI18N as useBaseI18N } from '../../../utils'
+import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
+import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
+import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -183,10 +175,11 @@ export interface RedPacketInHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const account = useAccount()
     const { history, onSelect } = props
-    const { t } = useI18N()
+    const i18n = useBaseI18N()
+    const t = useI18N()
     const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
@@ -201,22 +194,19 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        tokenAddress ?? '',
-    )
+    const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
         ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
-    } as ERC20TokenDetailed | NativeTokenDetailed
+    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken as FungibleTokenDetailed }))
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken }))
     }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
 
     // #region password lost tips
@@ -239,35 +229,31 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURI}
+                    logoURI={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
                         <div className={classes.div}>
                             <div className={classes.fullWidthBox}>
                                 <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                    {history.sender.message === ''
-                                        ? t('plugin_red_packet_best_wishes')
-                                        : history.sender.message}
+                                    {history.sender.message === '' ? t.best_wishes() : history.sender.message}
                                 </Typography>
                             </div>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_duration', {
+                                {t.history_duration({
                                     startTime: dateTimeFormat(new Date(history.creation_time)),
                                     endTime: dateTimeFormat(new Date(history.creation_time + history.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_total_amount', {
+                                {t.history_total_amount({
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
                                     symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                {t('plugin_red_packet_history_split_mode', {
-                                    mode: history.is_random
-                                        ? t('plugin_red_packet_random')
-                                        : t('plugin_red_packet_average'),
+                                {t.history_split_mode({
+                                    mode: history.is_random ? t.random() : t.average(),
                                 })}
                             </Typography>
                         </div>
@@ -291,12 +277,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     variant="contained"
                                     size="large">
                                     {canSend
-                                        ? t('plugin_red_packet_history_send')
+                                        ? t.send()
                                         : refunded
-                                        ? t('plugin_red_packet_refunding')
+                                        ? t.refunding()
                                         : listOfStatus.includes(RedPacketStatus.empty)
-                                        ? t('plugin_red_packet_empty')
-                                        : t('plugin_red_packet_refund')}
+                                        ? t.empty()
+                                        : t.refund()}
                                 </ActionButton>
                                 <Popper
                                     className={classes.popper}
@@ -306,7 +292,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     transition
                                     disablePortal>
                                     <Typography className={classes.popperText}>
-                                        {t('plugin_red_packet_data_broken', { duration: formatRefundDuration })}
+                                        {t.data_broken({ duration: formatRefundDuration })}
                                     </Typography>
                                     <div className={classes.arrow} />
                                 </Popper>
@@ -319,20 +305,18 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey="plugin_red_packet_history_claimed"
+                            <Translate.history_claimed
                                 components={{
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: history.claimers?.length ?? 0,
-                                    shares: history.shares,
+                                    claimedShares: String(history.claimers?.length ?? 0),
+                                    shares: String(history.shares),
                                 }}
                             />
                         </Typography>
                         <Typography variant="body1" className={classes.footerInfo}>
-                            <Trans
-                                i18nKey="plugin_red_packet_history_total_claimed_amount"
+                            <Translate.history_total_claimed_amount
                                 components={{
                                     strong: <strong className={classes.strong} />,
                                     span: <span className={classes.span} />,
@@ -358,6 +342,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 function removeUselessSendParams(payload: RedPacketJSONPayload): RedPacketJSONPayload {
     return {
         ...omit(payload, ['block_number', 'claimers']),
-        token: omit(payload.token, ['logoURI']) as FungibleTokenDetailed,
+        token: omit(payload.token, ['logoURI']) as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     }
 }

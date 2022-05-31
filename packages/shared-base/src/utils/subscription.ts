@@ -3,7 +3,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
 
-export function createConstantSubscription<T>(value: T) {
+export function createConstantSubscription<T>(value: T): Subscription<T> {
     return {
         getCurrentValue: () => value,
         subscribe: () => noop,
@@ -85,6 +85,22 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
             return mapper(sub.getCurrentValue())
         },
         subscribe: sub.subscribe,
+    }
+}
+
+export function mergeSubscription<T extends Array<Subscription<unknown>>>(
+    ...subscriptions: T
+): Subscription<{
+    [key in keyof T]: T[key] extends Subscription<infer U> ? U : never
+}> {
+    return {
+        getCurrentValue() {
+            return subscriptions.map((x) => x.getCurrentValue()) as any
+        },
+        subscribe: (callback: () => void) => {
+            const removeListeners = subscriptions.map((x) => x.subscribe(callback))
+            return () => removeListeners.forEach((x) => x())
+        },
     }
 }
 

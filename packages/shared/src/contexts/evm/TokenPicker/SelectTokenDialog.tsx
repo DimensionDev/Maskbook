@@ -1,11 +1,12 @@
-import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
+import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
-import { InjectedDialog, InjectedDialogProps } from '../../components'
+import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 
 interface StyleProps {
@@ -45,12 +46,15 @@ export interface PickTokenOptions {
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: FungibleTokenDetailed[]
+    tokens?: Array<FungibleToken<ChainId, SchemaType>>
     selectedTokens?: string[]
-    onSubmit?(token: FungibleTokenDetailed): void
+    onSubmit?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
 }
 
-export interface SelectTokenDialogProps extends PickTokenOptions, Omit<InjectedDialogProps, 'onSubmit' | 'title'> {}
+export interface SelectTokenDialogProps extends PickTokenOptions {
+    open: boolean
+    onClose?(): void
+}
 
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
@@ -82,7 +86,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             onClose={onClose}
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                <ERC20TokenList
+                <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSubmit}
                     tokens={tokens ?? []}
@@ -90,7 +94,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }
-                    targetChainId={chainId}
+                    chainId={chainId}
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     FixedSizeListProps={{

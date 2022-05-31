@@ -24,10 +24,7 @@ export const Flags = {
     toolbox_enabled: webOnly,
     /** Prohibit the use of test networks in production */
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
-    LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     // #endregion
-
-    EIP1559_enabled: true,
 
     bsc_enabled: true,
     polygon_enabled: true,

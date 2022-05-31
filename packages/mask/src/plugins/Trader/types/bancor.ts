@@ -1,11 +1,12 @@
-import type { FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { TradeStrategy } from '../types'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export type SwapBancorRequest = {
     strategy: TradeStrategy
     slippage: number
-    fromToken: FungibleTokenDetailed
-    toToken: FungibleTokenDetailed
+    fromToken: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    toToken: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     fromAmount: string | undefined
     toAmount: string | undefined
     user: string

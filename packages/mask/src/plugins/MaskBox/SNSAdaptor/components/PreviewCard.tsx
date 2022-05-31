@@ -1,18 +1,21 @@
-import { makeStyles } from '@masknet/theme'
-import { formatBalance, useChainId, useTransactionCallback } from '@masknet/web3-shared-evm'
-import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
+import { makeStyles } from '@masknet/theme'
+import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Context } from '../../hooks/useContext'
 import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
+import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
+import AbstractTab from '../../../../components/shared/AbstractTab'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -57,7 +60,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
 
     const {
@@ -97,7 +100,7 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
     // #region open box
-    const [isOpening, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
+    const [{ loading: isOpening }, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
     const onRefresh = useCallback(() => {
         state[1](CardTab.Articles)
         setPaymentCount(1)
@@ -213,8 +216,8 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId} renderInTimeline>
-                    <EthereumWalletConnectedBoundary
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                    <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
                         classes={{ button: tabClasses.button }}
                         renderInTimeline>
@@ -245,8 +248,8 @@ export function PreviewCard(props: PreviewCardProps) {
                                 )
                             })()}
                         </ActionButton>
-                    </EthereumWalletConnectedBoundary>
-                </EthereumChainBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

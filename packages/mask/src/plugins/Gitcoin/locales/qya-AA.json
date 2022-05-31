@@ -1,0 +1,15 @@
+{
+    "name": "crwdns16706:0crwdne16706:0",
+    "description": "crwdns16708:0crwdne16708:0",
+    "promote": "crwdns16710:0crwdne16710:0",
+    "select_a_token": "crwdns16712:0crwdne16712:0",
+    "grant_not_available": "crwdns16714:0crwdne16714:0",
+    "enter_an_amount": "crwdns16716:0crwdne16716:0",
+    "insufficient_balance": "crwdns16718:0{{symbol}}crwdne16718:0",
+    "gitcoin_readme": "crwdns16720:0crwdne16720:0",
+    "donate": "crwdns16722:0crwdne16722:0",
+    "last_updated": "crwdns16724:0crwdne16724:0",
+    "by": "crwdns16726:0crwdne16726:0",
+    "view_on": "crwdns16728:0crwdne16728:0",
+    "readme_fund_link": "crwdns16730:0crwdne16730:0"
+}

@@ -1,49 +1,53 @@
 import { Trash2 as TrashIcon } from 'react-feather'
 import { Button, Box, BoxProps } from '@mui/material'
-import { unreachable } from '@dimensiondev/kit'
-import {
-    ERC20TokenDetailed,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress, ChainId } from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
+import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<{ wallet: Wallet; token: FungibleTokenDetailed | ERC721TokenDetailed }>,
+    props: WrappedDialogProps<{
+        wallet: Wallet
+        token: FungibleToken<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>
+    }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
     const tokenAddress =
-        (token as FungibleTokenDetailed).address ?? (token as ERC721TokenDetailed).contractDetailed.address
-    const tokenName = (token as FungibleTokenDetailed).name ?? (token as ERC721TokenDetailed).info.name
+        (token as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>).address ??
+        (token as NonFungibleToken<ChainId, SchemaType>).contract?.address
+    const tokenName =
+        (token as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>).name ??
+        (token as NonFungibleToken<ChainId, SchemaType>).metadata?.name
     const onConfirm = useSnackbarCallback(
-        () => {
-            const type = ((token as FungibleTokenDetailed).type ??
-                (token as ERC721TokenDetailed).contractDetailed.type) as
-                | EthereumTokenType.Native
-                | EthereumTokenType.ERC20
-                | EthereumTokenType.ERC721
-            switch (type) {
-                case EthereumTokenType.Native:
-                    throw new Error('Unable to hide the native token.')
-                case EthereumTokenType.ERC20:
-                    return WalletRPC.updateWalletToken(wallet.address, token as ERC20TokenDetailed, {
-                        strategy: 'block',
-                    })
-                case EthereumTokenType.ERC721:
-                    return WalletRPC.removeToken(token as ERC721TokenDetailed)
-                default:
-                    unreachable(type)
-            }
+        async () => {
+            return
+            // const schema = ((token as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>).schema ??
+            //     (token as NonFungibleToken<ChainId, SchemaType.ERC721>).schema) as
+            //     | SchemaType.Native
+            //     | SchemaType.ERC20
+            //     | SchemaType.ERC721
+            // switch (schema) {
+            //     case SchemaType.Native:
+            //         throw new Error('Unable to hide the native token.')
+            //     case SchemaType.ERC20:
+            //         return WalletRPC.updateWalletToken(
+            //             wallet.address,
+            //             token as FungibleToken<ChainId, SchemaType.ERC20>,
+            //             {
+            //                 strategy: 'block',
+            //             },
+            //         )
+            //     case SchemaType.ERC721:
+            //         return WalletRPC.removeToken(token as NonFungibleToken<ChainId, SchemaType.ERC721>)
+            //     default:
+            //         unreachable(schema)
+            // }
         },
         [wallet.address, token],
         props.onClose,

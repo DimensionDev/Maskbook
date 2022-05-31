@@ -1,7 +1,8 @@
-import { useWeb3State, Web3Plugin } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { formatNFT_TokenId, isSameAddress, useChainId } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -10,7 +11,7 @@ import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Web3Plugin.NonFungibleToken[]
+    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
     onChange?: (id: string | null, contractAddress: string) => void
     limit?: number
     className: string
@@ -85,17 +86,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: Web3Plugin.NonFungibleToken
+    token: NonFungibleToken<ChainId, SchemaType>
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return (
         <NFTCardStyledAssetPlayer
             chainId={chainId}
             contractAddress={token.contract?.address}
-            url={token.info?.imageURL ?? token.metadata?.assetURL}
+            url={token.metadata?.imageURL ?? token.metadata?.imageURL}
             tokenId={token.tokenId}
             classes={{
                 loadingFailImage: classes.loadingFailImage,
@@ -124,26 +125,25 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
     )
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <List className={classnames(classes.list, className)}>
             {tokens.map((token) => {
                 const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
                 const disabled = !isRadio && reachedLimit && !selected
-                const link =
-                    Utils?.resolveNonFungibleTokenLink && token.contract
-                        ? Utils.resolveNonFungibleTokenLink(
-                              token.contract.chainId,
-                              token.contract.address,
-                              token.tokenId,
-                          )
-                        : undefined
+                const link = token.contract
+                    ? Others?.explorerResolver?.nonFungibleTokenLink(
+                          token.contract.chainId,
+                          token.contract.address,
+                          token.tokenId,
+                      )
+                    : undefined
                 return (
                     <ShadowRootTooltip
                         classes={{ tooltip: classes.tooltip }}
                         key={token.tokenId}
-                        title={`${token.contract?.name} ${formatNFT_TokenId(token.tokenId, 2)}`}
+                        title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
                         placement="top"
                         arrow>
                         <ListItem

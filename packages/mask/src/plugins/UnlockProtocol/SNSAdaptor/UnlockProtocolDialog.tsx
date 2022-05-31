@@ -1,4 +1,4 @@
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
@@ -9,6 +9,7 @@ import { PluginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean
@@ -26,9 +27,10 @@ const useStyles = makeStyles()(() => ({
 export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
-    const address = useAccount()
     const { classes } = useStyles()
-    const [currentUnlockChain, setCurrentUnlockChain] = useState(useChainId())
+    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const [currentUnlockChain, setCurrentUnlockChain] = useState(chainId)
     const [currentUnlockPost, setCurrentUnlockPost] = useState('')
     const [currentUnlockTarget, setCurrentUnlockTarget] = useState<UnlockLocks[]>(() => [])
     const [availableUnlockTarget, setAvailableUnlockTarget] = useState<UnlockLocks[]>(() => [])
@@ -41,7 +43,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 }
             })
             .catch((error) => {
-                console.error(error)
                 setAvailableUnlockTarget([
                     {
                         lock: {

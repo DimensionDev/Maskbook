@@ -1,7 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: RedPacketPluginID,
@@ -40,4 +41,5 @@ export const base: Plugin.Shared.Definition = {
     contribution: {
         metadataKeys: new Set([RedPacketMetaKey, RedPacketNftMetaKey]),
     },
+    i18n: languages,
 }

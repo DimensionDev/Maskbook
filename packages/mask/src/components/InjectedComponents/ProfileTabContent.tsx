@@ -4,11 +4,11 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useAddressNames, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useAddressNames } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
@@ -50,7 +50,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(
+        NetworkPluginID.PLUGIN_EVM,
+        identity,
+    )
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
         identity.identifier?.userId,
@@ -124,7 +127,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
                 : selectedTabId
         return getTabContent(tabId ?? '')
-    }, [selectedTabId, identity.identifier?.userId])
+    }, [selectedTabId, identity.identifier?.userId, currentAccountNotConnectPersona])
 
     if (hidden) return null
 

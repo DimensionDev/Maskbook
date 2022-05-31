@@ -168,3 +168,7 @@ common/autoinstallers/*/.npmrc
 packages/storybook-shared/*.js
 packages/storybook-shared/*.map
 packages/storybook-shared/*.d.ts
+
+# Requires Prettier support for typescript 4.7
+# https://github.com/prettier/prettier/issues/12640
+packages/web3-shared/base/src/specs/index.ts

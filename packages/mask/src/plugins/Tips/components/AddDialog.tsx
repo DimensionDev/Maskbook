@@ -1,20 +1,19 @@
-import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
-import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 import {
-    ERC721TokenDetailed,
-    getERC721ContractDetailed,
-    getERC721TokenDetailed,
-    isSameAddress,
     useAccount,
     useChainId,
-    useERC721TokenContract,
-} from '@masknet/web3-shared-evm'
+    useNetworkDescriptors,
+    useWeb3Connection,
+    useWeb3State,
+} from '@masknet/plugin-infra/web3'
+import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { WalletRPC } from '../../Wallet/messages'
 import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,19 +45,21 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends InjectedDialogProps {
-    onAdd?(token: ERC721TokenDetailed): void
+    onAdd?(token: NonFungibleToken<ChainId, SchemaType>): void
 }
 
 export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [contractAddress, setContractAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const web3Connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
-    const allNetworks = useNetworkDescriptors()
+    const allNetworks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const network = useMemo(() => allNetworks.find((n) => n.chainId === chainId), [allNetworks, chainId])
-    const erc721TokenContract = useERC721TokenContract(contractAddress)
+    const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
 
     const [, checkOwner] = useAsyncFn(async () => {
         if (!erc721TokenContract || !account) return false
@@ -88,19 +89,13 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             setMessage(t.tip_add_collectibles_error())
             return
         }
-        const erc721ContractDetailed = await getERC721ContractDetailed(erc721TokenContract, contractAddress, chainId)
-        const erc721TokenDetailed = await getERC721TokenDetailed(
-            erc721ContractDetailed,
-            erc721TokenContract,
-            tokenId,
-            chainId,
-        )
+        const erc721TokenDetailed = await web3Connection?.getNonFungibleToken(contractAddress, tokenId, { chainId })
 
         if (!erc721TokenDetailed) {
             setMessage(t.tip_add_collectibles_error())
             return
         }
-        await WalletRPC.addToken(erc721TokenDetailed)
+        await Token?.addToken?.(erc721TokenDetailed)
         onAdd?.(erc721TokenDetailed)
         reset()
     }, [onAdd, t, contractAddress, tokenId])

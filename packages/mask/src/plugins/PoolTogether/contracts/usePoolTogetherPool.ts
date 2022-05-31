@@ -1,8 +1,9 @@
 import type { AbiItem } from 'web3-utils'
 import PoolTogetherPoolABI from '@masknet/web3-contracts/abis/PoolTogetherPool.json'
 import type { PoolTogetherPool } from '@masknet/web3-contracts/types/PoolTogetherPool'
-import { useContract } from '@masknet/web3-shared-evm'
+import { useContract } from '@masknet/plugin-infra/web3-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
-export function usePoolTogetherPoolContract(address?: string) {
-    return useContract<PoolTogetherPool>(address, PoolTogetherPoolABI as AbiItem[])
+export function usePoolTogetherPoolContract(chainId: ChainId, address?: string) {
+    return useContract<PoolTogetherPool>(chainId, address, PoolTogetherPoolABI as AbiItem[])
 }

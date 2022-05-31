@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { rightShift, ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types'
-
+import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 export function useTradeComputed(
     trade: SwapBancorRequest | null,
     strategy: TradeStrategy,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
     return useMemo(() => {
         if (!trade) return null

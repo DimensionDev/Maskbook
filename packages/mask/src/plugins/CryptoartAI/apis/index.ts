@@ -48,7 +48,7 @@ export async function getAsset(tokenId: string, chainId?: ChainId) {
                       {
                           ownerAddress: fetchResponse.data.creatorInfo.ethAddress,
                           ownerName: fetchResponse.data.creatorInfo.username,
-                          ownerAvator: fetchResponse.data.creatorInfo.avatorPath,
+                          ownerAvatar: fetchResponse.data.creatorInfo.avatarPath,
                           ownerRoleType: fetchResponse.data.creatorInfo.roleType,
                       },
                   ]

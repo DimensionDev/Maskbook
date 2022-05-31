@@ -1,12 +1,14 @@
-import type { TradeProvider } from '@masknet/public-api'
-import { GasOptionConfig, TransactionEventType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
-import type { SwapParameters } from '@uniswap/v2-sdk'
-import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
+import BigNumber from 'bignumber.js'
+import type { TradeProvider } from '@masknet/public-api'
+import type { SwapParameters } from '@uniswap/v2-sdk'
+import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
+import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { useSwapParameters as useTradeParameters } from './useTradeParameters'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -34,12 +36,12 @@ export function useTradeCallback(
     allowedSlippage?: number,
 ) {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3({ chainId: targetChainId })
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!tradeParameters.length) {
+        if (!tradeParameters.length || !web3) {
             return
         }
 
