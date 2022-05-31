@@ -90,7 +90,7 @@ export function NFTList(props: NFTListProps) {
             {SUPPORTED_CHAIN_IDS.map((x, i) => (
                 <TabPanel key={i} value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon} className={classes.tabPanel}>
                     <NFTListPage
-                        tokens={tokens.filter((y) => y.chainId === x) ?? []}
+                        tokens={tokens.filter((y) => y.contract?.chainId === x) ?? []}
                         tokenInfo={tokenInfo}
                         chainId={x}
                         address={address}

@@ -1,22 +1,25 @@
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { useAsyncRetry } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { RSS3_KEY_SNS } from '../constants'
-import { PluginNFTAvatarRPC } from '../messages'
 import { getNFTAvatarByUserId } from '../utils'
+import { useGetNFTAvatar } from './rss3'
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS) {
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId(currentPluginId)
+    const [, getNFTAvatar] = useGetNFTAvatar()
     return useAsyncRetry(async () => {
         const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId)
         if (avatarMetaFromPersona) return avatarMetaFromPersona
-
-        const avatarMeta = await PluginNFTAvatarRPC.getNFTAvatar(
+        const avatarMeta = await getNFTAvatar(
             userId,
             activatedSocialNetworkUI.networkIdentifier,
             snsKey,
+            currentPluginId,
+            chainId,
         )
-
         if (!avatarMeta) return
-
         return { ...avatarMeta, imageUrl: '', nickname: '' }
-    }, [userId])
+    }, [userId, getNFTAvatar, avatarId])
 }

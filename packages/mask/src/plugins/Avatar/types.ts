@@ -34,3 +34,10 @@ export interface NextIDAvatarMeta extends AvatarMetaDB {
     nickname: string
     imageUrl: string
 }
+
+export interface NFTRSSNode {
+    signature: string
+    nft: AvatarMetaDB
+}
+
+export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()

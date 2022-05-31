@@ -7,6 +7,9 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 const NFTCache = new Map<string, Promise<NFT | undefined>>()
 export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, tokenId, { chainId })
+    console.log('---------------')
+    console.log(asset)
+
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return

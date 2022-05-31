@@ -11,10 +11,11 @@ import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 }
 import type { NextIDAvatarMeta } from '../types'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
-import { PluginNFTAvatarRPC } from '../messages'
 import { PLUGIN_ID, RSS3_KEY_SNS } from '../constants'
 import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
+import { useSaveNFTAvatar } from '../hooks'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -42,72 +43,80 @@ interface UploadAvatarDialogProps {
 
 type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
 
-async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) {
-    const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
-        account,
-        info,
-        identifier.network,
-        RSS3_KEY_SNS.TWITTER,
-    ).catch((error) => {
-        console.log(error)
-        return
+function useSaveToRSS3() {
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
+
+    return useAsyncFn(
+        async (info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) => {
+            return saveNFTAvatar(account, info, identifier.network, RSS3_KEY_SNS.TWITTER)
+        },
+        [saveNFTAvatar],
+    )
+}
+
+function useSaveToNextID() {
+    return useAsyncFn(async (info: NextIDAvatarMeta, persona?: PersonaIdentifier, proof?: BindingProof) => {
+        if (!proof?.identity || !persona?.publicKeyAsHex) return
+        const payload = await NextIDStorage.getPayload(
+            persona.publicKeyAsHex,
+            proof?.platform,
+            proof?.identity,
+            info,
+            PLUGIN_ID,
+        )
+        if (!payload.ok) {
+            return
+        }
+        const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
+        if (!result) return
+        const response = await NextIDStorage.set(
+            payload.val.uuid,
+            persona.publicKeyAsHex,
+            toBase64(fromHex(result.signature.signature)),
+            proof.platform,
+            proof.identity,
+            payload.val.createdAt,
+            info,
+            PLUGIN_ID,
+        )
+        return response.ok
     })
-    return avatar
 }
 
-async function saveToNextID(info: NextIDAvatarMeta, persona?: PersonaIdentifier, proof?: BindingProof) {
-    if (!proof?.identity || !persona?.publicKeyAsHex) return
-    const payload = await NextIDStorage.getPayload(
-        persona.publicKeyAsHex,
-        proof?.platform,
-        proof?.identity,
-        info,
-        PLUGIN_ID,
+function useSave() {
+    const [, saveToNextID] = useSaveToNextID()
+    const [, saveToRSS3] = useSaveToRSS3()
+
+    return useAsyncFn(
+        async (
+            account: string,
+            isBindAccount: boolean,
+            token: NonFungibleToken<ChainId, SchemaType>,
+            data: AvatarInfo,
+            persona: PersonaIdentifier,
+            proof: BindingProof,
+            identifier: ProfileIdentifier,
+        ) => {
+            if (!data || !token.contract?.address) return false
+
+            const info: NextIDAvatarMeta = {
+                nickname: data.nickname,
+                userId: data.userId,
+                imageUrl: data.imageUrl,
+                avatarId: data.avatarId,
+                address: token.contract?.address,
+                tokenId: token.tokenId,
+                chainId: token.contract?.chainId ?? ChainId.Mainnet,
+                schema: token.contract?.schema ?? SchemaType.ERC20,
+            }
+
+            if (isBindAccount) {
+                return saveToNextID(info, persona, proof)
+            }
+            return saveToRSS3(info, account, identifier)
+        },
+        [saveToNextID, saveToRSS3],
     )
-    if (!payload.ok) {
-        return
-    }
-    const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
-    if (!result) return
-    const response = await NextIDStorage.set(
-        payload.val.uuid,
-        persona.publicKeyAsHex,
-        toBase64(fromHex(result.signature.signature)),
-        proof.platform,
-        proof.identity,
-        payload.val.createdAt,
-        info,
-        PLUGIN_ID,
-    )
-    return response.ok
-}
-
-async function Save(
-    account: string,
-    isBindAccount: boolean,
-    token: NonFungibleToken<ChainId, SchemaType>,
-    data: AvatarInfo,
-    persona: PersonaIdentifier,
-    proof: BindingProof,
-    identifier: ProfileIdentifier,
-) {
-    if (!data || !token.contract?.address) return false
-
-    const info: NextIDAvatarMeta = {
-        nickname: data.nickname,
-        userId: data.userId,
-        imageUrl: data.imageUrl,
-        avatarId: data.avatarId,
-        address: token.contract?.address,
-        tokenId: token.tokenId,
-        chainId: token.contract?.chainId ?? ChainId.Mainnet,
-        schema: token.contract?.schema ?? SchemaType.ERC20,
-    }
-
-    if (isBindAccount) {
-        return saveToNextID(info, persona, proof)
-    }
-    return saveToRSS3(info, account, identifier)
 }
 
 async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
@@ -133,6 +142,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
+    const [, saveAvatar] = useSave()
 
     const onSave = useCallback(() => {
         if (!editor) return
@@ -146,7 +156,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 return
             }
 
-            const response = await Save(
+            const response = await saveAvatar(
                 account,
                 isBindAccount,
                 token,
@@ -166,7 +176,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         })
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount])
+    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
 

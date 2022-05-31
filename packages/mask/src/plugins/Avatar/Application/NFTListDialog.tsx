@@ -124,7 +124,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             onNext()
             setDisabled(false)
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
         setDisabled(false)
     }, [selectedToken, selectedAccount])
@@ -238,7 +238,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         address={selectedAccount}
                         onSelect={onSelect}
                         onChangePage={onChangePage}
-                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contract?.address && x.id)}
+                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contract?.address && x.tokenId)}
                         children={NoNFTList()}
                     />
                 )}

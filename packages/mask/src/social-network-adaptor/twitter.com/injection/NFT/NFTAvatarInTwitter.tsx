@@ -7,7 +7,6 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
@@ -22,6 +21,7 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
+import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -89,6 +89,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
     const openConfirmDialog = useShowConfirm()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {
@@ -106,7 +107,7 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+        const avatar = await saveNFTAvatar(
             wallet.address,
             {
                 ...NFTEvent,
@@ -153,7 +154,7 @@ function NFTAvatarInTwitter() {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t])
+    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
 
     useEffect(() => {
         setAvatar(_avatar)

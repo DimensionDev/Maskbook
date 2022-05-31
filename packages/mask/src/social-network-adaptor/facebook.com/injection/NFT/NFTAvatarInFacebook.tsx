@@ -8,9 +8,8 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { getAvatarId } from '../../utils/user'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile'
@@ -66,6 +65,7 @@ function NFTAvatarInFacebook() {
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
@@ -107,7 +107,7 @@ function NFTAvatarInFacebook() {
         if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
-                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network,
@@ -131,7 +131,7 @@ function NFTAvatarInFacebook() {
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
             try {
-                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     {
                         userId: storages.userId.value,

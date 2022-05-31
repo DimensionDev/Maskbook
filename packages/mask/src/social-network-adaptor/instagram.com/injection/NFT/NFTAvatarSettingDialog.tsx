@@ -10,13 +10,14 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/plugin-infra/web3'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { delay } from '@dimensiondev/kit'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -31,6 +32,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const wallet = useWallet()
     const identity = useCurrentVisitingIdentity()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const onChange = useCallback(
         async (token: NonFungibleToken<ChainId, SchemaType>) => {
@@ -56,7 +58,7 @@ export function NFTAvatarSettingDialog() {
 
                 if (!metaTag?.content) return
 
-                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     {
                         userId: identity.identifier.userId,
@@ -91,7 +93,7 @@ export function NFTAvatarSettingDialog() {
                 }
             }
         },
-        [identity, wallet],
+        [identity, wallet, saveNFTAvatar],
     )
 
     const onClose = useCallback(() => setOpen(false), [])

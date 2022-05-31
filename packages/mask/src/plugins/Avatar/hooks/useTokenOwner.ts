@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginNFTAvatarRPC } from '../messages'
 import { usePersonas } from './usePersonas'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { PluginNFTAvatarRPC } from '../messages'
 
 export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })

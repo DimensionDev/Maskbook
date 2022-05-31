@@ -3,7 +3,6 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
-import { getGunData } from '@masknet/gun-utils'
 
 const READ_GUN_TIMEOUT = 15 * 1000
 
@@ -11,20 +10,6 @@ const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_
 const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
 
 const cache = new Map<string, [Promise<string | undefined>, number]>()
-
-function timeout<T>(promise: PromiseLike<T>, duration: number): Promise<T | undefined> {
-    return Promise.race([promise, new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), duration))])
-}
-
-async function getDataFromGUN(userId: string) {
-    const data = await getGunData(NFT_AVATAR_DB_NAME, userId)
-    if (typeof data !== 'string') return undefined
-    return data
-}
-
-async function getUserAddressFromGUN(userId: string): Promise<string | undefined> {
-    return timeout(getDataFromGUN(userId), READ_GUN_TIMEOUT)
-}
 
 function getKey(networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId: number = ChainId.Mainnet) {
     return `${networkPluginId}-${chainId}`
@@ -47,12 +32,12 @@ async function _getUserAddress(userId: string, network: string, networkPluginId?
         if (!result || !result?.address) {
             const result = await NFTAvatarDBStorage(network).get<Record<string, string>>(userId)
             const address = result?.[getKey(networkPluginId, chainId)]
-            if (address) return address
-            return getUserAddressFromGUN(userId)
+            return address
         }
         return result.address
-    } catch {
-        return getUserAddressFromGUN(userId)
+    } catch (error) {
+        console.error(error)
+        return
     }
 }
 
@@ -70,7 +55,7 @@ export async function getUserAddress(
                 addSeconds(new Date(), 60).getTime(),
             ])
         } catch (err) {
-            console.log(err)
+            console.error(err)
         }
     }
     c = cache.get(getCacheKey(userId, network, networkPluginId, chainId))
