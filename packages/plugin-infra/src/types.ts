@@ -709,6 +709,7 @@ export enum PluginId {
     Example = 'io.mask.example',
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
+    AddressTags = 'network.def',
     RedPacket = 'com.maskbook.red_packet',
     RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',

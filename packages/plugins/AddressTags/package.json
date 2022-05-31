@@ -1,0 +1,26 @@
+{
+  "name": "@masknet/plugin-address-tags",
+  "private": true,
+  "exports": {
+    ".": {
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "bignumber.js": "^9.0.2",
+    "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
+    "react-use": "^17.3.2",
+    "urlcat": "^2.0.4"
+  }
+}

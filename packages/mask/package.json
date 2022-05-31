@@ -30,6 +30,7 @@
     "@masknet/plugin-go-plus-security": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-rss3": "workspace:*",
+    "@masknet/plugin-address-tags": "workspace:*",
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",

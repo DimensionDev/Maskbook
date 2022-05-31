@@ -94,6 +94,7 @@
       "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
       "@masknet/plugin-flow": ["./packages/plugins/Flow/src"],
       "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src"],
+      "@masknet/plugin-address-tags": ["./packages/plugins/AddressTags/src"],
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
