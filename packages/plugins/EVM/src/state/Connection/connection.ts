@@ -539,14 +539,15 @@ class Connection implements EVM_Connection {
         signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
         options?: EVM_Web3ConnectionOptions,
     ) {
-        if (!options?.account) throw new Error('Unknown account.')
+        const account = options?.account ?? this.account
+        if (!account) throw new Error('Unknown account.')
 
         switch (signType) {
             case 'personaSign':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
-                        params: [dataToSign, options.account, ''].filter((x) => typeof x !== 'undefined'),
+                        params: [dataToSign, account, ''].filter((x) => typeof x !== 'undefined'),
                     },
                     options,
                 )
@@ -554,7 +555,7 @@ class Connection implements EVM_Connection {
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
-                        params: [options.account, dataToSign],
+                        params: [account, dataToSign],
                     },
                     options,
                 )
