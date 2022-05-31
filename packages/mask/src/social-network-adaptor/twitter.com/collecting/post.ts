@@ -7,6 +7,7 @@ import { postIdParser, postParser, postImagesParser, postContentMessageParser } 
 import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
+import { injectNFTBadgeToPostTwitter } from '../injection/NFTIcon'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     makeTypedMessageImage,
@@ -115,6 +116,7 @@ function registerPostCollectorInner(
                     updateProfileInfo(info)
                 }),
             )
+            injectNFTBadgeToPostTwitter(info, cancel)
             injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {
