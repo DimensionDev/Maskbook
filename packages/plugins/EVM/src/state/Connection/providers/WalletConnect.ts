@@ -4,11 +4,11 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
-import QRCodeModal from '@walletconnect/qrcode-modal'
 import { ChainId, chainResolver, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import type { Account } from '@masknet/web3-shared-base'
+import { SharedContextSettings } from '../../../settings'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -57,7 +57,14 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
-            qrcodeModal: QRCodeModal,
+            qrcodeModal: {
+                open(uri: string, cb) {
+                    SharedContextSettings.value.openWalletConnectDialog(uri, cb)
+                },
+                close() {
+                    SharedContextSettings.value.closeWalletConnectDialog()
+                },
+            },
         })
 
         if (connector.connected) await connector.killSession()

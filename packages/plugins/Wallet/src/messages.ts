@@ -35,6 +35,15 @@ export type SelectProviderDialogEvent =
           address?: string
       }
 
+export type WalletConnectQRCodeDialogEvent =
+    | {
+          open: true
+          uri: string
+      }
+    | {
+          open: false
+      }
+
 export type ConnectWalletDialogEvent =
     | {
           open: true
@@ -130,6 +139,11 @@ export interface WalletMessage {
      * Select nft contract dialog
      */
     selectNftContractDialogUpdated: SelectNftContractDialogEvent
+
+    /**
+     * WalletConnect QR Code dialog
+     */
+    walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     /**
      * Wallet Risk Warning dialog
