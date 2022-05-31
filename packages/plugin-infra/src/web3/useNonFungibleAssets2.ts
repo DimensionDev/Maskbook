@@ -8,7 +8,12 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
     pluginID?: T,
     schemaType?: Web3Helper.Definition[T]['SchemaType'],
     options?: Web3Helper.Web3HubOptions<T>,
-) {
+): {
+    value: Array<NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
+    next: () => void
+    done: boolean
+    retry: () => void
+} {
     const [assets, setAssets] = useState<
         Array<NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     >([])

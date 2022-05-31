@@ -8,16 +8,17 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, Button, Stack, styled, Typography } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ReversedAddress, useElementOnScreen } from '@masknet/shared'
-import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { LoadingSkeleton } from './LoadingSkeleton'
+import { useNonFungibleAssets2 } from '@masknet/plugin-infra/src/web3'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -156,24 +157,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
-                {loading && (
-                    <Box className={classes.root}>
-                        {Array.from({ length: 3 })
-                            .fill(0)
-                            .map((_, i) => (
-                                <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                                    <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                                    <Skeleton
-                                        animation="wave"
-                                        variant="text"
-                                        width={172}
-                                        height={20}
-                                        style={{ marginTop: 4 }}
-                                    />
-                                </Box>
-                            ))}
-                    </Box>
-                )}
+                {loading && <LoadingSkeleton />}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
@@ -262,8 +246,6 @@ export function CollectionList({
         if (next) next()
     }, [next])
 
-    const isLoading = false
-
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles
         if (!selectedCollection) return collectibles.filter((x) => !x.collection)
@@ -282,7 +264,9 @@ export function CollectionList({
             .filter(Boolean) as Array<NonFungibleTokenCollection<ChainId>>
     }, [collectibles.length, collectibles.length])
 
-    if (!isLoading && !collectibles.length)
+    if (!collectibles.length && !done) return <LoadingSkeleton />
+
+    if (done && !collectibles.length)
         return (
             <>
                 {addressName && (
@@ -362,7 +346,9 @@ export function CollectionList({
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
                         />
-                        <Box ref={anchorRef} />
+                        <Stack py={2} ref={anchorRef} justifyContent="center" direction="row">
+                            {!done && <LoadingBase />}
+                        </Stack>
                     </Box>
                 </Box>
                 <Box>
