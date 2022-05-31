@@ -1,5 +1,5 @@
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { PriceAPI } from '..'
 
@@ -26,16 +26,19 @@ export class CoinGeckoAPI implements PriceAPI.Provider {
         if (chainId && nativeToken) {
             return this.getNativeTokenPrices(chainId, currencyType)
         }
-        const requestPath = urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: id, ['vs_currencies']: currencyType })
-        const price = await fetch(requestPath).then(
-            (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
-        )
-        return price[id][currencyType]
+        const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
+        const price = await this.getTokenPrices(PLATFORM_ID, [id], currencyType)
+
+        return Number(price[id][currencyType]) ?? 0
     }
 
     async getTokenPrices(platform: string, contractAddresses: string[], currency = CurrencyType.USD) {
         const addressList = contractAddresses.join(',')
-        const requestPath = `${COINGECKO_URL_BASE}/simple/token_price/${platform}?contract_addresses=${addressList}&vs_currencies=${currency}`
+        const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform', {
+            platform,
+            ['contract_addresses']: addressList,
+            ['vs_currencies']: currency,
+        })
         return fetch(requestPath).then((r) => r.json() as Promise<Record<string, Price>>)
     }
 
