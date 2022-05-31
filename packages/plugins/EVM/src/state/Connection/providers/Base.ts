@@ -63,7 +63,7 @@ export class BaseProvider implements EVM_Provider {
             params: [],
         })
 
-        if (Number.parseInt(actualChainId, 10) !== chainId)
+        if (Number.parseInt(actualChainId, 16) !== chainId)
             throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
     }
 
