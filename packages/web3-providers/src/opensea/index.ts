@@ -88,7 +88,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             symbol: asset.asset_contract.token_symbol,
             description: asset.description,
             imageURL:
-                asset.animation_url ?? asset.image_original_url ?? asset.image_url ?? asset.image_preview_url ?? '',
+                asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
                 toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
