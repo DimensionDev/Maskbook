@@ -1,12 +1,9 @@
-import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
+import { DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
-import { startWatch } from '../../../utils/watcher'
 import Tooltip from '@mui/material/Tooltip'
 
 function Icon(props: { size: number }) {
@@ -37,16 +34,14 @@ function isCurrentUser(nickname: string | null) {
     const d = document.querySelectorAll('div')
     let flag = false
     d.forEach((v) => {
-        if (v.hasAttribute('data-testid') && v.getAttribute('data-testid') === 'UserName') {
-            console.log(typeof v)
-            console.log(v.toString())
-            let spans = v.querySelectorAll('span')
+        if (!(Object.hasOwn(v.dataset, 'testid') && v.dataset.testid === 'UserName')) return;
+            const spans = v.querySelectorAll('span')
             spans.forEach((s) => {
                 if (s.innerText === nickname) {
                     flag = true
                 }
             })
-        }
+        
     })
     return flag
 }
@@ -83,7 +78,6 @@ function HolderBadge(t: any) {
 
 function Badge({ v }: { v: any }) {
     const el: any = document.querySelector('#soul-holder')
-    console.log({ el, v })
     return (
         <div
             style={{
@@ -161,7 +155,6 @@ function Badges({ badges }: { badges: any }) {
                 perspective: 'none',
                 filter: 'none',
             }}>
-            {/* <Icon size={24} /> */}
             {badges.map((v: any, i: number) => {
                 return <Badge v={v} key={i} />
             })}
@@ -169,51 +162,15 @@ function Badges({ badges }: { badges: any }) {
     )
 }
 
-function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: AbortSignal) {
-    // TODO: for unknown reason the MutationObserverWatcher doesn't work well
-    // To reproduce, open a profile and switch to another profile.
-    startWatch(
-        new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
-            let remover = () => {}
-            const remove = () => remover()
-            const check = () => {
-                ifUsingMask(
-                    ProfileIdentifier.of(EnhanceableSite.Twitter, bioPageUserIDSelector(main).evaluate()).unwrapOr(
-                        null,
-                    ),
-                ).then(() => {
-                    const root = createReactRootShadowed(meta.afterShadow, { signal })
-                    root.render(<Icon size={size} />)
-                    remover = root.destroy
-                }, remove)
-            }
-            check()
-            return {
-                onNodeMutation: check,
-                onTargetChanged: check,
-                onRemove: remove,
-            }
-        }),
-        signal,
-    )
-}
-
-export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
-    // profile
-    _(bioPageUserNickNameSelector, 24, signal)
-    // floating bio
-    _(floatingBioCardSelector, 20, signal)
-}
 export async function injectNFTBadgeToPostTwitter(post: PostInfo, signal: AbortSignal) {
     const account = localStorage.getItem('wallet_address')
     const userId = post.author.getCurrentValue()?.userId
     const avatar = post.avatarURL.getCurrentValue()?.href
     const nickname = post.nickname.getCurrentValue()
-    let myProfile = isProfilePage() && isCurrentUser(nickname)
-    let wallet_address = myProfile ? account : 'a'
+    const myProfile = isProfilePage() && isCurrentUser(nickname)
+    const wallet_address = myProfile ? account : 'a'
     const res = await fetch(
         `https://soul.sustainablebtc.org/get_badges_by_address?wallet_address=${wallet_address}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
-        // `http://localhost:8080/get_badges_by_address?wallet_address=${account}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
     )
     let badges = await res.json()
     badges = badges.data
@@ -247,7 +204,6 @@ export async function injectNFTBadgeToPostTwitter(post: PostInfo, signal: AbortS
     post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
     let remover = () => {}
     function add() {
-        console.log('add', signal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
@@ -262,7 +218,7 @@ export async function injectNFTBadgeToPostTwitter(post: PostInfo, signal: AbortS
     }
 }
 export const ifUsingMask = memoizePromise(
-    async (pid: ProfileIdentifier | null) => {
+    async (pid: any) => {
         if (!pid) throw new Error()
         const p = await Services.Identity.queryProfilesInformation([pid])
         if (!p[0].linkedPersona?.rawPublicKey) throw new Error()
