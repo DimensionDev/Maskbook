@@ -39,6 +39,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -266,7 +267,7 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await connection?.confirmRequest?.()
+                await WalletRPC.confirmRequest(request.payload)
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
@@ -277,7 +278,7 @@ const ContractInteraction = memo(() => {
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
-        await connection?.rejectRequest?.()
+        await WalletRPC.rejectRequest(request.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [request])
 
@@ -310,21 +311,6 @@ const ContractInteraction = memo(() => {
         .times(nativeTokenPrice ?? 0)
         .plus(tokenValueUSD)
         .toString()
-
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        amount,
-        gasFee,
-        gas,
-        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-        request,
-        tokenPrice,
-        tokenAmount,
-        tokenDecimals,
-        nativeTokenPrice,
-    })
 
     useUpdateEffect(() => {
         if (!request && !requestLoading) {

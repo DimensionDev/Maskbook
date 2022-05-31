@@ -152,8 +152,6 @@ export enum EthereumMethodType {
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-    MASK_CONFIRM_TRANSACTION = 'mask_confirmTransaction',
-    MASK_REJECT_TRANSACTION = 'mask_rejectTransaction',
 }
 
 export enum TransactionEventType {

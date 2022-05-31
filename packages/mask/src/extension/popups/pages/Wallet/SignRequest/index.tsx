@@ -12,6 +12,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -117,9 +118,13 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value && connection?.confirmRequest) {
+        const goBack = new URLSearchParams(routeLocation.search).get('goBack')
+
+        if (value) {
             try {
-                await connection.confirmRequest()
+                await WalletRPC.confirmRequest(value.payload, {
+                    disableClose: !!goBack,
+                })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
@@ -128,8 +133,8 @@ const SignRequest = memo(() => {
     }, [value, routeLocation.search, connection])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!value || !connection?.rejectRequest) return
-        await connection.rejectRequest()
+        if (!value) return
+        await WalletRPC.rejectRequest(value.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, connection])
 

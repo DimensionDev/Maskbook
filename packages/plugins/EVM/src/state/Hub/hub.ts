@@ -106,7 +106,12 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(
+            address,
+            CurrencyType.USD,
+            chainId,
+            options?.currencyType === CurrencyType.NATIVE || !address,
+        )
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

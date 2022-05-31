@@ -177,7 +177,7 @@ const ImportWallet = memo(() => {
                                     account: wallet,
                                 })
                             }
-                            await WalletRPC.selectMaskAccount([wallet])
+                            await WalletRPC.resolveMaskAccount([wallet])
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
@@ -186,11 +186,12 @@ const ImportWallet = memo(() => {
                             await WalletRPC.updateMaskAccount({
                                 account: privateKeyWallet,
                             })
-                            await WalletRPC.selectMaskAccount([privateKeyWallet])
+                            await WalletRPC.resolveMaskAccount([privateKeyWallet])
 
                             await connection?.connect({
                                 account: privateKeyWallet,
                                 providerType: ProviderType.MaskWallet,
+                                popupsWindow: false,
                             })
 
                             await Services.Helper.removePopupWindow()
