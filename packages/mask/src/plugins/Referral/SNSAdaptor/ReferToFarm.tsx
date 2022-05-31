@@ -36,7 +36,7 @@ import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
-import { useTabStyles, useSharedStyles } from './styles'
+import { useTabStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
     walletStatusBox: {
@@ -90,7 +90,6 @@ export function ReferToFarm(props: PageInterface) {
 
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
-    const { classes: sharedClasses } = useSharedStyles()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)
     const [token, setToken] = useState<FungibleTokenDetailed>()
@@ -245,11 +244,7 @@ export function ReferToFarm(props: PageInterface) {
                         ))}
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary
-                            offChain
-                            classes={{
-                                connectWallet: sharedClasses.switchButton,
-                            }}>
+                        <WalletConnectedBoundary offChain>
                             <ActionButton
                                 fullWidth
                                 variant="contained"

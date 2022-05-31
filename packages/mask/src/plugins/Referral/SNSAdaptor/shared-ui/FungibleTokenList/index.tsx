@@ -9,7 +9,6 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
     useFungibleToken,
-    useFungibleTokensBalance,
     useFungibleTokensFromTokenList,
     useTrustedFungibleTokens,
     useWeb3State,
@@ -18,7 +17,6 @@ import {
 import {
     CurrencyType,
     currySameAddress,
-    formatBalance,
     FungibleToken,
     isSameAddress,
     NetworkPluginID,
@@ -27,6 +25,7 @@ import { getFungibleTokenItem } from './FungibleTokenItem'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 import type { ChainAddress } from '../../../types'
+import { useI18N } from '../../../locales'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -68,6 +67,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedI18N()
+    const tReferral = useI18N()
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
@@ -85,11 +85,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         (token) =>
             (!includeTokens || includeTokens.some(currySameAddress(token.address))) &&
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
-    )
-
-    const { value: fungibleTokensBalance = {}, loading: fungibleTokensBalanceLoading } = useFungibleTokensBalance(
-        pluginID,
-        filteredFungibleTokens.map((x) => x.address),
     )
 
     const { value: fungibleAssets = [], loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
@@ -112,12 +107,13 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (aValueInUSD > bValueInUSD) return -1
         if (aValueInUSD < bValueInUSD) return 1
 
+        // TODO: add daily reward
         // balance
-        const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-        const bBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[b.address] ?? '0', b.decimals))
+        // const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+        // const bBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[b.address] ?? '0', b.decimals))
 
-        if (aBalance > bBalance) return -1
-        if (aBalance < bBalance) return 1
+        // if (aBalance > bBalance) return -1
+        // if (aBalance < bBalance) return 1
 
         // mask token
         if (isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
@@ -141,8 +137,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #endregion
 
     const getPlaceholder = () => {
-        if (Object.keys(fungibleTokensBalance).length === 0 || fungibleTokensBalanceLoading)
-            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
+        if (!filteredFungibleTokens.length) {
+            return <Placeholder height={FixedSizeListProps?.height} message={tReferral.placeholder_no_farms()} />
+        }
         if (searchedTokenLoading)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
         if (searchedTokenAddress && !searchedToken)
@@ -153,7 +150,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     return (
         <SearchableList<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
             onSelect={(token) => onSelect?.(token)}
-            onSearch={setKeyword}
             data={
                 searchedToken &&
                 isSameAddress(searchedToken.address, searchedTokenAddress) &&
@@ -176,9 +172,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
                     return 'external'
                 },
-                (address) => fungibleTokensBalance[address] ?? '0',
+                (address) => '0',
                 (address) => selectedTokens.some((x) => isSameAddress(x, address)),
-                (address) => fungibleTokensBalanceLoading || fungibleAssetsLoading,
+                (address) => fungibleAssetsLoading,
                 async (
                     token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
                 ) => {

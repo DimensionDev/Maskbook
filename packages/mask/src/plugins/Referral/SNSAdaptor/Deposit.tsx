@@ -11,8 +11,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
-import { useSharedStyles } from './styles'
-
 const useStyles = makeStyles()((theme) => ({
     container: {
         fontFamily: theme.typography.fontFamily,
@@ -33,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
 export function Deposit(props: DepositDialogInterface | undefined) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { classes: sharedClasses } = useSharedStyles()
 
     const onClickDeposit = useCallback(async () => {
         props?.deposit && (await props.deposit.onDeposit())
@@ -74,7 +71,7 @@ export function Deposit(props: DepositDialogInterface | undefined) {
             </Grid>
             <Grid item xs={12} marginTop="24px">
                 <ChainBoundary expectedChainId={deposit.requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                    <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }}>
+                    <WalletConnectedBoundary>
                         <ActionButton fullWidth variant="contained" size="medium" onClick={onClickDeposit}>
                             {t.deposit()} {totalDeposit} {deposit.token?.symbol}
                         </ActionButton>

@@ -28,7 +28,7 @@ import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
 
-import { useTabStyles, useSharedStyles } from './styles'
+import { useTabStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -60,7 +60,6 @@ export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
-    const { classes: sharedClasses } = useSharedStyles()
     const currentChainId = useChainId()
     const requiredChainId = getRequiredChainId(currentChainId)
     const web3 = useWeb3()
@@ -205,7 +204,7 @@ export function BuyToFarm(props: PageInterface) {
                         </Grid>
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary offChain classes={{ connectWallet: sharedClasses.switchButton }}>
+                        <WalletConnectedBoundary offChain>
                             <ActionButton
                                 fullWidth
                                 variant="contained"

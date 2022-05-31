@@ -337,7 +337,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                 </Grid>
                 <Grid item xs={12} marginTop="24px">
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }}>
+                        <WalletConnectedBoundary>
                             <ActionButton
                                 fullWidth
                                 variant="contained"

@@ -382,10 +382,7 @@ export function CreateFarm(props: PageInterface) {
                         </Grid>
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                        <WalletConnectedBoundary
-                            classes={{
-                                connectWallet: sharedClasses.switchButton,
-                            }}>
+                        <WalletConnectedBoundary>
                             <ActionButton
                                 fullWidth
                                 variant="contained"

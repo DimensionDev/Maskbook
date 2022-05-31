@@ -114,7 +114,7 @@ export function CreatedFarms(props: PageInterface) {
     if (currentChainId !== requiredChainId) {
         return (
             <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <WalletConnectedBoundary offChain classes={{ connectWallet: sharedClasses.switchButton }} />
+                <WalletConnectedBoundary offChain />
             </ChainBoundary>
         )
     }

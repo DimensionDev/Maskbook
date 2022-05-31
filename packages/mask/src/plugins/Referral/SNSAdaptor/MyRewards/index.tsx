@@ -31,10 +31,10 @@ export function MyRewards(props: PageInterface) {
         [account, currentChainId],
     )
 
-    if (currentChainId !== requiredChainId) {
+    if (currentChainId !== requiredChainId || !account) {
         return (
             <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <WalletConnectedBoundary classes={{ connectWallet: sharedClasses.switchButton }} />
+                <WalletConnectedBoundary />
             </ChainBoundary>
         )
     }
