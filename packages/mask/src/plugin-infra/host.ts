@@ -1,7 +1,5 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register'
-
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages'
@@ -28,15 +26,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
         nativeType: nativeAPI?.type,
         hasNativeAPI,
 
-        send: async (payload: JsonRpcPayload) => {
-            if (nativeAPI?.type === 'iOS') {
-                return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
-            } else {
-                const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
-                if (!response) throw new Error('Failed to send request to native APP.')
-                return JSON.parse(response) as JsonRpcResponse
-            }
-        },
+        send: WalletRPC.sendPayload,
 
         openPopupWindow: Services.Helper.openPopupWindow,
         closePopupWindow: Services.Helper.removePopupWindow,
@@ -66,18 +56,17 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         updateAccount: WalletRPC.updateMaskAccount,
         resetAccount: WalletRPC.resetMaskAccount,
-        selectAccountPrepare: WalletRPC.selectMaskAccountPrepare,
+        selectAccount: WalletRPC.selectMaskAccount,
 
         signTransaction: WalletRPC.signTransaction,
         signTypedData: WalletRPC.signTypedData,
         signPersonalMessage: WalletRPC.signPersonalMessage,
 
+        getWallets: WalletRPC.getWallets,
+        getWalletPrimary: WalletRPC.getWalletPrimary,
         addWallet: WalletRPC.updateWallet,
         updateWallet: WalletRPC.updateWallet,
         removeWallet: WalletRPC.removeWallet,
-
-        shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
-        pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
     }
 }
 

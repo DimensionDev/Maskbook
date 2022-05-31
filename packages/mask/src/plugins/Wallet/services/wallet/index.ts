@@ -6,11 +6,11 @@ import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } f
 import { encodeText } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Transaction } from '@masknet/web3-shared-evm'
-import { Mask } from '@masknet/web3-providers'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as database from './database'
 import * as password from './password'
+import * as Mask from '../maskwallet'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
 

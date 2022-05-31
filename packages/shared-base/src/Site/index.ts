@@ -17,7 +17,7 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
 }
 
 function getEnhanceableSiteType() {
-    const { host, pathname } = location
+    const { host } = location
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (host.match(regexp)) return type as EnhanceableSite
         continue
@@ -26,7 +26,7 @@ function getEnhanceableSiteType() {
 }
 
 function getExtensionSiteType() {
-    const { host, pathname } = location
+    const { pathname } = location
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (pathname.match(regexp)) return type as ExtensionSite
         continue
@@ -36,6 +36,10 @@ function getExtensionSiteType() {
 
 export function getSiteType() {
     return getEnhanceableSiteType() ?? getExtensionSiteType()
+}
+
+export function isEnhanceableSiteType() {
+    return !!getEnhanceableSiteType()
 }
 
 export function isExtensionSiteType() {
