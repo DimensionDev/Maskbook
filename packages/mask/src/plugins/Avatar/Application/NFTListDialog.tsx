@@ -104,7 +104,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const { collectibles, retry, error, loading } = useCollectibles()
+    const { collectibles, retry, error, loading } = useCollectibles(chainId)
 
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {

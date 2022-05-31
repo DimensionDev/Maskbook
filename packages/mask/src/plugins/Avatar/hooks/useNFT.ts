@@ -1,11 +1,12 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import type { NFT } from '../types'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAsset, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const NFTCache = new Map<string, Promise<NFT | undefined>>()
 export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
+    const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, tokenId, { chainId })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return

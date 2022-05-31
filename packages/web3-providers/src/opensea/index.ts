@@ -339,6 +339,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
             this._apiKey,
         )
+
         const tokens = (response?.assets ?? [])
             ?.filter(
                 (x: OpenSeaResponse) =>
