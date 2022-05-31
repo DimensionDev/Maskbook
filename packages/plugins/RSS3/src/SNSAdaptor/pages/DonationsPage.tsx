@@ -1,10 +1,14 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Link, List, ListItem } from '@mui/material'
+import { AddressName } from '@masknet/web3-shared-evm/types'
+import { Link, List, ListItem, Typography } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
-import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
+import { GeneralAssetWithTags } from '../../types'
 import { DonationCard, StatusBox } from '../components'
+import { TabHeader } from '../components/TabHeader'
+import { useDonations } from '../hooks'
 
 const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
@@ -48,37 +52,52 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations: GeneralAsset[]
     loading?: boolean
     addressLabel: string
+    address: string
+    addressName: AddressName
 }
 
-export function DonationPage({ donations, loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ addressLabel, address, addressName }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
+    const { value: donations = EMPTY_LIST, loading } = useDonations(address)
+
+    const summary = !loading ? (
+        <Typography color="textPrimary" component="span">
+            {t.total_grants({
+                count: donations.length.toString(),
+            })}
+        </Typography>
+    ) : null
 
     if (loading || !donations.length) {
         return <StatusBox loading={loading} empty={!donations.length} />
     }
     return (
-        <List className={classes.list}>
-            {donations.map((donation) => (
-                <ListItem key={donation.id} className={classes.listItem}>
-                    <Link
-                        className={classes.link}
-                        href={getDonationLink(addressLabel, donation)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <DonationCard
-                            className={classes.donationCard}
-                            imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                            name={donation.info.title || t.inactive_project()}
-                            contribCount={donation.info.total_contribs || 0}
-                            contribDetails={donation.info.token_contribs || []}
-                        />
-                    </Link>
-                </ListItem>
-            ))}
-        </List>
+        <>
+            <TabHeader addressLabel={addressLabel} addressName={addressName}>
+                {summary}
+            </TabHeader>
+            <List className={classes.list}>
+                {donations.map((donation) => (
+                    <ListItem key={donation.id} className={classes.listItem}>
+                        <Link
+                            className={classes.link}
+                            href={getDonationLink(addressLabel, donation)}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <DonationCard
+                                className={classes.donationCard}
+                                imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                                name={donation.info.title || t.inactive_project()}
+                                contribCount={donation.info.total_contribs || 0}
+                                contribDetails={donation.info.token_contribs || []}
+                            />
+                        </Link>
+                    </ListItem>
+                ))}
+            </List>
+        </>
     )
 }
