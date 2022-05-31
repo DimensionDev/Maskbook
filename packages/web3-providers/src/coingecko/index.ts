@@ -16,8 +16,7 @@ const COINGECKO_CHAIN_ID_MAPPING: { [key: string]: string } = {
 }
 export class CoinGeckoAPI implements PriceAPI.Provider {
     /**
-     * Takes get token price
-     * @returns sum of a and b
+     * Get token price
      * @param id string *refers to coins/list
      * @param currencyType
      * @param chainId
