@@ -1,16 +1,15 @@
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { SchemaType, TransactionEventType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, TransactionEventType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
-export function usePurchaseCallback(projectId: string, amount: string, schema?: SchemaType) {
+export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = 1) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const genArt721MinterContract = useArtBlocksContract()
+    const genArt721MinterContract = useArtBlocksContract(chainId)
 
     return useAsyncFn(async () => {
         if (!genArt721MinterContract) return
