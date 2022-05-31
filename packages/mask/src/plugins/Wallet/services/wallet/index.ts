@@ -143,7 +143,7 @@ export async function signTransaction(address: string, config: Transaction) {
     return `0x${Buffer.from(signed.sign_output.encoded).toString('hex')}`
 }
 
-export async function signPersonalMessage(address: string, message: string, password?: string) {
+export async function signPersonalMessage(message: string, address: string, password?: string) {
     return personalSign({
         privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
         data: message,
