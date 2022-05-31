@@ -184,7 +184,7 @@ export namespace Plugin.Shared {
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
         /** Update a wallet */
-        updateWallet(id: string, wallet: Partial<Wallet>): Promise<void>
+        updateWallet(id: string, wallet?: Partial<Wallet>): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
     }

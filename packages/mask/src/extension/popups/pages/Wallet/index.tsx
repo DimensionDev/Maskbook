@@ -75,6 +75,7 @@ export default function Wallet() {
             switch (payload.method) {
                 case EthereumMethodType.ETH_SIGN:
                 case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                case EthereumMethodType.PERSONAL_SIGN:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
                 default:
