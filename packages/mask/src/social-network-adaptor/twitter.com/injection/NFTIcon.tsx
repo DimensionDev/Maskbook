@@ -1,22 +1,9 @@
 import { DOMProxy, LiveSelector } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service'
-import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
 import Tooltip from '@mui/material/Tooltip'
-
-function Icon(props: { size: number }) {
-    return (
-        <MaskIcon
-            size={props.size}
-            style={{
-                verticalAlign: 'text-bottom',
-                marginLeft: 6,
-            }}
-        />
-    )
-}
 
 function isProfilePage() {
     const aa = document.querySelectorAll('a')
@@ -33,15 +20,15 @@ function isCurrentUser(nickname: string | null) {
     if (!nickname) return false
     const d = document.querySelectorAll('div')
     let flag = false
-    d.forEach((v) => {
-        if (!(Object.hasOwn(v.dataset, 'testid') && v.dataset.testid === 'UserName')) return;
-            const spans = v.querySelectorAll('span')
-            spans.forEach((s) => {
-                if (s.innerText === nickname) {
-                    flag = true
-                }
-            })
-        
+    d.forEach((v: HTMLDivElement) => {
+        /* eslint-disable */
+        if (!v.hasAttribute('data-testid') || v.getAttribute('data-testid') !== 'UserName') return
+        const spans = v.querySelectorAll('span')
+        spans.forEach((s: any) => {
+            if (s.innerText === nickname) {
+                flag = true
+            }
+        })
     })
     return flag
 }
