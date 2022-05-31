@@ -400,12 +400,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
         const _tokenDetailed = (await connection?.getNonFungibleToken(contract?.address ?? '', tokenId, {
+            account,
             chainId,
         })) as NonFungibleToken<ChainId, SchemaType.ERC721>
-        setTokenDetailed(_tokenDetailed?.contract?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
+        setTokenDetailed(_tokenDetailed?.metadata?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
-    }, [connection, contract, tokenId, chainId])
+    }, [connection, contract, tokenId, chainId, account])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -416,7 +417,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
     }, [tokenDetailedOwnerList.length])
 
-    const isOwner = isSameAddress(account, tokenDetailed?.contract?.owner) || tokenDetailedSelectedList.length > 0
+    const isOwner = isSameAddress(account, tokenDetailed?.metadata?.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
     // #endregion
 

@@ -47,7 +47,6 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
@@ -130,12 +129,12 @@ class Connection implements BaseConnection {
     }
     async getBlockNumber(options?: FlowConnectionOptions): Promise<number> {
         const web3 = await this.getWeb3(options)
-        const blockHeader = await web3.getBlockHeader()
+        const blockHeader = web3.getBlockHeader()
         return blockHeader.height
     }
     async getBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         const web3 = await this.getWeb3(options)
-        const account = await web3.getAccount(address)
+        const account = web3.getAccount(address)
         return account.balance.toFixed()
     }
     async getTransaction(id: string, options?: FlowConnectionOptions) {
@@ -147,7 +146,7 @@ class Connection implements BaseConnection {
     }
     async getTransactionStatus(id: string, options?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const web3 = await this.getWeb3(options)
-        const { status } = await web3.getTransactionStatus(id)
+        const { status } = web3.getTransactionStatus(id)
         const status_ = status as TransactionStatusCode
         switch (status_) {
             case TransactionStatusCode.UNKNOWN:
@@ -166,7 +165,7 @@ class Connection implements BaseConnection {
     }
     async getTransactionNonce(address: string, options?: FlowConnectionOptions): Promise<number> {
         const web3 = await this.getWeb3(options)
-        const account = await web3.getAccount(address)
+        const account = web3.getAccount(address)
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
     }
