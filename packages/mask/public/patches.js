@@ -89,6 +89,8 @@ globalThis.regeneratorRuntime = undefined
                 console.trace('[Trusted Types](default policy): Possible XSS happened. Please remove it.', string)
                 return string
             },
+            createScriptURL: (string) => string,
+            createScript: (string) => string,
         })
     }
 }
