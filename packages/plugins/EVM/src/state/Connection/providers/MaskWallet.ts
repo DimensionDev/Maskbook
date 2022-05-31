@@ -59,7 +59,7 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         const { account, chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
 
         if (getSiteType() !== ExtensionSite.Popup) {
-            const wallets = await getWallets()
+            const wallets = await getWallets(true)
             SharedContextSettings.value.openPopupWindow(
                 wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet,
                 {

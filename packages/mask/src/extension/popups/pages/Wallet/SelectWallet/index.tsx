@@ -110,7 +110,7 @@ const SelectWallet = memo(() => {
         chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     )
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM).filter((x) => x.hasStoredKeyInfo)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
 
     const [selected, setSelected] = useState(account)
 
