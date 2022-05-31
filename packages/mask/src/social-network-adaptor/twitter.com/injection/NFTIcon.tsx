@@ -37,16 +37,16 @@ function isCurrentUser(nickname: string | null) {
     const d = document.querySelectorAll('div')
     let flag = false
     d.forEach((v) => {
-        if (!(Object.hasOwn(v.dataset, 'testid') && v.dataset.testid === 'UserName')) return;
+        if (v.hasAttribute('data-testid') && v.getAttribute('data-testid') === 'UserName') {
             console.log(typeof v)
             console.log(v.toString())
-            const spans = v.querySelectorAll('span')
+            let spans = v.querySelectorAll('span')
             spans.forEach((s) => {
                 if (s.innerText === nickname) {
                     flag = true
                 }
             })
-        
+        }
     })
     return flag
 }
@@ -209,8 +209,8 @@ export async function injectNFTBadgeToPostTwitter(post: PostInfo, signal: AbortS
     const userId = post.author.getCurrentValue()?.userId
     const avatar = post.avatarURL.getCurrentValue()?.href
     const nickname = post.nickname.getCurrentValue()
-    const myProfile = isProfilePage() && isCurrentUser(nickname)
-    const wallet_address = myProfile ? account : 'a'
+    let myProfile = isProfilePage() && isCurrentUser(nickname)
+    let wallet_address = myProfile ? account : 'a'
     const res = await fetch(
         `https://soul.sustainablebtc.org/get_badges_by_address?wallet_address=${wallet_address}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
         // `http://localhost:8080/get_badges_by_address?wallet_address=${account}&twitter_user_id=${userId}&twitter_avatar=${avatar}&twitter_nickname=${nickname}`,
