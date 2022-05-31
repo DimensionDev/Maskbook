@@ -2,13 +2,7 @@ import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@dimensiondev/kit'
-import {
-    ChainId,
-    EthereumMethodType,
-    getPayloadConfig,
-    getPayloadId,
-    getRPCConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, getPayloadConfig, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
