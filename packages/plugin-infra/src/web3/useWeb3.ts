@@ -22,7 +22,7 @@ export function useWeb3<T extends NetworkPluginID>(pluginID?: T, options?: Web3H
             providerType,
             ...options,
         } as Web3Helper.Web3ConnectionOptions<T>)
-    }, [account, chainId, providerType, Connection, JSON.stringify(options)])
+    }, [account, chainId, providerType, JSON.stringify(options)])
 
     return web3
 }
