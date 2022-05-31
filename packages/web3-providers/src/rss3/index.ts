@@ -34,7 +34,13 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             ...data,
         }
         rss3.files.set(Object.assign(file, { [key]: value }))
-        await rss3.files.sync()
+        try {
+            console.log(rss3.files)
+            await rss3.files.sync()
+        } catch (error) {
+            console.log('333333')
+            console.log(error)
+        }
         return value as T
     }
     async getDonations(address: string) {

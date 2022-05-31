@@ -5,9 +5,10 @@ import { useAsyncFn } from 'react-use'
 import addSeconds from 'date-fns/addSeconds'
 import type { RSS3_KEY_SNS } from '../../constants'
 import { NFTRSSNode, RSS3Cache } from '../../types'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export function useGetNFTAvatarFromRSS3() {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
 
     return useAsyncFn(
         async (userId: string, address: string, snsKey: RSS3_KEY_SNS) => {
@@ -35,9 +36,8 @@ async function _getNFTAvatarFromRSS(
     snsKey: RSS3_KEY_SNS,
 ): Promise<NFTRSSNode | undefined> {
     const rss = RSS3.createRSS3(address, async (message: string) => {
-        return connection.signMessage(message, address)
+        return connection.signMessage(message, 'personaSign', { account: address })
     })
-
     const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
     if (nfts) {
         return nfts[userId]

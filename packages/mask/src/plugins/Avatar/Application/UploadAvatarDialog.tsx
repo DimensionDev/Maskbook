@@ -4,7 +4,6 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
@@ -16,6 +15,7 @@ import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
 import { useSaveNFTAvatar } from '../hooks'
 import { useAsyncFn } from 'react-use'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -172,8 +172,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
-            location.reload()
-            onClose()
+            // location.reload()
+            // onClose()
             setDisabled(false)
         })
     }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
