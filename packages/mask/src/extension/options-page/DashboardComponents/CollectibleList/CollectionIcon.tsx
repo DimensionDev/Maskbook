@@ -4,8 +4,8 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleToken<ChainId, SchemaType>
+    collection?: NonFungibleTokenCollection<ChainId>
     onClick?(): void
 }
 
@@ -49,7 +49,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             PopperProps={{
                 disablePortal: true,
             }}
-            title={collection.metadata?.name ?? ''}
+            title={collection?.name ?? ''}
             arrow>
             <Box
                 className={classNames(
@@ -57,19 +57,19 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                {collection.collection?.iconURL ? (
+                {collection?.iconURL ? (
                     <Image
                         width={24}
                         height={24}
                         component="img"
                         className={classes.collectionImg}
-                        src={collection.collection?.iconURL}
+                        src={collection?.iconURL}
                     />
                 ) : (
                     <TokenIcon
                         classes={{ icon: classes.collectionImg }}
-                        name={collection.collection?.name}
-                        address={collection.address}
+                        name={collection?.name}
+                        address={collection.name}
                     />
                 )}
             </Box>
