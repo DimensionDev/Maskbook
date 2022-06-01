@@ -9,5 +9,5 @@ export function useWallets<T extends NetworkPluginID>(pluginID?: T, storageRequi
     const wallets = useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
     return useMemo(() => {
         return wallets.filter((x) => x.hasStoredKeyInfo || !storageRequired)
-    }, [wallets])
+    }, [wallets, storageRequired])
 }
