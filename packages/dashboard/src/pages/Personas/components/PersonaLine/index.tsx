@@ -131,7 +131,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             })
 
             return (
-                <Typography className={classes.userIdBox}>
+                <Box className={classes.userIdBox}>
                     <Typography variant="caption" sx={{ fontSize: 13 }}>
                         @{profile.userId}
                     </Typography>
@@ -148,7 +148,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             )}
                         </Typography>
                     )}
-                </Typography>
+                </Box>
             )
         }
         return (
