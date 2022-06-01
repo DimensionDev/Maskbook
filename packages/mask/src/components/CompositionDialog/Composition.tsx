@@ -66,6 +66,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
+        if (hasNativeAPI) {
+            nativeAPI?.api.notify_composition_requested({reason, open})
+        }
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return
