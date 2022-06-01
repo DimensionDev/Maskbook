@@ -10,7 +10,7 @@ const schema = zod.object({
 export function useSetWalletNameForm(
     defaultName?: string,
 ): UseFormReturn<{ name: string }, object> & { schema: typeof schema } {
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
 
     const formValue = useForm<zod.infer<typeof schema>>({
         mode: 'onChange',

@@ -155,6 +155,11 @@ export namespace Plugin.Shared {
         /** Close popup window */
         closePopupWindow(): Promise<void>
 
+        /** Open walletconnect dialog */
+        openWalletConnectDialog(uri: string, callback: () => void): void
+        /** Close walletconnect dialog */
+        closeWalletConnectDialog(): void
+
         /** Select a Mask Wallet account */
         selectAccount(): Promise<string[]>
         /** Update Mask Wallet account */
@@ -178,7 +183,7 @@ export namespace Plugin.Shared {
         signTypedData(address: string, message: string): Promise<string>
 
         /** Get all wallets */
-        getWallets(): Promise<Wallet[]>
+        getWallets(storageRequired?: boolean): Promise<Wallet[]>
         /** Get the primary wallet */
         getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */

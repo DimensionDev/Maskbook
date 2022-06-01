@@ -12,7 +12,7 @@ import { defer, DeferTuple } from '@dimensiondev/kit'
 
 export async function setDefaultMaskAccount() {
     if (currentMaskWalletAccountSettings.value) return
-    const wallets = await WalletRPC.getWallets()
+    const wallets = await WalletRPC.getWallets(true)
     const address = first(wallets)?.address
     if (address)
         await updateMaskAccount({
