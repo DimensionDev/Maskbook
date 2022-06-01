@@ -85,7 +85,7 @@ const SwitchWallet = memo(() => {
 
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
     const walletPrimary = useWalletPrimary(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {

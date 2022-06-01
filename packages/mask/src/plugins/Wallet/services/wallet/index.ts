@@ -1,24 +1,28 @@
 import * as bip39 from 'bip39'
-import { first, last } from 'lodash-unified'
+import { first, last, omit } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { encodeText } from '@dimensiondev/kit'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import type { Transaction } from '@masknet/web3-shared-evm'
-import { Mask } from '@masknet/web3-providers'
+import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
+import { createPayload, EthereumMethodType, formatEthereumAddress, Transaction } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as database from './database'
 import * as password from './password'
+import * as Mask from '../maskwallet'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
-import type { WalletRecord } from './type'
+import { sendPayload } from '../send'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
     const index = Number.parseInt(last(splitted) ?? '', 10)
     if (Number.isNaN(index) || index < 0 || splitted.length !== 6) throw new Error('Invalid derivation path.')
     return [...splitted.slice(0, -1), index + 1].join('/')
+}
+
+function sanitizeWallet(wallet: Wallet): Wallet {
+    return omit(wallet, ['storedKeyInfo'])
 }
 
 // wallet db
@@ -35,40 +39,35 @@ export async function getWallet(address?: string) {
         const wallets = await getWallets()
         return wallets.find((x) => isSameAddress(x.address, address))
     }
-    return database.getWallet(address)
+    const wallet = await database.getWallet(address)
+    if (!wallet) return null
+    return sanitizeWallet(wallet)
 }
 
-export async function getWallets(): Promise<
-    Array<
-        Omit<WalletRecord, 'type'> & {
-            configurable: boolean
-            hasStoredKeyInfo: boolean
-            hasDerivationPath: boolean
-        }
-    >
-> {
-    // if (hasNativeAPI) {
-    //     // read wallet from rpc
-    //     const accounts = await EVM_RPC.getAccounts()
-    //     const address = first(accounts) ?? ''
-    //     if (!address) return []
+export async function getWallets(storageRequired = false): Promise<Wallet[]> {
+    if (hasNativeAPI) {
+        const response = await sendPayload(createPayload(0, EthereumMethodType.ETH_ACCOUNTS, []))
+        const accounts = response.result as string[] | undefined
+        const address = first(accounts) ?? ''
+        if (!address) return []
 
-    //     const now = new Date()
-    //     const address_ = formatEthereumAddress(address)
-    //     return [
-    //         {
-    //             id: address_,
-    //             name: 'Mask Network',
-    //             address: address_,
-    //             createdAt: now,
-    //             updatedAt: now,
-    //             configurable: false,
-    //             hasStoredKeyInfo: false,
-    //             hasDerivationPath: false,
-    //         },
-    //     ]
-    // }
-    return database.getWallets()
+        const now = new Date()
+        const address_ = formatEthereumAddress(address)
+        return [
+            {
+                id: address_,
+                name: 'Mask Network',
+                address: address_,
+                createdAt: now,
+                updatedAt: now,
+                configurable: false,
+                hasStoredKeyInfo: false,
+                hasDerivationPath: false,
+            },
+        ]
+    }
+    const wallets = await database.getWallets()
+    return wallets.filter((x) => x.hasStoredKeyInfo || !storageRequired).map(sanitizeWallet)
 }
 
 export function createMnemonicWords() {

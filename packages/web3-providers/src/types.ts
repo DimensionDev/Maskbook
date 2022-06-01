@@ -19,6 +19,7 @@ import type {
     GasOptionType,
     HubOptions,
 } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -100,7 +101,12 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(address: string, currency: CurrencyType): Promise<number>
+        getTokenPrice(
+            address: string,
+            currency: CurrencyType,
+            chainId?: ChainId,
+            nativeToken?: boolean,
+        ): Promise<number>
         getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
     }
 }

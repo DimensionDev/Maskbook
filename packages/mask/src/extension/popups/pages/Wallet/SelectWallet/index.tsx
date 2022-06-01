@@ -110,7 +110,7 @@ const SelectWallet = memo(() => {
         chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     )
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM).filter((x) => x.hasStoredKeyInfo)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
 
     const [selected, setSelected] = useState(account)
 
@@ -120,7 +120,7 @@ const SelectWallet = memo(() => {
         if (isPopup) {
             navigate(-1)
         } else {
-            await WalletRPC.selectMaskAccount([])
+            await WalletRPC.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isPopup])
@@ -142,7 +142,7 @@ const SelectWallet = memo(() => {
             account: selected,
         })
         if (chainId) {
-            await WalletRPC.selectMaskAccount([selected])
+            await WalletRPC.resolveMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isPopup])
