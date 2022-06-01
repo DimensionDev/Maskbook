@@ -4,7 +4,6 @@ import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-
 import { useCollectibles } from '../hooks/useCollectibles'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
-import { downloadUrl } from '../../../utils'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
 import type { SelectTokenInfo, TokenInfo } from '../types'
@@ -15,6 +14,7 @@ import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
 import { useChainId, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
+import { toPNG } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -119,7 +119,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
         try {
-            const image = await downloadUrl(selectedToken.metadata.imageURL)
+            const image = await toPNG(selectedToken.metadata.imageURL)
+            if (!image) {
+                return
+            }
             onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
             onNext()
             setDisabled(false)
@@ -246,9 +249,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
             <DialogActions className={classes.actions}>
                 {tokens.length || collectibles.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
-                        <Typography variant="body1" color="textPrimary">
-                            {t.collectible_not_found()}
-                        </Typography>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"

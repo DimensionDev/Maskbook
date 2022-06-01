@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -67,6 +67,7 @@ export function AddNFT(props: AddNFTProps) {
         }
 
         let asset = await hub.getNonFungibleAsset(address, tokenId)
+        console.log(asset)
         if (!asset) {
             asset = await connection?.getNonFungibleToken(address, tokenId)
         }
@@ -83,8 +84,9 @@ export function AddNFT(props: AddNFTProps) {
             tokenId: asset.tokenId,
             collection: asset.collection,
         } as NonFungibleToken<ChainId, SchemaType>
-
+        console.log(token)
         if (token) {
+            /*
             if (chainId && token && token.contract?.chainId !== chainId) {
                 setMessage('chain does not match.')
                 return
@@ -92,7 +94,7 @@ export function AddNFT(props: AddNFTProps) {
             if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
                 setMessage(t('nft_owner_hint'))
                 return
-            }
+            }*/
             onAddClick?.(token)
             handleClose()
         }

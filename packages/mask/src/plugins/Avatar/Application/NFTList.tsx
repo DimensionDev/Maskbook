@@ -10,7 +10,7 @@ import { NFTListPage } from './NFTListPage'
 const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme, props) => ({
     selected: {
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
-        border: 'none',
+        border: '1px solid transparent',
         borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: `${theme.palette.text.primary} !important`,
         minHeight: 37,
@@ -20,6 +20,7 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
     tab: {
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
         color: theme.palette.text.secondary,
+        borderTop: '1px solid transparent',
         border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         minHeight: 37,
         height: 37,

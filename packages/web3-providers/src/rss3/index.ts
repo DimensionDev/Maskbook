@@ -33,11 +33,14 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             ...(descriptor?.value as T | undefined),
             ...data,
         }
+
         rss3.files.set(Object.assign(file, { [key]: value }))
         try {
+            console.log(rss3)
             console.log(rss3.files)
             await rss3.files.sync()
         } catch (error) {
+            console.log(rss3)
             console.log('333333')
             console.log(error)
         }
