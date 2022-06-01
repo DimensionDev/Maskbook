@@ -31,7 +31,7 @@ import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Ba
 import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
-
+import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap'
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private connection = createConnection()
@@ -41,6 +41,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             new ITODescriptor(),
             new RedPacketDescriptor(),
             new ERC20Descriptor(),
+            new SwapDescriptor(),
             new BaseTransactionDescriptor(),
         ],
         [TransactionDescriptorType.DEPLOYMENT]: [new ContractDeploymentDescriptor()],
@@ -126,6 +127,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         transaction: Transaction,
         context: TransactionContext<ChainId, TransactionParameter>,
     ): Promise<TransactionDescriptorBase<ChainId, Transaction>> {
+        console.log(context)
         for (const descriptor of this.descriptors[context.type]) {
             const computed = await descriptor.compute(context)
 
