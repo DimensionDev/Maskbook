@@ -377,7 +377,6 @@ class Connection implements EVM_Connection {
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         // ERC721
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
-        console.log({ options })
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,

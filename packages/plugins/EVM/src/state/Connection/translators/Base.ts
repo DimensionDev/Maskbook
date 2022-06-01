@@ -14,8 +14,9 @@ export class Base implements Translator {
         // #region polyfill transaction config
         {
             // add gas margin
-            if (config.gas)
-                config.gas = BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
+            if (config.gas) {
+                config.gas = toHex(BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed())
+            }
 
             // add gas price
             const hub = await Web3StateSettings.value.Hub?.getHub?.({

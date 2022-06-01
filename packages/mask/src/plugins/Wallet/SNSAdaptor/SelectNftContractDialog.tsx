@@ -237,7 +237,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
     )
     return (
         <div className={classes.searchBox}>
-            {keyword !== '' ? (
+            {keyword !== '' && searchedTokenList.length === 0 ? (
                 <div>
                     {!isValid ||
                     loading ||
