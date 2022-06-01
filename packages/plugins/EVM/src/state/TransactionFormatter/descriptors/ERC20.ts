@@ -26,12 +26,13 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 }
             case 'transfer':
             case 'transferFrom':
+                console.log(context)
                 return {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
                         context.parameters?.value,
-                        await connection?.getFungibleToken(context.parameters?.to ?? '', {
+                        await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                         true,

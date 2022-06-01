@@ -81,7 +81,8 @@ export const ActivityListItem = memo<ActivityListItemProps>(
 
         const { value: formatterTransaction } = useAsync(async () => {
             if (!TransactionFormatter) return
-            return TransactionFormatter.formatTransaction(chainId, transaction)
+
+            return TransactionFormatter.formatTransaction(chainId, transaction._tx)
         }, [transaction, TransactionFormatter, chainId])
 
         const transactionIcon = useMemo(() => {
