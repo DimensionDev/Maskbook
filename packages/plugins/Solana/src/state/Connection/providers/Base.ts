@@ -1,5 +1,5 @@
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents } from '@masknet/web3-shared-base'
+import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import type { Transaction } from '@solana/web3.js'
@@ -37,10 +37,10 @@ export class BaseProvider implements SolanaProvider {
     signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
-    createWeb3(chainId?: ChainId): Promise<Web3> {
+    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3> {
         throw new Error('Method not implemented.')
     }
-    createWeb3Provider(chainId?: ChainId): Promise<Web3Provider> {
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider> {
         throw new Error('Method not implemented.')
     }
     connect(chainId: ChainId): Promise<Account<ChainId>> {
