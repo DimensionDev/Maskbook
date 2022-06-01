@@ -15,7 +15,8 @@ import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
 import { useSaveNFTAvatar } from '../hooks'
 import { useAsyncFn } from 'react-use'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -132,6 +133,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
         return
     }
 }
+
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
     const { classes } = useStyles()
@@ -143,7 +145,12 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
     const [, saveAvatar] = useSave()
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
+    console.log(identifier)
+    const onSave2 = useCallback(async () => {
+        const sign = await connection?.signMessage('abc', 'personaSign', { account })
+        console.log(sign)
+    }, [connection])
     const onSave = useCallback(() => {
         if (!editor) return
         editor.getImage().toBlob(async (blob) => {

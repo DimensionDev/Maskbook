@@ -4,7 +4,7 @@ import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -49,8 +49,9 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
-
+    const hub = useWeb3Hub(currentPluginId, { chainId })
     const onClick = useCallback(async () => {
         if (!address) {
             setMessage(t('nft_input_address_label'))
@@ -60,8 +61,29 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('nft_input_tokenid_label'))
             return
         }
+        if (!hub?.getNonFungibleAsset) {
+            setMessage('web3 error')
+            return
+        }
 
-        const token = await connection?.getNonFungibleToken(address, tokenId, { chainId })
+        let asset = await hub.getNonFungibleAsset(address, tokenId)
+        if (!asset) {
+            asset = await connection?.getNonFungibleToken(address, tokenId)
+        }
+        if (!asset) {
+            setMessage('cannot found asset')
+            return
+        }
+        const token: NonFungibleToken<ChainId, SchemaType> = {
+            contract: asset.contract,
+            metadata: {
+                ...asset.metadata,
+                imageURL: 'https://pbs.twimg.com/profile_images/1504678286789865474/wDuDeHOJ_400x400.jpg',
+            },
+            tokenId: asset.tokenId,
+            collection: asset.collection,
+        } as NonFungibleToken<ChainId, SchemaType>
+
         if (token) {
             if (chainId && token && token.contract?.chainId !== chainId) {
                 setMessage('chain does not match.')
@@ -74,7 +96,7 @@ export function AddNFT(props: AddNFTProps) {
             onAddClick?.(token)
             handleClose()
         }
-    }, [tokenId, address, onAddClick, onClose, connection, chainId])
+    }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')
