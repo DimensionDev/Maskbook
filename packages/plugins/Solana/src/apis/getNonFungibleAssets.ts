@@ -38,7 +38,7 @@ async function getNftList(chainId: ChainId, account: string): Promise<Array<NonF
                     {
                         memcmp: {
                             offset: 32,
-                            bytes: account,
+                            bytes: 'CZN1CMu9tWmuG2kW5eiG2ucheVnGqSBLKuMtrtBCQnw1',
                         },
                     },
                 ],

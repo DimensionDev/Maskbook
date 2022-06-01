@@ -12,7 +12,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { useChainId, useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 
@@ -89,8 +89,9 @@ interface NFTListDialogProps {
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets, onSelected, tokenInfo } = props
     const { classes } = useStyles()
-    const account = useWallet(NetworkPluginID.PLUGIN_EVM)?.address
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const account = useAccount(currentPluginId)
+    const chainId = useChainId(currentPluginId)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType>>()
@@ -100,12 +101,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
-
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
-
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { collectibles, retry, error, loading } = useCollectibles(chainId)
-
     const { showSnackbar } = useCustomSnackbar()
     const onChange = useCallback((address: string) => {
         setSelectedAccount(address)
@@ -219,7 +216,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
-    if (!wallets?.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account))
+    if (!wallets?.length && !account)
         return (
             <DialogContent className={classes.content}>
                 <NFTWalletConnect />
