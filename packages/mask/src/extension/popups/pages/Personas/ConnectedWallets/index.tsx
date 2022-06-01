@@ -28,7 +28,6 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
-        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
