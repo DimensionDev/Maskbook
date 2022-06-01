@@ -9,6 +9,7 @@ import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog'
+import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -25,6 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
                 <TransactionSnackbar />
+                <WalletConnectQRCodeDialog />
             </>
         )
     },

@@ -110,7 +110,7 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
     const account = notInPop ? frontAccount : wallet.account
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) ?? {}
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     return account ? (
         <section className={classes.currentAccount}>

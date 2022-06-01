@@ -12,7 +12,7 @@ export class WalletState implements Web3WalletState {
     }
 
     async getAllWallets() {
-        return this.context.wallets.getCurrentValue()
+        return this.context.getWallets()
     }
 
     async addWallet(id: string, wallet: Wallet) {
