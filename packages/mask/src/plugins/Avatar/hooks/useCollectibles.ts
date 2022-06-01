@@ -14,7 +14,8 @@ export function useCollectibles(chainId: ChainId) {
         return {
             contract: x.contract,
             metadata: x.metadata,
-            tokenId: x.id,
+            collection: x.collection,
+            tokenId: x.tokenId,
         } as NonFungibleToken<ChainId, SchemaType>
     })
     return { collectibles, error, retry, loading }
