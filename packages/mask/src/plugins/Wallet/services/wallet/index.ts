@@ -3,9 +3,9 @@ import { first, last, omit } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
-import { encodeText } from '@dimensiondev/kit'
 import { isSameAddress, Wallet } from '@masknet/web3-shared-base'
 import { createPayload, EthereumMethodType, formatEthereumAddress, Transaction } from '@masknet/web3-shared-evm'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as database from './database'
@@ -129,7 +129,7 @@ export async function signTransaction(address: string, config: Transaction) {
         max_inclusion_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? null,
         nonce: config.nonce ? toHex(config.nonce) : null,
         to_address: config.to ? config.to.toLowerCase() : null,
-        payload: config.data ? encodeText(config.data.slice(2)) : new Uint8Array(),
+        payload: config.data ? new Uint8Array(decodeArrayBuffer(config.data.replace(/^0x/, ''))) : new Uint8Array(),
     }
     const signed = await Mask.signTransaction({
         password: password_,
