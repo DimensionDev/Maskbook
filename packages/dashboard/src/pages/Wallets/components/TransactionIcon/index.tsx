@@ -36,13 +36,18 @@ export interface TransactionIconProps {
 }
 
 export const TransactionIcon = memo<TransactionIconProps>(({ address, failed, type, transactionType }) => {
-    const { HAPPY_RED_PACKET_ADDRESS_V1, HAPPY_RED_PACKET_ADDRESS_V2, HAPPY_RED_PACKET_ADDRESS_V3 } =
-        useRedPacketConstants()
+    const {
+        HAPPY_RED_PACKET_ADDRESS_V1,
+        HAPPY_RED_PACKET_ADDRESS_V2,
+        HAPPY_RED_PACKET_ADDRESS_V3,
+        HAPPY_RED_PACKET_ADDRESS_V4,
+    } = useRedPacketConstants()
 
     const isRedPacket =
         isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address) ||
         isSameAddress(HAPPY_RED_PACKET_ADDRESS_V2, address) ||
-        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V3, address)
+        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V3, address) ||
+        isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
 
     return (
         <TransactionIconUI transactionType={transactionType} isRedPacket={isRedPacket} isFailed={failed} type={type} />
@@ -60,6 +65,7 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
     const { classes } = useStyles()
     const icon = useMemo(() => {
         if (isFailed) return <CloseIcon style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
+        if (isRedPacket) return <RedPacketIcon className={classes.icon} />
 
         switch (type) {
             case TransactionType.SEND:
@@ -69,6 +75,8 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
             case TransactionType.RECEIVE:
                 return <DownloadIcon style={{ stroke: MaskColorVar.greenMain }} className={classes.icon} />
             case TransactionType.CREATE_LUCKY_DROP:
+                return <RedPacketIcon className={classes.icon} />
+            case TransactionType.CREATE_RED_PACKET:
                 return <RedPacketIcon className={classes.icon} />
             case TransactionType.FILL_POOL:
                 return <ITOIcon className={classes.icon} />
