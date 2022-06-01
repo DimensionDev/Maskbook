@@ -53,6 +53,7 @@
     "react-i18next": "^11.16.9",
     "ses": "0.15.15",
     "ts-results": "3.3.0",
+    "unidata.js": "^0.4.4",
     "web3-core": "1.7.3",
     "web3-core-method": "1.7.3"
   },

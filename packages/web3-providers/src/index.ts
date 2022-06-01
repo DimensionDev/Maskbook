@@ -15,6 +15,7 @@ import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
+import { UNIDATA_API } from './unidata'
 
 export * from './helpers'
 export * from './types'
@@ -38,3 +39,4 @@ export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const NextIDProof = new NextIDProofAPI()
+export const Unidata = new UNIDATA_API()

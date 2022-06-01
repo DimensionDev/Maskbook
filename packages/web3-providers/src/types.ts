@@ -132,6 +132,71 @@ export namespace FungibleTokenAPI {
     }
 }
 
+export namespace UniDataAssetsAPI {
+    export interface Provider {
+        getAssets(
+            source: SourceType,
+            address: string,
+            options: HubOptions<ChainId>,
+        ): Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
+    }
+
+    export enum NetworkId {
+        'Ethereum' = 1,
+        'Polygon' = 137,
+        'Binance Smart Chain' = 56,
+        'Gnosis' = 100,
+        'Flow' = 1,
+        'Solana' = 101,
+    }
+
+    export type SourceType = 'Ethereum NFT' | 'Solana NFT' | 'Flow NFT'
+    export interface Assets {
+        total: number
+        cursor?: any
+
+        list: Array<{
+            date_created?: string
+            date_updated?: string
+
+            related_urls?: string[]
+
+            tags?: string[]
+            owners: string[]
+            name?: string
+            description?: string
+
+            previews?: Array<{
+                content?: string
+                address?: string
+                mime_type?: string
+                size_in_bytes?: number
+            }>
+
+            items?: Array<{
+                content?: string
+                address?: string
+                mime_type?: string
+                size_in_bytes?: number
+            }>
+
+            attributes?: Array<{
+                content?: string
+                mime_type?: string
+            }>
+
+            source: string
+
+            metadata?: {
+                network: 'Ethereum' | 'Polygon' | 'Binance Smart Chain' | 'Gnosis' | 'Flow' | 'Solana'
+                proof: string
+
+                [key: string]: any
+            }
+        }>
+    }
+}
+
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType> {
         getAsset?: (

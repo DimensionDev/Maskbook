@@ -57,6 +57,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
+                    'unidata.js': require.resolve('unidata.js/dist/unidata.umd.js'),
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
