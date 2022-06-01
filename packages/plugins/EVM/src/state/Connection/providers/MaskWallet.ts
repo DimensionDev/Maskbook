@@ -42,7 +42,9 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
             this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
         })
         sharedContext.account.subscribe(() => {
-            this.emitter.emit('accounts', [sharedContext.account.getCurrentValue()])
+            const account = sharedContext.account.getCurrentValue()
+
+            this.emitter.emit(account ? 'accounts' : 'disconnect', [sharedContext.account.getCurrentValue()])
         })
     }
 
