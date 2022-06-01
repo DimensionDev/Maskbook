@@ -59,16 +59,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
-            if (hasNativeAPI) {
-                nativeAPI?.api.notify_composition_requested({reason, open})
-            }
         })
     }, [type])
     useEffect(() => {
-        if (!open) return
         if (hasNativeAPI) {
             nativeAPI?.api.notify_composition_requested({reason, open})
         }
+        if (!open) return
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return
