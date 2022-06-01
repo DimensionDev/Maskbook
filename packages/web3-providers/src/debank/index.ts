@@ -86,6 +86,7 @@ export class DeBankAPI
                         id: x.id === 'bsc' ? 'bnb' : x.id,
                         chain: x.chain === 'bsc' ? 'bnb' : x.chain,
                     })),
+                    options?.chainId,
                 ),
             )
         } catch {

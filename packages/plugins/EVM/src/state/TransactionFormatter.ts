@@ -12,8 +12,8 @@ import {
     ChainId,
     getData,
     getFunctionParameters,
+    getFunctionSignature,
     getTo,
-    getTransactionSignature,
     isEmptyHex,
     isZeroAddress,
     Transaction,
@@ -60,7 +60,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         const value = (transaction.value as string | undefined) ?? '0x0'
         const data = getData(transaction)
         const to = getTo(transaction)
-        const signature = getTransactionSignature(transaction)
+        const signature = getFunctionSignature(transaction)
         const parameters = getFunctionParameters(transaction)
 
         const context = {

@@ -194,6 +194,7 @@ export enum TransactionType {
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_LUCKY_DROP = 'create_lucky_drop',
+    CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
     REFUND = 'refund',

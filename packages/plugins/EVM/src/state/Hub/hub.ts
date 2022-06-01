@@ -73,9 +73,9 @@ class Hub implements EVM_Hub {
         // only the first page is available
         if ((options?.page ?? 0) > 0) return createPageable([])
         try {
-            return DeBank.getAssets(account, options)
+            return DeBank.getAssets(account, { chainId: this.chainId, ...options })
         } catch {
-            return Zerion.getAssets(account, options)
+            return Zerion.getAssets(account, { chainId: this.chainId, ...options })
         }
     }
     async getNonFungibleAsset(

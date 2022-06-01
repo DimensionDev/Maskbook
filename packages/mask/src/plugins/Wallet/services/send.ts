@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@dimensiondev/kit'
-import { ChainId, EthereumMethodType, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, getPayloadConfig, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
@@ -71,7 +71,29 @@ export async function send(
     options?: Options,
 ) {
     const provider = await createProvider(options?.chainId)
-    return provider.send(payload, callback)
+
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+            const computedPayload = getPayloadConfig(payload)
+            if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
+
+            const rawTransaction = await WalletRPC.signTransaction(computedPayload.from as string, {
+                ...computedPayload,
+                chainId: options.chainId,
+            })
+            if (!rawTransaction) break
+
+            return provider.send(
+                {
+                    ...payload,
+                    method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                    params: [rawTransaction],
+                },
+                callback,
+            )
+        default:
+            return provider.send(payload, callback)
+    }
 }
 
 /**

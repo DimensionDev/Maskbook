@@ -301,7 +301,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
-        [selectedAsset],
+        [selectedAsset, transferCallback],
     )
 
     const [menu, openMenu] = useMenuConfig(

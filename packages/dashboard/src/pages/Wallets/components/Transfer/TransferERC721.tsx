@@ -26,7 +26,7 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useGasConfig } from '../../hooks/useGasConfig'
+import { useGasConfig } from '../../hooks'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import {
@@ -40,7 +40,7 @@ import {
     useNativeTokenPrice,
 } from '@masknet/plugin-infra/web3'
 import { RightIcon } from '@masknet/icons'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -82,7 +82,6 @@ export const TransferERC721 = memo(() => {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-
     // form
     const schema = z.object({
         recipient: z
@@ -180,27 +179,23 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            // if (ev.open || !ev.contract || ev.uuid !== id) return
-            // if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
-            //     if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
-            //         setDefaultToken(null)
-            //     }
-            //     setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
-            //     setContract(ev.contract)
-            //     setValue('tokenId', '')
-            // }
+            if (ev.open || !ev.contract || ev.uuid !== id) return
+            if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
+                if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
+                    setDefaultToken(null)
+                }
+                setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
+                setContract(ev.contract)
+                setValue('tokenId', '')
+            }
         },
     )
 
-    // const {
-    //     asyncRetry: { loading: loadingOwnerList },
-    //     tokenDetailedOwnerList = [],
-    //     refreshing,
-    // } = useERC721TokenDetailedOwnerList(contract, account)
-
-    const loadingOwnerList = false
-    const tokenDetailedOwnerList: Array<NonFungibleToken<ChainId, SchemaType>> = []
-    const refreshing = false
+    const {
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
+        clearTokenDetailedOwnerList,
+    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId)
 
     const onTransfer = useCallback(
         async (data: FormInputs) => {
@@ -360,13 +355,13 @@ export const TransferERC721 = memo(() => {
                             name="contract"
                         />
                     </Box>
-                    {((loadingOwnerList && tokenDetailedOwnerList.length === 0) || refreshing) && (
+                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 && (
                         <Box pt={4}>
                             <LoadingPlaceholder />
                         </Box>
                     )}
                     <Box width="100%" mt={2}>
-                        {tokenDetailedOwnerList.length > 0 && !refreshing && (
+                        {tokenDetailedOwnerList.length > 0 && !loadingOwnerList && (
                             <Controller
                                 control={control}
                                 render={(field) => (

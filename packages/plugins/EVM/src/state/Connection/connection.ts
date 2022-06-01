@@ -276,7 +276,7 @@ class Connection implements EVM_Connection {
         return createERC721Collection(this.chainId, address, name ?? 'Unknown Token', '')
     }
     async switchChain(options?: EVM_Web3ConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
+        await Providers[this.providerType].switchChain(options?.chainId)
     }
 
     getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
