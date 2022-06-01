@@ -6,6 +6,7 @@ import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     constructor() {
@@ -46,12 +47,16 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         })
     }
 
-    override async request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    override async request<T extends unknown>(
+        requestArguments: RequestArguments,
+        options?: ProviderOptions<ChainId>,
+    ): Promise<T> {
         const response = await SharedContextSettings.value.send(
             createPayload(0, requestArguments.method, requestArguments.params),
             {
-                popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
                 chainId: SharedContextSettings.value.chainId.getCurrentValue(),
+                popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
+                ...options,
             },
         )
         return response?.result as T

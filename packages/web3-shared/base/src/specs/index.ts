@@ -501,13 +501,18 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(chainId?: ChainId): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(chainId?: ChainId): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
     /** Create the connection. */
     connect(chainId?: ChainId): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
+}
+
+export interface ProviderOptions<ChainId> {
+    chainId: ChainId
+    account?: string
 }
 
 export interface TransactionChecker<ChainId> {
@@ -520,8 +525,6 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     account?: string
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
-    /** Handle on popups page. */
-    popupsWindow?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }
@@ -878,7 +881,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Wait until a provider ready */
     untilReady: (providerType: ProviderType) => Promise<void>
     /** Connect with the provider and set chain id. */
-    connect: (chainId: ChainId, providerType: ProviderType, popupsWindow?: boolean) => Promise<Account<ChainId>>
+    connect: (chainId: ChainId, providerType: ProviderType) => Promise<Account<ChainId>>
     /** Disconnect with the provider. */
     disconnect: (providerType: ProviderType) => Promise<void>
 }

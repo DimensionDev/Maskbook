@@ -266,7 +266,7 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await WalletRPC.confirmRequest(request.payload, { chainId, popupsWindow: false })
+                await WalletRPC.confirmRequest(request.payload, { chainId })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
