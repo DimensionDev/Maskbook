@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { explorerResolver } from '@masknet/web3-shared-evm'
-import { useChainId, useReverseAddress, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWallet } from '@masknet/plugin-infra/web3'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Navigator } from '../../../components/Navigator'
 import { useTitle } from '../../../hook/useTitle'
@@ -75,9 +75,6 @@ const WalletSettings = memo(() => {
     const wallet = selectedWallet ?? currentWallet
 
     const { classes } = useStyles()
-
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address ?? '')
-    const { Others } = useWeb3State()
 
     useTitle(t('popups_wallet_setting'))
 
