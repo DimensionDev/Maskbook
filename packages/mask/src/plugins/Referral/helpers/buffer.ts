@@ -1,4 +1,4 @@
-import { BigNumber } from '@ethersproject/bignumber'
+import BigNumber from 'bignumber.js'
 import type { PrefixedHexString } from 'ethereumjs-util'
 
 // Never used class to force ts compiler to hide the underlying alias type.
@@ -120,7 +120,7 @@ function buf(b: Bytes | Uint8Array | HexTypes | number | BigIntTypes | BigNumber
     if (b === null || b instanceof Uint8Array) return b
 
     if (typeof b === 'number') {
-        return hexToArrayBuffer(BigNumber.from(b).toHexString().slice(2))
+        return hexToArrayBuffer(new BigNumber(b).toString(16).slice(2))
     }
 
     if (typeof b === 'bigint') return hexToArrayBuffer(toEvenLength(b.toString(16)))
@@ -146,7 +146,7 @@ export function toBigInt(b: BigIntTypes | Uint8Array | HexTypes | number | BigNu
     if (typeof b === 'number') return BigInt(b)
     if (b instanceof Uint8Array) return toBigInt(buf(b))
     if (typeof b === 'string' && b.startsWith('0x')) return BigInt(b)
-    if (b instanceof BigNumber || (b as any)?._isBigNumber === true) return (b as any).toBigInt() as bigint
+    if (b instanceof BigNumber || (b as any)?._isBigNumber === true) return BigInt(b as any)
 
     throw new Error('unsupported')
 }

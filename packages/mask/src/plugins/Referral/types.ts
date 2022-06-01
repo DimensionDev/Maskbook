@@ -1,8 +1,6 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEnum, SchemaType } from '@masknet/web3-shared-evm'
 import type { FarmExists, FarmDepositIncreased, FarmMetastate } from '@masknet/web3-contracts/types/ReferralFarmsV1'
-import type { BigNumberish } from '@ethersproject/bignumber'
-
 export enum TokenType {
     REFER = 0,
     REWARD = 1,
@@ -189,6 +187,8 @@ export interface FarmDetailed extends Farm {
     rewardToken?: FungibleTokenDetailed
     referredToken?: FungibleTokenDetailed
 }
+
+export type BigNumberish = string | number | bigint | ArrayLike<number>
 
 export interface Entitlement {
     entitlee: EvmAddress

@@ -1,9 +1,19 @@
 import { padStart } from 'lodash-unified'
-import { BigNumber } from '@ethersproject/bignumber'
+import BigNumber from 'bignumber.js'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
+import { formatUnits } from '@ethersproject/units'
 
 import { META_KEY, supportedChainId } from '../constants'
-import type { ReferralMetaData, ChainAddress, ChainAddressProps, EvmAddress, Bytes32, Bytes24, ChainId } from '../types'
+import type {
+    ReferralMetaData,
+    ChainAddress,
+    ChainAddressProps,
+    EvmAddress,
+    Bytes32,
+    Bytes24,
+    ChainId,
+    BigNumberish,
+} from '../types'
 import schema from '../schema.json'
 import { bufToHexString, toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
 
@@ -21,7 +31,7 @@ function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8
 }
 
 export function toChainAddressEthers(chainId: number, address: string): string {
-    return '0x' + bufToHexString(toChainAddress(BigNumber.from(chainId), hexToArrayBuffer(address.slice(2))))
+    return '0x' + bufToHexString(toChainAddress(new BigNumber(chainId), hexToArrayBuffer(address.slice(2))))
 }
 
 export function parseChainAddress(chainAddress: ChainAddress): ChainAddressProps {
@@ -63,3 +73,7 @@ export function getRequiredChainId(currentChainId: ChainId) {
 }
 
 export const referralMetadataReader = createTypedMessageMetadataReader<ReferralMetaData>(META_KEY, schema)
+
+export function valueToNumber(value: BigNumberish) {
+    return Number.parseInt(formatUnits(value, 0), 10)
+}

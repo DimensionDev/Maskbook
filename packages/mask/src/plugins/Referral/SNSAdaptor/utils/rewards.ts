@@ -1,5 +1,4 @@
 import type Web3 from 'web3'
-import { BigNumber } from '@ethersproject/bignumber'
 import { isNonNull } from '@dimensiondev/kit'
 import type { TransactionReceipt } from 'web3-core'
 import { createContract, TransactionEventType } from '@masknet/web3-shared-evm'
@@ -7,7 +6,7 @@ import type { AbiItem } from 'web3-utils'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 
 import type { Reward, ChainAddress } from '../../types'
-import { parseChainAddress } from '../../helpers'
+import { parseChainAddress, valueToNumber } from '../../helpers'
 import { ReferralRPC } from '../../messages'
 
 function validateRewardPeriods(rewards: Reward[]) {
@@ -17,8 +16,8 @@ function validateRewardPeriods(rewards: Reward[]) {
     rewards.forEach((reward, i) => {
         if (!(i < arrLength - 1)) return
 
-        const current = BigNumber.from(reward.confirmation).toNumber()
-        const next = BigNumber.from(rewards[i + 1].confirmation).toNumber()
+        const current = valueToNumber(reward.confirmation)
+        const next = valueToNumber(rewards[i + 1].confirmation)
         if (next - current > 1) {
             isValid = false
         }
@@ -53,7 +52,7 @@ export async function filterRewardsByAccountTokenPeriodOffset(
         await Promise.allSettled(
             rewards.map(async (reward) => {
                 const offset = await getAccountTokenConfirmationOffset(web3, account, rewardTokenDefn, farmsAddr)
-                if (offset < BigNumber.from(reward.confirmation).toNumber()) {
+                if (offset < valueToNumber(reward.confirmation)) {
                     return reward
                 }
                 return null
@@ -103,8 +102,7 @@ export async function harvestRewards(
             farmsAddr,
         )
         const rewardsSorted = rewardsFiltered.sort(
-            (rewardA, rewardB) =>
-                BigNumber.from(rewardA.confirmation).toNumber() - BigNumber.from(rewardB.confirmation).toNumber(),
+            (rewardA, rewardB) => valueToNumber(rewardA.confirmation) - valueToNumber(rewardB.confirmation),
         )
 
         // Check periods to ensure no periods are skipped (because skipped periods == lost funds)
