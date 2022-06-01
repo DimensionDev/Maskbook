@@ -1,18 +1,27 @@
 import { isNil } from 'lodash-unified'
-import { ChainId, chainResolver, createNativeToken, formatEthereumAddress, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    chainResolver,
+    createNativeToken,
+    formatEthereumAddress,
+    getTokenConstants,
+    SchemaType,
+} from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
-    TokenType,
     FungibleAsset,
+    isSameAddress,
     multipliedBy,
     rightShift,
     toFixed,
+    TokenType,
     Transaction,
 } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './type'
 
-export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
+export function formatAssets(data: WalletTokenRecord[], chainId?: ChainId): Array<FungibleAsset<ChainId, SchemaType>> {
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
 
     return data
@@ -26,7 +35,7 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
                 address: formatEthereumAddress(address),
                 chainId,
                 type: TokenType.Fungible,
-                schema: SchemaType.ERC20,
+                schema: isSameAddress(address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                 decimals: x.decimals,
                 name: x.name,
                 symbol: x.symbol,

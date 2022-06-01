@@ -9,7 +9,6 @@ import {
     Web3,
     Web3Provider,
     chainResolver,
-    providerResolver,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { SharedContextSettings } from '../settings'
@@ -33,9 +32,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
         const account = await super.connect(chainId, providerType)
 
         // add wallet into db
-        await SharedContextSettings.value.updateWallet(account.account, {
-            name: providerResolver.providerName(providerType)!,
-        })
+        await SharedContextSettings.value.updateWallet(account.account)
 
         return account
     }
