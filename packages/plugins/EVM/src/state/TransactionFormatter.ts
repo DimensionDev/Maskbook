@@ -127,7 +127,6 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         transaction: Transaction,
         context: TransactionContext<ChainId, TransactionParameter>,
     ): Promise<TransactionDescriptorBase<ChainId, Transaction>> {
-        console.log(context)
         for (const descriptor of this.descriptors[context.type]) {
             const computed = await descriptor.compute(context)
 
