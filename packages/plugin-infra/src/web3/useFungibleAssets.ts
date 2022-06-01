@@ -12,7 +12,6 @@ import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import { useWeb3Hub } from './useWeb3Hub'
 import { useWeb3State } from './useWeb3State'
-import { useFungibleTokens } from './useFungibleTokens'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
 
