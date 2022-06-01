@@ -51,7 +51,7 @@ export function useFungibleAssets<T extends NetworkPluginID>(
                 const zBalance = Number.parseFloat(z.balance)
 
                 // the currently selected chain id
-                if (a.chainId && z.chainId && a.chainId !== z.chainId) {
+                if (a.chainId !== z.chainId) {
                     if (a.chainId === chainId) return -1
                     if (z.chainId === chainId) return 1
                 }
