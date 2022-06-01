@@ -6,14 +6,7 @@ import { memoizePromise } from '@dimensiondev/kit'
 import Tooltip from '@mui/material/Tooltip'
 
 function isProfilePage() {
-    const aa = document.querySelectorAll('a')
-    let flag = false
-    aa.forEach((a: any) => {
-        if (a.href === 'https://twitter.com/settings/profile') {
-            flag = true
-        }
-    })
-    return flag
+    return [...document.querySelectorAll('a')].some((x) => x.href === 'https://twitter.com/settings/profile')
 }
 
 function isCurrentUser(nickname: string | null) {
@@ -21,14 +14,8 @@ function isCurrentUser(nickname: string | null) {
     const d = document.querySelectorAll('div')
     let flag = false
     d.forEach((v: HTMLDivElement) => {
-        /* eslint-disable */
-        if (!v.hasAttribute('data-testid') || v.getAttribute('data-testid') !== 'UserName') return
-        const spans = v.querySelectorAll('span')
-        spans.forEach((s: any) => {
-            if (s.innerText === nickname) {
-                flag = true
-            }
-        })
+        if (v.dataset.testid !== 'UserName') return
+        flag = [...v.querySelectorAll('span')].some((x: any) => x.innerText === nickname)
     })
     return flag
 }
