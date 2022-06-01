@@ -43,7 +43,10 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
         }
     }, [iterator, done])
 
-    const retry = useCallback(() => setAssets([]), [])
+    const retry = useCallback(() => {
+        setAssets([])
+        setDone(false)
+    }, [])
 
     return { value: assets, next, done, retry }
 }

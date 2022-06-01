@@ -15,10 +15,11 @@ import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReversedAddress, useElementOnScreen } from '@masknet/shared'
+import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useNonFungibleAssets2 } from '@masknet/plugin-infra/src/web3'
+import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
+import { ElementAnchor } from './ElementAnchor'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -238,19 +239,16 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
 
-    const anchorRef = useElementOnScreen((isIntersecting) => {
-        if (isIntersecting) next()
-    }, {})
-
     useEffect(() => {
         if (next) next()
     }, [next])
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles
-        if (!selectedCollection) return collectibles.filter((x) => !x.collection)
+        const uniqCollectibles = uniqBy(collectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
+        if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
 
-        return collectibles.filter((x) => {
+        return uniqCollectibles.filter((x) => {
             return (
                 isSameAddress(selectedCollection.address, x.collection?.address) ||
                 selectedCollection.slug === x.collection?.slug
@@ -346,10 +344,13 @@ export function CollectionList({
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
                         />
-                        <Stack py={2} ref={anchorRef} justifyContent="center" direction="row">
-                            {!done && <LoadingBase />}
-                        </Stack>
                     </Box>
+                    <ElementAnchor
+                        callback={() => {
+                            if (next) next()
+                        }}>
+                        {!done && <LoadingBase />}
+                    </ElementAnchor>
                 </Box>
                 <Box>
                     {collections.map((x, i) => {
