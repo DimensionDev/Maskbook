@@ -130,6 +130,10 @@ export interface SharedNativeAPIs {
         postLink: string
     }): Promise<void>
     notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
+    notify_composition_requested(params: {
+        reason: string
+        open: boolean
+    }): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network

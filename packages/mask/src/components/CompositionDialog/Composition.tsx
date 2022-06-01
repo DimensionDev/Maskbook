@@ -10,6 +10,7 @@ import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -58,6 +59,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
+            if (hasNativeAPI) {
+                nativeAPI?.api.notify_composition_requested({reason, open})
+            }
         })
     }, [type])
     useEffect(() => {
