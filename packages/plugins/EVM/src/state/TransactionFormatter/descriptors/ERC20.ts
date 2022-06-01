@@ -26,7 +26,6 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 }
             case 'transfer':
             case 'transferFrom':
-                console.log(context)
                 return {
                     chainId: context.chainId,
                     title: 'Transfer Token',

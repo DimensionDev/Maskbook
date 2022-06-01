@@ -3,7 +3,6 @@ import { createContainer } from 'unstated-next'
 import { useChainId, useRecentTransactions, useFungibleAssets } from '@masknet/plugin-infra/web3'
 import { FungibleAsset, NetworkPluginID, RecentTransaction, Wallet } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
-import { sortBy } from 'lodash-unified'
 
 function useWalletContext() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -15,7 +14,7 @@ function useWalletContext() {
     return {
         currentToken,
         setCurrentToken,
-        assets: sortBy(assets?.filter((asset) => asset.chainId === chainId) ?? [], 'schema'),
+        assets: assets?.filter((asset) => asset.chainId === chainId) ?? [],
         transactions,
         assetsLoading: loading,
         transaction,
