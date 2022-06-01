@@ -118,7 +118,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             }),
         )
     }, [chainId, web3, account, protocols])
-
+    console.log(protocols, 'pro')
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
@@ -146,7 +146,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             ) : protocols.length ? (
                 <div className={classes.tableContainer}>
                     {protocols
-                        .filter((x) => !x.balance.isZero())
+                        // .filter((x) => !x.balance.isZero())
                         .map((protocol, index) => (
                             <Grid container spacing={0} className={classes.tableRow} key={index}>
                                 <Grid item xs={4} className={classes.tableCell}>
