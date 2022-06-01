@@ -42,7 +42,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
             </Stack>
-            {owner ? <PointIcon sx={{ position: 'absolute', top: 1, right: 9, width: 6, height: 6 }} /> : null}
+            {owner ? <PointIcon sx={{ position: 'absolute', top: 1, right: 6, width: 8, height: 8 }} /> : null}
         </Stack>
     )
 }

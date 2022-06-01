@@ -62,7 +62,7 @@ export function NFTListPage(props: NFTListPageProps) {
         setSelectedToken(token)
         onSelect?.(token)
     }
-    console.log(tokens)
+
     return (
         <>
             <Box className={classes.root}>

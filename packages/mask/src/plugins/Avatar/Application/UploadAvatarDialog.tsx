@@ -15,8 +15,7 @@ import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
 import { useSaveNFTAvatar } from '../hooks'
 import { useAsyncFn } from 'react-use'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -145,12 +144,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
     const [, saveAvatar] = useSave()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
-    console.log(identifier)
-    const onSave2 = useCallback(async () => {
-        const sign = await connection?.signMessage('abc', 'personaSign', { account })
-        console.log(sign)
-    }, [connection])
+
     const onSave = useCallback(() => {
         if (!editor) return
         editor.getImage().toBlob(async (blob) => {
@@ -179,8 +173,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
-            // location.reload()
-            // onClose()
+            location.reload()
+            onClose()
             setDisabled(false)
         })
     }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])

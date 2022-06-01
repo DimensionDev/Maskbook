@@ -33,7 +33,7 @@ import type {
     OpenSeaResponse,
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
-import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
+import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constants'
 import { isProxyENV } from '../helpers'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
@@ -42,7 +42,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
-            headers: { Accept: 'application/json' },
+            headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(!isProxyENV() && { mode: 'cors' }),
         })
         if (response.ok) {

@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -67,7 +67,6 @@ export function AddNFT(props: AddNFTProps) {
         }
 
         let asset = await hub.getNonFungibleAsset(address, tokenId)
-        console.log(asset)
         if (!asset) {
             asset = await connection?.getNonFungibleToken(address, tokenId)
         }
@@ -77,27 +76,21 @@ export function AddNFT(props: AddNFTProps) {
         }
         const token: NonFungibleToken<ChainId, SchemaType> = {
             contract: asset.contract,
-            metadata: {
-                ...asset.metadata,
-                imageURL: 'https://pbs.twimg.com/profile_images/1504678286789865474/wDuDeHOJ_400x400.jpg',
-            },
+            metadata: asset.metadata,
             tokenId: asset.tokenId,
             collection: asset.collection,
         } as NonFungibleToken<ChainId, SchemaType>
-        console.log(token)
-        if (token) {
-            /*
-            if (chainId && token && token.contract?.chainId !== chainId) {
-                setMessage('chain does not match.')
-                return
-            }
-            if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
-                setMessage(t('nft_owner_hint'))
-                return
-            }*/
-            onAddClick?.(token)
-            handleClose()
+
+        if (chainId && token && token.contract?.chainId !== chainId) {
+            setMessage('chain does not match.')
+            return
         }
+        if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
+            setMessage(t('nft_owner_hint'))
+            return
+        }
+        onAddClick?.(token)
+        handleClose()
     }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])
 
     const onAddressChange = useCallback((address: string) => {

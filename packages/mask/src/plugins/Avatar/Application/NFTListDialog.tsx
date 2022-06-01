@@ -12,7 +12,7 @@ import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
 import { NFTList } from './NFTList'
 import { Application_NFT_LIST_PAGE } from '../constants'
-import { useChainId, useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 
@@ -89,7 +89,7 @@ interface NFTListDialogProps {
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets, onSelected, tokenInfo } = props
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useWallet(NetworkPluginID.PLUGIN_EVM)?.address
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
@@ -230,7 +230,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         <>
             <DialogContent className={classes.content}>
                 <AddressNames
-                    account={account}
+                    account={account!}
                     wallets={wallets ?? []}
                     classes={{ root: classes.AddressNames }}
                     onChange={onChange}
