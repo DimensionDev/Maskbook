@@ -94,7 +94,7 @@ delegateWalletRestore(async function (backup) {
     }
 })
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const wallets = await getWallets(true)
+    const wallets = await getWallets()
     const allSettled = await Promise.allSettled(
         wallets.map(async (wallet) => {
             return {

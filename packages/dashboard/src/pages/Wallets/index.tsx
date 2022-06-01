@@ -31,10 +31,10 @@ const r = relativeRouteOf(DashboardRoutes.Wallets)
 
 function Wallets() {
     const t = useDashboardI18N()
-    const wallets = useWallets()
     const navigate = useNavigate()
     const chainId = useChainId()
     const account = useAccount()
+    const wallets = useWallets()
     const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const { pathname } = useLocation()
@@ -87,14 +87,13 @@ function Wallets() {
     }, [selectedNetwork, fungibleAssets])
 
     const pateTitle = useMemo(() => {
-        if (wallets.length === 0) return t.create_wallet_form_title()
-
+        if (!account && wallets.length === 0) return t.create_wallet_form_title()
         if (isWalletPath) return t.wallets_assets()
         if (isWalletTransferPath) return t.wallets_transfer()
         if (isWalletHistoryPath) return t.wallets_history()
 
         return t.wallets()
-    }, [isWalletPath, isWalletHistoryPath, isWalletTransferPath, wallets.length])
+    }, [isWalletPath, isWalletHistoryPath, isWalletTransferPath, account, wallets.length])
 
     return (
         <PageFrame title={pateTitle} noBackgroundFill primaryAction={<WalletStateBar />}>
