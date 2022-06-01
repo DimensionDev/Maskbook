@@ -10,7 +10,6 @@ import { useI18N } from '../locales'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -89,11 +88,10 @@ export interface PreviewCardProps {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { t: tr } = useBaseI18N()
     const t = useI18N()
+    const { t: tr } = useBaseI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
 
     // #region the donation dialog

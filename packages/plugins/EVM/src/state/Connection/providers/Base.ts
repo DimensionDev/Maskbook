@@ -10,6 +10,7 @@ import {
     ProviderType,
     EthereumMethodType,
     getRPCConstants,
+    NetworkType,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 import { delay } from '@dimensiondev/kit'
@@ -29,7 +30,7 @@ export class BaseProvider implements EVM_Provider {
 
     // Switch chain with RPC calls by default
     async switchChain(chainId?: ChainId): Promise<void> {
-        if (chainId === ChainId.Mainnet) {
+        if (chainId && chainResolver.chainNetworkType(chainId) === NetworkType.Ethereum) {
             await this.request({
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
@@ -63,7 +64,7 @@ export class BaseProvider implements EVM_Provider {
             params: [],
         })
 
-        if (Number.parseInt(actualChainId, 10) !== chainId)
+        if (Number.parseInt(actualChainId, 16) !== chainId)
             throw new Error(`Failed to switch to ${chainResolver.chainFullName(chainId)}.`)
     }
 
