@@ -11,6 +11,7 @@ import { useCallback } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -46,9 +47,14 @@ export function PersonaItem(props: PersonaItemProps) {
     const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         _avatar?.chainId,
     )
-    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
+    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        userId,
+        token?.owner,
+    )
 
     const onClick = useCallback(() => {
         if (!proof) return

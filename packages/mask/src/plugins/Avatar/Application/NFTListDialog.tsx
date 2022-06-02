@@ -122,7 +122,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
             if (!image) {
                 return
             }
-            onSelected({ image: URL.createObjectURL(image), account: selectedAccount, token: selectedToken })
+            onSelected({
+                image: URL.createObjectURL(image),
+                account: selectedAccount,
+                token: selectedToken,
+                pluginId: selectedPluginId,
+            })
             onNext()
             setDisabled(false)
         } catch (error) {

@@ -15,7 +15,8 @@ import { useSubscription } from 'use-subscription'
 import Services from '../../../extension/service'
 import { useSaveNFTAvatar } from '../hooks'
 import { useAsyncFn } from 'react-use'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -37,6 +38,7 @@ interface UploadAvatarDialogProps {
     image?: string | File
     token?: NonFungibleToken<ChainId, SchemaType>
     proof?: BindingProof
+    pluginId?: NetworkPluginID
     onBack: () => void
     onClose: () => void
 }
@@ -89,6 +91,7 @@ function useSave() {
 
     return useAsyncFn(
         async (
+            pluginId: NetworkPluginID,
             account: string,
             isBindAccount: boolean,
             token: NonFungibleToken<ChainId, SchemaType>,
@@ -100,6 +103,7 @@ function useSave() {
             if (!data || !token.contract?.address) return false
 
             const info: NextIDAvatarMeta = {
+                pluginId,
                 nickname: data.nickname,
                 userId: data.userId,
                 imageUrl: data.imageUrl,
@@ -134,7 +138,8 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 }
 
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
+    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
+    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
     const { classes } = useStyles()
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -158,6 +163,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             }
 
             const response = await saveAvatar(
+                currentPluginId,
                 account,
                 isBindAccount,
                 token,

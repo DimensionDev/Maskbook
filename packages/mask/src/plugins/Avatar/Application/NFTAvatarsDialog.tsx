@@ -96,6 +96,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
+                        pluginId={selectedTokenInfo?.pluginId}
                         onBack={onBack}
                         onClose={onClose}
                     />

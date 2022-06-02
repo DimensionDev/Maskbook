@@ -1,5 +1,6 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import { useNFT } from '../hooks'
@@ -34,6 +35,7 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
         avatar.address,
         avatar.tokenId,
+        avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         avatar.chainId,
     )
 

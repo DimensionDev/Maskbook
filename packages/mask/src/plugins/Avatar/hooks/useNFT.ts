@@ -1,14 +1,13 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import type { NFT } from '../types'
-import { useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const NFTCache = new Map<string, Promise<NFT | undefined>>()
-export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
-    const [, getNFT] = useGetNFT(NetworkPluginID.PLUGIN_EVM, chainId)
-
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+export function useNFT(address: string, tokenId: string, pluginId: NetworkPluginID, chainId?: ChainId) {
+    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
+    const [, getNFT] = useGetNFT(currentPluginId, chainId)
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
         let f = NFTCache.get(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`)
@@ -17,7 +16,7 @@ export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
             NFTCache.set(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`, f)
         }
         return f
-    }, [address, tokenId, NFTCache, connection, chainId])
+    }, [address, tokenId, NFTCache, chainId])
 }
 
 function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {

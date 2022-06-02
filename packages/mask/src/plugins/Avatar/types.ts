@@ -1,4 +1,4 @@
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
@@ -8,6 +8,7 @@ export interface AvatarMetaDB {
     avatarId: string
     chainId?: ChainId
     schema?: SchemaType
+    pluginId?: NetworkPluginID
 }
 
 export interface NFT {
@@ -23,6 +24,7 @@ export interface SelectTokenInfo {
     account: string
     token: NonFungibleToken<ChainId, SchemaType>
     image: string
+    pluginId: NetworkPluginID
 }
 
 export interface TokenInfo {
