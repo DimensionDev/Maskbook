@@ -9,10 +9,13 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
+export interface Pageable<Item, Indicator = number> {
+    /** the indicator of the current page */
+    indicator: Indicator
+    /** the indicator of the next page */
+    nextIndicator?: Indicator
+    /** items data */
+    data: Item[]
 }
 
 export type Color =
@@ -653,7 +656,7 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId> {
+export interface HubOptions<ChainId, Indicator extends string | number = number> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -665,7 +668,7 @@ export interface HubOptions<ChainId> {
     /** The item size of each page. */
     size?: number
     /** The page index. */
-    page?: number
+    indicator?: Indicator
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {

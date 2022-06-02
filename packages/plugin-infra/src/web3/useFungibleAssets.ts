@@ -5,10 +5,10 @@ import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
 
-export function useFungibleAssets<T extends NetworkPluginID>(
+export function useFungibleAssets<T extends NetworkPluginID, Indicator extends string | number = number>(
     pluginID?: T,
     schemaType?: Web3Helper.Definition[T]['SchemaType'],
-    options?: Web3Helper.Web3HubOptions<T>,
+    options?: Web3Helper.Web3HubOptions<T, Indicator>,
 ) {
     type GetAllFungibleAssets = (
         address: string,

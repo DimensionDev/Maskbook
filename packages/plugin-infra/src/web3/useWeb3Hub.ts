@@ -4,9 +4,12 @@ import { useChainId, useAccount } from '../entry-web3'
 import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
 
-export function useWeb3Hub<T extends NetworkPluginID>(pluginID?: T, options?: Web3Helper.Web3HubOptions<T>) {
+export function useWeb3Hub<T extends NetworkPluginID, Indicator extends string | number = number>(
+    pluginID?: T,
+    options?: Web3Helper.Web3HubOptions<T, Indicator>,
+) {
     type GetHub = (
-        options?: Web3Helper.Web3HubOptions<T>,
+        options?: Web3Helper.Web3HubOptions<T, Indicator>,
     ) => Promise<
         Hub<
             Web3Helper.Definition[T]['ChainId'],
@@ -26,7 +29,7 @@ export function useWeb3Hub<T extends NetworkPluginID>(pluginID?: T, options?: We
             account,
             chainId,
             ...options,
-        } as Web3Helper.Web3HubOptions<T>)
+        } as Web3Helper.Web3HubOptions<T, Indicator>)
     }, [account, chainId, Hub, JSON.stringify(options)])
 
     return hub
