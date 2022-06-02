@@ -501,13 +501,18 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(chainId?: ChainId): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(chainId?: ChainId): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
     /** Create the connection. */
     connect(chainId?: ChainId): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
+}
+
+export interface ProviderOptions<ChainId> {
+    chainId: ChainId
+    account?: string
 }
 
 export interface TransactionChecker<ChainId> {
@@ -520,8 +525,6 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     account?: string
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
-    /** Handle on popups page. */
-    popupsWindow?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }
@@ -643,10 +646,6 @@ export interface Connection<
     connect(options?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(options?: Web3ConnectionOptions): Promise<void>
-    /** Confirm request */
-    confirmRequest?: (options?: Web3ConnectionOptions) => Promise<void>
-    /** Reject request */
-    rejectRequest?: (options?: Web3ConnectionOptions) => Promise<void>
     /** Replace request */
     replaceRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
     /** Cancel request */

@@ -1,6 +1,6 @@
 import { isExtensionSiteType } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
-import type { Account } from '@masknet/web3-shared-base'
+import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
@@ -35,7 +35,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override async createWeb3Provider(chainId?: ChainId) {
+    override async createWeb3Provider(options?: ProviderOptions<ChainId>) {
         await this.readyPromise
 
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')

@@ -41,7 +41,7 @@ const VerifyWallet = memo(() => {
     const { showSnackbar } = usePopupCustomSnackbar()
     const { value: request } = useUnconfirmedRequest()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
     const { value: bounds } = useAsync(async () => {
@@ -109,7 +109,6 @@ const VerifyWallet = memo(() => {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
-                popupsWindow: false,
             })
 
             if (!walletSignature) throw new Error('Wallet sign failed')

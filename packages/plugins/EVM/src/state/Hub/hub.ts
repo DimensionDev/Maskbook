@@ -73,9 +73,9 @@ class Hub implements EVM_Hub {
         // only the first page is available
         if ((options?.page ?? 0) > 0) return createPageable([])
         try {
-            return DeBank.getAssets(account, options)
+            return DeBank.getAssets(account, { chainId: this.chainId, ...options })
         } catch {
-            return Zerion.getAssets(account, options)
+            return Zerion.getAssets(account, { chainId: this.chainId, ...options })
         }
     }
     async getNonFungibleAsset(
@@ -106,7 +106,12 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(
+            address,
+            CurrencyType.USD,
+            chainId,
+            options?.currencyType === CurrencyType.NATIVE || !address,
+        )
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

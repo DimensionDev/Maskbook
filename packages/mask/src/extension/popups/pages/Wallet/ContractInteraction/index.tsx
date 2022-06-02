@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { formatGweiToWei, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
@@ -24,7 +24,6 @@ import {
     useNetworkType,
     useReverseAddress,
     useSchemaType,
-    useWeb3Connection,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -39,6 +38,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -153,8 +153,8 @@ const ContractInteraction = memo(() => {
     const navigate = useNavigate()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
@@ -167,8 +167,8 @@ const ContractInteraction = memo(() => {
         maxFeePerGas,
         maxPriorityFeePerGas,
         amount,
-        isNativeTokenInteraction,
         contractAddress,
+        isNativeTokenInteraction,
     } = useMemo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
@@ -234,13 +234,13 @@ const ContractInteraction = memo(() => {
             default:
                 unreachable(type)
         }
-    }, [request, t])
+    }, [request, t, NATIVE_TOKEN_ADDRESS])
 
     const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, isNativeTokenInteraction ? '' : tokenAddress)
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
 
     // gas price
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
@@ -266,18 +266,18 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await connection?.confirmRequest?.()
+                await WalletRPC.confirmRequest(request.payload, { chainId })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
         return
-    }, [request, location.search, history])
+    }, [request, location.search, history, chainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
-        await connection?.rejectRequest?.()
+        await WalletRPC.rejectRequest(request.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [request])
 
@@ -291,14 +291,15 @@ const ContractInteraction = memo(() => {
 
     // token decimals
     const tokenAmount = (amount ?? 0) as number
-    const tokenDecimals = isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals
+    const tokenDecimals = token?.decimals
 
     // token estimated value
-    const { value: tokenPrice } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        !isNativeTokenInteraction ? token?.address : undefined,
-    )
+    const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, {
+        chainId,
+    })
+
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+
     const tokenValueUSD =
         contractType && [SchemaType.ERC721, SchemaType.ERC1155].includes(contractType)
             ? ZERO
@@ -311,21 +312,6 @@ const ContractInteraction = memo(() => {
         .plus(tokenValueUSD)
         .toString()
 
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        amount,
-        gasFee,
-        gas,
-        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-        request,
-        tokenPrice,
-        tokenAmount,
-        tokenDecimals,
-        nativeTokenPrice,
-    })
-
     useUpdateEffect(() => {
         if (!request && !requestLoading) {
             navigate(PopupRoutes.Wallet, { replace: true })
@@ -333,7 +319,6 @@ const ContractInteraction = memo(() => {
     }, [request, requestLoading])
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
 
     return requestLoading ? (
@@ -357,10 +342,7 @@ const ContractInteraction = memo(() => {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
-                        <TokenIcon
-                            address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
-                            classes={{ icon: classes.tokenIcon }}
-                        />
+                        <TokenIcon address={token?.address ?? ''} classes={{ icon: classes.tokenIcon }} />
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>

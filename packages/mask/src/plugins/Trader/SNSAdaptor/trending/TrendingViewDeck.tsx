@@ -222,7 +222,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     ? last(stats)?.[1] ?? market.current_price
                                                     : market.current_price) ?? 0
                                             }
-                                            sign={currency.symbol}
                                             formatter={formatCurrency}
                                         />
                                     </span>

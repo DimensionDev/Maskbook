@@ -29,11 +29,17 @@ class Connection implements BaseConnection {
     }
 
     async getWeb3(options?: SolanaWeb3ConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
+        return this._getWeb3Provider(options).createWeb3({
+            account: options?.account ?? this.account,
+            chainId: options?.chainId ?? this.chainId,
+        })
     }
 
     getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3Provider(options?.chainId)
+        return this._getWeb3Provider(options).createWeb3Provider({
+            account: options?.account ?? this.account,
+            chainId: options?.chainId ?? this.chainId,
+        })
     }
 
     async connect(options?: SolanaWeb3ConnectionOptions): Promise<Account<ChainId>> {
@@ -218,12 +224,6 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    confirmRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
-    rejectRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
     replaceRequest(
         hash: string,
         config: Transaction,
