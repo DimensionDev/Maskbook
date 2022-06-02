@@ -4,6 +4,7 @@ import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
 import {
     NetworkPluginID,
     RecentTransaction,
+    TransactionDescriptor,
     TransactionDescriptorType,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
@@ -11,8 +12,7 @@ import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
-import { useReverseAddress, useWeb3State, useChainId } from '@masknet/plugin-infra/web3'
-import { useAsync } from 'react-use'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     item: {
@@ -67,23 +67,17 @@ const useStyles = makeStyles()({
 export interface ActivityListItemProps {
     toAddress?: string
     transaction: RecentTransaction<ChainId, Transaction> & { _tx: Transaction }
+    formatterTransaction: TransactionDescriptor<ChainId, Transaction>
     onSpeedUpClick: (e: React.MouseEvent<HTMLButtonElement>) => void
     onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const ActivityListItem = memo<ActivityListItemProps>(
-    ({ transaction, toAddress, onSpeedUpClick, onCancelClick }) => {
+    ({ transaction, toAddress, onSpeedUpClick, onCancelClick, formatterTransaction }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-        const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
         const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, toAddress)
-
-        const { value: formatterTransaction } = useAsync(async () => {
-            if (!TransactionFormatter) return
-
-            return TransactionFormatter.formatTransaction(chainId, transaction._tx)
-        }, [transaction, TransactionFormatter, chainId])
 
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {

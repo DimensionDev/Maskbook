@@ -5,6 +5,7 @@ import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
 import { ChainId, EthereumMethodType, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 import { BaseProvider } from './Base'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
@@ -36,15 +37,17 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override async createWeb3Provider(chainId?: ChainId) {
+    override async createWeb3Provider(options?: ProviderOptions<ChainId>) {
         await this.readyPromise
-
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }
 
-    override async request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
-        const provider = await this.createWeb3Provider()
+    override async request<T extends unknown>(
+        requestArguments: RequestArguments,
+        options?: ProviderOptions<ChainId>,
+    ): Promise<T> {
+        const provider = await this.createWeb3Provider(options)
         return provider.request(requestArguments) as Promise<T>
     }
 

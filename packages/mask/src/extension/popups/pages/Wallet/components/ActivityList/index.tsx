@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
-import { NetworkPluginID, RecentTransaction } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    NetworkPluginID,
+    RecentTransaction,
+    TransactionDescriptor,
+    TransactionDescriptorType,
+} from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
@@ -12,6 +18,8 @@ import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAsync } from 'react-use'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     list: {
@@ -92,12 +100,37 @@ export interface ActivityListProps {
 
 export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { transactions } = useContainer(WalletContext)
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+
+    const { value: dataSource } = useAsync(async () => {
+        if (!TransactionFormatter) return []
+        const formattedTransactions = await Promise.all(
+            transactions.map(async (transaction) => {
+                const formatterTransaction = await TransactionFormatter.formatTransaction(chainId, transaction._tx)
+
+                return {
+                    formatterTransaction,
+                    transaction,
+                }
+            }),
+        )
+
+        return formattedTransactions.filter(({ transaction, formatterTransaction }) => {
+            if (!tokenAddress) return true
+            else if (isNativeTokenAddress(tokenAddress))
+                return formatterTransaction.type === TransactionDescriptorType.TRANSFER
+            else if (formatterTransaction.type === TransactionDescriptorType.INTERACTION) {
+                return isSameAddress(transaction._tx.to, tokenAddress)
+            }
+
+            return false
+        })
+    }, [tokenAddress, transactions, chainId])
 
     return (
         <ActivityListUI
-            dataSource={transactions ?? []}
+            dataSource={dataSource ?? []}
             chainId={chainId}
             formatterTransactionLink={Others?.explorerResolver.transactionLink}
         />
@@ -105,7 +138,10 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
 })
 
 export interface ActivityListUIProps {
-    dataSource: Array<RecentTransaction<ChainId, Transaction> & { _tx: Transaction }>
+    dataSource: Array<{
+        transaction: RecentTransaction<ChainId, Transaction> & { _tx: Transaction }
+        formatterTransaction: TransactionDescriptor<ChainId, Transaction>
+    }>
     chainId: ChainId
     formatterTransactionLink?: (chainId: ChainId, id: string) => string
 }
@@ -122,7 +158,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, 
     return (
         <>
             <List dense className={classes.list}>
-                {dataSource.slice(0, !isExpand ? 3 : undefined).map((transaction, index) => {
+                {dataSource.slice(0, !isExpand ? 3 : undefined).map(({ transaction, formatterTransaction }, index) => {
                     return (
                         <Link
                             href={formatterTransactionLink?.(chainId, transaction.id)}
@@ -132,6 +168,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, 
                             style={{ textDecoration: 'none' }}>
                             <ActivityListItem
                                 transaction={transaction}
+                                formatterTransaction={formatterTransaction}
                                 toAddress={transaction._tx.to}
                                 onSpeedUpClick={(e) => {
                                     e.preventDefault()
