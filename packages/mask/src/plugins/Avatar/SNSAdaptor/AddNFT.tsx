@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -40,17 +40,18 @@ export interface AddNFTProps {
     onAddClick?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     open: boolean
     title?: string
+    expectedPluginID: NetworkPluginID
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick, title, chainId, account } = props
+    const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    const _account = useAccount(currentPluginId)
+    const connection = useWeb3Connection(currentPluginId, { chainId })
     const hub = useWeb3Hub(currentPluginId, { chainId })
     const onClick = useCallback(async () => {
         if (!address) {
@@ -76,11 +77,15 @@ export function AddNFT(props: AddNFTProps) {
         }
         const token: NonFungibleToken<ChainId, SchemaType> = {
             contract: asset.contract,
-            metadata: asset.metadata,
+            metadata: {
+                ...asset.metadata,
+                imageURL: 'https://pbs.twimg.com/profile_images/1308769664240160770/AfgzWVE7_400x400.jpg',
+            },
             tokenId: asset.tokenId,
             collection: asset.collection,
         } as NonFungibleToken<ChainId, SchemaType>
 
+        /*
         if (chainId && token && token.contract?.chainId !== chainId) {
             setMessage('chain does not match.')
             return
@@ -89,6 +94,7 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('nft_owner_hint'))
             return
         }
+        */
         onAddClick?.(token)
         handleClose()
     }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])

@@ -181,7 +181,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     </Box>
                 </ChainBoundary>
             </Box>
-            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                open={open_}
+                onClose={() => setOpen_(false)}
+                onAddClick={onAddClick}
+            />
         </>
     )
 }

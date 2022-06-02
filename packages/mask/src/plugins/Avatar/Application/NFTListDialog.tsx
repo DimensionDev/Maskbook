@@ -94,6 +94,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const chainId = useChainId(currentPluginId)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState('')
+    const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId)
     const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType>>()
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
@@ -102,10 +103,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
-    const { collectibles, retry, error, loading } = useCollectibles(chainId)
+    const { collectibles, retry, error, loading } = useCollectibles(chainId as ChainId)
     const { showSnackbar } = useCustomSnackbar()
-    const onChange = useCallback((address: string) => {
+    const onChange = useCallback((address: string, pluginId: NetworkPluginID) => {
         setSelectedAccount(address)
+        setSelectedPluginId(pluginId)
+        console.log(address)
     }, [])
 
     const onSelect = (token: NonFungibleToken<ChainId, SchemaType>) => {
@@ -154,18 +157,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const AddCollectible = (
         <Box className={classes.error}>
-            <Typography
-                color={currentPluginId !== NetworkPluginID.PLUGIN_EVM ? 'error' : 'textSecondary'}
-                textAlign="center"
-                fontSize={14}
-                fontWeight={600}>
-                {currentPluginId !== NetworkPluginID.PLUGIN_EVM ? (
-                    <Translate.wallet_non_evm_warning
-                        components={{
-                            br: <br />,
-                        }}
-                    />
-                ) : currentPage === POLYGON_PAGE ? (
+            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
+                {currentPage === POLYGON_PAGE ? (
                     <Translate.collectible_on_polygon
                         components={{
                             br: <br />,
@@ -175,11 +168,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     t.collectible_no_eth()
                 )}
             </Typography>
-            {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
-                <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
-                    {t.add_collectible()}
-                </Button>
-            ) : null}
+
+            <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
+                {t.add_collectible()}
+            </Button>
         </Box>
     )
 
@@ -232,7 +224,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     classes={{ root: classes.AddressNames }}
                     onChange={onChange}
                 />
-                {((account && currentPluginId === NetworkPluginID.PLUGIN_EVM) || Boolean(wallets?.length)) && (
+                {(account || Boolean(wallets?.length)) && (
                     <NFTList
                         tokenInfo={tokenInfo}
                         address={selectedAccount}
@@ -267,6 +259,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 open={open_}
                 onClose={() => setOpen_(false)}
                 onAddClick={onAddClick}
+                expectedPluginID={selectedPluginId}
             />
         </>
     )
