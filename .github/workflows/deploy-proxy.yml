@@ -1,7 +1,8 @@
 name: Publish Proxy Package
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [fix/nftscan-image-url]
 jobs:
   build:
     runs-on: ubuntu-20.04
