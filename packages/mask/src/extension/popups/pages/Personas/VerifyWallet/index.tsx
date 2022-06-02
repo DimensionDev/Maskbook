@@ -109,7 +109,6 @@ const VerifyWallet = memo(() => {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
-                popupsWindow: false,
             })
 
             if (!walletSignature) throw new Error('Wallet sign failed')
