@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -50,7 +50,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const _account = useAccount(currentPluginId)
+    const _account = useAccount(expectedPluginID)
     const connection = useWeb3Connection(currentPluginId, { chainId })
     const hub = useWeb3Hub(currentPluginId, { chainId })
     const onClick = useCallback(async () => {
@@ -90,7 +90,6 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('nft_owner_hint'))
             return
         }
-
         onAddClick?.(token)
         handleClose()
     }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])

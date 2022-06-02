@@ -187,10 +187,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    border={50}
                     style={{ width: '100%', height: '100%' }}
                     scale={scale ?? 1}
                     rotate={0}
+                    border={50}
                     borderRadius={300}
                 />
                 <Slider
