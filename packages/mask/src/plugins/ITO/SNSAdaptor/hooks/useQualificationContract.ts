@@ -8,7 +8,7 @@ import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { useContract } from '@masknet/plugin-infra/web3-evm'
 
 export function useQualificationContract(chainId?: ChainId, address?: string, ito_address?: string) {
-    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const QLF_CONTRACT = useContract<Qualification>(chainId, address, QualificationABI as AbiItem[])
     const QLF2_CONTRACT = useContract<Qualification2>(chainId, address, Qualification2ABI as AbiItem[])
 
