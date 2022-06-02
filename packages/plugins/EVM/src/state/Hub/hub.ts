@@ -229,6 +229,7 @@ class Hub implements EVM_Hub {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: currentPage,
+                chainId: options?.chainId ?? this.chainId,
                 size: this.sizePerPage,
                 chainId: this.chainId,
             })

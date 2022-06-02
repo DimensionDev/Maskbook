@@ -3,6 +3,8 @@ import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
 import { useCallback, useMemo, useState } from 'react'
+import { asyncIteratorMerge } from '@masknet/shared-base'
+import { useNetworkDescriptors } from './useNetworkDescriptors'
 
 export function useNonFungibleAssets2<T extends NetworkPluginID>(
     pluginID?: T,
@@ -22,18 +24,29 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
     const [error, setError] = useState<string>()
     type GetAllNonFungibleAssets = (
         address: string,
+        options?: Web3Helper.Web3HubOptions<T>,
     ) => AsyncIterableIterator<
         NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
     >
 
     const account = useAccount(pluginID)
     const hub = useWeb3Hub(pluginID, options)
+    const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
     const iterator = useMemo(() => {
-        if ((!account && !options?.account) || !hub) return
-        return (hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(options?.account ?? account)
-    }, [hub, account, options?.account])
+        if ((!account && !options?.account) || !hub || !networks) return
+        return asyncIteratorMerge(
+            // should use networks, this code for debug
+            [networks[0]]
+                .filter((x) => x.isMainnet)
+                .map((x) => {
+                    return (hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(options?.account ?? account, {
+                        chainId: x.chainId,
+                    } as Web3Helper.Web3HubOptions<T>)
+                }),
+        )
+    }, [hub, account, options?.account, networks])
 
     const next = useCallback(async () => {
         if (!iterator || done) return
