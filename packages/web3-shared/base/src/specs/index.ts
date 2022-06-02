@@ -458,7 +458,7 @@ export interface RecentTransaction<ChainId, Transaction> {
     chainId: ChainId
     /** status type */
     status: TransactionStatusType
-    /** available tx candidates */
+    /** all available tx candidates */
     candidates: Record<string, Transaction>
     /** record created at */
     createdAt: Date

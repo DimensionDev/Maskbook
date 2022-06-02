@@ -7,6 +7,7 @@ export class Polygon extends Base {
     override async encode(context: Context): Promise<void> {
         await super.encode(context)
         if (!context.config) return
+
         // the current version of metamask doesn't support polygon with EIP1559
         if (context.providerType !== ProviderType.MetaMask) return
 
