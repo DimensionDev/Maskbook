@@ -81,7 +81,6 @@ export function AddressNames(props: AddressNamesProps) {
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
     const t = useI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
     const onClick = useCallback((address: string, pluginId: NetworkPluginID) => {
         onChange(address, pluginId)
@@ -153,9 +152,8 @@ export function AddressNames(props: AddressNamesProps) {
                 <WalletUI
                     address={selectedWallet}
                     isETH={
-                        wallets.some((x) => isSameAddress(x.identity, account))
-                            ? true
-                            : currentPluginId === NetworkPluginID.PLUGIN_EVM
+                        wallets.some((x) => isSameAddress(x.identity, selectedWallet)) ||
+                        currentPluginId === NetworkPluginID.PLUGIN_EVM
                     }
                 />
                 <ArrowDropDownIcon />
@@ -174,9 +172,8 @@ export function AddressNames(props: AddressNamesProps) {
                         account,
                         Boolean(account),
                         wallets.some((x) => isSameAddress(x.identity, account)),
-                        wallets.some((x) => isSameAddress(x.identity, account))
-                            ? true
-                            : currentPluginId === NetworkPluginID.PLUGIN_EVM,
+                        wallets.some((x) => isSameAddress(x.identity, account)) ||
+                            currentPluginId === NetworkPluginID.PLUGIN_EVM,
                         onConnectWallet,
                     )
                 ) : (
@@ -260,12 +257,12 @@ function WalletUI(props: WalletUIProps) {
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />
-            <Stack direction="column" style={{ marginLeft: 0.5 }}>
+            <Stack direction="column" style={{ marginLeft: 4 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
-                            ? domain ?? formatAddress(address, 4)
-                            : formatAddress(address, 4)}
+                            ? domain ?? formatAddress(address, 4).toLowerCase()
+                            : formatAddress(address, 4).toLowerCase()}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
@@ -274,7 +271,7 @@ function WalletUI(props: WalletUIProps) {
                         variant="body2"
                         color="textSecondary"
                         className={classNames(classes.address, classes.walletAddress)}>
-                        {formatAddress(address, 4)}
+                        {formatAddress(address, 4).toLowerCase()}
                     </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link

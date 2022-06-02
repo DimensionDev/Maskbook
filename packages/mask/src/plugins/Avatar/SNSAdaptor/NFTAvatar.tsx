@@ -96,7 +96,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
     const { t } = useI18N()
-    const { collectibles, error, retry, loading } = useCollectibles(chainId)
+    const { collectibles, error, retry, loading } = useCollectibles(account, NetworkPluginID.PLUGIN_EVM, chainId)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return

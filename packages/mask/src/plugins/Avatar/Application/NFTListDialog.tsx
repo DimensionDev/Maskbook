@@ -103,12 +103,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
     )
     const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
-    const { collectibles, retry, error, loading } = useCollectibles(chainId as ChainId)
+    const { collectibles, retry, error, loading } = useCollectibles(
+        selectedAccount,
+        selectedPluginId,
+        chainId as ChainId,
+    )
     const { showSnackbar } = useCustomSnackbar()
-    const onChange = useCallback((address: string, pluginId: NetworkPluginID) => {
+    const onChange = (address: string, pluginId: NetworkPluginID) => {
         setSelectedAccount(address)
         setSelectedPluginId(pluginId)
-    }, [])
+    }
 
     const onSelect = (token: NonFungibleToken<ChainId, SchemaType>) => {
         setSelectedToken(token)
