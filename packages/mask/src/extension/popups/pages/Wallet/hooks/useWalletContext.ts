@@ -9,7 +9,7 @@ function useWalletContext() {
     const { value: assets, loading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
     const transactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM)
     const [currentToken, setCurrentToken] = useState<FungibleAsset<ChainId, SchemaType>>()
-    const [transaction, setTransaction] = useState<RecentTransaction<ChainId, Transaction>>()
+    const [transaction, setTransaction] = useState<RecentTransaction<ChainId, Transaction> & { _tx: Transaction }>()
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>()
     return {
         currentToken,

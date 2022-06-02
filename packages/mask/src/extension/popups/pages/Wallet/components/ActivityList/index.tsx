@@ -161,7 +161,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, 
                 {dataSource.slice(0, !isExpand ? 3 : undefined).map(({ transaction, formatterTransaction }, index) => {
                     return (
                         <Link
-                            href={formatterTransactionLink?.(chainId, transaction.id)}
+                            href={formatterTransactionLink?.(chainId, transaction.indexId)}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}

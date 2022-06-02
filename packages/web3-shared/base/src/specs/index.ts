@@ -489,9 +489,9 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
-export interface WatchEvents {
+export interface WatchEvents<Transaction> {
     /** Emit when the watched transaction status updated. */
-    progress: [string, TransactionStatusType]
+    progress: [string, TransactionStatusType, Transaction | undefined]
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -860,14 +860,14 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
-    emitter: Emitter<WatchEvents>
+    emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => void
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => void
     /** Update transaction status */
-    notifyTransaction: (id: string, status: TransactionStatusType) => void
+    notifyTransaction: (id: string, status: TransactionStatusType, transaction: Transaction) => void
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */
