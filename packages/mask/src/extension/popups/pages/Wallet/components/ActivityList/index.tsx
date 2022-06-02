@@ -7,7 +7,7 @@ import { Button, Link, List } from '@mui/material'
 import {
     isSameAddress,
     NetworkPluginID,
-    RecentTransaction,
+    RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
@@ -139,7 +139,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
 
 export interface ActivityListUIProps {
     dataSource: Array<{
-        transaction: RecentTransaction<ChainId, Transaction> & { _tx: Transaction }
+        transaction: RecentTransactionComputed<ChainId, Transaction>
         formatterTransaction: TransactionDescriptor<ChainId, Transaction>
     }>
     chainId: ChainId

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
 import {
     NetworkPluginID,
-    RecentTransaction,
+    RecentTransactionComputed,
     TransactionDescriptor,
     TransactionDescriptorType,
     TransactionStatusType,
@@ -66,7 +66,7 @@ const useStyles = makeStyles()({
 
 export interface ActivityListItemProps {
     toAddress?: string
-    transaction: RecentTransaction<ChainId, Transaction> & { _tx: Transaction }
+    transaction: RecentTransactionComputed<ChainId, Transaction>
     formatterTransaction: TransactionDescriptor<ChainId, Transaction>
     onSpeedUpClick: (e: React.MouseEvent<HTMLButtonElement>) => void
     onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void
