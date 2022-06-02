@@ -80,7 +80,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const expectedConnection = useWeb3Connection<'all'>(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
     const expectedAccount = useAccount(expectedPluginID)
-    const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
+    const expectedChainName = expectedOthers?.chainResolver.chainFullName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
 

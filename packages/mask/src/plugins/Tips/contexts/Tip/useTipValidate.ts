@@ -8,7 +8,13 @@ import { TipContext } from './TipContext'
 type ValidationTuple = [isValid: boolean, message?: string]
 
 export function useTipValidate(): ValidationTuple {
-    const { tipType, amount, token, erc721TokenId, erc721Address } = useContext(TipContext)
+    const {
+        tipType,
+        amount,
+        token,
+        nonFungibleTokenId: tokenId,
+        nonFungibleTokenAddress: tokenAddress,
+    } = useContext(TipContext)
     const { value: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
     const t = useI18N()
 
@@ -18,10 +24,10 @@ export function useTipValidate(): ValidationTuple {
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
         } else {
-            if (!erc721TokenId || !erc721Address) return [false]
+            if (!tokenId || !tokenAddress) return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, erc721TokenId, erc721Address, t])
+    }, [tipType, amount, token?.decimals, balance, tokenId, tokenAddress, t])
 
     return result
 }

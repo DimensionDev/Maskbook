@@ -16,7 +16,7 @@ export function useFungibleToken<T extends NetworkPluginID>(
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection) return
-        return (connection?.getFungibleToken as GetFungibleToken)(address ?? '', options)
+        if (!connection || !address) return
+        return (connection?.getFungibleToken as GetFungibleToken)(address, options)
     }, [address, connection])
 }

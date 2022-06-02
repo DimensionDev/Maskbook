@@ -1,4 +1,4 @@
-import { useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useFungibleTokenBalance, useGasPrice, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { usePickToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
@@ -6,17 +6,17 @@ import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useGasConfig } from '../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
-import { TargetChainIdContext, useTip } from '../../contexts'
+import { TargetRuntimeContext, useTip } from '../../contexts'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
     const { token, setToken, amount, setAmount, isSending, setGasConfig } = useTip()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginId,
         token?.address,
         { chainId },
     )
@@ -53,6 +53,7 @@ export const TokenSection: FC = () => {
     const pickToken = usePickToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
+            pluginId,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
@@ -60,7 +61,7 @@ export const TokenSection: FC = () => {
         if (picked) {
             setToken(picked)
         }
-    }, [pickToken, token?.address, chainId])
+    }, [pickToken, token?.address, pluginId, chainId])
     // #endregion
     return (
         <TokenAmountPanel

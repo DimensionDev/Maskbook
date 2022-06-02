@@ -1,11 +1,10 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
-import { TargetChainIdContext } from '../TargetChainIdContext'
+import { TargetRuntimeContext } from '../TargetRuntimeContext'
 import { ContextOptions, TipContext } from './TipContext'
 import { useNftTip } from './useNftTip'
 import { useTokenTip } from './useTokenTip'
@@ -15,20 +14,20 @@ interface Props {
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
     const [recipient, setRecipient] = useState('')
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId()
     const [erc721Address, setErc721Address] = useState<string>('')
-    const { value: nativeTokenDetailed = null } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginId, undefined, {
         chainId: targetChainId,
     })
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
-    const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
+    const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
 
-    const { value: erc721Contract } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, erc721Address)
+    const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, erc721Address)
 
     useEffect(() => {
         setTipType(TipType.Token)
@@ -75,7 +74,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             setAmount,
             erc721TokenId,
             setErc721TokenId,
-            erc721Contract: erc721Contract || null,
+            erc721Contract: nonFungibleTokenContract || null,
             erc721Address,
             setErc721Address,
             sendTip,
@@ -92,7 +91,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         tipType,
         amount,
         erc721TokenId,
-        erc721Contract,
+        nonFungibleTokenContract,
         erc721Address,
         token,
         sendTip,

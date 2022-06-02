@@ -1,8 +1,7 @@
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -11,7 +10,7 @@ import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
+    tokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     onChange?: (id: string | null, contractAddress: string) => void
     limit?: number
     className: string
@@ -86,12 +85,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: NonFungibleToken<ChainId, SchemaType>
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId()
     return (
         <NFTCardStyledAssetPlayer
             chainId={chainId}
@@ -125,7 +124,7 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
     )
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
 
     return (
         <List className={classnames(classes.list, className)}>

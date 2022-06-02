@@ -17,7 +17,7 @@ export function useFungibleTokensBalance<T extends NetworkPluginID>(
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection) return EMPTY_OBJECT
-        return (connection.getFungibleTokensBalance as GetFungibleTokensBalance)(listOfAddress ?? [])
+        if (!connection || !listOfAddress?.length) return EMPTY_OBJECT
+        return (connection.getFungibleTokensBalance as GetFungibleTokensBalance)(listOfAddress)
     }, [listOfAddress?.join(), connection])
 }

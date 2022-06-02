@@ -18,6 +18,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings'
+import { SolanaRPC } from '../../messages'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
@@ -81,7 +82,6 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
@@ -108,11 +108,16 @@ class Connection implements BaseConnection {
     getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getFungibleTokensBalance(
+    async getFungibleTokensBalance(
         listOfAddress: string[],
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<Record<string, string>> {
-        throw new Error('Method not implemented.')
+        if (!options?.chainId || !options.account) return {}
+        const splTokens = await SolanaRPC.getSplTokenList(options.chainId, options.account)
+        return splTokens.reduce(
+            (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
+            {},
+        )
     }
     getNonFungibleTokensBalance(
         listOfAddress: string[],

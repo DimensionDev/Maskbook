@@ -18,7 +18,7 @@ export function useWeb3Hub<
 
     const { value: hub = null } = useAsyncRetry(async () => {
         if (!Hub?.getHub) return
-        return (Hub.getHub as GetHub)?.({
+        return (Hub.getHub as GetHub)({
             account,
             chainId,
             ...options,

@@ -1,5 +1,5 @@
 import { MagicEden } from '@masknet/web3-providers'
-import type {
+import {
     FungibleToken,
     NonFungibleToken,
     SourceType,
@@ -11,6 +11,7 @@ import type {
     CurrencyType,
     Transaction,
     NonFungibleTokenCollection,
+    TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
@@ -30,7 +31,19 @@ class Hub implements SolanaHub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const splTokens = await SolanaRPC.getAllSplTokens(chainId)
+        const fungibleTokens = splTokens.map((token) => ({
+            id: token.address,
+            chainId,
+            type: TokenType.Fungible,
+            schema: SchemaType.Fungible,
+            address: token.address,
+            name: token.name,
+            symbol: token.symbol,
+            decimals: token.decimals,
+            logoURL: token.logoURI,
+        }))
+        return fungibleTokens
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -99,7 +112,7 @@ class Hub implements SolanaHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
-        throw new Error('Method not implemented.')
+        return []
     }
     getNonFungibleTokenIconURLs(
         chainId: ChainId,

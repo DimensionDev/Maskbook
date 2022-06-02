@@ -29,7 +29,14 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
     )
 }
 
-async function getSplTokenList(chainId: ChainId, account: string) {
+export async function getAllSplTokens(chainId: ChainId) {
+    const tokenListProvider = new TokenListProvider()
+    const provider = await tokenListProvider.resolve()
+    const tokenList = provider.filterByChainId(chainId).getList()
+    return tokenList
+}
+
+export async function getSplTokenList(chainId: ChainId, account: string) {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
         params: [
@@ -51,9 +58,7 @@ async function getSplTokenList(chainId: ChainId, account: string) {
         ],
     })
     if (!data.result?.length) return []
-    const tokenListProvider = new TokenListProvider()
-    const provider = await tokenListProvider.resolve()
-    const tokenList = provider.filterByChainId(chainId).getList()
+    const tokenList = await getAllSplTokens(chainId)
     const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
     data.result.forEach((x) => {
         const info = x.account.data.parsed.info
@@ -76,8 +81,8 @@ export async function getFungibleAssets(
     options?: HubOptions<ChainId>,
 ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(options?.chainId ?? ChainId.Mainnet, address).then((x) => [x]),
-        getSplTokenList(options?.chainId ?? ChainId.Mainnet, address),
+        getSolanaBalance(options?.chainId || ChainId.Mainnet, address).then((x) => [x]),
+        getSplTokenList(options?.chainId || ChainId.Mainnet, address),
     ])
     const assets = allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
