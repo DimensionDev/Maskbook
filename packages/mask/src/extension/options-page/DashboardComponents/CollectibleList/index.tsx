@@ -236,6 +236,7 @@ export function CollectionList({
         value: collectibles = EMPTY_LIST,
         done,
         next,
+        error,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
 
@@ -262,7 +263,14 @@ export function CollectionList({
             .filter(Boolean) as Array<NonFungibleTokenCollection<ChainId>>
     }, [collectibles.length, collectibles.length])
 
-    if (!collectibles.length && !done) return <LoadingSkeleton />
+    if (!collectibles.length && !done && !error) return <LoadingSkeleton />
+
+    if (!collectibles.length && error)
+        return (
+            <Stack justifyContent="center" direction="row">
+                <Button onClick={() => next()}>Reload</Button>
+            </Stack>
+        )
 
     if (done && !collectibles.length)
         return (
@@ -345,6 +353,11 @@ export function CollectionList({
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>
+                    {error && (
+                        <Stack justifyContent="center" direction="row">
+                            <Button onClick={() => next()}>Reload</Button>
+                        </Stack>
+                    )}
                     <ElementAnchor
                         callback={() => {
                             if (next) next()

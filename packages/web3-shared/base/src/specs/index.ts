@@ -452,12 +452,14 @@ export interface Transaction<ChainId, SchemaType> {
     /** 0: failed 1: succeed */
     status: 0 | 1
     /** transferred tokens */
-    tokens: Array<Token<ChainId, SchemaType> & {
-        name: string
-        symbol: string
-        amount: string
-        direction: string
-    }>
+    tokens: Array<
+        Token<ChainId, SchemaType> & {
+            name: string
+            symbol: string
+            amount: string
+            direction: string
+        }
+    >
     /** estimated tx fee */
     fee?: Price
 }
@@ -692,17 +694,17 @@ export interface HubOptions<ChainId, Indicator = number | string> {
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get the fungible from built-in token list */
-    getFungibleTokensFromTokenList?: (chainId: ChainId, options?: Web3HubOptions) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
+    getFungibleTokensFromTokenList?: (
+        chainId: ChainId,
+        options?: Web3HubOptions,
+    ) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
     /** Get the non-fungible from built-in token list */
     getNonFungibleTokensFromTokenList?: (
         chainId: ChainId,
         options?: Web3HubOptions,
     ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
     /** Get all gas options */
-    getGasOptions?: (
-        chainId: ChainId,
-        options?: Web3HubOptions,
-    ) => Promise<Record<GasOptionType, GasOption>>
+    getGasOptions?: (chainId: ChainId, options?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
     /** Get a fungible asset */
     getFungibleAsset?: (
         address: string,
@@ -733,18 +735,14 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getAllNonFungibleAssets?: (
         address: string,
         options?: Web3HubOptions,
-    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
+    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType> | Error>
     /** Get all non-fungible collections of given account and ignore the pagination options. */
     getAllNonFungibleCollections?: (
         address: string,
         options?: Web3HubOptions,
     ) => AsyncIterableIterator<NonFungibleTokenCollection<ChainId>>
     /** Get price of a fungible token */
-    getFungibleTokenPrice?: (
-        chainId: ChainId,
-        address: string,
-        options?: Web3HubOptions,
-    ) => Promise<number>
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, options?: Web3HubOptions) => Promise<number>
     /** Get price of an non-fungible token */
     getNonFungibleTokenPrice?: (
         chainId: ChainId,
@@ -762,7 +760,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         options?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get the most recent transactions */
-    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    getTransactions: (
+        chainId: ChainId,
+        account: string,
+        options?: Web3HubOptions,
+    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
 }
 
 export interface SettingsState {
@@ -953,7 +955,6 @@ export interface WalletState {
     getAllWallets?: () => Promise<Wallet[]>
 }
 export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
-
     // #region resolvers
     chainResolver: ReturnChainResolver<ChainId, SchemaType, NetworkType>
     explorerResolver: ReturnExplorerResolver<ChainId, SchemaType, NetworkType>

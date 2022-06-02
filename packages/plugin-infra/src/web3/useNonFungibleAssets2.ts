@@ -13,11 +13,13 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
     next: () => void
     done: boolean
     retry: () => void
+    error?: string
 } {
     const [assets, setAssets] = useState<
         Array<NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     >([])
     const [done, setDone] = useState(false)
+    const [error, setError] = useState<string>()
     type GetAllNonFungibleAssets = (
         address: string,
     ) => AsyncIterableIterator<
@@ -27,6 +29,7 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
     const account = useAccount(pluginID)
     const hub = useWeb3Hub(pluginID, options)
 
+    // create iterator
     const iterator = useMemo(() => {
         if ((!account && !options?.account) || !hub) return
         return (hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(options?.account ?? account)
@@ -34,12 +37,26 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
 
     const next = useCallback(async () => {
         if (!iterator || done) return
-        const { value, done: iteratorDone } = await iterator.next()
-        if (iteratorDone) {
+        try {
+            for (const v of Array.from({ length: 48 })) {
+                const { value, done: iteratorDone } = await iterator.next()
+                if (value instanceof Error) {
+                    // Controlled error
+                    setError(value.message)
+                    break
+                } else {
+                    if (iteratorDone) {
+                        setDone(true)
+                    }
+                    if (!iteratorDone && value) {
+                        setAssets((pred) => [...pred, value])
+                    }
+                }
+            }
+        } catch (error_) {
+            // Uncontrolled error
+            setError(error_ as string)
             setDone(true)
-        }
-        if (!iteratorDone && value) {
-            setAssets((pred) => [...pred, value])
         }
     }, [iterator, done])
 
@@ -48,5 +65,5 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
         setDone(false)
     }, [])
 
-    return { value: assets, next, done, retry }
+    return { value: assets, next, done, retry, error }
 }
