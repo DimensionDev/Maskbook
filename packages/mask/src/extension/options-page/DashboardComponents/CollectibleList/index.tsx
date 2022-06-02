@@ -20,6 +20,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
 import { ElementAnchor } from './ElementAnchor'
+import { RetryHint } from './RetryHint'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -265,12 +266,7 @@ export function CollectionList({
 
     if (!collectibles.length && !done && !error) return <LoadingSkeleton />
 
-    if (!collectibles.length && error)
-        return (
-            <Stack justifyContent="center" direction="row">
-                <Button onClick={() => next()}>Reload</Button>
-            </Stack>
-        )
+    if (!collectibles.length && error) return <RetryHint retry={next} />
 
     if (done && !collectibles.length)
         return (
@@ -353,11 +349,7 @@ export function CollectionList({
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>
-                    {error && (
-                        <Stack justifyContent="center" direction="row">
-                            <Button onClick={() => next()}>Reload</Button>
-                        </Stack>
-                    )}
+                    {error && <RetryHint retry={next} />}
                     <ElementAnchor
                         callback={() => {
                             if (next) next()
