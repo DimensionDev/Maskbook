@@ -39,11 +39,8 @@ export function useSave() {
                 chainId: token.contract?.chainId ?? ChainId.Mainnet,
                 schema: token.contract?.schema ?? SchemaType.ERC20,
             }
-            return saveSolana(info, account, persona, identifier, proof)
-            /*
+
             switch (pluginId) {
-                case NetworkPluginID.PLUGIN_SOLANA:
-                    return saveSolana(info, account, persona, identifier, proof)
                 case NetworkPluginID.PLUGIN_EVM: {
                     if (isBindAccount) {
                         return saveToNextID(info, persona, proof)
@@ -51,8 +48,8 @@ export function useSave() {
                     return saveToRSS3(info, account, identifier)
                 }
                 default:
-                    unreachable(pluginId as never)
-            }*/
+                    return saveSolana(info, account, persona, identifier, proof)
+            }
         },
         [saveToNextID, saveToRSS3],
     )
