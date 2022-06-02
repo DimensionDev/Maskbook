@@ -11,20 +11,17 @@ function isProfilePage() {
 
 function isCurrentUser(nickname: string | null) {
     if (!nickname) return false
-    const d = document.querySelectorAll('div')
-    let flag = false
-    d.forEach((v: HTMLDivElement) => {
-        if (v.dataset.testid !== 'UserName') return
-        flag = [...v.querySelectorAll('span')].some((x: any) => x.innerText === nickname)
+    return [...document.querySelectorAll('div')].some((v: HTMLDivElement) => {
+        if (!v.dataset.testid || v.dataset.testid !== 'UserName') return false
+        return [...v.querySelectorAll('span')].some((x: any) => x.innerText === nickname)
     })
-    return flag
 }
 
 function HolderBadge(t: any) {
     return `<div style="margin-top: 20px; display: flex;">
-                <div style="display:flex;">
+                <div style="display:flex; width: 100%;">
                     <img style="border-radius: 50px" src="${t.twitter_avatar}" width="48" height="48" />
-                    <div style="display: flex; flex-direction: column; margin-left: 10px;">
+                    <div style="display: flex; flex-direction: column; margin-left: 10px;  width: 100%;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div style="color: black; font-weight: bold;">
