@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { createLookupTableResolver, TransactionStatusType } from '@masknet/web3-shared-base'
-import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { useWeb3State, Web3Helper, useRecentTransactions, useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { isPopupPage } from '@masknet/shared-base'
 import type { TransactionProgressEvent } from '@masknet/plugin-wallet'
@@ -16,15 +16,39 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
-
-export function TransactionSnackbar() {
+export interface TransactionSnackbarProps {
+    pluginID?: NetworkPluginID
+}
+export function TransactionSnackbar({ pluginID }: TransactionSnackbarProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
+    const chainId = useChainId(pluginID)
     const [progress, setProgress] = useState<TransactionProgressEvent>()
-    const { Others, TransactionFormatter } = useWeb3State(progress?.pluginID) as Web3Helper.Web3StateAll
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(
+        progress?.pluginID,
+    ) as Web3Helper.Web3StateAll
+    const pendingTransactions = useRecentTransactions(pluginID)
+
+    useEffect(() => {
+        const removeListener = TransactionWatcher?.emitter.on('progress', (id, status) => {
+            const transaction = pendingTransactions.find((x) => Object.keys(x.candidates).includes(id))
+            if (!transaction || !pluginID) return
+            setProgress({
+                chainId,
+                pluginID,
+                status,
+                transactionId: id,
+                transaction,
+            })
+        })
+
+        return () => {
+            removeListener?.()
+        }
+    }, [pendingTransactions, TransactionWatcher, NetworkPluginID, chainId, pluginID])
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,

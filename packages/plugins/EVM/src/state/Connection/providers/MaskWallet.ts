@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { ChainId, createPayload, chainResolver } from '@masknet/web3-shared-evm'
+import { ChainId, createPayload, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
@@ -43,8 +43,8 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         })
         sharedContext.account.subscribe(() => {
             const account = sharedContext.account.getCurrentValue()
-
-            this.emitter.emit(account ? 'accounts' : 'disconnect', [sharedContext.account.getCurrentValue()])
+            if (account) this.emitter.emit('accounts', [account])
+            else this.emitter.emit('disconnect', ProviderType.MaskWallet)
         })
     }
 
