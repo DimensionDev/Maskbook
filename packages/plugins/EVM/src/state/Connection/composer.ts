@@ -105,9 +105,23 @@ class RequestContext implements Context {
 
     set config(config: Transaction | undefined) {
         if (!this.config || !config) return
-        this._requestArguments = {
-            method: this.method,
-            params: [config, 'latest'],
+        const method = this._requestArguments.method
+
+        switch (method) {
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                this._requestArguments = {
+                    method: this.method,
+                    params: [this._requestArguments.params[0], config],
+                }
+                break
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                this._requestArguments = {
+                    method: this.method,
+                    params: [config, 'latest'],
+                }
+                break
+            default:
+                break
         }
     }
 

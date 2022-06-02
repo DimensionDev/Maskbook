@@ -84,7 +84,10 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                 case TransactionStatusType.NOT_DEPEND:
                     return <LoaderIcon className={classes.loader} />
                 case TransactionStatusType.SUCCEED:
-                    if (formatterTransaction?.type === TransactionDescriptorType.TRANSFER)
+                    if (
+                        formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                        formatterTransaction.title === 'Transfer Token'
+                    )
                         return <UploadIcon className={classes.send} />
                     return <InteractionCircleIcon className={classes.interaction} />
                 case TransactionStatusType.FAILED:
