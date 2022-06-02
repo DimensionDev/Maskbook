@@ -7,7 +7,7 @@ import { Web3StateSettings } from '../../../settings'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Transaction } = Web3StateSettings.value
+        const { Transaction, TransactionWatcher } = Web3StateSettings.value
         let replacedHash
 
         switch (context.method) {
@@ -45,6 +45,7 @@ export class RecentTransaction implements Middleware<Context> {
                             context.result,
                             context.config,
                         )
+                    TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                     const receipt = context.result as TransactionReceipt | null
