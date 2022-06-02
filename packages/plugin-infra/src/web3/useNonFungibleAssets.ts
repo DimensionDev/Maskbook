@@ -16,7 +16,7 @@ export function useNonFungibleAssets<T extends NetworkPluginID>(
         NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
     >
 
-    const account = useAccount(pluginID)
+    const account = useAccount(pluginID, options?.account)
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {

@@ -25,6 +25,7 @@ import { VerifyIcon } from '../assets/verify'
 import { Verify2Icon } from '../assets/Verify2'
 import { formatAddress } from '../utils'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -119,10 +120,7 @@ export function AddressNames(props: AddressNamesProps) {
         isETH?: boolean,
         onChange?: () => void,
     ) => (
-        <MenuItem
-            key={wallet}
-            value={wallet}
-            onClick={() => onClick(wallet, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)}>
+        <MenuItem value={wallet} onClick={() => onClick(wallet, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)}>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
                     <>
@@ -177,25 +175,25 @@ export function AddressNames(props: AddressNamesProps) {
                         onConnectWallet,
                     )
                 ) : (
-                    <MenuItem key="connect">
+                    <MenuItem key={uuid()}>
                         <Button fullWidth onClick={onConnectWallet} sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
                             {t.connect_your_wallet()}
                         </Button>
                     </MenuItem>
                 )}
-                <Divider className={classes.divider} />
+                <Divider key={uuid()} className={classes.divider} />
                 {wallets
                     .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
                     ?.filter((x) => !isSameAddress(x.identity, account))
                     .map((x) => (
-                        <>
+                        <div key={uuid()}>
                             {walletItem(selectedWallet, x.identity, false, true, true)}
-                            <Divider className={classes.divider} />
-                        </>
+                            <Divider key={uuid()} className={classes.divider} />
+                        </div>
                     ))}
 
                 <MenuItem
-                    key="settings"
+                    key={uuid()}
                     onClick={() => {
                         openPopupsWindow()
                         onClose()

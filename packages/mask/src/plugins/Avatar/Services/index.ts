@@ -28,3 +28,4 @@ export async function getAddress(userId: string, network: string, networkPluginI
 }
 
 export * from './bind'
+export * from './kv'

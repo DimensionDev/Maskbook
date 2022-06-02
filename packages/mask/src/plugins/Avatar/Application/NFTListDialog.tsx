@@ -93,7 +93,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const account = useAccount(currentPluginId)
     const chainId = useChainId(currentPluginId)
     const [open_, setOpen_] = useState(false)
-    const [selectedAccount, setSelectedAccount] = useState('')
+    const [selectedAccount, setSelectedAccount] = useState(account ?? wallets?.[0]?.identity ?? '')
     const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId)
     const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType>>()
     const [disabled, setDisabled] = useState(false)

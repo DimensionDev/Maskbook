@@ -4,8 +4,6 @@ import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
 
-const READ_GUN_TIMEOUT = 15 * 1000
-
 const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME + '_' + network)
 const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
 

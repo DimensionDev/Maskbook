@@ -2,21 +2,17 @@ import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Twitter } from '@masknet/web3-providers'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types'
+import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
-import { PLUGIN_ID, RSS3_KEY_SNS } from '../constants'
 import { useSubscription } from 'use-subscription'
-import Services from '../../../extension/service'
-import { useSaveNFTAvatar } from '../hooks'
-import { useAsyncFn } from 'react-use'
 import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { AvatarInfo, useSave } from '../hooks/save/useSave'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -41,86 +37,6 @@ interface UploadAvatarDialogProps {
     pluginId?: NetworkPluginID
     onBack: () => void
     onClose: () => void
-}
-
-type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
-
-function useSaveToRSS3() {
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
-
-    return useAsyncFn(
-        async (info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) => {
-            return saveNFTAvatar(account, info, identifier.network, RSS3_KEY_SNS.TWITTER)
-        },
-        [saveNFTAvatar],
-    )
-}
-
-function useSaveToNextID() {
-    return useAsyncFn(async (info: NextIDAvatarMeta, persona?: PersonaIdentifier, proof?: BindingProof) => {
-        if (!proof?.identity || !persona?.publicKeyAsHex) return
-        const payload = await NextIDStorage.getPayload(
-            persona.publicKeyAsHex,
-            proof?.platform,
-            proof?.identity,
-            info,
-            PLUGIN_ID,
-        )
-        if (!payload.ok) {
-            return
-        }
-        const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
-        if (!result) return
-        const response = await NextIDStorage.set(
-            payload.val.uuid,
-            persona.publicKeyAsHex,
-            toBase64(fromHex(result.signature.signature)),
-            proof.platform,
-            proof.identity,
-            payload.val.createdAt,
-            info,
-            PLUGIN_ID,
-        )
-        return response.ok
-    })
-}
-
-function useSave() {
-    const [, saveToNextID] = useSaveToNextID()
-    const [, saveToRSS3] = useSaveToRSS3()
-
-    return useAsyncFn(
-        async (
-            pluginId: NetworkPluginID,
-            account: string,
-            isBindAccount: boolean,
-            token: NonFungibleToken<ChainId, SchemaType>,
-            data: AvatarInfo,
-            persona: PersonaIdentifier,
-            proof: BindingProof,
-            identifier: ProfileIdentifier,
-        ) => {
-            if (!data || !token.contract?.address) return false
-
-            const info: NextIDAvatarMeta = {
-                pluginId,
-                nickname: data.nickname,
-                userId: data.userId,
-                imageUrl: data.imageUrl,
-                avatarId: data.avatarId,
-                address: token.contract?.address,
-                tokenId: token.tokenId,
-                chainId: token.contract?.chainId ?? ChainId.Mainnet,
-                schema: token.contract?.schema ?? SchemaType.ERC20,
-            }
-
-            if (isBindAccount) {
-                return saveToNextID(info, persona, proof)
-            }
-            return saveToRSS3(info, account, identifier)
-        },
-        [saveToNextID, saveToRSS3],
-    )
 }
 
 async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
