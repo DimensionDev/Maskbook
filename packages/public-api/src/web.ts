@@ -84,6 +84,11 @@ export interface MaskNetworkAPIs {
         profiles: ProfileRecord[]
         relations: RelationRecord[]
     }>
+    publish_e2eResult_to_gun(params: {
+        postIV: string
+        networkHint: string
+        e2eResult: EncryptionResultE2E[]
+    }): Promise<void>
 }
 
 export interface WalletInfo {
@@ -271,4 +276,11 @@ export interface PriceRecord {
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
     [token: string]: PriceRecord
+}
+
+export interface EncryptionResultE2E {
+    target: string
+    encryptedPostKey: string
+    /** This is used in v38. */
+    ivToBePublished: string
 }

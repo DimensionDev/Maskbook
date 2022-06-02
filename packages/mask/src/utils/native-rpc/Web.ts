@@ -6,9 +6,9 @@ import type {
     EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeArrayBuffer, encodeText, decodeArrayBuffer } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
-import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, Identifier, ProfileIdentifier, IdentifierMap } from '@masknet/shared-base'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
@@ -18,6 +18,7 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
+import { publishPostAESKey_version39Or38 } from '../../../background/network/gun/encryption/queryPostKey'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -322,6 +323,22 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 favor: x.favor,
             })),
         }
+    },
+    publish_e2eResult_to_gun: async ({ postIV, networkHint, e2eResult }) => {
+        const postIVData = new Uint8Array(decodeArrayBuffer(postIV))
+        
+        const receiverKeys = new IdentifierMap(new Map(), ProfileIdentifier)
+        for (const result of e2eResult) {
+            const identifier = stringToProfileIdentifier(result.target)
+            const key = {
+                encryptedPostKey: new Uint8Array(decodeArrayBuffer(result.encryptedPostKey)),
+                ivToBePublished: new Uint8Array(decodeArrayBuffer(result.ivToBePublished)),
+                target: identifier,
+            }
+            receiverKeys.set(identifier, key)
+        }
+
+        await publishPostAESKey_version39Or38(-38, postIVData, networkHint, receiverKeys)
     },
 }
 
