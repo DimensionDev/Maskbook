@@ -40,7 +40,6 @@ export async function sendTransaction(
         maxFeePerGas?: string
     },
 ) {
-    console.log({ contract, transaction })
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
     const tx = await encodeTransaction(contract, transaction)
     const receipt = await transaction.send(tx as PayableTx)
