@@ -2,11 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
-import {
-    createLookupTableResolver,
-    NetworkPluginID,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
+import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { useWeb3State, Web3Helper, useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { isPopupPage } from '@masknet/shared-base'
