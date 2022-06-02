@@ -77,15 +77,11 @@ export function AddNFT(props: AddNFTProps) {
         }
         const token: NonFungibleToken<ChainId, SchemaType> = {
             contract: asset.contract,
-            metadata: {
-                ...asset.metadata,
-                imageURL: 'https://pbs.twimg.com/profile_images/1308769664240160770/AfgzWVE7_400x400.jpg',
-            },
+            metadata: asset.metadata,
             tokenId: asset.tokenId,
             collection: asset.collection,
         } as NonFungibleToken<ChainId, SchemaType>
 
-        /*
         if (chainId && token && token.contract?.chainId !== chainId) {
             setMessage('chain does not match.')
             return
@@ -94,7 +90,7 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('nft_owner_hint'))
             return
         }
-        */
+
         onAddClick?.(token)
         handleClose()
     }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])

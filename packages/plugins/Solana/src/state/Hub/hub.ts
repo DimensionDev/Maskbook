@@ -119,20 +119,15 @@ class Hub implements SolanaHub {
     }
 
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        try {
-            for (let i = 0; i < this.maxPageSize; i += 1) {
-                const pageable = await this.getNonFungibleAssets(address, {
-                    page: i,
-                    size: this.sizePerPage,
-                })
+        for (let i = 0; i < this.maxPageSize; i += 1) {
+            const pageable = await this.getNonFungibleAssets(address, {
+                page: i,
+                size: this.sizePerPage,
+            })
 
-                yield* pageable.data
+            yield* pageable.data
 
-                if (pageable.data.length === 0) return
-            }
-        } catch (error) {
-            console.log('--------')
-            console.log(error)
+            if (pageable.data.length === 0) return
         }
     }
 }

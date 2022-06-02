@@ -34,7 +34,7 @@ export function toPNG(image: string) {
         const ctx = canvas.getContext('2d')
         if (isNull(ctx)) throw new Error('Canvas was not supported')
         img.addEventListener('load', () => {
-            ;[canvas.width, canvas.height] = [600, 600]
+            ;[canvas.width, canvas.height] = [img.width, img.height]
             ctx.drawImage(img, 0, 0, img.width, img.height)
             canvas.toBlob((blob) => {
                 resolve(blob)

@@ -108,7 +108,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const onChange = useCallback((address: string, pluginId: NetworkPluginID) => {
         setSelectedAccount(address)
         setSelectedPluginId(pluginId)
-        console.log(address)
     }, [])
 
     const onSelect = (token: NonFungibleToken<ChainId, SchemaType>) => {
