@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
 import { useArtBlocksContract } from './useArtBlocksContract'
 
-export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = 1) {
+export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const genArt721MinterContract = useArtBlocksContract(chainId)

@@ -62,8 +62,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const default_chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainId = props?.chainId ?? default_chainId
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, props?.chainId)
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId, chainId)
