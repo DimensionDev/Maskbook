@@ -69,6 +69,9 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
             mediaUrl: resolveIPFSLinkFromURL(
                 JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
             ),
+            imageURL: resolveIPFSLinkFromURL(
+                JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
+            ),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
