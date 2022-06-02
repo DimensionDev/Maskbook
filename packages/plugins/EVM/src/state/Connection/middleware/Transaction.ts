@@ -28,7 +28,6 @@ export class RecentTransaction implements Middleware<Context> {
         try {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
-                    console.log({ config: context.config })
                     if (!context.config || typeof context.result !== 'string') return
                     if (replacedHash)
                         await Transaction?.replaceTransaction?.(

@@ -38,13 +38,10 @@ export function useClaimCallback(version: number, from: string, id: string, pass
                     throw error
                 }),
         }
-        console.log({ config })
         // step 2-1: blocking
         return new Promise<string>((resolve, reject) => {
-            const x = claim()
-            console.log({ send: x.send.toString() })
-
-            x.send(config as NonPayableTx)
+            claim()
+                .send(config as NonPayableTx)
                 .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
                     resolve(receipt.transactionHash)
                 })
