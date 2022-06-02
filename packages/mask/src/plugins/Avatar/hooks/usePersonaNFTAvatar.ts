@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { RSS3_KEY_SNS } from '../constants'
 import { getNFTAvatarByUserId } from '../utils'
-import { useGetNFTAvatar } from './rss3'
+import { useGetNFTAvatar } from './useGetNFTAvatar'
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS) {
     const currentPluginId = useCurrentWeb3NetworkPluginID()

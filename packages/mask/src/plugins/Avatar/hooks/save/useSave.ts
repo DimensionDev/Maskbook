@@ -1,7 +1,6 @@
-import { unreachable } from '@dimensiondev/kit'
 import type { BindingProof, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import type { NextIDAvatarMeta } from '../../types'
@@ -40,7 +39,8 @@ export function useSave() {
                 chainId: token.contract?.chainId ?? ChainId.Mainnet,
                 schema: token.contract?.schema ?? SchemaType.ERC20,
             }
-
+            return saveSolana(info, account, persona, identifier, proof)
+            /*
             switch (pluginId) {
                 case NetworkPluginID.PLUGIN_SOLANA:
                     return saveSolana(info, account, persona, identifier, proof)
@@ -52,7 +52,7 @@ export function useSave() {
                 }
                 default:
                     unreachable(pluginId as never)
-            }
+            }*/
         },
         [saveToNextID, saveToRSS3],
     )
