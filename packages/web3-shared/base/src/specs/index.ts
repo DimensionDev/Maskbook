@@ -466,6 +466,11 @@ export interface RecentTransaction<ChainId, Transaction> {
     updatedAt: Date
 }
 
+export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
+    /** a dynamically computed field in the hook which means the minted (initial) transaction */
+    _tx: Transaction
+}
+
 export interface TokenList<ChainId, SchemaType> {
     name: string
     description?: string
