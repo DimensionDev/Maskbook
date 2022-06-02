@@ -39,11 +39,11 @@ export async function getWallet(address?: string) {
         return wallets.find((x) => isSameAddress(x.address, address))
     }
     const wallet = await database.getWallet(address)
-    if (!wallet) return null
+    if (!wallet?.hasStoredKeyInfo) return null
     return sanitizeWallet(wallet)
 }
 
-export async function getWallets(storageRequired = false): Promise<Wallet[]> {
+export async function getWallets(): Promise<Wallet[]> {
     if (hasNativeAPI) {
         const response = await sendPayload(createPayload(0, EthereumMethodType.ETH_ACCOUNTS, []))
         const accounts = response.result as string[] | undefined
@@ -66,7 +66,7 @@ export async function getWallets(storageRequired = false): Promise<Wallet[]> {
         ]
     }
     const wallets = await database.getWallets()
-    return wallets.filter((x) => x.hasStoredKeyInfo || !storageRequired).map(sanitizeWallet)
+    return wallets.filter((x) => x.hasStoredKeyInfo).map(sanitizeWallet)
 }
 
 export function createMnemonicWords() {

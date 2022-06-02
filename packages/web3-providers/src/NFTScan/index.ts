@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { HubOptions } from '@masknet/web3-shared-base'
+import { createPageable, HubOptions } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC721Contract,
@@ -96,7 +96,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number
@@ -104,20 +104,15 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: page + 1,
+            page_index: indicator + 1,
             user_address: from,
         })
-        if (!response?.data)
-            return {
-                currentPage: 0,
-                data: [],
-                hasNextPage: false,
-            }
+        if (!response?.data) return createPageable([], 0)
         const total = response.data.total
-        return {
-            currentPage: page,
-            data: response.data.content.map(createERC721TokenAsset) ?? [],
-            hasNextPage: total - (page + 1) * size > 0,
-        }
+        return createPageable(
+            response.data.content.map(createERC721TokenAsset) ?? [],
+            indicator,
+            total - (indicator + 1) * size > 0 ? indicator + 1 : undefined,
+        )
     }
 }

@@ -183,7 +183,7 @@ export namespace Plugin.Shared {
         signTypedData(address: string, message: string): Promise<string>
 
         /** Get all wallets */
-        getWallets(storageRequired?: boolean): Promise<Wallet[]>
+        getWallets(): Promise<Wallet[]>
         /** Get the primary wallet */
         getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */

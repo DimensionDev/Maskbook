@@ -18,7 +18,7 @@ const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const location = useLocation()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
