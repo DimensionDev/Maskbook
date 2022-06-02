@@ -159,18 +159,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         startIcon={<PluginWalletConnectIcon />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
-                        sx={{
-                            backgroundColor: theme.palette.maskColor?.dark,
-                            width: '100%',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: theme.palette.maskColor?.dark,
-                            },
-                            margin: 0,
-                            lineHeight: 0,
-                            paddingTop: 1.25,
-                            paddingBottom: 1.25,
-                        }}
+                        sx={{ marginTop: 1.5 }}
                         onClick={openSelectProviderDialog}
                         {...buttonProps}>
                         {t('plugin_wallet_connect_wallet')}
@@ -201,18 +190,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             size={18}
                         />
                     }
-                    sx={
-                        props.ActionButtonPromiseProps?.sx ?? {
-                            backgroundColor: theme.palette.maskColor?.dark,
-                            width: '100%',
-                            color: 'white',
-                            '&:hover': {
-                                backgroundColor: theme.palette.maskColor?.dark,
-                            },
-                            padding: 1,
-                            margin: 0,
-                        }
-                    }
+                    sx={props.ActionButtonPromiseProps?.sx}
                     style={{ borderRadius: 10, paddingTop: 11, paddingBottom: 11 }}
                     init={<span>{t('plugin_wallet_switch_network', { network: expectedChainName })}</span>}
                     waiting={t('plugin_wallet_switch_network_under_going', {
