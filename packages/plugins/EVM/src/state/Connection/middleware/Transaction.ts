@@ -9,7 +9,6 @@ export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { Transaction } = Web3StateSettings.value
         let replacedHash
-
         switch (context.method) {
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 try {
@@ -29,6 +28,7 @@ export class RecentTransaction implements Middleware<Context> {
         try {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
+                    console.log({ config: context.config })
                     if (!context.config || typeof context.result !== 'string') return
                     if (replacedHash)
                         await Transaction?.replaceTransaction?.(

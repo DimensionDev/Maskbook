@@ -587,6 +587,7 @@ class Connection implements EVM_Connection {
     }
 
     callTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
+        console.log({ transaction })
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
@@ -596,6 +597,7 @@ class Connection implements EVM_Connection {
         )
     }
     sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
+        console.log({ transaction })
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,

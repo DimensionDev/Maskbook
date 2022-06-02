@@ -141,6 +141,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
                 return Promise.resolve(this.connector.chainId) as Promise<T>
             case EthereumMethodType.ETH_SEND_TRANSACTION: {
                 const [config] = requestArguments.params as [ITxData]
+                console.log({ config })
                 return this.connector.sendTransaction(config) as Promise<T>
             }
             case EthereumMethodType.ETH_SIGN_TRANSACTION: {
