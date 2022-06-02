@@ -22,7 +22,7 @@ import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from '
 
 export function formatAssets(data: WalletTokenRecord[], chainId?: ChainId): Array<FungibleAsset<ChainId, SchemaType>> {
     const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
-    const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
+    const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
         .filter((x) => x.is_verified && chainResolver.chainId(x.chain))
