@@ -296,16 +296,7 @@ export function CollectionList({
     return (
         <Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
-                <Stack display="inline-flex">
-                    <AllNetworkButton className={classes.networkSelected} onClick={() => setSelectedCollection('all')}>
-                        ALL
-                    </AllNetworkButton>
-                    <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
-                        {t('dashboard_collectible_menu_all', {
-                            count: collectibles.length,
-                        })}
-                    </Typography>
-                </Stack>
+                <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
                         <ReversedAddress address={addressName.address} />
@@ -358,6 +349,17 @@ export function CollectionList({
                     </ElementAnchor>
                 </Box>
                 <Box>
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                        <AllNetworkButton
+                            className={classes.networkSelected}
+                            onClick={() => setSelectedCollection('all')}>
+                            ALL
+                        </AllNetworkButton>
+                    </Box>
                     {collections.map((x, i) => {
                         return (
                             <Box
