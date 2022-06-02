@@ -247,7 +247,6 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     useAsync(async () => {
         const gasOptions = await hub?.getGasOptions?.(chainId)
 
-        console.log(gasOptions)
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
             const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
