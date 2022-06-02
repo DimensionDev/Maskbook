@@ -10,7 +10,6 @@ interface ElementAnchorProps {
 export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children }) => {
     const elementRef = useRef<HTMLDivElement>(null)
     const intersection = useIntersectionObserver(elementRef, {
-        threshold: [0, 0.5],
         rootMargin: '200px',
     })
 
