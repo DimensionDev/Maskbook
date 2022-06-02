@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { createLookupTableResolver, TransactionStatusType } from '@masknet/web3-shared-base'
-import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { isPopupPage } from '@masknet/shared-base'
 import type { TransactionProgressEvent } from '@masknet/plugin-wallet'
@@ -24,7 +24,7 @@ export function TransactionSnackbar() {
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const [progress, setProgress] = useState<TransactionProgressEvent>()
-    const { Others, TransactionFormatter } = useWeb3State(progress?.pluginID) as Web3Helper.Web3StateAll
+    const { Others, TransactionFormatter } = useWeb3State<'all'>(progress?.pluginID)
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,

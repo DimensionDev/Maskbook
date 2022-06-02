@@ -123,9 +123,11 @@ export declare namespace Web3Helper {
         T extends NetworkPluginID = never,
         Indicator extends string | number = number,
     > = T extends never ? never : HubOptions<Definition[T]['ChainId'], Indicator>
+
     export type Web3Hub<T extends NetworkPluginID = never> = T extends never
         ? never
         : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
+
     export type Web3State<T extends NetworkPluginID = never> = T extends never
         ? never
         : Web3Plugin.ObjectCapabilities.Capabilities<
@@ -162,6 +164,7 @@ export declare namespace Web3Helper {
     export type TransactionSignatureAll = Definition[NetworkPluginID]['TransactionSignature']
     export type TransactionParameterAll = Definition[NetworkPluginID]['TransactionParameter']
     export type Web3All = Definition[NetworkPluginID]['Web3']
+    export type Web3ProviderAll = Definition[NetworkPluginID]['Web3Provider']
 
     export type NetworkDescriptorAll = NetworkDescriptor<
         Definition[NetworkPluginID]['ChainId'],
@@ -186,6 +189,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Web3'],
         Definition[NetworkPluginID]['Web3Provider']
     >
+
     export type Web3HubAll = Hub<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],

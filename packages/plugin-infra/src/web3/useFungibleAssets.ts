@@ -31,7 +31,7 @@ export function useFungibleAssets<T extends NetworkPluginID, Indicator extends s
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
-    const { Token, Others } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State<'all'>(pluginID)
 
     return useAsyncRetry(async () => {
         if (!account || !hub) return EMPTY_LIST

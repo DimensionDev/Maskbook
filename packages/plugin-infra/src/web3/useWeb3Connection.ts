@@ -6,10 +6,11 @@ import { useChainId } from './useChainId'
 import { useProviderType } from './useProviderType'
 import { useWeb3State } from './useWeb3State'
 
-export function useWeb3Connection<T extends NetworkPluginID>(
+export function useWeb3Connection<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ) {
+    type Result = S extends 'all' ? Web3Helper.Web3ConnectionAll : Web3Helper.Web3Connection<T>
     type GetConnection = (options?: Web3Helper.Web3ConnectionOptions<T>) => Promise<Web3Helper.Web3Connection<T>>
 
     const { Connection } = useWeb3State(pluginID)
@@ -27,5 +28,5 @@ export function useWeb3Connection<T extends NetworkPluginID>(
         } as Web3Helper.Web3ConnectionOptions<T>)
     }, [account, chainId, providerType, Connection, JSON.stringify(options)])
 
-    return connection
+    return connection as Result
 }
