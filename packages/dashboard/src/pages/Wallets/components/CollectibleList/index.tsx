@@ -17,7 +17,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-unified'
-import { ElementAnchor } from './ElementAnchor'
+import { ElementAnchor } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     root: {

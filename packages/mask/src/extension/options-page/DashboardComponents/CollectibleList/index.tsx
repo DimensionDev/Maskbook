@@ -15,11 +15,10 @@ import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReversedAddress } from '@masknet/shared'
+import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
-import { ElementAnchor } from './ElementAnchor'
 import { RetryHint } from './RetryHint'
 
 export const CollectibleContext = createContext<{

@@ -36,7 +36,6 @@
     "@masknet/web3-shared-flow": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
-    "@react-hookz/web": "^14.2.2",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^12.0.0",
