@@ -90,7 +90,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // context
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
     // #region select token
     const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
