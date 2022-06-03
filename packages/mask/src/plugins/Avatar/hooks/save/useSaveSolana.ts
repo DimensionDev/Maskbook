@@ -1,5 +1,4 @@
 import type { BindingProof, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PluginNFTAvatarRPC } from '../../messages'
@@ -14,12 +13,7 @@ export function useSaveSolana() {
             identifier: ProfileIdentifier,
             proof: BindingProof,
         ) => {
-            return PluginNFTAvatarRPC.saveAvatar(
-                info.pluginId ?? NetworkPluginID.PLUGIN_SOLANA,
-                account,
-                activatedSocialNetworkUI.networkIdentifier,
-                info,
-            )
+            return PluginNFTAvatarRPC.saveAvatar(account, activatedSocialNetworkUI.networkIdentifier, info)
         },
         [],
     )

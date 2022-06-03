@@ -1,6 +1,6 @@
 import type { BindingProof, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import type { NextIDAvatarMeta } from '../../types'
