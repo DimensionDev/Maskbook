@@ -9,7 +9,7 @@ export function useTransactions<T extends NetworkPluginID>(
 ) {
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID)
-    const hub = useWeb3Hub(pluginID, options)
+    const hub = useWeb3Hub<'all'>(pluginID, options)
 
     return useAsyncRetry(async () => {
         return hub?.getTransactions(chainId, account)

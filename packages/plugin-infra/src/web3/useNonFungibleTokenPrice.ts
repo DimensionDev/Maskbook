@@ -14,7 +14,6 @@ export function useNonFungibleTokenPrice<T extends NetworkPluginID>(
         chainId: Web3Helper.Definition[T]['ChainId'],
         address: string,
         tokenId: string,
-        options?: Web3Helper.Web3HubOptions<T>,
     ) => Promise<number>
 
     const chainId = useChainId(pluginID, options?.chainId)

@@ -11,6 +11,7 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     TokenType,
+    createPageable,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -155,7 +156,7 @@ function _getAsset(address: string, tokenId: string) {
     })
 }
 
-export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const asset = await _getAsset(address, tokenId)
         if (!asset) return
@@ -167,7 +168,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
     }
 
-    async getTokens(from: string, { page = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(from: string, { indicator = '', size = 50 }: HubOptions<ChainId, string> = {}) {
         const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
             owner: from,
             size,
@@ -177,23 +178,16 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
 
-        if (!asset)
-            return {
-                currentPage: 0,
-                data: [],
-                hasNextPage: false,
-            }
-        return {
-            currentPage: page,
-            data:
-                asset.items
-                    .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                    .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
-                    .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? [],
-            hasNextPage: !!asset.continuation,
-        }
+        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
+        if (!asset) return createPageable([], indicator)
+
+        const items =
+            asset.items
+                .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+                .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
+                .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
+        return createPageable(items, indicator, asset.continuation)
     }
 
     async getOffers(

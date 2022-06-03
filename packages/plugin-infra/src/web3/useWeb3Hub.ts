@@ -1,20 +1,16 @@
 import { useAsyncRetry } from 'react-use'
-import type { Hub, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useAccount } from '../entry-web3'
 import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
 
-export function useWeb3Hub<T extends NetworkPluginID>(pluginID?: T, options?: Web3Helper.Web3HubOptions<T>) {
-    type GetHub = (
-        options?: Web3Helper.Web3HubOptions<T>,
-    ) => Promise<
-        Hub<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['SchemaType'],
-            Web3Helper.Definition[T]['GasOption'],
-            Web3Helper.Definition[T]['Transaction']
-        >
-    >
+export function useWeb3Hub<
+    S extends 'all' | void = void,
+    T extends NetworkPluginID = NetworkPluginID,
+    Indicator extends string | number = number,
+>(pluginID?: T, options?: Web3Helper.Web3HubOptions<T, Indicator>) {
+    type Result = S extends 'all' ? Web3Helper.Web3HubAll : Web3Helper.Web3Hub<T>
+    type GetHub = (options?: Web3Helper.Web3HubOptions<T, Indicator>) => Promise<Web3Helper.Web3HubAll>
 
     const { Hub } = useWeb3State(pluginID)
     const chainId = useChainId(pluginID)
@@ -26,8 +22,8 @@ export function useWeb3Hub<T extends NetworkPluginID>(pluginID?: T, options?: We
             account,
             chainId,
             ...options,
-        } as Web3Helper.Web3HubOptions<T>)
+        } as Web3Helper.Web3HubOptions<T, Indicator>)
     }, [account, chainId, Hub, JSON.stringify(options)])
 
-    return hub
+    return hub as Result
 }

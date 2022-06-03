@@ -44,8 +44,9 @@ const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     if (!chain) return chainResolver.chainName(ChainId.Mainnet)
-    if (chain.chainId === ChainId.BSC) return chainResolver.chainShortName(ChainId.BSC)
-    return chainResolver.chainName(ChainId.Mainnet)
+    if (chain.chainId === ChainId.BSC) return chainResolver.chainShortName(ChainId.BSC)?.toUpperCase()
+    if (chain.chainId === (66 as ChainId)) return chain.name
+    return chainResolver.chainName(chain.chainId)
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {

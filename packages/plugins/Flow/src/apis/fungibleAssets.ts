@@ -1,5 +1,12 @@
 import { ChainId, createClient, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
-import { FungibleAsset, CurrencyType, Pageable, rightShift, HubOptions } from '@masknet/web3-shared-base'
+import {
+    FungibleAsset,
+    CurrencyType,
+    Pageable,
+    rightShift,
+    HubOptions,
+    createPageable,
+} from '@masknet/web3-shared-base'
 import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 
@@ -132,11 +139,8 @@ export async function getFungibleAssets(
         getAssetTether(chainId, address),
     ])
 
-    return {
-        currentPage: 0,
-        data: allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Array<
-            FungibleAsset<ChainId, SchemaType>
-        >,
-        hasNextPage: false,
-    }
+    const items = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Array<
+        FungibleAsset<ChainId, SchemaType>
+    >
+    return createPageable(items, 0)
 }
