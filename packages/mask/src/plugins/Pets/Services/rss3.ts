@@ -3,6 +3,8 @@ import type { Constant } from '@masknet/web3-shared-base/src/utils/types'
 import type { ConfigRSSNode, EssayRSSNode, PetMetaDB } from '../types'
 import { NFTS_CONFIG_ADDRESS } from '../constants'
 import { WalletRPC } from '../../Wallet/messages'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const cache = new Map<string, Record<string, Constant> | undefined>()
 
@@ -15,10 +17,15 @@ export async function getCustomEssayFromRSS(address: string): Promise<PetMetaDB 
     return data?.essay
 }
 
-export async function saveCustomEssayToRSS(address: string, essay: PetMetaDB, signature: string) {
+export async function saveCustomEssayToRSS(
+    address: string,
+    essay: PetMetaDB,
+    signature: string,
+    connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
+) {
     if (!address) return
     const rss = RSS3.createRSS3(address, async (message: string) => {
-        return WalletRPC.signPersonalMessage(message, address)
+        return connection.signMessage(message, 'personaSign', { account: address })
     })
     await RSS3.setFileData<EssayRSSNode>(rss, address, '_pet', { address, signature, essay })
     return essay
