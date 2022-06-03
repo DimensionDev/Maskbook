@@ -57,9 +57,9 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     const t = useI18N()
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
-    const chainId = useChainId()
-    const web3 = useWeb3()
-    const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
     const requiredChainId = getRequiredChainId(chainId)
     const { value: rewardBalance = '0' } = useFungibleTokenBalance(

@@ -87,9 +87,9 @@ export function CreatedFarms(props: PageInterface) {
     const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const {
         value: farms = EMPTY_LIST,

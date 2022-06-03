@@ -3,6 +3,7 @@ import { explorerResolver } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Typography, CircularProgress, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../../locales'
 import { TransactionStatus, ChainId } from '../../types'
@@ -39,7 +40,7 @@ type TransactionProps =
 
 export function Transaction(props: TransactionProps) {
     const t = useI18N()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
 
     if (props.status === TransactionStatus.CONFIRMATION) {

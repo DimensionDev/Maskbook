@@ -5,6 +5,7 @@ import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Typography, Button, Box } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../../locales'
 import { roundValue } from '../../helpers'
@@ -30,7 +31,7 @@ export function Rewards({
     onChangePage,
 }: RewardsProps) {
     const t = useI18N()
-    const web3 = useWeb3()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
 
     const onStartHarvestRewards = useCallback(

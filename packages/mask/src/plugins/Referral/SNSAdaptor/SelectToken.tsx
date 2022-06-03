@@ -7,6 +7,7 @@ import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import { PluginReferralMessages, ReferralRPC } from '../messages'
@@ -34,7 +35,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function SelectToken() {
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes } = useStyles()

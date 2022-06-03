@@ -60,10 +60,10 @@ export function BuyToFarm(props: PageInterface) {
     const t = useI18N()
     const { classes } = useStyles()
     const { classes: tabClasses } = useTabStyles()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
-    const web3 = useWeb3()
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
 
     const [tab, setTab] = useState(TabsReferAndBuy.NEW)

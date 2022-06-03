@@ -77,10 +77,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ReferToFarm(props: PageInterface) {
     const t = useI18N()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
-    const web3 = useWeb3()
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = useCustomSnackbar()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
