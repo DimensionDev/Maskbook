@@ -2,6 +2,7 @@ import { padStart } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { formatUnits } from '@ethersproject/units'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 
 import { META_KEY, supportedChainId } from '../constants'
 import type {
@@ -18,7 +19,7 @@ import schema from '../schema.json'
 import { bufToHexString, toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
 
 function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8Array {
-    if (address.byteLength !== 20) throw new Error('invalid address')
+    if (isValidAddress(address.toString())) throw new Error('invalid address')
     const b = new Uint8Array(24)
 
     // Only numeric network id's are supported in the chain address, with max of uint32.
