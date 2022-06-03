@@ -19,7 +19,7 @@ export enum PagesType {
 }
 export enum TabsReferralFarms {
     TOKENS = 'Crypto Tokens',
-    NFT = 'NFTs',
+    NFTs = 'NFTs',
 }
 
 export enum TabsCreateFarm {
