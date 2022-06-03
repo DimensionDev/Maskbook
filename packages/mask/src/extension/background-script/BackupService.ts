@@ -94,18 +94,15 @@ delegateWalletRestore(async function (backup) {
     }
 })
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
+    const wallets = await getWallets()
     const allSettled = await Promise.allSettled(
-        (
-            await getWallets()
-        )
-            .filter((x) => x.storedKeyInfo)
-            .map(async (wallet) => {
-                return {
-                    ...wallet,
-                    mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
-                    privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
-                }
-            }),
+        wallets.map(async (wallet) => {
+            return {
+                ...wallet,
+                mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
+                privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
+            }
+        }),
     )
     const wallets_ = allSettled.map((x) => (x.status === 'fulfilled' ? WalletRecordToJSONFormat(x.value) : null))
     if (wallets_.some((x) => !x)) throw new Error('Failed to backup wallets.')

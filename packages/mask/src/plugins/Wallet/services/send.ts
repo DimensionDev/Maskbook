@@ -2,10 +2,20 @@ import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@dimensiondev/kit'
-import { ChainId, EthereumMethodType, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, getPayloadConfig, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
+import { isNil } from 'lodash-unified'
+
+enum JSON_RPC_ERROR_CODE {
+    INVALID_REQUEST = -32600,
+    METHOD_NOT_FOUND = 32601,
+    INVALID_PARAMS = -32602,
+    INTERNAL_ERROR = -32603,
+    SERVER_ERROR_RANGE_START = -32000,
+    SERVER_ERROR_RANGE_END = -32099,
+}
 
 type Options = {
     account?: string
@@ -62,6 +72,49 @@ async function createProvider(chainId = ChainId.Mainnet) {
     return createProviderInstance(url)
 }
 
+function getInternalError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
+    {
+        const rpcError = error
+        if (rpcError instanceof Error && rpcError.message) return rpcError
+        if (rpcError && typeof (rpcError as Error).message === 'string') return new Error((rpcError as Error).message)
+        if (rpcError && typeof rpcError === 'string') return new Error(rpcError)
+    }
+
+    {
+        const responseError = response?.error as unknown
+        if (responseError instanceof Error) return getError(responseError, null, fallback)
+        if (responseError && typeof (responseError as Error).message === 'string')
+            return getError(responseError, null, fallback)
+        if (responseError && typeof responseError === 'string') return new Error(responseError)
+    }
+    if (fallback) return new Error(fallback)
+    return new Error('Unknown Error.')
+}
+
+export function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
+    const internalError = getInternalError(error, response, fallback)
+    const internalErrorMessage = (() => {
+        const { code, message } = internalError as unknown as { code?: number; message: string }
+
+        if (message.includes(`"code":${JSON_RPC_ERROR_CODE.INTERNAL_ERROR}`))
+            return 'Transaction was failed due to an internal JSON-RPC server error.'
+        if (message.includes('User denied message signature.')) return 'Signature canceled.'
+        if (message.includes('User denied transaction signature.')) return 'Transaction was rejected!'
+        if (message.includes('transaction underpriced')) return 'Transaction underpriced.'
+        if (
+            typeof code === 'number' &&
+            (code === JSON_RPC_ERROR_CODE.INTERNAL_ERROR ||
+                (code <= JSON_RPC_ERROR_CODE.SERVER_ERROR_RANGE_START &&
+                    code >= JSON_RPC_ERROR_CODE.SERVER_ERROR_RANGE_END))
+        ) {
+            return 'Transaction was failed due to an internal JSON-RPC server error.'
+        }
+        return internalError.message
+    })()
+
+    return new Error(internalErrorMessage)
+}
+
 /**
  * Send to built-in RPC endpoints.
  */
@@ -71,7 +124,30 @@ export async function send(
     options?: Options,
 ) {
     const provider = await createProvider(options?.chainId)
-    return provider.send(payload, callback)
+
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SEND_TRANSACTION:
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+            const computedPayload = getPayloadConfig(payload)
+            if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
+
+            const rawTransaction = await WalletRPC.signTransaction(computedPayload.from as string, {
+                ...computedPayload,
+                chainId: options.chainId,
+            })
+            if (!rawTransaction) break
+
+            return provider.send(
+                {
+                    ...payload,
+                    method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                    params: [rawTransaction],
+                },
+                callback,
+            )
+        default:
+            return provider.send(payload, callback)
+    }
 }
 
 /**
@@ -87,8 +163,9 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
     } else {
         return new Promise<JsonRpcResponse>(async (resolve, reject) => {
             const callback = (error: Error | null, response?: JsonRpcResponse) => {
-                if (error) reject(error)
-                else if (response) resolve(response)
+                if (!isNil(error) || !isNil(response?.error)) {
+                    reject(getError(error, response))
+                } else if (response) resolve(response)
             }
 
             id += 1

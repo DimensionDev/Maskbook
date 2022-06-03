@@ -115,7 +115,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         return proofs ? uniqBy(proofs, (v) => v.identity) : EMPTY_LIST
     }, [bindings?.proofs])
 
-    if (personaActionButton) {
+    if (personaActionButton && isOwn) {
         return (
             <Stack justifyContent="center" direction="row" mt="24px">
                 {personaActionButton}

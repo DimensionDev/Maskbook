@@ -15,6 +15,7 @@ import { InMemoryStorages, PersistentStorages } from '../../shared'
 import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
 import { currentMaskWalletAccountSettings, currentMaskWalletChainIdSettings } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
+import type { WalletConnectQRCodeDialogEvent } from '@masknet/plugin-wallet'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
@@ -30,6 +31,25 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         openPopupWindow: Services.Helper.openPopupWindow,
         closePopupWindow: Services.Helper.removePopupWindow,
+
+        openWalletConnectDialog: (uri: string, callback) => {
+            const onClose = (ev: WalletConnectQRCodeDialogEvent) => {
+                if (ev.open) return
+                callback()
+                WalletMessages.events.walletConnectQRCodeDialogUpdated.off(onClose)
+            }
+
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.on(onClose)
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+                open: true,
+                uri,
+            })
+        },
+        closeWalletConnectDialog: () => {
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+                open: false,
+            })
+        },
 
         account: createSubscriptionFromValueRef(currentMaskWalletAccountSettings),
         chainId: createSubscriptionFromValueRef(currentMaskWalletChainIdSettings),

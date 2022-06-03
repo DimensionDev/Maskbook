@@ -49,3 +49,7 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
             )
     }
 }
+
+export function getMaskTokenAddress(chainId: ChainId) {
+    return getTokenConstants(chainId).MASK_ADDRESS
+}
