@@ -99,7 +99,7 @@ export async function runCreateERC20PairFarm(
                 throw error
             })
     } catch (error: any) {
-        onError()
+        onError(error?.message)
     }
 }
 
