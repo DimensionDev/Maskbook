@@ -11,7 +11,7 @@ const Entitlement = 'Entitlement'
 const eventsEntitlement = new Interface([
     `event ${Entitlement}(bytes32 indexed farmHash, address indexed entitlee, uint128 confirmation, uint128 rewardValue, bytes32[] proof)`,
 ])
-const eventIdsEntitlement: any = {}
+const eventIdsEntitlement: { [eventName: string]: string } = {}
 Object.entries(eventsEntitlement.events).forEach(([k, v]) => (eventIdsEntitlement[v.name] = keccak256(k)))
 
 function parseEntitlementEvents(items: any[]): any[] {
