@@ -145,7 +145,7 @@ export function BuyToFarm(props: PageInterface) {
 
         try {
             onConfirmReferFarm()
-            await singAndPostProofOfRecommendationWithReferrer(web3 as Web3, account, token.address, MASK_REFERRER)
+            await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
             props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             swapToken()
         } catch (error: any) {
