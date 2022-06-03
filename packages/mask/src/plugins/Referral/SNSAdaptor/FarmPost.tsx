@@ -95,7 +95,7 @@ export function FarmPost(props: FarmPostProps) {
 
     const onClickReferToFarm = useCallback(async () => {
         try {
-            await singAndPostProofOfRecommendationOrigin(web3 as Web3, account, payload.referral_token)
+            await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
 
             const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? ''
 
