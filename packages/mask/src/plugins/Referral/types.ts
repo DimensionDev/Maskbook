@@ -64,7 +64,7 @@ export interface DepositDialogInterface {
 }
 
 export enum TransactionStatus {
-    CONFIRMATION = 'Confirmation',
+    CONFIRMATION = 'CONFIRMATION',
     CONFIRMED = 'CONFIRMED',
     FAILED = 'FAILED',
 }
