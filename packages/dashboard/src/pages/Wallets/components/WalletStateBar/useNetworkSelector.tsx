@@ -31,11 +31,11 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const { classes } = useStyles()
 
     const currentChainId = useChainId()
-    const providerDescriptor = useProviderDescriptor() as Web3Helper.ProviderDescriptorAll
-    const networkDescriptors = useNetworkDescriptors() as Web3Helper.NetworkDescriptorAll[]
-    const Web3UI = useWeb3UI() as Web3Helper.Web3UIAll
+    const providerDescriptor = useProviderDescriptor<'all'>()
+    const networkDescriptors = useNetworkDescriptors<'all'>()
+    const Web3UI = useWeb3UI<'all'>()
     const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
-    const { Connection } = useWeb3State(pluginID) as Web3Helper.Web3StateAll
+    const { Connection } = useWeb3State<'all'>(pluginID)
 
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {

@@ -1,11 +1,12 @@
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
-import { ChainId, createPayload, chainResolver } from '@masknet/web3-shared-evm'
+import { ChainId, createPayload, chainResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import { SharedContextSettings, Web3StateSettings } from '../../../settings'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType, PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
+import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     constructor() {
@@ -42,16 +43,22 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
             this.emitter.emit('chainId', toHex(sharedContext.chainId.getCurrentValue()))
         })
         sharedContext.account.subscribe(() => {
-            this.emitter.emit('accounts', [sharedContext.account.getCurrentValue()])
+            const account = sharedContext.account.getCurrentValue()
+            if (account) this.emitter.emit('accounts', [account])
+            else this.emitter.emit('disconnect', ProviderType.MaskWallet)
         })
     }
 
-    override async request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    override async request<T extends unknown>(
+        requestArguments: RequestArguments,
+        options?: ProviderOptions<ChainId>,
+    ): Promise<T> {
         const response = await SharedContextSettings.value.send(
             createPayload(0, requestArguments.method, requestArguments.params),
             {
-                popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
                 chainId: SharedContextSettings.value.chainId.getCurrentValue(),
+                popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),
+                ...options,
             },
         )
         return response?.result as T

@@ -1,5 +1,12 @@
 import { Connection } from '@metaplex/js'
-import { HubOptions, NonFungibleAsset, NonFungibleToken, Pageable, TokenType } from '@masknet/web3-shared-base'
+import {
+    createPageable,
+    HubOptions,
+    NonFungibleAsset,
+    NonFungibleToken,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
@@ -90,9 +97,5 @@ export async function getNonFungibleAssets(
 ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
     const tokens = await getNftList(options?.chainId ?? ChainId.Mainnet, address)
 
-    return {
-        currentPage: 0,
-        hasNextPage: false,
-        data: tokens,
-    }
+    return createPageable(tokens, 0)
 }

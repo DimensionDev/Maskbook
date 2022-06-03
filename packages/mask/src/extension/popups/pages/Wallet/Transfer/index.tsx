@@ -31,7 +31,7 @@ const Transfer = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
 

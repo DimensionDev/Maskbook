@@ -127,6 +127,7 @@ export function useTradeCallback(
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     if (!(error as any)?.code) {
+                        reject(error)
                         return
                     }
                     const error_ = new Error(

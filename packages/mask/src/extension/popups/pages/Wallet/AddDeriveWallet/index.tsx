@@ -79,7 +79,7 @@ const AddDeriveWallet = memo(() => {
     const location = useLocation()
     const state = location.state as any as { mnemonic?: string } | undefined
     const { classes } = useStyles()
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const walletName = new URLSearchParams(location.search).get('name')
     const { mnemonic } = state || {}
 

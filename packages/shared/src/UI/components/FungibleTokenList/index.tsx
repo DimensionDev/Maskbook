@@ -5,6 +5,7 @@ import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import {
     useAccount,
+    useBlockedFungibleTokens,
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
@@ -66,9 +67,10 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
-    const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Token, Others } = useWeb3State<'all'>()
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()
+    const blockedFungibleTokens = useBlockedFungibleTokens()
 
     const nativeToken = Others?.chainResolver.nativeCurrency(chainId)
     const allFungibleTokens = uniqBy(
@@ -89,41 +91,47 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const { value: fungibleAssets = [], loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
     const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
+    const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
+    const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
-    const sortedFungibleTokens = filteredFungibleTokens.sort((a, b) => {
-        // tokens belong to the current chain
-        if (a.chainId !== b.chainId) {
-            if (a.chainId === chainId) return -1
-            if (b.chainId === chainId) return 1
-        }
+    const sortedFungibleTokens = filteredFungibleTokens
+        .filter((x) => !isBlockedToken(x))
+        .sort((a, z) => {
+            const aUSD = Number.parseFloat(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
+            const zUSD = Number.parseFloat(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
 
-        // native token
-        if (isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))) return -1
-        if (isSameAddress(b.address, Others?.getNativeTokenAddress(b.chainId))) return 1
+            const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+            const zBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
-        // usd value
-        const aValueInUSD = Number.parseFloat(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
-        const bValueInUSD = Number.parseFloat(fungibleAssetsTable[b.address]?.value?.[CurrencyType.USD] ?? '0')
-        if (aValueInUSD > bValueInUSD) return -1
-        if (aValueInUSD < bValueInUSD) return 1
+            // the currently selected chain id
+            if (a.chainId !== z.chainId) {
+                if (a.chainId === chainId) return -1
+                if (z.chainId === chainId) return 1
+            }
 
-        // balance
-        const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-        const bBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[b.address] ?? '0', b.decimals))
+            // native token
+            if (isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))) return -1
+            if (isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))) return 1
 
-        if (aBalance > bBalance) return -1
-        if (aBalance < bBalance) return 1
+            // mask token with position value
+            if (aUSD && isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
+            if (zUSD && isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))) return 1
 
-        // mask token
-        if (isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
-        if (isSameAddress(b.address, Others?.getMaskTokenAddress(b.chainId))) return 1
+            // token value
+            if (aUSD !== zUSD) zUSD - aUSD
 
-        // alphabet
-        if ((a.name ?? '') < (b.name ?? '')) return -1
-        if ((a.name ?? '') > (b.name ?? '')) return 1
+            // trusted token
+            if (isTrustedToken(a.address)) return -1
+            if (isTrustedToken(z.address)) return 1
 
-        return 0
-    })
+            // token balance
+            if (aBalance !== zBalance) return zBalance - aBalance
+
+            // alphabet
+            if (a.name !== z.name) return a.name < z.name ? -1 : 1
+
+            return 0
+        })
 
     // #region add token by address
     const [keyword, setKeyword] = useState('')
