@@ -41,6 +41,6 @@ export async function getReferralFarmsV1Address(): Promise<string> {
     } catch (error: unknown) {
         if (error instanceof Error) throw error
         else if (typeof error === 'string') throw new Error(error)
-        // ...
+        else throw new Error('Failed to fetch Referral farms address.')
     }
 }
