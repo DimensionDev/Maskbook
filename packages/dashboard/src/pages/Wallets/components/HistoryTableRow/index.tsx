@@ -78,7 +78,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes } = useStyles()
-        const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+        const { Others } = useWeb3State<'all'>()
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
