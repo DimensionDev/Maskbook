@@ -52,70 +52,6 @@ export function writeUInt32BE(buf: Uint8Array, value: number, offset?: number) {
     return buf
 }
 
-// Create lookup table for `toString('hex')`
-const hexSliceLookupTable = (function () {
-    const alphabet = '0123456789abcdef'
-    const table = Array.from({ length: 256 })
-    for (let i = 0; i < 16; i += 1) {
-        const i16 = i * 16
-        for (let j = 0; j < 16; j += 1) {
-            table[i16 + j] = alphabet[i] + alphabet[j]
-        }
-    }
-    return table
-})()
-
-function hexSlice(buf: Uint8Array, start?: number, end?: number) {
-    const len = buf.length
-
-    if (!start || start < 0) start = 0
-    if (!end || end < 0 || end > len) end = len
-
-    let out = ''
-    for (let i = start; i < end; i += 1) {
-        out += hexSliceLookupTable[buf[i]]
-    }
-    return out
-}
-
-export function bufToHexString(buffer: Uint8Array, start?: number, end?: number) {
-    // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
-    // property of a typed array.
-
-    // This behaves neither like String nor Uint8Array in that we set start/end
-    // to their upper/lower bounds if the value passed is out of range.
-    // undefined is handled specially as per ECMA-262 6th Edition,
-    // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
-    if (start === undefined || start < 0) {
-        start = 0
-    }
-    // Return early if start > this.length. Done here to prevent potential uint32
-    // coercion fail below.
-    if (start > buffer.length) {
-        return ''
-    }
-
-    if (end === undefined || end > buffer.length) {
-        end = buffer.length
-    }
-
-    if (end <= 0) {
-        return ''
-    }
-
-    // Force coercion to uint32. This will also coerce false/NaN values to 0.
-    // eslint-disable-next-line no-bitwise
-    end >>>= 0
-    // eslint-disable-next-line no-bitwise
-    start >>>= 0
-
-    if (end <= start) {
-        return ''
-    }
-
-    return hexSlice(buffer, start, end)
-}
-
 function buf(b: Bytes | Uint8Array | HexTypes | number | BigIntTypes | BigNumber): Uint8Array {
     if (b === null || b instanceof Uint8Array) return b
 
@@ -146,7 +82,7 @@ export function toBigInt(b: BigIntTypes | Uint8Array | HexTypes | number | BigNu
     if (typeof b === 'number') return BigInt(b)
     if (b instanceof Uint8Array) return toBigInt(buf(b))
     if (typeof b === 'string' && b.startsWith('0x')) return BigInt(b)
-    if (b instanceof BigNumber || (b as any)?._isBigNumber === true) return BigInt(b as any)
+    if (b instanceof BigNumber || (b as any)?._isBigNumber === true) return BigInt(b.toString())
 
     throw new Error('unsupported')
 }

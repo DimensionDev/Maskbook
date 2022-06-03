@@ -1,5 +1,6 @@
 import { padStart } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
+import { bytesToHex } from 'web3-utils'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { formatUnits } from '@ethersproject/units'
 import { isValidAddress } from '@masknet/web3-shared-evm'
@@ -16,10 +17,10 @@ import type {
     BigNumberish,
 } from '../types'
 import schema from '../schema.json'
-import { bufToHexString, toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
+import { toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
 
 function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8Array {
-    if (isValidAddress(address.toString())) throw new Error('invalid address')
+    if (isValidAddress(`0x${bytesToHex([...address])}`)) throw new Error('invalid address')
     const b = new Uint8Array(24)
 
     // Only numeric network id's are supported in the chain address, with max of uint32.
@@ -32,7 +33,7 @@ function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8
 }
 
 export function toChainAddressEthers(chainId: number, address: string): string {
-    return '0x' + bufToHexString(toChainAddress(new BigNumber(chainId), hexToArrayBuffer(address.slice(2))))
+    return bytesToHex([...toChainAddress(new BigNumber(chainId), hexToArrayBuffer(address.slice(2)))])
 }
 
 export function parseChainAddress(chainAddress: ChainAddress): ChainAddressProps {
