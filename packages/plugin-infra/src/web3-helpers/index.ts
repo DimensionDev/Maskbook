@@ -121,7 +121,7 @@ export declare namespace Web3Helper {
           >
     export type Web3HubOptions<
         T extends NetworkPluginID = never,
-        Indicator extends string | number = number,
+        Indicator extends string | Record<string, string | undefined> | number = number,
     > = T extends never ? never : HubOptions<Definition[T]['ChainId'], Indicator>
 
     export type Web3Hub<T extends NetworkPluginID = never> = T extends never

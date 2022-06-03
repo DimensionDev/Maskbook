@@ -1,4 +1,14 @@
-import { CoinGecko, DeBank, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import {
+    AlchemyNetworkMap,
+    AlchemyNft,
+    CoinGecko,
+    DeBank,
+    MetaSwap,
+    NFTScan,
+    OpenSea,
+    TokenList,
+    Zerion,
+} from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -178,6 +188,32 @@ class Hub implements EVM_Hub {
             yield* pageable.data
 
             if (pageable.data.length === 0) return
+        }
+    }
+    // Alchemy api has different page format
+    getNonFungibleAssetsFromAlchemy(
+        account: string,
+        options?: HubOptions<ChainId, Record<string, string | undefined>> | undefined,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, Record<string, string | undefined>>> {
+        return AlchemyNft.getAssets(account, options)
+    }
+
+    async *getAllNonFungibleAssetsFromAlchemy(
+        address: string,
+    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        let api_keys: Record<string, string | undefined> = {}
+        Object.keys(AlchemyNetworkMap).forEach((network) => {
+            api_keys[network] = ''
+        })
+        while (1) {
+            const pageable = await this.getNonFungibleAssetsFromAlchemy(address, {
+                indicator: api_keys,
+            })
+            api_keys = (pageable.nextIndicator as Record<string, string | undefined>) ?? {}
+
+            yield* pageable.data
+
+            if (pageable.data.length === 0 || Object.values(api_keys)?.every((value) => value === undefined)) return
         }
     }
 

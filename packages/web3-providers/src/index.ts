@@ -15,10 +15,12 @@ import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
+import { AlchemyNFTAPI } from './alchemy'
 
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
+export { AlchemyNetworkMap } from './alchemy/contants'
 
 export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()
@@ -38,3 +40,4 @@ export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const NextIDProof = new NextIDProofAPI()
+export const AlchemyNft = new AlchemyNFTAPI()

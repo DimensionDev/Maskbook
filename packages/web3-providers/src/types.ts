@@ -19,7 +19,7 @@ import type {
     GasOptionType,
     HubOptions,
 } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -461,4 +461,13 @@ export namespace MaskBaseAPI {
     export type StoredKeyInfo = api.IStoredKeyInfo
 
     export interface Provider {}
+}
+
+export namespace ALCHEMY_API {
+    export interface Provider {
+        getAssets: (
+            address: string,
+            options?: HubOptions<ChainId, Record<string, string | undefined>>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Record<string, string | undefined>>>
+    }
 }
