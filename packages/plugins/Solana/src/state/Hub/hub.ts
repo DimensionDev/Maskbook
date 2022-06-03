@@ -108,7 +108,7 @@ class Hub implements SolanaHub {
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 
@@ -121,7 +121,7 @@ class Hub implements SolanaHub {
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 

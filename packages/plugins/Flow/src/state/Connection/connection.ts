@@ -21,10 +21,16 @@ class Connection implements BaseConnection {
         return Providers[options?.providerType ?? this.providerType]
     }
     getWeb3(options?: FlowConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
+        return this._getWeb3Provider(options).createWeb3({
+            account: options?.account ?? this.account,
+            chainId: options?.chainId ?? this.chainId,
+        })
     }
     getWeb3Provider(options?: FlowConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3Provider(options?.chainId ?? this.chainId)
+        return this._getWeb3Provider(options).createWeb3Provider({
+            account: options?.account ?? this.account,
+            chainId: options?.chainId ?? this.chainId,
+        })
     }
     async connect(options?: FlowConnectionOptions): Promise<Account<ChainId>> {
         return {

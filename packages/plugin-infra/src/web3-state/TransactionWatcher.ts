@@ -65,7 +65,7 @@ class Watcher<ChainId, Transaction> {
         protected checkers: Array<TransactionChecker<ChainId>>,
         protected options: {
             delay: number
-            onNotify: (id: string, status: TransactionStatusType) => void
+            onNotify: (id: string, status: TransactionStatusType, transaction: Transaction) => void
         },
     ) {}
 
@@ -82,10 +82,10 @@ class Watcher<ChainId, Transaction> {
             .filter(([, x]) => x.status !== TransactionStatusType.NOT_DEPEND)
         if (!watchedTransactions.length) return
 
-        for (const [id] of watchedTransactions) {
+        for (const [id, { transaction }] of watchedTransactions) {
             for (const checker of this.checkers) {
                 const status = await checker.checkStatus(chainId, id)
-                if (status !== TransactionStatusType.NOT_DEPEND) this.options.onNotify(id, status)
+                if (status !== TransactionStatusType.NOT_DEPEND) this.options.onNotify(id, status, transaction)
             }
         }
 
@@ -128,7 +128,7 @@ export class TransactionWatcherState<ChainId, Transaction>
 {
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
-    emitter: Emitter<WatchEvents> = new Emitter()
+    emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -153,13 +153,14 @@ export class TransactionWatcherState<ChainId, Transaction>
 
     watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
         this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
+        this.emitter.emit('progress', id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
     unwatchTransaction(chainId: ChainId, id: string) {
         this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
-    notifyTransaction(id: string, status: TransactionStatusType) {
-        this.emitter.emit('progress', id, status)
+    notifyTransaction(id: string, status: TransactionStatusType, transaction: Transaction) {
+        this.emitter.emit('progress', id, status, transaction)
     }
 }

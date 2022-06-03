@@ -194,6 +194,7 @@ export enum TransactionType {
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_LUCKY_DROP = 'create_lucky_drop',
+    CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
     REFUND = 'refund',
@@ -322,8 +323,14 @@ export type TransactionState =
 
 export type Web3 = EVM_Web3
 export type Web3Provider = {
-    send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
-    sendAsync(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+    send(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
+    sendAsync(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
 
     on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): Web3Provider
