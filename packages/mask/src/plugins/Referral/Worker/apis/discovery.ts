@@ -38,7 +38,9 @@ export async function getReferralFarmsV1Address(): Promise<string> {
         const res = await getFarmOraclesDiscovery()
 
         return res.discovery.referralFarmsV1.find((e) => e.chainId === supportedChainId)?.address ?? ''
-    } catch (error) {
-        throw new Error(error as any)
+    } catch (error: unknown) {
+        if (error instanceof Error) throw error
+        else if (typeof error === 'string') throw new Error(error)
+        // ...
     }
 }
