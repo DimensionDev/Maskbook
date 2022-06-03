@@ -31,49 +31,45 @@ export function MyRewards(props: PageInterface) {
         [account, currentChainId],
     )
 
-    if (currentChainId !== requiredChainId || !account) {
-        return (
-            <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <WalletConnectedBoundary />
-            </ChainBoundary>
-        )
-    }
-
     return (
-        <div className={myFarmsClasses.container}>
-            <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                <Grid item xs={8}>
-                    <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t.reward_tokens()}
-                    </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                    <Typography fontWeight={500} className={myFarmsClasses.col}>
-                        {t.rewards_earned()}
-                    </Typography>
-                </Grid>
-            </Grid>
-            <div className={myFarmsClasses.content}>
-                {loading ? (
-                    <CircularProgress size={50} />
-                ) : (
-                    <>
-                        {!accountRewards || !Object.keys(accountRewards).length || error ? (
-                            <Typography className={sharedClasses.msg}>
-                                {error ? t.oracle_error_your_rewards() : t.you_have_not_joined_farm()}
+        <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <WalletConnectedBoundary>
+                <div className={myFarmsClasses.container}>
+                    <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
+                        <Grid item xs={8}>
+                            <Typography fontWeight={500} className={myFarmsClasses.col}>
+                                {t.reward_tokens()}
                             </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography fontWeight={500} className={myFarmsClasses.col}>
+                                {t.rewards_earned()}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    <div className={myFarmsClasses.content}>
+                        {loading ? (
+                            <CircularProgress size={50} />
                         ) : (
-                            <Rewards
-                                currentChainId={currentChainId}
-                                account={account}
-                                rewards={accountRewards}
-                                pageType={props.pageType}
-                                onChangePage={props.onChangePage}
-                            />
+                            <>
+                                {!accountRewards || !Object.keys(accountRewards).length || error ? (
+                                    <Typography className={sharedClasses.msg}>
+                                        {error ? t.oracle_error_your_rewards() : t.you_have_not_joined_farm()}
+                                    </Typography>
+                                ) : (
+                                    <Rewards
+                                        currentChainId={currentChainId}
+                                        account={account}
+                                        rewards={accountRewards}
+                                        pageType={props.pageType}
+                                        onChangePage={props.onChangePage}
+                                    />
+                                )}
+                            </>
                         )}
-                    </>
-                )}
-            </div>
-        </div>
+                    </div>
+                </div>
+            </WalletConnectedBoundary>
+        </ChainBoundary>
     )
 }

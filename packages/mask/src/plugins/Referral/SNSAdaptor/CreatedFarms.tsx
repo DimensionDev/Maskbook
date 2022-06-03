@@ -85,7 +85,6 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
 
 export function CreatedFarms(props: PageInterface) {
     const t = useI18N()
-    const { classes: sharedClasses } = useSharedStyles()
     const { classes: myFarmsClasses } = useMyFarmsStyles()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const requiredChainId = getRequiredChainId(currentChainId)
@@ -111,32 +110,28 @@ export function CreatedFarms(props: PageInterface) {
         })
     }
 
-    if (currentChainId !== requiredChainId) {
-        return (
-            <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <WalletConnectedBoundary offChain />
-            </ChainBoundary>
-        )
-    }
-
     return (
-        <div className={myFarmsClasses.container}>
-            <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
-                <Grid item xs={8} className={myFarmsClasses.col}>
-                    {t.referral_farm()}
-                </Grid>
-                <Grid item xs={4} className={myFarmsClasses.col}>
-                    {t.total_rewards()}
-                </Grid>
-            </Grid>
-            <div className={myFarmsClasses.content}>
-                <FarmList
-                    loading={loading}
-                    error={error}
-                    farms={farms}
-                    onAdjustRewardButtonClick={onAdjustRewardButtonClick}
-                />
-            </div>
-        </div>
+        <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <WalletConnectedBoundary offChain>
+                <div className={myFarmsClasses.container}>
+                    <Grid container justifyContent="space-between" rowSpacing="20px" className={myFarmsClasses.heading}>
+                        <Grid item xs={8} className={myFarmsClasses.col}>
+                            {t.referral_farm()}
+                        </Grid>
+                        <Grid item xs={4} className={myFarmsClasses.col}>
+                            {t.total_rewards()}
+                        </Grid>
+                    </Grid>
+                    <div className={myFarmsClasses.content}>
+                        <FarmList
+                            loading={loading}
+                            error={error}
+                            farms={farms}
+                            onAdjustRewardButtonClick={onAdjustRewardButtonClick}
+                        />
+                    </div>
+                </div>
+            </WalletConnectedBoundary>
+        </ChainBoundary>
     )
 }
