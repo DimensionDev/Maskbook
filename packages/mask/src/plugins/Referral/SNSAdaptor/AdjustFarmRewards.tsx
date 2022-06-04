@@ -15,11 +15,8 @@ import { roundValue, getRequiredChainId } from '../helpers'
 import { ATTRACE_FEE_PERCENT } from '../constants'
 import { adjustFarmRewards } from './utils/referralFarm'
 import { ReferralRPC } from '../messages'
-
 import { FarmTokenDetailed } from './shared-ui/FarmTokenDetailed'
-
 import { useSharedStyles } from './styles'
-import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     valueCol: {

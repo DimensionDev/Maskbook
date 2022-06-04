@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { Web3 } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -27,7 +26,6 @@ import { MyRewards } from './MyRewards'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 import { RewardDataWidget } from './shared-ui/RewardDataWidget'
 import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
-
 import { useTabStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
