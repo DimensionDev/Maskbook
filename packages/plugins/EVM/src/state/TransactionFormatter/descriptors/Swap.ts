@@ -13,6 +13,7 @@ export class SwapDescriptor implements TransactionDescriptor {
 
         const nativeToken = await connection?.getNativeToken({ chainId: context.chainId })
 
+        console.log(context)
         switch (context.name) {
             case 'swapExactETHForTokens':
                 const outputToken = await connection?.getFungibleToken(last(context.parameters!.path) ?? '')
@@ -26,7 +27,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     }`,
                 }
             case 'swapExactTokensForETH':
-                const inToken = await connection?.getFungibleToken(last(context.parameters!.path) ?? '')
+                const inToken = await connection?.getFungibleToken(first(context.parameters!.path) ?? '')
                 const inAmount = formatBalance(context.parameters!.amountIn, inToken?.decimals, 2)
                 const outAmount = formatBalance(context.parameters!.amountOutMin, nativeToken?.decimals, 2)
 
@@ -48,6 +49,12 @@ export class SwapDescriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'SwapToken',
                     description: `Swap ${amountIn} ${tokenIn?.symbol ?? ''} for ${amountOut} ${tokenOut?.symbol ?? ''}`,
+                }
+            case 'multicall':
+                return {
+                    chainId: context.chainId,
+                    title: 'SwapToken',
+                    description: 'Swap with UniSwap V3',
                 }
             default:
                 return
