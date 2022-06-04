@@ -909,6 +909,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Referral = 'com.maskbook.referral',
     // @masknet/scripts: insert-here
 }
 /**
