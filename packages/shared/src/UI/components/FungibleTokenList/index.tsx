@@ -25,7 +25,7 @@ import {
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -64,7 +64,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedI18N()
-    const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
+    const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
     const { Token, Others } = useWeb3State<'all'>()
@@ -86,13 +86,15 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const { value: fungibleTokensBalance = {}, loading: loadingFungibleTokensBalance } = useFungibleTokensBalance(
-        pluginID,
-        filteredFungibleTokens.map((x) => x.address),
-        { account, chainId },
-    )
+    const { value: fungibleTokensBalance = EMPTY_OBJECT, loading: loadingFungibleTokensBalance } =
+        useFungibleTokensBalance<T>(
+            pluginID,
+            filteredFungibleTokens.map((x) => x.address),
+            // @ts-ignore
+            { account, chainId },
+        )
 
-    const { value: fungibleAssets = [], loading: loadingFungibleAssets } = useFungibleAssets(pluginID)
+    const { value: fungibleAssets = EMPTY_LIST, loading: loadingFungibleAssets } = useFungibleAssets(pluginID)
     const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
     const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
     const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
@@ -156,15 +158,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         return null
     }
 
-    console.log('loading', { loadingFungibleTokensBalance, loadingFungibleAssets })
     return (
         <SearchableList<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
             onSelect={(token) => onSelect?.(token)}
             onSearch={setKeyword}
             data={
-                searchedToken &&
-                isSameAddress(searchedToken.address, searchedTokenAddress) &&
-                !sortedFungibleTokens.find((x) => isSameAddress(x.address, searchedTokenAddress))
+                searchedToken && sortedFungibleTokens.some((x) => isSameAddress(x.address, searchedTokenAddress))
                     ? [searchedToken]
                     : sortedFungibleTokens
             }

@@ -1,12 +1,13 @@
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 import { FungibleToken, isSameAddress, rightShift } from '@masknet/web3-shared-base'
-import { ChainId, GasConfig, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { GasConfig, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
 export function useTokenTip(
     recipient: string,
-    token: FungibleToken<ChainId, SchemaType> | null,
+    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null,
     amount: string,
     gasConfig?: GasConfig,
 ): TipTuple {
@@ -15,6 +16,13 @@ export function useTokenTip(
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
     const assetType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
+    const { Connection } = useWeb3State()
+    const transfer = useCallback(async () => {
+        const connection = await Connection?.getConnection?.()
+        if (!token?.address || !connection) return
+        connection.transferFungibleToken(token?.address, recipient, amount)
+    }, [])
+
     const [{ loading: isTransferring }, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {

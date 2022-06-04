@@ -2,7 +2,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
@@ -41,7 +41,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
 
 export interface PickTokenOptions {
     disableNativeToken?: boolean
-    pluginId: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
     disableSearchBar?: boolean
     keyword?: string

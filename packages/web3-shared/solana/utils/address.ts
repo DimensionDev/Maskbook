@@ -18,7 +18,11 @@ export function formatAddress(address: string, size = 0) {
     return `${address.slice(0, Math.max(0, size))}...${address.slice(-size)}`
 }
 export function isValidAddress(address?: string) {
-    return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
+    try {
+        return address?.length === 44 && Web3.PublicKey.isOnCurve(bs58.decode(address))
+    } catch {
+        return false
+    }
 }
 
 export function isValidChainId(chainId: number) {

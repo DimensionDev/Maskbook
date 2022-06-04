@@ -59,8 +59,8 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     const {
         nonFungibleTokenAddress: tokenAddress,
         nonFungibleTokenId: tokenId,
-        setErc721TokenId,
-        setNonFungibleTokenAddress: setErc721Address,
+        setNonFungibleTokenId,
+        setNonFungibleTokenAddress,
     } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
@@ -104,8 +104,8 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                                 selectedPairs={selectedPairs}
                                 tokens={tokens}
                                 onChange={(id, address) => {
-                                    setErc721TokenId(id)
-                                    setErc721Address(address)
+                                    setNonFungibleTokenId(id)
+                                    setNonFungibleTokenAddress(address)
                                 }}
                             />
                         )

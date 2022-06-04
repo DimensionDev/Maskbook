@@ -1191,6 +1191,7 @@ importers:
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-flow': workspace:*
       '@masknet/web3-shared-solana': workspace:*
       '@types/qrcode': ^1.4.2
       anchorme: ^2.1.2
@@ -1212,6 +1213,7 @@ importers:
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-flow': link:../web3-shared/flow
       '@masknet/web3-shared-solana': link:../web3-shared/solana
       '@types/qrcode': 1.4.2
       anchorme: 2.1.2

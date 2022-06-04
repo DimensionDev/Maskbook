@@ -20,6 +20,26 @@ export interface AccountInfo {
     lamports: number
 }
 
+export interface SplToken {
+    symbol: string
+    name: string
+    mint: string
+    decimals: 3
+    icon: string
+}
+
+export interface RaydiumTokenList {
+    name: string
+    timestamp: string
+    version: {
+        major: number
+        minor: number
+        patch: number
+    }
+    official: SplToken[]
+    unOfficial: SplToken[]
+}
+
 export type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
 export interface ProgramAccount {
     account: {

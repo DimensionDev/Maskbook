@@ -1,9 +1,23 @@
-import { FungibleAsset, CurrencyType, Pageable, HubOptions, createPageable } from '@masknet/web3-shared-base'
-import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
+import { memoizePromise } from '@dimensiondev/kit'
 import { CoinGecko } from '@masknet/web3-providers'
-import { TokenListProvider } from '@solana/spl-token-registry'
+import {
+    createPageable,
+    CurrencyType,
+    FungibleAsset,
+    FungibleToken,
+    HubOptions,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
+import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
-import { GetAccountInfoResponse, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
+import {
+    GetAccountInfoResponse,
+    GetProgramAccountsResponse,
+    RaydiumTokenList,
+    requestRPC,
+    SPL_TOKEN_PROGRAM_ID,
+} from './shared'
 
 async function getSolanaBalance(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
@@ -29,11 +43,30 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
     )
 }
 
-export async function getAllSplTokens(chainId: ChainId) {
-    const tokenListProvider = new TokenListProvider()
-    const provider = await tokenListProvider.resolve()
-    const tokenList = provider.filterByChainId(chainId).getList()
-    return tokenList
+const fetchTokenList = memoizePromise(
+    async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
+        const response = await fetch(url, { cache: 'force-cache' })
+        const tokenList = (await response.json()) as RaydiumTokenList
+        const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
+            (token) => ({
+                id: token.mint,
+                chainId: ChainId.Mainnet,
+                type: TokenType.Fungible,
+                schema: SchemaType.Fungible,
+                address: token.mint,
+                name: token.name,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                logoURL: token.icon,
+            }),
+        )
+        return tokens
+    },
+    (url) => url,
+)
+const RAYDIUM_TOKEN_LIST = 'https://api.raydium.io/v2/sdk/token/raydium.mainnet.json'
+export async function getAllSplTokens() {
+    return fetchTokenList(RAYDIUM_TOKEN_LIST)
 }
 
 export async function getSplTokenList(chainId: ChainId, account: string) {
@@ -58,7 +91,7 @@ export async function getSplTokenList(chainId: ChainId, account: string) {
         ],
     })
     if (!data.result?.length) return []
-    const tokenList = await getAllSplTokens(chainId)
+    const tokenList = await getAllSplTokens()
     const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
     data.result.forEach((x) => {
         const info = x.account.data.parsed.info
@@ -68,7 +101,7 @@ export async function getSplTokenList(chainId: ChainId, account: string) {
         const name = token.name || 'Unknown Token'
         const symbol = token.symbol || 'Unknown Token'
         const splToken = createFungibleAsset(
-            createFungibleToken(chainId, info.mint, name, symbol, info.tokenAmount.decimals, token.logoURI),
+            createFungibleToken(chainId, info.mint, name, symbol, info.tokenAmount.decimals, token.logoURL),
             info.tokenAmount.amount,
         )
         splTokens.push(splToken)

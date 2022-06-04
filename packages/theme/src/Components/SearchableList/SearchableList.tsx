@@ -22,7 +22,7 @@ export interface MaskSearchableListProps<T> {
     /** The props to react-window */
     FixedSizeListProps?: Partial<FixedSizeListProps>
     /** The callback when clicked someone list item */
-    onSelect(selected: T): void
+    onSelect?(selected: T): void
     /** The hook when search */
     onSearch?(key: string): void
     /** Props for search box */
@@ -80,8 +80,8 @@ export function SearchableList<T extends {}>({
 
     // #region create searched data
     const readyToRenderData = useMemo(() => {
-        if (!keyword || onSearch) return data
-        const filtered = [...fuse.search(keyword).map((x: any) => x.item)]
+        if (!keyword || !onSearch) return data
+        const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])
     // #endregion

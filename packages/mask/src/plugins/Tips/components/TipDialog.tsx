@@ -167,7 +167,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         nonFungibleTokenContract,
         nonFungibleTokenId: erc721TokenId,
         setNonFungibleTokenAddress,
-        setErc721TokenId,
+        setNonFungibleTokenId,
         reset,
     } = useTip()
 
@@ -251,7 +251,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const handleAddToken = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
         setNonFungibleTokenAddress(token.address ?? '')
-        setErc721TokenId(token.tokenId)
+        setNonFungibleTokenId(token.tokenId)
         openAddTokenDialog(false)
     }, [])
 

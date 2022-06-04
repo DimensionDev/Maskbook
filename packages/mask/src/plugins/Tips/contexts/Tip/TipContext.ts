@@ -17,7 +17,7 @@ export interface ContextOptions {
     amount: string
     setAmount: Dispatch<SetStateAction<string>>
     nonFungibleTokenId: string | null
-    setErc721TokenId: Dispatch<SetStateAction<string | null>>
+    setNonFungibleTokenId: Dispatch<SetStateAction<string | null>>
     nonFungibleTokenContract: NonFungibleTokenContract<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     nonFungibleTokenAddress: string
     setNonFungibleTokenAddress: Dispatch<SetStateAction<string>>
@@ -40,7 +40,7 @@ export const TipContext = createContext<ContextOptions>({
     amount: '',
     setAmount: noop,
     nonFungibleTokenId: null,
-    setErc721TokenId: noop,
+    setNonFungibleTokenId: noop,
     nonFungibleTokenContract: null,
     nonFungibleTokenAddress: '',
     setNonFungibleTokenAddress: noop,

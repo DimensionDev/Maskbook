@@ -53,7 +53,6 @@ export const TokenSection: FC = () => {
     const pickToken = usePickToken()
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await pickToken({
-            pluginId,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],

@@ -1,17 +1,16 @@
 import { MagicEden } from '@masknet/web3-providers'
-import {
-    FungibleToken,
-    NonFungibleToken,
-    SourceType,
+import type {
+    CurrencyType,
     FungibleAsset,
+    FungibleToken,
+    GasOptionType,
     HubOptions,
     NonFungibleAsset,
-    Pageable,
-    GasOptionType,
-    CurrencyType,
-    Transaction,
+    NonFungibleToken,
     NonFungibleTokenCollection,
-    TokenType,
+    Pageable,
+    SourceType,
+    Transaction,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
@@ -31,19 +30,7 @@ class Hub implements SolanaHub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const splTokens = await SolanaRPC.getAllSplTokens(chainId)
-        const fungibleTokens = splTokens.map((token) => ({
-            id: token.address,
-            chainId,
-            type: TokenType.Fungible,
-            schema: SchemaType.Fungible,
-            address: token.address,
-            name: token.name,
-            symbol: token.symbol,
-            decimals: token.decimals,
-            logoURL: token.logoURI,
-        }))
-        return fungibleTokens
+        return SolanaRPC.getAllSplTokens()
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
