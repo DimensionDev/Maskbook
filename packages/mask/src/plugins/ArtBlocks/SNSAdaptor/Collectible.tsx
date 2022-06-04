@@ -62,10 +62,10 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, props?.chainId)
     const [tabIndex, setTabIndex] = useState(0)
 
-    const { value, loading, error } = useFetchProject(props.projectId)
+    const { value, loading, error } = useFetchProject(props.projectId, chainId)
     const project = value?.projects[0]
 
     if (loading) return <Typography align="center">{t('loading')}</Typography>
@@ -134,11 +134,8 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </Card>
             <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={props.chainId ?? chainId}
-                    renderInTimeline>
-                    <ActionBar project={project} />
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                    <ActionBar chainId={chainId} project={project} />
                 </ChainBoundary>
             </Box>
         </>
