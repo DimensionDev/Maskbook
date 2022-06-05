@@ -19,6 +19,7 @@ import type {
     GasOptionType,
     HubOptions,
 } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -100,17 +101,22 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(address: string, currency: CurrencyType): Promise<number>
+        getTokenPrice(
+            address: string,
+            currency: CurrencyType,
+            chainId?: ChainId,
+            nativeToken?: boolean,
+        ): Promise<number>
         getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
     }
 }
 
 export namespace HistoryAPI {
-    export interface Provider<ChainId, SchemaType> {
+    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
+        ): Promise<Pageable<Transaction<ChainId, SchemaType>, Indicator>>
     }
 }
 
@@ -121,13 +127,16 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
-        getAssets(address: string, options?: HubOptions<ChainId>): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+        getAssets(
+            address: string,
+            options?: HubOptions<ChainId>,
+        ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
     }
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
+    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
         getAsset?: (
             address: string,
             tokenId: string,
@@ -162,8 +171,8 @@ export namespace NonFungibleTokenAPI {
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
         getTokens?: (
             from: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
+            opts?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getContract?: (
             address: string,
             opts?: HubOptions<ChainId>,
@@ -172,7 +181,7 @@ export namespace NonFungibleTokenAPI {
         getCollections?: (
             address: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
     }
 }
 

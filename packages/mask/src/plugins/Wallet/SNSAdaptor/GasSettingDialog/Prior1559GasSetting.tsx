@@ -13,8 +13,8 @@ import { z as zod } from 'zod'
 import { useI18N } from '../../../../utils'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
-import { GasOptionType, NetworkPluginID , scale10 } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleToken, useGasOptions, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
+import { GasOptionType, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
+import { useChainId, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: scale10(5, 9), // 5 Gwei
@@ -29,11 +29,8 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const { t } = useI18N()
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
-        const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
 
-        const { value: nativeTokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, '', {
-            chainId: nativeToken?.chainId,
-        })
+        const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
 
         const { value: gasOptions, loading: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
 

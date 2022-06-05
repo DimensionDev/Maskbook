@@ -26,7 +26,7 @@
     {
         "chainId": 3,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Ropsten",
         "color": "rgb(255, 65, 130)",
         "network": "ropsten",
         "fullName": "Ethereum",
@@ -50,7 +50,7 @@
     {
         "chainId": 4,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Rinkeby",
         "color": "rgb(133, 89, 255)",
         "network": "rinkeby",
         "fullName": "Ethereum",
@@ -74,7 +74,7 @@
     {
         "chainId": 42,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Kovan",
         "color": "rgb(133, 89,255)",
         "network": "kovan",
         "fullName": "Ethereum",
@@ -98,7 +98,7 @@
     {
         "chainId": 5,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Goerli",
         "color": "rgb(48, 153, 242)",
         "network": "goerli",
         "fullName": "Ethereum",

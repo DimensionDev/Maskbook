@@ -13,7 +13,7 @@ import type {
     Wallet,
     Web3EnableRequirement,
 } from '@masknet/web3-shared-base'
-import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -141,13 +141,27 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
         /** Send request to native API */
-        send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+        send(
+            payload: JsonRpcPayload,
+            options?: {
+                account?: string
+                chainId?: ChainId
+                popupsWindow?: boolean
+            },
+        ): Promise<JsonRpcResponse>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
 
+        /** Open walletconnect dialog */
+        openWalletConnectDialog(uri: string, callback: () => void): void
+        /** Close walletconnect dialog */
+        closeWalletConnectDialog(): void
+
+        /** Select a Mask Wallet account */
+        selectAccount(): Promise<string[]>
         /** Update Mask Wallet account */
         updateAccount(account: {
             account?: string
@@ -157,8 +171,6 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
-        /** Prepare to select a Mask Wallet account */
-        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
@@ -170,17 +182,16 @@ export namespace Plugin.Shared {
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
 
+        /** Get all wallets */
+        getWallets(): Promise<Wallet[]>
+        /** Get the primary wallet */
+        getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
         /** Update a wallet */
-        updateWallet(id: string, wallet: Partial<Wallet>): Promise<void>
+        updateWallet(id: string, wallet?: Partial<Wallet>): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
-
-        /** get the latest unconfirmed request */
-        shiftUnconfirmedRequest(): Promise<JsonRpcPayload | undefined>
-        /** add an unconfirmed request */
-        pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
     export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
         /**
@@ -898,6 +909,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Referral = 'com.maskbook.referral',
     // @masknet/scripts: insert-here
 }
 /**

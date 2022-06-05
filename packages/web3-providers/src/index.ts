@@ -10,7 +10,6 @@ import { KeyValueAPI } from './kv'
 import { TwitterAPI } from './twitter'
 import { TokenListAPI } from './token-list'
 import { InstagramAPI } from './instagram'
-import { MaskAPI } from './mask'
 import { DeBankAPI } from './debank'
 import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
@@ -34,7 +33,6 @@ export const Twitter = new TwitterAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
 export const TokenList = new TokenListAPI()
-export const Mask = new MaskAPI()
 export const DeBank = new DeBankAPI()
 export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()

@@ -279,25 +279,13 @@
             }
         },
         {
-            "input": "./packages/mask/src/plugins/Trader/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/Trader/locales/i18n_generated",
+            "input": "./packages/mask/src/plugins/Referral/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Referral/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.maskbook.trader",
-                "trans": "Translate",
-                "sourceMap": "inline"
-            }
-        },
-        {
-            "input": "./packages/mask/src/plugins/Gitcoin/locales/en-US.json",
-            "output": "./packages/mask/src/plugins/Gitcoin/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "com.maskbook.gitcoin",
+                "namespace": "com.maskbook.referral",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }

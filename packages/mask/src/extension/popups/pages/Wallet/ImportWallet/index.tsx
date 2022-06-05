@@ -18,7 +18,6 @@ import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
@@ -177,7 +176,7 @@ const ImportWallet = memo(() => {
                                     account: wallet,
                                 })
                             }
-                            await WalletRPC.selectMaskAccount([wallet])
+                            await WalletRPC.resolveMaskAccount([wallet])
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
@@ -186,12 +185,7 @@ const ImportWallet = memo(() => {
                             await WalletRPC.updateMaskAccount({
                                 account: privateKeyWallet,
                             })
-                            await WalletRPC.selectMaskAccount([privateKeyWallet])
-
-                            await connection?.connect({
-                                account: privateKeyWallet,
-                                providerType: ProviderType.MaskWallet,
-                            })
+                            await WalletRPC.resolveMaskAccount([privateKeyWallet])
 
                             await Services.Helper.removePopupWindow()
                             navigate(PopupRoutes.Wallet, { replace: true })
@@ -206,7 +200,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs, connection],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

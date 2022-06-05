@@ -17,7 +17,7 @@ import {
     Web3Helper,
     useChainId,
 } from '@masknet/plugin-infra/web3'
-import { ChainIcon } from '@masknet/shared'
+import { ChainIcon, WalletIcon } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
@@ -83,7 +83,7 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
-    colorChainICon: {
+    colorChainIcon: {
         borderRadius: '999px!important',
         margin: '0 !important',
     },
@@ -110,7 +110,7 @@ const SelectWallet = memo(() => {
         chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     )
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM).filter((x) => x.hasStoredKeyInfo)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
 
     const [selected, setSelected] = useState(account)
 
@@ -120,7 +120,7 @@ const SelectWallet = memo(() => {
         if (isPopup) {
             navigate(-1)
         } else {
-            await WalletRPC.selectMaskAccount([])
+            await WalletRPC.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isPopup])
@@ -142,7 +142,7 @@ const SelectWallet = memo(() => {
             account: selected,
         })
         if (chainId) {
-            await WalletRPC.selectMaskAccount([selected])
+            await WalletRPC.resolveMaskAccount([selected])
         }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isPopup])
@@ -158,11 +158,19 @@ const SelectWallet = memo(() => {
                     <div className={classes.header}>
                         <div className={classes.network}>
                             <div className={classes.iconWrapper}>
-                                <ChainIcon
-                                    color={currentNetwork.iconColor}
-                                    size={20}
-                                    classes={{ point: classes.colorChainICon }}
-                                />
+                                {currentNetwork.icon ? (
+                                    <WalletIcon
+                                        networkIcon={currentNetwork.icon}
+                                        size={20}
+                                        classes={{ networkIcon: classes.colorChainIcon }}
+                                    />
+                                ) : (
+                                    <ChainIcon
+                                        color={currentNetwork.iconColor}
+                                        size={20}
+                                        classes={{ point: classes.colorChainIcon }}
+                                    />
+                                )}
                             </div>
                             <Typography className={classes.title}>{currentNetwork.name}</Typography>
                         </div>

@@ -9,6 +9,8 @@ import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskBoxIcon } from '@masknet/icons'
+import { RootContext } from '../contexts'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -64,17 +66,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const [, chainId] = props.url.match(/chain=(\d+)/i) ?? []
+    const [, matchedChainId] = props.url.match(/chain=(\d+)/i) ?? []
     const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
     const [, hashRoot] = props.url.match(/rootHash=([\dA-Za-z]+)/) ?? []
 
-    const shouldNotRender = !chainId || !boxId
+    const shouldNotRender = !matchedChainId || !boxId
     usePluginWrapper(!shouldNotRender)
     if (shouldNotRender) return null
 
     return (
-        <Context.Provider initialState={{ boxId, hashRoot }}>
-            <PreviewCard />
-        </Context.Provider>
+        <RootContext chainId={Number.parseInt(matchedChainId, 10) as ChainId.Mainnet}>
+            <Context.Provider initialState={{ boxId, hashRoot }}>
+                <PreviewCard />
+            </Context.Provider>
+        </RootContext>
     )
 }

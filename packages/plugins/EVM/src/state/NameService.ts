@@ -55,7 +55,8 @@ export class NameService extends NameServiceState<ChainId> {
         if (cachedDomain) return cachedDomain
 
         const ens = await this.createENS()
-        await super.addName(chainId, address, await ens.reverse(address))
+        const name = await ens.reverse(address)
+        await super.addName(chainId, address, name)
         return super.reverse(chainId, address)
     }
 }
