@@ -8,6 +8,7 @@ import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Others } from './Others'
 import type { SolanaWeb3State } from './Connection/types'
+import { IdentityService } from './IdentityService'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb3State {
     const Provider_ = new Provider(context)
@@ -23,6 +24,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb
             currencyType: Settings_.currencyType,
         }),
         Settings: Settings_,
+        IdentityService: new IdentityService(context),
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,

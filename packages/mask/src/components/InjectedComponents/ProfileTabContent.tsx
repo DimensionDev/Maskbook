@@ -51,9 +51,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(
-        NetworkPluginID.PLUGIN_EVM,
+        NetworkPluginID.PLUGIN_SOLANA,
         identity,
     )
+
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
         identity.identifier?.userId,
