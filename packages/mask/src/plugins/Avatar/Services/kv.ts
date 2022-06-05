@@ -4,14 +4,20 @@ import { NFT_AVATAR_METADATA_STORAGE } from '../constants'
 import type { NextIDAvatarMeta } from '../types'
 import { setUserAddress } from './bind'
 
-const NFTAvatarStorage = (pluginId: NetworkPluginID, network: string) =>
-    KeyValue.createJSON_Storage(NFT_AVATAR_METADATA_STORAGE + '_' + pluginId + '_' + network)
+function getKey(network: string) {
+    return NFT_AVATAR_METADATA_STORAGE + '_' + network
+}
+const NFTAvatarStorage = (network: string) => KeyValue.createJSON_Storage(getKey(network))
 
-export async function saveAvatar(account: string, network: string, avatar: NextIDAvatarMeta) {
+export async function saveAvatar(account: string, network: string, avatar: NextIDAvatarMeta, sign: string) {
     await setUserAddress(avatar.userId, account, network, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, avatar.chainId)
-    await NFTAvatarStorage(avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, network).set(avatar.userId, avatar)
+    await NFTAvatarStorage(network).set(avatar.userId, {
+        ...avatar,
+        sign,
+    })
+    return avatar
 }
 
-export async function getAvatar(pluginId: NetworkPluginID, userId: string, network: string) {
-    return NFTAvatarStorage(pluginId, network).get<NextIDAvatarMeta>(userId)
+export async function getAvatar(userId: string, network: string) {
+    return NFTAvatarStorage(network).get<NextIDAvatarMeta>(userId)
 }

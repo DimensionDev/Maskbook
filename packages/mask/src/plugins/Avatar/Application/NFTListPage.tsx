@@ -1,11 +1,10 @@
 import { useImageChecker } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, createERC721Token, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
-import type { TokenInfo } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -42,25 +41,21 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTListPageProps {
-    chainId: ChainId
-    address: string
-    tokenInfo?: TokenInfo
+    tokenInfo?: NonFungibleToken<ChainId, SchemaType>
     tokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    onSelect?: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    onChange?: (token: NonFungibleToken<ChainId, SchemaType>) => void
     children?: React.ReactElement
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { onSelect, chainId, tokenInfo, tokens, children } = props
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(
-        tokenInfo ? createERC721Token(chainId, tokenInfo.address, tokenInfo.tokenId) : undefined,
-    )
+    const { onChange, tokenInfo, tokens, children } = props
+    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(tokenInfo)
 
-    const onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const _onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {
         if (!token) return
         setSelectedToken(token)
-        onSelect?.(token)
+        onChange?.(token)
     }
 
     return (
@@ -73,7 +68,7 @@ export function NFTListPage(props: NFTListPageProps) {
                                 key={i}
                                 token={token}
                                 selectedToken={selectedToken}
-                                onChange={(token) => onChange(token)}
+                                onChange={(token) => _onChange(token)}
                             />
                         ))}
                 </Box>

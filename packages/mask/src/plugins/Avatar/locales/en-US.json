@@ -23,5 +23,7 @@
     "retry": "Retry",
     "application_hint": "Socialize and show off your NFTs. People can bid,buy, view your valuable NFTs without leaving Twitter.",
     "provider_by": "Provided by",
+    "downloading_image": "Downloading image...",
+    "saving": "Saving...",
     "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future."
 }

@@ -63,6 +63,7 @@ function NFTAvatarInTwitter() {
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
+
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()

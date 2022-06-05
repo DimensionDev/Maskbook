@@ -7,10 +7,11 @@ import { CloseIcon } from '../assets/close'
 import { context } from '../context'
 import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales/i18n_generated'
-import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 interface PersonaPageProps {
     onNext: () => void
     onClose(): void
-    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
+    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: NonFungibleToken<ChainId, SchemaType>) => void
 }
 
 export function PersonaPage(props: PersonaPageProps) {
@@ -40,7 +41,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const t = useI18N()
 
     const onSelect = useCallback(
-        (proof: BindingProof, tokenInfo?: TokenInfo) => {
+        (proof: BindingProof, tokenInfo?: NonFungibleToken<ChainId, SchemaType>) => {
             onChange(proof, persona?.wallets, tokenInfo)
             onNext()
         },

@@ -3,12 +3,13 @@ import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SelectTokenInfo, TokenInfo } from '../types'
+import type { SelectTokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,12 +43,16 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
-    const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
+    const [tokenInfo, setTokenInfo] = useState<NonFungibleToken<ChainId, SchemaType>>()
     const [proof, setProof] = useState<BindingProof>()
     const t = useI18N()
     const { classes } = useStyles()
 
-    const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
+    const onPersonaChange = (
+        proof: BindingProof,
+        wallets?: BindingProof[],
+        tokenInfo?: NonFungibleToken<ChainId, SchemaType>,
+    ) => {
         setWallets(wallets)
         setTokenInfo(tokenInfo)
         setProof(proof)

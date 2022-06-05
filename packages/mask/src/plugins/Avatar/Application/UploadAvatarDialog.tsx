@@ -3,7 +3,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import type { BindingProof } from '@masknet/shared-base'
@@ -64,12 +64,12 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
-    const [, saveAvatar] = useSave()
+    const [, saveAvatar] = useSave(currentPluginId, token?.chainId ?? ChainId.Mainnet)
 
-    const onSave = useCallback(() => {
-        if (!editor) return
+    const onSave = useCallback(async () => {
+        if (!editor || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
         editor.getImage().toBlob(async (blob) => {
-            if (!blob || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
+            if (!blob) return
             setDisabled(true)
 
             const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
@@ -79,7 +79,6 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             }
 
             const response = await saveAvatar(
-                currentPluginId,
                 account,
                 isBindAccount,
                 token,
@@ -98,7 +97,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             location.reload()
             onClose()
             setDisabled(false)
-        })
+        }, 'image/png')
     }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
@@ -116,6 +115,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     borderRadius={300}
                 />
                 <Slider
+                    disabled={disabled}
                     max={2}
                     min={0.5}
                     step={0.1}
@@ -125,10 +125,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
+                <Button disabled={disabled} className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
                     {t.cancel()}
                 </Button>
-                <Button disabled={disabled} fullWidth variant="contained" onClick={onSave}>
+                <Button fullWidth onClick={onSave} disabled={disabled}>
                     {t.save()}
                 </Button>
             </DialogActions>

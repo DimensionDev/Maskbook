@@ -4,7 +4,6 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
 import { Application_NFT_LIST_PAGE, SUPPORTED_CHAIN_IDS } from '../constants'
-import type { TokenInfo } from '../types'
 import { NFTListPage } from './NFTListPage'
 
 const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme, props) => ({
@@ -33,8 +32,7 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
     },
 }))
 interface NFTListProps {
-    address: string
-    tokenInfo?: TokenInfo
+    tokenInfo?: NonFungibleToken<ChainId, SchemaType>
     onSelect: (token: NonFungibleToken<ChainId, SchemaType>) => void
     onChangePage?: (page: Application_NFT_LIST_PAGE) => void
     tokens?: Array<NonFungibleToken<ChainId, SchemaType>>
@@ -42,7 +40,7 @@ interface NFTListProps {
 }
 
 export function NFTList(props: NFTListProps) {
-    const { address, onSelect, tokenInfo, onChangePage, tokens = [], children } = props
+    const { onSelect, tokenInfo, onChangePage, tokens = [], children } = props
 
     const [currentTab, onChange, tabs] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
@@ -55,7 +53,6 @@ export function NFTList(props: NFTListProps) {
         onChangePage?.(value)
     }
 
-    if (!address) return null
     return (
         <TabContext value={currentTab}>
             <Tabs
@@ -90,14 +87,7 @@ export function NFTList(props: NFTListProps) {
             </Tabs>
             {SUPPORTED_CHAIN_IDS.map((x, i) => (
                 <TabPanel key={i} value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon} className={classes.tabPanel}>
-                    <NFTListPage
-                        tokens={tokens.filter((y) => y.contract?.chainId === x) ?? []}
-                        tokenInfo={tokenInfo}
-                        chainId={x}
-                        address={address}
-                        onSelect={onSelect}
-                        children={children}
-                    />
+                    <NFTListPage tokens={tokens} tokenInfo={tokenInfo} onChange={onSelect} children={children} />
                 </TabPanel>
             ))}
         </TabContext>

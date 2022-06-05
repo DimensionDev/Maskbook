@@ -6,12 +6,11 @@ import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
 import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-import type { TokenInfo } from '../types'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -37,7 +36,7 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     proof?: BindingProof
-    onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void
+    onSelect?: (proof: BindingProof, tokenInfo?: NonFungibleToken<ChainId, SchemaType>) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
@@ -56,9 +55,34 @@ export function PersonaItem(props: PersonaItemProps) {
         token?.owner,
     )
 
+    const tokenDetailed: NonFungibleToken<ChainId, SchemaType> = useMemo(
+        () => ({
+            tokenId: _avatar?.tokenId ?? '',
+            contract: {
+                chainId: _avatar?.chainId ?? ChainId.Mainnet,
+                name: token?.name ?? '',
+                symbol: token?.symbol ?? 'ETH',
+                address: _avatar?.address ?? '',
+                schema: SchemaType.ERC721,
+                owner: token?.owner,
+            },
+            metadata: {
+                chainId: _avatar?.chainId ?? ChainId.Mainnet,
+                name: token?.name ?? '',
+                symbol: token?.symbol ?? 'ETH',
+            },
+            id: _avatar?.address ?? '',
+            chainId: _avatar?.chainId ?? ChainId.Mainnet,
+            type: TokenType.NonFungible,
+            schema: SchemaType.ERC721,
+            address: _avatar?.address ?? '',
+        }),
+        [_avatar, token],
+    )
+
     const onClick = useCallback(() => {
         if (!proof) return
-        onSelect?.(proof, _avatar && isOwner ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
+        onSelect?.(proof, _avatar && isOwner ? tokenDetailed : undefined)
     }, [_avatar, proof])
 
     return (

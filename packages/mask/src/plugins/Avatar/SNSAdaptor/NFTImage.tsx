@@ -44,7 +44,12 @@ interface NFTImageProps {
 }
 
 function isSameNFT(a: NonFungibleToken<ChainId, SchemaType>, b?: NonFungibleToken<ChainId, SchemaType>) {
-    return isSameAddress(a.address, b?.address) && a.chainId === b?.chainId && a.tokenId === b?.tokenId
+    return (
+        isSameAddress(a.contract?.address, b?.contract?.address) &&
+        a.contract?.chainId &&
+        a.contract?.chainId === b?.contract?.chainId &&
+        a.tokenId === b?.tokenId
+    )
 }
 
 export function NFTImage(props: NFTImageProps) {

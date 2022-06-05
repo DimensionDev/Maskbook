@@ -10,11 +10,11 @@ import type { SelectTokenInfo, TokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
-import { NFTList } from './NFTList'
-import { Application_NFT_LIST_PAGE } from '../constants'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
+import { NFTListPage } from './NFTListPage'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -81,7 +81,7 @@ function isSameToken(token?: NonFungibleToken<ChainId, SchemaType>, tokenInfo?: 
 }
 interface NFTListDialogProps {
     onNext: () => void
-    tokenInfo?: TokenInfo
+    tokenInfo?: NonFungibleToken<ChainId, SchemaType>
     wallets?: BindingProof[]
     onSelected: (info: SelectTokenInfo) => void
 }
@@ -95,35 +95,35 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState(account ?? wallets?.[0]?.identity ?? '')
     const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId)
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType>>()
+    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
-    const [currentPage, setCurrentPage] = useState<Application_NFT_LIST_PAGE>(
-        Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
-    )
-    const POLYGON_PAGE = Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
+
     const { collectibles, retry, error, loading } = useCollectibles(
         selectedAccount,
         selectedPluginId,
         chainId as ChainId,
     )
+
     const { showSnackbar } = useCustomSnackbar()
-    const onChange = (address: string, pluginId: NetworkPluginID) => {
+    const onChangeWallet = (address: string, pluginId: NetworkPluginID) => {
         setSelectedAccount(address)
         setSelectedPluginId(pluginId)
     }
 
-    const onSelect = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const onChangeToken = (token: NonFungibleToken<ChainId, SchemaType>) => {
         setSelectedToken(token)
     }
 
     const onSave = useCallback(async () => {
         if (!selectedToken?.metadata?.imageURL) return
         setDisabled(true)
+
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
+                showSnackbar('Download image error', { variant: 'error' })
                 return
             }
             onSelected({
@@ -132,13 +132,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 token: selectedToken,
                 pluginId: selectedPluginId,
             })
-            onNext()
             setDisabled(false)
+            onNext()
         } catch (error) {
-            console.error(error)
+            showSnackbar(String(error), { variant: 'error' })
+            return
         }
-        setDisabled(false)
-    }, [selectedToken, selectedAccount])
+    }, [selectedToken, selectedAccount, selectedPluginId])
 
     const onClick = useCallback(() => {
         if (!account && !wallets?.length) {
@@ -158,15 +158,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
-    const onChangePage = (name: Application_NFT_LIST_PAGE) => {
-        setCurrentPage(name)
-        setSelectedToken(undefined)
-    }
-
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
-                {currentPage === POLYGON_PAGE ? (
+                {chainId === ChainId.Matic ? (
                     <Translate.collectible_on_polygon
                         components={{
                             br: <br />,
@@ -201,8 +196,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (currentPage === POLYGON_PAGE && tokens.length === 0) return AddCollectible
-        else if (currentPage === POLYGON_PAGE && tokens.length) return
+        if (chainId === ChainId.Matic && tokens.length === 0 && collectibles.length === 0) return AddCollectible
+        else if (chainId === ChainId.Matic && (tokens.length || collectibles.length)) return
         if (loading) {
             return LoadStatus
         }
@@ -230,15 +225,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     account={account!}
                     wallets={wallets ?? []}
                     classes={{ root: classes.AddressNames }}
-                    onChange={onChange}
+                    onChange={onChangeWallet}
                 />
                 {(account || Boolean(wallets?.length)) && (
-                    <NFTList
-                        tokenInfo={tokenInfo}
-                        address={selectedAccount}
-                        onSelect={onSelect}
-                        onChangePage={onChangePage}
+                    <NFTListPage
                         tokens={uniqBy([...tokens, ...collectibles], (x) => x.contract?.address && x.tokenId)}
+                        tokenInfo={selectedToken}
+                        onChange={onChangeToken}
                         children={NoNFTList()}
                     />
                 )}
@@ -256,13 +249,24 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Stack>
                 ) : null}
 
-                <Button disabled={disabled} className={classes.button} onClick={onSave}>
+                <ActionButtonPromise
+                    className={classes.button}
+                    disabled={disabled}
+                    init={!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
+                    waiting={t.downloading_image()}
+                    executor={onSave}
+                    completeIcon={null}
+                    failIcon={null}
+                    failed={t.set_avatar_title()}
+                    failedOnClick="use executor"
+                    data-testid="confirm_button"
+                    complete={t.set_avatar_title()}>
                     {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                </Button>
+                </ActionButtonPromise>
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
-                chainId={currentPage !== POLYGON_PAGE ? ChainId.Mainnet : ChainId.Matic}
+                chainId={chainId as ChainId}
                 title={t.add_collectible()}
                 open={open_}
                 onClose={() => setOpen_(false)}

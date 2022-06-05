@@ -10,14 +10,13 @@ import { useSaveToRSS3 } from './useSAveToRSS3'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
 
-export function useSave() {
+export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
     const [, saveToNextID] = useSaveToNextID()
     const [, saveToRSS3] = useSaveToRSS3()
-    const [, saveSolana] = useSaveSolana()
+    const [, saveSolana] = useSaveSolana(pluginId, chainId)
 
     return useAsyncFn(
         async (
-            pluginId: NetworkPluginID,
             account: string,
             isBindAccount: boolean,
             token: NonFungibleToken<ChainId, SchemaType>,
@@ -51,6 +50,6 @@ export function useSave() {
                     return saveSolana(info, account, persona, identifier, proof)
             }
         },
-        [saveToNextID, saveToRSS3],
+        [saveToNextID, saveToRSS3, pluginId],
     )
 }

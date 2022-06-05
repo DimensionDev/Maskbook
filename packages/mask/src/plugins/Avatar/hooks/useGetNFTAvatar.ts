@@ -19,7 +19,7 @@ export function useGetNFTAvatar() {
             const address = await PluginNFTAvatarRPC.getUserAddress(userId, network, networkPluginId, chainId)
             if (!address) return
             if (networkPluginId !== NetworkPluginID.PLUGIN_EVM) {
-                return PluginNFTAvatarRPC.getAvatar(networkPluginId ?? NetworkPluginID.PLUGIN_EVM, network, userId)
+                return PluginNFTAvatarRPC.getAvatar(userId, network)
             }
             return getNFTAvatarFromRSS(userId, address, snsKey)
         },
