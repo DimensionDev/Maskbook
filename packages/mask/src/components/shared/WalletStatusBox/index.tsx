@@ -7,7 +7,6 @@ import {
     useReverseAddress,
     useWallet,
     useWeb3State,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -106,7 +105,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State<'all'>()
     const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard

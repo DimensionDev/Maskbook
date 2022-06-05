@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
 import { Emitter } from '@servie/events'
-import type { Account, ProviderEvents } from '@masknet/web3-shared-base'
+import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {
     chainResolver,
     createWeb3Provider,
@@ -70,20 +70,23 @@ export class BaseProvider implements EVM_Provider {
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    async request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
+    async request<T extends unknown>(
+        requestArguments: RequestArguments,
+        options?: ProviderOptions<ChainId>,
+    ): Promise<T> {
         throw new Error('Method not implemented.')
     }
 
     // Create a web3 instance from the external provider by default.
-    async createWeb3(chainId?: ChainId) {
+    async createWeb3(options?: ProviderOptions<ChainId>) {
         // @ts-ignore
-        return new Web3(await this.createWeb3Provider(chainId))
+        return new Web3(await this.createWeb3Provider(options))
     }
 
     // Create an external provider from the basic request method.
-    async createWeb3Provider(chainId?: ChainId) {
+    async createWeb3Provider(options?: ProviderOptions<ChainId>) {
         await this.readyPromise
-        return createWeb3Provider(this.request.bind(this))
+        return createWeb3Provider((requestArguments: RequestArguments) => this.request(requestArguments, options))
     }
 
     connect(chainId: ChainId): Promise<Account<ChainId>> {

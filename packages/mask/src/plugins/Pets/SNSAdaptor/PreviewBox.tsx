@@ -3,6 +3,7 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
+import { ImageLoader } from './ImageLoader'
 import ModelView from './ModelView'
 
 export const useStyles = makeStyles()((theme) => ({
@@ -140,7 +141,7 @@ export function PreviewBox(props: Props) {
                         <ModelView className={classes.glbView} source={props.imageUrl} />
                     </div>
                 ) : (
-                    <img className={classes.image} src={props.imageUrl} />
+                    <ImageLoader className={classes.image} src={props.imageUrl} />
                 ))}
             {!(props.message || props.imageUrl) && (
                 <div className={classes.noData}>

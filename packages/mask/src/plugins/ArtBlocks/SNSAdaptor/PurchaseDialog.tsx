@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface ActionBarProps {
+    chainId: ChainId
     project: Project
     open: boolean
     onClose: () => void
@@ -51,7 +52,7 @@ export interface ActionBarProps {
 export function PurchaseDialog(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { project, open, onClose } = props
+    const { project, open, onClose, chainId } = props
 
     const { token, balance } = useFungibleTokenWatched(
         NetworkPluginID.PLUGIN_EVM,
@@ -60,6 +61,7 @@ export function PurchaseDialog(props: ActionBarProps) {
 
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
+        chainId,
         project.projectId,
         project.pricePerTokenInWei,
         token.value?.schema,

@@ -147,6 +147,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                             }}>
                             <SelectTokenChip
                                 token={token}
+                                chainId={chainId}
                                 classes={{
                                     chip: classes.selectedTokenChip,
                                     tokenIcon: classes.chipTokenIcon,

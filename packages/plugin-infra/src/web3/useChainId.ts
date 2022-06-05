@@ -6,15 +6,17 @@ import { UNDEFINED } from '../utils/subscription'
 import { useDefaultChainId } from './useDefaultChainId'
 import { useCurrentWeb3NetworkChainId } from './Context'
 
-export function useChainId<T extends NetworkPluginID>(
+export function useChainId<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
+    type Result = S extends 'all' ? Web3Helper.ChainIdAll : Web3Helper.Definition[T]['ChainId']
+
     const { Provider } = useWeb3State(pluginID)
     const currentChainId = useCurrentWeb3NetworkChainId(pluginID)
     const defaultChainId = useDefaultChainId(pluginID) as Web3Helper.Definition[T]['ChainId']
     const actualChainId = useSubscription(
         (Provider?.chainId ?? UNDEFINED) as Subscription<Web3Helper.Definition[T]['ChainId'] | undefined>,
     )
-    return expectedChainId ?? currentChainId ?? actualChainId ?? defaultChainId
+    return (expectedChainId ?? currentChainId ?? actualChainId ?? defaultChainId) as Result
 }

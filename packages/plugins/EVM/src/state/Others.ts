@@ -15,6 +15,7 @@ import {
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    getMaskTokenAddress,
 } from '@masknet/web3-shared-evm'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
@@ -31,6 +32,8 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+
+    override getMaskTokenAddress = getMaskTokenAddress
 
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId

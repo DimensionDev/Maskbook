@@ -183,7 +183,7 @@ export namespace Plugin.Shared {
         signTypedData(address: string, message: string): Promise<string>
 
         /** Get all wallets */
-        getWallets(storageRequired?: boolean): Promise<Wallet[]>
+        getWallets(): Promise<Wallet[]>
         /** Get the primary wallet */
         getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */
@@ -909,6 +909,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Referral = 'com.maskbook.referral',
     // @masknet/scripts: insert-here
 }
 /**
