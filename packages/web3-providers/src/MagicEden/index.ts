@@ -1,9 +1,17 @@
-import { HubOptions, NonFungibleToken, NonFungibleTokenContract, OrderSide, TokenType } from '@masknet/web3-shared-base'
+import {
+    createFungibleToken,
+    HubOptions,
+    NonFungibleToken,
+    NonFungibleTokenContract,
+    OrderSide,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '../types'
 import { MAGIC_EDEN_API_URL } from './constants'
 import type {
+    Auction,
     MagicEdenCollection as Collection,
     MagicEdenNFT,
     MagicEdenToken,
@@ -78,7 +86,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getToken(address: string, tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
-            urlcat('/v2/tokens/:token_mint', { token_mint: tokenMint }),
+            urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
         )
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
@@ -88,9 +96,68 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTToken(token, collection)
     }
 
+    async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const [token, auction, nft] = await Promise.all([
+            this.getToken(address, tokenMint),
+            fetchFromMagicEden<Auction>(urlcat('/auctions/token-mint/:mint_address', { mint_address: tokenMint })),
+            fetchFromMagicEden<MagicEdenNFT>(
+                urlcat('/rpc/getNFTByMintAddress/:mint_address', { mint_address: tokenMint }),
+            ),
+        ])
+        const link = urlcat('https://magiceden.io/item-details/:mint_address', {
+            mint_address: tokenMint,
+        })
+        if (!token) return
+        return {
+            ...token,
+            link,
+            auction: auction
+                ? {
+                      endAt: Date.parse(auction.config.endDate),
+                      // TODO
+                      orderTokens: [],
+                      // TODO
+                      offerTokens: [],
+                  }
+                : undefined,
+            creator: nft?.creators.length
+                ? {
+                      address: nft.creators[0].address,
+                      nickname: 'Unknown',
+                  }
+                : undefined,
+            owner: {
+                address: nft?.owner,
+                nickname: 'Unknown',
+            },
+            traits: auction?.attributes.map((x) => ({
+                type: x.trait_type,
+                value: x.value,
+            })),
+            orders: auction?.bids
+                ? auction.bids.map((x) => ({
+                      id: x.bid,
+                      chainId: ChainId.Mainnet,
+                      asset_permalink: link,
+                      hash: x.bid,
+                      quantity: '1',
+                      createdAt: x.timestamp * 1000,
+                      paymentToken: createFungibleToken<ChainId.Mainnet, SchemaType.Fungible | SchemaType.Native>(
+                          ChainId.Mainnet,
+                          SchemaType.Native,
+                          auction.config.payees[0].address,
+                          'Sol',
+                          'Sol',
+                          9,
+                      ),
+                  }))
+                : [],
+        }
+    }
+
     async getContract(tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
-            urlcat('/v2/tokens/:token_mint', { token_mint: tokenMint }),
+            urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
         )
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
@@ -100,7 +167,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTCollection(collection)
     }
 
-    async getTokens(owner: string) {
+    async getTokens(owner: string, options?: HubOptions<ChainId>) {
         const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,
@@ -150,8 +217,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
 
     async getHistory(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
-            urlcat('/v2/tokens/:token_mint/activities', {
-                token_mint: tokenId,
+            urlcat('/v2/tokens/:mint_address/activities', {
+                mint_address: tokenId,
                 offset: (indicator - 1) * size,
                 limit: size,
             }),
@@ -184,8 +251,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         const limit = size || 20
         const offset = indicator ? (Math.max(1, indicator) - 1) * limit : 0
         const offers = await fetchFromMagicEden<WalletOffer[]>(
-            urlcat('/tokens/:token_mint/offer_received', {
-                token_mint: mintAddress,
+            urlcat('/tokens/:mint_address/offer_received', {
+                mint_address: mintAddress,
                 side,
                 offset,
                 limit,

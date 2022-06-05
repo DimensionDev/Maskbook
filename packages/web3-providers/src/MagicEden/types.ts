@@ -6,7 +6,7 @@ interface Creator {
 }
 interface Attribute {
     trait_type: string
-    value: string | number
+    value: string
 }
 interface File {
     uri: string
@@ -287,4 +287,64 @@ export interface Instruction {
         type: 'Buffer'
         data: number[]
     }
+}
+
+interface AuctionBid {
+    /** pubkey */
+    auctionConfig: string
+    timestamp: number
+    /** pubkey */
+    bid: string
+    /** pubkey */
+    bidder: string
+    bump: number
+    escrowBump: number
+    amount: number
+    notifiable: boolean
+    notifiableOutbid: boolean
+}
+
+export interface Auction {
+    bids: AuctionBid[]
+    _id: string
+    /** pubkey */
+    configId: string
+    name: string
+    description: string | null
+    attributes: Attribute[]
+    rarity: Rarity
+    source: 'self-service'
+    config: {
+        bump: number
+        /** pubkey */
+        authority: number
+        minBid: number
+        minBidIncrement: number
+        /** ISODatetime */
+        startDate: string
+        /** ISODatetime */
+        endDate: string
+        /** pubkey */
+        tokenAccount: string
+        /** pubkey */
+        tokenMint: string
+        highestBid: number | null
+        highestBidAmount: number | null
+        /** pubkey */
+        highestBidder: string | null
+        acceptingBids: boolean
+        auctionClosed: boolean
+        timeExtension: number
+        timeExtensionThreshold: number
+        payees: Array<{
+            address: string
+            share: 0
+        }>
+    }
+    notifiable: boolean
+    collectionSymbol: string
+    onChainCollectionAddress: string | null
+    configVersion: number
+    /** ISODatetime */
+    updatedAt: string
 }
