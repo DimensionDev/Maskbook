@@ -85,7 +85,7 @@ export enum TransactionDescriptorType {
     RETRY = 'retry', // speed up
 }
 
-export enum IdentityAddressType {
+export enum SocialAddressType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
     UNS = 'UNS',
@@ -112,9 +112,14 @@ export interface SocialIdentity {
     homepage?: string
 }
 
-export interface IdentityAddress {
-    type: IdentityAddressType
+export interface SocialAddress<PluginID> {
+    /** The ID of a plugin that the address belongs to */
+    networkSupporterPluginID: PluginID
+    /** The data source type */
+    type: SocialAddressType
+    /** The address in hex string */
     address: string
+    /** A human readable address title */
     label: string
 }
 
@@ -795,10 +800,10 @@ export interface HubState<
 }
 
 export interface IdentityServiceState {
-    /** Find all social addresses related to given social identity. */
-    lookup(identity: SocialIdentity): Promise<IdentityAddress[]>
+    /** Find all social addresses related to the given identity. */
+    lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
-export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
+export interface NameServiceState<ChainId> {
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */

@@ -1,4 +1,6 @@
 import { uniq } from 'lodash-unified'
+import { Trans } from 'react-i18next'
+import { CollectiblesIcon } from '@masknet/icons'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -6,9 +8,7 @@ import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
-import { Trans } from 'react-i18next'
-import { CollectiblesIcon } from '@masknet/icons'
-import { IdentityAddress, IdentityAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -34,35 +34,35 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'NFTs',
             priority: 1,
             UI: {
-                TabContent: ({ addressNames = [] }) => <NFTPage addressNames={addressNames as IdentityAddress[]} />,
+                TabContent: NFTPage,
             },
             Utils: {
-                addressNameSorter: (a, z) => {
-                    if (a.type === IdentityAddressType.ENS) return -1
-                    if (z.type === IdentityAddressType.ENS) return 1
+                shouldDisplay: (identity, socialAddressList) => {
+                    return !!socialAddressList?.length
+                },
+                sorter: (a, z) => {
+                    if (a.type === SocialAddressType.ENS) return -1
+                    if (z.type === SocialAddressType.ENS) return 1
 
-                    if (a.type === IdentityAddressType.UNS) return -1
-                    if (z.type === IdentityAddressType.UNS) return 1
+                    if (a.type === SocialAddressType.UNS) return -1
+                    if (z.type === SocialAddressType.UNS) return 1
 
-                    if (a.type === IdentityAddressType.DNS) return -1
-                    if (z.type === IdentityAddressType.DNS) return 1
+                    if (a.type === SocialAddressType.DNS) return -1
+                    if (z.type === SocialAddressType.DNS) return 1
 
-                    if (a.type === IdentityAddressType.RSS3) return -1
-                    if (z.type === IdentityAddressType.RSS3) return 1
+                    if (a.type === SocialAddressType.RSS3) return -1
+                    if (z.type === SocialAddressType.RSS3) return 1
 
-                    if (a.type === IdentityAddressType.ADDRESS) return -1
-                    if (z.type === IdentityAddressType.ADDRESS) return 1
+                    if (a.type === SocialAddressType.ADDRESS) return -1
+                    if (z.type === SocialAddressType.ADDRESS) return 1
 
-                    if (a.type === IdentityAddressType.GUN) return -1
-                    if (z.type === IdentityAddressType.GUN) return 1
+                    if (a.type === SocialAddressType.GUN) return -1
+                    if (z.type === SocialAddressType.GUN) return 1
 
-                    if (a.type === IdentityAddressType.THE_GRAPH) return -1
-                    if (z.type === IdentityAddressType.THE_GRAPH) return 1
+                    if (a.type === SocialAddressType.THE_GRAPH) return -1
+                    if (z.type === SocialAddressType.THE_GRAPH) return 1
 
                     return 0
-                },
-                shouldDisplay: (identity, addressNames) => {
-                    return !!addressNames?.length
                 },
             },
         },
