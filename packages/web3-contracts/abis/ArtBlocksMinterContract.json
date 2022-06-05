@@ -1,160 +1,390 @@
 [
     {
-        "inputs": [{ "internalType": "address", "name": "_genArt721Address", "type": "address" }],
-        "payable": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_genArt721Address",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_minterFilter",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
     {
-        "constant": true,
-        "inputs": [],
-        "name": "artblocksContract",
-        "outputs": [{ "internalType": "contract GenArt721CoreContract", "name": "", "type": "address" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
+        "anonymous": false,
         "inputs": [
-            { "internalType": "uint256", "name": "_projectId", "type": "uint256" },
-            { "internalType": "address", "name": "_bonusContractAddress", "type": "address" }
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "_pricePerTokenInWei",
+                "type": "uint256"
+            }
         ],
-        "name": "artistSetBonusContractAddress",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
+        "name": "PricePerTokenInWeiUpdated",
+        "type": "event"
     },
     {
-        "constant": false,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
-        "name": "artistToggleBonus",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
-        "name": "checkYourAllowanceOfProjectERC20",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "contractFilterProject",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
-        "name": "getYourBalanceOfProjectERC20",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "projectIdToBonus",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "projectIdToBonusContractAddress",
-        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "projectMaxHasBeenInvoked",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "projectMaxInvocations",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
+        "anonymous": false,
         "inputs": [
-            { "internalType": "address", "name": "", "type": "address" },
-            { "internalType": "uint256", "name": "", "type": "uint256" }
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_currencyAddress",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "_currencySymbol",
+                "type": "string"
+            }
+        ],
+        "name": "ProjectCurrencyInfoUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "bool",
+                "name": "_purchaseToDisabled",
+                "type": "bool"
+            }
+        ],
+        "name": "PurchaseToDisabledUpdated",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "contractMintable",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "genArt721CoreAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPriceInfo",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "isConfigured",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "tokenPriceInWei",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "currencySymbol",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "currencyAddress",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minterFilterAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minterType",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "projectMaxHasBeenInvoked",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "projectMaxInvocations",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
         ],
         "name": "projectMintCounter",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "payable": false,
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "name": "projectMintLimit",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "payable": false,
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
         "name": "purchase",
-        "outputs": [{ "internalType": "uint256", "name": "_tokenId", "type": "uint256" }],
-        "payable": true,
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
+        "name": "purchaseTo",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "purchaseToDisabled",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
         "name": "setProjectMaxInvocations",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": false,
         "inputs": [
-            { "internalType": "uint256", "name": "_projectId", "type": "uint256" },
-            { "internalType": "uint8", "name": "_limit", "type": "uint8" }
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "_limit",
+                "type": "uint8"
+            }
         ],
         "name": "setProjectMintLimit",
         "outputs": [],
-        "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
-        "name": "toggleContractFilter",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
+        "name": "toggleContractMintable",
         "outputs": [],
-        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            }
+        ],
+        "name": "togglePurchaseToDisabled",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_projectId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_pricePerTokenInWei",
+                "type": "uint256"
+            }
+        ],
+        "name": "updatePricePerTokenInWei",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     }
