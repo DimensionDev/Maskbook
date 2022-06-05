@@ -13,7 +13,6 @@ export class SwapDescriptor implements TransactionDescriptor {
 
         const nativeToken = await connection?.getNativeToken({ chainId: context.chainId })
 
-        console.log(context)
         switch (context.name) {
             case 'swapExactETHForTokens':
                 const outputToken = await connection?.getFungibleToken(last(context.parameters!.path) ?? '')
