@@ -134,6 +134,7 @@ export async function signTransaction(address: string, config: Transaction) {
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
+        derivationPath: wallet.derivationPath,
         sign_input,
     })
 
