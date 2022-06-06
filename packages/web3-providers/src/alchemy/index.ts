@@ -1,53 +1,70 @@
-import { createPageable, HubOptions, NonFungibleToken, Pageable, TokenType } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    createPageable,
+    HubOptions,
+    NetworkPluginID,
+    NonFungibleToken,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
+import { ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
+import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import urlcat from 'urlcat'
-import type { ALCHEMY_API } from '..'
+import type { NonFungibleTokenAPI } from '..'
 import { fetchJSON } from '../helpers'
 import { AlchemyNetworkMap } from './contants'
-import type { AlchemyNFT, AlchemyResponse } from './types'
+import type { AlchemyNFT_EVM, AlchemyNFT_FLOW, AlchemyResponse_EVM, AlchemyResponse_FLOW } from './types'
 
 export * from './contants'
-export class AlchemyNFTAPI implements ALCHEMY_API.Provider {
-    getAssets = async (
-        address: string,
-        options: HubOptions<ChainId, Record<string, string | undefined>> | undefined,
-    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Record<string, string | undefined>>> => {
-        let result: Array<NonFungibleToken<ChainId, SchemaType>> = []
-        const api_keys: Record<string, string | undefined> = {}
-        Object.keys(AlchemyNetworkMap).forEach((network) => {
-            api_keys[network] = ''
-        })
-        await Promise.all(
-            Object.keys(AlchemyNetworkMap).map(async (network, index) => {
-                const res = await fetchJSON<AlchemyResponse>(
-                    urlcat(`${AlchemyNetworkMap[network].baseURL}${AlchemyNetworkMap[network].API_KEY}/getNFTs/`, {
-                        owner: address,
-                        pageKey: options?.indicator?.[network] || undefined,
-                    }),
-                )
-                const assets = res?.ownedNfts.map((item: AlchemyNFT) => {
-                    const asset = createNFTToken(AlchemyNetworkMap[network].chainId, item)
-
-                    return asset
-                })
-                api_keys[network] = res?.pageKey
-
-                result = result.concat(assets)
-
-                return network
-            }),
+export class AlchemyNFTAPI
+    implements NonFungibleTokenAPI.Provider<ChainId_EVM | ChainId_FLOW, SchemaType_EVM | SchemaType_FLOW, string>
+{
+    getTokens = async <tokenChainId extends ChainId_EVM | ChainId_FLOW, tokenSchemaType>(
+        from: string,
+        opts?: HubOptions<tokenChainId, string | number>,
+    ): Promise<Pageable<NonFungibleToken<tokenChainId, tokenSchemaType>, string | number>> => {
+        const chainInfo = AlchemyNetworkMap?.find((network) => network.network === opts?.networkPluginId)?.chains?.find(
+            (chain) => chain.chainId === opts?.chainId,
         )
-        return createPageable(result, { ...options?.indicator }, { ...api_keys })
+
+        let res
+        let assets
+        if (opts?.networkPluginId === NetworkPluginID.PLUGIN_EVM) {
+            res = await fetchJSON<AlchemyResponse_EVM>(
+                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+                    owner: from,
+                    pageKey: opts?.indicator === '' ? opts?.indicator : undefined,
+                }),
+            )
+            assets = res?.ownedNfts?.map((nft) =>
+                createNftToken_EVM((opts?.chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
+            )
+            return createPageable(assets, res?.pageKey ?? '')
+        } else if (opts?.networkPluginId === NetworkPluginID.PLUGIN_FLOW) {
+            res = await fetchJSON<AlchemyResponse_FLOW>(
+                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+                    owner: from,
+                }),
+            )
+            assets = res?.nfts?.map((nft) =>
+                createNftToken_FLOW((opts?.chainId as ChainId_FLOW | undefined) ?? ChainId_FLOW.Mainnet, nft),
+            )
+            return createPageable(assets, '')
+        }
+
+        return createPageable([], '')
     }
 }
 
-function createNFTToken(chainId: ChainId, asset: AlchemyNFT): NonFungibleToken<ChainId, SchemaType> {
+function createNftToken_EVM(
+    chainId: ChainId_EVM | ChainId_FLOW,
+    asset: AlchemyNFT_EVM,
+): NonFungibleToken<ChainId_EVM | ChainId_FLOW, SchemaType_EVM | SchemaType_FLOW> {
     return {
         id: asset.contract?.address,
         chainId,
         type: TokenType.NonFungible,
-        schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155,
-        tokenId: Number.parseInt(asset.id?.tokenId.toString(), 16).toString(),
+        schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
+        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
         address: asset.contract?.address,
         metadata: {
             chainId,
@@ -59,9 +76,44 @@ function createNFTToken(chainId: ChainId, asset: AlchemyNFT): NonFungibleToken<C
         },
         contract: {
             chainId,
-            schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155,
+            schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
             address: asset?.contract?.address,
             name: asset?.metadata?.name ?? asset?.title,
+            symbol: '',
+        },
+        collection: {
+            chainId,
+            name: '',
+            slug: '',
+            description: asset.description,
+        },
+    }
+}
+
+function createNftToken_FLOW(
+    chainId: ChainId_FLOW,
+    asset: AlchemyNFT_FLOW,
+): NonFungibleToken<ChainId_FLOW, SchemaType_FLOW> {
+    return {
+        id: asset.contract?.address,
+        chainId,
+        type: TokenType.NonFungible,
+        schema: SchemaType_FLOW.NonFungible,
+        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
+        address: asset.contract?.address,
+        metadata: {
+            chainId,
+            name: asset?.contract?.name ?? '',
+            symbol: '',
+            description: asset.description,
+            imageURL: asset?.metadata?.metadata?.find((data) => data?.name === 'img')?.value,
+            mediaURL: asset?.media?.uri,
+        },
+        contract: {
+            chainId,
+            schema: SchemaType_FLOW.NonFungible,
+            address: asset?.contract?.address,
+            name: asset?.contract?.name ?? '',
             symbol: '',
         },
         collection: {

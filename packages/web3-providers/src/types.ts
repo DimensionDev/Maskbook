@@ -172,10 +172,10 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: (
+        getTokens?: <tokenChainId, tokenSchemaType>(
             from: string,
-            opts?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+            opts?: HubOptions<tokenChainId, string | number>,
+        ) => Promise<Pageable<NonFungibleToken<tokenChainId, tokenSchemaType>, string | number>>
         getContract?: (
             address: string,
             opts?: HubOptions<ChainId>,

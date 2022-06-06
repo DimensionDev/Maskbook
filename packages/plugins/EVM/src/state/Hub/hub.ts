@@ -1,14 +1,4 @@
-import {
-    AlchemyNetworkMap,
-    AlchemyNft,
-    CoinGecko,
-    DeBank,
-    MetaSwap,
-    NFTScan,
-    OpenSea,
-    TokenList,
-    Zerion,
-} from '@masknet/web3-providers'
+import { AlchemyNft, CoinGecko, DeBank, MetaSwap, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -26,21 +16,21 @@ import {
     Transaction,
 } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    ChainId as ChainId_EVM,
     chainResolver,
     formatEthereumAddress,
     GasOption,
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
-    SchemaType,
+    SchemaType as SchemaType_EVM,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
 
 class Hub implements EVM_Hub {
     constructor(
-        private chainId?: ChainId,
+        private chainId?: ChainId_EVM,
         private account?: string,
         private sourceType?: SourceType,
         private currencyType?: CurrencyType,
@@ -49,21 +39,21 @@ class Hub implements EVM_Hub {
     ) {}
 
     async getFungibleTokensFromTokenList(
-        chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
+        chainId: ChainId_EVM,
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<Array<FungibleToken<ChainId_EVM, SchemaType_EVM>>> {
         const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
         return TokenList.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS)
     }
     async getNonFungibleTokensFromTokenList(
-        chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
+        chainId: ChainId_EVM,
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<Array<NonFungibleToken<ChainId_EVM, SchemaType_EVM>>> {
         throw new Error('Method not implemented.')
     }
     getGasOptions(
-        chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
+        chainId: ChainId_EVM,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
         if (chainResolver.isSupport(chainId, 'EIP1559')) {
             return MetaSwap.getGasOptions(chainId)
@@ -72,14 +62,14 @@ class Hub implements EVM_Hub {
     }
     getFungibleAsset(
         address: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<FungibleAsset<ChainId, SchemaType>> {
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<FungibleAsset<ChainId_EVM, SchemaType_EVM>> {
         throw new Error('Method not implemented.')
     }
     async getFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<Pageable<FungibleAsset<ChainId_EVM, SchemaType_EVM>>> {
         // only the first page is available
         if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
         try {
@@ -91,30 +81,30 @@ class Hub implements EVM_Hub {
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<NonFungibleAsset<ChainId_EVM, SchemaType_EVM> | undefined> {
         return OpenSea.getAsset(address, tokenId, options)
     }
     getNonFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        options?: HubOptions<ChainId_EVM, string | number> | undefined,
+    ): Promise<Pageable<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>, string | number>> {
         try {
-            return OpenSea.getTokens(account, options)
+            return AlchemyNft.getTokens<ChainId_EVM, SchemaType_EVM>(account, options)
         } catch {
-            return NFTScan.getTokens(account, options)
+            return OpenSea.getTokens(account, options)
         }
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId_EVM>>> {
         return OpenSea.getCollections(account, options)
     }
     getFungibleTokenPrice(
-        chainId: ChainId,
+        chainId: ChainId_EVM,
         address: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<number> {
         return CoinGecko.getTokenPrice(
             address,
@@ -124,17 +114,17 @@ class Hub implements EVM_Hub {
         )
     }
     getNonFungibleTokenPrice(
-        chainId: ChainId,
+        chainId: ChainId_EVM,
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<never> {
         throw new Error('Method not implemented.')
     }
     async getFungibleTokenIconURLs(
-        chainId: ChainId,
+        chainId: ChainId_EVM,
         address: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<string[]> {
         const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(chainId)
         const checkSummedAddress = formatEthereumAddress(address)
@@ -150,22 +140,22 @@ class Hub implements EVM_Hub {
         return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
     }
     getNonFungibleTokenIconURLs(
-        chainId: ChainId,
+        chainId: ChainId_EVM,
         address: string,
         tokenId?: string | undefined,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
     async getTransactions(
-        chainId: ChainId,
+        chainId: ChainId_EVM,
         account: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        options?: HubOptions<ChainId_EVM> | undefined,
+    ): Promise<Pageable<Transaction<ChainId_EVM, SchemaType_EVM>>> {
         return DeBank.getTransactions(account, { chainId })
     }
 
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
+    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId_EVM, SchemaType_EVM>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
                 indicator: i,
@@ -178,7 +168,9 @@ class Hub implements EVM_Hub {
         }
     }
 
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+    async *getAllNonFungibleAssets(
+        address: string,
+    ): AsyncIterableIterator<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: i,
@@ -190,37 +182,11 @@ class Hub implements EVM_Hub {
             if (pageable.data.length === 0) return
         }
     }
-    // Alchemy api has different page format
-    getNonFungibleAssetsFromAlchemy(
-        account: string,
-        options?: HubOptions<ChainId, Record<string, string | undefined>> | undefined,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, Record<string, string | undefined>>> {
-        return AlchemyNft.getAssets(account, options)
-    }
-
-    async *getAllNonFungibleAssetsFromAlchemy(
-        address: string,
-    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        let api_keys: Record<string, string | undefined> = {}
-        Object.keys(AlchemyNetworkMap).forEach((network) => {
-            api_keys[network] = ''
-        })
-        while (1) {
-            const pageable = await this.getNonFungibleAssetsFromAlchemy(address, {
-                indicator: api_keys,
-            })
-            api_keys = (pageable.nextIndicator as Record<string, string | undefined>) ?? {}
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0 || Object.values(api_keys)?.every((value) => value === undefined)) return
-        }
-    }
 
     async *getAllNonFungibleCollections(
         address: string,
-        options?: HubOptions<ChainId>,
-    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
+        options?: HubOptions<ChainId_EVM>,
+    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId_EVM>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleCollections(address, {
                 indicator: i,
@@ -236,7 +202,7 @@ class Hub implements EVM_Hub {
 }
 
 export function createHub(
-    chainId?: ChainId,
+    chainId?: ChainId_EVM,
     account?: string,
     sourceType?: SourceType,
     currencyType?: CurrencyType,

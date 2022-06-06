@@ -1,4 +1,4 @@
-export function createPageable<Item, Indicator extends string | number | Record<string, string | undefined> = number>(
+export function createPageable<Item, Indicator extends string | number = number>(
     data: Item[],
     indicator: Indicator,
     nextIndicator?: Indicator,
