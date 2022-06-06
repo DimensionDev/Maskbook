@@ -476,6 +476,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     withChildren
                                     ActionButtonProps={{
                                         color: 'primary',
+                                        style: { borderRadius: isDashboard ? 8 : 24 },
                                     }}
                                     infiniteUnlockContent={
                                         <Box component="span" display="flex" alignItems="center">
