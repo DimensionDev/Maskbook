@@ -59,47 +59,59 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         identity.identifier?.userId,
     )
 
+    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
+    const availablePlugins = useAvailablePlugins(activatedPlugins)
+    const displayPlugins = availablePlugins
+        .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+        .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
+
+    const tabs = displayPlugins
+        .sort((a, z) => {
+            // order those tabs from next id first
+            if (a.pluginID === PluginId.NextID) return -1
+            if (z.pluginID === PluginId.NextID) return 1
+
+            // order those tabs from collectible first
+            if (a.pluginID === PluginId.Collectible) return -1
+            if (z.pluginID === PluginId.Collectible) return 1
+
+            // place those tabs from debugger last
+            if (a.pluginID === PluginId.Debugger) return 1
+            if (z.pluginID === PluginId.Debugger) return -1
+
+            // place those tabs from dao before the last
+            if (a.pluginID === PluginId.DAO) return 1
+            if (z.pluginID === PluginId.DAO) return -1
+
+            return a.priority - z.priority
+        })
+        .map((x) => ({
+            id: x.ID,
+            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+        }))
+
+    const selectedTabId = selectedTab ?? first(tabs)?.id
     const currentAccountNotConnectPersona =
         currentIdentity.identifier === identity.identifier &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
             -1
+    const Component = getTabContent(
+        isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona && selectedTabId !== PluginId.Debugger
+            ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+            : selectedTabId,
+    )
+    const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
 
-    const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const availablePlugins = useAvailablePlugins(activatedPlugins)
-    const displayPlugins = useMemo(() => {
-        return availablePlugins
-            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
-    }, [availablePlugins])
-
-    const tabs = useMemo(() => {
-        return displayPlugins
-            .sort((a, z) => {
-                // order those tabs from next id first
-                if (a.pluginID === PluginId.NextID) return -1
-                if (z.pluginID === PluginId.NextID) return 1
-
-                // order those tabs from collectible first
-                if (a.pluginID === PluginId.Collectible) return -1
-                if (z.pluginID === PluginId.Collectible) return 1
-
-                // place those tabs from debugger last
-                if (a.pluginID === PluginId.Debugger) return 1
-                if (z.pluginID === PluginId.Debugger) return -1
-
-                // place those tabs from dao before the last
-                if (a.pluginID === PluginId.DAO) return 1
-                if (z.pluginID === PluginId.DAO) return -1
-
-                return a.priority - z.priority
-            })
-            .map((x) => ({
-                id: x.ID,
-                label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
-            }))
-    }, [displayPlugins, translate])
-
-    const selectedTabId = selectedTab ?? first(tabs)?.id
+    console.log('DEBUG: logs')
+    console.log({
+        selectedTabId,
+        socialAddressList,
+        personaList,
+        activatedPlugins,
+        availablePlugins,
+        displayPlugins,
+        tabs,
+    })
 
     useLocationChange(() => {
         setSelectedTab(undefined)
@@ -120,28 +132,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             setHidden(!data.show)
         })
     }, [identity.identifier?.userId])
-
-    const content = useMemo(() => {
-        const Component = getTabContent(
-            isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
-                ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-                : selectedTabId,
-        )
-        const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
-
-        return (
-            <Component
-                identity={identity}
-                personaList={personaList?.map((x) => x.persona)}
-                socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
-            />
-        )
-    }, [
-        selectedTabId,
-        displayPlugins.map((x) => x.ID).join(),
-        identity.identifier?.userId,
-        currentAccountNotConnectPersona,
-    ])
 
     if (hidden) return null
 
@@ -169,7 +159,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     </Typography>
                 )}
             </div>
-            <div className={classes.content}>{content}</div>
+            <div className={classes.content}>
+                <Component
+                    identity={identity}
+                    personaList={personaList?.map((x) => x.persona)}
+                    socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
+                />
+            </div>
         </div>
     )
 }

@@ -28,7 +28,9 @@
     "socket.io-client": "2.4.0",
     "urlcat": "^2.0.4",
     "uuid": "^8.3.2",
-    "wallet.ts": "^1.0.1"
+    "wallet.ts": "^1.0.1",
+    "web3": "1.7.3",
+    "web3-eth": "1.7.3"
   },
   "devDependencies": {
     "@types/lru-cache": "^7.10.10"

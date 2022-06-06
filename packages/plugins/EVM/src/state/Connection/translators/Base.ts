@@ -49,7 +49,7 @@ export class Base implements Translator {
                     normalOption &&
                     isLessThan((config.gasPrice as string) ?? 0, slowOption.suggestedMaxFeePerGas)
                 ) {
-                    config.gasPrice = toHex(normalOption.suggestedMaxFeePerGas)
+                    config.gasPrice = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
                 }
             }
 

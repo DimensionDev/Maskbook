@@ -25,7 +25,7 @@ export async function saveCustomEssayToRSS(
 ) {
     if (!address) return
     const rss = RSS3.createRSS3(address, async (message: string) => {
-        return connection.signMessage(message, 'personaSign', { account: address })
+        return connection.signMessage(message, 'personalSign', { account: address })
     })
     await RSS3.setFileData<EssayRSSNode>(rss, address, '_pet', { address, signature, essay })
     return essay
