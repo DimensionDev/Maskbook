@@ -23,6 +23,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb
             account: Provider_.account,
             currencyType: Settings_.currencyType,
         }),
+        IdentityService: new IdentityService(context),
         Settings: Settings_,
         IdentityService: new IdentityService(context),
         Transaction: new Transaction(context, {

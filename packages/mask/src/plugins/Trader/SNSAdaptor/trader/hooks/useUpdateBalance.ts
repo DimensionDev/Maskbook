@@ -36,7 +36,7 @@ export function useUpdateBalance(chainId: ChainId) {
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: value || '0',
         })
-    }, [currentAccount, inputToken?.type, balance.value])
+    }, [currentAccount, inputToken?.schema, balance.value])
 
     useEffect(() => {
         if (!currentAccount) return
@@ -48,5 +48,5 @@ export function useUpdateBalance(chainId: ChainId) {
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: value || '0',
         })
-    }, [currentAccount, outputToken?.type, outputToken?.address, balance.value])
+    }, [currentAccount, outputToken?.schema, outputToken?.address, balance.value])
 }

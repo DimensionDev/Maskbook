@@ -1,9 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-
-const SOL_RE = /(?=\w)\S{1,256}\.sol\b/
-const ADDRESS_FULL = /(?!0x)\w{44}/
+import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 
 export class IdentityService extends IdentityServiceState {
     constructor(protected context: Plugin.Shared.SharedContext) {
@@ -11,18 +8,18 @@ export class IdentityService extends IdentityServiceState {
     }
 
     protected override async getFromRemote(identity: SocialIdentity) {
-        const addressMatched = identity.bio?.match(ADDRESS_FULL) ?? null
+        const addressMatched = identity.bio?.match(/0x\w{16}/) ?? null
         const address = addressMatched?.[0]
 
         return [
             address
                 ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      networkSupporterPluginID: NetworkPluginID.PLUGIN_FLOW,
                       type: SocialAddressType.ADDRESS,
                       label: address,
                       address,
                   }
                 : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_SOLANA>>
+        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_FLOW>>
     }
 }

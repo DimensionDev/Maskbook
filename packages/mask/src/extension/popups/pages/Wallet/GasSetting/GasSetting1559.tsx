@@ -236,16 +236,7 @@ export const GasSetting1559 = memo(() => {
             value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
             value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
         ) {
-            if (
-                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
-                value?.transactionContext?.name &&
-                !['transfer', 'transferFrom', 'approve'].includes(value?.transactionContext?.name)
-            ) {
-                setOption(1)
-            } else if (
-                value?.formatterTransaction._tx.maxFeePerGas &&
-                value?.formatterTransaction._tx.maxPriorityFeePerGas
-            ) {
+            if (value?.formatterTransaction._tx.maxFeePerGas && value?.formatterTransaction._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
                     fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas as string), 'gwei'),

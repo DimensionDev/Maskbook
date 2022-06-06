@@ -1,6 +1,6 @@
 import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { IdentityAddress, IdentityAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
@@ -13,12 +13,14 @@ export enum TabCardType {
 
 export interface TabCardProps {
     type: TabCardType
-    addressNames: IdentityAddress[]
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function TabCard({ type, addressNames }: TabCardProps) {
+export function TabCard({ type, socialAddressList }: TabCardProps) {
     const t = useI18N()
-    const addressName = addressNames.find((x) => x.type === IdentityAddressType.RSS3)
+    const addressName = socialAddressList?.find(
+        (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+    )
     const userAddress = addressName?.address || ''
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
