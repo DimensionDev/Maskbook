@@ -1,7 +1,16 @@
-import { useAccount, useBalance, useBlockNumber, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useBalance,
+    useBlockNumber,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useWeb3Connection,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback } from 'react'
 
@@ -66,11 +75,13 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
     }
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const { Others } = useWeb3State()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State<'all'>()
+    const connection = useWeb3Connection<'all'>()
     const account = useAccount()
+    const chainId = useChainId()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
-    const connection = useWeb3Connection()
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection.transferFungibleToken(
@@ -80,11 +91,67 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
         )
     }, [connection])
 
-    const onPersonaSign = useCallback(async () => {
-        const signed = await connection.signMessage('hello world', 'personalSign')
-        console.log(signed)
-        window.alert(`Signed: ${signed}`)
-    }, [connection])
+    const onSignMessage = useCallback(
+        async (type?: string) => {
+            const message = 'Hello World'
+            const typedData = JSON.stringify({
+                domain: {
+                    chainId: chainId.toString(),
+                    name: 'Ether Mail',
+                    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                    version: '1',
+                },
+                message: {
+                    contents: 'Hello, Bob!',
+                    from: {
+                        name: 'Cow',
+                        wallets: [
+                            '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+                            '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+                        ],
+                    },
+                    to: [
+                        {
+                            name: 'Bob',
+                            wallets: [
+                                '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+                                '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+                                '0xB0B0b0b0b0b0B000000000000000000000000000',
+                            ],
+                        },
+                    ],
+                },
+                primaryType: 'Mail',
+                types: {
+                    Group: [
+                        { name: 'name', type: 'string' },
+                        { name: 'members', type: 'Person[]' },
+                    ],
+                    Mail: [
+                        { name: 'from', type: 'Person' },
+                        { name: 'to', type: 'Person[]' },
+                        { name: 'contents', type: 'string' },
+                    ],
+                    Person: [
+                        { name: 'name', type: 'string' },
+                        { name: 'wallets', type: 'address[]' },
+                    ],
+                },
+            })
+            const signed = await connection.signMessage(type === 'typedDataSign' ? typedData : message, type)
+            window.alert(`Signed: ${signed}`)
+        },
+        [chainId, connection],
+    )
+
+    const onSwitchChain = useCallback(
+        async (chainId: Web3Helper.ChainIdAll) => {
+            return connection?.switchChain?.({
+                chainId,
+            })
+        },
+        [connection],
+    )
 
     return (
         <section className={classes.container}>
@@ -121,8 +188,59 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                             <Typography variant="body2">Sign Message</Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" onClick={onPersonaSign}>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            onSignMessage('personalSign')
+                                            break
+                                        default:
+                                            onSignMessage()
+                                            break
+                                    }
+                                }}>
                                 Sign Message
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Sign Typed Data</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            onSignMessage('typedDataSign')
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Sign Typed Data
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Switch To Matic</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            await onSwitchChain(ChainId.Matic)
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Switch Chain
                             </Button>
                         </TableCell>
                     </TableRow>
