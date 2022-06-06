@@ -15,7 +15,7 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
     const wallets = useWallets(pluginID)
 
     return useMemo(() => {
-        // if the currently selected account is a mask wallet then use the wallet name as the account name
+        // if the currently selected account is a mask wallet, then use the wallet name as the account name
         const wallet = wallets.find((x) => isSameAddress(account, x.address))
         if (wallet?.name) return wallet.name
 
