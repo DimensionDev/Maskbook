@@ -265,7 +265,6 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    console.log({ contract })
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract)}>

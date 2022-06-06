@@ -542,14 +542,14 @@ class Connection implements EVM_Connection {
 
     signMessage(
         dataToSign: string,
-        signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
+        signType?: 'personalSign' | 'typedDataSign' | Omit<string, 'personalSign' | 'typedDataSign'>,
         options?: EVM_Web3ConnectionOptions,
     ) {
         const account = options?.account ?? this.account
         if (!account) throw new Error('Unknown account.')
 
         switch (signType) {
-            case 'personaSign':
+            case 'personalSign':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
