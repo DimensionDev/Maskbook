@@ -176,7 +176,7 @@ class Connection implements EVM_Connection {
     ): Promise<string> {
         // Native
         if (!address || isNativeTokenAddress(options?.chainId ?? this.chainId, address)) {
-            const tx = {
+            const tx: Transaction = {
                 from: options?.account ?? this.account,
                 to: recipient,
                 value: toHex(amount),
@@ -186,6 +186,7 @@ class Connection implements EVM_Connection {
                 {
                     ...tx,
                     gas: await this.estimateTransaction(tx, 50000, options),
+                    ...options?.overrides,
                 },
                 options,
             )
@@ -194,7 +195,7 @@ class Connection implements EVM_Connection {
         // ERC20
         const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
         const tx = contract?.methods.transfer(recipient, toHex(amount))
-        return sendTransaction(contract, tx)
+        return sendTransaction(contract, tx, options?.overrides)
     }
     async transferNonFungibleToken(
         address: string,
@@ -206,7 +207,7 @@ class Connection implements EVM_Connection {
         // ERC721
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
         const tx = contract?.methods.transferFrom(options?.account ?? this.account, recipient, tokenId)
-        return sendTransaction(contract, tx)
+        return sendTransaction(contract, tx, options?.overrides)
     }
 
     async getGasPrice(options?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -280,7 +281,6 @@ class Connection implements EVM_Connection {
     async switchChain(options?: EVM_Web3ConnectionOptions): Promise<void> {
         await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
-
     getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
         return this.getBalance(options?.account ?? this.account, options)
     }
@@ -600,7 +600,13 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
-                params: [transaction, 'latest'],
+                params: [
+                    {
+                        ...transaction,
+                        ...options?.overrides,
+                    },
+                    'latest',
+                ],
             },
             options,
         )
@@ -609,7 +615,12 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [transaction],
+                params: [
+                    {
+                        ...transaction,
+                        ...options?.overrides,
+                    },
+                ],
             },
             options,
         )
