@@ -2,7 +2,7 @@ import { useAccount, useBalance, useBlockNumber, useWeb3Connection, useWeb3State
 import { makeStyles } from '@masknet/theme'
 import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
-import { Button, List, ListItem, ListItemText, Table, TableCell, TableRow, Typography } from '@mui/material'
+import { Button, List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback } from 'react'
 
 export interface TabContentProps {
@@ -56,11 +56,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                 {socialAddressList?.map((x) => (
                     <ListItem key={`${x.type}_${x.address}`}>
                         <ListItemText
-                            primary={
-                                <Typography color="textPrimary">
-                                    {x.type}: {x.label}
-                                </Typography>
-                            }
+                            primary={<Typography color="textPrimary">{x.type}</Typography>}
                             secondary={x.address}
                         />
                     </ListItem>
@@ -86,60 +82,63 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const onPersonaSign = useCallback(async () => {
         const signed = await connection.signMessage('hello world', 'personalSign')
+        console.log(signed)
         window.alert(`Signed: ${signed}`)
     }, [connection])
 
     return (
         <section className={classes.container}>
             <Table size="small">
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Balance of {Others?.formatAddress(account, 4)}</Typography>
-                    </TableCell>
-                    <TableCell>
-                        <Typography variant="body2">{balance}</Typography>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Block Number</Typography>
-                    </TableCell>
-                    <TableCell>
-                        <Typography variant="body2">{blockNumber}</Typography>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Native Token Transfer</Typography>
-                    </TableCell>
-                    <TableCell>
-                        <Button size="small" onClick={onTransferCallback}>
-                            Transfer
-                        </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Sign Message</Typography>
-                    </TableCell>
-                    <TableCell>
-                        <Button size="small" onClick={onPersonaSign}>
-                            Sign Message
-                        </Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Identity</Typography>
-                    </TableCell>
-                    <TableCell>{renderIdentity()}</TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>
-                        <Typography variant="body2">Social Address List</Typography>
-                    </TableCell>
-                    <TableCell>{renderAddressNames()}</TableCell>
-                </TableRow>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Balance of {Others?.formatAddress(account, 4)}</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{balance}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Block Number</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{blockNumber}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Native Token Transfer</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onTransferCallback}>
+                                Transfer
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Sign Message</Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onPersonaSign}>
+                                Sign Message
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Identity</Typography>
+                        </TableCell>
+                        <TableCell>{renderIdentity()}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2">Social Address List</Typography>
+                        </TableCell>
+                        <TableCell>{renderAddressNames()}</TableCell>
+                    </TableRow>
+                </TableBody>
             </Table>
         </section>
     )
