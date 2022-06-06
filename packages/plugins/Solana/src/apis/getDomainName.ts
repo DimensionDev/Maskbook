@@ -16,9 +16,14 @@ const connection = (chainId: ChainId) => {
 }
 
 export async function lookup(name: string, chainId: ChainId) {
-    const { domainKey } = await getKey(name)
-    const registry = await NameRegistryState.retrieve(connection(chainId), domainKey)
-    return registry.owner.toBase58()
+    try {
+        const { domainKey } = await getKey(name.replace('.sol', ''))
+        const registry = await NameRegistryState.retrieve(connection(chainId), domainKey)
+        return registry.owner.toBase58()
+    } catch (error) {
+        console.error(error)
+        return undefined
+    }
 }
 
 export async function reverse(owner: string, chainId: ChainId) {
