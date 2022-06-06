@@ -130,6 +130,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
             supportedExtensionSites: [],
         },
+        iconFilterColor: 'rgba(85, 27, 249, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(84, 63, 196, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_solflare`,

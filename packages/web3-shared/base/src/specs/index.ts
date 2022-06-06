@@ -177,6 +177,10 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     icon: URL
     /** The provider name */
     name: string
+    /** The provider bar background gradient color */
+    backgroundGradient?: string
+    /** The provider icon filter color */
+    iconFilterColor?: string
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]

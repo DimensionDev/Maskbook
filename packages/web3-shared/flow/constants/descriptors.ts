@@ -91,6 +91,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         type: ProviderType.Blocto,
         name: 'Blocto',
         icon: new URL('../assets/blocto.png', import.meta.url),
+        iconFilterColor: 'rgba(52, 133, 196, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         homeLink: 'https://portto.com/',
         shortenLink: 'portto.com',
         enableRequirements: {
