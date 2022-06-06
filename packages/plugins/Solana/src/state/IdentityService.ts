@@ -2,8 +2,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 
-const SOL_RE = /(?=\w)\S{1,256}\.sol\b/
-const ADDRESS_FULL = /(?!0x)\w{44}/
+const SOL_RE = /\S{1,256}\.sol\b/
+const ADDRESS_FULL = /(?!0x)(?=[A-Za-z])\w{44}/
 
 export class IdentityService extends IdentityServiceState {
     constructor(protected context: Plugin.Shared.SharedContext) {

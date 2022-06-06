@@ -25,7 +25,6 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb
         }),
         IdentityService: new IdentityService(context),
         Settings: Settings_,
-        IdentityService: new IdentityService(context),
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
