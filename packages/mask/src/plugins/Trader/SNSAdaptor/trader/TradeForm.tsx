@@ -100,6 +100,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: 18,
             lineHeight: '22px',
             fontWeight: 600,
+            borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
             padding: '13px 0',
             marginTop: '0 !important',
@@ -109,6 +110,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             lineHeight: '22px',
             fontWeight: 600,
             padding: '13px 0',
+            borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
         },
         selectedTokenChip: {
@@ -474,7 +476,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     withChildren
                                     ActionButtonProps={{
                                         color: 'primary',
-                                        variant: 'roundedContained',
                                     }}
                                     infiniteUnlockContent={
                                         <Box component="span" display="flex" alignItems="center">
@@ -509,7 +510,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="roundedContained"
+                                                variant="contained"
                                                 color="error"
                                                 disabled={
                                                     focusedTrade?.loading ||
@@ -527,7 +528,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="roundedContained"
+                                                variant="contained"
                                                 disabled={
                                                     focusedTrade?.loading ||
                                                     !focusedTrade?.value ||
