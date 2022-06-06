@@ -5,14 +5,7 @@ import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    FungibleToken,
-    isLessThan,
-    formatBalance,
-    NetworkPluginID,
-    rightShift,
-    Wallet,
-} from '@masknet/web3-shared-base'
+import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -180,7 +173,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 })
 
 export interface AllTradeFormProps {
-    wallet?: Wallet | null
+    account?: string | null
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType>
     outputToken?: FungibleToken<ChainId, SchemaType>
@@ -199,7 +192,7 @@ export interface AllTradeFormProps {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
-        wallet,
+        account,
         trades,
         inputAmount,
         inputToken,
@@ -456,7 +449,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </IconButton>
                         </div>
                     </Box>
-                    {wallet ? (
+                    {account ? (
                         <Box className={classes.section}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
