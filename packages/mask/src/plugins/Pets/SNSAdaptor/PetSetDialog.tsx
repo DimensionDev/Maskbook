@@ -314,6 +314,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
+                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         size: 'large',
