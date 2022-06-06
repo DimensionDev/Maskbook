@@ -142,7 +142,10 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        getAssets?: (address: string) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
+        getAssets?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
         getHistory?: (
             address: string,
             tokenId: string,
@@ -192,15 +195,15 @@ export namespace RiskWarningBaseAPI {
 }
 
 export namespace StorageAPI {
-    export interface Storage {
-        set(key: string, value: any): Promise<void>
-        get<T>(key: string): Promise<T | undefined>
+    export interface Storage<T> {
+        get(key: string): Promise<T | undefined>
+        set(key: string, value: T): Promise<void>
         delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?(key: string): Storage
-        createBinaryStorage?(key: string): Storage
+        createJSON_Storage?<T>(key: string): Storage<T>
+        createBinaryStorage?<T>(key: string): Storage<T>
     }
 }
 
