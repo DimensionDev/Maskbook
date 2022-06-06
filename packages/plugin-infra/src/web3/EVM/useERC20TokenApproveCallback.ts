@@ -116,7 +116,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
             spender,
             balance,
         },
-        state,
+        { ...state, loading: loadingAllowance || loadingBalance || state.loading },
         approveCallback,
         resetCallback,
     ] as const
