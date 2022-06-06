@@ -91,7 +91,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
 
     const {
         value: bindings,
-        loading: loadingBingings,
+        loading: loadingBindings,
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
         if (!publicKeyAsHex) return
@@ -118,7 +118,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (loadingBingings || loadingPersona || loadingVerifyInfo) {
+    if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
