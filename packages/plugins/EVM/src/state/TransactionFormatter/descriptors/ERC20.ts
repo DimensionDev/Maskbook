@@ -12,7 +12,6 @@ export class ERC20Descriptor implements TransactionDescriptor {
             chainId: context.chainId,
         })
 
-        console.log(context)
         switch (context.name) {
             case 'approve':
                 return {
