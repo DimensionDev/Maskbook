@@ -85,7 +85,6 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
         if (!currentPersona?.identifier.publicKeyAsHex) return
-        if (!currentPersona.identifier) return
         if (!visitingPersonaIdentifier.identifier) return
         return NextIDProof.queryIsBound(
             currentPersona.identifier.publicKeyAsHex,
@@ -99,7 +98,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         loading,
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
-        if (!currentPersona) return
+        if (!currentPersona?.identifier.publicKeyAsHex) return
         return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
     }, [currentPersona, isOwn])
 
@@ -183,7 +182,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         open={openBindDialog}
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                         onBound={retryQueryBinding}
                     />
                 )}
@@ -193,7 +192,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
                         onUnBound={retryQueryBinding}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                     />
                 )}
             </>
@@ -233,7 +232,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? []}
+                    bounds={bindings?.proofs ?? EMPTY_LIST}
                     onBound={retryQueryBinding}
                 />
             )}
