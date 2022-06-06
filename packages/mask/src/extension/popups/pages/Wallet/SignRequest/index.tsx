@@ -83,6 +83,11 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
+const emptyMessage = {
+    data: '',
+    address: '',
+}
+
 const SignRequest = memo(() => {
     const { t } = useI18N()
     const routeLocation = useRouteLocation()
@@ -94,27 +99,29 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
+        if (!value) return emptyMessage
         if (
-            (value?.payload?.method === EthereumMethodType.ETH_SIGN ||
-                value?.payload?.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) &&
-            value.computedPayload?.data
+            value.payload.method === EthereumMethodType.ETH_SIGN ||
+            value.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
         ) {
-            let message = value.computedPayload?.data
-
             try {
-                message = toUtf8(value.computedPayload?.data)
-            } catch (error) {
-                console.log(error)
+                return {
+                    address: value.payload.params?.[0],
+                    data: toUtf8(value.payload.params?.[1] ?? ''),
+                }
+            } catch {
+                return {
+                    address: value.payload.params?.[0],
+                    data: value.payload.params?.[1],
+                }
             }
+        } else if (value.payload.method === EthereumMethodType.PERSONAL_SIGN)
             return {
-                address: value.computedPayload.to,
-                data: message,
+                address: value.payload.params?.[1],
+                data: value.payload.params?.[0],
             }
-        }
-        return {
-            address: '',
-            data: '',
-        }
+
+        return emptyMessage
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
