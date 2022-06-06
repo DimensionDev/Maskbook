@@ -193,7 +193,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const items =
             asset.items
                 .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
+                .filter((x) => x.metadata?.owner?.toLowerCase() === from.toLowerCase())
                 .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
         return createPageable(items, indicator, asset.continuation)
     }
