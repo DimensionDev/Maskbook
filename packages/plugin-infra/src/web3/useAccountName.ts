@@ -11,7 +11,7 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
 
     const { Others } = useWeb3State<void, T>(pluginID)
     const account = useAccount(pluginID, expectedAccount)
-    const proivderType = useProviderType(pluginID)
+    const providerType = useProviderType(pluginID)
     const wallets = useWallets(pluginID)
 
     return useMemo(() => {
@@ -20,6 +20,6 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
         if (wallet?.name) return wallet.name
 
         // else use the provider name as the account name
-        return (Others?.providerResolver.providerName as ProviderName | undefined)?.(proivderType)
-    }, [account, proivderType, wallets.map((x) => x.address.toLowerCase()), Others])
+        return (Others?.providerResolver.providerName as ProviderName | undefined)?.(providerType)
+    }, [account, providerType, wallets.map((x) => x.address.toLowerCase()), Others])
 }
