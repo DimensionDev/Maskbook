@@ -1,5 +1,6 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { once } from 'lodash-unified'
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useERC20TokenContract } from './useERC20TokenContract'
@@ -79,16 +80,13 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
 
             // send transaction and wait for hash
             return new Promise<string>(async (resolve, reject) => {
-                const revalidate = () => {
+                const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
-                }
+                })
                 erc20Contract.methods
                     .approve(spender, useExact ? amount : MaxUint256)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.RECEIPT, () => {
-                        revalidate()
-                    })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         revalidate()
                         resolve(receipt.transactionHash)
