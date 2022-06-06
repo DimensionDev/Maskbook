@@ -49,14 +49,18 @@ export class NameService extends NameServiceState<ChainId> {
     }
 
     override async reverse(chainId: ChainId, address: string) {
-        if (chainId !== ChainId.Mainnet) return
+        try {
+            if (chainId !== ChainId.Mainnet) return
 
-        const cachedDomain = await super.reverse(chainId, address)
-        if (cachedDomain) return cachedDomain
+            const cachedDomain = await super.reverse(chainId, address)
+            if (cachedDomain) return cachedDomain
 
-        const ens = await this.createENS()
-        const name = await ens.reverse(address)
-        await super.addName(chainId, address, name)
-        return super.reverse(chainId, address)
+            const ens = await this.createENS()
+            const name = await ens.reverse(address)
+            await super.addName(chainId, address, name)
+            return super.reverse(chainId, address)
+        } catch {
+            return
+        }
     }
 }

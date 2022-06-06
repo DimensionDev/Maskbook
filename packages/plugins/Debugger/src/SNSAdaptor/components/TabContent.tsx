@@ -1,11 +1,11 @@
 import { useBalance, useBlockNumber } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import type { IdentityAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    addressNames?: IdentityAddress[]
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
 const useStyles = makeStyles()({
@@ -14,8 +14,9 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TabContent({ identity, addressNames }: TabContentProps) {
+export function TabContent({ identity, socialAddressList }: TabContentProps) {
     const { classes } = useStyles()
+
     const renderIdentity = () => {
         return (
             <List>
@@ -53,7 +54,7 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
     const renderAddressNames = () => {
         return (
             <List>
-                {addressNames?.map((x) => (
+                {socialAddressList?.map((x) => (
                     <ListItem key={x.type}>
                         <ListItemText
                             primary={
@@ -85,7 +86,7 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
             {renderIdentity()}
 
             <Typography color="textPrimary" variant="h6">
-                Address Names
+                Social Address List
             </Typography>
             {renderAddressNames()}
         </section>
