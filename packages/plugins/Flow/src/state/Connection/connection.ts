@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
-import type { BlockObject, CompositeSignature, MutateOptions, QueryOptions } from '@blocto/fcl'
+import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
@@ -13,6 +13,7 @@ import {
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
 import { Web3StateSettings } from '../../settings'
+import { toHex } from '@masknet/shared-base'
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
@@ -180,16 +181,26 @@ class Connection implements BaseConnection {
     }
     async signMessage(dataToSign: string, signType?: string, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)
-        return web3.currentUser.signUserMessage(dataToSign)
+        const data = new TextEncoder().encode(dataToSign)
+        const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
+        if (!signed) throw new Error('Failed to sign message.')
+        return signed.signature
     }
     async verifyMessage(
         dataToVerify: string,
-        signature: CompositeSignature[],
+        signature: string,
         signType?: string,
         options?: FlowConnectionOptions,
     ): Promise<boolean> {
         const web3 = await this.getWeb3(options)
-        return web3.verifyUserSignatures(dataToVerify, signature)
+        if (!options?.account) throw new Error('No account found.')
+        return web3.verifyUserSignatures(dataToVerify, [
+            {
+                addr: options?.account,
+                keyId: 1,
+                signature,
+            },
+        ])
     }
     async callTransaction(query: QueryOptions, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)

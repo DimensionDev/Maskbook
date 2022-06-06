@@ -1,6 +1,6 @@
 import type { PublicKey, Transaction } from '@solana/web3.js'
 import { injectedSolflareProvider } from '@masknet/injected-script'
-import { Coin98MethodType, PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseInjectedProvider } from './BaseInjected'
 
