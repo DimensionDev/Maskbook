@@ -2,7 +2,7 @@ import { useAccount, useBalance, useBlockNumber, useWeb3Connection, useWeb3State
 import { makeStyles } from '@masknet/theme'
 import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
-import { Box, Button, List, ListItem, ListItemText, Table, TableCell, TableRow, Typography } from '@mui/material'
+import { Button, List, ListItem, ListItemText, Table, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback } from 'react'
 
 export interface TabContentProps {

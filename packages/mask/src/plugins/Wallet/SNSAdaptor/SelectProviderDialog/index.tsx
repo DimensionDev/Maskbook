@@ -67,7 +67,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const onProviderIconClicked = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
-            if (!(await Provider?.isReady(provider.type))) {
+            if (!Provider?.isReady(provider.type)) {
                 const downloadLink = Others?.providerResolver.providerDownloadLink(provider.type)
                 if (downloadLink) openWindow(downloadLink)
                 return

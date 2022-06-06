@@ -6,6 +6,7 @@ import { ChainId, chainResolver, formatWeiToGwei, GasOption, getRPCConstants, We
 import type { GasOptionAPI } from '../types'
 
 function avg(arr: number[]) {
+    // eslint-disable-next-line unicorn/no-array-reduce
     const sum = arr.reduce((a, v) => a + v)
     return Math.round(sum / arr.length)
 }
@@ -24,7 +25,8 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
                 baseFeePerGas: Number.parseInt(nth(result.baseFeePerGas, index) ?? '0', 16),
                 gasUsedRatio: nth(result.gasUsedRatio, index) || 0,
                 priorityFeePerGas:
-                    nth(result.reward, index)?.map((x) => Number.parseInt(x, 16)) ?? new Array(3).fill(0),
+                    nth(result.reward, index)?.map((x) => Number.parseInt(x, 16)) ??
+                    Array.from<number>({ length: 3 }).fill(0),
             })
             index += 1
         }
