@@ -1,10 +1,10 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import {
-    IdentityAddress,
     isSameAddress,
     NetworkPluginID,
     NonFungibleAsset,
     NonFungibleTokenCollection,
+    SocialAddress,
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, Wallet } from '@masknet/web3-shared-evm'
@@ -239,10 +239,6 @@ export function CollectionList({
         error,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
-
-    useEffect(() => {
-        if (next) next()
-    }, [next])
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles

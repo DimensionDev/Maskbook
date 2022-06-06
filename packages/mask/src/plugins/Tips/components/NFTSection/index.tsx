@@ -1,8 +1,9 @@
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { SchemaType } from '@masknet/web3-shared-evm'
+import { Button, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
@@ -73,9 +74,15 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     }, 10000)
 
     const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
-    const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(pluginId, undefined, {
-        chainId,
-    })
+    // const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    // TODO: add address and chainId && retry
+    const {
+        value: fetchedTokens = EMPTY_LIST,
+        done,
+        next,
+        error,
+        retry: retryFetchCollectible,
+    } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
 
     const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
@@ -89,7 +96,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         )
     }, [fetchedTokens, isEvm])
 
-    const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
+    const showLoadingIndicator = tokens.length === 0 && done && !guessLoading
 
     useEffect(() => {
         onEmpty?.(showLoadingIndicator)
@@ -109,13 +116,15 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                                     setNonFungibleTokenId(id)
                                     setNonFungibleTokenAddress(address || '')
                                 }}
+                                nextPage={next}
+                                loadFinish={done}
                             />
                         )
                     }
-                    if (loading || guessLoading) {
+                    if (tokens.length === 0 && (!done || guessLoading)) {
                         return (
                             <div className={classes.statusBox}>
-                                <CircularProgress size={24} />
+                                <LoadingBase />
                                 <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
                             </div>
                         )

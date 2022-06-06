@@ -2,7 +2,7 @@ import type { NonFungibleAsset, NetworkPluginID } from '@masknet/web3-shared-bas
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { asyncIteratorMerge } from '@masknet/shared-base'
 import { useNetworkDescriptors } from './useNetworkDescriptors'
 
@@ -50,6 +50,7 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
 
     const next = useCallback(async () => {
         if (!iterator || done) return
+
         try {
             for (const v of Array.from({ length: 48 })) {
                 const { value, done: iteratorDone } = await iterator.next()
@@ -72,6 +73,11 @@ export function useNonFungibleAssets2<T extends NetworkPluginID>(
             setDone(true)
         }
     }, [iterator, done])
+
+    // Execute once after next update
+    useEffect(() => {
+        if (next) next()
+    }, [next])
 
     const retry = useCallback(() => {
         setAssets([])
