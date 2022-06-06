@@ -1,6 +1,6 @@
 import type { PublicKey, Transaction } from '@solana/web3.js'
 import { injectedSolflareProvider } from '@masknet/injected-script'
-import { Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { Coin98MethodType, PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseInjectedProvider } from './BaseInjected'
 
@@ -11,7 +11,7 @@ export class SolflareProvider extends BaseInjectedProvider implements SolanaProv
 
     override async signMessage(dataToSign: string): Promise<string> {
         const { signature } = (await this.bridge.request({
-            method: Coin98MethodType.SOL_SIGN,
+            method: PhantomMethodType.SIGN_MESSAGE,
             params: [new TextEncoder().encode(dataToSign)],
         })) as { signature: string }
         return signature
@@ -19,7 +19,7 @@ export class SolflareProvider extends BaseInjectedProvider implements SolanaProv
 
     override async signTransaction(transaction: Transaction): Promise<Transaction> {
         const { signature, publicKey } = (await this.bridge.request({
-            method: Coin98MethodType.SOL_SIGN,
+            method: PhantomMethodType.SIGN_TRANSACTION,
             params: [transaction],
         })) as { signature: Buffer; publicKey: PublicKey }
         transaction.addSignature(publicKey, signature)
