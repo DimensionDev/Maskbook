@@ -1,8 +1,8 @@
-import { useBalance, useBlockNumber, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useBalance, useBlockNumber, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
-import { Box, Button, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Box, Button, List, ListItem, ListItemText, Table, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback } from 'react'
 
 export interface TabContentProps {
@@ -21,7 +21,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const renderIdentity = () => {
         return (
-            <List>
+            <List dense>
                 <ListItem>
                     <ListItemText
                         primary={<Typography color="textPrimary">Nickname</Typography>}
@@ -43,11 +43,8 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                 <ListItem sx={{ display: 'block' }}>
                     <ListItemText
                         primary={<Typography color="textPrimary">Avatar</Typography>}
-                        secondary={identity?.avatar}
+                        secondary={<img src={identity?.avatar} style={{ maxWidth: 100 }} />}
                     />
-                    <Box sx={{ mt: 1 }}>
-                        <img src={identity?.avatar} />
-                    </Box>
                 </ListItem>
             </List>
         )
@@ -55,7 +52,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const renderAddressNames = () => {
         return (
-            <List>
+            <List dense>
                 {socialAddressList?.map((x) => (
                     <ListItem key={`${x.type}_${x.address}`}>
                         <ListItemText
@@ -73,6 +70,8 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
     }
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const { Others } = useWeb3State()
+    const account = useAccount()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const connection = useWeb3Connection()
@@ -87,27 +86,61 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const onPersonaSign = useCallback(async () => {
         const signed = await connection.signMessage('hello world', 'personalSign')
-        console.log(signed)
+        window.alert(`Signed: ${signed}`)
     }, [connection])
 
     return (
         <section className={classes.container}>
-            <Button onClick={onTransferCallback}>Transfer</Button>
-            <Button onClick={onPersonaSign}>Sign</Button>
-            <Typography color="textPrimary" variant="h6">
-                Balance {balance} <br />
-                BlockNumber {blockNumber} <br />
-            </Typography>
-
-            <Typography color="textPrimary" variant="h6">
-                Identity
-            </Typography>
-            {renderIdentity()}
-
-            <Typography color="textPrimary" variant="h6">
-                Social Address List
-            </Typography>
-            {renderAddressNames()}
+            <Table size="small">
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Balance of {Others?.formatAddress(account, 4)}</Typography>
+                    </TableCell>
+                    <TableCell>
+                        <Typography variant="body2">{balance}</Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Block Number</Typography>
+                    </TableCell>
+                    <TableCell>
+                        <Typography variant="body2">{blockNumber}</Typography>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Native Token Transfer</Typography>
+                    </TableCell>
+                    <TableCell>
+                        <Button size="small" onClick={onTransferCallback}>
+                            Transfer
+                        </Button>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Sign Message</Typography>
+                    </TableCell>
+                    <TableCell>
+                        <Button size="small" onClick={onPersonaSign}>
+                            Sign Message
+                        </Button>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Identity</Typography>
+                    </TableCell>
+                    <TableCell>{renderIdentity()}</TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>
+                        <Typography variant="body2">Social Address List</Typography>
+                    </TableCell>
+                    <TableCell>{renderAddressNames()}</TableCell>
+                </TableRow>
+            </Table>
         </section>
     )
 }
