@@ -31,7 +31,7 @@ export class Base implements Translator {
                     slowOption?.suggestedMaxFeePerGas &&
                     normalOption &&
                     isLessThan(
-                        config.maxFeePerGas ? formatWeiToGwei(config.maxFeePerGas as string) : 0,
+                        config.maxPriorityFeePerGas ? formatWeiToGwei(config.maxPriorityFeePerGas as string) : 0,
                         slowOption.suggestedMaxPriorityFeePerGas,
                     )
                 ) {
