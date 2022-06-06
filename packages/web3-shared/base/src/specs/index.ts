@@ -91,6 +91,7 @@ export enum SocialAddressType {
     UNS = 'UNS',
     DNS = 'DNS',
     RSS3 = 'RSS3',
+    KV = 'KV',
     GUN = 'GUN',
     THE_GRAPH = 'THE_GRAPH',
     TWITTER_BLUE = 'TWITTER_BLUE',
