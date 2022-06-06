@@ -39,11 +39,11 @@ export async function getWallet(address?: string) {
         return wallets.find((x) => isSameAddress(x.address, address))
     }
     const wallet = await database.getWallet(address)
-    if (!wallet) return null
+    if (!wallet?.hasStoredKeyInfo) return null
     return sanitizeWallet(wallet)
 }
 
-export async function getWallets(storageRequired = false): Promise<Wallet[]> {
+export async function getWallets(): Promise<Wallet[]> {
     if (hasNativeAPI) {
         const response = await sendPayload(createPayload(0, EthereumMethodType.ETH_ACCOUNTS, []))
         const accounts = response.result as string[] | undefined
@@ -66,7 +66,7 @@ export async function getWallets(storageRequired = false): Promise<Wallet[]> {
         ]
     }
     const wallets = await database.getWallets()
-    return wallets.filter((x) => x.hasStoredKeyInfo || !storageRequired).map(sanitizeWallet)
+    return wallets.filter((x) => x.hasStoredKeyInfo).map(sanitizeWallet)
 }
 
 export function createMnemonicWords() {
@@ -295,8 +295,9 @@ export async function recoverWalletFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+    initialPassword?: string,
 ) {
-    const password_ = await password.INTERNAL_getPasswordRequired()
+    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
@@ -325,8 +326,8 @@ export async function recoverWalletFromMnemonic(
     }
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
-    const password_ = await password.INTERNAL_getPasswordRequired()
+export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
+    const password_ = initialPassword_ ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
         name,

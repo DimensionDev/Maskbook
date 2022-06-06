@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
@@ -85,7 +84,7 @@ const SwitchWallet = memo(() => {
 
     const navigate = useNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM, true)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const walletPrimary = useWalletPrimary(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {
@@ -112,9 +111,6 @@ const SwitchWallet = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>
-                <NetworkSelector />
-            </div>
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (

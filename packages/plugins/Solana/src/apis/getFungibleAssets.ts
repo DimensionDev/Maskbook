@@ -1,4 +1,4 @@
-import { FungibleAsset, CurrencyType, Pageable, HubOptions } from '@masknet/web3-shared-base'
+import { FungibleAsset, CurrencyType, Pageable, HubOptions, createPageable } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
 import { TokenListProvider } from '@solana/spl-token-registry'
@@ -84,9 +84,5 @@ export async function getFungibleAssets(
         .flat()
         .filter(Boolean)
 
-    return {
-        currentPage: 0,
-        hasNextPage: false,
-        data: assets as Array<FungibleAsset<ChainId, SchemaType>>,
-    }
+    return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, 0)
 }

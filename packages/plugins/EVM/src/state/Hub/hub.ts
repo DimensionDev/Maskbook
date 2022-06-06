@@ -71,7 +71,7 @@ class Hub implements EVM_Hub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         // only the first page is available
-        if ((options?.page ?? 0) > 0) return createPageable([])
+        if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
         try {
             return DeBank.getAssets(account, { chainId: this.chainId, ...options })
         } catch {
@@ -158,7 +158,7 @@ class Hub implements EVM_Hub {
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 
@@ -171,7 +171,7 @@ class Hub implements EVM_Hub {
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 
@@ -187,7 +187,7 @@ class Hub implements EVM_Hub {
     ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleCollections(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
                 chainId: options?.chainId,
             })

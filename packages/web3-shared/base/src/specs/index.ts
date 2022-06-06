@@ -9,10 +9,13 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
+export interface Pageable<Item, Indicator = number> {
+    /** the indicator of the current page */
+    indicator: Indicator
+    /** the indicator of the next page */
+    nextIndicator?: Indicator
+    /** items data */
+    data: Item[]
 }
 
 export type Color =
@@ -455,12 +458,17 @@ export interface RecentTransaction<ChainId, Transaction> {
     chainId: ChainId
     /** status type */
     status: TransactionStatusType
-    /** available tx candidates */
+    /** all available tx candidates */
     candidates: Record<string, Transaction>
     /** record created at */
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+}
+
+export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
+    /** a dynamically computed field in the hook which means the minted (initial) transaction */
+    _tx: Transaction
 }
 
 export interface TokenList<ChainId, SchemaType> {
@@ -486,9 +494,9 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
-export interface WatchEvents {
+export interface WatchEvents<Transaction> {
     /** Emit when the watched transaction status updated. */
-    progress: [string, TransactionStatusType]
+    progress: [string, TransactionStatusType, Transaction | undefined]
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -652,7 +660,7 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId> {
+export interface HubOptions<ChainId, Indicator extends string | number = number> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -664,7 +672,7 @@ export interface HubOptions<ChainId> {
     /** The item size of each page. */
     size?: number
     /** The page index. */
-    page?: number
+    indicator?: Indicator
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -856,14 +864,14 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
-    emitter: Emitter<WatchEvents>
+    emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => void
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => void
     /** Update transaction status */
-    notifyTransaction: (id: string, status: TransactionStatusType) => void
+    notifyTransaction: (id: string, status: TransactionStatusType, transaction: Transaction) => void
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */

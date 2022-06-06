@@ -1,7 +1,17 @@
-export function createPageable<T extends unknown>(data: T[] = [], currentPage = 0, hasNextPage = false) {
+export function createPageable<Item, Indicator extends string | number>(
+    data: Item[],
+    indicator: Indicator,
+    nextIndicator?: Indicator,
+) {
+    if (typeof nextIndicator !== 'undefined') {
+        return {
+            data,
+            indicator,
+            nextIndicator,
+        }
+    }
     return {
         data,
-        currentPage,
-        hasNextPage,
+        indicator,
     }
 }

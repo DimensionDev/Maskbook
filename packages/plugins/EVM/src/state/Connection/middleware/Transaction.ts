@@ -8,20 +8,6 @@ import { Web3StateSettings } from '../../../settings'
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const { Transaction, TransactionWatcher } = Web3StateSettings.value
-        let replacedHash
-        switch (context.method) {
-            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                try {
-                    const [hash, config] = context.request.params as [string, Transaction]
-
-                    // remember the hash of the replaced tx
-                    replacedHash = hash
-                    context.write(await context.connection.sendTransaction(config, context.requestOptions))
-                } catch (error) {
-                    context.abort(error)
-                }
-                break
-        }
 
         await next()
 
@@ -29,14 +15,6 @@ export class RecentTransaction implements Middleware<Context> {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
-                    if (replacedHash)
-                        await Transaction?.replaceTransaction?.(
-                            context.chainId,
-                            context.account,
-                            replacedHash,
-                            context.result,
-                            context.config,
-                        )
                     else
                         await Transaction?.addTransaction?.(
                             context.chainId,
@@ -44,8 +22,6 @@ export class RecentTransaction implements Middleware<Context> {
                             context.result,
                             context.config,
                         )
-
-                    // add the transaction into the internal watch list
                     TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
@@ -59,6 +35,17 @@ export class RecentTransaction implements Middleware<Context> {
                             status,
                         )
                     }
+                    break
+                case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                    if (!context.config || typeof context.result !== 'string') return
+                    const [hash] = context.request.params as [string, Transaction]
+                    await Transaction?.replaceTransaction?.(
+                        context.chainId,
+                        context.account,
+                        hash,
+                        context.result,
+                        context.config,
+                    )
                     break
             }
         } catch {

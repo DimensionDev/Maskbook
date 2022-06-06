@@ -6,7 +6,11 @@ import { UNDEFINED } from '../utils/subscription'
 import { useDefaultNetworkType } from './useDefaultNetworkType'
 import { useCurrentWeb3NetworkNetworkType } from './Context'
 
-export function useNetworkType<T extends NetworkPluginID>(pluginID?: T) {
+export function useNetworkType<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+) {
+    type Result = S extends 'all' ? Web3Helper.NetworkTypeAll : Web3Helper.Definition[T]['NetworkType']
+
     const { Provider } = useWeb3State(pluginID)
     const currentNetworkType = useCurrentWeb3NetworkNetworkType(pluginID)
     const defaultNetworkType = useDefaultNetworkType(pluginID) as Web3Helper.Definition[T]['NetworkType']
@@ -14,5 +18,5 @@ export function useNetworkType<T extends NetworkPluginID>(pluginID?: T) {
         (Provider?.networkType ?? UNDEFINED) as Subscription<Web3Helper.Definition[T]['NetworkType'] | undefined>,
     )
 
-    return currentNetworkType ?? networkType ?? defaultNetworkType
+    return (currentNetworkType ?? networkType ?? defaultNetworkType) as Result
 }

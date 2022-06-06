@@ -88,9 +88,10 @@ export class DeBankAPI
                     })),
                     options?.chainId,
                 ),
+                0,
             )
         } catch {
-            return createPageable()
+            return createPageable([], 0)
         }
     }
 
@@ -99,12 +100,12 @@ export class DeBankAPI
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return createPageable()
+        if (!CHAIN_ID) return createPageable([], 0)
 
         const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return createPageable(formatTransactions(chainId, data))
+        return createPageable(formatTransactions(chainId, data), 0)
     }
 }
