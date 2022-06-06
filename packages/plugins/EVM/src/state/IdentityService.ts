@@ -67,7 +67,7 @@ export class IdentityService extends IdentityServiceState {
 
         const addressENS = getSettledAddress(allSettled[0])
         const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressGUN = getSettledAddress(allSettled[2])
+        const addressKV = getSettledAddress(allSettled[2])
 
         return [
             isValidSocialAddress(address)
@@ -94,12 +94,12 @@ export class IdentityService extends IdentityServiceState {
                       address: addressRSS3,
                   }
                 : null,
-            isValidSocialAddress(addressGUN)
+            isValidSocialAddress(addressKV)
                 ? {
                       networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                      type: SocialAddressType.GUN,
-                      label: addressGUN,
-                      address: addressGUN,
+                      type: SocialAddressType.KV,
+                      label: addressKV,
+                      address: addressKV,
                   }
                 : null,
         ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>

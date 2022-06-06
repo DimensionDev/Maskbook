@@ -159,7 +159,19 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                 <TableBody>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Balance of {Others?.formatAddress(account, 4)}</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Account
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{Others?.formatAddress(account, 4)}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Balance
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Typography variant="body2">{balance}</Typography>
@@ -167,7 +179,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Block Number</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Block Number
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Typography variant="body2">{blockNumber}</Typography>
@@ -175,7 +189,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Native Token Transfer</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Native Token Transfer
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Button size="small" onClick={onTransferCallback}>
@@ -185,7 +201,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Sign Message</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Sign Message
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Button
@@ -206,7 +224,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Sign Typed Data</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Sign Typed Data
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Button
@@ -226,7 +246,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Switch To Matic</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Switch Chain
+                            </Typography>
                         </TableCell>
                         <TableCell>
                             <Button
@@ -234,7 +256,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                 onClick={async () => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            await onSwitchChain(ChainId.Matic)
+                                            await onSwitchChain(
+                                                chainId === ChainId.Mainnet ? ChainId.Matic : ChainId.Mainnet,
+                                            )
                                             break
                                         default:
                                             break
@@ -246,13 +270,17 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Identity</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Profile Data
+                            </Typography>
                         </TableCell>
                         <TableCell>{renderIdentity()}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Typography variant="body2">Social Address List</Typography>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Found Address Names
+                            </Typography>
                         </TableCell>
                         <TableCell>{renderAddressNames()}</TableCell>
                     </TableRow>

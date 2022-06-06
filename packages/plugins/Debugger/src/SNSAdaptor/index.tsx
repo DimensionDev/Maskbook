@@ -16,9 +16,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 TabContent,
             },
             Utils: {
-                filter(x) {
-                    return x.type !== SocialAddressType.ENS
-                },
                 sorter(a, z) {
                     if (a.type === SocialAddressType.ADDRESS) return 1
                     if (z.type === SocialAddressType.ADDRESS) return -1

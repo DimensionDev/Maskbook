@@ -281,7 +281,9 @@ class Connection implements EVM_Connection {
     async switchChain(options?: EVM_Web3ConnectionOptions): Promise<void> {
         await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
-    getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
+    async getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
+        const account = options?.account ?? this.account
+        if (!account) return '0'
         return this.getBalance(options?.account ?? this.account, options)
     }
     async getFungibleTokenBalance(address: string, options?: EVM_Web3ConnectionOptions): Promise<string> {

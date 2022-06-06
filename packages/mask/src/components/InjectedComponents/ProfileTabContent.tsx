@@ -59,9 +59,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
-    const displayPlugins = availablePlugins
-        .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-        .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
+    const displayPlugins = useMemo(() => {
+        return availablePlugins
+            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+            .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
+    }, [
+        identity.identifier?.userId,
+        availablePlugins.map((x) => x.ID).join(),
+        socialAddressList.map((x) => x.address).join(),
+    ])
 
     const tabs = displayPlugins
         .sort((a, z) => {
