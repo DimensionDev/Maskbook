@@ -244,7 +244,7 @@ class Connection implements EVM_Connection {
     }
     async getNonFungibleTokenContract(
         address: string,
-        id: string,
+        id?: string,
         options?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         // ERC721
@@ -252,7 +252,7 @@ class Connection implements EVM_Connection {
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
-            contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
+            id ? contract?.methods.ownerOf(id).call() ?? EMPTY_STRING : undefined,
             contract?.methods.balanceOf(address).call() ?? EMPTY_STRING,
         ])
         const [name, symbol, owner, balance] = results.map((result) =>

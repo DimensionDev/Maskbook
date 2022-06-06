@@ -571,7 +571,7 @@ export interface Connection<
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
-        id: string,
+        id?: string,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */

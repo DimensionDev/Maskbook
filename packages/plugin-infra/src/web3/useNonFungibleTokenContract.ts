@@ -11,13 +11,14 @@ export function useNonFungibleTokenContract<T extends NetworkPluginID>(
 ) {
     type GetNonFungibleTokenContract = (
         address: string,
-        id: string,
+        id?: string,
         options?: Web3Helper.Web3ConnectionOptions<T>,
     ) => Promise<NonFungibleTokenContract<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection || !address || !id) return
+        if (!connection || !address) return
+        // id is optional for some chains, for example, EVM chains.
         return (connection.getNonFungibleTokenContract as GetNonFungibleTokenContract)(address, id)
     }, [address, id, connection])
 }

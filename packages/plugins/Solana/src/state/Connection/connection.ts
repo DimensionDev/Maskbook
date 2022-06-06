@@ -81,7 +81,7 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
+        id?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
