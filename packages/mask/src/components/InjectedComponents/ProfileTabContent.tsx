@@ -20,8 +20,6 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
-const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
-
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
         const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
@@ -55,7 +53,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } =
         useSocialAddressListAll(identity)
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
-        platform,
+        activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined,
         identity.identifier?.userId,
     )
 
@@ -90,28 +88,33 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
         }))
 
-    const selectedTabId = selectedTab ?? first(tabs)?.id
     const currentAccountNotConnectPersona =
         currentIdentity.identifier === identity.identifier &&
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
             -1
-    const Component = getTabContent(
-        isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona && selectedTabId !== PluginId.Debugger
+    const selectedTabId = selectedTab ?? first(tabs)?.id
+    const componentTabId =
+        isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabId,
-    )
-    const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
+            : selectedTabId
 
-    console.log('DEBUG: logs')
-    console.log({
-        selectedTabId,
-        socialAddressList,
-        personaList,
-        activatedPlugins,
-        availablePlugins,
-        displayPlugins,
-        tabs,
-    })
+    const component = useMemo(() => {
+        const Component = getTabContent(componentTabId)
+        const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
+
+        return (
+            <Component
+                identity={identity}
+                personaList={personaList?.map((x) => x.persona)}
+                socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
+            />
+        )
+    }, [
+        componentTabId,
+        displayPlugins.map((x) => x.ID).join(),
+        personaList.join(),
+        socialAddressList.map((x) => x.address).join(),
+    ])
 
     useLocationChange(() => {
         setSelectedTab(undefined)
@@ -159,13 +162,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     </Typography>
                 )}
             </div>
-            <div className={classes.content}>
-                <Component
-                    identity={identity}
-                    personaList={personaList?.map((x) => x.persona)}
-                    socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
-                />
-            </div>
+            <div className={classes.content}>{component}</div>
         </div>
     )
 }

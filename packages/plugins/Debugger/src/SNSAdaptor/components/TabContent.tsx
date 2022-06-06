@@ -92,7 +92,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     return (
         <section className={classes.container}>
-            <Button onClick={onTransferCallback}>Trasfer</Button>
+            <Button onClick={onTransferCallback}>Transfer</Button>
             <Button onClick={onPersonaSign}>Sign</Button>
             <Typography color="textPrimary" variant="h6">
                 Balance {balance} <br />

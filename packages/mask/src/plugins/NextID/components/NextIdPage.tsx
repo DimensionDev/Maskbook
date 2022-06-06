@@ -69,7 +69,6 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
-
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
         return (
             <Button variant="contained" onClick={personaConnectStatus.action}>
@@ -82,25 +81,22 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
+    const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
+        if (!publicKeyAsHex) return
         if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
-            currentPersona.identifier.publicKeyAsHex,
-            platform,
-            visitingPersonaIdentifier.identifier.userId,
-        )
-    }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
+        return NextIDProof.queryIsBound(publicKeyAsHex, platform, visitingPersonaIdentifier.identifier.userId)
+    }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
     const {
         value: bindings,
-        loading,
+        loading: loadingBingings,
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-    }, [currentPersona, isOwn])
+        if (!publicKeyAsHex) return
+        return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
+    }, [publicKeyAsHex])
 
     const onVerify = async () => {
         reset()
@@ -122,7 +118,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (loading || loadingPersona || loadingVerifyInfo) {
+    if (loadingBingings || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
