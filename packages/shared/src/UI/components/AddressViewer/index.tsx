@@ -48,6 +48,7 @@ export function AddressViewer({ identityAddress }: AddressViewerProps) {
         [SocialAddressType.NEXT_ID]: t.address_viewer_address_name_address(),
         [SocialAddressType.THE_GRAPH]: t.address_viewer_address_name_address(),
         [SocialAddressType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
+        [SocialAddressType.SOL]: t.address_viewer_address_name_sol(),
     }
 
     const rulesTipMap = [
