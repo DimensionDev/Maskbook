@@ -98,16 +98,12 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                     .approve(spender, useExact ? amount : MaxUint256)
                     .send(config as NonPayableTx)
                     .on(TransactionEventType.TRANSACTION_HASH, () => {
-                        revalidate()
                         setApproving(true)
                     })
-                    .on(TransactionEventType.RECEIPT, () => {
-                        revalidate()
-                    })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                        revalidate()
                         resolve(receipt.transactionHash)
                         setApproving(false)
+                        revalidate()
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         revalidate()

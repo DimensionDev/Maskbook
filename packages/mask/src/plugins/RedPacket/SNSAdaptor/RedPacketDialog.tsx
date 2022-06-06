@@ -176,7 +176,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const title = isCreateStep ? t.display_name() : t.details()
 
     return (
-        <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
+        <InjectedDialog
+            open={props.open}
+            title={title}
+            onClose={isCreateStep ? onClose : () => setStep(CreateRedPacketPageStep.NewRedPacketPage)}
+            disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                     <AbstractTab height={dialogContentHeight} {...tabProps} />

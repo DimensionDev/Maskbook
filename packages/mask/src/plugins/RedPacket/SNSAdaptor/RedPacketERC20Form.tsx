@@ -139,7 +139,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = rightShift(rawAmount ?? '0', token?.decimals)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
