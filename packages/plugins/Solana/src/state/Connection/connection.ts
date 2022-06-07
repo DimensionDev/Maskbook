@@ -1,14 +1,4 @@
 import {
-    BlockResponse,
-    Connection as SolanaConnection,
-    sendAndConfirmRawTransaction,
-    Transaction,
-} from '@solana/web3.js'
-import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
-import { Providers } from './provider'
-import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
-import { NETWORK_ENDPOINTS } from '../../constants'
-import {
     Account,
     ConnectionOptions,
     FungibleToken,
@@ -17,11 +7,23 @@ import {
     NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { Web3StateSettings } from '../../settings'
+import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
+import {
+    BlockResponse,
+    Connection as SolConnection,
+    PublicKey,
+    sendAndConfirmRawTransaction,
+    Transaction,
+} from '@solana/web3.js'
+import { NETWORK_ENDPOINTS } from '../../constants'
 import { SolanaRPC } from '../../messages'
+import { Web3StateSettings } from '../../settings'
+import { Providers } from './provider'
+import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
+import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
 
 class Connection implements BaseConnection {
-    private connections: Map<ChainId, SolanaConnection> = new Map()
+    private connections: Map<ChainId, SolConnection> = new Map()
 
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
 
@@ -56,14 +58,51 @@ class Connection implements BaseConnection {
     async disconnect(options?: SolanaWeb3ConnectionOptions): Promise<void> {
         await Web3StateSettings.value.Provider?.disconnect(options?.providerType ?? this.providerType)
     }
-    transferFungibleToken(
+    async transferFungibleToken(
         address: string,
         recipient: string,
         amount: string,
         memo?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        if (!options?.account) throw new Error('No payer provides.')
+        const chainId = options.chainId ?? ChainId.Mainnet
+        const connection = this.connections.get(chainId) ?? new SolConnection(NETWORK_ENDPOINTS[chainId])
+
+        const payer = new PublicKey(options.account)
+        const recipientPubkey = new PublicKey(recipient)
+        const mint = new PublicKey(address)
+        const formatTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            payer,
+            mint,
+            payer,
+            this.signTransaction,
+        )
+        const toTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            payer,
+            mint,
+            recipientPubkey,
+            this.signTransaction,
+        )
+        const transaction = new Transaction().add(
+            createTransferInstruction(
+                formatTokenAccount.address,
+                toTokenAccount.address,
+                payer,
+                Number.parseInt(amount, 10),
+            ),
+        )
+        const blockHash = await connection.getRecentBlockhash()
+        transaction.feePayer = payer
+        transaction.recentBlockhash = blockHash.blockhash
+        debugger
+        const signed = await this.signTransaction(transaction)
+        debugger
+
+        const signature = await connection.sendRawTransaction(signed.serialize())
+        return signature
     }
     transferNonFungibleToken(
         address: string,
@@ -134,7 +173,7 @@ class Connection implements BaseConnection {
 
     getWeb3Connection(options?: SolanaWeb3ConnectionOptions) {
         const chainId = options?.chainId ?? this.chainId
-        const connection = this.connections.get(chainId) ?? new SolanaConnection(NETWORK_ENDPOINTS[chainId])
+        const connection = this.connections.get(chainId) ?? new SolConnection(NETWORK_ENDPOINTS[chainId])
         this.connections.set(chainId, connection)
         return connection
     }

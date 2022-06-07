@@ -102,7 +102,7 @@ export const TipButton: FC<Props> = ({
             if (!allAddresses.length || !receiver?.userId) return
             PluginNextIDMessages.tipTask.sendToLocal({
                 recipientSnsId: receiver.userId,
-                addresses: allAddresses,
+                addresses: ['84v6DuTZAoaz6UefXFyAvBxqVxafyW22AG2YffHxzWJn'],
             })
         },
         [disabled, allAddresses, receiver?.userId],
