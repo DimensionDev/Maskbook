@@ -1,5 +1,7 @@
 import { memo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { uniqBy } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
@@ -22,10 +24,12 @@ import {
     formatBalance,
     FungibleToken,
     isSameAddress,
+    minus,
+    multipliedBy,
     NetworkPluginID,
+    toZero,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -97,11 +101,20 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const sortedFungibleTokens = filteredFungibleTokens
         .filter((x) => !isBlockedToken(x))
         .sort((a, z) => {
-            const aUSD = Number.parseFloat(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
-            const zUSD = Number.parseFloat(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
+            const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+            const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
-            const aBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-            const zBalance = Number.parseFloat(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+            const aPrice = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
+            const zPrice = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
+
+            const aUSD = multipliedBy(aPrice, aBalance)
+            const zUSD = multipliedBy(zPrice, zBalance)
+
+            const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
+            const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+
+            const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
+            const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
 
             // the currently selected chain id
             if (a.chainId !== z.chainId) {
@@ -110,22 +123,26 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             }
 
             // native token
-            if (isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))) return -1
-            if (isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))) return 1
+            if (isNativeTokenA) return -1
+            if (isNativeTokenZ) return 1
 
             // mask token with position value
-            if (aUSD && isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
-            if (zUSD && isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))) return 1
+            if (aUSD.isPositive() && isMaskTokenA) return -1
+            if (zUSD.isPositive() && isMaskTokenZ) return 1
 
             // token value
-            if (aUSD !== zUSD) zUSD - aUSD
+            if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+
+            // token balance
+            if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
 
             // trusted token
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
 
-            // token balance
-            if (aBalance !== zBalance) return zBalance - aBalance
+            // mask token with position value
+            if (isMaskTokenA) return -1
+            if (isMaskTokenZ) return 1
 
             // alphabet
             if (a.name !== z.name) return a.name < z.name ? -1 : 1
