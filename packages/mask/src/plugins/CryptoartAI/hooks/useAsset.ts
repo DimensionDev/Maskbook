@@ -1,8 +1,9 @@
-import { useAccount, useChainId, useTokenConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { toTokenIdentifier } from '../utils'
 import type { Token } from '../types'
-
 import { getAsset } from '../apis'
 
 interface OwnerProps {
@@ -10,8 +11,8 @@ interface OwnerProps {
 }
 
 export function useAsset(token?: Token) {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { WNATIVE_ADDRESS } = useTokenConstants()
 
     return useAsyncRetry(async () => {

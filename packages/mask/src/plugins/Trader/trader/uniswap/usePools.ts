@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
 import { isZero } from '@masknet/web3-shared-base'
+import { MulticallStateType, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 
 export enum PoolState {
     LOADING = 0,
@@ -19,12 +19,12 @@ export enum PoolState {
 
 export function usePools(
     tradeProvider: TradeProvider,
-    poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][],
-): [PoolState, Pool | null][] {
+    poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]>,
+): Array<[PoolState, Pool | null]> {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const context = useGetTradeContext(tradeProvider)
 
-    const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
+    const transformed: Array<[Token, Token, FeeAmount] | null> = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
             if (!chainId || !currencyA || !currencyB || !feeAmount) return null
 
@@ -53,7 +53,7 @@ export function usePools(
         }
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
-    const poolContracts = usePoolContracts(poolAddresses, chainId)
+    const poolContracts = usePoolContracts(chainId, poolAddresses)
 
     const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
@@ -111,7 +111,7 @@ export function usePool(
     currencyB: Currency | undefined,
     feeAmount: FeeAmount | undefined,
 ): [PoolState, Pool | null] {
-    const poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][] = useMemo(
+    const poolKeys: Array<[Currency | undefined, Currency | undefined, FeeAmount | undefined]> = useMemo(
         () => [[currencyA, currencyB, feeAmount]],
         [currencyA, currencyB, feeAmount],
     )

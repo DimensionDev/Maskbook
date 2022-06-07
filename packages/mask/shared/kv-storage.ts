@@ -45,6 +45,7 @@ export const PersistentStorages = {
             [PluginId.Game]: false,
             [PluginId.FindTruman]: false,
             [PluginId.GoPlusSecurity]: false,
+            [PluginId.Referral]: false,
         },
     ),
 }

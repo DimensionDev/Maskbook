@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import { useLocation, useWindowScroll } from 'react-use'
+import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
+import type { DataProvider } from '@masknet/public-api'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
-import type { DataProvider } from '@masknet/public-api'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {
@@ -23,13 +23,10 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const popper = useRef<HTMLDivElement | null>(null)
 
-    // #region select token and provider dialog could be open by trending view
+    // #region select token and provider dialog could be opened by trending view
     const onFreezed = useCallback((ev: { open: boolean }) => setFreezed(ev.open), [])
-    useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, onFreezed)
-    useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
     // #endregion
@@ -68,8 +65,8 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const position = useWindowScroll()
     useEffect(() => {
         if (!popper.current) return
-        const { top = Number.NaN, height = Number.NaN } = popper.current?.getBoundingClientRect() ?? {}
-        if ((top < 0 && -1 * top > height) || top > document.documentElement.clientHeight) {
+        const { top, height } = popper.current.getBoundingClientRect()
+        if ((top < 0 && -top > height) || top > document.documentElement.clientHeight) {
             // out off bottom bound
             setAnchorEl(null)
         }

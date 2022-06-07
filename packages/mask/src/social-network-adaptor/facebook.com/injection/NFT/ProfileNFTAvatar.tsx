@@ -13,11 +13,12 @@ import {
 } from '../../utils/selector'
 import { useCallback, useEffect } from 'react'
 import { toPNG } from '../../../../plugins/Avatar/utils'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -61,9 +62,9 @@ function NFTAvatarInFacebookFirstStep() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
+        async (token: NonFungibleToken<ChainId, SchemaType>) => {
+            if (!token.metadata?.imageURL || !token.contract?.address) return
+            const image = await toPNG(token.metadata.imageURL)
             if (!image) return
             if (!identity.identifier) return
 
@@ -72,7 +73,7 @@ function NFTAvatarInFacebookFirstStep() {
             MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                 userId: identity.identifier.userId,
                 avatarId: '',
-                address: token.contractDetailed.address,
+                address: token.contract.address,
                 tokenId: token.tokenId,
             })
         },
@@ -140,16 +141,16 @@ function NFTAvatarListInFaceBookMobile() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
+        async (token: NonFungibleToken<ChainId, SchemaType>) => {
+            if (!token.metadata?.imageURL || !token.contract?.address) return
+            const image = await toPNG(token.metadata.imageURL)
             if (!image) return
 
             await changeImageToActiveElementsOnMobile(image)
 
             identity.identifier &&
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contract?.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
         },
         [identity],

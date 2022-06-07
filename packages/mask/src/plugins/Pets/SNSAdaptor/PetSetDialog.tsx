@@ -1,5 +1,7 @@
-import { useState, useMemo, ReactNode, Fragment } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
+import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
@@ -12,10 +14,8 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
-    CircularProgress,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
@@ -24,6 +24,9 @@ import { useUser, useNFTs } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { saveCustomEssayToRSS } from '../Services/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -105,8 +108,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const checked = useValueRef<boolean>(petShowSettings)
     const [isReady, cancel] = useTimeout(2000)
 
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+
     const user = useUser()
-    const { nfts, state } = useNFTs(user, configNFTs)
+    const nfts = useNFTs(user, configNFTs)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
@@ -136,7 +141,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             return
         }
         setLoading(true)
-        const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        const chosenToken = collection.tokens.find((item) => item?.metadata?.imageURL === metaData.image)
         const meta = {
             ...metaData,
             userId: user.userId,
@@ -145,7 +150,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         }
         try {
             await PluginPetRPC.setUserAddress(user)
-            await PluginPetRPC.saveEssay(user.address, meta, user.userId)
+            const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
+            if (signature && connection) {
+                await saveCustomEssayToRSS(user.address, meta, signature, connection)
+            }
             closeDialogHandle()
         } catch {
             showSnackbar(t('plugin_pets_dialog_fail'), { variant: 'error' })
@@ -172,12 +180,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const onImageChange = (v: OwnerERC721TokenInfo | null) => {
         setTokenInfoSelect(v)
-        setInputTokenName(v?.name ?? '')
+        setInputTokenName(v?.metadata?.name ?? '')
         setMetaData({
             ...metaData,
             userId: user.userId,
             tokenId: v?.tokenId ?? '',
-            image: v?.imageURL ?? '',
+            image: v?.metadata?.imageURL ?? '',
             type: v?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
         })
         setImageError(false)
@@ -192,12 +200,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
-        return imageChosen?.imageURL
+        return imageChosen?.metadata?.imageURL
     }, [metaData.image, collection.tokens])
 
     const mediaChose = useMemo(() => {
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
-        return imageChosen?.mediaUrl
+        return imageChosen?.metadata?.mediaURL
     }, [metaData.image, collection.tokens])
 
     const renderImg = (item: FilterContract) => {
@@ -212,7 +220,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 disablePortal
                 id="collection-box"
                 options={nfts}
-                loading={state !== 'done'}
                 onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
                 getOptionLabel={(option) => option.name}
                 PopperComponent={ShadowRootPopper}
@@ -239,12 +246,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         InputProps={{
                             ...params.InputProps,
                             classes: { root: classes.inputBorder },
-                            endAdornment: (
-                                <Fragment>
-                                    {state !== 'done' ? <CircularProgress color="inherit" size={20} /> : null}
-                                    {params.InputProps.endAdornment}
-                                </Fragment>
-                            ),
+                            // endAdornment: (
+                            //     <Fragment>
+                            //         {state !== 'done' ? <CircularProgress color="inherit" size={20} /> : null}
+                            //         {params.InputProps.endAdornment}
+                            //     </Fragment>
+                            // ),
                         }}
                     />
                 )}
@@ -260,13 +267,15 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 options={collection.tokens}
                 inputValue={inputTokenName}
                 onChange={(_event, newValue) => onImageChange(newValue)}
-                getOptionLabel={(option) => option.name ?? ''}
+                getOptionLabel={(option) => option?.metadata?.name ?? ''}
                 PaperComponent={({ children }) => paperComponent(children)}
                 PopperComponent={ShadowRootPopper}
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
-                        {!option.glbSupport ? <img className={classes.thumbnail} src={option.imageURL} /> : null}
-                        <Typography>{option.name}</Typography>
+                        {!option.glbSupport ? (
+                            <img className={classes.thumbnail} src={option.metadata?.imageURL} />
+                        ) : null}
+                        <Typography>{option?.metadata?.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
                 )}
@@ -321,17 +330,27 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <LoadingButton
-                    loading={loading}
-                    color="inherit"
-                    size="large"
-                    fullWidth
-                    variant="contained"
-                    className={classes.btn}
-                    onClick={saveHandle}
-                    disabled={!collection.name || !metaData.image}>
-                    {t('plugin_pets_dialog_btn')}
-                </LoadingButton>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={ChainId.Mainnet}
+                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
+                    noSwitchNetworkTip
+                    ActionButtonPromiseProps={{
+                        size: 'large',
+                        fullWidth: true,
+                    }}>
+                    <LoadingButton
+                        loading={loading}
+                        color="inherit"
+                        size="large"
+                        fullWidth
+                        variant="contained"
+                        className={classes.btn}
+                        onClick={saveHandle}
+                        disabled={!collection.name || !metaData.image}>
+                        {t('plugin_pets_dialog_btn')}
+                    </LoadingButton>
+                </ChainBoundary>
                 <Box className={classes.desBox}>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
                     <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>

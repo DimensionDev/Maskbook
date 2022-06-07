@@ -27,7 +27,7 @@ export async function deriveAESByECDH_version38OrOlderExtraSteps(
     deriveAESByECDH: (key: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>,
     pub: EC_Public_CryptoKey,
     iv: Uint8Array,
-): Promise<(readonly [key: AESCryptoKey, iv: Uint8Array])[]> {
+): Promise<Array<readonly [key: AESCryptoKey, iv: Uint8Array]>> {
     const deriveResult = await deriveAESByECDH(pub)
     const extraSteps = deriveResult.map(async (key) => {
         const derivedKeyRaw = await crypto.subtle.exportKey('raw', key)

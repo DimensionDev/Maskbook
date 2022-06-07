@@ -11,12 +11,11 @@ import {
     isBlockedKeyword,
     isMirroredKeyword,
     resolveAlias,
+    resolveChainId,
     resolveCoinAddress,
     resolveCoinId,
-    resolveNetworkType,
 } from './hotfix'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
+import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
 /**
@@ -87,7 +86,7 @@ const coinNamespace = new Map<
     }
 >()
 
-async function updateCache(dataProvider: DataProvider, keyword?: string) {
+async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword?: string) {
     try {
         // uniswap update cache with keyword
         if (dataProvider === DataProvider.UNISWAP_INFO) {
@@ -99,8 +98,8 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = (await uniswapAPI.getAllCoinsByKeyword(keyword)).filter(
-                (x) => !isBlockedId(x.id, dataProvider),
+            const coins = (await uniswapAPI.getAllCoinsByKeyword(chainId, keyword)).filter(
+                (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
             if (coins.length) {
                 cache.supportedSymbolsSet.add(keyword.toLowerCase())
@@ -111,7 +110,7 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
         }
 
         // other providers fetch all of supported coins
-        const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(x.id, dataProvider))
+        const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
         coinNamespace.set(dataProvider, {
             supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
@@ -128,20 +127,25 @@ function isCacheExpired(dataProvider: DataProvider) {
     return Date.now() - lastUpdated > CRYPTOCURRENCY_MAP_EXPIRES_AT
 }
 
-export async function checkAvailabilityOnDataProvider(keyword: string, type: TagType, dataProvider: DataProvider) {
+export async function checkAvailabilityOnDataProvider(
+    chainId: ChainId,
+    keyword: string,
+    type: TagType,
+    dataProvider: DataProvider,
+) {
     if (isBlockedKeyword(type, keyword)) return false
     // for uniswap we check availability by fetching token info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(dataProvider, keyword)
+    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
-    else if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
+    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider)
     // data fetched before update in nonblocking way
-    else if (isCacheExpired(dataProvider)) updateCache(dataProvider)
+    else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
-    return symbols?.has(resolveAlias(keyword, dataProvider).toLowerCase()) ?? false
+    return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
 }
 
-export async function getAvailableDataProviders(type?: TagType, keyword?: string) {
-    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
+    const networkType = chainResolver.chainNetworkType(chainId)
     if (!networkType) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
@@ -154,22 +158,32 @@ export async function getAvailableDataProviders(type?: TagType, keyword?: string
                 async (x) =>
                     [
                         x.value,
-                        await checkAvailabilityOnDataProvider(resolveAlias(keyword, x.value), type, x.value),
+                        await checkAvailabilityOnDataProvider(
+                            chainId,
+                            resolveAlias(chainId, keyword, x.value),
+                            type,
+                            x.value,
+                        ),
                     ] as const,
             ),
     )
     return checked.filter(([, y]) => y).map(([x]) => x)
 }
 
-export async function getAvailableCoins(keyword: string, type: TagType, dataProvider: DataProvider) {
-    if (!(await checkAvailabilityOnDataProvider(keyword, type, dataProvider))) return []
+export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
+    if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
-    return ids?.get(resolveAlias(keyword, dataProvider).toLowerCase()) ?? []
+    return ids?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? []
 }
 // #endregion
 
 // #region get trending info
-async function getCoinTrending(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
+async function getCoinTrending(
+    chainId: ChainId,
+    id: string,
+    currency: Currency,
+    dataProvider: DataProvider,
+): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
             const info = await coinGeckoAPI.getCoinInfo(id)
@@ -192,8 +206,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     symbol: info.symbol.toUpperCase(),
                     is_mirrored: isMirroredKeyword(info.symbol),
 
-                    // TODO:
-                    // use current language setting
+                    // TODO: use current language setting
                     description: info.description.en,
                     market_cap_rank: info.market_cap_rank,
                     image_url: info.image.small,
@@ -217,18 +230,22 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     twitter_url,
                     telegram_url,
                     contract_address:
-                        resolveCoinAddress(id, DataProvider.COIN_GECKO) ??
+                        resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
                         info.platforms[
                             Object.keys(info.platforms).find(
-                                (x) => resolveNetworkType(x, DataProvider.COIN_GECKO) === currentNetworkSettings.value,
+                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === chainId,
                             ) ?? ''
                         ],
                 },
-                market: Object.entries(info.market_data).reduce<any>((accumulated, [key, value]) => {
-                    if (value && typeof value === 'object') accumulated[key] = value[currency.id] ?? 0
-                    else accumulated[key] = value
-                    return accumulated
-                }, {}),
+                market: (() => {
+                    const entries = Object.entries(info.market_data).map(([key, value]) => {
+                        if (value && typeof value === 'object') {
+                            return [key, value[currency.id] ?? 0]
+                        }
+                        return [key, value]
+                    })
+                    return Object.fromEntries(entries)
+                })(),
                 tickers: info.tickers.slice(0, 30).map((x) => ({
                     logo_url: x.market.logo,
                     trade_url: x.trade_url,
@@ -278,11 +295,9 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                     description: coinInfo.description,
                     contract_address:
-                        resolveCoinAddress(id, DataProvider.COIN_MARKET_CAP) ??
+                        resolveCoinAddress(chainId, id, DataProvider.COIN_MARKET_CAP) ??
                         coinInfo.contract_address.find(
-                            (x) =>
-                                resolveNetworkType(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) ===
-                                currentNetworkSettings.value,
+                            (x) => resolveChainId(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) === chainId,
                         )?.contract_address,
                 },
                 currency,
@@ -327,7 +342,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                 }
             return trending
         case DataProvider.UNISWAP_INFO:
-            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(id)
+            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(chainId, id)
             return {
                 currency,
                 dataProvider: DataProvider.UNISWAP_INFO,
@@ -351,18 +366,24 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
     }
 }
 
-export async function getCoinTrendingById(id: string, currency: Currency, dataProvider: DataProvider) {
-    return getCoinTrending(id, currency, dataProvider)
+export async function getCoinTrendingById(
+    chainId: ChainId,
+    id: string,
+    currency: Currency,
+    dataProvider: DataProvider,
+) {
+    return getCoinTrending(chainId, id, currency, dataProvider)
 }
 
 export async function getCoinTrendingByKeyword(
+    chainId: ChainId,
     keyword: string,
     tagType: TagType,
     currency: Currency,
     dataProvider: DataProvider,
 ) {
     // check if the keyword is supported by given data provider
-    const coins = await getAvailableCoins(keyword, tagType, dataProvider)
+    const coins = await getAvailableCoins(chainId, keyword, tagType, dataProvider)
     if (!coins.length) return null
 
     // prefer coins on the ethereum network
@@ -370,7 +391,8 @@ export async function getCoinTrendingByKeyword(
     if (!coin) return null
 
     return getCoinTrendingById(
-        resolveCoinId(resolveAlias(keyword, dataProvider), dataProvider) ?? coin.id,
+        chainId,
+        resolveCoinId(chainId, resolveAlias(chainId, keyword, dataProvider), dataProvider) ?? coin.id,
         currency,
         dataProvider,
     )
@@ -379,6 +401,7 @@ export async function getCoinTrendingByKeyword(
 
 // #region get price stats info
 export async function getPriceStats(
+    chainId: ChainId,
     id: string,
     currency: Currency,
     days: number,
@@ -420,6 +443,7 @@ export async function getPriceStats(
                 return 300 // 5m
             })()
             return uniswapAPI.getPriceStats(
+                chainId,
                 id,
                 currency,
                 uniswap_interval,

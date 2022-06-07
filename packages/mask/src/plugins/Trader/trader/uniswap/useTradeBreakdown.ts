@@ -14,6 +14,7 @@ function computeRealizedLPFeePercent(trade: Trade): Percent {
         // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
         // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
         const percent = ONE_HUNDRED_PERCENT.subtract(
+            // eslint-disable-next-line unicorn/no-array-reduce
             trade.route.pairs.reduce<Percent>(
                 (currentFee: Percent): Percent => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
                 ONE_HUNDRED_PERCENT,
@@ -22,6 +23,7 @@ function computeRealizedLPFeePercent(trade: Trade): Percent {
         return new Percent(percent.numerator, percent.denominator)
     } else {
         const percent = ONE_HUNDRED_PERCENT.subtract(
+            // eslint-disable-next-line unicorn/no-array-reduce
             trade.route.pools.reduce<Percent>(
                 (currentFee: Percent, pool): Percent =>
                     currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1_000_000))),
@@ -52,16 +54,20 @@ function computeRealizedLPFeeAmount(trade?: Trade | null): CurrencyAmount<Curren
 
 export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
-        if (!trade) return null
-        const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
-        const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
-        return {
-            realizedLPFeePercent,
-            realizedLPFeeAmount,
+        try {
+            if (!trade) return null
+            const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
+            const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
+            return {
+                realizedLPFeePercent,
+                realizedLPFeeAmount,
 
-            // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
-            realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
-            priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
+                // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
+                realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
+                priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
+            }
+        } catch {
+            return null
         }
     }, [trade])
 }

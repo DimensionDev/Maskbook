@@ -1,16 +1,23 @@
 {
   "name": "@masknet/web3-shared-solana",
   "private": true,
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./index.ts",
       "default": "../dist/solana/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
+    "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@solana/web3.js": "^1.30.2",
+    "@toruslabs/solana-embed": "^0.1.6",
+    "@types/bs58": "^4.0.1",
+    "bignumber.js": "9.0.2",
+    "bs58": "^4.0.1",
+    "buffer": "^6.0.3",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"
   }

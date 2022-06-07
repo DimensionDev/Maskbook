@@ -1,15 +1,12 @@
 import React, { useCallback } from 'react'
 import { Grid, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    ApproveStateType,
-    ERC20TokenDetailed,
-    formatBalance,
-    useERC20TokenApproveCallback,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -43,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface EthereumERC20TokenApprovedBoundaryProps {
     amount: string
     spender?: string
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
     fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
     render?: (disable: boolean) => React.ReactNode
@@ -82,6 +79,27 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
+
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
+                    {transactionState.loading
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    &hellip;
+                </ActionButton>
+                {withChildren ? (
+                    <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
+                ) : null}
+            </Grid>
+        )
 
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
@@ -153,23 +171,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
             </Box>
-        )
-    if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {approveStateType === ApproveStateType.PENDING
-                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                        : `Updating ${token.symbol}`}
-                    &hellip;
-                </ActionButton>
-            </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)
         return (

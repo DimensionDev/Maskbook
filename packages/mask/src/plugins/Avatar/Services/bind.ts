@@ -1,5 +1,5 @@
-import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
@@ -7,8 +7,12 @@ import { getGunData } from '@masknet/gun-utils'
 
 const READ_GUN_TIMEOUT = 15 * 1000
 
-const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME + '_' + network)
-const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
+const NFTAvatarDB = (network: string) =>
+    KeyValue.createJSON_Storage<{ networkPluginId: string; chainId: number; address: string }>(
+        NFT_AVATAR_DB_NAME + '_' + network,
+    )
+const NFTAvatarDBStorage = (network: string) =>
+    KeyValue.createJSON_Storage<Record<string, string>>(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
 
 const cache = new Map<string, [Promise<string | undefined>, number]>()
 
@@ -41,11 +45,9 @@ function getCacheKey(
 
 async function _getUserAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {
     try {
-        const result = await NFTAvatarDB(network).get<{ networkPluginId: string; chainId: number; address: string }>(
-            userId,
-        )
+        const result = await NFTAvatarDB(network).get(userId)
         if (!result || !result?.address) {
-            const result = await NFTAvatarDBStorage(network).get<Record<string, string>>(userId)
+            const result = await NFTAvatarDBStorage(network).get(userId)
             const address = result?.[getKey(networkPluginId, chainId)]
             if (address) return address
             return getUserAddressFromGUN(userId)

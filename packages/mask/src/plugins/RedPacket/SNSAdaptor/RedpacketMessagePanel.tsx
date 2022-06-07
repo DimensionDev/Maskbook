@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -40,20 +40,20 @@ export interface RedpacketMessagePanelProps {
 export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
     const { onChange, message } = props
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
 
     return (
         <Box className={classes.root}>
             <div className={classes.wrapper}>
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                    {t('plugin_red_packet_message_label')}
+                    {t.message_label()}
                 </Typography>
             </div>
             <div className={classNames(classes.wrapper)}>
                 <InputBase
                     className={classes.input}
                     onChange={(e) => onChange(e.target.value)}
-                    inputProps={{ placeholder: t('plugin_red_packet_best_wishes') }}
+                    inputProps={{ placeholder: t.best_wishes() }}
                     value={message}
                 />
             </div>

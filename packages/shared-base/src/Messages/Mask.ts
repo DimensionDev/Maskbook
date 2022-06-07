@@ -1,29 +1,18 @@
-import type {
-    Appearance,
-    LanguageOptions,
-    DataProvider,
-    CryptoPrice,
-    NetworkType,
-    ProviderType,
-    FungibleAssetProvider,
-    NonFungibleAssetProvider,
-} from '@masknet/public-api'
+import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
 
+enum NetworkPluginID {
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
+    PLUGIN_SOLANA = 'com.mask.solana',
+}
+
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
+    pluginIDSettings: NetworkPluginID
     languageSettings: LanguageOptions
-    pluginIDSettings: string
-    currentChainIdSettings: number
-    currentTokenPricesSettings: CryptoPrice
-    currentDataProviderSettings: DataProvider
-    currentProviderSettings: ProviderType
-    currentNetworkSettings: NetworkType
-    currentAccountSettings: string
-    currentFungibleAssetDataProviderSettings: FungibleAssetProvider
-    currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
 }
 
@@ -81,9 +70,14 @@ export interface CompositionRequest {
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {
-        target?: 'E2E' | 'Everyone'
+        target?: EncryptionTargetType
         startupPlugin?: string
     }
+}
+export enum EncryptionTargetType {
+    Public = 'public',
+    Self = 'self',
+    E2E = 'e2e',
 }
 
 export interface NFTAvatarSettingDialogEvent {

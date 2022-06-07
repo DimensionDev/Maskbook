@@ -1,5 +1,4 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -8,11 +7,13 @@ import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
 import { WalletHeader } from './components/WalletHeader'
+import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
+import { EthereumMethodType, getPayloadConfig } from '@masknet/web3-shared-evm'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -20,15 +21,15 @@ const WalletSettings = lazy(() => import('./WalletSettings'))
 const WalletRename = lazy(() => import('./WalletRename'))
 const DeleteWallet = lazy(() => import('./DeleteWallet'))
 const CreateWallet = lazy(() => import('./CreateWallet'))
-const SwitchWallet = lazy(() => import('./SwitchWallet'))
+const SwitchWallet = lazy(() => import(/* webpackPrefetch: true */ './SwitchWallet'))
 const BackupWallet = lazy(() => import('./BackupWallet'))
 const AddToken = lazy(() => import('./AddToken'))
-const TokenDetail = lazy(() => import('./TokenDetail'))
-const SignRequest = lazy(() => import('./SignRequest'))
-const GasSetting = lazy(() => import('./GasSetting'))
-const Transfer = lazy(() => import('./Transfer'))
-const ContractInteraction = lazy(() => import('./ContractInteraction'))
-const Unlock = lazy(() => import('./Unlock'))
+const TokenDetail = lazy(() => import(/* webpackPrefetch: true */ './TokenDetail'))
+const SignRequest = lazy(() => import(/* webpackPrefetch: true */ './SignRequest'))
+const GasSetting = lazy(() => import(/* webpackPrefetch: true */ './GasSetting'))
+const Transfer = lazy(() => import(/* webpackPrefetch: true */ './Transfer'))
+const ContractInteraction = lazy(() => import(/* webpackPrefetch: true */ './ContractInteraction'))
+const Unlock = lazy(() => import(/* webpackPreload: true */ './Unlock'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
@@ -37,10 +38,11 @@ const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
-    const wallet = useWallet()
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const location = useLocation()
     const navigate = useNavigate()
-
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const { loading, retry } = useAsyncRetry(async () => {
@@ -53,31 +55,36 @@ export default function Wallet() {
             ].some((item) => item === location.pathname)
         )
             return
-
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
-        const value = {
-            payload,
-            computedPayload,
-        }
-
-        if (value?.computedPayload) {
-            switch (value.computedPayload.type) {
-                case EthereumRpcType.SIGN:
-                case EthereumRpcType.SIGN_TYPED_DATA:
+        if (payload) {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SIGN:
+                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                case EthereumMethodType.PERSONAL_SIGN:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                case EthereumRpcType.CONTRACT_INTERACTION:
-                case EthereumRpcType.SEND_ETHER:
-                    navigate(PopupRoutes.ContractInteraction, { replace: true })
                     break
                 default:
                     break
             }
         }
-    }, [location.search, location.pathname])
+
+        const computedPayload = getPayloadConfig(payload)
+
+        if (!computedPayload) return
+
+        const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
+
+        if (
+            formatterTransaction &&
+            [TransactionDescriptorType.INTERACTION, TransactionDescriptorType.TRANSFER].includes(
+                formatterTransaction.type,
+            )
+        ) {
+            navigate(PopupRoutes.ContractInteraction, { replace: true })
+        }
+    }, [location.search, location.pathname, chainId])
 
     useEffect(() => {
         if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return

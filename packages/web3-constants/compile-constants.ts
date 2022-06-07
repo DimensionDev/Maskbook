@@ -11,7 +11,7 @@ async function compileConstants(folderPath: string, names: string[]) {
         for (const name of Object.keys(constants)) {
             const values = constants[name]
             const defaultValue = getDefaultValue(Object.values(values)[0])
-            const pairs: [string, unknown][] = []
+            const pairs: Array<[string, unknown]> = []
             for (const name of names) {
                 pairs.push([name, values[name] ?? defaultValue])
             }
@@ -60,6 +60,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Aurora',
     'Aurora_Testnet',
     'Conflux',
+    'Harmony',
+    'Harmony_Test',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])

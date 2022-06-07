@@ -1,15 +1,17 @@
-import { ExternalLink } from 'react-feather'
-import { ChainId, ProviderType, NetworkType, useAccount, useProviderType } from '@masknet/web3-shared-evm'
-import { Button, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
-    useWeb3State,
+    useAccount,
     useNetworkDescriptor,
     useProviderDescriptor,
+    useProviderType,
     useReverseAddress,
-    Web3Plugin,
+    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { Account, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { Button, Link, Typography } from '@mui/material'
+import { ExternalLink } from 'react-feather'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -92,7 +94,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface CurrentWalletBox {
-    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    wallet: Account<ChainId> & {
+        providerType: ProviderType
+    }
     walletName?: string
     changeWallet: () => void
     notInPop?: boolean
@@ -101,14 +105,13 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { wallet, walletName, notInPop, changeWallet } = props
-    const providerType = useProviderType()
-    const providerDescriptor = useProviderDescriptor(wallet.providerType ?? providerType)
-    const networkDescriptor = useNetworkDescriptor(wallet.networkType)
-    const frontAccount = useAccount()
+    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
+    const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, providerType)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
+    const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
     const account = notInPop ? frontAccount : wallet.account
-    const { Utils } = useWeb3State() ?? {}
-    const { value: domain } = useReverseAddress(wallet.account)
-    const _providerType = wallet.providerType ?? providerType
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
@@ -119,10 +122,10 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    {_providerType !== ProviderType.MaskWallet ? (
+                    {providerType !== ProviderType.MaskWallet ? (
                         <Typography className={classes.accountName}>
-                            {domain && Utils?.formatDomainName
-                                ? Utils.formatDomainName(domain)
+                            {domain && Others?.formatDomainName
+                                ? Others.formatDomainName(domain)
                                 : providerDescriptor?.name}
                         </Typography>
                     ) : (
@@ -130,20 +133,20 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                             <Typography className={classes.accountName}>
                                 {walletName ?? providerDescriptor?.name}
                             </Typography>
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            {domain && Others?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </>
                     )}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={account}>
-                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
                     </Typography>
 
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(wallet.chainId, wallet.account) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(wallet.chainId, account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

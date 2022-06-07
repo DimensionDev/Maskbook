@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N, useSettingsSwitcher } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -17,16 +17,13 @@ import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 import { TrendingViewDeck } from './TrendingViewDeck'
-import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import {
-    EthereumTokenType,
-    useFungibleTokenDetailed,
-    useChainIdValid,
-    useNetworkType,
-    isNativeTokenSymbol,
-} from '@masknet/web3-shared-evm'
+import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
+import { useChainIdValid, useFungibleToken, useNetworkType } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { setStorage } from '../../storage'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -35,8 +32,8 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
                   width: 450,
                   boxShadow:
                       theme.palette.mode === 'dark'
-                          ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
+                          ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
+                          : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
               }
             : {
                   width: '100%',
@@ -110,10 +107,9 @@ export function TraderView(props: TraderViewProps) {
     const { classes } = useStyles({ isPopper })
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
-    const chainIdValid = useChainIdValid()
-
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     // #region track network type
-    const networkType = useNetworkType()
+    const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => setTabIndex(0), [networkType])
     // #endregion
 
@@ -135,8 +131,8 @@ export function TraderView(props: TraderViewProps) {
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region swap
-    const { value: tokenDetailed } = useFungibleTokenDetailed(
-        coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+    const { value: tokenDetailed } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     // #endregion
@@ -155,13 +151,25 @@ export function TraderView(props: TraderViewProps) {
     })
     // #endregion
 
-    // #region current data provider switcher
-    const DataProviderSwitcher = useSettingsSwitcher(
-        currentDataProviderSettings,
-        dataProviders,
-        resolveDataProviderName,
-    )
-    // #endregion
+    // // #region current data provider switcher
+    const DataProviderSwitcher = useMemo(() => {
+        if (dataProviders.length === 0) return
+        if (typeof dataProvider === 'undefined') return dataProviders[0]
+        const indexOf = dataProviders.indexOf(dataProvider)
+        if (indexOf === -1) return
+        const nextOption = indexOf === dataProviders.length - 1 ? dataProviders[0] : dataProviders[indexOf + 1]
+
+        return (
+            <ActionButton
+                sx={{ marginTop: 1 }}
+                color="primary"
+                variant="contained"
+                onClick={() => setStorage(nextOption)}>
+                Switch to {resolveDataProviderName(nextOption)}
+            </ActionButton>
+        )
+    }, [dataProvider, resolveDataProviderName])
+    // // #endregion
 
     // #region api ready callback
     useEffect(() => {

@@ -15,7 +15,13 @@ export interface ProfileInformation {
     nickname?: string
     avatar?: string
     identifier: ProfileIdentifier
-    fingerprint?: string
+    linkedPersona?: PersonaIdentifier
+}
+
+export interface ProfileInformationFromNextID extends ProfileInformation {
+    fromNextID: boolean
+    linkedTwitterNames: string[]
+    walletAddress?: string
 }
 
 export enum RelationFavor {

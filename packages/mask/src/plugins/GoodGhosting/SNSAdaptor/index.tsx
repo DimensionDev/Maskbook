@@ -7,7 +7,8 @@ import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
@@ -37,8 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             marketListSortingPriority: 13,
             description: <Trans i18nKey="plugin_good_ghosting_description" />,
             name: <Trans i18nKey="plugin_good_ghosting_name" />,
-            tutorialLink:
-                'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
+            tutorialLink: 'https://realmasknetwork.notion.site/f94aa38b01404b9c99c7a03935840962',
             icon: <GoogGhostingIcon />,
         },
     ],
@@ -52,9 +52,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <EthereumChainBoundary chainId={ChainId.Matic}>
+        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic} renderInTimeline>
             <PreviewCard id={id} />
-        </EthereumChainBoundary>
+        </ChainBoundary>
     )
 }
 

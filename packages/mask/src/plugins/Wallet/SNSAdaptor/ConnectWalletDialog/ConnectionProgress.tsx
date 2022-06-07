@@ -1,18 +1,13 @@
+import { Trans } from 'react-i18next'
+import { ImageIcon } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
-import { ImageIcon } from '@masknet/shared'
-import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra/web3'
-import {
-    ProviderType,
-    resolveProviderName,
-    resolveProviderShortenLink,
-    resolveProviderHomeLink,
-} from '@masknet/web3-shared-evm'
+import { useProviderDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { FlashIcon } from '../../../../resources/FlashIcon'
-import { Trans } from 'react-i18next'
+import { WarningTriangleIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -25,17 +20,17 @@ const useStyles = makeStyles()((theme) => ({
         flexWrap: 'nowrap',
         alignItems: 'center',
         marginTop: 10,
-        backgroundColor: MaskColorVar.errorBackground,
+        backgroundColor: MaskColorVar.warningBackground,
         padding: theme.spacing(2, 0, 2, 1.5),
         borderRadius: 8,
     },
     tipContentText: {
-        color: MaskColorVar.redMain,
+        color: MaskColorVar.warning,
         fontSize: 12,
         marginLeft: 10,
     },
     tipLink: {
-        color: MaskColorVar.redMain,
+        color: MaskColorVar.warning,
         textDecoration: 'underline',
     },
     error: {
@@ -46,18 +41,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ConnectionProgressProps extends withClasses<never> {
-    providerType: ProviderType
+    pluginID: NetworkPluginID
+    providerType: Web3Helper.Definition[NetworkPluginID]['ProviderType']
     connection: AsyncStateRetry<true>
 }
 
 export function ConnectionProgress(props: ConnectionProgressProps) {
-    const { providerType, connection } = props
+    const { pluginID, providerType, connection } = props
     const { value: connected, loading, error, retry } = connection
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const providerDescriptor = useProviderDescriptor(providerType, NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State<'all'>(pluginID)
+    const providerDescriptor = useProviderDescriptor(pluginID, providerType)
+
+    if (!Others) return null
+
     return (
         <>
             <Paper elevation={0}>
@@ -69,7 +69,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                 {loading
                                     ? t('plugin_wallet_connecting_with')
                                     : t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
-                                {resolveProviderName(providerType)}
+                                {Others.providerResolver.providerName(providerType)}
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
@@ -97,25 +97,25 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                 </Card>
             </Paper>
             <Card className={classes.tipContent} elevation={0}>
-                <FlashIcon />
+                <WarningTriangleIcon />
                 <Typography className={classes.tipContentText} variant="body2">
                     <Trans
                         i18nKey="plugin_wallet_connect_tip"
                         components={{
-                            providerLink: resolveProviderHomeLink(providerType) ? (
+                            providerLink: Others.providerResolver.providerHomeLink(providerType) ? (
                                 <Link
                                     className={classes.tipLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveProviderHomeLink(providerType)}
+                                    href={Others.providerResolver.providerHomeLink(providerType)}
                                 />
                             ) : (
                                 <span />
                             ),
                         }}
                         values={{
-                            providerName: resolveProviderName(providerType),
-                            providerShortenLink: resolveProviderShortenLink(providerType),
+                            providerName: Others.providerResolver.providerName(providerType),
+                            providerShortenLink: Others.providerResolver.providerShortenLink(providerType),
                         }}
                     />
                 </Typography>

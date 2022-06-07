@@ -1,17 +1,18 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useHoverDirty } from 'react-use'
+import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
-import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import {
-    NetworkPluginID,
-    useNetworkDescriptor,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
     useWeb3State,
-    Web3Plugin,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 0,
         paddingBottom: 0,
         transform: 'scale(1.1)',
-        filter: 'drop-shadow(0px 12px 28px rgba(0, 0, 0, 0.1))',
+        filter: 'drop-shadow(0 12px 28px rgba(0, 0, 0, 0.1))',
     },
     card: {
         position: 'relative',
@@ -68,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#111432',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,
@@ -94,20 +95,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    chainId: number
-    token: Web3Plugin.NonFungibleToken
+    token: NonFungibleAsset<
+        Web3Helper.Definition[NetworkPluginID]['ChainId'],
+        Web3Helper.Definition[NetworkPluginID]['SchemaType']
+    >
     onSend(): void
     renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
-    const { Utils } = useWeb3State()
+    const chainId = useChainId()
     const { classes } = useStyles()
     const ref = useRef(null)
+    const { Others } = useWeb3State<'all'>()
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
+    const networkDescriptor = useNetworkDescriptor(undefined, token.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
     const currentPluginId = useCurrentWeb3NetworkPluginID()
 
@@ -119,10 +123,9 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
-    let nftLink
-    if (Utils?.resolveNonFungibleTokenLink && token.contract) {
-        nftLink = Utils?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
-    }
+    const nftLink = useMemo(() => {
+        return Others?.explorerResolver.nonFungibleTokenLink(token.chainId, token.address, token.tokenId)
+    }, [currentPluginId, token.chainId, token.address, token.tokenId])
 
     return (
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
@@ -130,7 +133,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
+                {(token.metadata?.mediaURL || token.metadata?.imageURL) && token.contract ? (
                     <Link
                         target={nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
@@ -142,7 +145,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 contractAddress={token.contract.address}
                                 chainId={token.contract.chainId}
                                 renderOrder={renderOrder}
-                                url={token.metadata.assetURL || token.metadata.iconURL}
+                                url={token.metadata.imageURL || token.metadata.mediaURL}
                                 tokenId={token.tokenId}
                                 classes={{
                                     loadingFailImage: classes.loadingFailImage,
@@ -183,7 +186,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         </Box>
                     ) : (
                         <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.name || token.tokenId}
+                            {token.metadata?.name || token.tokenId}
                         </Typography>
                     )}
                 </Box>

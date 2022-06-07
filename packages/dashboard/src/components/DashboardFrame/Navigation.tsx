@@ -30,7 +30,8 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -69,7 +70,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
                 display: 'inline-block',
                 width: 5,
                 height: 40,
-                boxShadow: '-2px 0px 10px 2px rgba(0, 56, 255, 0.15)',
+                boxShadow: '-2px 0 10px 2px rgba(0, 56, 255, 0.15)',
                 borderRadius: 50,
                 background: MaskColorVar.textLink,
                 position: 'absolute',

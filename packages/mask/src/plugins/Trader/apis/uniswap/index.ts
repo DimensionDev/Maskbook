@@ -18,6 +18,7 @@ import {
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
 import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 type Value = string | number | BigNumber | undefined
 
@@ -107,7 +108,7 @@ export function getAllCoins() {
     throw new Error('For uniswap all coins are available by default.')
 }
 
-export async function getAllCoinsByKeyword(keyword: string): Promise<Coin[]> {
+export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): Promise<Coin[]> {
     keyword = keyword.toLowerCase()
     if (keyword === 'mask') {
         return [
@@ -122,7 +123,7 @@ export async function getAllCoinsByKeyword(keyword: string): Promise<Coin[]> {
         ]
     }
 
-    const tokens = await fetchTokensByKeyword(keyword)
+    const tokens = await fetchTokensByKeyword(chainId, keyword)
 
     const coins: Coin[] = tokens.map((x) => ({
         ...x,
@@ -154,9 +155,10 @@ export async function getAllCoinsByKeyword(keyword: string): Promise<Coin[]> {
 
 /**
  * Get coin info by id
+ * @param chainId ChainId
  * @param id the token address
  */
-export async function getCoinInfo(id: string) {
+export async function getCoinInfo(chainId: ChainId, id: string) {
     // #region get timestamps from one hour ago, ,one day ago, a week ago
     const { utcOneHourBack, utcOneDayBack, utcWeekBack, utcTwoWeekBack, utcOneMonthBack, utcOneYearBack } =
         getTimestampForChanges()
@@ -170,7 +172,7 @@ export async function getCoinInfo(id: string) {
         [`t${utcTwoWeekBack}`]: twoWeekBlock,
         [`t${utcOneMonthBack}`]: oneMonthBlock,
         [`t${utcOneYearBack}`]: oneYearBlock,
-    } = await fetchBlockNumbersObjectByTimestamps([
+    } = await fetchBlockNumbersObjectByTimestamps(chainId, [
         utcOneHourBack,
         utcOneDayBack,
         utcWeekBack,
@@ -181,7 +183,7 @@ export async function getCoinInfo(id: string) {
     // #region
 
     // #region get ether price
-    const ethPrice = await fetchEtherPriceByBlockNumber()
+    const ethPrice = await fetchEtherPriceByBlockNumber(chainId)
     const {
         [`b${oneHourBlock}`]: oneHourBackEthPrice,
         [`b${oneDayBlock}`]: oneDayBackEthPrice,
@@ -189,7 +191,7 @@ export async function getCoinInfo(id: string) {
         [`b${twoWeekBlock}`]: twoWeekBackEthPrice,
         [`b${oneMonthBlock}`]: oneMonthBackEthPrice,
         [`b${oneYearBlock}`]: oneYearBackEthPrice,
-    } = await fetchEtherPricesByBlockNumbers([
+    } = await fetchEtherPricesByBlockNumbers(chainId, [
         oneHourBlock,
         oneDayBlock,
         weekBlock,
@@ -209,13 +211,13 @@ export async function getCoinInfo(id: string) {
         { token: oneMonthToken },
         { token: oneYearToken },
     ] = await Promise.all([
-        fetchTokenData(id),
-        fetchTokenData(id, oneHourBlock),
-        fetchTokenData(id, oneDayBlock),
-        fetchTokenData(id, weekBlock),
-        fetchTokenData(id, twoWeekBlock),
-        fetchTokenData(id, oneMonthBlock),
-        fetchTokenData(id, oneYearBlock),
+        fetchTokenData(chainId, id),
+        fetchTokenData(chainId, id, oneHourBlock),
+        fetchTokenData(chainId, id, oneDayBlock),
+        fetchTokenData(chainId, id, weekBlock),
+        fetchTokenData(chainId, id, twoWeekBlock),
+        fetchTokenData(chainId, id, oneMonthBlock),
+        fetchTokenData(chainId, id, oneYearBlock),
     ])
     // #endregion
 
@@ -262,7 +264,10 @@ export async function getCoinInfo(id: string) {
     // #endregion
 
     // #region get pairs data
-    const pairsData = await getBulkPairData(allPairs?.map(({ id }) => id))
+    const pairsData = await getBulkPairData(
+        chainId,
+        allPairs?.map(({ id }) => id),
+    )
     // #endregion
 
     return {
@@ -302,21 +307,21 @@ export async function getCoinInfo(id: string) {
     }
 }
 
-export async function getBulkPairData(pairList: string[]) {
+export async function getBulkPairData(chainId: ChainId, pairList: string[]) {
     type Data = Pair | undefined
     const { utcOneDayBack } = getTimestampForChanges()
-    const oneDayBlock = await fetchBlockNumberByTimestamp(utcOneDayBack)
-    const current = await fetchPairsBulk(pairList)
+    const oneDayBlock = await fetchBlockNumberByTimestamp(chainId, utcOneDayBack)
+    const current = await fetchPairsBulk(chainId, pairList)
 
-    const oneDayResult = await fetchPairsHistoricalBulk(pairList, oneDayBlock)
+    const oneDayResult = await fetchPairsHistoricalBulk(chainId, pairList, oneDayBlock)
 
-    const oneDayData = oneDayResult.reduce<Record<string, Data>>((obj, cur) => ({ ...obj, [cur.id]: cur }), {})
+    const oneDayData = Object.fromEntries(oneDayResult.map((pair): [string, Data] => [pair.id, pair]))
 
     const pairsData = await Promise.all(
         current?.map(async (pair) => {
             let oneDayHistory = oneDayData[pair.id]
             if (!oneDayHistory) {
-                oneDayHistory = await fetchPairData(pair.id, oneDayBlock)
+                oneDayHistory = await fetchPairData(chainId, pair.id, oneDayBlock)
             }
 
             const oneDayVolumeUSD = new BigNumber(pair.volumeUSD).minus(oneDayHistory?.volumeUSD ?? 0).toNumber()
@@ -340,20 +345,23 @@ export async function getBulkPairData(pairList: string[]) {
         }),
     )
 
-    return pairsData.reduce<Record<string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }>>(
-        (obj, cur) => ({ ...obj, [cur.id]: cur }),
-        {},
+    return Object.fromEntries(
+        pairsData.map((pair): [string, Data & { oneDayVolumeUSD: number; oneDayVolumeUntracked: number }] => [
+            pair.id,
+            pair,
+        ]),
     )
 }
 
 export async function getPriceStats(
+    chainId: ChainId,
     id: string,
     currency: Currency,
     interval: number,
     startTime: number,
     endTime: number,
 ) {
-    const [latestBlock] = await fetchLatestBlocks()
+    const [latestBlock] = await fetchLatestBlocks(chainId)
 
     // create an array of hour start times until we reach current hour
     // buffer by half your to catch case where graph isn't to latest block
@@ -368,7 +376,7 @@ export async function getPriceStats(
         return []
     }
 
-    let blocks = await fetchBlockNumbersByTimestamps(timestamps)
+    let blocks = await fetchBlockNumbersByTimestamps(chainId, timestamps)
 
     if (!blocks || blocks.length === 0) {
         return []
@@ -378,7 +386,7 @@ export async function getPriceStats(
         blocks = blocks.filter((block) => block.blockNumber && isLessThanOrEqualTo(block?.blockNumber, latestBlock))
     }
 
-    const prices = await fetchPricesByBlocks(id, blocks)
+    const prices = await fetchPricesByBlocks(chainId, id, blocks)
 
     return prices.map(({ timestamp, derivedETH, ethPrice }) => {
         return [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as Stat

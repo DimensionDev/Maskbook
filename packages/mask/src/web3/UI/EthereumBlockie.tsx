@@ -1,4 +1,4 @@
-import { useBlockie } from '@masknet/web3-shared-evm'
+import { useBlockie } from '@masknet/plugin-infra/web3'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
@@ -24,7 +24,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
 
     return (
         <Avatar className={classes.icon} src={blockie}>
-            {name?.substr(0, 1).toUpperCase()}
+            {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 }

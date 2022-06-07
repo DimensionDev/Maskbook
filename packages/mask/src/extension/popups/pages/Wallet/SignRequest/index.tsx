@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react'
-import { useAsyncFn, useLocation } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { useLocation as useRouteLocation, useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
@@ -7,11 +7,12 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { ChainId, EthereumRpcType, NetworkType, ProviderType, useWallet } from '@masknet/web3-shared-evm'
-import Services from '../../../../service'
+import { useWallet, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
-import type { Web3Plugin } from '@masknet/plugin-infra/dist/web3-types'
+import { EthereumMethodType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -77,42 +78,46 @@ const useStyles = makeStyles()(() => ({
         color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
-        padding: '0px 16px 20px 16px',
+        padding: '0 16px 20px 16px',
         wordBreak: 'break-all',
     },
 }))
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
-    const location = useLocation()
     const routeLocation = useRouteLocation()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet()
     const [transferError, setTransferError] = useState(false)
 
-    const selectedWallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType> = location.state.usr
-
     const { data, address } = useMemo(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SIGN ||
-            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+            value?.payload.method === EthereumMethodType.ETH_SIGN ||
+            value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
         ) {
-            let message = value.computedPayload.data
             try {
-                message = toUtf8(value.computedPayload.data)
-            } catch (error) {
-                console.log(error)
+                return {
+                    address: value.payload.params?.[0],
+                    data: toUtf8(value.payload.params?.[1] ?? ''),
+                }
+            } catch {
+                return {
+                    address: value.payload.params?.[0],
+                    data: value.payload.params?.[1],
+                }
             }
+        } else if (value?.payload.method === EthereumMethodType.PERSONAL_SIGN)
             return {
-                address: value.computedPayload.to,
-                data: message,
+                address: value.payload.params?.[1],
+                data: value.payload.params?.[0],
             }
-        }
+
         return {
-            address: '',
             data: '',
+            address: '',
         }
     }, [value])
 
@@ -121,19 +126,21 @@ const SignRequest = memo(() => {
 
         if (value) {
             try {
-                await Services.Ethereum.confirmRequest(value.payload, !!goBack)
+                await WalletRPC.confirmRequest(value.payload, {
+                    disableClose: !!goBack,
+                })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
-    }, [value, routeLocation.search, selectedWallet])
+    }, [value, routeLocation.search, connection])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
-        await Services.Ethereum.rejectRequest(value.payload)
+        await WalletRPC.rejectRequest(value.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [value])
+    }, [value, connection])
 
     useTitle(t('popups_wallet_signature_request_title'))
 

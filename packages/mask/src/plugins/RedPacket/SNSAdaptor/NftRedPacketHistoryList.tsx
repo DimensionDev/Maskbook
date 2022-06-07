@@ -1,13 +1,16 @@
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
-import { useI18N } from '../../../utils'
+import { useI18N as useBaseI18n } from '../../../utils'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -75,14 +78,15 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
 })
 
 interface Props {
-    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
-    const { t } = useI18N()
-    const account = useAccount()
-    const chainId = useChainId()
+    const { t: tr } = useBaseI18n()
+    const t = useI18N()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
     const containerRef = useRef(null)
     const [popperText, setPopperText] = useState('')
@@ -101,7 +105,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (chainId === ChainId.BSC) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('plugin_chain_not_supported', { chain: 'Binance Smart Chain' })}
+                {t.chain_not_supported({ chain: 'Binance Smart Chain' })}
             </Typography>
         )
     }
@@ -109,7 +113,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('loading')}
+                {tr('loading')}
             </Typography>
         )
     }
@@ -117,7 +121,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('plugin_red_packet_nft_no_history')}
+                {t.nft_no_history()}
             </Typography>
         )
     }

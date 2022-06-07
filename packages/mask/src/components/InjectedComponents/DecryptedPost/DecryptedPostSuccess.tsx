@@ -9,12 +9,12 @@ import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
 import { usePostInfo, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { usePostClaimedAuthor } from '../../DataSource/usePostInfo'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { delay } from '@dimensiondev/kit'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 export interface DecryptPostSuccessProps {
     message: TypedMessage
@@ -28,8 +28,9 @@ export interface DecryptPostSuccessProps {
 function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is ProfileIdentifier {
     const version = usePostInfoDetails.version()
     const sharedPublic = usePostInfoDetails.publicShared()
-    const authorInPayload = usePostClaimedAuthor()
     const currentPostBy = usePostInfoDetails.author()
+    // TODO: this should be read from the payload.
+    const authorInPayload = currentPostBy
     const postAuthor = authorInPayload || currentPostBy
 
     if (sharedPublic) return false
@@ -73,7 +74,7 @@ const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShar
     const { t } = useI18N()
     const [showDialog, setShowDialog] = useState(false)
     const recipients = useRecipientsList()
-    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI) && recipients.hasRecipients
+    const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
 
     const rightActions = canAppendShareTarget ? (
         <>
@@ -109,6 +110,7 @@ function AppendShareDetail(props: { onClose(): void; recipients: LazyRecipients;
                     iv,
                     profiles.map((x) => x.identifier),
                     props.whoAmI,
+                    activatedSocialNetworkUI.encryptionNetwork,
                 )
                 await delay(1500)
                 retry()

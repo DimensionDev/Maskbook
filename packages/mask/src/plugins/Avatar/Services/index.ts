@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'
@@ -42,13 +42,9 @@ export async function saveNFTAvatar(
     networkPluginId?: NetworkPluginID,
     chainId?: number,
 ) {
-    try {
-        const avatar = await saveNFTAvatarToRSS(address, nft, '', snsKey)
-        await setUserAddress(nft.userId, address, network, networkPluginId, chainId)
-        return avatar
-    } catch (error) {
-        throw error
-    }
+    const avatar = await saveNFTAvatarToRSS(address, nft, '', snsKey)
+    await setUserAddress(nft.userId, address, network, networkPluginId, chainId)
+    return avatar
 }
 
 export async function getAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {

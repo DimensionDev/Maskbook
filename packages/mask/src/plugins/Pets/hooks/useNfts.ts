@@ -1,63 +1,44 @@
-import { useEffect, useMemo, useState } from 'react'
-import {
-    useChainId,
-    useCollectibles,
-    isSameAddress,
-    SocketState,
-    resolveIPFSLink,
-    Constant,
-    transform,
-} from '@masknet/web3-shared-evm'
+import { useEffect, useState } from 'react'
+import { NetworkPluginID, isSameAddress, Constant } from '@masknet/web3-shared-base'
+import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 import { findLastIndex } from 'lodash-unified'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
-
-function useInitNFTs(config: Record<string, Constant> | undefined) {
-    return useMemo(() => {
-        if (!config) return []
-        const nftList = transform(config)()
-        return Object.keys(nftList).map((i) => {
-            const value = nftList[i as keyof typeof nftList]
-            return { name: i, contract: value as string, icon: '', tokens: [] }
-        })
-    }, [config])
-}
+import { useChainId, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const chainId = useChainId()
-    // const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
-    // const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
-    const { data: collectibles, state } = useCollectibles('0x141721F4D7Fd95541396E74266FF272502Ec8899', chainId)
+    const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
+    const { value: collectibles } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
-        if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
+        if (collectibles?.length) {
             for (const NFT of collectibles) {
-                let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
+                let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.address))
                 if (!sameNFT) {
                     sameNFT = {
-                        name: NFT.contractDetailed.name,
-                        contract: NFT.contractDetailed.address,
-                        icon: NFT.contractDetailed.iconURL ?? '',
+                        name: NFT.metadata?.name ?? '',
+                        contract: NFT.address,
+                        icon: NFT.metadata?.imageURL ?? '',
                         tokens: [],
                     }
                     tempNFTs.push(sameNFT)
                 } else {
                     if (!sameNFT.icon) {
-                        sameNFT.icon = NFT.contractDetailed.iconURL ?? ''
+                        sameNFT.icon = NFT.metadata?.imageURL ?? ''
                     }
                 }
-                const isPunk =
-                    isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
-                if (isPunk) {
-                    NFT.info.mediaUrl = Punk3D.url
+                const isPunk = isSameAddress(NFT.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
+                if (isPunk && NFT.metadata) {
+                    NFT.metadata.mediaURL = Punk3D.url
                 }
-                const glbSupport = NFT.info.mediaUrl?.endsWith('.glb') || isPunk
-                if (NFT.info.mediaUrl?.includes('ipfs://')) {
-                    NFT.info.mediaUrl = resolveIPFSLink(NFT.info.mediaUrl.replace('ipfs://', ''))
+                const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') || isPunk
+                if (NFT.metadata?.imageURL?.includes('ipfs://')) {
+                    NFT.metadata.imageURL = resolveIPFSLink(NFT.metadata.imageURL.replace('ipfs://', ''))
                 }
-                const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
+                const item = { ...NFT, tokenId: NFT.tokenId, glbSupport }
                 const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
                 if (sameTokenIndex === -1) {
                     sameNFT.tokens.push(item)
@@ -66,13 +47,11 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                 }
             }
         }
-
-        // tempNFTs.sort(
-        //     (a: FilterContract, b: FilterContract) => blacklist.indexOf(a.contract) - blacklist.indexOf(b.contract),
-        // )
-        console.log(tempNFTs)
+        tempNFTs.sort(
+            (a: FilterContract, b: FilterContract) => blacklist.indexOf(a.contract) - blacklist.indexOf(b.contract),
+        )
         setNfts(tempNFTs)
         return () => {}
-    }, [JSON.stringify(user), JSON.stringify(collectibles), state])
-    return { nfts, state }
+    }, [JSON.stringify(user), JSON.stringify(collectibles)])
+    return nfts
 }

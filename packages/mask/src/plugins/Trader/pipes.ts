@@ -1,5 +1,5 @@
 import { DataProvider, TradeProvider } from '@masknet/public-api'
-import { createLookupTableResolver } from '@masknet/web3-shared-evm'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 
 export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
     {
@@ -40,7 +40,10 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
+        [TradeProvider.VENOMSWAP]: 'VenomSwap',
+        [TradeProvider.OPENSWAP]: 'OpenSwap',
         [TradeProvider.MDEX]: 'Mdex',
+        [TradeProvider.DEFIKINGDOMS]: 'DefiKingdoms',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)

@@ -10,13 +10,13 @@ import {
     step2ActiveIcon,
 } from './constants'
 import { ImageIcon } from '@masknet/shared'
-import { Button, Typography } from '@mui/material'
-import classNames from 'classnames'
+import { Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { useI18N } from '../../../utils'
-import type { Web3Plugin } from '@masknet/plugin-infra/src/web3-types'
-import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import type { Account } from '@masknet/web3-shared-base'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -67,8 +67,16 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+
     roundBtn: {
         borderRadius: 99,
+    },
+    cancelBtn: {
+        padding: '8px 22px',
+        borderRadius: 99,
+        border: '1px solid #EBEEF0',
+        color: '#1C68F3',
+        fontSize: 14,
     },
     disableBtn: {
         pointerEvents: 'none',
@@ -91,7 +99,9 @@ export enum SignSteps {
 interface StepsProps {
     step: SignSteps
     nickname?: string
-    wallet: Web3Plugin.ConnectionResult<ChainId, NetworkType, ProviderType>
+    wallet: Account<ChainId> & {
+        providerType: ProviderType
+    }
     disableConfirm?: boolean
     confirmLoading: boolean
     notInPop?: boolean
@@ -188,20 +198,21 @@ export function Steps(props: StepsProps) {
             )}
 
             <div className={classes.actionBox}>
-                <Button
-                    className={classes.roundBtn}
-                    variant="outlined"
-                    size="large"
+                <ActionButton
+                    className={notInPop ? '' : classes.cancelBtn}
+                    variant="roundedFlat"
                     fullWidth
-                    color="primary"
+                    color="secondary"
                     onClick={onCustomCancel}>
                     {t('cancel')}
-                </Button>
+                </ActionButton>
                 <LoadingButton
+                    className={notInPop ? '' : classes.roundBtn}
+                    color={notInPop ? 'inherit' : 'primary'}
                     loading={confirmLoading}
-                    className={disableConfirm ? classNames(classes.roundBtn, classes.disableBtn) : classes.roundBtn}
-                    variant="contained"
-                    size="large"
+                    size={notInPop ? 'medium' : 'large'}
+                    disabled={disableConfirm}
+                    variant={notInPop ? 'roundedContained' : 'contained'}
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}

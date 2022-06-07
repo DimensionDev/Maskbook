@@ -1,14 +1,11 @@
-import {
-    useTransactionState,
-    useAccount,
-    useChainId,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
-import { useCallback } from 'react'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
+import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
@@ -20,8 +17,8 @@ export function useCreateNftRedpacketCallback(
     contractAddress: string,
     tokenIdList: string[],
 ) {
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [createState, setCreateState] = useTransactionState()
     const nftRedPacketContract = useNftRedPacketContract()
     const createCallback = useCallback(

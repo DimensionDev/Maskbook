@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
@@ -9,15 +9,18 @@ import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@maskne
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
-        padding: '8px 16px 0px 16px',
+        padding: '8px 16px 0 16px',
         display: 'flex',
         flexDirection: 'column',
         rowGap: 12,
         flex: 1,
         backgroundColor: '#F7F9FA',
+        overflow: 'auto',
+        maxHeight: 448,
     },
     loading: {
         flex: 1,
@@ -82,17 +85,18 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
     },
     button: {
-        backgroundColor: '#ffffff',
-        padding: '11px 20px',
-        borderRadius: 99,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        padding: '16px 0',
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         color: '#07101B',
         position: 'fixed',
-        bottom: 32,
-        left: 32,
-        right: 32,
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        boxShadow: '0 0 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
     },
 }))
 
@@ -119,7 +123,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
         }, [])
 
         // TODO: remove this after next dot id support multiple chain
-        const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+        const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
 
         if (loading)
             return (
@@ -149,7 +153,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                     <CopyIconButton text={wallet.identity} className={classes.icon} />
                                     <Link
                                         style={{ width: 16, height: 16 }}
-                                        href={resolveAddressLinkOnExplorer(chainId, wallet.identity ?? '')}
+                                        href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <PopupLinkIcon className={classes.icon} />

@@ -106,7 +106,7 @@ interface TabOption<T> {
 }
 
 export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
-    tabs: TabOption<T>[]
+    tabs: Array<TabOption<T>>
     selectedId?: T
     onChange?(id: T): void
     tail?: ReactNode
@@ -152,7 +152,7 @@ export function ConcealableTabs<T extends number | string>({
         if (selectedId === undefined && tabs.length) {
             onChange?.(tabs[0].id)
         }
-    }, [selectedId === undefined, tabs.length > 0, onChange])
+    }, [selectedId, tabs.map((x) => x.id).join(), onChange])
 
     const slide = useCallback((toLeft: boolean) => {
         const tabList = trackRef.current

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import type { DataProvider } from '@masknet/public-api'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { currentDataProviderSettings } from '../settings'
+import { useSubscription } from 'use-subscription'
+import { getDataProvider } from '../storage'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
-    const currentDataProvider = useValueRef<DataProvider>(currentDataProviderSettings)
+    const currentDataProvider = useSubscription(getDataProvider().subscription)
+
     const [dataProvider, setDataProvider] = useState(currentDataProvider)
 
     // sync data provider
@@ -13,10 +14,6 @@ export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
         setDataProvider(
             availableDataProviders.includes(currentDataProvider) ? currentDataProvider : availableDataProviders[0],
         )
-    }, [
-        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
-        availableDataProviders.sort().join(),
-        currentDataProvider,
-    ])
+    }, [availableDataProviders.sort((a, b) => a - b).join(), currentDataProvider])
     return dataProvider
 }

@@ -1,9 +1,18 @@
-import { ChainId, ChainIdOptionalRecord, ERC20TokenDetailed } from '../types'
-import { createERC20Tokens, getChainDetailed } from '../utils'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import Token from '@masknet/web3-constants/evm/token.json'
+import { createFungibleTokensFromConstants, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types'
+import { chainResolver } from '../utils'
 
-export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<ERC20TokenDetailed[]>>
+export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 
-export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
+const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainId, SchemaType.ERC20>(
+    getEnumAsArray(ChainId),
+    SchemaType.ERC20,
+    Token,
+)
+
+export const USDC = createERC20Tokens('USDC_ADDRESS', 'USC Coin', 'USDC', 6)
 export const USDCe = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDCe', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
 export const USDTe = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT.e', 6)
@@ -33,7 +42,6 @@ export const WBTCe = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTCe
 export const IGG = createERC20Tokens('IGG_ADDRESS', 'IG Gold', 'IGG', 18)
 export const OM = createERC20Tokens('OM_ADDRESS', 'OM Token', 'OM', 18)
 export const SUSHI = createERC20Tokens('SUSHI_ADDRESS', 'SushiToken', 'SUSHI', 18)
-export const YAM = createERC20Tokens('YAM_ADDRESS', 'YAM', 'YAM', 18)
 export const RUNE = createERC20Tokens('RUNE_ADDRESS', 'RUNE.ETH', 'RUNE', 18)
 export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
 export const BTCB = createERC20Tokens('BTCB_ADDRESS', 'Binance BTC', 'BTCB', 18)
@@ -45,11 +53,14 @@ export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
+export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
+export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
+export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
-    (chainId) => `Wrapped ${getChainDetailed(chainId)?.nativeCurrency.name ?? 'Ether'}`,
-    (chainId) => `W${getChainDetailed(chainId)?.nativeCurrency.symbol ?? 'ETH'}`,
+    (chainId) => `Wrapped ${chainResolver.nativeCurrency(chainId)?.name ?? 'Ether'}`,
+    (chainId) => `W${chainResolver.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
     18,
 )
 
@@ -72,4 +83,5 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
+    [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }

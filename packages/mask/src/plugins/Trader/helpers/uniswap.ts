@@ -1,17 +1,10 @@
 import JSBI from 'jsbi'
 import { memoize } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
-import {
-    formatEthereumAddress,
-    ChainId,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isSameAddress,
-    WNATIVE,
-} from '@masknet/web3-shared-evm'
-import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
+import { ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
+import { FungibleToken, isGreaterThan, isSameAddress, pow10, TokenType } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
@@ -21,7 +14,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
         error = error.error ?? error.data?.originalError
     }
 
-    if (reason?.startsWith('execution reverted: ')) reason = reason.substr('execution reverted: '.length)
+    if (reason?.startsWith('execution reverted: ')) reason = reason.slice('execution reverted: '.length)
 
     switch (reason) {
         case 'UniswapV2Router: EXPIRED':
@@ -58,19 +51,22 @@ export function toUniswapPercent(numerator: number, denominator: number) {
     return new Percent(JSBI.BigInt(numerator), JSBI.BigInt(denominator))
 }
 
-export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetailed): Currency | undefined {
+export function toUniswapCurrency(
+    chainId: ChainId,
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+): Currency | undefined {
     try {
         if (!token) return
         const extendedEther = ExtendedEther.onChain(chainId)
         const weth = toUniswapToken(chainId, WNATIVE[chainId])
         if (weth && isSameAddress(token.address, weth.address)) return weth
-        return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+        return token.schema === SchemaType.Native ? extendedEther : toUniswapToken(chainId, token)
     } catch {
         return
     }
 }
 
-export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed) {
+export function toUniswapToken(chainId: ChainId, token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>) {
     return new Token(
         toUniswapChainId(chainId),
         formatEthereumAddress(token.address),
@@ -80,7 +76,11 @@ export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed) {
     )
 }
 
-export function toUniswapCurrencyAmount(chainId: ChainId, token?: FungibleTokenDetailed, amount?: string) {
+export function toUniswapCurrencyAmount(
+    chainId: ChainId,
+    token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    amount?: string,
+) {
     if (!token || !amount) return
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
@@ -106,15 +106,17 @@ export function uniswapPriceTo(price: Price<Currency, Currency>) {
 
 export function uniswapTokenTo(token: Token) {
     return {
-        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+        type: TokenType.Fungible,
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
         address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
-    } as FungibleTokenDetailed
+        schema: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
+            ? SchemaType.Native
+            : SchemaType.ERC20,
+        id: token.symbol,
+    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 }
 
 export function uniswapCurrencyAmountTo(currencyAmount: CurrencyAmount<Currency>) {

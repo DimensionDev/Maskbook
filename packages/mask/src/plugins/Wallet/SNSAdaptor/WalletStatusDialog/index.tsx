@@ -1,19 +1,20 @@
 import { useCallback } from 'react'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
+import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useChainIdValid } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2.5),
+        overflowX: 'hidden',
     },
     footer: {
         fontSize: 12,
@@ -39,14 +40,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
-export interface WalletStatusDialogProps {
-    isDashboard?: boolean
-}
+export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
-    const chainIdValid = useChainIdValid()
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog logic
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
@@ -65,9 +64,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <WalletStatusBox isDashboard={props.isDashboard} />
-                {!props.isDashboard && <ApplicationBoard />}
+                <WalletStatusBox />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

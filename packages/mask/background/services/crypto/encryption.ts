@@ -7,6 +7,8 @@ import {
     EncryptionResultE2EMap,
     EncryptTargetE2E,
     EncryptTargetPublic,
+    SocialNetworkEnum,
+    SocialNetworkEnumToProfileDomain,
 } from '@masknet/encryption'
 import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
 import { savePostKeyToDB } from '../../database/post/helper'
@@ -17,11 +19,12 @@ import { publishPostAESKey_version39Or38 } from '../../network/gun/encryption/qu
 export async function encryptTo(
     content: SerializableTypedMessages,
     target: EncryptTargetPublic | EncryptTargetE2E,
-    whoAmI: ProfileIdentifier,
+    whoAmI: ProfileIdentifier | undefined,
+    network: SocialNetworkEnum,
 ): Promise<string> {
     const { identifier, output, postKey, e2e } = await encrypt(
         {
-            network: whoAmI.network,
+            network: whoAmI?.network || SocialNetworkEnumToProfileDomain(network),
             author: whoAmI,
             message: content,
             target,
@@ -33,7 +36,10 @@ export async function encryptTo(
                 if (result.length === 0) throw new Error('No key found')
                 return result[0]
             },
-            encryptByLocalKey: encryptByLocalKey.bind(null, whoAmI),
+            encryptByLocalKey: async (content, iv) => {
+                if (!whoAmI) throw new Error('No Profile found')
+                return encryptByLocalKey(whoAmI, content, iv)
+            },
             queryPublicKey: (id) =>
                 queryPublicKey(id).then((key): EC_Key<EC_Public_CryptoKey> | null =>
                     key ? { algr: EC_KeyCurveEnum.secp256k1, key } : null,
@@ -42,7 +48,7 @@ export async function encryptTo(
     )
 
     ;(async () => {
-        const profile = await queryProfileDB(whoAmI).catch(noop)
+        const profile = whoAmI ? await queryProfileDB(whoAmI).catch(noop) : null
         const usingPersona = profile?.linkedPersona
         return savePostKeyToDB(identifier, postKey, {
             postBy: whoAmI,
@@ -53,7 +59,7 @@ export async function encryptTo(
     })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
-        publishPostAESKey_version39Or38(-38, identifier.toIV(), whoAmI.network, e2e!)
+        publishPostAESKey_version39Or38(-38, identifier.toIV(), network, e2e!)
     }
     if (typeof output !== 'string') throw new Error('version -37 is not enabled yet!')
     return output

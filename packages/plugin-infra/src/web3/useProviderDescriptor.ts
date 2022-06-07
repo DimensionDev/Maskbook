@@ -1,13 +1,19 @@
-import type { NetworkPluginID } from '../web3-types'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useProviderType } from './useProviderType'
+import type { Web3Helper } from '../web3-helpers'
 import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
 
-export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: NetworkPluginID) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const providerType = useProviderType(expectedPluginID ?? pluginID)
+export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    expectedPluginID?: T,
+    expectedProviderTypeOrID?: string,
+) {
+    type Result = S extends 'all' ? Web3Helper.ProviderDescriptorAll : Web3Helper.Web3ProviderDescriptor<T>
 
-    return getPluginDefine(expectedPluginID ?? pluginID)?.declareWeb3Providers?.find((x) =>
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    const providerType = useProviderType(pluginID)
+
+    return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    )
+    ) as Result
 }

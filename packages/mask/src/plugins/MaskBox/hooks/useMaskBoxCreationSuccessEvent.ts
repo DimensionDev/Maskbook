@@ -1,15 +1,17 @@
 import { first } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
-import { useBlockNumber, useMaskBoxConstants } from '@masknet/web3-shared-evm'
+import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useBlockNumber } from '@masknet/plugin-infra/web3'
 
 // dynamically set the block range window size
 const FRAGMENT_SIZE = 3000
 const MAX_PAGE_SIZE = 10
 
 export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddress: string, boxId: string) {
-    const { value: blockNumber = 0 } = useBlockNumber()
+    const { value: blockNumber = 0 } = useBlockNumber(NetworkPluginID.PLUGIN_EVM)
     const maskBoxContract = useMaskBoxContract()
     const { MASK_BOX_CONTRACT_FROM_BLOCK = Math.max(0, blockNumber - FRAGMENT_SIZE) } = useMaskBoxConstants()
 

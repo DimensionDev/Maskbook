@@ -1,13 +1,8 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, Tooltip } from '@mui/material'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import {
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    ChainId,
-    AddressName,
-    AddressNameType,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../..'
 
 const useStyles = makeStyles()((theme) => ({
@@ -35,23 +30,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressViewerProps {
-    addressName: AddressName
+    identityAddress: SocialAddress<NetworkPluginID>
 }
 
-export function AddressViewer({ addressName }: AddressViewerProps) {
+export function AddressViewer({ identityAddress }: AddressViewerProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const { type, label, resolvedAddress } = addressName
+    const { type, label, address } = identityAddress
 
-    const typeMap = {
-        [AddressNameType.ADDRESS]: t.address_viewer_address_name_address(),
-        [AddressNameType.ENS]: t.address_viewer_address_name_ens(),
-        [AddressNameType.UNS]: t.address_viewer_address_name_uns(),
-        [AddressNameType.DNS]: t.address_viewer_address_name_dns(),
-        [AddressNameType.RSS3]: t.address_viewer_address_name_rns(),
-        [AddressNameType.GUN]: t.address_viewer_address_name_address(),
-        [AddressNameType.THE_GRAPH]: t.address_viewer_address_name_address(),
-        [AddressNameType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
+    const typeMap: Record<SocialAddressType, string> = {
+        [SocialAddressType.ADDRESS]: t.address_viewer_address_name_address(),
+        [SocialAddressType.ENS]: t.address_viewer_address_name_ens(),
+        [SocialAddressType.UNS]: t.address_viewer_address_name_uns(),
+        [SocialAddressType.DNS]: t.address_viewer_address_name_dns(),
+        [SocialAddressType.RSS3]: t.address_viewer_address_name_rns(),
+        [SocialAddressType.KV]: t.address_viewer_address_name_address(),
+        [SocialAddressType.GUN]: t.address_viewer_address_name_address(),
+        [SocialAddressType.NEXT_ID]: t.address_viewer_address_name_address(),
+        [SocialAddressType.THE_GRAPH]: t.address_viewer_address_name_address(),
+        [SocialAddressType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
     }
 
     const rulesTipMap = [
@@ -72,7 +69,7 @@ export function AddressViewer({ addressName }: AddressViewerProps) {
         </div>
     )
 
-    if (!resolvedAddress) return null
+    if (!address) return null
 
     return (
         <Box className={classes.root} display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
@@ -80,7 +77,7 @@ export function AddressViewer({ addressName }: AddressViewerProps) {
                 <Typography color="textPrimary" component="span">
                     {t.address_viewer_current_display_of({ type: typeMap[type] })}
                     <Link
-                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, resolvedAddress)}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         {formatEthereumAddress(label, 4)}

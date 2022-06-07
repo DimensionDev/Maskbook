@@ -16,7 +16,7 @@ import { Some, None, Err, Result, Ok, Option } from 'ts-results'
  * If checked is true, it will return a status object so you can handle the error by yourself.
  *
  * The second item is the revalidation function. It can be called anywhere and returns a Promise.
- * It will resolves regardless the f itself fullfilled or rejected.
+ * It will resolves regardless the f itself fulfilled or rejected.
  */
 export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: () => void) => () => void) {
     const listeners = new Set<Function>()

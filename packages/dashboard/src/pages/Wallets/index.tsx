@@ -1,22 +1,19 @@
 import {
     getRegisteredWeb3Networks,
-    NetworkPluginID,
     useAccount,
     useChainId,
-    useNetworkDescriptor,
     useCurrentWeb3NetworkPluginID,
-    useWallet,
+    useFungibleAssets,
+    useNetworkDescriptor,
     useWallets,
-    useWeb3State as useWeb3PluginState,
-    Web3Plugin,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import { DashboardRoutes, EMPTY_LIST, relativeRouteOf } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import { PluginMessages } from '../../API'
 import { PageFrame } from '../../components/PageFrame'
 import { useDashboardI18N } from '../../locales'
@@ -31,16 +28,14 @@ import { StartUp } from './StartUp'
 import { getTokenUSDValue } from './utils/getTokenUSDValue'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
+
 function Wallets() {
-    const wallet = useWallet()
-    const wallets = useWallets()
-    const navigate = useNavigate()
     const t = useDashboardI18N()
-    const currentChainId = useChainId()
-    const { Asset } = useWeb3PluginState()
+    const navigate = useNavigate()
+    const chainId = useChainId()
     const account = useAccount()
-    const { portfolioProvider } = useWeb3State()
-    const network = useNetworkDescriptor()
+    const wallets = useWallets()
+    const { value: fungibleAssets = EMPTY_LIST } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     const { pathname } = useLocation()
     const isWalletPath = useIsMatched(DashboardRoutes.Wallets)
@@ -50,19 +45,15 @@ function Wallets() {
     const [receiveOpen, setReceiveOpen] = useState(false)
 
     const networks = getRegisteredWeb3Networks()
-    const networkDescriptor = useNetworkDescriptor()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
+    const networkDescriptor = useNetworkDescriptor<'all'>()
+    const [selectedNetwork, setSelectedNetwork] = useState<Web3Helper.NetworkDescriptorAll | null>(
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: detailedTokens } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, network],
-    )
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
     }, [networks, pluginId])
@@ -87,27 +78,26 @@ function Wallets() {
     }, [pathname, defaultNetwork])
 
     const balance = useMemo(() => {
-        if (!detailedTokens || !detailedTokens.length) return 0
+        if (!fungibleAssets || !fungibleAssets.length) return 0
 
-        const values = detailedTokens
+        const values = fungibleAssets
             .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
             .map((y) => getTokenUSDValue(y.value))
         return BigNumber.sum(...values).toNumber()
-    }, [selectedNetwork, detailedTokens])
+    }, [selectedNetwork, fungibleAssets])
 
     const pateTitle = useMemo(() => {
-        if (wallets.length === 0) return t.create_wallet_form_title()
-
+        if (!account && wallets.length === 0) return t.create_wallet_form_title()
         if (isWalletPath) return t.wallets_assets()
         if (isWalletTransferPath) return t.wallets_transfer()
         if (isWalletHistoryPath) return t.wallets_history()
 
         return t.wallets()
-    }, [isWalletPath, isWalletHistoryPath, isWalletTransferPath, wallets.length])
+    }, [isWalletPath, isWalletHistoryPath, isWalletTransferPath, account, wallets.length])
 
     return (
         <PageFrame title={pateTitle} noBackgroundFill primaryAction={<WalletStateBar />}>
-            {!wallet ? (
+            {!account ? (
                 <StartUp />
             ) : (
                 <>
@@ -127,18 +117,13 @@ function Wallets() {
                         <Route path={r(DashboardRoutes.WalletsTransfer)} element={<Transfer />} />
                         <Route
                             path={r(DashboardRoutes.WalletsHistory)}
-                            element={<History selectedChainId={selectedNetwork?.chainId ?? currentChainId} />}
+                            element={<History selectedChainId={selectedNetwork?.chainId ?? chainId} />}
                         />
                     </Routes>
                 </>
             )}
-            {wallet ? (
-                <ReceiveDialog
-                    open={receiveOpen}
-                    chainName="Ethereum"
-                    walletAddress={wallet.address ?? ''}
-                    onClose={() => setReceiveOpen(false)}
-                />
+            {account ? (
+                <ReceiveDialog open={receiveOpen} address={account} onClose={() => setReceiveOpen(false)} />
             ) : null}
         </PageFrame>
     )

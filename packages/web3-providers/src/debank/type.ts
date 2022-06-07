@@ -4,6 +4,7 @@ export enum DebankTransactionDirection {
 }
 
 export interface DictItem {
+    name: string
     id: string
     cn: string
     en: string

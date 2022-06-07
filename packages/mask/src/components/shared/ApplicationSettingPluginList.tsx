@@ -2,7 +2,6 @@ import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/con
 import { useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../utils'
 import { PersistentStorages } from '../../../shared'
 
@@ -10,6 +9,8 @@ export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
     pluginId: string
     enabled?: boolean
+    isWalletConnectedRequired?: boolean
+    isWalletConnectedEVMRequired?: boolean
 }
 
 // #region kv storage
@@ -23,14 +24,14 @@ export function getUnlistedApp(app: Application): boolean {
 }
 // #endregion
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilterColor }) => ({
     list: {
         display: 'grid',
         gap: theme.spacing(2, 1),
         gridTemplateColumns: 'repeat(6, 1fr)',
         gridTemplateRows: 'repeat(3, 1fr)',
         width: '100%',
-        paddingTop: '8px 0px 0px 0px',
+        paddingTop: '8px',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -53,6 +54,9 @@ const useStyles = makeStyles()((theme) => ({
             width: 36,
             height: 36,
         },
+        ...(iconFilterColor
+            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+            : {}),
     },
     loadingWrapper: {
         display: 'flex',
@@ -76,29 +80,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function ApplicationSettingPluginList() {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: undefined })
     const { t } = useI18N()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
-    const applicationList = useMemo(
-        () =>
-            snsAdaptorPlugins
-                .reduce<Application[]>((acc, cur) => {
-                    if (!cur.ApplicationEntries) return acc
-                    return acc.concat(
-                        cur.ApplicationEntries.filter((x) => x.appBoardSortingDefaultPriority).map((x) => {
-                            return {
-                                entry: x,
-                                pluginId: cur.ID,
-                            }
-                        }) ?? EMPTY_LIST,
-                    )
-                }, EMPTY_LIST)
-                .sort(
-                    (a, b) =>
-                        (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0),
-                ),
-        [snsAdaptorPlugins],
-    )
+    const applicationList = useMemo(() => {
+        return snsAdaptorPlugins
+            .flatMap(({ ID, ApplicationEntries: entries }) =>
+                (entries ?? [])
+                    .filter((entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature)
+                    .map((entry) => ({ entry, pluginId: ID })),
+            )
+            .sort((a, b) => {
+                return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+            })
+    }, [snsAdaptorPlugins])
     const [listedAppList, setListedAppList] = useState(applicationList.filter((x) => !getUnlistedApp(x)))
     const [unlistedAppList, setUnListedAppList] = useState(applicationList.filter((x) => getUnlistedApp(x)))
 
@@ -131,7 +126,7 @@ interface AppListProps {
 
 function AppList(props: AppListProps) {
     const { appList, setUnlistedApp, isListed } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: undefined })
     const { t } = useI18N()
 
     return appList.length > 0 ? (
@@ -164,7 +159,7 @@ interface AppListItemProps {
 
 function AppListItem(props: AppListItemProps) {
     const { application, setUnlistedApp, isListed } = props
-    const { classes } = useStyles()
+    const { classes } = useStyles({ iconFilterColor: application.entry.iconFilterColor })
     return (
         <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
             <div className={classes.iconWrapper}>{application.entry.icon}</div>

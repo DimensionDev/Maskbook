@@ -18,6 +18,7 @@ export function composeTransformers(): ComposedTransformers {
     const transformers = new Set<readonly [Transformer, number]>()
 
     function composed(message: TypedMessage, context: TransformationContext) {
+        // eslint-disable-next-line unicorn/no-array-reduce
         return [...transformers].sort((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
     }
 

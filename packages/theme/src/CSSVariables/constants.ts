@@ -70,6 +70,10 @@ export const LightColor = {
     tooltipBackground: '#ffffff',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
     cyberconnectPrimary: '#000000',
+    errorPlugin: '#FF3545',
+    buttonPluginBackground: '#07101B',
+    textPluginColor: '#07101B',
+    buttonPluginColor: '#FFFFFF',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -145,5 +149,9 @@ export const DarkColor: typeof LightColor = {
     tooltipBackground: '#1A1D20',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
     cyberconnectPrimary: '#ffffff',
+    errorPlugin: '#FF3545',
+    buttonPluginBackground: '#07101B',
+    textPluginColor: '#07101B',
+    buttonPluginColor: '#FFFFFF',
 }
 export type Color = typeof LightColor

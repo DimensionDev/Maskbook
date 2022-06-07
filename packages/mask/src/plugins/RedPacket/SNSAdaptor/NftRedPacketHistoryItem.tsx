@@ -1,20 +1,21 @@
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import classNames from 'classnames'
 import { fill } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../utils/i18n-next-ui'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import type { NftRedPacketHistory } from '../types'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
 import { NftList } from './NftList'
+import { Translate, useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -143,27 +144,30 @@ const useStyles = makeStyles()((theme) => {
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketHistory
-    onSend: (history: NftRedPacketHistory, contract: ERC721ContractDetailed) => void
+    onSend: (history: NftRedPacketHistory, contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>) => void
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
 export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
     ({ history, onSend, onShowPopover, onHidePopover }) => {
-        const account = useAccount()
-        const { t } = useI18N()
+        const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+        const t = useI18N()
         const { classes } = useStyles()
         const {
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
-        const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
-        const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-            WalletMessages.events.walletStatusDialogUpdated,
+        const { value: contractDetailed } = useNonFungibleTokenContract(
+            NetworkPluginID.PLUGIN_EVM,
+            history.token_contract.address,
+        )
+        const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+            WalletMessages.events.ApplicationDialogUpdated,
         )
         const handleSend = useCallback(() => {
             if (!(canSend && contractDetailed && isPasswordValid)) return
-            onSend(history, contractDetailed)
-            closeWalletStatusDialog()
-        }, [onSend, closeWalletStatusDialog, canSend, history, contractDetailed, isPasswordValid])
+            onSend(history, contractDetailed as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
+            closeApplicationBoardDialog()
+        }, [onSend, closeApplicationBoardDialog, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
         const bitStatusList = redpacketStatus
@@ -175,7 +179,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             }
         }
         const handleShowPopover = (anchor: HTMLElement) => {
-            onShowPopover(anchor, t('plugin_nft_red_packet_data_broken'))
+            onShowPopover(anchor, t.nft_data_broken())
         }
 
         return (
@@ -196,10 +200,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                 <Typography
                                     variant="body1"
                                     className={classNames(classes.title, classes.message, classes.ellipsis)}>
-                                    {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
+                                    {history.message === '' ? t.best_wishes() : history.message}
                                 </Typography>
                                 <Typography variant="body1" className={classNames(classes.info, classes.message)}>
-                                    {t('plugin_red_packet_history_duration', {
+                                    {t.history_duration({
                                         startTime: dateTimeFormat(new Date(history.creation_time)),
                                         endTime: dateTimeFormat(
                                             new Date(history.creation_time + history.duration),
@@ -219,32 +223,26 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                     )}
                                     variant="contained"
                                     size="large">
-                                    {t('plugin_red_packet_history_send')}
+                                    {t.send()}
                                 </ActionButton>
                             ) : null}
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={
-                                    {
-                                        address: history.token_contract.address,
-                                        chainId: history.token_contract.chain_id,
-                                    } as ERC721ContractDetailed
-                                }
+                                contract={history.token_contract}
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />
                         </section>
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                <Trans
-                                    i18nKey="plugin_red_packet_history_claimed"
+                                <Translate.history_claimed
                                     components={{
                                         strong: <strong />,
                                     }}
                                     values={{
-                                        claimedShares: history.claimers.length,
-                                        shares: history.shares,
+                                        claimedShares: history.claimers.length.toString(),
+                                        shares: history.shares.toString(),
                                     }}
                                 />
                             </Typography>

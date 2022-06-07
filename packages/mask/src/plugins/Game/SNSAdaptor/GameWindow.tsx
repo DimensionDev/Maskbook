@@ -5,7 +5,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconClose, IconFull } from '../constants'
 import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useLocation } from 'react-use'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import type { GameInfo } from '../types'
 
 const useStyles = makeStyles()(() => ({

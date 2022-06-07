@@ -3,8 +3,8 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
-import ModelView from './ModelView'
 import { ImageLoader } from './ImageLoader'
+import ModelView from './ModelView'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -49,7 +49,7 @@ export const useStyles = makeStyles()((theme) => ({
 
         '@keyframes word-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
                 transform: 'scale3d(1, 1, 1)',
             },
             '30%': {
@@ -84,11 +84,11 @@ export const useStyles = makeStyles()((theme) => ({
     image: {
         borderRadius: '4px',
         width: '100%',
-        opacity: '0',
+        opacity: 0,
         transition: 'all 200ms',
         '@keyframes image-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
             },
             '100%': {
                 opacity: '1',
@@ -135,7 +135,10 @@ export function PreviewBox(props: Props) {
         if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {
             return (
                 <video className={classes.video} autoPlay loop muted playsInline poster={imageUrl}>
-                    <source src={mediaUrl} type={`video/${mediaUrl.substring(mediaUrl.lastIndexOf('.') + 1)}`} />
+                    <source
+                        src={mediaUrl}
+                        type={`video/${mediaUrl.slice(Math.max(0, mediaUrl.lastIndexOf('.') + 1))}`}
+                    />
                 </video>
             )
         } else {

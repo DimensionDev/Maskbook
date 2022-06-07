@@ -4,7 +4,7 @@
 import urlcat from 'urlcat'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
 import { fetchJSON } from './helper'
-import type { Result } from 'ts-results'
+import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants'
 
@@ -29,10 +29,32 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
      * @param personaPublicKey
      *
      */
+    async getByIdentity<T>(
+        personaPublicKey: string,
+        platform: NextIDPlatform,
+        identity: string,
+        pluginId: string,
+    ): Promise<Result<T, string>> {
+        interface Proof {
+            platform: NextIDPlatform
+            identity: string
+            content: Record<string, T>
+        }
+        interface Response {
+            persona: string
+            proofs: Proof[]
+        }
+        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        if (!response.ok) return Err('User not found')
+        const proofs = (response.val.proofs ?? [])
+            .filter((x) => x.platform === platform)
+            .filter((x) => x.identity === identity.toLowerCase())
+        if (!proofs.length) return Err('Not found')
+        return Ok(proofs[0].content[pluginId])
+    }
     async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
         return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
     }
-
     /**
      * Get signature payload for updating
      * @param personaPublicKey

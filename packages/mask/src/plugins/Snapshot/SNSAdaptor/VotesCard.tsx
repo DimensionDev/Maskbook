@@ -1,10 +1,4 @@
-import {
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    resolveIPFSLink,
-    useChainId,
-    formatPercentage,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver, resolveIPFSLink, formatPercentage } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
@@ -18,6 +12,8 @@ import { useVotes } from './hooks/useVotes'
 import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -77,7 +73,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function Content() {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const identifier = useContext(SnapshotContext)
     const { payload: votes } = useVotes(identifier)
     const { classes } = useStyles()
@@ -95,14 +91,13 @@ function Content() {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
-                            ? v.choices.reduce((acc, choice, i) => {
-                                  return (
-                                      acc +
-                                      (i === 0 ? '' : ', ') +
-                                      (!isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '') +
-                                      choice.name
-                                  )
-                              }, '')
+                            ? v.choices
+                                  .flatMap((choice, index) => [
+                                      index === 0 ? '' : ', ',
+                                      !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                      choice.name,
+                                  ])
+                                  .join('')
                             : null
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
@@ -110,7 +105,7 @@ function Content() {
                                 className={classNames(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={resolveAddressLinkOnExplorer(chainId, v.address)}>
+                                href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
                                     {v.authorAvatar ? (
                                         <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />

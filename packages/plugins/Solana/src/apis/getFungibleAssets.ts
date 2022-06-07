@@ -1,8 +1,8 @@
-import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra/web3'
-import { ChainId, getTokenConstants } from '@masknet/web3-shared-solana'
+import { FungibleAsset, CurrencyType, Pageable, HubOptions, createPageable } from '@masknet/web3-shared-base'
+import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
-import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { TokenListProvider } from '@solana/spl-token-registry'
+import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { GetAccountInfoResponse, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 
 async function getSolanaBalance(chainId: ChainId, account: string) {
@@ -14,12 +14,21 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
     })
     const balance = data.result?.value.lamports.toString() ?? '0'
     return createFungibleAsset(
-        createFungibleToken(chainId, SOL_ADDRESS, 'Solana', 'SOL', 9),
+        createFungibleToken(
+            chainId,
+            SOL_ADDRESS,
+            'Solana',
+            'SOL',
+            9,
+            new URL('../assets/solana.png', import.meta.url).toString(),
+        ),
         balance,
-        new URL('../assets/solana.png', import.meta.url).toString(),
-        price,
+        {
+            [CurrencyType.USD]: price.toString(),
+        },
     )
 }
+
 async function getSplTokenList(chainId: ChainId, account: string) {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
@@ -45,7 +54,7 @@ async function getSplTokenList(chainId: ChainId, account: string) {
     const tokenListProvider = new TokenListProvider()
     const provider = await tokenListProvider.resolve()
     const tokenList = provider.filterByChainId(chainId).getList()
-    const splTokens: Web3Plugin.Asset[] = []
+    const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
     data.result.forEach((x) => {
         const info = x.account.data.parsed.info
         const token = tokenList.find((y) => y.address === info.mint)
@@ -54,9 +63,8 @@ async function getSplTokenList(chainId: ChainId, account: string) {
         const name = token.name || 'Unknown Token'
         const symbol = token.symbol || 'Unknown Token'
         const splToken = createFungibleAsset(
-            createFungibleToken(chainId, info.mint, name, symbol, info.tokenAmount.decimals),
+            createFungibleToken(chainId, info.mint, name, symbol, info.tokenAmount.decimals, token.logoURI),
             info.tokenAmount.amount,
-            token.logoURI,
         )
         splTokens.push(splToken)
     })
@@ -65,17 +73,16 @@ async function getSplTokenList(chainId: ChainId, account: string) {
 
 export async function getFungibleAssets(
     address: string,
-    provider: string,
-    network: Web3Plugin.NetworkDescriptor,
-    pagination?: Pagination,
-): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
+    options?: HubOptions<ChainId>,
+): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(network.chainId, address).then((x) => [x]),
-        getSplTokenList(network.chainId, address),
+        getSolanaBalance(options?.chainId ?? ChainId.Mainnet, address).then((x) => [x]),
+        getSplTokenList(options?.chainId ?? ChainId.Mainnet, address),
     ])
-
-    return allSettled
+    const assets = allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
         .flat()
-        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+        .filter(Boolean)
+
+    return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, 0)
 }
