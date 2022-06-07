@@ -1,11 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-import { lookup } from '../apis'
 import { ChainId } from '@masknet/web3-shared-solana'
+import { NameService } from './NameService'
 
 const SOL_RE = /\S{1,256}\.sol\b/
-const ADDRESS_FULL = /(?!0x)(?=[A-Za-z])\w{44}/
 
 function getSolanaName(twitterId: string, nickname: string, bio: string) {
     const [matched] = nickname.match(SOL_RE) ?? bio.match(SOL_RE) ?? []
@@ -20,13 +19,13 @@ export class IdentityService extends IdentityServiceState {
 
     protected override async getFromRemote(identity: SocialIdentity) {
         const { identifier, bio = '', nickname = '' } = identity
-        const addressMatched = identity.bio?.match(ADDRESS_FULL) ?? null
+        const addressMatched = identity.bio?.match(/\w{44}/) ?? null
         const address = addressMatched?.[0]
         const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
-        const solanaDomainAddress = await lookup(solanaName, ChainId.Mainnet)
+        const solanaDomainAddress = await new NameService().lookup(ChainId.Mainnet, solanaName)
 
         return [
-            address
+            address && !address.startsWith('0x')
                 ? {
                       networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.ADDRESS,

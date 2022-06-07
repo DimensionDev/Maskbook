@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NameServiceState } from '@masknet/plugin-infra/web3'
 import { performReverseLookup } from '@bonfida/spl-name-service'
-import { ChainId, formatAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-solana'
+import { ChainId, formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
 import { getHashedName, getNameAccountKey, NameRegistryState } from '@solana/spl-name-service'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { NETWORK_ENDPOINTS, SOL_TLD_AUTHORITY } from '../constants'
@@ -10,17 +10,17 @@ import type { Subscription } from 'use-subscription'
 
 export class NameService extends NameServiceState<ChainId> {
     constructor(
-        context: Plugin.Shared.SharedContext,
-        subscriptions: {
+        context?: Plugin.Shared.SharedContext,
+        subscriptions?: {
             chainId?: Subscription<ChainId>
         },
     ) {
         super(
-            context,
+            context!,
             getEnumAsArray(ChainId).map((x) => x.value),
-            subscriptions,
+            subscriptions!,
             {
-                isValidName: (x) => x !== '0x',
+                isValidName: (x) => isValidDomain(x),
                 isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
                 formatAddress,
             },
@@ -37,7 +37,7 @@ export class NameService extends NameServiceState<ChainId> {
     }
 
     override async lookup(chainId: ChainId, name: string) {
-        const { domainKey } = await this.getKey(name)
+        const { domainKey } = await this.getKey(name.replace('.sol', ''))
         const registry = await NameRegistryState.retrieve(this.connection(chainId), domainKey)
         return registry.owner.toBase58()
     }
