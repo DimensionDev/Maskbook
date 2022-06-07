@@ -7,6 +7,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageFailOver } from '../../../hooks'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useImageBase64 } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -36,15 +37,14 @@ export function TokenIcon(props: TokenIconProps) {
     }, [chainId, address, logoURI, hub])
 
     const { value: trustedLogoURI, loading } = useImageFailOver(urls, '')
+    const base64 = useImageBase64(address, trustedLogoURI)
 
-    return (
-        <TokenIconUI
-            logoURL={loading ? undefined : trustedLogoURI}
-            AvatarProps={AvatarProps}
-            classes={classes}
-            name={name}
-        />
-    )
+    console.log({
+        address,
+        base64,
+    })
+
+    return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {
@@ -69,7 +69,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
             src={logoURL}
             style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
             {...AvatarProps}>
-            {name?.slice(0, 1).toUpperCase()}
+            {' '}
         </Avatar>
     )
 })
