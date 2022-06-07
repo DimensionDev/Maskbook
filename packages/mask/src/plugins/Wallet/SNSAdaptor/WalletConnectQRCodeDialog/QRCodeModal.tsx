@@ -30,10 +30,10 @@ export const QRCodeModal: React.FC<{
     }
     return (
         <Grid className={classes.container}>
+            <QRCode text={uri} canvasProps={{ style }} />
             <Typography className={classes.tip} color="textSecondary">
                 {t('plugin_wallet_qr_code_with_wallet_connect')}
             </Typography>
-            <QRCode text={uri} canvasProps={{ style }} />
         </Grid>
     )
 }

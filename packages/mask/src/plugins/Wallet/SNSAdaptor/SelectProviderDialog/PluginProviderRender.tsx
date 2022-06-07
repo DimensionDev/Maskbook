@@ -3,9 +3,8 @@ import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType } from '@masknet/shared-base'
-import type { Web3Helper, Web3Plugin } from '@masknet/plugin-infra/web3'
-import { chainResolver } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
@@ -153,6 +152,7 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
+    const { Others } = useWeb3State<'all'>()
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
@@ -168,37 +168,14 @@ export function PluginProviderRender({
                     <List className={classes.list}>
                         {networks
                             ?.filter((x) => x.isMainnet)
-                            .map((network) => (
-                                <ListItem
-                                    className={classes.networkItem}
-                                    key={network.ID}
-                                    onClick={() => {
-                                        onNetworkIconClicked(network)
-                                    }}>
-                                    <div
-                                        className={classes.iconWrapper}
-                                        style={{ boxShadow: `3px 10px 15px -8px ${network.iconColor}` }}>
-                                        {NetworkIconClickBait ? (
-                                            <NetworkIconClickBait network={network}>
-                                                <ImageIcon size={30} icon={network.icon} />
-                                            </NetworkIconClickBait>
-                                        ) : (
-                                            <ImageIcon size={30} icon={network.icon} />
-                                        )}
-                                        {undeterminedNetworkID === network.ID && (
-                                            <SelectedIcon className={classes.checkedBadge} />
-                                        )}
-                                    </div>
-                                    <Typography
-                                        className={cx(
-                                            classes.networkName,
-                                            undeterminedNetworkID === network.ID ? classes.selected : '',
-                                        )}>
-                                        {network.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
-                                            ? chainResolver.chainName(network.chainId as number)
-                                            : network.type}
-                                    </Typography>
-                                </ListItem>
+                            .map((network, i) => (
+                                <NetworkItem
+                                    key={i}
+                                    onNetworkIconClicked={onNetworkIconClicked}
+                                    NetworkIconClickBait={NetworkIconClickBait}
+                                    network={network}
+                                    undeterminedNetworkID={undeterminedNetworkID}
+                                />
                             ))}
                     </List>
                 </section>
@@ -251,5 +228,40 @@ export function PluginProviderRender({
                 </section>
             </Box>
         </>
+    )
+}
+
+interface NetworkItemProps {
+    onNetworkIconClicked: PluginProviderRenderProps['onNetworkIconClicked']
+    NetworkIconClickBait?: PluginProviderRenderProps['NetworkIconClickBait']
+    network: Web3Helper.NetworkDescriptorAll
+    undeterminedNetworkID: string | undefined
+}
+
+function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, undeterminedNetworkID }: NetworkItemProps) {
+    const { classes, cx } = useStyles()
+    const { Others } = useWeb3State<'all'>(network.networkSupporterPluginID)
+    return (
+        <ListItem
+            className={classes.networkItem}
+            key={network.ID}
+            onClick={() => {
+                onNetworkIconClicked(network)
+            }}>
+            <div className={classes.iconWrapper} style={{ boxShadow: `3px 10px 15px -8px ${network.iconColor}` }}>
+                {NetworkIconClickBait ? (
+                    <NetworkIconClickBait network={network}>
+                        <ImageIcon size={30} icon={network.icon} />
+                    </NetworkIconClickBait>
+                ) : (
+                    <ImageIcon size={30} icon={network.icon} />
+                )}
+                {undeterminedNetworkID === network.ID && <SelectedIcon className={classes.checkedBadge} />}
+            </div>
+            <Typography
+                className={cx(classes.networkName, undeterminedNetworkID === network.ID ? classes.selected : '')}>
+                {Others?.chainResolver.chainName(network.chainId as number)}
+            </Typography>
+        </ListItem>
     )
 }

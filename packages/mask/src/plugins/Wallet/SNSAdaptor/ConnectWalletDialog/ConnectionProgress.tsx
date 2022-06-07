@@ -1,6 +1,7 @@
 import { Trans } from 'react-i18next'
 import { WalletIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
@@ -115,7 +116,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     </Box>
                 </Card>
             </Paper>
-            {providerDescriptor?.ID === `${NetworkPluginID.PLUGIN_EVM}_walletconnect` ? null : (
+            {providerDescriptor?.type === ProviderType.WalletConnect ? null : (
                 <Card className={classes.tipContent} elevation={0}>
                     <WarningTriangleIcon className={classes.warningTriangleIcon} />
                     <Typography className={classes.tipContentText} variant="body2">
