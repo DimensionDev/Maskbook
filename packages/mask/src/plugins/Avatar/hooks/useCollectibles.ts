@@ -1,5 +1,5 @@
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken } from '../types'
 
