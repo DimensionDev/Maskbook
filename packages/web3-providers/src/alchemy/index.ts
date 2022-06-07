@@ -11,10 +11,10 @@ import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '..'
 import { fetchJSON } from '../helpers'
-import { AlchemyNetworkMap } from './contants'
+import { AlchemyNetworkMap } from './constants'
 import type { AlchemyNFT_EVM, AlchemyNFT_FLOW, AlchemyResponse_EVM, AlchemyResponse_FLOW } from './types'
 
-export * from './contants'
+export * from './constants'
 export class AlchemyNFTAPI
     implements NonFungibleTokenAPI.Provider<ChainId_EVM | ChainId_FLOW, SchemaType_EVM | SchemaType_FLOW, string>
 {

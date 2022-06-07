@@ -22,7 +22,7 @@ import { MagicEdenAPI } from './MagicEden'
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
-export { AlchemyNetworkMap } from './alchemy/contants'
+export { AlchemyNetworkMap } from './alchemy/constants'
 
 export const OpenSea = new OpenSeaAPI()
 export const MagicEden = new MagicEdenAPI()
