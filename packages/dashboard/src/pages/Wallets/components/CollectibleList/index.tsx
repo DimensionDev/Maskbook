@@ -9,12 +9,7 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferTab } from '../Transfer'
-import {
-    useAccount,
-    useCurrentWeb3NetworkPluginID,
-    useNonFungibleAssets2,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { useAccount, useCurrentWeb3NetworkPluginID, useNonFungibleAssets, Web3Helper } from '@masknet/plugin-infra/web3'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-unified'
 import { ElementAnchor } from '@masknet/shared'
@@ -49,7 +44,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         done,
         next,
         error,
-    } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account })
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account })
 
     const renderCollectibles = useMemo(() => {
         const uniqCollectibles = uniqBy(value, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)

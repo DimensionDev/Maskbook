@@ -18,7 +18,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { RetryHint } from './RetryHint'
 
 export const CollectibleContext = createContext<{
@@ -238,7 +238,7 @@ export function CollectionList({
         next,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles

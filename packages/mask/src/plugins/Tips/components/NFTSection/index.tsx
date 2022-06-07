@@ -1,4 +1,4 @@
-import { useNonFungibleAssets2 } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -83,7 +83,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssets2(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
 
     const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {

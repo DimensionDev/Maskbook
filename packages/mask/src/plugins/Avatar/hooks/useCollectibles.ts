@@ -8,7 +8,7 @@ export function useCollectibles(account: string, pluginId: NetworkPluginID, chai
         value: assets = [],
         error,
         retry,
-        loading,
+        done: loading,
     } = useNonFungibleAssets(pluginId, undefined, {
         chainId,
         account,
