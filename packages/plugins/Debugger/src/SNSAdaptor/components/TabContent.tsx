@@ -343,7 +343,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                             break
                                     }
                                 }}>
-                                Disconnect Walelt
+                                Disconnect Wallet
                             </Button>
                         </TableCell>
                     </TableRow>
