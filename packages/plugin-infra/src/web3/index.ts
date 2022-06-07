@@ -1,6 +1,7 @@
 export * from './Context'
 
 export * from './useAccount'
+export * from './useAccountName'
 export * from './useAddressBook'
 export * from './useSocialAddressList'
 export * from './useSocialAddressListAll'

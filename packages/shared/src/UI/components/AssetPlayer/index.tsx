@@ -203,7 +203,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                       ))
                     : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
             </Box>
-            {IframeResizerMemo}
+            {AssetPlayerState.LOADING !== playerState && IframeResizerMemo}
         </>
     )
 })
