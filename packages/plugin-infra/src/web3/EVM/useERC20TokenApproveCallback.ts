@@ -87,9 +87,6 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                 erc20Contract.methods
                     .approve(spender, useExact ? amount : MaxUint256)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.RECEIPT, () => {
-                        revalidate()
-                    })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         revalidate()
                         resolve(receipt.transactionHash)
@@ -116,7 +113,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
             spender,
             balance,
         },
-        state,
+        { ...state, loading: loadingAllowance || loadingBalance || state.loading },
         approveCallback,
         resetCallback,
     ] as const

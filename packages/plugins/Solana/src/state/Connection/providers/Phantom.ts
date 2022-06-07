@@ -10,33 +10,37 @@ export class PhantomProvider extends BaseInjectedProvider implements SolanaProvi
         super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
-    override signMessage(dataToSign: string) {
-        return this.bridge.request({
+    override async signMessage(dataToSign: string) {
+        const { signature } = await this.bridge.request<{
+            publicKey: string
+            signature: string
+        }>({
             method: PhantomMethodType.SIGN_MESSAGE,
             params: {
                 message: new TextEncoder().encode(dataToSign),
                 display: 'hex',
             },
-        }) as Promise<string>
+        })
+        return signature
     }
 
     override signTransaction(transaction: Transaction) {
-        return this.bridge.request({
+        return this.bridge.request<Transaction>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
                 message: bs58.encode(transaction.serializeMessage()),
             },
-        }) as Promise<Transaction>
+        })
     }
 
     override async signTransactions(transactions: Transaction[]) {
-        return this.bridge.request({
+        return this.bridge.request<Transaction[]>({
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
                     return bs58.encode(transaction.serializeMessage())
                 }),
             },
-        }) as Promise<Transaction[]>
+        })
     }
 }

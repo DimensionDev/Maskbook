@@ -149,7 +149,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         }
         try {
             await PluginPetRPC.setUserAddress(user)
-            const signature = await connection?.signMessage(user.userId, 'personaSign', { account: user.address })
+            const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
             if (signature && connection) {
                 await saveCustomEssayToRSS(user.address, meta, signature, connection)
             }
@@ -314,6 +314,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
+                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         size: 'large',
