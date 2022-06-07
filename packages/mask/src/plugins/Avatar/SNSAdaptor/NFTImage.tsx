@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { SelectedIcon } from '../assets/selected'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
@@ -38,12 +38,15 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTImageProps {
     showBadge?: boolean
-    token: NonFungibleToken<ChainId, SchemaType>
-    selectedToken?: NonFungibleToken<ChainId, SchemaType>
-    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    selectedToken?: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    onChange: (token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
 }
 
-function isSameNFT(a: NonFungibleToken<ChainId, SchemaType>, b?: NonFungibleToken<ChainId, SchemaType>) {
+function isSameNFT(
+    a: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+    b?: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
+) {
     return (
         isSameAddress(a.contract?.address, b?.contract?.address) &&
         a.contract?.chainId &&

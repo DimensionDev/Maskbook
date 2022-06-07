@@ -8,6 +8,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import urlcat from 'urlcat'
+import { courier } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
 import { MAGIC_EDEN_API_URL } from './constants'
 import type {
@@ -22,7 +23,7 @@ import { toImage } from './utils'
 
 async function fetchFromMagicEden<T>(path: string) {
     try {
-        const response = await fetch(urlcat(MAGIC_EDEN_API_URL, path), {
+        const response = await fetch(courier(urlcat(MAGIC_EDEN_API_URL, path)), {
             method: 'GET',
             headers: { Accept: 'application/json' },
         })

@@ -1,10 +1,9 @@
 import { useImageChecker } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -41,18 +40,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTListPageProps {
-    tokenInfo?: NonFungibleToken<ChainId, SchemaType>
-    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    onChange?: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    tokenInfo?: AllChainsNonFungibleToken
+    tokens: AllChainsNonFungibleToken[]
+    onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
     const { onChange, tokenInfo, tokens, children } = props
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(tokenInfo)
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
 
-    const _onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const _onChange = (token: AllChainsNonFungibleToken) => {
         if (!token) return
         setSelectedToken(token)
         onChange?.(token)
@@ -63,7 +62,7 @@ export function NFTListPage(props: NFTListPageProps) {
             <Box className={classes.root}>
                 <Box className={classes.gallery}>
                     {children ??
-                        tokens.map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
+                        tokens.map((token: AllChainsNonFungibleToken, i) => (
                             <NFTImageCollectibleAvatar
                                 key={i}
                                 token={token}
@@ -78,9 +77,9 @@ export function NFTListPage(props: NFTListPageProps) {
 }
 
 interface NFTImageCollectibleAvatarProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
-    selectedToken?: NonFungibleToken<ChainId, SchemaType>
+    token: AllChainsNonFungibleToken
+    onChange: (token: AllChainsNonFungibleToken) => void
+    selectedToken?: AllChainsNonFungibleToken
 }
 
 function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageCollectibleAvatarProps) {

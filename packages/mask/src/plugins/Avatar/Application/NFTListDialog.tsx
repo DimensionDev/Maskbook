@@ -6,7 +6,7 @@ import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography 
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SelectTokenInfo, TokenInfo } from '../types'
+import type { AllChainsNonFungibleToken, SelectTokenInfo, TokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isSameToken(token?: NonFungibleToken<ChainId, SchemaType>, tokenInfo?: TokenInfo) {
+function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: TokenInfo) {
     if (!token && !tokenInfo) return false
     return isSameAddress(token?.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
 }
@@ -94,25 +94,20 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const chainId = useChainId(currentPluginId)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState(account ?? wallets?.[0]?.identity ?? '')
-    const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId)
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(tokenInfo)
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
-    const [tokens, setTokens] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
+    const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
 
-    const { collectibles, retry, error, loading } = useCollectibles(
-        selectedAccount,
-        selectedPluginId,
-        chainId as ChainId,
-    )
+    const { collectibles, retry, error, loading } = useCollectibles(selectedAccount, pluginId, chainId as ChainId)
 
     const { showSnackbar } = useCustomSnackbar()
-    const onChangeWallet = (address: string, pluginId: NetworkPluginID) => {
+    const onChangeWallet = (address: string) => {
         setSelectedAccount(address)
-        setSelectedPluginId(pluginId)
     }
 
-    const onChangeToken = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const onChangeToken = (token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)
     }
 
@@ -130,7 +125,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 image: URL.createObjectURL(image),
                 account: selectedAccount,
                 token: selectedToken,
-                pluginId: selectedPluginId,
+                pluginId,
             })
             setDisabled(false)
             onNext()
@@ -138,7 +133,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             showSnackbar(String(error), { variant: 'error' })
             return
         }
-    }, [selectedToken, selectedAccount, selectedPluginId])
+    }, [selectedToken, selectedAccount, pluginId])
 
     const onClick = useCallback(() => {
         if (!account && !wallets?.length) {
@@ -154,7 +149,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
-    const onAddClick = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const onAddClick = (token: AllChainsNonFungibleToken) => {
+        // TODO reference tokensInList below
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
@@ -211,6 +207,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
+    const tokensInList = uniqBy(
+        [...tokens, ...collectibles],
+        pluginId === NetworkPluginID.PLUGIN_SOLANA ? (x) => x.tokenId : (x) => x.contract?.address && x.tokenId,
+    )
+
     if (!wallets?.length && !account)
         return (
             <DialogContent className={classes.content}>
@@ -229,7 +230,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 />
                 {(account || Boolean(wallets?.length)) && (
                     <NFTListPage
-                        tokens={uniqBy([...tokens, ...collectibles], (x) => x.contract?.address && x.tokenId)}
+                        tokens={tokensInList}
                         tokenInfo={selectedToken}
                         onChange={onChangeToken}
                         children={NoNFTList()}
@@ -271,7 +272,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 open={open_}
                 onClose={() => setOpen_(false)}
                 onAddClick={onAddClick}
-                expectedPluginID={selectedPluginId}
+                expectedPluginID={pluginId}
             />
         </>
     )

@@ -66,7 +66,9 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
             id,
         }),
     })
-    return res.json()
+    const result = await res.json()
+    if (result.error) throw new Error(result.message || 'Fails to request RPC')
+    return result
 }
 
 export async function fetchJSON<T = unknown>(url: string): Promise<T> {
