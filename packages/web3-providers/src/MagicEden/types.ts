@@ -120,7 +120,7 @@ export interface TokenActivity {
 }
 
 /**
- * /tokens/:token_mint/activities
+ * /wallets/:wallet_address/tokens
  * Token owned by a wallet.
  */
 export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {

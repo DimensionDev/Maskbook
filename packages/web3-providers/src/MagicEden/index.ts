@@ -23,7 +23,8 @@ import { toImage } from './utils'
 
 async function fetchFromMagicEden<T>(path: string) {
     try {
-        const response = await fetch(courier(urlcat(MAGIC_EDEN_API_URL, path)), {
+        const url = courier(urlcat(MAGIC_EDEN_API_URL, path))
+        const response = await fetch(url, {
             method: 'GET',
             headers: { Accept: 'application/json' },
         })
