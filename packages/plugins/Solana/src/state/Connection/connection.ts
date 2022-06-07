@@ -99,11 +99,14 @@ class Connection implements BaseConnection {
     getNativeToken(options?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
+    async getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
+        if (!options?.account) return '0'
+        const sol = await SolanaRPC.getSolAsset(options?.chainId ?? ChainId.Mainnet, options.account)
+        return sol.balance
     }
-    getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
+    async getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
+        if (!options?.account) return '0'
+        return SolanaRPC.getSplTokenBalance(options?.chainId ?? ChainId.Mainnet, options.account, address)
     }
     getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')

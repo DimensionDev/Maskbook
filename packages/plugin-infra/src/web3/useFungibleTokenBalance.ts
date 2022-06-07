@@ -13,7 +13,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID>(
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection) return '0'
-        return (connection.getFungibleTokenBalance as GetFungibleTokenBalance)(address ?? '')
-    }, [address, connection])
+        if (!connection || !address) return '0'
+        return (connection.getFungibleTokenBalance as GetFungibleTokenBalance)(address ?? '', options)
+    }, [address, connection, JSON.stringify(options)])
 }

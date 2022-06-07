@@ -19,7 +19,7 @@ import {
     SPL_TOKEN_PROGRAM_ID,
 } from './shared'
 
-async function getSolanaBalance(chainId: ChainId, account: string) {
+export async function getSolAsset(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
     const price = await CoinGecko.getTokenPrice('solana', CurrencyType.USD)
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
@@ -109,12 +109,19 @@ export async function getSplTokenList(chainId: ChainId, account: string) {
     return splTokens
 }
 
+export async function getSplTokenBalance(chainId: ChainId, account: string, mintAddress: string) {
+    const splTokens = await getSplTokenList(chainId, account)
+    debugger
+    const splToken = splTokens.find((x) => x.address === mintAddress)
+    return splToken?.balance ?? '0'
+}
+
 export async function getFungibleAssets(
     address: string,
     options?: HubOptions<ChainId>,
 ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(options?.chainId || ChainId.Mainnet, address).then((x) => [x]),
+        getSolAsset(options?.chainId || ChainId.Mainnet, address).then((x) => [x]),
         getSplTokenList(options?.chainId || ChainId.Mainnet, address),
     ])
     const assets = allSettled

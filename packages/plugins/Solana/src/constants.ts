@@ -1,3 +1,4 @@
+import { courier } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { PublicKey } from '@solana/web3.js'
@@ -8,7 +9,7 @@ export const PLUGIN_NAME = 'Solana Chain'
 export const PLUGIN_DESCRIPTION = ''
 
 export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
-    [ChainId.Mainnet]: 'https://solana-api.projectserum.com',
+    [ChainId.Mainnet]: courier('https://solana-mainnet.phantom.app'),
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }

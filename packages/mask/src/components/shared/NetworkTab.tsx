@@ -51,7 +51,7 @@ interface NetworkTabProps<T extends NetworkPluginID>
     chainId: Web3Helper.Definition[T]['ChainId']
 }
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
-    const { Others } = useWeb3State<T>()
+    const { Others } = useWeb3State<'all'>()
     const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ chainLength: props.chains.length, isDashboard }), props)
     const { chainId, setChainId, chains } = props
@@ -62,7 +62,6 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     })
 
     const tabProps: AbstractTabProps = {
-        // @ts-ignore
         tabs: chains.map((chainId) => createTabItem(Others?.chainResolver.chainName(chainId) ?? 'Unknown', chainId)),
         index: chains.indexOf(chainId),
         classes,

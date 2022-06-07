@@ -79,7 +79,9 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            authority: 'solana-mainnet.phantom.app',
         },
+        mode: 'cors',
         body: JSON.stringify({
             ...options,
             jsonrpc: '2.0',

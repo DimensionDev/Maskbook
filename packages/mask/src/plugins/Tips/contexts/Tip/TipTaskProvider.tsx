@@ -1,4 +1,5 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
@@ -47,8 +48,14 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         setToken(nativeTokenDetailed)
     }, [nativeTokenDetailed])
     const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const tokenTipTuple = useTokenTip(recipient, token, amount, gasConfig)
-    const nftTipTuple = useNftTip(recipient, nonFungibleTokenId, nonFungibleTokenAddress)
+    const connectionOptions =
+        pluginId === NetworkPluginID.PLUGIN_EVM
+            ? {
+                  overrides: gasConfig,
+              }
+            : undefined
+    const tokenTipTuple = useTokenTip(pluginId, recipient, token, amount, connectionOptions)
+    const nftTipTuple = useNftTip(pluginId, recipient, nonFungibleTokenId, nonFungibleTokenAddress, connectionOptions)
 
     const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
     const isSending = sendTipTuple[0]

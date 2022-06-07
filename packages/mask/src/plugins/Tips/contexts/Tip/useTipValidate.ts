@@ -1,8 +1,9 @@
-import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
 import { useContext, useMemo } from 'react'
 import { useI18N } from '../../locales'
 import { TipType } from '../../types'
+import { TargetRuntimeContext } from '../TargetRuntimeContext'
 import { TipContext } from './TipContext'
 
 type ValidationTuple = [isValid: boolean, message?: string]
@@ -15,7 +16,9 @@ export function useTipValidate(): ValidationTuple {
         nonFungibleTokenId: tokenId,
         nonFungibleTokenAddress: tokenAddress,
     } = useContext(TipContext)
-    const { value: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
+    const account = useAccount()
+    const { pluginId, targetChainId: chainId } = TargetRuntimeContext.useContainer()
+    const { value: balance = '0' } = useFungibleTokenBalance(pluginId, token?.address, { chainId, account })
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {

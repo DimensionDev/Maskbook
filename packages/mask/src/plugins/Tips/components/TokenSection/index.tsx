@@ -1,4 +1,4 @@
-import { useFungibleTokenBalance, useGasPrice, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { usePickToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
@@ -12,13 +12,15 @@ const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
     const { token, setToken, amount, setAmount, isSending, setGasConfig } = useTip()
     const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State<'all'>()
+
+    const account = useAccount()
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         pluginId,
         token?.address,
-        { chainId },
+        { chainId, account },
     )
     const { gasPrice, gasConfig } = useGasConfig(chainId)
     const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
