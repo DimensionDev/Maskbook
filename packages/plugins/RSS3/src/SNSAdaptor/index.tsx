@@ -1,17 +1,21 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { IdentityAddress, IdentityAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { TabCard, TabCardType } from './TabCard'
 
-function addressNameSorter(a: IdentityAddress, z: IdentityAddress) {
-    if (a.type === IdentityAddressType.RSS3) return -1
-    if (z.type === IdentityAddressType.RSS3) return 1
+function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
+    if (a.type === SocialAddressType.RSS3) return -1
+    if (z.type === SocialAddressType.RSS3) return 1
     return 0
 }
 
-function shouldDisplay(identity?: SocialIdentity, addressNames?: IdentityAddress[]) {
-    return addressNames?.some((x) => x.type === IdentityAddressType.RSS3) ?? false
+function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
+    return (
+        addressNames?.some(
+            (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+        ) ?? false
+    )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -23,12 +27,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as IdentityAddress[]} type={TabCardType.Donation} />
+                TabContent: ({ socialAddressList = [] }) => {
+                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} />
                 },
             },
             Utils: {
-                addressNameSorter,
+                sorter,
                 shouldDisplay,
             },
         },
@@ -37,12 +41,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ addressNames = [] }) => {
-                    return <TabCard addressNames={addressNames as IdentityAddress[]} type={TabCardType.Footprint} />
+                TabContent: ({ socialAddressList = [] }) => {
+                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} />
                 },
             },
             Utils: {
-                addressNameSorter,
+                sorter,
                 shouldDisplay,
             },
         },

@@ -8,12 +8,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    divider: {
-        width: '100%',
-        height: 1,
-        background: theme.palette.divider,
-        margin: '8px 0',
-    },
     mainTitle: {
         fontSize: 14,
         color: theme.palette.text.primary,
@@ -34,11 +28,10 @@ interface PopoverListItemProps {
     title: string
     subTitle?: string
     disabled?: boolean
-    showDivider?: boolean
     onItemClick?(): void
 }
 export function PopoverListItem(props: PopoverListItemProps) {
-    const { title, subTitle, value, itemTail, disabled, showDivider, onItemClick } = props
+    const { title, subTitle, value, itemTail, disabled, onItemClick } = props
     const { classes, cx } = useStyles()
     return (
         <>
@@ -53,7 +46,6 @@ export function PopoverListItem(props: PopoverListItemProps) {
                 </Box>
                 {itemTail}
             </div>
-            {showDivider && <div className={classes.divider} />}
         </>
     )
 }

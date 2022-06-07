@@ -2,6 +2,8 @@ import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { ChainId } from '../types'
+import { ZERO_ADDRESS } from '../constants'
+import { currySameAddress } from '@masknet/web3-shared-base'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -24,3 +26,5 @@ export function isValidAddress(address?: string) {
 export function isValidChainId(chainId: number) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
+
+export const isZeroAddress = currySameAddress(ZERO_ADDRESS)

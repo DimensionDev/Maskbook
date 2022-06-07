@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { IdentityAddress, NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { SocialAddress, NonFungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, NonFungibleAssetProvider, SchemaType, Wallet } from '@masknet/web3-shared-evm'
 import { Button, styled, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -228,7 +228,7 @@ export function CollectionList({
     addressName,
     onSelectAddress,
 }: {
-    addressName: IdentityAddress
+    addressName: SocialAddress<NetworkPluginID>
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
     return null
