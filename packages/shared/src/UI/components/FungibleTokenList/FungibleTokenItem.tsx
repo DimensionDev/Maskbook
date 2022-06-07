@@ -140,7 +140,7 @@ export const getFungibleTokenItem =
                 onClick={handleTokenSelect}
                 disabled={selected}>
                 <ListItemIcon>
-                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURL} />
+                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
                     <Typography

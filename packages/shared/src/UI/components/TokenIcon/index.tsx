@@ -21,28 +21,23 @@ export interface TokenIconProps extends withClasses<'icon'> {
     pluginID?: NetworkPluginID
     address: string
     name?: string
-    logoURI?: string
+    logoURL?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURI, name, AvatarProps, classes } = props
+    const { address, logoURL, name, AvatarProps, classes } = props
 
     const chainId = useChainId<'all'>(props.pluginID, props.chainId)
     const hub = useWeb3Hub<'all'>(props.pluginID)
 
     const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
-        return [logoURI, ...(logoURLs ?? [])].filter(Boolean) as string[]
-    }, [chainId, address, logoURI, hub])
+        return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
+    }, [chainId, address, logoURL, hub])
 
-    const { value: trustedLogoURI, loading } = useImageFailOver(urls, '')
-    const base64 = useImageBase64(address, trustedLogoURI)
-
-    console.log({
-        address,
-        base64,
-    })
+    const { value: trustedLogoURL } = useImageFailOver(urls, '')
+    const base64 = useImageBase64(address, trustedLogoURL)
 
     return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }

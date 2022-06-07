@@ -72,7 +72,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             classes={{ icon: classes.icon }}
                             address={x.address}
                             name={x.name}
-                            logoURI={x.logoURL}
+                            logoURL={x.logoURL}
                         />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
@@ -167,7 +167,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                         classes={{ icon: classes.icon }}
                                         address={token?.address}
                                         name={token?.name}
-                                        logoURI={token?.logoURL}
+                                        logoURL={token?.logoURL}
                                     />
                                     <Typography
                                         variant="inherit"
