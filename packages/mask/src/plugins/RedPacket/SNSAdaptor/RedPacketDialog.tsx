@@ -99,7 +99,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     if (!connection) return
                     payload.password = await connection.signMessage(
                         Web3Utils.sha3(payload.sender.message) ?? '',
-                        'personaSign',
+                        'personalSign',
                         { account },
                     )
                     payload.password = payload.password!.slice(2)

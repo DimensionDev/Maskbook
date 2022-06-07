@@ -101,8 +101,8 @@ const SignRequest = memo(() => {
     const { data, address } = useMemo(() => {
         if (!value) return emptyMessage
         if (
-            value.payload.method === EthereumMethodType.ETH_SIGN ||
-            value.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
+            value?.payload.method === EthereumMethodType.ETH_SIGN ||
+            value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
         ) {
             try {
                 return {
@@ -115,13 +115,16 @@ const SignRequest = memo(() => {
                     data: value.payload.params?.[1],
                 }
             }
-        } else if (value.payload.method === EthereumMethodType.PERSONAL_SIGN)
+        } else if (value?.payload.method === EthereumMethodType.PERSONAL_SIGN)
             return {
                 address: value.payload.params?.[1],
                 data: value.payload.params?.[0],
             }
 
-        return emptyMessage
+        return {
+            data: '',
+            address: '',
+        }
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {

@@ -79,6 +79,27 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
 
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
+                    {transactionState.loading
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    &hellip;
+                </ActionButton>
+                {withChildren ? (
+                    <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
+                ) : null}
+            </Grid>
+        )
+
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
@@ -149,23 +170,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
             </Box>
-        )
-    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {transactionState.loading
-                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                        : `Updating ${token.symbol}`}
-                    &hellip;
-                </ActionButton>
-            </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)
         return (

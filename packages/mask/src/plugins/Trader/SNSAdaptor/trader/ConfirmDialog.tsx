@@ -125,11 +125,12 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     onConfirm: () => void
     onClose?: () => void
     wallet?: Wallet | null
+    account?: string
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
-    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
+    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice, account } = props
 
     const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>()
     const [priceUpdated, setPriceUpdated] = useState(false)
@@ -220,7 +221,11 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
                         <Typography>
-                            ({wallet?.name})
+                            {wallet?.name ? (
+                                `(${wallet.name})`
+                            ) : (
+                                <FormattedAddress address={account} size={10} formatter={formatEthereumAddress} />
+                            )}
                             <FormattedAddress
                                 address={wallet?.address ?? ''}
                                 size={4}

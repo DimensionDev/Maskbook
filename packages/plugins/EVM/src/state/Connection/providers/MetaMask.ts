@@ -20,6 +20,11 @@ export class MetaMaskProvider extends BaseInjectedProvider implements EVM_Provid
         return super.readyPromise
     }
 
+    override onDisconnect() {
+        // MetaMask will emit disconnect after switching chain id
+        // since then, override to stop listening to the disconnect event with MetaMask
+    }
+
     override async disconnect(): Promise<void> {
         // do nothing
     }
