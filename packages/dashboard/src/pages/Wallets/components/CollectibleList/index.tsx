@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Stack } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
@@ -81,6 +81,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     return (
         <CollectibleListUI
+            isError={!!error}
             isLoading={renderCollectibles.length === 0 && !done && !error}
             isEmpty={!error && renderCollectibles.length === 0 && done}
             dataSource={renderCollectibles}
@@ -91,6 +92,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 })
 
 export interface CollectibleListUIProps {
+    isError: boolean
     isLoading: boolean
     isEmpty: boolean
     chainId?: Web3Helper.ChainIdAll
@@ -109,39 +111,52 @@ export interface CollectibleListUIProps {
     onRetry?: () => void
 }
 
-export const CollectibleListUI = memo<CollectibleListUIProps>(({ isEmpty, isLoading, onRetry, dataSource, onSend }) => {
-    const t = useDashboardI18N()
-    const { classes } = useStyles()
-    const ref = useRef<HTMLDivElement>(null)
+export const CollectibleListUI = memo<CollectibleListUIProps>(
+    ({ isEmpty, isLoading, onRetry, dataSource, onSend, isError }) => {
+        const t = useDashboardI18N()
+        const { classes } = useStyles()
+        const ref = useRef<HTMLDivElement>(null)
 
-    return (
-        <Stack flexDirection="column" justifyContent="space-between" height="100%" ref={ref}>
-            {isLoading ? (
-                <LoadingPlaceholder />
-            ) : isEmpty ? (
-                <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
-            ) : (
-                <Box>
-                    <div className={classes.root}>
-                        {dataSource.map((x, index) => (
-                            <div className={classes.card} key={index}>
-                                <CollectibleCard
-                                    token={x}
-                                    renderOrder={index}
-                                    // TODO: transfer not support multi chain, should remove is after supported
-                                    onSend={() => onSend(x as unknown as any)}
-                                />
+        return (
+            <Stack flexDirection="column" justifyContent="space-between" height="100%" ref={ref}>
+                {(() => {
+                    if (isLoading) return <LoadingPlaceholder />
+                    if (isEmpty) return <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                    if (!dataSource.length && isError)
+                        return (
+                            <Stack flexDirection="row" justifyContent="center" height="100%" alignItems="center">
+                                <Button>{t.wallets_reload()}</Button>
+                            </Stack>
+                        )
+                    return (
+                        <Box>
+                            <div className={classes.root}>
+                                {dataSource.map((x, index) => (
+                                    <div className={classes.card} key={index}>
+                                        <CollectibleCard
+                                            token={x}
+                                            renderOrder={index}
+                                            // TODO: transfer not support multi chain, should remove is after supported
+                                            onSend={() => onSend(x as unknown as any)}
+                                        />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <ElementAnchor
-                        callback={() => {
-                            if (onRetry) onRetry()
-                        }}>
-                        <Stack />
-                    </ElementAnchor>
-                </Box>
-            )}
-        </Stack>
-    )
-})
+                            {isError && (
+                                <Stack flexDirection="row" justifyContent="center" pt={3} alignItems="center">
+                                    <Button>{t.wallets_reload()}</Button>
+                                </Stack>
+                            )}
+                            <ElementAnchor
+                                callback={() => {
+                                    if (onRetry) onRetry()
+                                }}>
+                                <Stack />
+                            </ElementAnchor>
+                        </Box>
+                    )
+                })()}
+            </Stack>
+        )
+    },
+)
