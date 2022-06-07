@@ -3,16 +3,17 @@ import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
 import { useSubscription } from 'use-subscription'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { AvatarInfo, useSave } from '../hooks/save/useSave'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -32,7 +33,7 @@ interface UploadAvatarDialogProps {
     account?: string
     isBindAccount?: boolean
     image?: string | File
-    token?: NonFungibleToken<ChainId, SchemaType>
+    token?: AllChainsNonFungibleToken
     proof?: BindingProof
     pluginId?: NetworkPluginID
     onBack: () => void
@@ -64,7 +65,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
-    const [, saveAvatar] = useSave(currentPluginId, token?.chainId ?? ChainId.Mainnet)
+    const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
         if (!editor || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return

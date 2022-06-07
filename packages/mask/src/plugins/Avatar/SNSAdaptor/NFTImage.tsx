@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectedIcon } from '../assets/selected'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
@@ -37,26 +37,24 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTImageProps {
+    pluginId: NetworkPluginID
     showBadge?: boolean
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    selectedToken?: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    onChange: (token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    token: AllChainsNonFungibleToken
+    selectedToken?: AllChainsNonFungibleToken
+    onChange: (token: AllChainsNonFungibleToken) => void
 }
 
-function isSameNFT(
-    a: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    b?: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-) {
-    return (
-        isSameAddress(a.contract?.address, b?.contract?.address) &&
-        a.contract?.chainId &&
-        a.contract?.chainId === b?.contract?.chainId &&
-        a.tokenId === b?.tokenId
-    )
+function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: AllChainsNonFungibleToken) {
+    return pluginId !== NetworkPluginID.PLUGIN_SOLANA
+        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
+              a.contract?.chainId &&
+              a.contract?.chainId === b?.contract?.chainId &&
+              a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onChange, selectedToken, showBadge = false } = props
+    const { token, onChange, selectedToken, showBadge = false, pluginId } = props
     const { classes } = useStyles()
 
     return (
@@ -64,9 +62,9 @@ export function NFTImage(props: NFTImageProps) {
             <img
                 onClick={() => onChange(token)}
                 src={token.metadata?.imageURL}
-                className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
+                className={classNames(classes.image, isSameNFT(pluginId, token, selectedToken) ? classes.selected : '')}
             />
-            {showBadge && isSameNFT(token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
+            {showBadge && isSameNFT(pluginId, token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
         </div>
     )
 }

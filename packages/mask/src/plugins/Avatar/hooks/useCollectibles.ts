@@ -1,20 +1,23 @@
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { ChainId as SolChainId, SchemaType as SolSchemaType } from '@masknet/web3-shared-solana'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { AllChainsNonFungibleToken } from '../types'
 
-export function useCollectibles(account: string, pluginId: NetworkPluginID, chainId: ChainId | SolChainId) {
-    const isSolana = pluginId === NetworkPluginID.PLUGIN_SOLANA
+export function useCollectibles(account: string, pluginId: NetworkPluginID, chainId: ChainId) {
     const {
         value: assets = [],
         error,
         retry,
         loading,
-    } = useNonFungibleAssets(pluginId, isSolana ? SolSchemaType.NonFungible : SchemaType.ERC721, {
+    } = useNonFungibleAssets(pluginId, undefined, {
         chainId,
-        account,
+        account: pluginId === NetworkPluginID.PLUGIN_SOLANA ? '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde' : account,
         // account: '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde',
     })
+
+    console.log(pluginId)
+    console.log(chainId)
+    console.log(assets)
 
     const collectibles = assets.map((x) => {
         return {
@@ -22,7 +25,7 @@ export function useCollectibles(account: string, pluginId: NetworkPluginID, chai
             metadata: x.metadata,
             collection: x.collection,
             tokenId: x.tokenId,
-        } as NonFungibleToken<ChainId, SchemaType>
+        } as AllChainsNonFungibleToken
     })
     return { collectibles, error, retry, loading }
 }

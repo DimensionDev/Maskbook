@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
-    onChange: (address: string, pluginId: NetworkPluginID) => void
+    onChange: (address: string, pluginId: NetworkPluginID, chainId: ChainId) => void
     account: string
     wallets: BindingProof[]
 }
@@ -83,8 +83,9 @@ export function AddressNames(props: AddressNamesProps) {
     const t = useI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
-    const onClick = useCallback((address: string, pluginId: NetworkPluginID) => {
-        onChange(address, pluginId)
+    const chainId = useChainId(currentPluginId)
+    const onClick = useCallback((address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
+        onChange(address, pluginId, chainId)
         setSelectedWallet(address)
         onClose()
     }, [])
@@ -99,7 +100,7 @@ export function AddressNames(props: AddressNamesProps) {
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const chainId = useChainId()
+
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
             chainId,
@@ -120,7 +121,15 @@ export function AddressNames(props: AddressNamesProps) {
         isETH?: boolean,
         onChange?: () => void,
     ) => (
-        <MenuItem value={wallet} onClick={() => onClick(wallet, isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)}>
+        <MenuItem
+            value={wallet}
+            onClick={() =>
+                onClick(
+                    wallet,
+                    isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId,
+                    wallets.some((x) => isSameAddress(x.identity, wallet)) ? ChainId.Mainnet : (chainId as ChainId),
+                )
+            }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
                     <>

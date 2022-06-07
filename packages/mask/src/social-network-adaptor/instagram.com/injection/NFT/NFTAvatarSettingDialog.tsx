@@ -10,12 +10,10 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/plugin-infra/web3'
-import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import type { AllChainsNonFungibleToken, AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { delay } from '@dimensiondev/kit'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
@@ -36,7 +34,7 @@ export function NFTAvatarSettingDialog() {
     const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const onChange = useCallback(
-        async (token: NonFungibleToken<ChainId, SchemaType>) => {
+        async (token: AllChainsNonFungibleToken) => {
             try {
                 if (!token.metadata?.imageURL || !token.contract?.address) return
                 if (!identity.identifier) return

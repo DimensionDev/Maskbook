@@ -1,5 +1,6 @@
 import { useImageChecker } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
@@ -44,11 +45,12 @@ interface NFTListPageProps {
     tokens: AllChainsNonFungibleToken[]
     onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
+    pluginId: NetworkPluginID
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { onChange, tokenInfo, tokens, children } = props
+    const { onChange, tokenInfo, tokens, children, pluginId } = props
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
 
     const _onChange = (token: AllChainsNonFungibleToken) => {
@@ -64,6 +66,7 @@ export function NFTListPage(props: NFTListPageProps) {
                     {children ??
                         tokens.map((token: AllChainsNonFungibleToken, i) => (
                             <NFTImageCollectibleAvatar
+                                pluginId={pluginId}
                                 key={i}
                                 token={token}
                                 selectedToken={selectedToken}
@@ -80,9 +83,10 @@ interface NFTImageCollectibleAvatarProps {
     token: AllChainsNonFungibleToken
     onChange: (token: AllChainsNonFungibleToken) => void
     selectedToken?: AllChainsNonFungibleToken
+    pluginId: NetworkPluginID
 }
 
-function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageCollectibleAvatarProps) {
+function NFTImageCollectibleAvatar({ token, onChange, selectedToken, pluginId }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
 
@@ -92,5 +96,7 @@ function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageC
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
-    return isImageToken ? <NFTImage showBadge token={token} selectedToken={selectedToken} onChange={onChange} /> : null
+    return isImageToken ? (
+        <NFTImage pluginId={pluginId} showBadge token={token} selectedToken={selectedToken} onChange={onChange} />
+    ) : null
 }

@@ -9,19 +9,19 @@ export function useNFT(address: string, tokenId: string, pluginId: NetworkPlugin
     const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
     const [, getNFT] = useGetNFT(currentPluginId, chainId)
     return useAsyncRetry(async () => {
-        if (!address || !tokenId) return
-        let f = NFTCache.get(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`)
+        if (!tokenId) return
+        let f = NFTCache.get(`${address || tokenId}-${pluginId}-${tokenId}-${chainId ?? ChainId.Mainnet}`)
         if (!f) {
             f = getNFT(address, tokenId)
-            NFTCache.set(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`, f)
+            NFTCache.set(`${address || tokenId}-${pluginId}-${tokenId}-${chainId ?? ChainId.Mainnet}`, f)
         }
         return f
     }, [address, tokenId, NFTCache, chainId])
 }
 
 function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {
-    const connection = useWeb3Connection(currentPluginId, { chainId })
-    const hub = useWeb3Hub(currentPluginId, { chainId })
+    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId })
+    const hub = useWeb3Hub<'all'>(currentPluginId, { chainId })
 
     return useAsyncFn(
         async (address: string, tokenId: string) => {

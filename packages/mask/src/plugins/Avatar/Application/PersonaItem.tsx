@@ -10,7 +10,8 @@ import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -36,7 +37,7 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     proof?: BindingProof
-    onSelect?: (proof: BindingProof, tokenInfo?: NonFungibleToken<ChainId, SchemaType>) => void
+    onSelect?: (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
@@ -55,7 +56,7 @@ export function PersonaItem(props: PersonaItemProps) {
         token?.owner,
     )
 
-    const tokenDetailed: NonFungibleToken<ChainId, SchemaType> = useMemo(
+    const tokenDetailed: AllChainsNonFungibleToken = useMemo(
         () => ({
             tokenId: _avatar?.tokenId ?? '',
             contract: {

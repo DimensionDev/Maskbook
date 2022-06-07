@@ -1,11 +1,12 @@
 import { makeStyles } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -37,7 +38,7 @@ export interface AddNFTProps {
     account?: string
     onClose: () => void
     chainId?: ChainId
-    onAddClick?: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    onAddClick?: (token: AllChainsNonFungibleToken) => void
     open: boolean
     title?: string
     expectedPluginID: NetworkPluginID
@@ -51,7 +52,7 @@ export function AddNFT(props: AddNFTProps) {
     const [message, setMessage] = useState('')
     const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const _account = useAccount(expectedPluginID)
-    const connection = useWeb3Connection(currentPluginId, { chainId })
+    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId })
     const hub = useWeb3Hub(currentPluginId, { chainId })
     const onClick = useCallback(async () => {
         if (!address) {
@@ -66,21 +67,22 @@ export function AddNFT(props: AddNFTProps) {
             setMessage('web3 error')
             return
         }
-
-        let asset = await hub.getNonFungibleAsset(address, tokenId)
-        if (!asset) {
-            asset = await connection?.getNonFungibleToken(address, tokenId)
+        let token: AllChainsNonFungibleToken
+        const asset = await hub.getNonFungibleAsset(address, tokenId)
+        if (asset) {
+            token = {
+                contract: asset.contract,
+                metadata: asset.metadata,
+                tokenId: asset.tokenId,
+                collection: asset.collection,
+            } as AllChainsNonFungibleToken
+        } else {
+            token = await connection.getNonFungibleToken(address, tokenId)
         }
-        if (!asset) {
+        if (!token) {
             setMessage('cannot found asset')
             return
         }
-        const token: NonFungibleToken<ChainId, SchemaType> = {
-            contract: asset.contract,
-            metadata: asset.metadata,
-            tokenId: asset.tokenId,
-            collection: asset.collection,
-        } as NonFungibleToken<ChainId, SchemaType>
 
         if (chainId && token && token.contract?.chainId !== chainId) {
             setMessage('chain does not match.')

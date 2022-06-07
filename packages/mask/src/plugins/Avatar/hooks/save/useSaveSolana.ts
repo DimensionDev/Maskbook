@@ -8,7 +8,7 @@ import { PluginNFTAvatarRPC } from '../../messages'
 import type { NextIDAvatarMeta } from '../../types'
 
 export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
-    const connection = useWeb3Connection(pluginId, { chainId })
+    const connection = useWeb3Connection<'all'>(pluginId, { chainId })
     return useAsyncFn(
         async (
             info: NextIDAvatarMeta,
@@ -17,15 +17,23 @@ export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
             identifier: ProfileIdentifier,
             proof: BindingProof,
         ) => {
-            const sign = await connection.signMessage(JSON.stringify(info), 'personaSign', {
-                account,
-            })
-            return PluginNFTAvatarRPC.saveAvatar(
-                account,
-                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-                info,
-                sign,
-            )
+            try {
+                console.log('---------------------------')
+                console.log(info)
+                const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
+                    account,
+                })
+                console.log(sign)
+                return PluginNFTAvatarRPC.saveAvatar(
+                    account,
+                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+                    info,
+                    sign,
+                )
+            } catch (error) {
+                console.log(error)
+                return
+            }
         },
         [connection],
     )

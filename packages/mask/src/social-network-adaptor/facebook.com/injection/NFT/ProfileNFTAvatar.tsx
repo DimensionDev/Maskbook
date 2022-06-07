@@ -17,8 +17,7 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { AllChainsNonFungibleToken } from '../../../../plugins/Avatar/types'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -62,7 +61,7 @@ function NFTAvatarInFacebookFirstStep() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: NonFungibleToken<ChainId, SchemaType>) => {
+        async (token: AllChainsNonFungibleToken) => {
             if (!token.metadata?.imageURL || !token.contract?.address) return
             const image = await toPNG(token.metadata.imageURL)
             if (!image) return
@@ -141,7 +140,7 @@ function NFTAvatarListInFaceBookMobile() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: NonFungibleToken<ChainId, SchemaType>) => {
+        async (token: AllChainsNonFungibleToken) => {
             if (!token.metadata?.imageURL || !token.contract?.address) return
             const image = await toPNG(token.metadata.imageURL)
             if (!image) return

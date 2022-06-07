@@ -8,11 +8,11 @@ import type { AvatarMetaDB } from '../../types'
 import { NFTRSSNode, RSS3Cache } from '../../types'
 
 export function useSaveAvatarToRSS3() {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
+    const connection = useWeb3Connection<'all'>(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
     return useAsyncFn(
         async (address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS) => {
             const rss = RSS3.createRSS3(address, async (message: string) => {
-                return connection?.signMessage(message, 'personaSign', { account: address }) ?? ''
+                return connection.signMessage(message, 'personalSign', { account: address }) ?? ''
             })
             let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
             if (!_nfts) {

@@ -3,16 +3,16 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
 import { useAccount, useChainId, useImageChecker } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useCollectibles } from '../hooks/useCollectibles'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    onChange: (token: AllChainsNonFungibleToken) => void
     hideWallet?: boolean
 }
 
@@ -92,9 +92,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>()
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
-    const [collectibles_, setCollectibles_] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
+    const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])
     const { t } = useI18N()
     const { collectibles, error, retry, loading } = useCollectibles(account, NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -104,7 +104,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+    const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)
         setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
@@ -160,7 +160,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 : uniqBy(
                                       [...collectibles_, ...(collectibles ?? [])],
                                       (x) => x.contract?.address && x.tokenId,
-                                  ).map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
+                                  ).map((token: AllChainsNonFungibleToken, i) => (
                                       <NFTImageCollectibleAvatar
                                           key={i}
                                           token={token}
@@ -191,9 +191,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
     )
 }
 interface NFTImageCollectibleAvatarProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-    setSelectedToken: React.Dispatch<React.SetStateAction<NonFungibleToken<ChainId, SchemaType> | undefined>>
-    selectedToken?: NonFungibleToken<ChainId, SchemaType>
+    token: AllChainsNonFungibleToken
+    setSelectedToken: React.Dispatch<React.SetStateAction<AllChainsNonFungibleToken | undefined>>
+    selectedToken?: AllChainsNonFungibleToken
 }
 
 function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
@@ -205,5 +205,12 @@ function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: N
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
-    return isImageToken ? <NFTImage token={token} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
+    return isImageToken ? (
+        <NFTImage
+            pluginId={NetworkPluginID.PLUGIN_EVM}
+            token={token}
+            selectedToken={selectedToken}
+            onChange={setSelectedToken}
+        />
+    ) : null
 }
