@@ -57,7 +57,7 @@ export class InjectedProvider {
     /**
      * Send RPC request to the sdk object.
      */
-    request(data: unknown): Promise<unknown> {
+    request<T extends unknown>(data: unknown): Promise<T> {
         return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'request'].join('.'), id, data))
     }
 

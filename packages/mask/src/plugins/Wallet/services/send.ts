@@ -124,11 +124,10 @@ export async function send(
     options?: Options,
 ) {
     const provider = await createProvider(options?.chainId)
-
+    const computedPayload = getPayloadConfig(payload)
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-            const computedPayload = getPayloadConfig(payload)
             if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
 
             const rawTransaction = await WalletRPC.signTransaction(computedPayload.from as string, {
@@ -145,6 +144,32 @@ export async function send(
                 },
                 callback,
             )
+        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            const [address, dataToSign] = payload.params as [string, string]
+            const signed = await WalletRPC.signTypedData(address, dataToSign)
+            try {
+                callback(null, {
+                    jsonrpc: '2.0',
+                    id: payload.id as number,
+                    result: signed,
+                })
+            } catch (error) {
+                callback(getError(error, null, 'Failed to sign message.'))
+            }
+            break
+        case EthereumMethodType.PERSONAL_SIGN:
+            const [data, account] = payload.params as [string, string]
+            const personalSigned = await WalletRPC.signPersonalMessage(data, account)
+            try {
+                callback(null, {
+                    jsonrpc: '2.0',
+                    id: payload.id as number,
+                    result: personalSigned,
+                })
+            } catch (error) {
+                callback(getError(error, null, 'Failed to sign message.'))
+            }
+            break
         default:
             return provider.send(payload, callback)
     }

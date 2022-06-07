@@ -1,4 +1,13 @@
-import { AlchemyNft, CoinGecko, DeBank, MetaSwap, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import {
+    AlchemyNft,
+    CoinGecko,
+    DeBank,
+    EthereumWeb3,
+    MetaSwap,
+    OpenSea,
+    TokenList,
+    Zerion,
+} from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -51,14 +60,17 @@ class Hub implements EVM_Hub {
     ): Promise<Array<NonFungibleToken<ChainId_EVM, SchemaType_EVM>>> {
         throw new Error('Method not implemented.')
     }
-    getGasOptions(
+    async getGasOptions(
         chainId: ChainId_EVM,
         options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
-        if (chainResolver.isSupport(chainId, 'EIP1559')) {
-            return MetaSwap.getGasOptions(chainId)
+        try {
+            const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
+            if (isEIP1559) return await MetaSwap.getGasOptions(chainId)
+            return await DeBank.getGasOptions(chainId)
+        } catch (error) {
+            return EthereumWeb3.getGasOptions(chainId)
         }
-        return DeBank.getGasOptions(chainId)
     }
     getFungibleAsset(
         address: string,
@@ -73,7 +85,7 @@ class Hub implements EVM_Hub {
         // only the first page is available
         if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
         try {
-            return DeBank.getAssets(account, { chainId: this.chainId, ...options })
+            return await DeBank.getAssets(account, { chainId: this.chainId, ...options })
         } catch {
             return Zerion.getAssets(account, { chainId: this.chainId, ...options })
         }
