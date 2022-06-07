@@ -152,7 +152,6 @@ export function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
-    const { Others } = useWeb3State<'all'>()
 
     const selectedNetwork = useMemo(() => {
         return networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
@@ -260,7 +259,7 @@ function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, unde
             </div>
             <Typography
                 className={cx(classes.networkName, undeterminedNetworkID === network.ID ? classes.selected : '')}>
-                {Others?.chainResolver.chainName(network.chainId as number)}
+                {Others?.chainResolver.chainName(network.chainId)}
             </Typography>
         </ListItem>
     )
