@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-solana'
-import { NameService } from './NameService'
+import { SolanaRPC } from '../messages'
 
 const SOL_RE = /\S{1,256}\.sol\b/
 
@@ -22,7 +22,7 @@ export class IdentityService extends IdentityServiceState {
         const addressMatched = identity.bio?.match(/\w{44}/) ?? null
         const address = addressMatched?.[0]
         const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
-        const solanaDomainAddress = await new NameService().lookup(ChainId.Mainnet, solanaName)
+        const solanaDomainAddress = await SolanaRPC.lookup(ChainId.Mainnet, solanaName)
 
         return [
             address && !address.startsWith('0x')
