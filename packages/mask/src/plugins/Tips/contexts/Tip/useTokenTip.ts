@@ -1,5 +1,5 @@
 import { useAccount, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 import type { TipTuple } from './type'
 
@@ -18,11 +18,10 @@ export function useTokenTip<T extends NetworkPluginID>(
     }
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
-        debugger
         if (!token?.address || !connection) return
-        debugger
-        return connection.transferFungibleToken(token?.address, recipient, amount, '', connectionOptions)
-    }, [JSON.stringify(connectionOptions), token?.address])
+        const totalAmount = rightShift(amount, token.decimals).toFixed()
+        return connection.transferFungibleToken(token?.address, recipient, totalAmount, '', connectionOptions)
+    }, [JSON.stringify(connectionOptions), token?.address, token?.decimals, amount])
 
     return [isTransferring, sendTip]
 }

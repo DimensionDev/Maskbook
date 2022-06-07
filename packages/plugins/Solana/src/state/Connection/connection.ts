@@ -69,37 +69,36 @@ class Connection implements BaseConnection {
         const chainId = options.chainId ?? ChainId.Mainnet
         const connection = this.connections.get(chainId) ?? new SolConnection(NETWORK_ENDPOINTS[chainId])
 
-        const payer = new PublicKey(options.account)
+        const payerPubkey = new PublicKey(options.account)
         const recipientPubkey = new PublicKey(recipient)
-        const mint = new PublicKey(address)
+        const mintPubkey = new PublicKey(address)
+        const signTransaction = this.signTransaction.bind(this)
         const formatTokenAccount = await getOrCreateAssociatedTokenAccount(
             connection,
-            payer,
-            mint,
-            payer,
-            this.signTransaction,
+            payerPubkey,
+            mintPubkey,
+            payerPubkey,
+            signTransaction,
         )
         const toTokenAccount = await getOrCreateAssociatedTokenAccount(
             connection,
-            payer,
-            mint,
+            payerPubkey,
+            mintPubkey,
             recipientPubkey,
-            this.signTransaction,
+            signTransaction,
         )
         const transaction = new Transaction().add(
             createTransferInstruction(
                 formatTokenAccount.address,
                 toTokenAccount.address,
-                payer,
+                payerPubkey,
                 Number.parseInt(amount, 10),
             ),
         )
         const blockHash = await connection.getRecentBlockhash()
-        transaction.feePayer = payer
+        transaction.feePayer = payerPubkey
         transaction.recentBlockhash = blockHash.blockhash
-        debugger
         const signed = await this.signTransaction(transaction)
-        debugger
 
         const signature = await connection.sendRawTransaction(signed.serialize())
         return signature

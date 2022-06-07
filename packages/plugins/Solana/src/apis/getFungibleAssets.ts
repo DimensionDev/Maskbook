@@ -111,7 +111,6 @@ export async function getSplTokenList(chainId: ChainId, account: string) {
 
 export async function getSplTokenBalance(chainId: ChainId, account: string, mintAddress: string) {
     const splTokens = await getSplTokenList(chainId, account)
-    debugger
     const splToken = splTokens.find((x) => x.address === mintAddress)
     return splToken?.balance ?? '0'
 }

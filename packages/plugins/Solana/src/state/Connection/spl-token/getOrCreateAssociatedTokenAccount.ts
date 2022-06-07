@@ -11,7 +11,7 @@ export async function getOrCreateAssociatedTokenAccount(
     owner: PublicKey,
     signTransaction: (tx: Transaction) => Promise<Transaction>,
     allowOwnerOffCurve = false,
-    commitment?: Commitment,
+    commitment: Commitment = 'single',
     programId = TOKEN_PROGRAM_ID,
     associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID,
 ) {
