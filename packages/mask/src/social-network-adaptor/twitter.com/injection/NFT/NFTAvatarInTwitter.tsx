@@ -22,6 +22,7 @@ import { useWallet } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -114,7 +115,7 @@ function NFTAvatarInTwitter() {
                 ...NFTEvent,
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
-            identity.identifier.network,
+            identity.identifier.network as EnhanceableSite,
             RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)

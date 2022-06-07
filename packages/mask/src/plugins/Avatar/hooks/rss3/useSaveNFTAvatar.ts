@@ -1,4 +1,5 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { EnhanceableSite } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 import type { RSS3_KEY_SNS } from '../../constants'
 import { PluginNFTAvatarRPC } from '../../messages'
@@ -12,13 +13,18 @@ export function useSaveNFTAvatar() {
         async (
             address: string,
             nft: AvatarMetaDB,
-            network: string,
+            network: EnhanceableSite,
             snsKey: RSS3_KEY_SNS,
             networkPluginId?: NetworkPluginID,
             chainId?: number,
         ) => {
             const avatar = await saveAvatarToRSS3(address, nft, '', snsKey)
-            await PluginNFTAvatarRPC.setUserAddress(nft.userId, address, network, networkPluginId, chainId)
+            await PluginNFTAvatarRPC.setAddress(
+                network,
+                nft.userId,
+                networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
+                address,
+            )
             return avatar
         },
         [saveAvatarToRSS3],

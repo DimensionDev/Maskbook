@@ -5,6 +5,7 @@ import { usePersonas } from './usePersonas'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginNFTAvatarRPC } from '../messages'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 export function useTokenOwner(address: string, tokenId: string, pluginId: NetworkPluginID, chainId?: ChainId) {
     const connection = useWeb3Connection(pluginId, { chainId })
@@ -18,7 +19,12 @@ export function useTokenOwner(address: string, tokenId: string, pluginId: Networ
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner?: string) {
     const { value: persona, loading } = usePersonas(userId)
     const { value: address, loading: loadingAddress } = useAsyncRetry(
-        async () => PluginNFTAvatarRPC.getAddress(userId, activatedSocialNetworkUI.networkIdentifier, pluginId),
+        async () =>
+            PluginNFTAvatarRPC.getAddress(
+                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+                userId,
+                pluginId,
+            ),
         [userId],
     )
 

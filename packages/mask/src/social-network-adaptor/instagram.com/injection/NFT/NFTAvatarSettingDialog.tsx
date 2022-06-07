@@ -18,6 +18,7 @@ import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -66,7 +67,7 @@ export function NFTAvatarSettingDialog() {
                         address: token.contract.address,
                         avatarId: getAvatarId(metaTag.content),
                     } as AvatarMetaDB,
-                    identity.identifier.network,
+                    identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
                 )
 
@@ -78,7 +79,7 @@ export function NFTAvatarSettingDialog() {
 
                 await PluginNFTAvatarRPC.clearCache(
                     identity.identifier.userId,
-                    activatedSocialNetworkUI.networkIdentifier,
+                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
                 )
 

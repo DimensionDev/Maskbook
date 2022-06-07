@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
 import { RSS3_KEY_SNS } from '../../constants'
 import type { NextIDAvatarMeta } from '../../types'
@@ -9,7 +9,7 @@ export function useSaveToRSS3() {
 
     return useAsyncFn(
         async (info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) => {
-            return saveNFTAvatar(account, info, identifier.network, RSS3_KEY_SNS.TWITTER)
+            return saveNFTAvatar(account, info, identifier.network as EnhanceableSite, RSS3_KEY_SNS.TWITTER)
         },
         [saveNFTAvatar],
     )

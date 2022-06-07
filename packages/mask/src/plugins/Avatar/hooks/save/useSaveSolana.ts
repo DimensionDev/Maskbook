@@ -1,5 +1,5 @@
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import type { BindingProof, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { BindingProof, ECKeyIdentifier, EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
@@ -22,9 +22,9 @@ export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
             })
             return PluginNFTAvatarRPC.saveAvatar(
                 account,
-                activatedSocialNetworkUI.networkIdentifier,
+                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
                 info,
-                sign.toString(),
+                sign,
             )
         },
         [connection],

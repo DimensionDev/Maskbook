@@ -1,4 +1,5 @@
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { RSS3_KEY_SNS } from '../constants'
@@ -14,7 +15,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RS
         if (avatarMetaFromPersona) return avatarMetaFromPersona
         const avatarMeta = await getNFTAvatar(
             userId,
-            activatedSocialNetworkUI.networkIdentifier,
+            activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             snsKey,
             currentPluginId,
             chainId,

@@ -1,7 +1,8 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { getUserAddress } from './bind'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { RSS3_KEY_SNS } from '../constants'
 import { RSS3Cache } from '../types'
+import type { EnhanceableSite } from '@masknet/shared-base'
+import { getAddress } from './kv'
 
 function deleteTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
     const key = `${address}, ${userId}, ${snsKey}`
@@ -10,22 +11,17 @@ function deleteTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS
 
 export async function clearCache(
     userId: string,
-    network: string,
+    network: EnhanceableSite,
     snsKey: RSS3_KEY_SNS,
     networkPluginId?: NetworkPluginID,
     chainId?: number,
 ) {
-    const address = await getUserAddress(userId, network, networkPluginId, chainId)
+    const address = await getAddress(network, userId, networkPluginId ?? NetworkPluginID.PLUGIN_EVM)
+
     if (address) {
         deleteTargetCache(userId, address, snsKey)
     }
 }
 
-export async function getAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    if (!userId) return ''
-    const address = await getUserAddress(userId, network, networkPluginId, chainId)
-    return (address ?? '') as string
-}
-
-export * from './bind'
 export * from './storage'
+export * from './kv'

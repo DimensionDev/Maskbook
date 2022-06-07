@@ -6,7 +6,7 @@ import { useAsyncFn } from 'react-use'
 import type { NextIDAvatarMeta } from '../../types'
 import { useSaveSolana } from './useSaveSolana'
 import { useSaveToNextID } from './useSaveToNextID'
-import { useSaveToRSS3 } from './useSAveToRSS3'
+import { useSaveToRSS3 } from './useSaveToRSS3'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
 

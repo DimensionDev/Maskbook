@@ -6,6 +6,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { useGetNFTAvatar } from './useGetNFTAvatar'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 export function useNFTAvatar(
     userId: string | undefined,
@@ -16,6 +17,12 @@ export function useNFTAvatar(
     const [, getNFTAvatar] = useGetNFTAvatar()
 
     return useAsync(async () => {
-        return getNFTAvatar(userId, activatedSocialNetworkUI.networkIdentifier, snsKey, networkPluginId, chainId)
+        return getNFTAvatar(
+            userId,
+            activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+            snsKey,
+            networkPluginId,
+            chainId,
+        )
     }, [userId, snsKey, networkPluginId, chainId, getNFTAvatar])
 }

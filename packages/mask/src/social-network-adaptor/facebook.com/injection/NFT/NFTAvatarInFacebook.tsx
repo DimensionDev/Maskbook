@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import type { NFTAvatarEvent } from '@masknet/shared-base'
+import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
@@ -110,7 +110,7 @@ function NFTAvatarInFacebook() {
                 const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
-                    identity.identifier.network,
+                    identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {
@@ -139,7 +139,7 @@ function NFTAvatarInFacebook() {
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
                     } as AvatarMetaDB,
-                    identity.identifier.network,
+                    identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {
