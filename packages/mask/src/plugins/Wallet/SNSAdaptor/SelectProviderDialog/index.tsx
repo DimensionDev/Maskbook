@@ -32,9 +32,12 @@ export interface SelectProviderDialogProps {}
 export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
     // #region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
+    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {
+        if (!ev.open) return
+        setWalletConnectedCallback(() => ev.walletConnectedCallback)
+    })
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
     )
@@ -81,9 +84,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
                 open: true,
                 network,
                 provider,
+                walletConnectedCallback,
             })
         },
-        [Others, Provider, closeDialog],
+        [Others, Provider, closeDialog, walletConnectedCallback],
     )
 
     // not available for the native app

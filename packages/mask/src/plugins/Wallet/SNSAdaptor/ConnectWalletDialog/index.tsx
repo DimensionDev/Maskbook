@@ -24,6 +24,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
     const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
+    const [walletConnectedCallback, setWalletConnectedCallback] = useState<(() => void) | undefined>()
 
     // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
@@ -33,6 +34,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             setPluginID(ev.network.networkSupporterPluginID)
             setNetworkType(ev.network.type)
             setProviderType(ev.provider.type)
+            setWalletConnectedCallback(() => ev.walletConnectedCallback)
         },
     )
     // #endregion
@@ -63,8 +65,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             open: false,
         })
 
+        walletConnectedCallback?.()
+
         return true
-    }, [open])
+    }, [open, walletConnectedCallback])
 
     if (!pluginID || !providerType) return null
 
