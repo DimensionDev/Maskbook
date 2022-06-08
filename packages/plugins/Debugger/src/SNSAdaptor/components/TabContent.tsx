@@ -2,6 +2,7 @@ import {
     useAccount,
     useBalance,
     useBlockNumber,
+    useBlockTimestamp,
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useWeb3Connection,
@@ -84,6 +85,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
     const chainId = useChainId()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
+    const { value: blockTimestamp = 0 } = useBlockTimestamp()
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection.transferFungibleToken(
@@ -206,6 +208,16 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                         </TableCell>
                         <TableCell>
                             <Typography variant="body2">{blockNumber}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Block Timestamp
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{blockTimestamp}</Typography>
                         </TableCell>
                     </TableRow>
                     <TableRow>
