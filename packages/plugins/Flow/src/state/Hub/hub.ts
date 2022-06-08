@@ -1,4 +1,3 @@
-import { CoinGecko } from '@masknet/web3-providers'
 import type {
     FungibleToken,
     NonFungibleToken,
@@ -100,7 +99,7 @@ class Hub implements FlowHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(address, options?.currencyType)
+        throw new Error('Method not implemented.')
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,
