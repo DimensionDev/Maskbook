@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -166,7 +166,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
             else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
             else {
-                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
+                setCustomGasPrice(gasPrice.toString())
                 setOption(2)
             }
         }, [gasConfig, gasOptions])
@@ -179,7 +179,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                         <Typography className={classes.accordingTitle}>
                             {t('plugin_trader_gas_option', {
                                 option: options[selected].title,
-                                value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
+                                value: new BigNumber(options[selected].gasPrice ?? 0).toString(),
                             })}
                         </Typography>
                     </AccordionSummary>
@@ -221,14 +221,14 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                                                     InputProps={{ classes: { root: classes.textFieldInput } }}
                                                 />
                                             ) : (
-                                                formatWeiToGwei(option.gasPrice ?? 0).toString()
+                                                new BigNumber(option.gasPrice ?? 0).toString()
                                             )}
                                         </Typography>
                                         {t('wallet_transfer_gwei')}
                                     </Typography>
                                     <Typography className={classes.cost} marginTop={option.isCustom ? 4 : 6}>
                                         {t('popups_wallet_gas_fee_settings_usd', {
-                                            usd: formatWeiToEther(option.gasPrice)
+                                            usd: formatGweiToEther(option.gasPrice)
                                                 .times(nativeTokenPrice)
                                                 .times(21000)
                                                 .toPrecision(3),

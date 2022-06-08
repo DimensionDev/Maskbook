@@ -23,6 +23,7 @@ import {
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
+    isNativeTokenAddress,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
@@ -111,9 +112,9 @@ class Hub implements EVM_Hub {
     ): Promise<number> {
         return CoinGecko.getTokenPrice(
             address,
-            CurrencyType.USD,
+            options?.currencyType ?? this.currencyType,
             chainId,
-            options?.currencyType === CurrencyType.NATIVE || !address,
+            isNativeTokenAddress(address),
         )
     }
     getNonFungibleTokenPrice(
