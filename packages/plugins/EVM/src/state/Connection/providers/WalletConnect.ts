@@ -113,7 +113,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
         if (!this.connection) return
-        this.connection.reject(error || new Error('User closed modal.'))
+        this.connection.reject(error || new Error('User rejected'))
     }
 
     private async login(chainId?: ChainId) {
