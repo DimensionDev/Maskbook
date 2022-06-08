@@ -1,5 +1,5 @@
 import { CoinGecko, MagicEden } from '@masknet/web3-providers'
-import type {
+import {
     FungibleToken,
     NonFungibleToken,
     SourceType,
@@ -11,11 +11,11 @@ import type {
     CurrencyType,
     Transaction,
     NonFungibleTokenCollection,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
 import type { SolanaHub } from './types'
-import { isSameAddress } from '../../utils'
 
 class Hub implements SolanaHub {
     constructor(
