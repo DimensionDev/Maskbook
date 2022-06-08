@@ -229,7 +229,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURL}
+                    logoURL={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>

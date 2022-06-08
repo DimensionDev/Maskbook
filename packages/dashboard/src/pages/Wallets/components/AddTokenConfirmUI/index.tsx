@@ -59,7 +59,7 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
                                 address={token?.address ?? ''}
                                 name={token?.name}
                                 chainId={token?.chainId}
-                                logoURI={token?.logoURL}
+                                logoURL={token?.logoURL}
                                 AvatarProps={{ sx: { width: 48, height: 48 } }}
                             />
                             <Typography className={classes.confirmTitle} sx={{ marginLeft: 1.2 }}>
