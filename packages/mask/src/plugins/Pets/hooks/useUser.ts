@@ -8,12 +8,12 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const wallet = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
-        if (!(wallet && whoAmI?.identifier?.userId)) return
-        setUser({ userId: whoAmI.identifier.userId, address: wallet })
-    }, [wallet, whoAmI])
+        if (!(account && whoAmI?.identifier?.userId)) return
+        setUser({ userId: whoAmI.identifier.userId, address: account })
+    }, [account, whoAmI])
     return user
 }
 
