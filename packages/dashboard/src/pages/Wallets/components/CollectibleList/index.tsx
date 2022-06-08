@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Stack } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -83,6 +83,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         <CollectibleListUI
             isError={!!error}
             isLoading={renderCollectibles.length === 0 && !done && !error}
+            isDone={done}
             isEmpty={!error && renderCollectibles.length === 0 && done}
             dataSource={renderCollectibles}
             onSend={onSend}
@@ -94,6 +95,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 export interface CollectibleListUIProps {
     isError: boolean
     isLoading: boolean
+    isDone: boolean
     isEmpty: boolean
     chainId?: Web3Helper.ChainIdAll
     dataSource: Array<
@@ -112,7 +114,7 @@ export interface CollectibleListUIProps {
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
-    ({ isEmpty, isLoading, onRetry, dataSource, onSend, isError }) => {
+    ({ isEmpty, isLoading, isDone, onRetry, dataSource, onSend, isError }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const ref = useRef<HTMLDivElement>(null)
@@ -142,6 +144,11 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                                     </div>
                                 ))}
                             </div>
+                            {!isDone && !isError && (
+                                <Stack direction="row" justifyContent="center" pt={2}>
+                                    <LoadingBase />
+                                </Stack>
+                            )}
                             {isError && (
                                 <Stack flexDirection="row" justifyContent="center" pt={3} alignItems="center">
                                     <Button>{t.wallets_reload()}</Button>

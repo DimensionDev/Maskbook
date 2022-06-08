@@ -309,7 +309,6 @@ export function CollectionList({
                                     variant="body2"
                                     sx={{ fontSize: '16px' }}>
                                     Other
-                                    {/* // todo: loadingCollectibleDone ?? */}
                                     {renderCollectibles.length ? `(${renderCollectibles.length})` : null}
                                 </Typography>
                             </Box>
