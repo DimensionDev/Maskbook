@@ -58,11 +58,10 @@ class Connection implements BaseConnection {
     async disconnect(options?: SolanaWeb3ConnectionOptions): Promise<void> {
         await Web3StateSettings.value.Provider?.disconnect(options?.providerType ?? this.providerType)
     }
-    async transferFungibleToken(
+    async transferSplToken(
         address: string,
         recipient: string,
         amount: string,
-        memo?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         if (!options?.account) throw new Error('No payer provides.')
@@ -103,14 +102,23 @@ class Connection implements BaseConnection {
         const signature = await connection.sendRawTransaction(signed.serialize())
         return signature
     }
-    transferNonFungibleToken(
+    async transferFungibleToken(
         address: string,
-        tokenId: string,
-        amount: string,
         recipient: string,
+        amount: string,
+        memo?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        return this.transferSplToken(address, recipient, amount, options)
+    }
+    transferNonFungibleToken(
+        address: string,
+        recipient: string,
+        mintAddress: string,
+        amount: string,
+        options?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        return this.transferSplToken(mintAddress, recipient, amount, options)
     }
     getGasPrice(options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')

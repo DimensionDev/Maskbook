@@ -1,7 +1,7 @@
 import { useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
@@ -64,10 +64,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
-    const selectedPairs: TipNFTKeyPair[] = useMemo(
-        () => (tokenAddress && tokenId ? [[tokenAddress, tokenId]] : []),
-        [tokenId, tokenId],
-    )
+    const selectedPairs: TipNFTKeyPair[] = useMemo(() => (tokenId ? [[tokenAddress, tokenId]] : []), [tokenId, tokenId])
     // Cannot get the loading status of fetching via websocket
     // loading status of `useAsyncRetry` is not the real status
     const [guessLoading, setGuessLoading] = useState(true)
@@ -75,17 +72,21 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         setGuessLoading(false)
     }, 10000)
 
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
     const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(pluginId, undefined, {
         chainId,
     })
 
     const tokens = useMemo(() => {
-        return uniqWith(fetchedTokens, (v1, v2) => {
-            return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
-        })
-    }, [fetchedTokens])
+        return uniqWith(
+            fetchedTokens,
+            pluginId === NetworkPluginID.PLUGIN_EVM
+                ? (v1, v2) => {
+                      return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
+                  }
+                : (v1, v2) => v1.tokenId === v2.tokenId,
+        )
+    }, [fetchedTokens, pluginId])
 
     const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
 
@@ -105,7 +106,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                                 tokens={tokens}
                                 onChange={(id, address) => {
                                     setNonFungibleTokenId(id)
-                                    setNonFungibleTokenAddress(address)
+                                    setNonFungibleTokenAddress(address || '')
                                 }}
                             />
                         )

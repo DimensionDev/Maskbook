@@ -94,12 +94,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 address,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
-            urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
+        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
+            return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
     }
 }
 

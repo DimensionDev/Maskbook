@@ -1,5 +1,5 @@
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, isLessThanOrEqualTo, rightShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useContext, useMemo } from 'react'
 import { useI18N } from '../../locales'
 import { TipType } from '../../types'
@@ -26,8 +26,10 @@ export function useTipValidate(): ValidationTuple {
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
-        } else {
+        } else if (pluginId === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
+        } else if (!tokenId) {
+            return [false]
         }
         return [true]
     }, [tipType, amount, token?.decimals, balance, tokenId, tokenAddress, t])

@@ -1,7 +1,7 @@
-import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -11,7 +11,7 @@ import type { TipNFTKeyPair } from '../../types'
 interface Props {
     selectedPairs: TipNFTKeyPair[]
     tokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    onChange?: (id: string | null, contractAddress: string) => void
+    onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string
 }
@@ -106,10 +106,6 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-const includes = (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
-    return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-}
-
 export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className }) => {
     const { classes } = useStyles()
 
@@ -117,14 +113,25 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
     const reachedLimit = selectedPairs.length >= limit
 
     const toggleItem = useCallback(
-        (currentId: string | null, contractAddress: string) => {
+        (currentId: string | null, contractAddress?: string) => {
             onChange?.(currentId, contractAddress)
         },
         [onChange, isRadio, reachedLimit],
     )
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const includes =
+        pluginId === NetworkPluginID.PLUGIN_EVM
+            ? (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
+                  return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
+              }
+            : (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
+                  return !!pairs.find(([address, tokenId]) => tokenId === pair[1])
+              }
 
     const SelectComponent = isRadio ? Radio : Checkbox
     const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+
+    console.log('selectedPairs', selectedPairs)
 
     return (
         <List className={classnames(classes.list, className)}>
@@ -160,11 +167,11 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                                 onChange={noop}
                                 disabled={disabled}
                                 onClick={() => {
-                                    if (disabled || !token.contract?.address) return
+                                    if (disabled) return
                                     if (selected) {
                                         toggleItem(null, '')
                                     } else {
-                                        toggleItem(token.tokenId, token.contract.address)
+                                        toggleItem(token.tokenId, token.contract?.address)
                                     }
                                 }}
                                 className={classes.checkbox}

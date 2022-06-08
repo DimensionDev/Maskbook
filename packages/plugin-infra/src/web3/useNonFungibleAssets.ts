@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray } from '@masknet/shared-base'
+import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import type { NonFungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
@@ -16,11 +16,12 @@ export function useNonFungibleAssets<T extends NetworkPluginID, Indicator extend
         NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
     >
 
-    const account = useAccount(pluginID)
+    const account = 'TmJmhWp764ixAAFZSL3G7mRkvorjRHsg8Nb1QnDWkSD' // useAccount(pluginID)
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!account || !hub) return []
+        if (!account || !hub) return EMPTY_LIST
+        console.log('getAllNonFungibleAssets', account)
         const assets = await asyncIteratorToArray((hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(account))
         return assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
     }, [account, schemaType, hub])

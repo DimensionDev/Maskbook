@@ -68,9 +68,9 @@ class Hub implements SolanaHub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         try {
-            return SolanaRPC.getNonFungibleAssets(account, options)
-        } catch {
             return MagicEden.getTokens(account, options)
+        } catch {
+            return SolanaRPC.getNonFungibleAssets(account, options)
         }
     }
     getNonFungibleCollections(
@@ -118,7 +118,7 @@ class Hub implements SolanaHub {
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
+        for (let i = 0; i < 1; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
                 indicator: i,
                 size: this.sizePerPage,

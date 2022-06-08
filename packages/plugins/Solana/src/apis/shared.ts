@@ -79,7 +79,6 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            authority: 'solana-mainnet.phantom.app',
         },
         mode: 'cors',
         body: JSON.stringify({
@@ -88,7 +87,9 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
             id,
         }),
     })
-    return res.json()
+    const result = await res.json()
+    if (result.error) throw new Error(result.message || 'Fails in requesting RPC')
+    return result
 }
 
 export async function fetchJSON<T = unknown>(url: string): Promise<T> {
