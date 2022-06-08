@@ -349,7 +349,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createPageable(tokens, indicator, tokens.length === size ? indicator + 1 : undefined)
     }
 
-    async getHistory(
+    async getEvents(
         address: string,
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},

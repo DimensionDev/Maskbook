@@ -112,7 +112,7 @@ export namespace PriceAPI {
 }
 
 export namespace HistoryAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number> {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
@@ -127,7 +127,7 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number> {
         getAssets(
             address: string,
             options?: HubOptions<ChainId>,
@@ -136,7 +136,21 @@ export namespace FungibleTokenAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number> {
+        getContract?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        getBalance?: (address: string, options?: HubOptions<ChainId>) => Promise<number>
+        getToken?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        getTokens?: <ChainId, SchemaType>(
+            from: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getAsset?: (
             address: string,
             tokenId: string,
@@ -144,46 +158,32 @@ export namespace NonFungibleTokenAPI {
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         getAssets?: (
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
-        getHistory?: (
+        getEvents?: (
             address: string,
             tokenId: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
         getListings?: (
             address: string,
             tokenId: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
         getOffers?: (
             address: string,
             tokenId: string,
-            opts?: HubOptions<ChainId>,
+            opts?: HubOptions<ChainId, Indicator>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: <tokenChainId, tokenSchemaType>(
-            from: string,
-            opts?: HubOptions<tokenChainId, string | number>,
-        ) => Promise<Pageable<NonFungibleToken<tokenChainId, tokenSchemaType>, string | number>>
-        getContract?: (
-            address: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
     }
 }

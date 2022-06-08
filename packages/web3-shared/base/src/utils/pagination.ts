@@ -1,4 +1,4 @@
-export function createPageable<Item, Indicator extends string | number = number>(
+export function createPageable<Item, Indicator = number>(
     data: Item[],
     indicator: Indicator,
     nextIndicator?: Indicator,

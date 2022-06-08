@@ -217,7 +217,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         }
     }
 
-    async getHistory(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {
+    async getEvents(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
                 mint_address: tokenId,

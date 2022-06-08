@@ -15,7 +15,7 @@ import { useWeb3State } from './useWeb3State'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
 
-export function useFungibleAssets<T extends NetworkPluginID, Indicator extends string | number = number>(
+export function useFungibleAssets<T extends NetworkPluginID, Indicator = number>(
     pluginID?: T,
     schemaType?: Web3Helper.Definition[T]['SchemaType'],
     options?: Web3Helper.Web3HubOptions<T, Indicator>,
