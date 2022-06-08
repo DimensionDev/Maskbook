@@ -28,7 +28,7 @@ export async function fetchJSON<T = unknown>(
     if (isPending) {
         pendingResponse = cached
     } else {
-        pendingResponse = fetch(url, { mode: 'cors', ...requestInit })
+        pendingResponse = fetch(url, requestInit)
         if (enableCache) {
             fetchCache.set(url, pendingResponse)
         }
