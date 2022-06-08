@@ -164,7 +164,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }
 
     const onChangeChain = (chainId: ChainId) => {
-        console.log(chainId)
         setChainId(chainId)
     }
 

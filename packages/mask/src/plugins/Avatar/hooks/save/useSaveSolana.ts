@@ -17,23 +17,15 @@ export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
             identifier: ProfileIdentifier,
             proof: BindingProof,
         ) => {
-            try {
-                console.log('---------------------------')
-                console.log(info)
-                const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
-                    account,
-                })
-                console.log(sign)
-                return PluginNFTAvatarRPC.saveAvatar(
-                    account,
-                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-                    info,
-                    sign,
-                )
-            } catch (error) {
-                console.log(error)
-                return
-            }
+            const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
+                account,
+            })
+            return PluginNFTAvatarRPC.saveAvatar(
+                account,
+                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+                info,
+                sign,
+            )
         },
         [connection],
     )

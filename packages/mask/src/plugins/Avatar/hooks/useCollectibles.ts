@@ -16,10 +16,6 @@ export function useCollectibles(account: string, pluginId: NetworkPluginID, chai
         // account: '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde',
     })
 
-    console.log(pluginId)
-    console.log(chainId)
-    console.log(assets)
-
     const collectibles = assets.map((x) => {
         return {
             contract: x.contract,
