@@ -118,6 +118,8 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan]
+
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
@@ -290,6 +292,7 @@ export function Collectible(props: CollectibleProps) {
                                     </>
                                 ),
                                 value: x.value,
+                                disabled: !supportedProvider.includes(x.value),
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}
