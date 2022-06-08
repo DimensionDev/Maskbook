@@ -99,6 +99,7 @@ class Hub implements FlowHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
+        // The Flow chain is unlisted in CoinGecko.
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenPrice(
