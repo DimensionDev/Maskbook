@@ -78,13 +78,13 @@ export const QRCodeDialog: React.FC<QRCodeDialogProps> = ({ uri, open, onClose, 
             <DialogContent className={classes.container}>
                 <PlatformSelector />
             </DialogContent>
-            <DialogActions className={classes.actions}>
-                {mode !== 'qrcode' && (
+            {mode !== 'qrcode' && (
+                <DialogActions className={classes.actions}>
                     <Button variant="contained" onClick={() => setQRMode(!qrMode)}>
                         {t(qrMode ? 'plugin_wallet_return_mobile_wallet_options' : 'plugin_wallet_view_qr_code')}
                     </Button>
-                )}
-            </DialogActions>
+                </DialogActions>
+            )}
         </InjectedDialog>
     )
 }

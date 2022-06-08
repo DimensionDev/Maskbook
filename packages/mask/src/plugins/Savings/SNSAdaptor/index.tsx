@@ -18,6 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
@@ -25,7 +26,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 title={name}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
                             <SavingsDialog open={open} onClose={() => setOpen(false)} />
                         </>

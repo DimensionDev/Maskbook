@@ -1,0 +1,12 @@
+{
+    "PLATFORM_ID": {
+        "Mainnet": "solana",
+        "Testnet": "",
+        "Devnet": ""
+    },
+    "COIN_ID": {
+        "Mainnet": "solana",
+        "Testnet": "",
+        "Devnet": ""
+    }
+}

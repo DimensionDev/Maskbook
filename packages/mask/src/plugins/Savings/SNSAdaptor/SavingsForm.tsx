@@ -99,6 +99,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         () => (tab === TabType.Deposit ? new BigNumber(inputTokenBalance || '0') : protocol.balance),
         [tab, protocol.balance, inputTokenBalance],
     )
+    const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     const { loading } = useAsync(async () => {
         if (!web3 || !(tokenAmount.toNumber() > 0)) return
@@ -117,6 +118,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     // #region form validation
     const validationMessage = useMemo(() => {
+        if (needsSwap) return ''
         if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
         if (isLessThan(tokenAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
 
@@ -207,8 +209,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         }
     }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog])
 
-    const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
-
     const buttonDom = useMemo(() => {
         if (tab === TabType.Deposit)
             return (
@@ -235,10 +235,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 size="large"
                                 variant="contained"
                                 init={
-                                    needsSwap
-                                        ? 'Swap ' + protocol.bareToken.symbol
-                                        : validationMessage ||
-                                          t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
+                                    validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
                                 }
                                 waiting={t('plugin_savings_process_deposit')}
                                 failed={t('failed')}
@@ -272,7 +269,11 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         color="primary"
                         size="large"
                         variant="contained"
-                        init={validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol}
+                        init={
+                            needsSwap
+                                ? 'Swap ' + protocol.bareToken.symbol
+                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
+                        }
                         waiting={t('plugin_savings_process_withdraw')}
                         failed={t('failed')}
                         failedOnClick="use executor"

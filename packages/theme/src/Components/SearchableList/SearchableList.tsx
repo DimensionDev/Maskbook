@@ -80,7 +80,7 @@ export function SearchableList<T extends {}>({
 
     // #region create searched data
     const readyToRenderData = useMemo(() => {
-        if (!keyword || !onSearch) return data
+        if (!keyword) return data
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])

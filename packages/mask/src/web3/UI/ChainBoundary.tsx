@@ -186,8 +186,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 <ActionButtonPromise
                     startIcon={
                         <WalletIcon
-                            networkIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                            isBorderColorNotDefault
+                            mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
                             size={18}
                         />
                     }

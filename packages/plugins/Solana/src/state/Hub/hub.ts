@@ -1,4 +1,4 @@
-import { MagicEden } from '@masknet/web3-providers'
+import { CoinGecko, MagicEden } from '@masknet/web3-providers'
 import type {
     CurrencyType,
     FungibleAsset,
@@ -12,9 +12,10 @@ import type {
     SourceType,
     Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
 import type { SolanaHub } from './types'
+import { isSameAddress } from '../../utils'
 
 class Hub implements SolanaHub {
     constructor(
@@ -84,7 +85,14 @@ class Hub implements SolanaHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        throw new Error('Method not implemented.')
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+        const { SOL_ADDRESS } = getTokenConstants(chainId)
+
+        if (isSameAddress(address, SOL_ADDRESS)) {
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+        }
+
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

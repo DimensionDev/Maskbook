@@ -31,6 +31,7 @@ export function useNftTip<T extends NetworkPluginID>(
         )
         const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, {
             chainId,
+            account,
         })
         if (tokenDetailed) {
             await Token?.removeToken?.(tokenDetailed)

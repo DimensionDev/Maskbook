@@ -94,6 +94,11 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
+        if (!value)
+            return {
+                data: '',
+                address: '',
+            }
         if (
             value?.payload.method === EthereumMethodType.ETH_SIGN ||
             value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA

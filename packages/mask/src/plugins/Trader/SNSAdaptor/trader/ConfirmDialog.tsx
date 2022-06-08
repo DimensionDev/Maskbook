@@ -248,7 +248,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={inputToken.address}
-                                logoURI={inputToken.logoURL}
+                                logoURL={inputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={inputAmount.toFixed() ?? '0'}
@@ -265,7 +265,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={outputToken.address}
-                                logoURI={outputToken.logoURL}
+                                logoURL={outputToken.logoURL}
                             />
                             <FormattedBalance
                                 value={outputAmount.toFixed() ?? '0'}

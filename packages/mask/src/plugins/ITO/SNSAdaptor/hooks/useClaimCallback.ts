@@ -11,7 +11,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { contract: ITO_Contract } = useITO_Contract(chainId, contractAddress)
 
     const isV1 = isSameAddress(ITO_CONTRACT_ADDRESS ?? '', contractAddress)

@@ -22,7 +22,6 @@ const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
 const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=solana&vs_currencies=usd`
 export async function getSolAsset(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
-
     const priceData = await fetch(requestPath).then(
         (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
     )

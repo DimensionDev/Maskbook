@@ -49,7 +49,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '612px !important',
+            width: '600px !important',
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
