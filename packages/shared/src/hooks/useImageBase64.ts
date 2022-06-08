@@ -4,8 +4,8 @@ import { useAsyncRetry } from 'react-use'
 function readAsDataURL(blob: Blob) {
     return new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
-        reader.onload = () => resolve(reader.result as string)
-        reader.onerror = reject
+        reader.addEventListener('load', () => resolve(reader.result as string))
+        reader.addEventListener('error', reject)
         reader.readAsDataURL(blob)
     })
 }
