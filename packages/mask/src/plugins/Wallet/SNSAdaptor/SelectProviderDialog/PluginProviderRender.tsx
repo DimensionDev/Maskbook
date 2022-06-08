@@ -78,8 +78,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            gridAutoRows: '130px',
-            height: 72,
+            maxHeight: 180,
             gridGap: '16px 8px',
             margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
