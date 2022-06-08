@@ -83,11 +83,6 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const emptyMessage = {
-    data: '',
-    address: '',
-}
-
 const SignRequest = memo(() => {
     const { t } = useI18N()
     const routeLocation = useRouteLocation()
@@ -99,7 +94,11 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (!value) return emptyMessage
+        if (!value)
+            return {
+                data: '',
+                address: '',
+            }
         if (
             value?.payload.method === EthereumMethodType.ETH_SIGN ||
             value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
