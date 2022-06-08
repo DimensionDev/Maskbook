@@ -20,6 +20,7 @@ import {
     chainResolver,
     formatEthereumAddress,
     GasOption,
+    getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
@@ -110,12 +111,13 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(
-            address,
-            options?.currencyType ?? this.currencyType,
-            chainId,
-            isNativeTokenAddress(address),
-        )
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+
+        if (isNativeTokenAddress(address)) {
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+        }
+
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

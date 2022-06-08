@@ -53,7 +53,7 @@ async function getTokenBalance(
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPrice('usd-coin', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPriceByCoinId('usd-coin', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FUSD_ADDRESS,
@@ -78,7 +78,7 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPrice('flow', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPriceByCoinId('flow', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FLOW_ADDRESS,
@@ -104,7 +104,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPrice('tether', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPriceByCoinId('tether', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: TETHER_ADDRESS,

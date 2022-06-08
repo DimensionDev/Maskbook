@@ -1,10 +1,9 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import { isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, FormattedCurrency } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
@@ -118,9 +117,10 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         const { value: tokenPrice = 0 } = useFungibleTokenPrice(
             NetworkPluginID.PLUGIN_EVM,
-            !isZeroAddress(token?.address) ? token?.address.toLowerCase() : undefined,
+            token?.address.toLowerCase(),
             { chainId },
         )
+
 
         const tokenValueUSD = useMemo(
             () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2) : '0'),
