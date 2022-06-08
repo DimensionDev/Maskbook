@@ -2,7 +2,7 @@ import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token
 import { Connection, PublicKey, Commitment, Transaction } from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction'
 import { getAccountInfo } from './getAccountInfo'
-import { getAssociatedTokenAddress } from './getAssociatedTokerAddress'
+import { getAssociatedTokenAddress } from './getAssociatedTokenAddress'
 
 export async function getOrCreateAssociatedTokenAccount(
     connection: Connection,

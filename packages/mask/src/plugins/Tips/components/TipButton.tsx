@@ -88,7 +88,7 @@ export const TipButton: FC<Props> = ({
 
     const pluginId = useCurrentWeb3NetworkPluginID()
     const isVisitingUser = visitingIdentity.identifier?.userId === receiver?.userId
-    const isRuntimeAvaliable = useMemo(() => {
+    const isRuntimeAvailable = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
                 return true
@@ -117,7 +117,7 @@ export const TipButton: FC<Props> = ({
     }, [pluginId, publicWallets, addresses, socialAddressList])
 
     const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvaliable
+    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {

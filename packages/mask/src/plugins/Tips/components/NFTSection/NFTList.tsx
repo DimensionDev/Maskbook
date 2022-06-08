@@ -125,13 +125,11 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                   return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
               }
             : (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
-                  return !!pairs.find(([address, tokenId]) => tokenId === pair[1])
+                  return !!pairs.find(([, tokenId]) => tokenId === pair[1])
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
     const { Others } = useWeb3State() as Web3Helper.Web3StateAll
-
-    console.log('selectedPairs', selectedPairs)
 
     return (
         <List className={classnames(classes.list, className)}>

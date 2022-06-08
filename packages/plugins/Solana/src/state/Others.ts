@@ -37,4 +37,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
     override explorerResolver = explorerResolver
+    override getMaskTokenAddress = () => ''
 }

@@ -168,7 +168,6 @@ class Connection implements BaseConnection {
         return sol.balance
     }
     async getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        console.log('get balance', options, address)
         if (!options?.account) return '0'
         if (isNativeTokenAddress(address)) {
             return this.getNativeTokenBalance(options)

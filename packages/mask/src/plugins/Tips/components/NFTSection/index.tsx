@@ -1,4 +1,4 @@
-import { useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'

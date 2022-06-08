@@ -97,7 +97,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     const t = useI18N()
     const currentChainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    console.log('current pluginId', pluginId)
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const { classes } = useStyles()
     const {

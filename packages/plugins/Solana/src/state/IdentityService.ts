@@ -19,7 +19,7 @@ export class IdentityService extends IdentityServiceState {
 
     protected override async getFromRemote(identity: SocialIdentity) {
         const { identifier, bio = '', nickname = '' } = identity
-        const addressMatched = identity.bio?.match(/\w{44}/) ?? null
+        const addressMatched = identity.bio?.match(/\w{44}/)
         const address = addressMatched?.[0]
         const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
         const solanaDomainAddress = await SolanaRPC.lookup(ChainId.Mainnet, solanaName)
