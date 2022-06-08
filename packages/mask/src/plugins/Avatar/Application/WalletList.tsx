@@ -14,6 +14,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useReverseAddress,
+    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../extension/service'
 import { useI18N } from '../locales/i18n_generated'
@@ -24,7 +25,7 @@ import classNames from 'classnames'
 import { VerifyIcon } from '../assets/verify'
 import { Verify2Icon } from '../assets/Verify2'
 import { formatAddress } from '../utils'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
@@ -259,6 +260,7 @@ function WalletUI(props: WalletUIProps) {
     const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { Others } = useWeb3State<'all'>()
 
     if (!address) return null
     return (
@@ -283,7 +285,7 @@ function WalletUI(props: WalletUIProps) {
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
                         className={classes.link}
-                        href={explorerResolver.addressLink?.(chainId as ChainId, address) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(chainId as ChainId, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">
