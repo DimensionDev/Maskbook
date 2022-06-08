@@ -7,7 +7,14 @@ import {
     createPageable,
     HubOptions,
 } from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatGweiToWei,
+    getDeBankConstants,
+    SchemaType,
+    GasOption,
+    formatWeiToGwei,
+} from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
@@ -48,17 +55,17 @@ export class DeBankAPI
         return {
             [GasOptionType.FAST]: {
                 estimatedSeconds: responseModified.data.fast.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.fast.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedSeconds: responseModified.data.normal.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.normal.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedSeconds: responseModified.data.slow.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.slow.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
         }

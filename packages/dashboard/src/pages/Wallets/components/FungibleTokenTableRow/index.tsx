@@ -99,7 +99,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             address={asset.address}
                             name={asset.name}
                             chainId={asset.chainId}
-                            logoURI={asset.logoURL || asset.logoURL}
+                            logoURL={asset.logoURL || asset.logoURL}
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>

@@ -15,12 +15,15 @@ import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
+import { EthereumWeb3API } from './web3'
+import { MagicEdenAPI } from './MagicEden'
 
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()
+export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
 export const Zora = new ZoraAPI()
@@ -37,4 +40,5 @@ export const DeBank = new DeBankAPI()
 export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()
 export const NextIDStorage = new NextIDStorageAPI()
+export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()

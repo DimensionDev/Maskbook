@@ -21,7 +21,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
                       [x.name, x.fullName, x.shortName, x.network]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
-                          .includes(name),
+                          .includes(name?.toLowerCase()),
                   )?.chainId
                 : undefined,
         coinMarketCapChainId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinMarketCapChainId,

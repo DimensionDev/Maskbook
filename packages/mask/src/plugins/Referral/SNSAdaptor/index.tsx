@@ -30,13 +30,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
                                 {...EntryComponentProps}
                                 icon={icon}
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
                             <ReferralDialog open={open} onClose={() => setOpen(false)} />
                         </>

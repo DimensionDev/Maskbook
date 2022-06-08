@@ -152,7 +152,7 @@ export function ConcealableTabs<T extends number | string>({
         if (selectedId === undefined && tabs.length) {
             onChange?.(tabs[0].id)
         }
-    }, [selectedId === undefined, tabs.length > 0, onChange])
+    }, [selectedId, tabs.map((x) => x.id).join(), onChange])
 
     const slide = useCallback((toLeft: boolean) => {
         const tabList = trackRef.current

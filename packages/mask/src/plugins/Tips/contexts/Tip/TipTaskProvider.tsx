@@ -1,4 +1,4 @@
-import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useNonFungibleTokenContract, useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
@@ -20,6 +20,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [erc721Address, setErc721Address] = useState<string>('')
     const { value: nativeTokenDetailed = null } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: targetChainId,
@@ -28,7 +29,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
 
-    const { value: erc721Contract } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, erc721Address)
+    const { value: erc721Contract } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, erc721Address, {
+        account,
+    })
 
     useEffect(() => {
         setTipType(TipType.Token)

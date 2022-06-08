@@ -92,18 +92,20 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 394,
     },
     wrapper: {
+        position: 'relative',
         display: 'flex',
-        overflow: 'hidden',
         flexDirection: 'column',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2.5),
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
-        width: 120,
-        minHeight: 153,
         borderRadius: 8,
+        padding: 0,
+        marginBottom: theme.spacing(2.5),
+        background: theme.palette.background.paper,
+        width: 120,
+        height: 180,
+        minHeight: 153,
+        overflow: 'hidden',
     },
     iframe: {
-        minHeight: 153,
+        minHeight: 147,
     },
     nftNameWrapper: {
         width: '100%',
@@ -146,15 +148,16 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     selectWrapper: {
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
+        position: 'relative',
         display: 'flex',
-        overflow: 'hidden',
-        padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
-        height: 180,
-        userSelect: 'none',
+        padding: 0,
+        marginBottom: theme.spacing(2.5),
+        background: theme.palette.background.paper,
         width: 120,
+        height: 180,
+        overflow: 'hidden',
     },
     hide: {
         display: 'none !important',
@@ -400,12 +403,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
         const _tokenDetailed = (await connection?.getNonFungibleToken(contract?.address ?? '', tokenId, {
+            account,
             chainId,
         })) as NonFungibleToken<ChainId, SchemaType.ERC721>
-        setTokenDetailed(_tokenDetailed?.contract?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
+        setTokenDetailed(_tokenDetailed?.metadata?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
-    }, [connection, contract, tokenId, chainId])
+    }, [connection, contract, tokenId, chainId, account])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -416,7 +420,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
     }, [tokenDetailedOwnerList.length])
 
-    const isOwner = isSameAddress(account, tokenDetailed?.contract?.owner) || tokenDetailedSelectedList.length > 0
+    const isOwner = isSameAddress(account, tokenDetailed?.metadata?.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
     // #endregion
 
@@ -487,7 +491,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <NFTCardStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
-                                    url={tokenDetailed.metadata?.mediaURL}
+                                    url={tokenDetailed.metadata?.mediaURL || tokenDetailed.metadata?.imageURL}
                                     tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
@@ -720,11 +724,10 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
-
     return (
         <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
-                url={token.metadata?.mediaURL}
+                url={token.metadata?.mediaURL || token.metadata?.imageURL}
                 contractAddress={token.contract?.address}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}

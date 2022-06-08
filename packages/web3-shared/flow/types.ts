@@ -1,6 +1,6 @@
 /// <reference path="./env.d.ts" />
 
-import type { CompositeSignature, MutateOptions, BlockObject, TransactionObject } from '@blocto/fcl'
+import type { MutateOptions, BlockObject, TransactionObject } from '@blocto/fcl'
 
 export enum ChainId {
     Mainnet = 1,
@@ -42,7 +42,7 @@ export enum TransactionStatusCode {
 
 export type Web3 = typeof import('@blocto/fcl')
 export type Web3Provider = {}
-export type Signature = CompositeSignature[]
+export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
 export type Transaction = MutateOptions

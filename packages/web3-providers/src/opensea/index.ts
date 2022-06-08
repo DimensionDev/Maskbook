@@ -300,7 +300,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
         )
         if (!response) return
-        // @ts-ignore
         return createNFTAsset(chainId, response)
     }
 
@@ -314,7 +313,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             address,
             assetContract?.name ?? 'Unknown Token',
             assetContract?.token_symbol ?? 'UNKNOWN',
-            undefined,
             undefined,
             assetContract?.image_url,
         )

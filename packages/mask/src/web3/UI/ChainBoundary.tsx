@@ -156,6 +156,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        fullWidth
                         startIcon={<PluginWalletConnectIcon />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}

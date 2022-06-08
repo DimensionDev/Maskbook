@@ -43,10 +43,6 @@ function checkParams(paramsObj: ParamsObjType) {
         throw new Error('At least 1 person should be able to claim the lucky drop.')
     }
 
-    if (paramsObj.tokenType !== SchemaType.Native && paramsObj.tokenType !== SchemaType.ERC20) {
-        throw new Error('Token not supported')
-    }
-
     return true
 }
 

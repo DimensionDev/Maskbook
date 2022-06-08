@@ -36,9 +36,8 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // #region select token
     const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
     const pickToken = usePickToken()

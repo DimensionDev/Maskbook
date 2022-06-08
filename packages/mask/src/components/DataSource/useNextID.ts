@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
@@ -31,11 +31,11 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
     })
 }
 
-export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, identity?: string) => {
-    const res = useAsyncRetry(() => {
-        if (!platform || !identity) return Promise.resolve([])
-        return NextIDProof.queryExistedBindingByPlatform(platform, identity)
-    }, [platform, identity])
+export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
+    const res = useAsyncRetry(async () => {
+        if (!platform || !userId) return EMPTY_LIST
+        return NextIDProof.queryExistedBindingByPlatform(platform, userId)
+    }, [platform, userId])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
 }

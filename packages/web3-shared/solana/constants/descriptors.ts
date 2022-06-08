@@ -157,7 +157,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coin98.png', import.meta.url),
         homeLink: 'https://coin98.com/',
         shortenLink: 'solflare.com',
-        downloadLink: 'https://solflare.com/download',
+        downloadLink: 'https://coin98.com/wallet',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),

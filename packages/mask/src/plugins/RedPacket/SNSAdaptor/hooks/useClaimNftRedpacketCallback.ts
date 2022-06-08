@@ -13,7 +13,7 @@ const EXTRA_GAS_PER_NFT = 335
 export function useClaimNftRedpacketCallback(id: string, totalAmount: number | undefined, signedMsg: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const nftRedPacketContract = useNftRedPacketContract()
+    const nftRedPacketContract = useNftRedPacketContract(chainId)
     const [claimState, setClaimState] = useTransactionState()
     const claimCallback = useCallback(async () => {
         if (!nftRedPacketContract || !id || !signedMsg || !account || !totalAmount) {

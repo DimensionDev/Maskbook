@@ -44,10 +44,12 @@ export function AddressViewer({ identityAddress }: AddressViewerProps) {
         [SocialAddressType.UNS]: t.address_viewer_address_name_uns(),
         [SocialAddressType.DNS]: t.address_viewer_address_name_dns(),
         [SocialAddressType.RSS3]: t.address_viewer_address_name_rns(),
+        [SocialAddressType.KV]: t.address_viewer_address_name_address(),
         [SocialAddressType.GUN]: t.address_viewer_address_name_address(),
         [SocialAddressType.NEXT_ID]: t.address_viewer_address_name_address(),
         [SocialAddressType.THE_GRAPH]: t.address_viewer_address_name_address(),
         [SocialAddressType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
+        [SocialAddressType.SOL]: t.address_viewer_address_name_sol(),
     }
 
     const rulesTipMap = [

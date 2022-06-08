@@ -12,10 +12,11 @@ export class Base implements Translator {
         if (!config || isReadOnlyMethod(context.method)) return
 
         // #region polyfill transaction config
-        {
+        try {
             // add gas margin
-            if (config.gas)
-                config.gas = BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
+            if (config.gas) {
+                config.gas = toHex(BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed())
+            }
 
             // add gas price
             const hub = await Web3StateSettings.value.Hub?.getHub?.({
@@ -31,7 +32,7 @@ export class Base implements Translator {
                     slowOption?.suggestedMaxFeePerGas &&
                     normalOption &&
                     isLessThan(
-                        config.maxFeePerGas ? formatWeiToGwei(config.maxFeePerGas as string) : 0,
+                        config.maxPriorityFeePerGas ? formatWeiToGwei(config.maxPriorityFeePerGas as string) : 0,
                         slowOption.suggestedMaxPriorityFeePerGas,
                     )
                 ) {
@@ -49,12 +50,13 @@ export class Base implements Translator {
                     normalOption &&
                     isLessThan((config.gasPrice as string) ?? 0, slowOption.suggestedMaxFeePerGas)
                 ) {
-                    config.gasPrice = toHex(normalOption.suggestedMaxFeePerGas)
+                    config.gasPrice = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
                 }
             }
-
-            context.config = config
+        } catch (err) {
+            console.error(err)
         }
+        context.config = config
         // #endregion
     }
 
