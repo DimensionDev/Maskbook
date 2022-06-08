@@ -65,7 +65,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                                 {network.chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
                             </Stack>
                             <Stack justifyContent="center" alignItems="center" width={30}>
-                                <WalletIcon networkIcon={network.icon} size={30} />
+                                <WalletIcon mainIcon={network.icon} size={30} />
                             </Stack>
                             <Typography flex={1}>{network.name}</Typography>
                         </Stack>

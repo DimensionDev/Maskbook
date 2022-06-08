@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
+import { useI18N } from '../../../../utils'
 import { pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
@@ -16,11 +17,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConnectWalletDialogProps {}
-
-export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
-    const classes = useStylesExtends(useStyles(), props)
-
+export function ConnectWalletDialog() {
+    const { classes } = useStyles()
+    const { t } = useI18N()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.Definition[NetworkPluginID]['ProviderType']>()
     const [networkType, setNetworkType] = useState<Web3Helper.Definition[NetworkPluginID]['NetworkType']>()
@@ -70,15 +69,20 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         return true
     }, [open, walletConnectedCallback])
 
-    if (!pluginID || !providerType) return null
+    if (!pluginID || !providerType || !networkType) return null
 
     return (
         <InjectedDialog
-            title={`Connect to ${Others?.providerResolver.providerName(providerType)}`}
+            title={t('plugin_wallet_dialog_title')}
             open={open}
             onClose={() => setConnectWalletDialog({ open: false })}>
             <DialogContent className={classes.content}>
-                <ConnectionProgress pluginID={pluginID} providerType={providerType} connection={connection} />
+                <ConnectionProgress
+                    pluginID={pluginID}
+                    providerType={providerType}
+                    networkType={networkType}
+                    connection={connection}
+                />
             </DialogContent>
         </InjectedDialog>
     )

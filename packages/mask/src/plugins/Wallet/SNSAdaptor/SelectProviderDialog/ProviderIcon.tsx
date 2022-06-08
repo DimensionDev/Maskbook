@@ -13,40 +13,52 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(1),
-        backgroundColor: theme.palette.background.default,
+        '&:hover': {
+            background: theme.palette.background.default,
+            '& p': {
+                fontWeight: 700,
+                color: theme.palette.text.primary,
+            },
+        },
     },
     icon: {
-        width: 45,
-        height: 45,
-        marginBottom: theme.spacing(2),
+        width: 36,
+        height: 36,
+        marginBottom: 4,
     },
     name: {
-        fontSize: 16,
-        fontWeight: 'normal',
+        fontSize: 12,
+        fontWeight: 700,
         whiteSpace: 'nowrap',
         marginBottom: theme.spacing(1),
     },
     description: {
-        fontSize: 14,
-        fontWeight: 300,
+        color: theme.palette.text.secondary,
     },
 }))
 
 export interface ProviderIconProps extends CardProps {
     icon: URL
     name: React.ReactNode
+    iconFilterColor?: string
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
 
-export function ProviderIcon({ icon, name, onClick, className, ButtonBaseProps }: ProviderIconProps) {
+export function ProviderIcon({ icon, name, onClick, iconFilterColor, className, ButtonBaseProps }: ProviderIconProps) {
     const { classes } = useStyles()
     return (
         <Card className={classnames(classes.root, className)} elevation={0} onClick={onClick}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
-                <img src={icon.toString()} className={classes.icon} />
-                <Typography className={classes.name} variant="h3">
-                    {name}
-                </Typography>
+                <img
+                    src={icon.toString()}
+                    className={classes.icon}
+                    style={
+                        iconFilterColor
+                            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+                            : {}
+                    }
+                />
+                <Typography className={classes.name}>{name}</Typography>
             </ButtonBase>
         </Card>
     )
