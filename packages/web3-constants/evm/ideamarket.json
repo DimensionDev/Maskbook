@@ -1,0 +1,25 @@
+{
+    "MULTI_ACTION_CONTRACT": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "0x3e2E703159E2a9fE4290c5949Ab6aC2AA60C8524",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
+    }
+}

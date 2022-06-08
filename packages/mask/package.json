@@ -48,6 +48,7 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@metamask/eth-sig-util": "^4.0.0",
     "@msgpack/msgpack": "^2.7.2",
+    "@mui/x-data-grid": "^5.5.1",
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.1",
     "@snapshot-labs/snapshot.js": "^0.3.31",
