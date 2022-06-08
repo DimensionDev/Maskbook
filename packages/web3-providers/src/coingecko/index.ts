@@ -13,7 +13,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider {
 
     async getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
         const addressList = contractAddresses.join(',')
-        const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform', {
+        const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
             platform_id,
             ['contract_addresses']: addressList,
             ['vs_currencies']: currency,
