@@ -121,7 +121,6 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
             { chainId },
         )
 
-
         const tokenValueUSD = useMemo(
             () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2) : '0'),
             [amount, tokenPrice],
