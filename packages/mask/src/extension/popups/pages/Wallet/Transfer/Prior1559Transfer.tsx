@@ -517,7 +517,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                             classes={{ icon: classes.icon }}
                                                             address={selectedAsset?.address ?? ''}
                                                             name={selectedAsset?.name}
-                                                            logoURI={selectedAsset?.logoURL}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}

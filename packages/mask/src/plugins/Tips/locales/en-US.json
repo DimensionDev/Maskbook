@@ -32,7 +32,7 @@
     "tip_disconnect_dialog_title": "Disconnect Wallet?",
     "tip_persona_sign_success": "Persona signed successfully.",
     "tip_persona_sign_error": "Persona Signature failed.",
-    "tip_wallet_sign_success": "The walelt is connected.",
+    "tip_wallet_sign_success": "The wallet is connected.",
     "tip_wallet_sign_error": "Wallet connection failed.",
     "tip_wallet_add": "Please add wallet",
     "tip_connect_your_wallet": "Connect your wallet",
