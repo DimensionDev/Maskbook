@@ -33,7 +33,7 @@ function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {
                         name: asset.contract?.name ?? '',
                         symbol: asset.contract?.symbol ?? 'ETH',
                         image: asset.metadata?.imageURL ?? '',
-                        owner: asset.contract?.owner ?? '',
+                        owner: asset.metadata?.owner ?? '',
                         slug: asset.collection?.slug ?? '',
                     }
                 }
@@ -44,7 +44,7 @@ function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {
                 name: nft?.contract?.name ?? '',
                 symbol: nft?.contract?.symbol ?? 'ETH',
                 image: nft?.metadata?.imageURL ?? '',
-                owner: nft?.contract?.owner ?? '',
+                owner: nft?.metadata?.owner ?? '',
                 slug: '',
             }
         },

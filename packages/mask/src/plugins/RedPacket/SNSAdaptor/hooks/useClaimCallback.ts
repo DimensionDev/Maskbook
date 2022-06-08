@@ -8,7 +8,7 @@ import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPac
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
+export function useClaimCallback(version: number, from: string, id: string, password?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
     return useAsyncFn(async () => {
@@ -38,7 +38,6 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     throw error
                 }),
         }
-
         // step 2-1: blocking
         return new Promise<string>((resolve, reject) => {
             claim()
@@ -48,5 +47,5 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                 })
                 .on(TransactionEventType.ERROR, reject)
         })
-    }, [id, password, from, redPacketContract])
+    }, [id, password, from, redPacketContract, chainId, version])
 }

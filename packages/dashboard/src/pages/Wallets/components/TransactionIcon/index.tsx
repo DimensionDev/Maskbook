@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react'
 import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import classNames from 'classnames'
@@ -36,12 +37,13 @@ export interface TransactionIconProps {
 }
 
 export const TransactionIcon = memo<TransactionIconProps>(({ address, failed, type, transactionType }) => {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         HAPPY_RED_PACKET_ADDRESS_V1,
         HAPPY_RED_PACKET_ADDRESS_V2,
         HAPPY_RED_PACKET_ADDRESS_V3,
         HAPPY_RED_PACKET_ADDRESS_V4,
-    } = useRedPacketConstants()
+    } = useRedPacketConstants(chainId)
 
     const isRedPacket =
         isSameAddress(HAPPY_RED_PACKET_ADDRESS_V1, address) ||

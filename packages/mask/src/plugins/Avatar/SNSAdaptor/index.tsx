@@ -24,6 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
@@ -31,7 +32,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 icon={icon}
                                 recommendFeature={recommendFeature}
                                 {...EntryComponentProps}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                                 tooltipHint={
                                     EntryComponentProps.tooltipHint ??
                                     (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)

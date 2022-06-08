@@ -1,7 +1,7 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { once } from 'lodash-unified'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useERC20TokenContract } from './useERC20TokenContract'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
@@ -39,14 +39,24 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
         error: errorAllowance,
         retry: revalidateAllowance,
     } = useERC20TokenAllowance(address, spender)
-
+    const [isApproving, setApproving] = useState(false)
     // the computed approve state
     const approveStateType = useMemo(() => {
         if (!amount || !spender) return ApproveStateType.UNKNOWN
-        if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
+        if (loadingBalance || loadingAllowance || isApproving) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
         return isLessThan(allowance, amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
-    }, [amount, spender, balance, allowance, errorBalance, errorAllowance, loadingAllowance, loadingBalance])
+    }, [
+        amount,
+        spender,
+        balance,
+        allowance,
+        errorBalance,
+        errorAllowance,
+        loadingAllowance,
+        loadingBalance,
+        isApproving,
+    ])
 
     const [state, approveCallback] = useAsyncFn(
         async (useExact = false) => {
@@ -88,8 +98,9 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                     .approve(spender, useExact ? amount : MaxUint256)
                     .send(config as NonPayableTx)
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                        revalidate()
                         resolve(receipt.transactionHash)
+                        setApproving(false)
+                        revalidate()
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         revalidate()

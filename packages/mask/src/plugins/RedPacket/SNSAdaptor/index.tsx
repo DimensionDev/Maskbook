@@ -97,6 +97,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
+                    const clickHandler = () =>
+                        CrossIsolationMessages.events.requestComposition.sendToLocal({
+                            reason: 'timeline',
+                            open: true,
+                            options: {
+                                startupPlugin: base.ID,
+                            },
+                        })
                     return (
                         <ApplicationEntry
                             title={name}
@@ -104,15 +112,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={
-                                EntryComponentProps.onClick ??
-                                (() =>
-                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                        reason: 'timeline',
-                                        open: true,
-                                        options: {
-                                            startupPlugin: base.ID,
-                                        },
-                                    }))
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
                             }
                         />
                     )

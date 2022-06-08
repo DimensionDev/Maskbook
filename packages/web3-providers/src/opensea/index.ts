@@ -314,7 +314,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             assetContract?.name ?? 'Unknown Token',
             assetContract?.token_symbol ?? 'UNKNOWN',
             undefined,
-            undefined,
             assetContract?.image_url,
         )
     }

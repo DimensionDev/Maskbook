@@ -13,7 +13,7 @@ export function useAvailability(
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, options?.chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { ITO_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const isV1 = isSameAddress(contractAddress ?? '', ITO_CONTRACT_ADDRESS)
 
     return useAsyncRetry(async () => {

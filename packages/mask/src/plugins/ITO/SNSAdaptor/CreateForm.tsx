@@ -9,7 +9,11 @@ import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -22,7 +26,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
-import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance, useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -119,14 +123,20 @@ export function CreateForm(props: CreateFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName =
+        lastRecognizedIdentity.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
