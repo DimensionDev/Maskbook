@@ -7,8 +7,14 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginNFTAvatarRPC } from '../messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
 
-export function useTokenOwner(address: string, tokenId: string, pluginId: NetworkPluginID, chainId?: ChainId) {
-    const connection = useWeb3Connection<'all'>(pluginId, { chainId })
+export function useTokenOwner(
+    address: string,
+    tokenId: string,
+    pluginId: NetworkPluginID,
+    chainId?: ChainId,
+    account?: string,
+) {
+    const connection = useWeb3Connection<'all'>(pluginId, { account, chainId })
     return useAsyncRetry(async () => {
         if (!address || !tokenId || !connection) return
         const token = await connection.getNonFungibleToken(address, tokenId)

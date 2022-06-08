@@ -15,6 +15,7 @@ import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { NFTList } from './NFTList'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -162,6 +163,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
+    const onChangeChain = (chainId: ChainId) => {
+        console.log(chainId)
+        setChainId(chainId)
+    }
+
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
@@ -199,9 +205,14 @@ export function NFTListDialog(props: NFTListDialogProps) {
         </Box>
     )
 
+    const tokensInList = uniqBy(
+        [...tokens, ...collectibles],
+        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA ? (x) => x.tokenId : (x) => x.contract?.address && x.tokenId,
+    )
+
     const NoNFTList = () => {
-        if (chainId === ChainId.Matic && tokens.length === 0 && collectibles.length === 0) return AddCollectible
-        else if (chainId === ChainId.Matic && (tokens.length || collectibles.length)) return
+        if (chainId === ChainId.Matic && tokensInList.length === 0) return AddCollectible
+        else if (chainId === ChainId.Matic && tokensInList.length) return
         if (loading) {
             return LoadStatus
         }
@@ -214,11 +225,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
         return
     }
-
-    const tokensInList = uniqBy(
-        [...tokens, ...collectibles],
-        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA ? (x) => x.tokenId : (x) => x.contract?.address && x.tokenId,
-    )
 
     if (!wallets?.length && !account)
         return (
@@ -236,15 +242,24 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     classes={{ root: classes.AddressNames }}
                     onChange={onChangeWallet}
                 />
-                {(account || Boolean(wallets?.length)) && (
-                    <NFTListPage
-                        pluginId={selectedPluginId}
-                        tokens={tokensInList}
-                        tokenInfo={selectedToken}
-                        onChange={onChangeToken}
-                        children={NoNFTList()}
-                    />
-                )}
+                {(account || Boolean(wallets?.length)) &&
+                    (selectedPluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                        <NFTListPage
+                            pluginId={selectedPluginId}
+                            tokens={tokensInList}
+                            tokenInfo={selectedToken}
+                            onChange={onChangeToken}
+                            children={NoNFTList()}
+                        />
+                    ) : (
+                        <NFTList
+                            onSelect={onChangeToken}
+                            tokens={tokensInList}
+                            tokenInfo={selectedToken}
+                            children={NoNFTList()}
+                            onChangeChain={onChangeChain}
+                        />
+                    ))}
             </DialogContent>
             <DialogActions className={classes.actions}>
                 {tokensInList.length ? (

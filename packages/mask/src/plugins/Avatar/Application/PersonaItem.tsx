@@ -12,6 +12,7 @@ import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types'
+import { useWallet } from '../hooks/useWallet'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -44,12 +45,20 @@ export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
+
+    const { loading: loadingWallet, value: account } = useWallet(
+        userId,
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+    )
+
     const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         _avatar?.chainId,
+        account,
     )
+
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         userId,
@@ -104,7 +113,7 @@ export function PersonaItem(props: PersonaItemProps) {
             </Box>
 
             <NFTInfo
-                loading={loading || loadingToken || loadingCheckOwner}
+                loading={loading || loadingToken || loadingCheckOwner || loadingWallet}
                 owner={owner ? isOwner && _avatar?.avatarId === getAvatarId(avatar) : true}
                 nft={
                     _avatar
