@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { formatGweiToWei, formatWeiToEther, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -141,7 +141,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                 {
                     title: t('plugin_trader_gas_setting_custom'),
                     isCustom: true,
-                    gasPrice: customGasPrice ? formatGweiToWei(customGasPrice) : 0,
+                    gasPrice: customGasPrice ? customGasPrice : 0,
                 },
             ],
             [gasOptions, customGasPrice],
@@ -155,7 +155,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         // #region Confirm function
         const handleConfirm = useCallback(() => {
             onSave_({
-                gasPrice: toHex(new BigNumber(options[selected].gasPrice).toString()),
+                gasPrice: toHex(formatGweiToWei(options[selected].gasPrice).toString()),
             })
         }, [selected, options])
         // #endregion
@@ -171,6 +171,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             }
         }, [gasConfig, gasOptions])
 
+        useUpdateEffect(() => {
+            setCustomGasPrice('0')
+        }, [chainId])
+
         return (
             <>
                 <Accordion className={classes.accordion} elevation={0} defaultExpanded>
@@ -179,7 +183,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                         <Typography className={classes.accordingTitle}>
                             {t('plugin_trader_gas_option', {
                                 option: options[selected].title,
-                                value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
+                                value: new BigNumber(options[selected].gasPrice ?? 0).toString(),
                             })}
                         </Typography>
                     </AccordionSummary>
@@ -221,14 +225,14 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                                                     InputProps={{ classes: { root: classes.textFieldInput } }}
                                                 />
                                             ) : (
-                                                formatWeiToGwei(option.gasPrice ?? 0).toString()
+                                                new BigNumber(option.gasPrice ?? 0).toString()
                                             )}
                                         </Typography>
                                         {t('wallet_transfer_gwei')}
                                     </Typography>
                                     <Typography className={classes.cost} marginTop={option.isCustom ? 4 : 6}>
                                         {t('popups_wallet_gas_fee_settings_usd', {
-                                            usd: formatWeiToEther(option.gasPrice)
+                                            usd: formatGweiToEther(option.gasPrice)
                                                 .times(nativeTokenPrice)
                                                 .times(21000)
                                                 .toPrecision(3),

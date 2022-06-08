@@ -1,54 +1,32 @@
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
-import { ChainId, getCoinGeckoConstants } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { PriceAPI } from '..'
 
 const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
-const COINGECKO_CHAIN_ID_MAPPING: { [key: string]: string } = {
-    [ChainId.Mainnet]: 'ethereum',
-    [ChainId.BSC]: 'binancecoin',
-    [ChainId.xDai]: 'xdai',
-    [ChainId.Matic]: 'matic-network',
-    [ChainId.Fantom]: 'fantom',
-    [ChainId.Conflux]: 'conflux',
-    [ChainId.Avalanche]: 'avalanche-2',
-    [ChainId.Aurora]: 'aurora-near',
-}
-export class CoinGeckoAPI implements PriceAPI.Provider {
-    /**
-     * Get token price
-     * @param id string *refers to coins/list
-     * @param currencyType
-     * @param chainId
-     * @param nativeToken
-     */
-    async getTokenPrice(id: string, currencyType = CurrencyType.USD, chainId?: number, nativeToken?: boolean) {
-        if (chainId && nativeToken) {
-            return this.getNativeTokenPrices(chainId, currencyType)
-        }
-        const { PLATFORM_ID = '' } = getCoinGeckoConstants(chainId)
-        const price = await this.getTokenPrices(PLATFORM_ID, [id], currencyType)
 
-        return Number(price[id][currencyType]) ?? 0
+export class CoinGeckoAPI implements PriceAPI.Provider {
+    async getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
+        const price = await this.getTokenPrices(platform_id, [address], currencyType)
+
+        return Number(price[address][currencyType]) ?? 0
     }
 
-    async getTokenPrices(platform: string, contractAddresses: string[], currency = CurrencyType.USD) {
+    async getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
         const addressList = contractAddresses.join(',')
-        const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform', {
-            platform,
+        const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
+            platform_id,
             ['contract_addresses']: addressList,
             ['vs_currencies']: currency,
         })
         return fetch(requestPath).then((r) => r.json() as Promise<Record<string, Price>>)
     }
 
-    async getNativeTokenPrices(chainId: number, currency = CurrencyType.USD) {
-        const id = COINGECKO_CHAIN_ID_MAPPING[chainId]
-        const requestPath = urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: id, ['vs_currencies']: currency })
+    async getTokenPriceByCoinId(coin_id: string, currency = CurrencyType.USD) {
+        const requestPath = urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: coin_id, ['vs_currencies']: currency })
         const price = await fetch(requestPath).then(
             (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
         )
-        return price[id][currency]
+        return price[coin_id][currency]
     }
 
     async getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {

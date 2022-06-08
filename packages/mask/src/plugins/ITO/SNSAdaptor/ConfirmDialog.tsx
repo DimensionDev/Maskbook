@@ -119,7 +119,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+    const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
     const showQualification =
         poolSettings?.advanceSettingData.contract &&
         poolSettings?.qualificationAddress !== DEFAULT_QUALIFICATION2_ADDRESS
@@ -304,7 +304,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Typography>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton disabled={loading} fullWidth variant="outlined" onClick={onBack}>
+                    <ActionButton disabled={loading} fullWidth variant="contained" onClick={onBack}>
                         {t('plugin_ito_back')}
                     </ActionButton>
                 </Grid>

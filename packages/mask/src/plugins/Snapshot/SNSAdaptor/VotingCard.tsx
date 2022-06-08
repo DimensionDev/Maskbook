@@ -28,12 +28,14 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.mode === 'dark' ? 'white' : 'black',
             transitionDuration: '0s !important',
             '&:hover': {
-                border: '2px solid rgb(29, 161, 242) !important',
+                border: '1px solid rgb(29, 161, 242)',
+                boxShadow: 'inset 0 0 10px rgb(29, 161, 242)',
                 backgroundColor: 'transparent !important',
             },
         },
         buttonActive: {
-            border: '2px solid rgb(29, 161, 242)',
+            border: '1px solid rgb(29, 161, 242)',
+            boxShadow: 'inset 0 0 2px rgb(29, 161, 242)',
             backgroundColor: 'transparent',
             color: theme.palette.mode === 'dark' ? 'white' : 'black',
         },
@@ -132,6 +134,8 @@ export function VotingCard() {
                     ))}
 
                     <Button
+                        color="primary"
+                        variant="contained"
                         className={classes.button}
                         disabled={choice === 0 || !account || !power}
                         onClick={() => setOpen(true)}>

@@ -61,7 +61,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
-    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
 
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)

@@ -6,7 +6,7 @@ import type { TransactionReceipt } from 'web3-core'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType, ChainId, SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { FungibleToken, isGreaterThan, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
 import type { AdvanceSettingData } from '../AdvanceSetting'
@@ -56,11 +56,12 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { contract: ITO_Contract } = useITO_Contract(chainId)
     const paramResult = useFillParams(poolSettings)
 
     const [state, fillCallback] = useAsyncFn(async () => {
-        if (!web3 || !poolSettings) return
+        if (!web3 || !poolSettings || !connection) return
 
         const { password, startTime, endTime, token, unlockTime } = poolSettings
 
@@ -73,7 +74,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await web3.eth.personal.sign(password, account, '')
+            signedPassword = await connection.signMessage(password, 'personaSign', { account })
         } catch {
             signedPassword = ''
         }
@@ -116,7 +117,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult])
+    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, connection])
 
     return [state, fillCallback] as const
 }

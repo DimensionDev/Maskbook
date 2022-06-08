@@ -7,7 +7,7 @@ import { GetAccountInfoResponse, GetProgramAccountsResponse, requestRPC, SPL_TOK
 
 async function getSolanaBalance(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPrice('solana', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPriceByCoinId('solana', CurrencyType.USD)
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
         method: 'getAccountInfo',
         params: [account],

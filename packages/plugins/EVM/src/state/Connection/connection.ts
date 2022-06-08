@@ -245,7 +245,6 @@ class Connection implements EVM_Connection {
     }
     async getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         // ERC721
@@ -253,10 +252,9 @@ class Connection implements EVM_Connection {
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
-            contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(address).call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
         ])
-        const [name, symbol, owner, balance] = results.map((result) =>
+        const [name, symbol, balance] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
         return createERC721Contract(
@@ -264,7 +262,6 @@ class Connection implements EVM_Connection {
             address,
             name ?? 'Unknown Token',
             symbol ?? 'UNKNOWN',
-            owner,
             balance as unknown as number,
         )
     }
@@ -392,22 +389,22 @@ class Connection implements EVM_Connection {
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
             contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(address).call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
         ])
         const [name, symbol, owner, balance] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
+
         return createERC721Token(
             chainId,
             address,
             id,
-            createERC721Metadata(chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN'),
+            createERC721Metadata(chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN', owner),
             createERC721Contract(
                 chainId,
                 address,
                 name ?? 'Unknown Token',
                 symbol ?? 'UNKNOWN',
-                owner,
                 balance as unknown as number,
             ),
             createERC721Collection(chainId, name ?? 'Unknown Token', ''),

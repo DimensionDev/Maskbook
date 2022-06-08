@@ -179,6 +179,10 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     icon: URL
     /** The provider name */
     name: string
+    /** The provider bar background gradient color */
+    backgroundGradient?: string
+    /** The provider icon filter color */
+    iconFilterColor?: string
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]
@@ -214,7 +218,6 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     symbol: string
     address: string
     schema: SchemaType
-    owner?: string
     balance?: number
     logoURL?: string
     iconURL?: string
@@ -224,6 +227,7 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     name: string
     symbol: string
+    owner?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -578,7 +582,6 @@ export interface Connection<
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */

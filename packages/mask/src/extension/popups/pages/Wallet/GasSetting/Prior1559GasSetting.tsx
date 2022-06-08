@@ -8,7 +8,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     ChainId,
     formatGweiToWei,
-    formatWeiToEther,
+    formatGweiToEther,
     formatWeiToGwei,
     ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
@@ -209,7 +209,7 @@ export const Prior1559GasSetting = memo(() => {
                 const minGasPrice = minGasPriceOfChain[chainId as ChainId]
                 // if the gas price in payload is lower than minimum value
                 if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice as number, minGasPrice)) {
-                    setValue('gasPrice', formatWeiToGwei(minGasPrice).toString())
+                    setValue('gasPrice', minGasPrice.toString())
                 }
                 setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice as number).toString())
             } else {
@@ -224,7 +224,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
-        if (selected !== null && options) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
+        if (selected !== null && options) setValue('gasPrice', options[selected].gasPrice.toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
@@ -268,11 +268,11 @@ export const Prior1559GasSetting = memo(() => {
                             className={selected === index ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography className={classes.optionsContent}>
-                                {formatWeiToGwei(gasPrice ?? 0).toString()} Gwei
+                                {Number(gasPrice ?? 0).toString()} Gwei
                             </Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatWeiToEther(gasPrice)
+                                    usd: formatGweiToEther(gasPrice)
                                         .times(nativeTokenPrice)
                                         .times(minGasLimit || 21000)
                                         .toPrecision(3),
