@@ -1,4 +1,5 @@
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -12,7 +13,6 @@ import { TargetRuntimeContext, useTip } from '../../contexts'
 import { useI18N } from '../../locales'
 import type { TipNFTKeyPair } from '../../types'
 import { NFTList } from './NFTList'
-import { RetryHint } from './RetryHint'
 
 export * from './NFTList'
 

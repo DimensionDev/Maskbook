@@ -19,7 +19,7 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children }) =
     }, [intersection])
 
     return (
-        <Stack py={2} ref={elementRef} justifyContent="center" direction="row">
+        <Stack pt={1} ref={elementRef} justifyContent="center" direction="row">
             {children}
         </Stack>
     )

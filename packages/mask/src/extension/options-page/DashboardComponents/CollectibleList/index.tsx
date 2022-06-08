@@ -15,11 +15,10 @@ import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ElementAnchor, ReversedAddress } from '@masknet/shared'
+import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { RetryHint } from './RetryHint'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -335,7 +334,7 @@ export function CollectionList({
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>
-                    {error && <RetryHint retry={next} />}
+                    {error && <RetryHint hint={false} retry={next} />}
                     <ElementAnchor
                         callback={() => {
                             if (next) next()

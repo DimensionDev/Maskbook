@@ -1,8 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio, Stack } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -181,6 +181,9 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                     </ShadowRootTooltip>
                 )
             })}
+            <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                <RetryHint hint={false} retry={nextPage} />
+            </Stack>
             <ElementAnchor
                 callback={() => {
                     if (nextPage) nextPage()
