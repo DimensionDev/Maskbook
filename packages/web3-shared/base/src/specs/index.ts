@@ -96,6 +96,7 @@ export enum SocialAddressType {
     THE_GRAPH = 'THE_GRAPH',
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
+    SOL = 'SOL'
 }
 
 export interface Identity {

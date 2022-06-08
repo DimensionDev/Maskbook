@@ -82,6 +82,7 @@ export class LidoProtocol implements SavingsProtocol {
     }
 
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
         return new Promise<string>((resolve, reject) => {
             const contract = createContract<Lido>(
                 web3,
@@ -93,7 +94,7 @@ export class LidoProtocol implements SavingsProtocol {
                 .send({
                     from: account,
                     value: value.toString(),
-                    gas: 300000,
+                    gas: gasEstimate.toNumber(),
                 })
                 .once(TransactionEventType.ERROR, reject)
                 .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
