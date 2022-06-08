@@ -16,16 +16,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={disabled}
+                                {...EntryComponentProps}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
                             <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />
                         </>

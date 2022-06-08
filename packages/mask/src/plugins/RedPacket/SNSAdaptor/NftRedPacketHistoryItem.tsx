@@ -159,6 +159,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const { value: contractDetailed } = useNonFungibleTokenContract(
             NetworkPluginID.PLUGIN_EVM,
             history.token_contract.address,
+            { account },
         )
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
             WalletMessages.events.ApplicationDialogUpdated,
@@ -229,7 +230,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={history.token_contract}
+                                contract={contractDetailed ?? history.token_contract}
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />

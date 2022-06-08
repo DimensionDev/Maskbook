@@ -12,15 +12,10 @@ export class Base implements Translator {
         if (!config || isReadOnlyMethod(context.method)) return
 
         // #region polyfill transaction config
-        {
-            try {
-                // add gas margin
-                if (config.gas)
-                    config.gas = toHex(
-                        BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed(),
-                    )
-            } catch (error) {
-                console.log(error)
+        try {
+            // add gas margin
+            if (config.gas) {
+                config.gas = toHex(BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed())
             }
 
             // add gas price
@@ -58,8 +53,10 @@ export class Base implements Translator {
                     config.gasPrice = toHex(formatGweiToWei(normalOption.suggestedMaxFeePerGas).toFixed(0))
                 }
             }
-            context.config = config
+        } catch (err) {
+            console.error(err)
         }
+        context.config = config
         // #endregion
     }
 
