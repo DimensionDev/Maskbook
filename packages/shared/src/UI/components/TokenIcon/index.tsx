@@ -37,7 +37,7 @@ export function TokenIcon(props: TokenIconProps) {
     }, [chainId, address, logoURL, hub])
 
     const { value: trustedLogoURL } = useImageFailOver(urls, '')
-    const base64 = useImageBase64(address, trustedLogoURL)
+    const base64 = useImageBase64(`${address}_${chainId}`, trustedLogoURL)
 
     return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
@@ -64,7 +64,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
             src={logoURL}
             style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
             {...AvatarProps}>
-            {' '}
+            {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })

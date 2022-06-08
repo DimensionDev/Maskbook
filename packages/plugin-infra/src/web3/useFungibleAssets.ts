@@ -3,10 +3,10 @@ import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import {
     CurrencyType,
     currySameAddress,
+    formatBalance,
     FungibleAsset,
     isSameAddress,
     minus,
-    multipliedBy,
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
@@ -46,14 +46,11 @@ export function useFungibleAssets<T extends NetworkPluginID, Indicator extends s
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(a.balance)
-                const zBalance = toZero(z.balance)
+                const aBalance = toZero(formatBalance(a.balance, a.decimals))
+                const zBalance = toZero(formatBalance(z.balance, z.decimals))
 
-                const aPrice = toZero(a.value?.[CurrencyType.USD] ?? '0')
-                const zPrice = toZero(z.value?.[CurrencyType.USD] ?? '0')
-
-                const aUSD = multipliedBy(aPrice, aBalance)
-                const zUSD = multipliedBy(zPrice, zBalance)
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
 
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
