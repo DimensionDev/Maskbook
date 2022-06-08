@@ -147,7 +147,6 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             [gasOptions, customGasPrice],
         )
 
-        console.log(options)
         const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
         const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
             chainId: nativeToken?.chainId,
