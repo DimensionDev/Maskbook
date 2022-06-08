@@ -195,6 +195,16 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_harmony`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Harmony,
+        type: NetworkType.Harmony,
+        name: 'Harmony',
+        icon: new URL('../assets/harmony.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_conflux`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Conflux,
