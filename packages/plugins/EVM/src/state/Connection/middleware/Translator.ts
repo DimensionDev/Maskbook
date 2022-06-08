@@ -10,7 +10,6 @@ export class Translator implements Middleware<Context> {
     private base = new Base()
 
     private translators: Partial<Record<ChainId, ChainTranslator>> = {
-        [ChainId.Matic]: new Polygon(),
         [ChainId.Mumbai]: new Polygon(),
     }
 

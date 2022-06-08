@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { formatGweiToEther, formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -141,7 +141,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                 {
                     title: t('plugin_trader_gas_setting_custom'),
                     isCustom: true,
-                    gasPrice: customGasPrice ? formatGweiToWei(customGasPrice) : 0,
+                    gasPrice: customGasPrice ? customGasPrice : 0,
                 },
             ],
             [gasOptions, customGasPrice],
@@ -155,7 +155,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         // #region Confirm function
         const handleConfirm = useCallback(() => {
             onSave_({
-                gasPrice: toHex(new BigNumber(options[selected].gasPrice).toString()),
+                gasPrice: toHex(formatGweiToWei(options[selected].gasPrice).toString()),
             })
         }, [selected, options])
         // #endregion
@@ -166,10 +166,14 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
             else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
             else {
-                setCustomGasPrice(gasPrice.toString())
+                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
                 setOption(2)
             }
         }, [gasConfig, gasOptions])
+
+        useUpdateEffect(() => {
+            setCustomGasPrice('0')
+        }, [chainId])
 
         return (
             <>
