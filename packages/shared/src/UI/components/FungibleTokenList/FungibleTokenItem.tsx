@@ -135,6 +135,7 @@ export const getFungibleTokenItem =
 
         return (
             <ListItem
+                title={address}
                 key={address}
                 button
                 className={`${classes.list} dashboard token-list`}

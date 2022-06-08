@@ -1,5 +1,4 @@
 import { memoizePromise } from '@dimensiondev/kit'
-import { CoinGecko } from '@masknet/web3-providers'
 import {
     createPageable,
     CurrencyType,
@@ -19,9 +18,16 @@ import {
     SPL_TOKEN_PROGRAM_ID,
 } from './shared'
 
+const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
+const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=solana&vs_currencies=usd`
 export async function getSolAsset(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPrice('solana', CurrencyType.USD)
+
+    const priceData = await fetch(requestPath).then(
+        (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
+    )
+    const price = priceData.solana.usd
+
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
         method: 'getAccountInfo',
         params: [account],
@@ -43,22 +49,27 @@ export async function getSolAsset(chainId: ChainId, account: string) {
     )
 }
 
+const FAKE_SOL_ADDRESS = '11111111111111111111111111111111'
 const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const response = await fetch(url, { cache: 'force-cache' })
         const tokenList = (await response.json()) as RaydiumTokenList
+        const SOL_ADDRESS = getTokenConstants(ChainId.Mainnet).SOL_ADDRESS!
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
-            (token) => ({
-                id: token.mint,
-                chainId: ChainId.Mainnet,
-                type: TokenType.Fungible,
-                schema: SchemaType.Fungible,
-                address: token.mint,
-                name: token.name,
-                symbol: token.symbol,
-                decimals: token.decimals,
-                logoURL: token.icon,
-            }),
+            (token) => {
+                const address = token.mint === FAKE_SOL_ADDRESS ? SOL_ADDRESS : token.mint
+                return {
+                    id: address,
+                    chainId: ChainId.Mainnet,
+                    type: TokenType.Fungible,
+                    schema: SchemaType.Fungible,
+                    address,
+                    name: token.name,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
+                    logoURL: token.icon,
+                }
+            },
         )
         return tokens
     },

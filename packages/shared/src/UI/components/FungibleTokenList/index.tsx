@@ -94,6 +94,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             { account, chainId },
         )
 
+    console.log('fungibleTokensBalance', fungibleTokensBalance)
     const { value: fungibleAssets = EMPTY_LIST, loading: loadingFungibleAssets } = useFungibleAssets(pluginID)
     const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
     const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))

@@ -1,6 +1,6 @@
 import { courier } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-solana'
+import { ChainId, getTokenConstants } from '@masknet/web3-shared-solana'
 import { PublicKey } from '@solana/web3.js'
 
 export const PLUGIN_META_KEY = NetworkPluginID.PLUGIN_SOLANA
@@ -15,3 +15,4 @@ export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
 }
 export const ENDPOINT_KEY = 'mainnet-beta'
 export const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
+export const SOL_ADDRESS = getTokenConstants(ChainId.Mainnet).SOL_ADDRESS!

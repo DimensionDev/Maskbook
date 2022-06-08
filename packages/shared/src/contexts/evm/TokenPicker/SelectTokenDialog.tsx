@@ -1,11 +1,12 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
+import { useTokenConstants as useSolTokenConstants } from '@masknet/web3-shared-solana'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import type { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useBaseUIRuntime } from '../../base'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
@@ -74,11 +75,23 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    const { SOL_ADDRESS } = useSolTokenConstants(chainId)
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+
+    const nativeTokenAddress = useMemo(() => {
+        switch (pluginId) {
+            case NetworkPluginID.PLUGIN_EVM:
+                return NATIVE_TOKEN_ADDRESS
+            case NetworkPluginID.PLUGIN_SOLANA:
+                return SOL_ADDRESS
+        }
+        return NATIVE_TOKEN_ADDRESS
+    }, [NATIVE_TOKEN_ADDRESS, pluginId])
 
     return (
         <InjectedDialog
@@ -93,7 +106,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
-                        disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
+                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
                     chainId={chainId}
                     disableSearch={disableSearchBar}

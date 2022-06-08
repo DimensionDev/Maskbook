@@ -13,11 +13,13 @@ import {
     Connection as SolConnection,
     PublicKey,
     sendAndConfirmRawTransaction,
+    SystemProgram,
     Transaction,
 } from '@solana/web3.js'
-import { NETWORK_ENDPOINTS } from '../../constants'
+import { NETWORK_ENDPOINTS, SOL_ADDRESS } from '../../constants'
 import { SolanaRPC } from '../../messages'
 import { Web3StateSettings } from '../../settings'
+import { isNativeTokenAddress } from '../../utils'
 import { Providers } from './provider'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
 import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
@@ -58,7 +60,20 @@ class Connection implements BaseConnection {
     async disconnect(options?: SolanaWeb3ConnectionOptions): Promise<void> {
         await Web3StateSettings.value.Provider?.disconnect(options?.providerType ?? this.providerType)
     }
-    async transferSplToken(
+    private async transferSol(recipient: string, amount: string, options?: SolanaWeb3ConnectionOptions) {
+        if (!options?.account) throw new Error('No payer provides.')
+        const payerPubkey = new PublicKey(options.account)
+        const recipientPubkey = new PublicKey(recipient)
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: payerPubkey,
+                toPubkey: recipientPubkey,
+                lamports: Number.parseInt(amount, 10),
+            }),
+        )
+        return this.sendTransaction(transaction)
+    }
+    private async transferSplToken(
         address: string,
         recipient: string,
         amount: string,
@@ -97,9 +112,8 @@ class Connection implements BaseConnection {
         const blockHash = await connection.getRecentBlockhash()
         transaction.feePayer = payerPubkey
         transaction.recentBlockhash = blockHash.blockhash
-        const signed = await this.signTransaction(transaction)
 
-        const signature = await connection.sendRawTransaction(signed.serialize())
+        const signature = await this.sendTransaction(transaction)
         return signature
     }
     async transferFungibleToken(
@@ -109,6 +123,9 @@ class Connection implements BaseConnection {
         memo?: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
+        if (isNativeTokenAddress(address)) {
+            return this.transferSol(recipient, amount, options)
+        }
         return this.transferSplToken(address, recipient, amount, options)
     }
     transferNonFungibleToken(
@@ -151,7 +168,11 @@ class Connection implements BaseConnection {
         return sol.balance
     }
     async getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
+        console.log('get balance', options, address)
         if (!options?.account) return '0'
+        if (isNativeTokenAddress(address)) {
+            return this.getNativeTokenBalance(options)
+        }
         return SolanaRPC.getSplTokenBalance(options?.chainId ?? ChainId.Mainnet, options.account, address)
     }
     getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
@@ -163,10 +184,14 @@ class Connection implements BaseConnection {
     ): Promise<Record<string, string>> {
         if (!options?.chainId || !options.account) return {}
         const splTokens = await SolanaRPC.getSplTokenList(options.chainId, options.account)
-        return splTokens.reduce(
+        const records = splTokens.reduce(
             (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
             {},
         )
+        if (listOfAddress.includes(SOL_ADDRESS)) {
+            records[SOL_ADDRESS] = await this.getNativeTokenBalance(options)
+        }
+        return records
     }
     getNonFungibleTokensBalance(
         listOfAddress: string[],

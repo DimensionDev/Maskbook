@@ -18,6 +18,6 @@ export function useFungibleTokensBalance<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!connection || !listOfAddress?.length) return EMPTY_OBJECT
-        return (connection.getFungibleTokensBalance as GetFungibleTokensBalance)(listOfAddress)
-    }, [listOfAddress?.join(), connection])
+        return (connection.getFungibleTokensBalance as GetFungibleTokensBalance)(listOfAddress, options)
+    }, [listOfAddress?.join(), connection, JSON.stringify(options)])
 }

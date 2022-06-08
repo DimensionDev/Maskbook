@@ -11,7 +11,7 @@ export function useNftTip<T extends NetworkPluginID>(
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
     const { Token, Connection } = useWeb3State<'all'>(pluginId)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId()
 
     const account = useAccount(pluginId)
     const connectionOptions = {
