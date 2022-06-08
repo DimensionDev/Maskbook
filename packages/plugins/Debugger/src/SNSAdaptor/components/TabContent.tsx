@@ -167,7 +167,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const onDisconnect = useCallback(
         async (providerType: Web3Helper.ProviderTypeAll) => {
-            await connection.connect({
+            await connection.disconnect({
                 providerType,
             })
         },
