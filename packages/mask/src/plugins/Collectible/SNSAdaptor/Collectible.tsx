@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { ReactElement, useCallback } from 'react'
 import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -7,7 +7,7 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useI18N } from '../../../utils'
+import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -22,6 +22,10 @@ import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { CollectibleProviderIcon } from './CollectibleProviderIcon'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { findIndex } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -122,22 +126,23 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    // // #region sync with settings
-    // const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
-    // const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-    //     setProvider(option.value as NonFungibleAssetProvider)
-    // }, [])
-    // // #endregion
+    // #region sync with settings
+    const collectibleProviderOptions = getEnumAsArray(SourceType)
 
-    // // #region provider switcher
-    // const CollectibleProviderSwitcher = useSwitcher(
-    //     provider,
-    //     setProvider,
-    //     getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
-    //     resolveCollectibleProviderName,
-    //     true,
-    // )
-    // // #endregion
+    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
+        setProvider(option.value as SourceType)
+    }, [])
+    // #endregion
+
+    // #region provider switcher
+    const CollectibleProviderSwitcher = useSwitcher(
+        provider,
+        setProvider,
+        getEnumAsArray(SourceType).map((x) => x.value),
+        resolveCollectibleProviderName,
+        true,
+    )
+    // #endregion
 
     if (!asset.value || !token)
         return (
@@ -146,7 +151,7 @@ export function Collectible(props: CollectibleProps) {
                     Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
-                    {/* <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box> */}
+                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button
                             variant="contained"
@@ -274,7 +279,7 @@ export function Collectible(props: CollectibleProps) {
                     {/* flex to make foot menu right */}
                     <div />
                     <div className={classes.footMenu}>
-                        {/* <FootnoteMenu
+                        <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
                                     <>
@@ -288,7 +293,7 @@ export function Collectible(props: CollectibleProps) {
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}
-                        /> */}
+                        />
                         <ArrowDropDownIcon />
                     </div>
                 </CardActions>

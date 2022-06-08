@@ -6,19 +6,19 @@ import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
-    const [provider, setProvider] = useState(SourceType.OpenSea)
+    const [provider, setProvider] = useState(SourceType.Rarible)
 
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, token?.contractAddress ?? '', token?.tokenId ?? '', {
         sourceType: provider,
     })
+    console.log(asset, 'sss')
 
     return {
         token,
         asset,
         provider,
-        setProvider,
-
         tabIndex,
+        setProvider,
         setTabIndex,
     }
 }
