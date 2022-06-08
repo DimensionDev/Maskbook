@@ -8,7 +8,7 @@ import { PluginNFTAvatarRPC } from '../../messages'
 import type { NextIDAvatarMeta } from '../../types'
 
 export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
-    const connection = useWeb3Connection<'all'>(pluginId, { chainId })
+    const connection = useWeb3Connection<'all'>(pluginId)
     return useAsyncFn(
         async (
             info: NextIDAvatarMeta,

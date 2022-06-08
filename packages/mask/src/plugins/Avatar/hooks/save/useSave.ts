@@ -15,6 +15,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
     const [, saveToRSS3] = useSaveToRSS3()
     const [, saveSolana] = useSaveSolana(pluginId, chainId)
 
+    console.log('aaaaaaaaaaaaaaaaaaaaa')
     return useAsyncFn(
         async (
             account: string,
@@ -25,10 +26,12 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             proof: BindingProof,
             identifier: ProfileIdentifier,
         ) => {
-            if (pluginId === NetworkPluginID.PLUGIN_SOLANA)
-                if (!token.tokenId) return
-                else if (!token.contract?.address || !token.tokenId) return
-
+            console.log('--------')
+            console.log(pluginId)
+            console.log(token)
+            if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !token.tokenId) return
+            if (pluginId !== NetworkPluginID.PLUGIN_SOLANA && (!token.contract?.address || !token.tokenId)) return
+            console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbb')
             const info: NextIDAvatarMeta = {
                 pluginId,
                 nickname: data.nickname,
@@ -49,8 +52,12 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                     }
                     return saveToRSS3(info, account, identifier)
                 }
-                default:
-                    return saveSolana(info, account, persona, identifier, proof)
+                default: {
+                    const a = await saveSolana(info, account, persona, identifier, proof)
+                    console.log('--------aaaaaa----------')
+                    console.log(a)
+                    return a
+                }
             }
         },
         [saveToNextID, saveToRSS3, pluginId],
