@@ -18,8 +18,6 @@ export function useNonFungibleAssets<T extends NetworkPluginID, Indicator extend
 
     const account = useAccount(pluginID, options?.account)
     const hub = useWeb3Hub(pluginID, options)
-    console.log('-----------')
-    console.log(options)
     return useAsyncRetry(async () => {
         if (!account || !hub) return []
         const assets = await asyncIteratorToArray((hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(account))

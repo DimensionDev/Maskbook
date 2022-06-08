@@ -328,6 +328,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+        if (chainId !== ChainId.Mainnet) return createPageable([], 0)
         const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
             urlcat('/api/v1/assets', {
                 owner: from,
