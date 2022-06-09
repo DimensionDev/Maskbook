@@ -268,7 +268,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coin98.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
@@ -282,7 +282,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coinbase.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://walletlink.org',
         shortenLink: 'walletlink.org',
@@ -296,7 +296,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/mathwallet.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://mathwallet.org',
         shortenLink: 'mathwallet.org',
@@ -336,7 +336,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
                 ChainId.Arbitrum,
                 ChainId.Avalanche,
             ],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://app.tor.us/',
