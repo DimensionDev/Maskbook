@@ -9,6 +9,7 @@ import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers }
 import { Identifier } from '../Identifier'
 import { responseRegedit } from './response'
 import { readableStreamRegedit } from './readableStream'
+import { requestRegedit } from './request'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined
@@ -31,6 +32,7 @@ function setup() {
         Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],
         ReadableStream: [...readableStreamRegedit],
         Response: [...responseRegedit],
+        Request: [...requestRegedit],
     })
 
     for (const a of pendingRegister) a()
