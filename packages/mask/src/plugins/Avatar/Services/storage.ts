@@ -22,6 +22,7 @@ export async function saveAvatar(account: string, network: EnhanceableSite, avat
     await setAddress(network, avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account)
     await NFTAvatarStorage(network).set(avatar.userId, {
         ...avatar,
+        address: avatar.pluginId === NetworkPluginID.PLUGIN_SOLANA ? avatar.tokenId : avatar.address,
         sign,
     })
 

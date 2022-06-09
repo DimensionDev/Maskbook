@@ -1,5 +1,6 @@
 import {
     createFungibleToken,
+    createPageable,
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
@@ -170,17 +171,15 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getTokens(owner: string, options?: HubOptions<ChainId>) {
+        if (options?.indicator && options.indicator > 0) return createPageable([], 0)
         const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,
             }),
         )
         const tokens = response?.results || []
-        return {
-            // All tokens get returned in single one page
-            indicator: 1,
-            hasNextPage: false,
-            data: tokens.map((token) => {
+        return createPageable(
+            tokens.map((token) => {
                 const chainId = ChainId.Mainnet
                 return {
                     id: token.mintAddress,
@@ -214,7 +213,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     },
                 }
             }),
-        }
+            0,
+        )
     }
 
     async getHistory(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {

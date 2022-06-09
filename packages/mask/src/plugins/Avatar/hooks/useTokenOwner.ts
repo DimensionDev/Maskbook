@@ -38,7 +38,7 @@ export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, ow
         loading: loading || loadingAddress,
         isOwner: Boolean(
             (address && owner && isSameAddress(address, owner)) ||
-                persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
+                (owner && persona?.wallets.some((x) => isSameAddress(x.identity, owner))),
         ),
     }
 }
