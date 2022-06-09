@@ -1,5 +1,5 @@
 import {
-    AlchemyNft,
+    Alchemy_EVM,
     CoinGecko,
     DeBank,
     EthereumWeb3,
@@ -23,6 +23,7 @@ import {
     currySameAddress,
     CurrencyType,
     Transaction,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import {
     ChainId as ChainId_EVM,
@@ -95,17 +96,22 @@ class Hub implements EVM_Hub {
         tokenId: string,
         options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<NonFungibleAsset<ChainId_EVM, SchemaType_EVM> | undefined> {
+        if (
+            options?.sourceType === SourceType.Alchemy_FLOW ||
+            options?.networkPluginId === NetworkPluginID.PLUGIN_FLOW
+        ) {
+            return Alchemy_EVM.getAsset(address, tokenId, options)
+        }
         return OpenSea.getAsset(address, tokenId, options)
     }
     getNonFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId_EVM, string | number> | undefined,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>, string | number>> {
-        try {
-            return AlchemyNft.getTokens<ChainId_EVM, SchemaType_EVM>(account, options)
-        } catch {
-            return OpenSea.getTokens(account, options)
+        if (options?.sourceType === SourceType.Alchemy_EVM) {
+            return Alchemy_EVM.getTokens(account, options)
         }
+        return OpenSea.getTokens(account, options)
     }
     getNonFungibleCollections(
         account: string,
@@ -182,7 +188,24 @@ class Hub implements EVM_Hub {
 
     async *getAllNonFungibleAssets(
         address: string,
+        options?: HubOptions<ChainId_EVM> | undefined,
     ): AsyncIterableIterator<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>> {
+        if (options?.sourceType === SourceType.Alchemy_EVM) {
+            let api_keys = ''
+            while (1) {
+                const pageable = await this.getNonFungibleAssets(address, {
+                    pageKey: api_keys,
+                    chainId: options?.chainId,
+                    sourceType: options?.sourceType,
+                })
+                api_keys = (pageable.nextIndicator as string) ?? ''
+
+                yield* pageable.data
+
+                if (pageable.data.length === 0 || !api_keys) return
+            }
+            return
+        }
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: i,

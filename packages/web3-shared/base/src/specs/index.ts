@@ -64,6 +64,8 @@ export enum SourceType {
     OpenSea = 'opensea',
     Rarible = 'rarible',
     NFTScan = 'NFTScan',
+    Alchemy_EVM = 'Alchemy_EVM',
+    Alchemy_FLOW = 'Alchemy_FLOW'
 }
 
 export enum TransactionStatusType {
@@ -667,7 +669,7 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId, Indicator = number  > {
+export interface HubOptions<ChainId, Indicator  = number > {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -682,6 +684,8 @@ export interface HubOptions<ChainId, Indicator = number  > {
     size?: number
     /** The page index. */
     indicator?: Indicator
+    /** The page key of alchemy api */
+    pageKey?: string
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -717,7 +721,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleAssets?: (
         account: string,
         options?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>,string|number>>
     /** Get all fungible assets of given account and ignore the pagination options. */
     getAllFungibleAssets?: (
         address: string,

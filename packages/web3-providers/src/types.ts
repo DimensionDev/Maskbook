@@ -19,7 +19,7 @@ import type {
     GasOptionType,
     HubOptions,
 } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -147,18 +147,20 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: <ChainId, SchemaType>(
+        getTokens?: (
             from: string,
-            options?: HubOptions<ChainId, Indicator>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
+            ownerAddress?: string,
+            contractName?: string,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         getAssets?: (
             address: string,
-            options?: HubOptions<ChainId, Indicator>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
         getEvents?: (
             address: string,
@@ -464,13 +466,4 @@ export namespace MaskBaseAPI {
     export type StoredKeyInfo = api.IStoredKeyInfo
 
     export interface Provider {}
-}
-
-export namespace ALCHEMY_API {
-    export interface Provider {
-        getAssets: (
-            address: string,
-            options?: HubOptions<ChainId, Record<string, string | undefined>>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Record<string, string | undefined>>>
-    }
 }

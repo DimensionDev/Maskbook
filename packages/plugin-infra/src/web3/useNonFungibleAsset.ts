@@ -9,10 +9,15 @@ export function useNonFungibleAsset<T extends NetworkPluginID>(
     address?: string,
     id?: string,
     options?: Web3Helper.Web3HubOptions<T>,
+    ownerAddress?: string,
+    contractName?: string,
 ) {
     type GetNonFungibleAsset = (
         address: string,
         id: string,
+        ownerAddress?: string,
+        // name of nft collection
+        contractName?: string,
     ) => Promise<NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
 
     const account = useAccount(pluginID)
@@ -20,6 +25,6 @@ export function useNonFungibleAsset<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!address || !id || !hub) return
-        return (hub.getNonFungibleAsset as GetNonFungibleAsset)(address, id)
+        return (hub.getNonFungibleAsset as GetNonFungibleAsset)(address, id, ownerAddress, contractName)
     }, [address, account, id, hub])
 }

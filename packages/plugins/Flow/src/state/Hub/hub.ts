@@ -1,4 +1,4 @@
-import { CoinGecko } from '@masknet/web3-providers'
+import { Alchemy_FLOW, CoinGecko } from '@masknet/web3-providers'
 import type {
     FungibleToken,
     NonFungibleToken,
@@ -86,14 +86,16 @@ class Hub implements FlowHub {
         address: string,
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
+        ownerAddress?: string,
+        contractName?: string,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        throw new Error('Method not implemented.')
+        return Alchemy_FLOW.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
     getNonFungibleAssets(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return Alchemy_FLOW.getTokens<ChainId, SchemaType>(account, options)
     }
     getFungibleTokenPrice(
         chainId: ChainId,

@@ -15,6 +15,7 @@ export function useNonFungibleAssets<
 ) {
     type GetAllNonFungibleAssets = (
         address: string,
+        options?: Web3Helper.Web3HubOptions<T, Indicator>,
     ) => AsyncIterableIterator<
         NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
     >
@@ -24,7 +25,9 @@ export function useNonFungibleAssets<
 
     return useAsyncRetry(async () => {
         if (!account || !hub) return []
-        const assets = await asyncIteratorToArray((hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(account))
+        const assets = await asyncIteratorToArray(
+            (hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(account, options),
+        )
         return assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
     }, [account, schemaType, hub])
 }
