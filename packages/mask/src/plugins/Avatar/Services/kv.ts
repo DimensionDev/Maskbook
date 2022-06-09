@@ -38,11 +38,11 @@ async function _getAddress(
     const storageV1 = storage as AddressStorageV1
     const storageV2 = storage as AddressStorageV2
 
-    if (!pluginID) return storageV2[userId] as AddressStorageV1
-    if (storageV2[pluginID])
+    if (!pluginID && storageV2[userId]) return storageV2[userId]
+    if (storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM])
         return {
-            address: storageV2[pluginID],
-            networkPluginID: pluginID,
+            address: storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM],
+            networkPluginID: pluginID ?? NetworkPluginID.PLUGIN_EVM,
         }
 
     // V1 only supports EVM
