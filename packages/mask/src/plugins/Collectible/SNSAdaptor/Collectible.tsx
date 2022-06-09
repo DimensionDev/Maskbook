@@ -140,13 +140,13 @@ export function Collectible(props: CollectibleProps) {
     const CollectibleProviderSwitcher = useSwitcher(
         provider,
         setProvider,
-        getEnumAsArray(SourceType).map((x) => x.value),
+        supportedProvider,
         resolveCollectibleProviderName,
         true,
     )
     // #endregion
 
-    if (!asset.value || !token)
+    if (!asset.value || !token || !asset.value.id)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>

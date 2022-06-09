@@ -91,7 +91,7 @@ export function resolveAssetLinkOnCurrentProvider(chainId: ChainId, address: str
                 id,
             })
         case SourceType.Rarible:
-            return urlcat(resolveLinkOnRarible(chainId as RaribleSupportedChainId), '/token/:address/:id', {
+            return urlcat(resolveLinkOnRarible(chainId as RaribleSupportedChainId), '/token/:address::id', {
                 address,
                 id,
             })

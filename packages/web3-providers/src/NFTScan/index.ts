@@ -99,6 +99,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             nft_address: address,
             token_id: tokenId,
         })
+        console.log(response, 'scan', address, tokenId)
+
         if (!response) return
         return createERC721TokenAsset(response.data)
     }

@@ -101,13 +101,13 @@ class Hub implements EVM_Hub {
         const provider = options?.sourceType
         switch (provider) {
             case SourceType.OpenSea:
-                return OpenSea.getAsset(address, tokenId, options)
+                return OpenSea.getAsset(address, tokenId)
             case SourceType.Rarible:
-                return Rarible.getAsset(address, tokenId, options)
+                return Rarible.getAsset(address, tokenId)
             case SourceType.NFTScan:
                 return NFTScan.getToken(address, tokenId)
             default:
-                return OpenSea.getAsset(address, tokenId, options)
+                return OpenSea.getAsset(address, tokenId)
         }
     }
     getNonFungibleAssets(
