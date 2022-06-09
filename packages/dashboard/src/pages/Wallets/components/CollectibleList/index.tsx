@@ -2,14 +2,20 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferTab } from '../Transfer'
-import { useAccount, useCurrentWeb3NetworkPluginID, useNonFungibleAssets, Web3Helper } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useCurrentWeb3NetworkPluginID,
+    useNonFungibleAssets,
+    useTrustedNonFungibleTokens,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-unified'
 import { ElementAnchor } from '@masknet/shared'
@@ -38,6 +44,8 @@ interface CollectibleListProps {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const navigate = useNavigate()
     const account = useAccount()
+    const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
 
     const {
         value = EMPTY_LIST,
@@ -47,17 +55,18 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account })
 
     const renderCollectibles = useMemo(() => {
-        const uniqCollectibles = uniqBy(value, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
-        return uniqCollectibles
-    }, [value.length])
+        const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) =>
+            isSameAddress(x.contract?.owner, account),
+        )
+        return uniqBy(
+            [...trustedOwnNonFungibleTokens, ...value],
+            (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
+        )
+    }, [value.length, trustedNonFungibleTokens.length])
 
     useEffect(() => {
         if (next) next()
     }, [next])
-
-    // useEffect(() => {
-    // const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-    // }, [retry])
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(

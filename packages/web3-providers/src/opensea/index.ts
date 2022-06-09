@@ -96,6 +96,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.token_symbol,
+            owner: asset.owner.address,
         },
         collection: {
             chainId,

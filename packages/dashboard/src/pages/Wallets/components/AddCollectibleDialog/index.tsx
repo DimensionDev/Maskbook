@@ -12,7 +12,9 @@ import {
     useChainId,
     useNonFungibleTokenContract,
     useAccount,
-    useWeb3Hub,
+    useWeb3State,
+    useTrustedNonFungibleTokens,
+    useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
 
 export interface AddCollectibleDialogProps {
@@ -31,38 +33,43 @@ enum FormErrorType {
 }
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
-    const wallet = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const [address, setAddress] = useState('')
-    const [tokenId, setTokenId] = useState('')
+    const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { Token } = useWeb3State<'all'>()
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
-    const { value, loading, error, retry } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, tokenId)
+    const [address, setAddress] = useState('')
+    const [tokenId, setTokenId] = useState('')
+
+    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, tokenId)
 
     const onSubmit = useCallback(async () => {
-        if (loading || !wallet || !value || !hub?.getNonFungibleAsset) return
+        if (loading || !account || !value || !connection?.getNonFungibleToken) return
 
-        // const tokenInDB = await PluginServices.Wallet.getToken(SchemaType.ERC721, address, tokenId)
-        // if (tokenInDB)
-        if (!value) throw new Error(FormErrorType.Added)
+        // If the NonFungible token is added
+        const tokenInDB = trustedNonFungibleTokens.find(
+            (x) => isSameAddress(x.contract?.owner, account) && x.tokenId === tokenId && x.address === address,
+        )
+        if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const tokenDetailed = await hub?.getNonFungibleAsset?.(address ?? '', tokenId, {
+        const tokenDetailed = await connection?.getNonFungibleToken(address ?? '', tokenId, {
             chainId,
         })
 
+        // If the NonFungible token is belong this account
         if (
-            (tokenDetailed && !isSameAddress(tokenDetailed?.owner?.address, wallet)) ||
+            (tokenDetailed && !isSameAddress(tokenDetailed?.contract?.owner, account)) ||
             !tokenDetailed ||
-            !tokenDetailed.owner
+            !tokenDetailed.contract?.owner
         ) {
             throw new Error(FormErrorType.NotExist)
         } else {
-            console.log(tokenDetailed)
-            // await PluginServices.Wallet.addToken(tokenDetailed)
+            await Token?.addToken?.(tokenDetailed)
             onClose()
         }
-    }, [wallet, address, tokenId, value, loading, hub?.getNonFungibleAsset])
+    }, [account, address, tokenId, value, loading, connection?.getNonFungibleToken, trustedNonFungibleTokens.length])
 
     return (
         <AddCollectibleDialogUI
