@@ -1,22 +1,15 @@
 import urlcat from 'urlcat'
-import { createPageable, HubOptions } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    createERC721Contract,
-    createERC721Token,
-    resolveIPFSLinkFromURL,
-    SchemaType,
-    createERC721Metadata,
-    createERC721Collection,
-} from '@masknet/web3-shared-evm'
+import { createPageable, CurrencyType, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { NonFungibleTokenAPI } from '..'
-import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
+import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
 import type { NFTScanAsset } from './types'
 import { courier, isProxyENV } from '../helpers'
 
+const IPFS_BASE = 'https://ipfs.io/ipfs/:id'
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
 async function getToken() {
@@ -55,42 +48,61 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         image?: string
     } = JSON.parse(asset.nft_json ?? '{}')
     const name = payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? ''
-    const description = payload?.description ?? ''
-    const mediaURL = resolveIPFSLinkFromURL(
-        JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
-    )
+    const description = payload?.description ?? asset.nft_detail
+    const mediaURL = urlcat(IPFS_BASE, { id: asset.nft_cover })
+    const chainId = ChainId.Mainnet
+    const creator = asset.nft_creator
+    const owner = asset.nft_holder
 
-    return createERC721Token(
-        ChainId.Mainnet,
-        asset.trade_contract ?? asset.nft_contract_address,
-        asset.nft_asset_id,
-        createERC721Metadata(
-            ChainId.Mainnet,
+    return {
+        id: asset.nft_contract_address,
+        chainId,
+        tokenId: asset.token_id ?? asset.nft_asset_id,
+        type: TokenType.NonFungible,
+        address: asset.nft_contract_address,
+        schema: SchemaType.ERC721,
+        creator: {
+            address: creator,
+            avatarURL: '',
+            nickname: creator,
+            link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
+        },
+        owner: {
+            address: owner,
+            avatarURL: '',
+            nickname: owner,
+            link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
+        },
+        traits: [],
+        price: {
+            [CurrencyType.NATIVE]: asset.last_price,
+        },
+
+        metadata: {
+            chainId,
             name,
-            asset.trade_symbol,
-            asset.nft_holder,
+            symbol: asset.trade_symbol,
             description,
-            undefined,
+            imageURL: mediaURL,
             mediaURL,
-        ),
-        createERC721Contract(
-            ChainId.Mainnet,
-            asset.trade_contract ?? asset.nft_contract_address,
+        },
+        contract: {
+            chainId,
+            schema: SchemaType.ERC721,
+            address: asset.nft_contract_address,
             name,
-            asset.trade_symbol,
-            undefined,
-            mediaURL,
-        ),
-        createERC721Collection(
-            ChainId.Mainnet,
+            symbol: asset.trade_symbol,
+        },
+        collection: {
+            chainId,
             name,
-            name,
+            slug: name,
             description,
-            mediaURL,
-            false,
-            getUnixTime(new Date(asset.nft_create_time)),
-        ),
-    )
+            iconURL: urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.nft_contract_address + '.png' }),
+            verified: !!asset.nft_asset_id,
+            createdAt: getUnixTime(new Date(asset.nft_create_time)),
+        },
+    }
 }
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -99,8 +111,6 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             nft_address: address,
             token_id: tokenId,
         })
-        console.log(response, 'scan', address, tokenId)
-
         if (!response) return
         return createERC721TokenAsset(response.data)
     }
