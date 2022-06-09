@@ -1,9 +1,9 @@
 import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Wallet, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
-import type { NonFungibleToken, SourceType } from '@masknet/web3-shared-base'
+import type { NonFungibleToken, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     provider: SourceType
     wallet?: Wallet
-    token: NonFungibleToken<ChainId, SchemaType>
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
 }

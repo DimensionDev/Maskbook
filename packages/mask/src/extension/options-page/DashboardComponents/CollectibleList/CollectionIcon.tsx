@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleTokenCollection<ChainId>
+    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll>
     onClick?(): void
 }
 
