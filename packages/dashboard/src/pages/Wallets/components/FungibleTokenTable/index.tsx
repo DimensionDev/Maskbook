@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
@@ -7,7 +7,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { formatBalance, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, FungibleAsset, minus, NetworkPluginID, toZero } from '@masknet/web3-shared-base'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useCurrentWeb3NetworkPluginID, useFungibleAssets, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { PluginMessages } from '../../../../API'
@@ -107,11 +107,31 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         [],
     )
 
+    const dataSource = useMemo(() => {
+        const results = fungibleAssets.filter((x) => !selectedChainId || x.chainId === selectedChainId)
+
+        if (!selectedChainId)
+            return results.sort((a, z) => {
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
+
+                // token value
+                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+
+                // // token balance
+                // if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
+
+                return 0
+            })
+
+        return results
+    }, [fungibleAssets, selectedChainId])
+
     return (
         <TokenTableUI
             isLoading={fungibleAssetsLoading}
             isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
-            dataSource={fungibleAssets.filter((x) => !selectedChainId || x.chainId === selectedChainId)}
+            dataSource={dataSource}
             onSwap={onSwap}
             onSend={onSend}
         />

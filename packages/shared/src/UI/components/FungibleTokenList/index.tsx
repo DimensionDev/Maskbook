@@ -104,8 +104,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
-        console.log(filteredFungibleTokens)
-        console.log(fungibleAssetsTable)
         return filteredFungibleTokens
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
