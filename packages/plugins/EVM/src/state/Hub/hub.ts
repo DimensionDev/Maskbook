@@ -94,9 +94,9 @@ class Hub implements EVM_Hub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         try {
-            return OpenSea.getTokens(account, options)
+            return OpenSea.getTokens(account, { chainId: this.chainId, ...options })
         } catch {
-            return NFTScan.getTokens(account, options)
+            return NFTScan.getTokens(account, { chainId: this.chainId, ...options })
         }
     }
     getNonFungibleCollections(

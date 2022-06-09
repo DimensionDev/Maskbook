@@ -37,7 +37,7 @@ import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constan
 import { isProxyENV } from '../helpers'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
-    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
+    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
 
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
