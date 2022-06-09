@@ -74,7 +74,7 @@ export const WalletHeader = memo(() => {
                         onClick={() => onChainChange(chainId)}
                         selected={chainId === currentNetwork.chainId}>
                         {network.isMainnet ? (
-                            <WalletIcon size={20} networkIcon={network.icon} />
+                            <WalletIcon size={20} mainIcon={network.icon} />
                         ) : Flags.support_testnet_switch ? (
                             <ChainIcon color={network.iconColor} />
                         ) : null}

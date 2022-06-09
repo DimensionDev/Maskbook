@@ -126,8 +126,13 @@ export type NonFungibleTokenOutMask = Omit<NonFungibleToken<ChainId, SchemaType.
     chain_id: ChainId
 }
 
-export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token'> {
+export type NonFungibleTokenContractOutMask = Omit<NonFungibleTokenContract<ChainId, SchemaType.ERC721>, 'chainId'> & {
+    chain_id: ChainId
+}
+
+export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token' | 'token_contract'> {
     token: NonFungibleTokenOutMask
+    token_contract: NonFungibleTokenContractOutMask
 }
 
 export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {

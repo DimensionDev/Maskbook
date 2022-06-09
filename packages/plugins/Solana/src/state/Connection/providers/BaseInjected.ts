@@ -9,7 +9,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
         super()
 
-        bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
+        bridge.on('accountChanged', this.onAccountChanged.bind(this))
         bridge.on('chainChanged', this.onChainChanged.bind(this))
         bridge.on('disconnect', this.onDisconnect.bind(this))
     }
@@ -23,8 +23,8 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         return this.bridge.untilAvailable().then(() => undefined)
     }
 
-    protected onAccountsChanged(accounts: string[]) {
-        this.emitter.emit('accounts', accounts)
+    protected onAccountChanged(account: string) {
+        this.emitter.emit('accounts', [account])
     }
 
     protected onChainChanged(chainId: string) {

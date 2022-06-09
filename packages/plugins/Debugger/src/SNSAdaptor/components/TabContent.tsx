@@ -2,6 +2,7 @@ import {
     useAccount,
     useBalance,
     useBlockNumber,
+    useBlockTimestamp,
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useWeb3Connection,
@@ -10,7 +11,9 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId as EVM_ChainId, ProviderType as EVM_ProviderType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
+import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 import { Button, List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { useCallback } from 'react'
 
@@ -82,6 +85,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
     const chainId = useChainId()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
+    const { value: blockTimestamp = 0 } = useBlockTimestamp()
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection.transferFungibleToken(
@@ -153,6 +157,25 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
         [connection],
     )
 
+    const onConnect = useCallback(
+        async (chainId: Web3Helper.ChainIdAll, providerType: Web3Helper.ProviderTypeAll) => {
+            await connection.connect({
+                chainId,
+                providerType,
+            })
+        },
+        [connection],
+    )
+
+    const onDisconnect = useCallback(
+        async (providerType: Web3Helper.ProviderTypeAll) => {
+            await connection.disconnect({
+                providerType,
+            })
+        },
+        [connection],
+    )
+
     return (
         <section className={classes.container}>
             <Table size="small">
@@ -185,6 +208,16 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                         </TableCell>
                         <TableCell>
                             <Typography variant="body2">{blockNumber}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Block Timestamp
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{blockTimestamp}</Typography>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -257,7 +290,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === ChainId.Mainnet ? ChainId.Matic : ChainId.Mainnet,
+                                                chainId === EVM_ChainId.Mainnet
+                                                    ? EVM_ChainId.Matic
+                                                    : EVM_ChainId.Mainnet,
                                             )
                                             break
                                         default:
@@ -265,6 +300,62 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                     }
                                 }}>
                                 Switch Chain
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Connect Wallet
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            await onConnect(EVM_ChainId.Mainnet, EVM_ProviderType.MetaMask)
+                                            break
+                                        case NetworkPluginID.PLUGIN_SOLANA:
+                                            await onConnect(SolanaChainId.Mainnet, SolanaProviderType.Phantom)
+                                            break
+                                        case NetworkPluginID.PLUGIN_FLOW:
+                                            await onConnect(FlowChainId.Mainnet, FlowProviderType.Blocto)
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Connect Wallet
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Disconnect Wallet
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    switch (pluginID) {
+                                        case NetworkPluginID.PLUGIN_EVM:
+                                            await onDisconnect(EVM_ProviderType.MetaMask)
+                                            break
+                                        case NetworkPluginID.PLUGIN_SOLANA:
+                                            await onDisconnect(SolanaProviderType.Phantom)
+                                            break
+                                        case NetworkPluginID.PLUGIN_FLOW:
+                                            await onDisconnect(FlowProviderType.Blocto)
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}>
+                                Disconnect Wallet
                             </Button>
                         </TableCell>
                     </TableRow>

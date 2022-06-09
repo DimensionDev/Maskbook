@@ -5,7 +5,10 @@ import {
     currySameAddress,
     FungibleAsset,
     isSameAddress,
+    minus,
+    multipliedBy,
     NetworkPluginID,
+    toZero,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
@@ -43,11 +46,20 @@ export function useFungibleAssets<T extends NetworkPluginID, Indicator = number>
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aUSD = Number.parseFloat(a.value?.[CurrencyType.USD] ?? '0')
-                const zUSD = Number.parseFloat(z.value?.[CurrencyType.USD] ?? '0')
+                const aBalance = toZero(a.balance)
+                const zBalance = toZero(z.balance)
 
-                const aBalance = Number.parseFloat(a.balance)
-                const zBalance = Number.parseFloat(z.balance)
+                const aPrice = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zPrice = toZero(z.value?.[CurrencyType.USD] ?? '0')
+
+                const aUSD = multipliedBy(aPrice, aBalance)
+                const zUSD = multipliedBy(zPrice, zBalance)
+
+                const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
+                const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+
+                const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
 
                 // the currently selected chain id
                 if (a.chainId !== z.chainId) {
@@ -56,22 +68,26 @@ export function useFungibleAssets<T extends NetworkPluginID, Indicator = number>
                 }
 
                 // native token
-                if (isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))) return -1
-                if (isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))) return 1
+                if (isNativeTokenA) return -1
+                if (isNativeTokenZ) return 1
 
                 // mask token with position value
-                if (aUSD && isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))) return -1
-                if (zUSD && isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))) return 1
+                if (aUSD.isPositive() && isMaskTokenA) return -1
+                if (zUSD.isPositive() && isMaskTokenZ) return 1
 
                 // token value
-                if (aUSD !== zUSD) zUSD - aUSD
+                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+
+                // token balance
+                if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
 
                 // trusted token
                 if (isTrustedToken(a.address)) return -1
                 if (isTrustedToken(z.address)) return 1
 
-                // token balance
-                if (aBalance !== zBalance) return zBalance - aBalance
+                // mask token with position value
+                if (isMaskTokenA) return -1
+                if (isMaskTokenZ) return 1
 
                 // alphabet
                 if (a.name !== z.name) return a.name < z.name ? -1 : 1

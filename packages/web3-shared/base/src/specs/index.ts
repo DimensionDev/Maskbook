@@ -98,6 +98,7 @@ export enum SocialAddressType {
     THE_GRAPH = 'THE_GRAPH',
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
+    SOL = 'SOL'
 }
 
 export interface Identity {
@@ -180,6 +181,10 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     icon: URL
     /** The provider name */
     name: string
+    /** The provider bar background gradient color */
+    backgroundGradient?: string
+    /** The provider icon filter color */
+    iconFilterColor?: string
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]
@@ -215,7 +220,6 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     symbol: string
     address: string
     schema: SchemaType
-    owner?: string
     balance?: number
     logoURL?: string
     iconURL?: string
@@ -225,6 +229,7 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     name: string
     symbol: string
+    owner?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -579,7 +584,6 @@ export interface Connection<
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */
@@ -605,10 +609,10 @@ export interface Connection<
     /** Get the currently chain id. */
     getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
-    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block>
+    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block | null>
     /** Get the latest block number. */
     getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
-    /** Get the latest block timestamp. */
+    /** Get the latest block unix timestamp. */
     getBlockTimestamp(options?: Web3ConnectionOptions): Promise<number>
     /** Get the latest balance of the account. */
     getBalance(address: string, options?: Web3ConnectionOptions): Promise<string>

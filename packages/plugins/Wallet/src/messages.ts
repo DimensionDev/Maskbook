@@ -29,6 +29,7 @@ export type TransactionDialogEvent =
 export type SelectProviderDialogEvent =
     | {
           open: true
+          walletConnectedCallback?: () => void
       }
     | {
           open: false
@@ -49,6 +50,7 @@ export type ConnectWalletDialogEvent =
           open: true
           network: Web3Helper.NetworkDescriptorAll
           provider: Web3Helper.ProviderDescriptorAll
+          walletConnectedCallback?: () => void
       }
     | {
           open: false

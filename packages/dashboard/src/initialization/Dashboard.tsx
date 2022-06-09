@@ -10,20 +10,24 @@ import {
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    PluginsWeb3ContextProvider,
+    useAllPluginsWeb3State,
+    useCurrentWeb3NetworkPluginID,
+} from '@masknet/plugin-infra/web3'
 import { i18NextInstance } from '@masknet/shared-base'
 
 import '../utils/kv-storage'
 
 import './PluginHost'
 import { Pages } from '../pages/routes'
-import { useAppearance, usePluginID } from '../pages/Personas/api'
+import { useAppearance } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
-    const pluginID = usePluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const PluginsWeb3State = useAllPluginsWeb3State()
 
     // #region theme

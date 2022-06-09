@@ -115,9 +115,9 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
 }
 
 function createNftToken_EVM(
-    chainId: ChainId_EVM | ChainId_FLOW,
+    chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
-): NonFungibleToken<ChainId_EVM | ChainId_FLOW, SchemaType_EVM | SchemaType_FLOW> {
+): NonFungibleToken<ChainId_EVM, SchemaType_EVM> {
     return {
         id: asset.contract?.address,
         chainId,

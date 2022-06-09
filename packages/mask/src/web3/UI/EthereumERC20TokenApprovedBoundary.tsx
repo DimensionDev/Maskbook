@@ -22,13 +22,12 @@ const useStyles = makeStyles()((theme) => ({
     buttonLabel: {
         display: 'block',
         fontWeight: 'inherit',
-        marginTop: theme.spacing(-0.5),
-        marginBottom: theme.spacing(1),
+        transform: 'translateY(-4px)',
     },
     buttonAmount: {
         fontSize: 10,
         fontWeight: 300,
-        bottom: theme.spacing(1),
+        transform: 'translateY(12px)',
         position: 'absolute',
     },
     children: {

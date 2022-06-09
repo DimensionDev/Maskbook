@@ -70,8 +70,16 @@ function createERC721TokenFromAsset(
         ChainId.Mainnet,
         tokenAddress,
         tokenId,
-        createERC721Metadata(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', imageURL, imageURL),
-        createERC721Contract(ChainId.Mainnet, tokenAddress, asset?.meta?.name ?? '', '', first(asset?.owners)),
+        createERC721Metadata(
+            ChainId.Mainnet,
+            asset?.meta?.name ?? '',
+            '',
+            first(asset?.owners),
+            '',
+            imageURL,
+            imageURL,
+        ),
+        createERC721Contract(ChainId.Mainnet, tokenAddress, asset?.meta?.name ?? '', ''),
         createERC721Collection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
     )
 }
@@ -185,7 +193,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const items =
             asset.items
                 .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
+                .filter((x) => x.metadata?.owner?.toLowerCase() === from.toLowerCase())
                 .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
         return createPageable(items, indicator, asset.continuation)
     }

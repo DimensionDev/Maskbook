@@ -15,13 +15,13 @@ const connection = (chainId: ChainId) => {
     return new Connection(NETWORK_ENDPOINTS[chainId])
 }
 
-export async function lookup(name: string, chainId: ChainId) {
-    const { domainKey } = await getKey(name)
+export async function lookup(chainId: ChainId, name: string) {
+    const { domainKey } = await getKey(name.replace('.sol', ''))
     const registry = await NameRegistryState.retrieve(connection(chainId), domainKey)
     return registry.owner.toBase58()
 }
 
-export async function reverse(owner: string, chainId: ChainId) {
+export async function reverse(chainId: ChainId, owner: string) {
     const accountKey = new PublicKey(owner)
     return performReverseLookup(connection(chainId), accountKey)
 }

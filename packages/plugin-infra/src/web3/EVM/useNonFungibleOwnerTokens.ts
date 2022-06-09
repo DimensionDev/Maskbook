@@ -47,7 +47,13 @@ export function useNonFungibleOwnerTokens(
         if (!listOfPairs.length) return
 
         allListRef.current = (
-            await Promise.all(listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1])) ?? [])
+            await Promise.all(
+                listOfPairs?.map((x) =>
+                    connection.getNonFungibleToken(x[0], x[1], {
+                        account: ownerAccount,
+                    }),
+                ) ?? [],
+            )
         ).filter((x) => x.contract?.balance) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
     }, [contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
 
