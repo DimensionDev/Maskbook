@@ -18,6 +18,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings'
+import { MagicEden } from '@masknet/web3-providers'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
@@ -220,12 +221,13 @@ class Connection implements BaseConnection {
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         address: string,
         id: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const token = await MagicEden.getAsset(address, id, options)
+        return token as NonFungibleToken<ChainId, SchemaType>
     }
     replaceRequest(
         hash: string,

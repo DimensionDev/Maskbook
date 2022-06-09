@@ -58,7 +58,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
-            address: '',
+            address: token.mintAddress,
             name: collection.name,
             symbol: collection.symbol,
         },
