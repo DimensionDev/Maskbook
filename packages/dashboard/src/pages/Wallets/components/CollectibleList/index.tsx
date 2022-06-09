@@ -44,8 +44,7 @@ interface CollectibleListProps {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
-    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens()
 
     const {
         value = EMPTY_LIST,

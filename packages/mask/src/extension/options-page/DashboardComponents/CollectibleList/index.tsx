@@ -18,7 +18,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens } from '@masknet/plugin-infra/web3'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -225,11 +225,13 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleTokenCollection<ChainId> | 'all' | undefined
     >('all')
-    const { address } = addressName
+    const { address: account } = addressName
 
     useEffect(() => {
         setSelectedCollection('all')
-    }, [address])
+    }, [account])
+
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens() as Array<NonFungibleAsset<ChainId, SchemaType>>
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -237,11 +239,16 @@ export function CollectionList({
         next,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account: address, chainId })
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account, chainId })
+
+    const allCollectibles = [
+        ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
+        ...collectibles,
+    ]
 
     const renderCollectibles = useMemo(() => {
-        if (selectedCollection === 'all') return collectibles
-        const uniqCollectibles = uniqBy(collectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
+        if (selectedCollection === 'all') return allCollectibles
+        const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
 
         return uniqCollectibles.filter((x) => {
@@ -250,19 +257,19 @@ export function CollectionList({
                 selectedCollection.slug === x.collection?.slug
             )
         })
-    }, [selectedCollection, collectibles.length])
+    }, [selectedCollection, allCollectibles.length])
 
     const collections = useMemo(() => {
-        return uniqBy(collectibles, (x) => x?.contract?.address.toLowerCase())
+        return uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
             .filter(Boolean) as Array<NonFungibleTokenCollection<ChainId>>
-    }, [collectibles.length, collectibles.length])
+    }, [allCollectibles.length])
 
-    if (!collectibles.length && !done && !error) return <LoadingSkeleton />
+    if (!allCollectibles.length && !done && !error) return <LoadingSkeleton />
 
-    if (!collectibles.length && error) return <RetryHint retry={next} />
+    if (!allCollectibles.length && error) return <RetryHint retry={next} />
 
-    if (done && !collectibles.length)
+    if (done && !allCollectibles.length)
         return (
             <>
                 {addressName && (
@@ -327,7 +334,7 @@ export function CollectionList({
                             </Box>
                         )}
                         <CollectibleList
-                            address={address}
+                            address={account}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

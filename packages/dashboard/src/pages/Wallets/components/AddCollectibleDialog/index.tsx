@@ -15,6 +15,7 @@ import {
     useWeb3State,
     useTrustedNonFungibleTokens,
     useCurrentWeb3NetworkPluginID,
+    useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
 
 export interface AddCollectibleDialogProps {
@@ -37,6 +38,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Token } = useWeb3State<'all'>()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
+    const hub = useWeb3Hub()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
@@ -46,7 +48,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, tokenId)
 
     const onSubmit = useCallback(async () => {
-        if (loading || !account || !value || !connection?.getNonFungibleToken) return
+        if (loading || !account || !value || !hub?.getNonFungibleAsset) return
 
         // If the NonFungible token is added
         const tokenInDB = trustedNonFungibleTokens.find(
@@ -54,9 +56,9 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         )
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const tokenDetailed = await connection?.getNonFungibleToken(address ?? '', tokenId, {
-            chainId,
-        })
+        const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId)
+        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, { chainId })
+        const tokenDetailed = { ...token, ...tokenAsset }
 
         // If the NonFungible token is belong this account
         if (
@@ -69,7 +71,16 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
             await Token?.addToken?.(tokenDetailed)
             onClose()
         }
-    }, [account, address, tokenId, value, loading, connection?.getNonFungibleToken, trustedNonFungibleTokens.length])
+    }, [
+        account,
+        address,
+        tokenId,
+        value,
+        loading,
+        hub?.getNonFungibleAsset,
+        connection?.getNonFungibleToken,
+        trustedNonFungibleTokens.length,
+    ])
 
     return (
         <AddCollectibleDialogUI
