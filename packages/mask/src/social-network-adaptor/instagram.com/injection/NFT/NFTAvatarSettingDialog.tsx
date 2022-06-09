@@ -9,7 +9,7 @@ import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useWallet } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
 import type { AllChainsNonFungibleToken, AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -31,6 +31,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const wallet = useWallet()
     const identity = useCurrentVisitingIdentity()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const onChange = useCallback(
@@ -54,7 +55,6 @@ export function NFTAvatarSettingDialog() {
                 html.innerHTML = htmlString
 
                 const metaTag = html.querySelector<HTMLMetaElement>('meta[property="og:image"]')
-
                 if (!metaTag?.content) return
 
                 const avatarInfo = await saveNFTAvatar(
@@ -67,6 +67,7 @@ export function NFTAvatarSettingDialog() {
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
+                    pluginId,
                 )
 
                 if (!avatarInfo) {

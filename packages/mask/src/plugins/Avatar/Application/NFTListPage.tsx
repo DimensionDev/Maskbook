@@ -86,7 +86,12 @@ interface NFTImageCollectibleAvatarProps {
     pluginId: NetworkPluginID
 }
 
-function NFTImageCollectibleAvatar({ token, onChange, selectedToken, pluginId }: NFTImageCollectibleAvatarProps) {
+export function NFTImageCollectibleAvatar({
+    token,
+    onChange,
+    selectedToken,
+    pluginId,
+}: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
 

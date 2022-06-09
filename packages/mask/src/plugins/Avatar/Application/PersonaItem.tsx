@@ -62,7 +62,7 @@ export function PersonaItem(props: PersonaItemProps) {
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         userId,
-        token?.owner,
+        token?.owner ?? '',
     )
 
     const tokenDetailed: AllChainsNonFungibleToken = useMemo(

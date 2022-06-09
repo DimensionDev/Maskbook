@@ -199,7 +199,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     contract: {
                         chainId,
                         schema: SchemaType.NonFungible,
-                        address: '',
+                        address: token.mintAddress,
                         name: token.collectionName,
                         symbol: '',
                     },

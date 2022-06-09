@@ -7,7 +7,7 @@ import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PluginNFTAvatarRPC } from '../../messages'
 import type { NextIDAvatarMeta } from '../../types'
 
-export function useSaveSolana(pluginId: NetworkPluginID, chainId: ChainId) {
+export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
     const connection = useWeb3Connection<'all'>(pluginId)
     return useAsyncFn(
         async (

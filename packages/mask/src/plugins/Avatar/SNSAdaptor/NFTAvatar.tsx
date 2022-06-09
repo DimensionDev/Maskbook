@@ -6,13 +6,13 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
-import { NFTImage } from './NFTImage'
-import { useAccount, useChainId, useImageChecker } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useCollectibles } from '../hooks/useCollectibles'
 import type { AllChainsNonFungibleToken } from '../types'
+import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -128,6 +128,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
             </Button>
         </Box>
     )
+
+    const _onChange = (token: AllChainsNonFungibleToken) => {
+        if (!token) return
+        setSelectedToken(token)
+    }
     return (
         <>
             <Box className={classes.root}>
@@ -163,9 +168,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                   ).map((token: AllChainsNonFungibleToken, i) => (
                                       <NFTImageCollectibleAvatar
                                           key={i}
+                                          pluginId={NetworkPluginID.PLUGIN_EVM}
                                           token={token}
                                           selectedToken={selectedToken}
-                                          setSelectedToken={setSelectedToken}
+                                          onChange={(token) => _onChange(token)}
                                       />
                                   ))}
                         </Box>
@@ -189,28 +195,4 @@ export function NFTAvatar(props: NFTAvatarProps) {
             />
         </>
     )
-}
-interface NFTImageCollectibleAvatarProps {
-    token: AllChainsNonFungibleToken
-    setSelectedToken: React.Dispatch<React.SetStateAction<AllChainsNonFungibleToken | undefined>>
-    selectedToken?: AllChainsNonFungibleToken
-}
-
-function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles()
-    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
-    if (loading)
-        return (
-            <div className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        )
-    return isImageToken ? (
-        <NFTImage
-            pluginId={NetworkPluginID.PLUGIN_EVM}
-            token={token}
-            selectedToken={selectedToken}
-            onChange={setSelectedToken}
-        />
-    ) : null
 }

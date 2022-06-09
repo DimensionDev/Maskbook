@@ -22,7 +22,7 @@ export function useTokenOwner(
     }, [connection, tokenId, address])
 }
 
-export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner?: string) {
+export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
     const { value: persona, loading } = usePersonas(userId)
     const { value: address, loading: loadingAddress } = useAsyncRetry(
         async () =>
@@ -37,8 +37,8 @@ export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, ow
     return {
         loading: loading || loadingAddress,
         isOwner: Boolean(
-            (address && owner && isSameAddress(address, owner)) ||
-                (owner && persona?.wallets.some((x) => isSameAddress(x.identity, owner))),
+            (address && isSameAddress(address, owner)) ||
+                persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }
 }
