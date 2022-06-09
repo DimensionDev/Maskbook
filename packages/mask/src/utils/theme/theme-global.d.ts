@@ -1,7 +1,7 @@
 declare module '@mui/material/styles/createPalette.d' {
     export interface Palette {
         secondaryDivider: string
-        maskColor: {
+        maskColor?: {
             main: string
             second: string
             third: string
