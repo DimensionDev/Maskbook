@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'

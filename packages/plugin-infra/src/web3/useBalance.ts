@@ -13,6 +13,6 @@ export function useBalance<S extends 'all' | void = void, T extends NetworkPlugi
 
     return useAsyncRetry(async () => {
         if (!account || !connection) return '0'
-        return (connection.getBalance as GetBalance)(account)
+        return connection.getBalance(account)
     }, [account, connection])
 }
