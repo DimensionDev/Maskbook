@@ -10,13 +10,14 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
-import type { AllChainsNonFungibleToken, AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { delay } from '@dimensiondev/kit'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -35,11 +36,11 @@ export function NFTAvatarSettingDialog() {
     const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const onChange = useCallback(
-        async (token: AllChainsNonFungibleToken) => {
+        async (info: SelectTokenInfo) => {
             try {
-                if (!token.metadata?.imageURL || !token.contract?.address) return
+                if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
                 if (!identity.identifier) return
-                const image = await toPNG(token.metadata.imageURL)
+                const image = await toPNG(info.token.metadata.imageURL)
                 if (!image || !wallet) return
 
                 await Instagram.uploadUserAvatar(image, identity.identifier.userId)
@@ -54,17 +55,20 @@ export function NFTAvatarSettingDialog() {
                 const html = document.createElement('html')
                 html.innerHTML = htmlString
 
-                const metaTag = html.querySelector<HTMLMetaElement>('meta[property="og:image"]')
-                if (!metaTag?.content) return
+                const imgTag = html.querySelector<HTMLImageElement>('button > img')
+                if (!imgTag?.src) return
 
                 const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     {
                         userId: identity.identifier.userId,
-                        tokenId: token.tokenId,
-                        address: token.contract.address,
-                        avatarId: getAvatarId(metaTag.content),
-                    } as AvatarMetaDB,
+                        tokenId: info.token.tokenId,
+                        address: info.token.address,
+                        avatarId: getAvatarId(imgTag.src),
+                        chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
+                        schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
+                        pluginId: info.pluginId,
+                    },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
                     pluginId,

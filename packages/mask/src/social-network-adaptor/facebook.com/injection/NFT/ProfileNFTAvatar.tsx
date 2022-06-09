@@ -17,7 +17,7 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
-import type { AllChainsNonFungibleToken } from '../../../../plugins/Avatar/types'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -61,9 +61,9 @@ function NFTAvatarInFacebookFirstStep() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: AllChainsNonFungibleToken) => {
-            if (!token.metadata?.imageURL || !token.contract?.address) return
-            const image = await toPNG(token.metadata.imageURL)
+        async (info: SelectTokenInfo) => {
+            if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+            const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
             if (!identity.identifier) return
 
@@ -72,8 +72,8 @@ function NFTAvatarInFacebookFirstStep() {
             MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                 userId: identity.identifier.userId,
                 avatarId: '',
-                address: token.contract.address,
-                tokenId: token.tokenId,
+                address: info.token.contract.address,
+                tokenId: info.token.tokenId,
             })
         },
         [identity],
@@ -140,17 +140,17 @@ function NFTAvatarListInFaceBookMobile() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: AllChainsNonFungibleToken) => {
-            if (!token.metadata?.imageURL || !token.contract?.address) return
-            const image = await toPNG(token.metadata.imageURL)
+        async (info: SelectTokenInfo) => {
+            if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+            const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
 
             await changeImageToActiveElementsOnMobile(image)
 
             identity.identifier &&
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contract?.address)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
         },
         [identity],
     )

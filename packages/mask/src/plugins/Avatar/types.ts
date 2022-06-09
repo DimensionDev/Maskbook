@@ -30,11 +30,6 @@ export interface SelectTokenInfo {
     pluginId: NetworkPluginID
 }
 
-export interface TokenInfo {
-    address: string
-    tokenId: string
-}
-
 export interface NextIDAvatarMeta extends AvatarMetaDB {
     nickname: string
     imageUrl: string

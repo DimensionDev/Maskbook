@@ -6,13 +6,14 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useCollectibles } from '../hooks/useCollectibles'
-import type { AllChainsNonFungibleToken } from '../types'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -83,24 +84,30 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: AllChainsNonFungibleToken) => void
+    onChange: (token: SelectTokenInfo) => void
     hideWallet?: boolean
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount(pluginID)
+    const chainId = useChainId(pluginID)
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])
     const { t } = useI18N()
-    const { collectibles, error, retry, loading } = useCollectibles(account, NetworkPluginID.PLUGIN_EVM, chainId)
+    const { collectibles, error, retry, loading } = useCollectibles(account, pluginID, chainId as ChainId)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
-        onChange(selectedToken)
+        onChange({
+            account,
+            token: selectedToken,
+            image: selectedToken.metadata?.imageURL ?? '',
+            pluginId: pluginID,
+        })
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
@@ -155,7 +162,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </Typography>
                     ) : null}
                 </Box>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
                             {loading && !collectibles?.length
@@ -187,12 +194,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     </Box>
                 </ChainBoundary>
             </Box>
-            <AddNFT
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                open={open_}
-                onClose={() => setOpen_(false)}
-                onAddClick={onAddClick}
-            />
+            <AddNFT expectedPluginID={pluginID} open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
 }
