@@ -159,11 +159,7 @@ const SelectWallet = memo(() => {
                         <div className={classes.network}>
                             <div className={classes.iconWrapper}>
                                 {currentNetwork.icon ? (
-                                    <WalletIcon
-                                        networkIcon={currentNetwork.icon}
-                                        size={20}
-                                        classes={{ networkIcon: classes.colorChainIcon }}
-                                    />
+                                    <WalletIcon mainIcon={currentNetwork.icon} size={20} />
                                 ) : (
                                     <ChainIcon
                                         color={currentNetwork.iconColor}

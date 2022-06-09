@@ -258,8 +258,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             <WalletIcon
                 size={30}
                 badgeSize={12}
-                networkIcon={providerDescriptor?.icon}
-                providerIcon={networkDescriptor?.icon}
+                mainIcon={providerDescriptor?.icon}
+                badgeIcon={networkDescriptor?.icon}
             />
             <div className={classes.wallet}>
                 <Typography ml={1} className={classes.walletTitle}>

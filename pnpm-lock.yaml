@@ -937,6 +937,7 @@ importers:
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       bignumber.js: ^9.0.2
+      date-fns: ^2.28.0
       react-use: ^17.3.2
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.10
@@ -952,6 +953,7 @@ importers:
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       '@servie/events': 3.0.0
       bignumber.js: 9.0.2
+      date-fns: 2.28.0
       react-use: 17.3.2
     devDependencies:
       '@types/use-subscription': 1.0.0
@@ -25993,7 +25995,7 @@ packages:
     dev: true
 
   /semver-regex/1.0.0:
-    resolution: {integrity: sha1-kqSWkGX5xwxpR1PVUkj8aPj2Usk=}
+    resolution: {integrity: sha512-1vZcoRC+LPtHFkLUPyrabsATDSHerxW+hJBN8h04HZOZBuewbXaNROtUVdEPrTdZsWNq6sfsXDhd48GB2xTG4g==}
     engines: {node: '>=0.10.0'}
     dev: false
 
