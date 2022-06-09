@@ -85,14 +85,16 @@ class Hub implements SolanaHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
-        const { SOL_ADDRESS } = getTokenConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const expectedCurrencyType = options?.currencyType ?? this.currencyType
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(expectedChainId)
+        const { SOL_ADDRESS } = getTokenConstants(expectedChainId)
 
         if (isSameAddress(address, SOL_ADDRESS)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, expectedCurrencyType)
         }
 
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, expectedCurrencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

@@ -29,10 +29,11 @@ class Hub implements FlowHub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(expectedChainId)
         return [
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 FLOW_ADDRESS,
                 'Flow',
                 'FLOW',
@@ -40,7 +41,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/flow.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 FUSD_ADDRESS,
                 'Flow USD',
                 'FUSD',
@@ -48,7 +49,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/FUSD.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 TETHER_ADDRESS,
                 'Tether USD',
                 'tUSD',
@@ -79,7 +80,8 @@ class Hub implements FlowHub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-        return FlowRPC.getFungibleAssets(options?.chainId ?? this.chainId, account)
+        const expectedChainId = options?.chainId ?? this.chainId
+        return FlowRPC.getFungibleAssets(expectedChainId, account)
     }
     async getNonFungibleAsset(
         address: string,
