@@ -89,7 +89,10 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             setMessage(t.tip_add_collectibles_error())
             return
         }
-        const erc721TokenDetailed = await web3Connection?.getNonFungibleToken(contractAddress, tokenId, { chainId })
+        const erc721TokenDetailed = await web3Connection?.getNonFungibleToken(contractAddress, tokenId, {
+            chainId,
+            account,
+        })
 
         if (!erc721TokenDetailed) {
             setMessage(t.tip_add_collectibles_error())
@@ -98,7 +101,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
         await Token?.addToken?.(erc721TokenDetailed)
         onAdd?.(erc721TokenDetailed)
         reset()
-    }, [onAdd, t, contractAddress, tokenId])
+    }, [onAdd, t, contractAddress, tokenId, account, chainId])
 
     const handleClose = useCallback(() => {
         onClose?.()

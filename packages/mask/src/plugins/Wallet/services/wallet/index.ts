@@ -134,6 +134,7 @@ export async function signTransaction(address: string, config: Transaction) {
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
+        derivationPath: wallet.derivationPath,
         sign_input,
     })
 
@@ -295,8 +296,9 @@ export async function recoverWalletFromMnemonic(
     name: string,
     mnemonic: string,
     derivationPath = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
+    initialPassword?: string,
 ) {
-    const password_ = await password.INTERNAL_getPasswordRequired()
+    const password_ = initialPassword ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importMnemonic({
         mnemonic,
         password: password_,
@@ -325,8 +327,8 @@ export async function recoverWalletFromMnemonic(
     }
 }
 
-export async function recoverWalletFromPrivateKey(name: string, privateKey: string) {
-    const password_ = await password.INTERNAL_getPasswordRequired()
+export async function recoverWalletFromPrivateKey(name: string, privateKey: string, initialPassword_?: string) {
+    const password_ = initialPassword_ ?? (await password.INTERNAL_getPasswordRequired())
     const imported = await Mask.importPrivateKey({
         coin: api.Coin.Ethereum,
         name,

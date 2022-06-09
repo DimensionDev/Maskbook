@@ -1,0 +1,521 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "delta",
+                "type": "uint128"
+            }
+        ],
+        "name": "FarmDepositDecreaseClaimed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "confirmation",
+                "type": "uint128"
+            }
+        ],
+        "name": "FarmDepositDecreaseRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "delta",
+                "type": "uint128"
+            }
+        ],
+        "name": "FarmDepositIncreased",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sponsor",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "FarmExists",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "key",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes",
+                "name": "value",
+                "type": "bytes"
+            }
+        ],
+        "name": "FarmMetastate",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "caller",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "leafHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "RewardsHarvested",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "uint128",
+                "name": "confirmation",
+                "type": "uint128"
+            },
+            {
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            },
+            {
+                "internalType": "bytes32[]",
+                "name": "proof",
+                "type": "bytes32[]"
+            }
+        ],
+        "name": "claimReferralFarmDecrease",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "confirmationsAddr_",
+                "type": "address"
+            }
+        ],
+        "name": "configure",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "key",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes",
+                        "name": "value",
+                        "type": "bytes"
+                    }
+                ],
+                "internalType": "struct KeyVal[]",
+                "name": "metastate",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "configureMetastate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "devRescueErc20",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "devRescueNative",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "getAccountTokenConfirmationOffset",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "int256",
+                "name": "idx",
+                "type": "int256"
+            }
+        ],
+        "name": "getFarmConfirmationReward",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint128",
+                        "name": "reward",
+                        "type": "uint128"
+                    },
+                    {
+                        "internalType": "uint128",
+                        "name": "activationConfirmation",
+                        "type": "uint128"
+                    }
+                ],
+                "internalType": "struct FarmConfirmationReward",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "farmHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "getFarmDepositRemaining",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "bytes24",
+                        "name": "rewardTokenDefn",
+                        "type": "bytes24"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "bytes32",
+                                "name": "farmHash",
+                                "type": "bytes32"
+                            },
+                            {
+                                "internalType": "uint128",
+                                "name": "value",
+                                "type": "uint128"
+                            },
+                            {
+                                "internalType": "uint128",
+                                "name": "confirmation",
+                                "type": "uint128"
+                            }
+                        ],
+                        "internalType": "struct TokenEntitlement[]",
+                        "name": "entitlements",
+                        "type": "tuple[]"
+                    }
+                ],
+                "internalType": "struct HarvestTokenRequest[]",
+                "name": "reqs",
+                "type": "tuple[]"
+            },
+            {
+                "internalType": "bytes32[][][]",
+                "name": "proofs",
+                "type": "bytes32[][][]"
+            }
+        ],
+        "name": "harvestRewardsNoGapcheck",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "uint128",
+                "name": "rewardDeposit",
+                "type": "uint128"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "key",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes",
+                        "name": "value",
+                        "type": "bytes"
+                    }
+                ],
+                "internalType": "struct KeyVal[]",
+                "name": "metastate",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "increaseReferralFarm",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes24",
+                "name": "rewardTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "bytes24",
+                "name": "referredTokenDefn",
+                "type": "bytes24"
+            },
+            {
+                "internalType": "uint128",
+                "name": "value",
+                "type": "uint128"
+            }
+        ],
+        "name": "requestDecreaseReferralFarm",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

@@ -69,7 +69,6 @@ export function createERC721Contract(
     address: string,
     name: string,
     symbol: string,
-    owner?: string,
     balance?: number,
     logoURL?: string,
 ): NonFungibleTokenContract<ChainId, SchemaType.ERC721> {
@@ -79,7 +78,6 @@ export function createERC721Contract(
         address,
         name,
         symbol,
-        owner,
         balance,
         logoURL,
     }
@@ -89,6 +87,7 @@ export function createERC721Metadata(
     chainId: ChainId,
     name: string,
     symbol: string,
+    owner?: string,
     description?: string,
     imageURL?: string,
     mediaURL?: string,
@@ -98,6 +97,7 @@ export function createERC721Metadata(
         chainId,
         name,
         symbol,
+        owner,
         description,
         imageURL,
         mediaURL,

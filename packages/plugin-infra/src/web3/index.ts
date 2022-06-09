@@ -1,8 +1,10 @@
 export * from './Context'
 
 export * from './useAccount'
+export * from './useAccountName'
 export * from './useAddressBook'
-export * from './useAddressNames'
+export * from './useSocialAddressList'
+export * from './useSocialAddressListAll'
 export * from './useAllowTestnet'
 export * from './useBalance'
 export * from './useBeat'

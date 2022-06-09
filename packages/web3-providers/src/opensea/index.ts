@@ -88,7 +88,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             symbol: asset.asset_contract.token_symbol,
             description: asset.description,
             imageURL:
-                asset.animation_url ?? asset.image_original_url ?? asset.image_url ?? asset.image_preview_url ?? '',
+                asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
                 toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
@@ -300,7 +300,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
         )
         if (!response) return
-        // @ts-ignore
         return createNFTAsset(chainId, response)
     }
 
@@ -314,7 +313,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             address,
             assetContract?.name ?? 'Unknown Token',
             assetContract?.token_symbol ?? 'UNKNOWN',
-            undefined,
             undefined,
             assetContract?.image_url,
         )

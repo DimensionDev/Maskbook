@@ -1,4 +1,5 @@
-import type {
+import { CoinGecko, MagicEden } from '@masknet/web3-providers'
+import {
     FungibleToken,
     NonFungibleToken,
     SourceType,
@@ -9,8 +10,10 @@ import type {
     GasOptionType,
     CurrencyType,
     Transaction,
+    NonFungibleTokenCollection,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
 import type { SolanaHub } from './types'
 
@@ -53,7 +56,7 @@ class Hub implements SolanaHub {
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        throw new Error('Method not implemented.')
+        return MagicEden.getAsset(address, tokenId, options)
     }
     async getFungibleAssets(
         account: string,
@@ -65,14 +68,31 @@ class Hub implements SolanaHub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return SolanaRPC.getNonFungibleAssets(account, options)
+        try {
+            return SolanaRPC.getNonFungibleAssets(account, options)
+        } catch {
+            return MagicEden.getTokens(account, options)
+        }
+    }
+    getNonFungibleCollections(
+        account: string,
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+        return MagicEden.getCollections(account, options)
     }
     getFungibleTokenPrice(
         chainId: ChainId,
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        throw new Error('Method not implemented.')
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+        const { SOL_ADDRESS } = getTokenConstants(chainId)
+
+        if (isSameAddress(address, SOL_ADDRESS)) {
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+        }
+
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

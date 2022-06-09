@@ -153,7 +153,9 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     const boxState = useMemo(() => {
-        if (notInWhiteList) return BoxState.NOT_IN_WHITELIST
+        if (notInWhiteList) {
+            return BoxState.NOT_IN_WHITELIST
+        }
         if (insufficientHolderToken) return BoxState.INSUFFICIENT_HOLDER_TOKEN
         if (qualification?.error_msg) return BoxState.NOT_QUALIFIED
         if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo || (rootHash ? errorProof : false))
@@ -236,7 +238,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #region the erc721 contract detailed
     const { value: contractDetailed } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
-        maskBoxInfo?.nft_address,
+        maskBoxInfo?.nft_address ?? '',
+        { account },
     )
     // #endregion
 

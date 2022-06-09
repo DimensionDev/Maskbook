@@ -26,7 +26,7 @@
     {
         "chainId": 3,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Ropsten",
         "color": "rgb(255, 65, 130)",
         "network": "ropsten",
         "fullName": "Ethereum",
@@ -50,7 +50,7 @@
     {
         "chainId": 4,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Rinkeby",
         "color": "rgb(133, 89, 255)",
         "network": "rinkeby",
         "fullName": "Ethereum",
@@ -74,7 +74,7 @@
     {
         "chainId": 42,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Kovan",
         "color": "rgb(133, 89,255)",
         "network": "kovan",
         "fullName": "Ethereum",
@@ -98,7 +98,7 @@
     {
         "chainId": 5,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Goerli",
         "color": "rgb(48, 153, 242)",
         "network": "goerli",
         "fullName": "Ethereum",
@@ -221,7 +221,7 @@
         "name": "Arbitrum",
         "color": "rgb(36, 150, 238)",
         "network": "mainnet",
-        "fullName": "Arbitrum",
+        "fullName": "Arbitrum One",
         "shortName": "arb",
         "features": [],
         "nativeCurrency": {
@@ -2821,6 +2821,7 @@
     {
         "chainId": 1666600000,
         "name": "Harmony",
+        "type": "Harmony",
         "network": "mainnet",
         "shortName": "hmy-s0",
         "features": [],
@@ -2836,6 +2837,7 @@
         "chainId": 1666600001,
         "name": "Harmony",
         "network": "mainnet",
+        "type": "Harmony",
         "shortName": "hmy-s1",
         "features": [],
         "nativeCurrency": {
@@ -2850,6 +2852,7 @@
         "chainId": 1666600002,
         "name": "Harmony",
         "network": "mainnet",
+        "type": "Harmony",
         "shortName": "hmy-s2",
         "features": [],
         "nativeCurrency": {
@@ -2864,6 +2867,7 @@
         "chainId": 1666600003,
         "name": "Harmony",
         "network": "mainnet",
+        "type": "Harmony",
         "shortName": "hmy-s3",
         "features": [],
         "nativeCurrency": {
@@ -2878,6 +2882,7 @@
         "chainId": 1666700000,
         "name": "Harmony",
         "network": "testnet",
+        "type": "Harmony",
         "shortName": "hmy-b-s0",
         "features": [],
         "nativeCurrency": {
@@ -2892,6 +2897,7 @@
         "chainId": 1666700001,
         "name": "Harmony",
         "network": "testnet",
+        "type": "Harmony",
         "shortName": "hmy-b-s1",
         "features": [],
         "nativeCurrency": {
@@ -2906,6 +2912,7 @@
         "chainId": 1666700002,
         "name": "Harmony",
         "network": "testnet",
+        "type": "Harmony",
         "shortName": "hmy-b-s2",
         "features": [],
         "nativeCurrency": {
@@ -2919,6 +2926,7 @@
     {
         "chainId": 1666700003,
         "name": "Harmony",
+        "type": "Harmony",
         "network": "testnet",
         "shortName": "hmy-b-s3",
         "features": [],
@@ -2990,7 +2998,7 @@
     {
         "chainId": 1030,
         "type": "Conflux",
-        "name": "Conflux",
+        "name": "Conflux eSpace",
         "network": "mainnet",
         "shortName": "Conflux",
         "features": [],

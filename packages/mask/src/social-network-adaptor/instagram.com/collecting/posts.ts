@@ -67,5 +67,5 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     return null
 }
 function getPostID(node: DOMProxy): null | string {
-    return node.current?.querySelector<HTMLAnchorElement>('a[href^="/p/"]')?.href.match(/\/p\/(.+)\/.+/)?.[1] || null
+    return node.current?.querySelector<HTMLAnchorElement>('span a[href^="/"]')?.text || null
 }

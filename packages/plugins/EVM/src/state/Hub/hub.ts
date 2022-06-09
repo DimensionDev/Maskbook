@@ -1,4 +1,4 @@
-import { CoinGecko, DeBank, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import { CoinGecko, DeBank, EthereumWeb3, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -20,9 +20,11 @@ import {
     chainResolver,
     formatEthereumAddress,
     GasOption,
+    getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
+    isNativeTokenAddress,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
@@ -51,14 +53,17 @@ class Hub implements EVM_Hub {
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
-    getGasOptions(
+    async getGasOptions(
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
-        if (chainResolver.isSupport(chainId, 'EIP1559')) {
-            return MetaSwap.getGasOptions(chainId)
+        try {
+            const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
+            if (isEIP1559) return await MetaSwap.getGasOptions(chainId)
+            return await DeBank.getGasOptions(chainId)
+        } catch (error) {
+            return EthereumWeb3.getGasOptions(chainId)
         }
-        return DeBank.getGasOptions(chainId)
     }
     getFungibleAsset(
         address: string,
@@ -73,7 +78,7 @@ class Hub implements EVM_Hub {
         // only the first page is available
         if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
         try {
-            return DeBank.getAssets(account, { chainId: this.chainId, ...options })
+            return await DeBank.getAssets(account, { chainId: this.chainId, ...options })
         } catch {
             return Zerion.getAssets(account, { chainId: this.chainId, ...options })
         }
@@ -106,12 +111,13 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(
-            address,
-            CurrencyType.USD,
-            chainId,
-            options?.currencyType === CurrencyType.NATIVE || !address,
-        )
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+
+        if (isNativeTokenAddress(address)) {
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+        }
+
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,

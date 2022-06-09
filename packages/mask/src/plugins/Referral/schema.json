@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+        "referral_token": {
+            "type": "string",
+            "title": "referral_token"
+        },
+        "sender": {
+            "type": "string",
+            "title": "sender"
+        }
+    },
+    "required": ["referral_token", "sender"]
+}

@@ -67,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const getFungibleTokenItem =
     <T extends NetworkPluginID>(
-        account: string,
         getSource: (address: string) => 'personal' | 'official' | 'external',
         getBalance: (address: string) => string,
         isSelected: (address: string) => boolean,
@@ -141,7 +140,7 @@ export const getFungibleTokenItem =
                 onClick={handleTokenSelect}
                 disabled={selected}>
                 <ListItemIcon>
-                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURL} />
+                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
                     <Typography

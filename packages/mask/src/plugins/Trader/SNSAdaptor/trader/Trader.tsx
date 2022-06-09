@@ -28,7 +28,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { useGasConfig } from './hooks/useGasConfig'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet } from '@masknet/plugin-infra/web3'
+import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
 
@@ -52,6 +52,7 @@ export function Trader(props: TraderProps) {
     const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
@@ -356,7 +357,7 @@ export function Trader(props: TraderProps) {
     return (
         <div className={classes.root}>
             <TradeForm
-                wallet={wallet}
+                account={account}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
@@ -373,6 +374,7 @@ export function Trader(props: TraderProps) {
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog
+                    account={account}
                     wallet={wallet}
                     open={openConfirmDialog}
                     trade={focusedTrade.value}

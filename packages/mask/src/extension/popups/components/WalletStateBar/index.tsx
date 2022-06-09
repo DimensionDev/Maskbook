@@ -66,7 +66,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                 )}
                 <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                     <Stack mx={1} justifyContent="center">
-                        <WalletIcon providerIcon={providerDescriptor.icon} inverse size={38} />
+                        <WalletIcon mainIcon={providerDescriptor.icon} size={38} />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16} display="flex" alignItems="center">

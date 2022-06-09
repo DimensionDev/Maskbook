@@ -81,7 +81,6 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
@@ -92,10 +91,9 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlockTimestamp(options?: SolanaWeb3ConnectionOptions): Promise<number> {
-        throw new Error('Method not implemented.')
+    async switchChain(options?: SolanaWeb3ConnectionOptions) {
+        await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
-    switchChain?: ((options?: SolanaWeb3ConnectionOptions) => Promise<void>) | undefined
     getNativeToken(options?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
@@ -143,14 +141,18 @@ class Connection implements BaseConnection {
         return Promise.resolve(options?.chainId ?? this.chainId)
     }
 
-    getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse> {
-        throw new Error('Method not implemented.')
+    async getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse | null> {
+        return this.getWeb3Connection(options).getBlock(no)
     }
 
     async getBlockNumber(options?: SolanaWeb3ConnectionOptions) {
-        // cspell:disable-next-line
-        const response = await this.getWeb3Connection(options).getLatestBlockhash()
-        return response.lastValidBlockHeight
+        return this.getWeb3Connection(options).getSlot()
+    }
+
+    async getBlockTimestamp(options?: SolanaWeb3ConnectionOptions): Promise<number> {
+        const slot = await this.getBlockNumber(options)
+        const response = await this.getWeb3Connection(options).getBlockTime(slot)
+        return response ?? 0
     }
 
     async getBalance(account: string, options?: SolanaWeb3ConnectionOptions) {

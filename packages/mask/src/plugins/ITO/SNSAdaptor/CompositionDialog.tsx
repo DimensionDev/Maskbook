@@ -61,7 +61,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
-    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
 
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -151,7 +151,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
                 payload.password =
-                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personaSign', {
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personalSign', {
                         account,
                     })) ?? ''
             }

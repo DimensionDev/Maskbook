@@ -20,7 +20,7 @@ export function useCreateNftRedpacketCallback(
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [createState, setCreateState] = useTransactionState()
-    const nftRedPacketContract = useNftRedPacketContract()
+    const nftRedPacketContract = useNftRedPacketContract(chainId)
     const createCallback = useCallback(
         async (publicKey: string) => {
             if (!nftRedPacketContract) {

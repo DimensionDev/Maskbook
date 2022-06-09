@@ -176,7 +176,7 @@ class Connection implements EVM_Connection {
     ): Promise<string> {
         // Native
         if (!address || isNativeTokenAddress(options?.chainId ?? this.chainId, address)) {
-            const tx = {
+            const tx: Transaction = {
                 from: options?.account ?? this.account,
                 to: recipient,
                 value: toHex(amount),
@@ -186,6 +186,7 @@ class Connection implements EVM_Connection {
                 {
                     ...tx,
                     gas: await this.estimateTransaction(tx, 50000, options),
+                    ...options?.overrides,
                 },
                 options,
             )
@@ -194,7 +195,7 @@ class Connection implements EVM_Connection {
         // ERC20
         const contract = await this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], options)
         const tx = contract?.methods.transfer(recipient, toHex(amount))
-        return sendTransaction(contract, tx)
+        return sendTransaction(contract, tx, options?.overrides)
     }
     async transferNonFungibleToken(
         address: string,
@@ -206,7 +207,7 @@ class Connection implements EVM_Connection {
         // ERC721
         const contract = await this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], options)
         const tx = contract?.methods.transferFrom(options?.account ?? this.account, recipient, tokenId)
-        return sendTransaction(contract, tx)
+        return sendTransaction(contract, tx, options?.overrides)
     }
 
     async getGasPrice(options?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -244,7 +245,6 @@ class Connection implements EVM_Connection {
     }
     async getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         // ERC721
@@ -252,10 +252,9 @@ class Connection implements EVM_Connection {
         const results = await Promise.allSettled([
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
-            contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(address).call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
         ])
-        const [name, symbol, owner, balance] = results.map((result) =>
+        const [name, symbol, balance] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
         return createERC721Contract(
@@ -263,7 +262,6 @@ class Connection implements EVM_Connection {
             address,
             name ?? 'Unknown Token',
             symbol ?? 'UNKNOWN',
-            owner,
             balance as unknown as number,
         )
     }
@@ -280,8 +278,9 @@ class Connection implements EVM_Connection {
     async switchChain(options?: EVM_Web3ConnectionOptions): Promise<void> {
         await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
-
-    getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
+    async getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
+        const account = options?.account ?? this.account
+        if (!account) return '0'
         return this.getBalance(options?.account ?? this.account, options)
     }
     async getFungibleTokenBalance(address: string, options?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -390,22 +389,22 @@ class Connection implements EVM_Connection {
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
             contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(address).call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
         ])
         const [name, symbol, owner, balance] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
+
         return createERC721Token(
             chainId,
             address,
             id,
-            createERC721Metadata(chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN'),
+            createERC721Metadata(chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN', owner),
             createERC721Contract(
                 chainId,
                 address,
                 name ?? 'Unknown Token',
                 symbol ?? 'UNKNOWN',
-                owner,
                 balance as unknown as number,
             ),
             createERC721Collection(chainId, name ?? 'Unknown Token', ''),
@@ -542,14 +541,14 @@ class Connection implements EVM_Connection {
 
     signMessage(
         dataToSign: string,
-        signType?: 'personaSign' | 'typedDataSign' | Omit<string, 'personaSign' | 'typedDataSign'>,
+        signType?: 'personalSign' | 'typedDataSign' | Omit<string, 'personalSign' | 'typedDataSign'>,
         options?: EVM_Web3ConnectionOptions,
     ) {
         const account = options?.account ?? this.account
         if (!account) throw new Error('Unknown account.')
 
         switch (signType) {
-            case 'personaSign':
+            case 'personalSign':
                 return this.hijackedRequest<string>(
                     {
                         method: EthereumMethodType.PERSONAL_SIGN,
@@ -600,7 +599,13 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL,
-                params: [transaction, 'latest'],
+                params: [
+                    {
+                        ...transaction,
+                        ...options?.overrides,
+                    },
+                    'latest',
+                ],
             },
             options,
         )
@@ -609,7 +614,12 @@ class Connection implements EVM_Connection {
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [transaction],
+                params: [
+                    {
+                        ...transaction,
+                        ...options?.overrides,
+                    },
+                ],
             },
             options,
         )

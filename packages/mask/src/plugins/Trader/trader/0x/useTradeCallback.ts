@@ -23,7 +23,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
             ...gasConfig,
         } as TransactionConfig
-    }, [account, tradeComputed])
+    }, [account, tradeComputed, gasConfig])
 
     return useAsyncFn(async () => {
         // validate config

@@ -9,8 +9,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        filter: 'drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.1))',
+        backdropFilter: 'blur(20px)',
     },
-    tip: { fontSize: 14, marginBottom: theme.spacing(2) },
+    tip: { fontSize: 12, marginTop: '10px' },
     onCopy: { marginTop: theme.spacing(1) },
 }))
 
@@ -21,16 +23,17 @@ export const QRCodeModal: React.FC<{
 
     const { classes } = useStyles()
     const style: React.CSSProperties = {
-        width: '80%',
+        width: 361,
         display: 'block',
         margin: 'auto',
+        borderRadius: 16,
     }
     return (
         <Grid className={classes.container}>
+            <QRCode text={uri} canvasProps={{ style }} />
             <Typography className={classes.tip} color="textSecondary">
                 {t('plugin_wallet_qr_code_with_wallet_connect')}
             </Typography>
-            <QRCode text={uri} canvasProps={{ style }} />
         </Grid>
     )
 }
