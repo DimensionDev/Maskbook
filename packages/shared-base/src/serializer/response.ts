@@ -1,40 +1,19 @@
-import { TypesonPromise } from 'typeson'
-
 export const is = (x: any) => x instanceof Response
-export const ser = (x: Response) => {
-    return new TypesonPromise<{ binaryArray: Uint8Array[]; init: ResponseInit }>(async (resolve, reject) => {
-        const reader = x.body?.getReader()
-        const output = []
-        let isDone = false
-        if (reader) {
-            try {
-                while (!isDone) {
-                    const { done, value } = await reader.read()
-                    if (!done) {
-                        output.push(value)
-                    } else {
-                        isDone = true
-                    }
-                }
-            } catch (error) {
-                reject(error)
-            }
-        }
-        resolve({
-            binaryArray: output,
-            init: {
-                status: x.status,
-                statusText: x.statusText,
-                headers: { 'Content-Type': 'application/json' },
-            },
-        })
-    })
+export const serializer = (x: Response) => {
+    return {
+        body: x.body,
+        init: {
+            status: x.status,
+            statusText: x.statusText,
+            headers: x.headers,
+        },
+    }
 }
 
-export const de = (x: { binaryArray: Uint8Array[]; init: ResponseInit }) => {
+export const deserializer = (x: { body: Uint8Array[]; init: ResponseInit }) => {
     const body = new ReadableStream({
         start(controller) {
-            for (const binary of x.binaryArray) {
+            for (const binary of x.body) {
                 controller.enqueue(binary)
             }
             controller.close()
@@ -42,3 +21,5 @@ export const de = (x: { binaryArray: Uint8Array[]; init: ResponseInit }) => {
     })
     return new Response(body, x.init)
 }
+
+export const responseRegedit = [is, serializer, deserializer] as const

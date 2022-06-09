@@ -1,13 +1,14 @@
 /// <reference path="./typeson.d.ts" />
 import { Typeson, TypesonPromise } from 'typeson'
 import type { Serialization } from 'async-call-rpc'
-import { Ok, Err, Some, None } from 'ts-results'
+import { Err, None, Ok, Some } from 'ts-results'
 import * as BN from 'bignumber.js'
-import { is as responseIs, de as responseDe, ser as responseSer } from './response'
 
 // @ts-ignore
-import { builtin, blob, file, filelist, imagebitmap, specialNumbers, cryptokey } from 'typeson-registry'
+import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '../Identifier'
+import { responseRegedit } from './response'
+import { readableStreamRegedit } from './readableStream'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined
@@ -28,7 +29,8 @@ function setup() {
 
     typeson.register({
         Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],
-        Response: [responseIs, responseSer, responseDe],
+        ReadableStream: [...readableStreamRegedit],
+        Response: [...responseRegedit],
     })
 
     for (const a of pendingRegister) a()
