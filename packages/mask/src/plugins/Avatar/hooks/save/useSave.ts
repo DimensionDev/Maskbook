@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types'
-import { useSaveSolana } from './useSaveSolana'
+import { useSaveKV } from './useSaveKV'
 import { useSaveToNextID } from './useSaveToNextID'
 import { useSaveToRSS3 } from './useSaveToRSS3'
 
@@ -13,7 +13,7 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
 export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
     const [, saveToNextID] = useSaveToNextID()
     const [, saveToRSS3] = useSaveToRSS3()
-    const [, saveSolana] = useSaveSolana(pluginId, chainId)
+    const [, saveToKV] = useSaveKV(pluginId, chainId)
 
     return useAsyncFn(
         async (
@@ -47,7 +47,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                     return saveToRSS3(info, account, identifier)
                 }
                 default:
-                    return saveSolana(info, account, persona, identifier, proof)
+                    return saveToKV(info, account, persona, identifier, proof)
             }
         },
         [saveToNextID, saveToRSS3, pluginId],
