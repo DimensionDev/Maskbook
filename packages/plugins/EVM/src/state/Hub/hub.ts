@@ -177,6 +177,7 @@ class Hub implements EVM_Hub {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: i,
                 size: this.sizePerPage,
+                chainId: this.chainId,
             })
 
             yield* pageable.data
