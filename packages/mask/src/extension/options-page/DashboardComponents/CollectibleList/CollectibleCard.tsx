@@ -65,6 +65,7 @@ export interface CollectibleCardProps {
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, readonly, renderOrder } = props
     const { classes } = useStyles()
+
     return (
         <Link target="_blank" rel="noopener noreferrer" className={classes.linkWrapper}>
             <div className={classes.blocker} />
@@ -75,7 +76,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 <NFTCardStyledAssetPlayer
                     contractAddress={token.address}
                     chainId={token.chainId}
-                    url={token.metadata?.mediaURL}
+                    url={token.metadata?.mediaURL ?? token.metadata?.imageURL}
                     renderOrder={renderOrder}
                     tokenId={token.tokenId}
                     classes={{

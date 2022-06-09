@@ -10,7 +10,7 @@ interface RetryHintProps {
 export const RetryHint = memo<RetryHintProps>(({ retry, hint = true }) => {
     const t = useSharedI18N()
     return (
-        <Stack justifyContent="center" direction="row" alignItems="center" height="100%">
+        <Stack justifyContent="center" direction="row" alignItems="center" height={hint ? '100%' : '100px'}>
             <Stack gap={2.75}>
                 {hint && (
                     <Typography textAlign="center" fontSize={12} fontWeight={700}>

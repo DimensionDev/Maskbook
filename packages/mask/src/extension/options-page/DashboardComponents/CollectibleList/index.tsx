@@ -340,7 +340,7 @@ export function CollectionList({
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>
-                    {error && <RetryHint hint={false} retry={next} />}
+                    {error && !done && <RetryHint hint={false} retry={next} />}
                     <ElementAnchor
                         callback={() => {
                             if (next) next()

@@ -227,19 +227,17 @@ class Hub implements EVM_Hub {
             return
         }
         for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator: currentPage,
-                chainId: options?.chainId ?? this.chainId,
-                size: this.sizePerPage,
-                chainId: this.chainId,
-            })
-            // @ts-ignore
-            if (pageable.error) {
-                yield new Error('Fetch failed')
-            } else {
+            try {
+                const pageable = await this.getNonFungibleAssets(address, {
+                    indicator: currentPage,
+                    chainId: options?.chainId ?? this.chainId,
+                    size: this.sizePerPage,
+                chainId: this.chainId,})
                 yield* pageable.data
                 currentPage = currentPage + 1
                 if (pageable.data.length === 0) break
+            } catch (error) {
+                yield new Error((error as Error).message)
             }
         }
     }
