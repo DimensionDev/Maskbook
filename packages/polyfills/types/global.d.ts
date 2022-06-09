@@ -1,1 +1,1 @@
-declare function r2d2Fetch(url: string, init?: RequestInit): Promise<Response>
+declare function r2d2Fetch(url: RequestInfo, init?: RequestInit): Promise<Response>
