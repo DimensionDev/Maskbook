@@ -4,7 +4,6 @@ import {
     CurrencyType,
     currySameAddress,
     formatBalance,
-    FungibleAsset,
     isSameAddress,
     minus,
     NetworkPluginID,
@@ -18,29 +17,23 @@ import { useWeb3State } from './useWeb3State'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
 
-export function useFungibleAssets<T extends NetworkPluginID, Indicator extends string | number = number>(
-    pluginID?: T,
-    schemaType?: Web3Helper.Definition[T]['SchemaType'],
-    options?: Web3Helper.Web3HubOptions<T, Indicator>,
-) {
-    type GetAllFungibleAssets = (
-        address: string,
-    ) => AsyncIterableIterator<
-        FungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
-    >
-
+export function useFungibleAssets<
+    S extends 'all' | void = void,
+    T extends NetworkPluginID = NetworkPluginID,
+    Indicator = number,
+>(pluginID?: T, schemaType?: Web3Helper.SchemaTypeScope<S, T>, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
     const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
+    const chainId = useChainId(pluginID, options?.chainId)
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
-    const { Others } = useWeb3State<'all'>(pluginID)
+    const { Others } = useWeb3State(pluginID)
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
-        const assets = await asyncIteratorToArray((hub?.getAllFungibleAssets as GetAllFungibleAssets)(account))
+        const assets = await asyncIteratorToArray(hub?.getAllFungibleAssets?.(account))
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
 
         return filteredAssets

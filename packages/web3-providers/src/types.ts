@@ -112,11 +112,11 @@ export namespace PriceAPI {
 }
 
 export namespace HistoryAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType> {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>, Indicator>>
+        ): Promise<Array<Transaction<ChainId, SchemaType>>>
     }
 }
 
@@ -127,7 +127,7 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number> {
         getAssets(
             address: string,
             options?: HubOptions<ChainId>,
@@ -136,7 +136,7 @@ export namespace FungibleTokenAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number> {
         getAsset?: (
             address: string,
             tokenId: string,

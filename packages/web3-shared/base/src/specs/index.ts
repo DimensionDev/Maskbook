@@ -667,7 +667,7 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId, Indicator extends string | number = number> {
+export interface HubOptions<ChainId, Indicator = number> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -754,7 +754,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         options?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get the most recent transactions */
-    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
+    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Array<Transaction<ChainId, SchemaType>>>
 }
 
 export interface SettingsState {

@@ -46,7 +46,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const networkDescriptor = useNetworkDescriptor<'all'>()
+    const networkDescriptor = useNetworkDescriptor()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Helper.NetworkDescriptorAll | null>(
         networkDescriptor ?? null,
     )

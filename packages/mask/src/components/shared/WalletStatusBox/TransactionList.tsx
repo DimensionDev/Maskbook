@@ -93,7 +93,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     }
 
     const web3 = useWeb3()
-    const { Others } = useWeb3State<'all'>()
+    const { Others } = useWeb3State()
 
     const { value: targetAddress } = useAsync(async () => {
         return ''
