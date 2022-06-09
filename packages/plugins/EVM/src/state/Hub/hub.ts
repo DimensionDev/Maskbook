@@ -155,7 +155,7 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         return DeBank.getTransactions(account, { chainId })
     }
 

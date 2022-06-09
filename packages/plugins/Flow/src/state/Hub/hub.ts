@@ -129,7 +129,7 @@ class Hub implements FlowHub {
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 

@@ -35,6 +35,7 @@ import {
 import {
     Account,
     ConnectionOptions,
+    currySameAddress,
     FungibleToken,
     isSameAddress,
     NonFungibleToken,
@@ -303,20 +304,35 @@ class Connection implements EVM_Connection {
     ): Promise<Record<string, string>> {
         if (!listOfAddress.length) return {}
 
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options?.chainId ?? this.chainId)
-        const contract = await this.getWeb3Contract<BalanceChecker>(
-            BALANCE_CHECKER_ADDRESS ?? '',
-            BalanceCheckerABI as AbiItem[],
-            options,
-        )
-        const result = await contract?.methods.balances([options?.account ?? this.account], listOfAddress).call({
-            // cannot check the sender's balance in the same contract
-            from: undefined,
-            chainId: numberToHex(options?.chainId ?? this.chainId),
-        })
+        const account = options?.account ?? this.account
+        const chainId = options?.chainId ?? this.chainId
+        const { NATIVE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
+        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
+        const entities: Array<[string, string]> = []
 
-        if (result?.length !== listOfAddress.length) return {}
-        return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
+        if (listOfAddress.some(currySameAddress(NATIVE_TOKEN_ADDRESS))) {
+            entities.push([NATIVE_TOKEN_ADDRESS, await this.getBalance(this.account, options)])
+        }
+
+        const listOfNonNativeAddress = listOfAddress.filter((x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x))
+
+        if (listOfNonNativeAddress.length) {
+            const contract = await this.getWeb3Contract<BalanceChecker>(
+                BALANCE_CHECKER_ADDRESS ?? '',
+                BalanceCheckerABI as AbiItem[],
+                options,
+            )
+            const balances = await contract?.methods.balances([account], listOfNonNativeAddress).call({
+                // cannot check the sender's balance in the same contract
+                from: undefined,
+                chainId: numberToHex(chainId),
+            })
+
+            listOfNonNativeAddress.forEach((x, i) => {
+                entities.push([x, balances?.[i] ?? '0'])
+            })
+        }
+        return Object.fromEntries(entities)
     }
 
     async getNonFungibleTokensBalance(

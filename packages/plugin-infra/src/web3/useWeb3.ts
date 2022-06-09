@@ -11,23 +11,19 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
     pluginID?: T,
     options?: Web3Helper.Web3ConnectionOptions<T>,
 ) {
-    type Result = S extends 'all' ? Web3Helper.Web3All : Web3Helper.Web3<T>
-    type GetWeb3 = (options?: Web3Helper.Web3ConnectionOptions<T>) => Promise<Web3Helper.Web3<T>>
-
     const { Connection } = useWeb3State(pluginID)
     const chainId = useChainId(pluginID)
     const account = useAccount(pluginID)
     const providerType = useProviderType(pluginID)
 
     const { value: web3 = null } = useAsyncRetry(async () => {
-        if (!Connection?.getWeb3) return null
-        return (Connection.getWeb3 as GetWeb3)({
+        return Connection?.getWeb3?.({
             account,
             chainId,
             providerType,
             ...options,
-        } as Web3Helper.Web3ConnectionOptions<T>)
+        })
     }, [account, chainId, providerType, JSON.stringify(options)])
 
-    return web3 as Result
+    return web3 as Web3Helper.Web3Scope<S, T>
 }

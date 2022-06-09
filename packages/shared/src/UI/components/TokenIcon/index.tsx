@@ -28,8 +28,8 @@ export interface TokenIconProps extends withClasses<'icon'> {
 export function TokenIcon(props: TokenIconProps) {
     const { address, logoURL, name, AvatarProps, classes } = props
 
-    const chainId = useChainId<'all'>(props.pluginID, props.chainId)
-    const hub = useWeb3Hub<'all'>(props.pluginID)
+    const chainId = useChainId(props.pluginID, props.chainId)
+    const hub = useWeb3Hub(props.pluginID)
 
     const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)

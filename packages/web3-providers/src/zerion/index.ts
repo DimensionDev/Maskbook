@@ -136,7 +136,7 @@ export class ZerionAPI
     async getTransactions(
         address: string,
         options?: HubOptions<ChainId>,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         let result: Array<Transaction<ChainId, SchemaType>> = []
         // xdai-assets is not support
         const pairs = getEnumAsArray(ChainId).map(
@@ -151,6 +151,6 @@ export class ZerionAPI
             result = [...result, ...formatTransactions(chainId, payload.transactions)]
         }
 
-        return createPageable(result, 0)
+        return result
     }
 }

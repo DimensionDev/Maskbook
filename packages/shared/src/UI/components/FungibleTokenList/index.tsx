@@ -69,14 +69,13 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
-    const { Token, Others } = useWeb3State<'all'>()
-    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
+    const { Token, Others } = useWeb3State()
+    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(undefined, {
+        chainId,
+    })
     const trustedFungibleTokens = useTrustedFungibleTokens()
     const blockedFungibleTokens = useBlockedFungibleTokens()
-
-    const nativeToken = useMemo(() => {
-        return Others?.chainResolver.nativeCurrency(chainId)
-    }, [chainId])
+    const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
@@ -95,9 +94,18 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         useFungibleTokensBalance(
             pluginID,
             filteredFungibleTokens.map((x) => x.address),
+            {
+                chainId,
+            },
         )
 
-    const { value: fungibleAssets = EMPTY_LIST, loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
+    const { value: fungibleAssets = EMPTY_LIST, loading: fungibleAssetsLoading } = useFungibleAssets(
+        pluginID,
+        undefined,
+        {
+            chainId,
+        },
+    )
 
     const sortedFungibleTokens = useMemo(() => {
         const fungibleAssetsTable = Object.fromEntries(
