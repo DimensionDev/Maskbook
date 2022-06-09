@@ -2,11 +2,11 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { AvatarMetaDB } from '../types'
 import type { RSS3_KEY_SNS } from '../constants'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
-import { useGetNFTAvatar } from './useGetNFTAvatar'
 import type { EnhanceableSite } from '@masknet/shared-base'
+import { useGetNFTAvatar } from './useGetNFTAvatar'
 
 export function useNFTAvatar(
     userId: string | undefined,
@@ -21,7 +21,7 @@ export function useNFTAvatar(
             userId,
             activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             snsKey,
-            networkPluginId,
+            networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
             chainId,
         )
     }, [userId, snsKey, networkPluginId, chainId, getNFTAvatar])

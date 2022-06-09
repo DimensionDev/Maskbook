@@ -22,6 +22,7 @@ export function useGetNFTAvatar() {
                 userId,
                 networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
             )
+
             if (!address) return
             if (networkPluginId !== NetworkPluginID.PLUGIN_EVM) {
                 return PluginNFTAvatarRPC.getAvatar(userId, network)
