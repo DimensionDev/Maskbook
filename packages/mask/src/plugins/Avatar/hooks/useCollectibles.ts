@@ -1,5 +1,5 @@
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken } from '../types'
 
@@ -11,8 +11,8 @@ export function useCollectibles(account: string, pluginId: NetworkPluginID, chai
         loading,
     } = useNonFungibleAssets(pluginId, undefined, {
         chainId,
-        account,
-        // account: pluginId === NetworkPluginID.PLUGIN_SOLANA ? '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde' : account,
+        // account,
+        account: pluginId === NetworkPluginID.PLUGIN_SOLANA ? '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde' : account,
         // account: '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde',
     })
 

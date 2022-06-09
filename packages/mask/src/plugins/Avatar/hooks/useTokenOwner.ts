@@ -24,20 +24,16 @@ export function useTokenOwner(
 
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
     const { value: persona, loading } = usePersonas(userId)
-    const { value: address, loading: loadingAddress } = useAsyncRetry(
+    const { value: storage, loading: loadingAddress } = useAsyncRetry(
         async () =>
-            PluginNFTAvatarRPC.getAddress(
-                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-                userId,
-                pluginId,
-            ),
+            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
         [userId],
     )
 
     return {
         loading: loading || loadingAddress,
         isOwner: Boolean(
-            (address && isSameAddress(address, owner)) ||
+            (storage?.address && isSameAddress(storage.address, owner) && pluginId === storage.networkPluginID) ||
                 persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }

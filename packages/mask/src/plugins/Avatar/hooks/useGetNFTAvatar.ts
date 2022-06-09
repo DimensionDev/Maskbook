@@ -9,25 +9,14 @@ export function useGetNFTAvatar() {
     const [, getNFTAvatarFromRSS] = useGetNFTAvatarFromRSS3()
 
     return useAsyncFn(
-        async (
-            userId?: string,
-            network?: EnhanceableSite,
-            snsKey?: RSS3_KEY_SNS,
-            networkPluginId?: NetworkPluginID,
-            chainId?: number,
-        ) => {
+        async (userId?: string, network?: EnhanceableSite, snsKey?: RSS3_KEY_SNS) => {
             if (!userId || !network || !snsKey) return
-            const address = await PluginNFTAvatarRPC.getAddress(
-                network,
-                userId,
-                networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
-            )
-
-            if (!address) return
-            if (networkPluginId !== NetworkPluginID.PLUGIN_EVM) {
+            const storage = await PluginNFTAvatarRPC.getAddress(network, userId)
+            if (!storage?.address) return
+            if (storage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
                 return PluginNFTAvatarRPC.getAvatar(userId, network)
             }
-            return getNFTAvatarFromRSS(userId, address, snsKey)
+            return getNFTAvatarFromRSS(userId, storage.address, snsKey)
         },
         [getNFTAvatarFromRSS],
     )
