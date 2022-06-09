@@ -68,12 +68,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    useEffect(() => {
-        // PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
-        //     setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
-        // )
-    }, [])
-
     const onSwap = useCallback(
         (
             token: FungibleAsset<
@@ -117,9 +111,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 
                 // token value
                 if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
-
-                // // token balance
-                // if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
 
                 return 0
             })

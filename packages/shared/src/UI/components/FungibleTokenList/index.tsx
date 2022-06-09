@@ -100,7 +100,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const { value: fungibleAssets = EMPTY_LIST, loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
 
     const sortedFungibleTokens = useMemo(() => {
-        const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
+        const fungibleAssetsTable = Object.fromEntries(
+            fungibleAssets.filter((x) => x.chainId === chainId).map((x) => [x.address, x]),
+        )
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
