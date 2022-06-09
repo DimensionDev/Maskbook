@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     listItem: {
-        height: 54,
+        height: 52,
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(1, 1),
         '&:nth-child(even)': {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     methodName: {
-        fontWeight: 'bold',
+        fontWeight: 500,
         fontSize: 14,
         textTransform: 'capitalize',
         textOverflow: 'ellipsis',
@@ -38,7 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
     },
     timestamp: {
-        fontSize: 12,
+        fontSize: 14,
+        lineHeight: '18px',
     },
     cell: {
         fontSize: 14,
@@ -47,19 +48,23 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         boxSizing: 'border-box',
     },
+    linkText: {
+        fontSize: 14,
+        lineHeight: '18px',
+    },
     link: {
         display: 'flex',
         fill: 'none',
     },
     linkIcon: {
         fill: 'none',
-        width: 16,
-        height: 16,
+        width: 17.5,
+        height: 17.5,
         marginLeft: theme.spacing(0.5),
     },
     clear: {
         fontSize: 14,
-        color: theme.palette.primary.main,
+        color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.common.white,
         cursor: 'pointer',
     },
 }))
@@ -148,7 +153,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Stack>
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.linkText}>
                     {address && isSameAddress(domainOrAddress, address)
                         ? Others?.formatAddress?.(address, 4)
                         : domainOrAddress || address}
@@ -162,7 +167,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Link>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">
-                <Typography fontWeight={300} justifyContent="center" color={statusTextColorMap[txStatus]}>
+                <Typography fontWeight={400} justifyContent="center" color={statusTextColorMap[txStatus]} fontSize={14}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>

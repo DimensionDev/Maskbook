@@ -12,7 +12,7 @@ export function useBalance<S extends 'all' | void = void, T extends NetworkPlugi
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection) return '0'
-        return connection.getBalance(account)
+        if (!account || !connection) return '0'
+        return (connection.getBalance as GetBalance)(account)
     }, [account, connection])
 }

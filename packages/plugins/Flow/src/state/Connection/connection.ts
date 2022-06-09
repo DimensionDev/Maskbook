@@ -1,6 +1,7 @@
+import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
-import type { BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
+import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
@@ -10,10 +11,10 @@ import {
     NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
+import { toHex } from '@masknet/shared-base'
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
 import { Web3StateSettings } from '../../settings'
-import { toHex } from '@masknet/shared-base'
 
 class Connection implements BaseConnection {
     constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
@@ -21,6 +22,7 @@ class Connection implements BaseConnection {
     private _getWeb3Provider(options?: FlowConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType]
     }
+
     getWeb3(options?: FlowConnectionOptions) {
         return this._getWeb3Provider(options).createWeb3({
             account: options?.account ?? this.account,
@@ -64,11 +66,14 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject> {
-        throw new Error('Method not implemented.')
+    async getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject | null> {
+        const web3 = await this.getWeb3(options)
+        return web3.send([web3.getBlock(), web3.atBlockHeight(no)]).then(web3.decode)
     }
-    getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
-        throw new Error('Method not implemented.')
+    async getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
+        const web3 = await this.getWeb3(options)
+        const blockHeader: BlockHeaderObject = await web3.send([web3.getBlockHeader()]).then(web3.decode)
+        return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
     }
     transferFungibleToken(
         address: string,
@@ -136,11 +141,12 @@ class Connection implements BaseConnection {
     }
     async getBlockNumber(options?: FlowConnectionOptions): Promise<number> {
         const web3 = await this.getWeb3(options)
-        return web3.getBlockHeader().height
+        const blockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
+        return blockHeader.height
     }
     async getBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         const web3 = await this.getWeb3(options)
-        const account = web3.getAccount(address)
+        const account = await web3.send([web3.getAccount(address)]).then(web3.decode)
         return account.balance.toFixed()
     }
     async getTransaction(id: string, options?: FlowConnectionOptions) {
@@ -175,8 +181,8 @@ class Connection implements BaseConnection {
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
     }
-    switchChain(options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
+    async switchChain(options?: FlowConnectionOptions): Promise<void> {
+        await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
     async signMessage(dataToSign: string, signType?: string, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)

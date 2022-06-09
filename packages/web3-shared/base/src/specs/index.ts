@@ -179,6 +179,10 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     icon: URL
     /** The provider name */
     name: string
+    /** The provider bar background gradient color */
+    backgroundGradient?: string
+    /** The provider icon filter color */
+    iconFilterColor?: string
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]
@@ -603,10 +607,10 @@ export interface Connection<
     /** Get the currently chain id. */
     getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
-    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block>
+    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block | null>
     /** Get the latest block number. */
     getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
-    /** Get the latest block timestamp. */
+    /** Get the latest block unix timestamp. */
     getBlockTimestamp(options?: Web3ConnectionOptions): Promise<number>
     /** Get the latest balance of the account. */
     getBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
