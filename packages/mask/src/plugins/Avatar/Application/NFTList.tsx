@@ -1,8 +1,10 @@
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
+import { useEffect } from 'react'
 import { Application_NFT_LIST_PAGE, SUPPORTED_CHAIN_IDS } from '../constants'
 import type { AllChainsNonFungibleToken } from '../types'
 import { NFTListPage } from './NFTListPage'
@@ -42,8 +44,8 @@ interface NFTListProps {
 
 export function NFTList(props: NFTListProps) {
     const { onSelect, tokenInfo, onChangeChain, tokens = [], children } = props
-
-    const [currentTab, onChange, tabs] = useTabs(
+    const chainId = useChainId()
+    const [currentTab, onChange, tabs, setTab] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
         Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page,
     )
@@ -56,6 +58,13 @@ export function NFTList(props: NFTListProps) {
             value === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
         )
     }
+    useEffect(() => {
+        setTab(
+            chainId === ChainId.Matic
+                ? Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
+                : Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
+        )
+    }, [chainId, setTab])
     return (
         <TabContext value={currentTab}>
             <Tabs
