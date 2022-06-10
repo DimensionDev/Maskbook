@@ -76,5 +76,7 @@ export function useNonFungibleAssets<
         setDone(false)
     }, [])
 
+    useEffect(() => retry(), [account, options?.account, retry])
+
     return { value: assets, next, done, retry, error }
 }
