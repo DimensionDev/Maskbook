@@ -193,9 +193,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 )}
             </Typography>
 
-            <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
-                {t.add_collectible()}
-            </Button>
+            {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
+                    {t.add_collectible()}
+                </Button>
+            ) : null}
         </Box>
     )
 
@@ -273,7 +275,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     ))}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                {tokensInList.length ? (
+                {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography
                             variant="body1"
