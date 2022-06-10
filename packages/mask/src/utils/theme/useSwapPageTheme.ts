@@ -23,7 +23,7 @@ export function useSwapPageTheme() {
 
         colors.forEach((color) => {
             if (typeof theme.palette[color] === 'object') {
-                Object.assign(theme.palette[color], colorSchema[color])
+                Object.assign(theme.palette[color] ?? {}, colorSchema[color])
             }
         })
         theme.palette.maskColor = colorSchema.maskColor
