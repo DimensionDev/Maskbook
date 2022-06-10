@@ -124,10 +124,10 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                       variant: 'contained',
                       fullWidth: true,
                       sx: {
-                          backgroundColor: theme.palette.maskColor.dark,
-                          color: theme.palette.maskColor.white,
+                          backgroundColor: theme.palette.maskColor?.dark,
+                          color: theme.palette.maskColor?.white,
                           '&:hover': {
-                              backgroundColor: theme.palette.maskColor.dark,
+                              backgroundColor: theme.palette.maskColor?.dark,
                           },
                       },
                   }

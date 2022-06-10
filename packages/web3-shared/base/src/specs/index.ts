@@ -607,10 +607,10 @@ export interface Connection<
     /** Get the currently chain id. */
     getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
-    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block>
+    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block | null>
     /** Get the latest block number. */
     getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
-    /** Get the latest block timestamp. */
+    /** Get the latest block unix timestamp. */
     getBlockTimestamp(options?: Web3ConnectionOptions): Promise<number>
     /** Get the latest balance of the account. */
     getBalance(address: string, options?: Web3ConnectionOptions): Promise<string>

@@ -32,7 +32,6 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
         const SideBarNativeItemStyle = SideBarNativeItem ? window.getComputedStyle(SideBarNativeItem) : null
         const SideBarNativeItemTextStyle = SideBarNativeItemText ? window.getComputedStyle(SideBarNativeItemText) : null
         const SideBarNativeItemIconStyle = SideBarNativeItemIcon ? window.getComputedStyle(SideBarNativeItemIcon) : null
-        console.log({ w: SideBarNativeItemIconStyle?.width, mw: SideBarNativeItemIconStyle?.minWidth })
         SideBarNativeItemPaddingRef.value = SideBarNativeItemStyle?.padding ?? '11px'
         SideBarNativeItemIconSize.value = SideBarNativeItemIconStyle?.width ?? '24px'
         SideBarNativeItemTextMarginLeftRef.value = SideBarNativeItemTextStyle?.marginLeft ?? '20px'
