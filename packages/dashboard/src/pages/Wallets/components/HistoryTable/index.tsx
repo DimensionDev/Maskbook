@@ -64,8 +64,8 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
             onPageChange={setPage}
             hasNextPage={false}
             isLoading={loading}
-            isEmpty={!value?.data?.length}
-            dataSource={(value?.data ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
+            isEmpty={!value?.length}
+            dataSource={(value ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
             selectedChainId={selectedChainId}
         />
     )

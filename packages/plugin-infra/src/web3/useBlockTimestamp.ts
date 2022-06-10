@@ -4,17 +4,15 @@ import type { Web3Helper } from '../web3-helpers'
 import { useChainId } from './useChainId'
 import { useWeb3Connection } from './useWeb3Connection'
 
-export function useBlockTimestamp<T extends NetworkPluginID>(
+export function useBlockTimestamp<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    options?: Web3Helper.Web3ConnectionOptions<T>,
+    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    type GetBlockTimestamp = (options?: Web3Helper.Web3ConnectionOptions<T>) => Promise<number>
-
     const chainId = useChainId(pluginID, options?.chainId)
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
         if (!connection) return 0
-        return (connection.getBlockTimestamp as GetBlockTimestamp)()
+        return connection.getBlockTimestamp()
     }, [chainId, connection])
 }

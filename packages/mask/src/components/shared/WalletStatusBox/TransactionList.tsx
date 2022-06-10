@@ -90,7 +90,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
     }
 
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State<'all'>()
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
 

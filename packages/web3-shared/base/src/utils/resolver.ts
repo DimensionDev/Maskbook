@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { ChainDescriptor, NetworkDescriptor, ProviderDescriptor } from '../specs'
+import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs'
 
 export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
     function resolveFallback(key: K) {
@@ -157,3 +157,29 @@ export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
 export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
     Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
 >
+
+export const resolveSourceName = createLookupTableResolver<SourceType, string>(
+    {
+        [SourceType.DeBank]: 'DeBank',
+        [SourceType.Zerion]: 'Zerion',
+        [SourceType.RSS3]: 'RSS3',
+        [SourceType.OpenSea]: 'OpenSea',
+        [SourceType.Rarible]: 'Rarible',
+        [SourceType.NFTScan]: 'NFTScan',
+        [SourceType.Zora]: 'Zora',
+    },
+    (providerType) => {
+        throw new Error(`Unknown provider type: ${providerType}.`)
+    },
+)
+
+export const resolveCurrencyName = createLookupTableResolver<CurrencyType, string>(
+    {
+        [CurrencyType.BTC]: 'BTC',
+        [CurrencyType.NATIVE]: 'ETH',
+        [CurrencyType.USD]: 'USD',
+    },
+    (CurrencyType) => {
+        throw new Error(`Unknown currency type: ${CurrencyType}.`)
+    },
+)
