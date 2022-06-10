@@ -147,7 +147,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
     const contractList = assets
         .filter((x) => x.schema_name === WyvernSchemaName.ERC721)

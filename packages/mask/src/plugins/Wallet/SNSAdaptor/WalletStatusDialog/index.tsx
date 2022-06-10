@@ -64,7 +64,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_dialog_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <WalletStatusBox />
+                <WalletStatusBox showPendingTransaction />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

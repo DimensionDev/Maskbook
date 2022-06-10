@@ -79,8 +79,8 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const { Others } = useWeb3State<'all'>()
-    const connection = useWeb3Connection<'all'>()
+    const { Others } = useWeb3State()
+    const connection = useWeb3Connection()
     const account = useAccount()
     const chainId = useChainId()
     const { value: balance = '0' } = useBalance()

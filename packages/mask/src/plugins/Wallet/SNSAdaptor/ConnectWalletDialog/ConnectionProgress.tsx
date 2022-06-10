@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor?.dark,
         fontWeight: 700,
     },
     error: {
@@ -65,7 +65,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { t } = useI18N()
 
-    const { Others } = useWeb3State<'all'>(pluginID)
+    const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, providerType)
     const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
