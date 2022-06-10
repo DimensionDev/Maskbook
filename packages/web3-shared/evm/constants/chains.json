@@ -1296,15 +1296,15 @@
             "chainId": 250,
             "name": "Fantom",
             "symbol": "FTM",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
         },
         "infoURL": "https://fantom.foundation",
         "explorers": [
             {
                 "name": "ftmscan",
                 "url": "https://ftmscan.com",
-                "standard": "EIP3091",
-                "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2225,8 +2225,7 @@
             {
                 "name": "snowtrace",
                 "url": "https://snowtrace.io/",
-                "standard": "EIP3091",
-                "logoURL": "https://snowtrace.io/images/svg/brands/main.svg?v=21.12.4.1"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2998,7 +2997,7 @@
     {
         "chainId": 1030,
         "type": "Conflux",
-        "name": "Conflux eSpace",
+        "name": "Conflux",
         "network": "mainnet",
         "shortName": "Conflux",
         "features": [],

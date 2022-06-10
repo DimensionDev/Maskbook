@@ -4,3 +4,4 @@ export { openPopupWindow, removePopupWindow, openDashboard } from './popup-opene
 export { __deprecated__getStorage, __deprecated__setStorage } from './deprecated-storage'
 export { queryExtensionPermission, requestExtensionPermission } from './request-permission'
 export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download'
+export { r2d2Fetch } from './r2d2Fetch'

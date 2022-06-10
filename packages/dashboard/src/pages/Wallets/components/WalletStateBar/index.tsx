@@ -66,8 +66,8 @@ export const WalletStateBar = memo(() => {
 
     const account = useAccount()
     const wallet = useWallet()
-    const networkDescriptor = useNetworkDescriptor<'all'>()
-    const providerDescriptor = useProviderDescriptor<'all'>()
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(

@@ -24,7 +24,6 @@ import {
     FungibleToken,
     isSameAddress,
     minus,
-    multipliedBy,
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
@@ -70,14 +69,13 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
-    const { Token, Others } = useWeb3State<'all'>()
-    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
+    const { Token, Others } = useWeb3State()
+    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(undefined, {
+        chainId,
+    })
     const trustedFungibleTokens = useTrustedFungibleTokens()
     const blockedFungibleTokens = useBlockedFungibleTokens()
-
-    const nativeToken = useMemo(() => {
-        return Others?.chainResolver.nativeCurrency(chainId)
-    }, [chainId])
+    const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
@@ -96,12 +94,23 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         useFungibleTokensBalance(
             pluginID,
             filteredFungibleTokens.map((x) => x.address),
+            {
+                chainId,
+            },
         )
 
-    const { value: fungibleAssets = EMPTY_LIST, loading: fungibleAssetsLoading } = useFungibleAssets(pluginID)
+    const { value: fungibleAssets = EMPTY_LIST, loading: fungibleAssetsLoading } = useFungibleAssets(
+        pluginID,
+        undefined,
+        {
+            chainId,
+        },
+    )
 
     const sortedFungibleTokens = useMemo(() => {
-        const fungibleAssetsTable = Object.fromEntries(fungibleAssets.map((x) => [x.address, x]))
+        const fungibleAssetsTable = Object.fromEntries(
+            fungibleAssets.filter((x) => x.chainId === chainId).map((x) => [x.address, x]),
+        )
         const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
@@ -111,11 +120,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
                 const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
-                const aPrice = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
-                const zPrice = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
-
-                const aUSD = multipliedBy(aPrice, aBalance)
-                const zUSD = multipliedBy(zPrice, zBalance)
+                const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')
 
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))

@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,7 +58,7 @@ export function OfferTab() {
     if (asset.loading)
         return (
             <div className={classes.empty}>
-                <LoadingAnimation />
+                <LoadingBase />
             </div>
         )
     if (!offers.length || asset.error)

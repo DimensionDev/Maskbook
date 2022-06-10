@@ -1,4 +1,4 @@
-import { useImageChecker } from '@masknet/plugin-infra/web3'
+import { useImageChecker } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Skeleton } from '@mui/material'

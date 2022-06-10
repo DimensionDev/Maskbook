@@ -5,6 +5,9 @@ declare module 'typeson' {
         (x: InternalRepresentation) => Type,
     ]
     export class Undefined {}
+    export class TypesonPromise<T> {
+        constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void)
+    }
     export class Typeson {
         constructor(options?: {
             cyclic?: boolean

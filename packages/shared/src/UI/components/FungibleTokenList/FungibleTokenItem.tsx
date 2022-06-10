@@ -85,7 +85,7 @@ export const getFungibleTokenItem =
         const { classes } = useStyles()
 
         if (!token) return null
-        const { address, name, symbol, decimals, logoURL } = token
+        const { chainId, address, name, symbol, decimals, logoURL } = token
 
         const { source, balance, selected, loading } = useMemo(() => {
             return {
@@ -140,7 +140,13 @@ export const getFungibleTokenItem =
                 onClick={handleTokenSelect}
                 disabled={selected}>
                 <ListItemIcon>
-                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
+                    <TokenIcon
+                        classes={{ icon: classes.icon }}
+                        chainId={chainId}
+                        address={address}
+                        name={name}
+                        logoURL={logoURL}
+                    />
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.text }}>
                     <Typography

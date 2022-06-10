@@ -65,7 +65,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { t } = useI18N()
 
-    const { Others } = useWeb3State<'all'>(pluginID)
+    const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, providerType)
     const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
