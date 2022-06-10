@@ -139,7 +139,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
-                showSnackbar('Download image error', { variant: 'error' })
+                showSnackbar(t.download_image_error(), { variant: 'error' })
                 return
             }
             onSelected({
@@ -158,7 +158,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const onClick = useCallback(() => {
         if (!account && !wallets?.length) {
-            showSnackbar('Please connect your wallet!', { variant: 'error' })
+            showSnackbar(t.connect_wallet(), { variant: 'error' })
             return
         }
         setOpen_(true)
@@ -171,7 +171,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
     const onAddClick = (token: AllChainsNonFungibleToken) => {
-        // TODO reference tokensInList below
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
     }
 
@@ -224,18 +223,14 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (chainId === ChainId.Matic && tokensInList.length === 0) return AddCollectible
-        else if (chainId === ChainId.Matic && tokensInList.length) return
+        if (chainId === ChainId.Matic && tokensInList.length) return
+        if (tokensInList.length === 0) return AddCollectible
         if (loading) {
             return LoadStatus
         }
         if (error) {
             return Retry
         }
-        if (tokens.length === 0 && collectibles.length === 0) {
-            return AddCollectible
-        }
-
         return
     }
 

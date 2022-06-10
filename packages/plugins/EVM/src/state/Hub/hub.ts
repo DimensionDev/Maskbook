@@ -104,7 +104,7 @@ class Hub implements EVM_Hub {
         const provider = options?.sourceType
         switch (provider) {
             case SourceType.OpenSea: {
-                if (options?.chainId !== ChainId.Mainnet) return
+                if (options?.chainId && options.chainId !== ChainId.Mainnet) return
                 return OpenSea.getAsset(address, tokenId)
             }
             case SourceType.Rarible:
