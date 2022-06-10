@@ -8,6 +8,7 @@ import { useImageFailOver } from '../../../hooks'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useImageBase64 } from '../../../hooks/useImageBase64'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -35,9 +36,7 @@ export function TokenIcon(props: TokenIconProps) {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
         return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
     }, [chainId, address, logoURL, hub])
-
-    const { value: trustedLogoURL } = useImageFailOver(urls, '')
-    const base64 = useImageBase64(`${address}_${chainId}`, trustedLogoURL)
+    const base64 = useImageBase64(`${address}_${chainId}`, first(urls))
 
     return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }

@@ -9,6 +9,7 @@ import {
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
+import { useTokenConstants } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
@@ -16,6 +17,7 @@ import { useWeb3Hub } from './useWeb3Hub'
 import { useWeb3State } from './useWeb3State'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
+import { useFungibleToken, useNativeTokenBalance } from '../entry-web3'
 
 export function useFungibleAssets<
     S extends 'all' | void = void,
@@ -28,6 +30,18 @@ export function useFungibleAssets<
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { Others } = useWeb3State(pluginID)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    const { value: balance = 0 } = useNativeTokenBalance()
+    const { value: nativeToken } = useFungibleToken(pluginID, NATIVE_TOKEN_ADDRESS, {
+        chainId,
+    })
+
+    console.log({
+        chainId,
+        oChainId: options?.chainId,
+        balance,
+        nativeToken,
+    })
 
     return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
@@ -35,6 +49,10 @@ export function useFungibleAssets<
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
         const assets = await asyncIteratorToArray(hub?.getAllFungibleAssets?.(account))
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
+
+        console.log({
+            assets,
+        })
 
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
