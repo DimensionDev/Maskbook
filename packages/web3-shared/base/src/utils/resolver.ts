@@ -167,6 +167,8 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.Rarible]: 'Rarible',
         [SourceType.NFTScan]: 'NFTScan',
         [SourceType.Zora]: 'Zora',
+        [SourceType.Alchemy_EVM]: 'Alchemy_EVM',
+        [SourceType.Alchemy_FLOW]: 'Alchemy_FLOW',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
