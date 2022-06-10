@@ -241,7 +241,7 @@ export function CollectionList({
         next,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_SOLANA, undefined, { account, chainId })
+    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account, chainId })
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
