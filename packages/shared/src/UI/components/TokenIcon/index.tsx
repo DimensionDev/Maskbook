@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import { first } from 'lodash-unified'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
@@ -7,7 +8,6 @@ import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useImageBase64 } from '../../../hooks/useImageBase64'
-import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
