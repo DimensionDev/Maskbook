@@ -6,11 +6,13 @@ export const Alchemy_EVM_NetworkMap = {
     chains: [
         {
             chainId: ChainId_EVM.Mainnet,
+            // cspell:disable-next-line
             API_KEY: '3TJz6QYDHCj0ZhCdGvc5IC6EtMMMTKG1',
             baseURL: 'https://eth-mainnet.alchemyapi.io/v2/',
         },
         {
             chainId: ChainId_EVM.Matic,
+            // cspell:disable-next-line
             API_KEY: 'PsJ3gMn6JrSE9FCzShjsjD91irkybmh_',
             baseURL: 'https://polygon-mainnet.g.alchemy.com/v2/',
         },
@@ -22,6 +24,7 @@ export const Alchemy_FLOW_NetworkMap = {
     chains: [
         {
             chainId: ChainId_FLOW.Mainnet,
+            // cspell:disable-next-line
             API_KEY: '5359fbk38tw2ggpgxutjjw5qf4jiocpw',
             baseURL: 'https://flow-mainnet.g.alchemy.com/v2/',
         },
