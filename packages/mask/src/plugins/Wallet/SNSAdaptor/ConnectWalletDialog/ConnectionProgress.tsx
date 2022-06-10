@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor?.dark,
         fontWeight: 700,
     },
     error: {
