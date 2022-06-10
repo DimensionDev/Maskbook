@@ -45,17 +45,14 @@ export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-
     const { loading: loadingWallet, value: storage } = useWallet(userId)
-
     const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
-        storage?.networkPluginID ?? _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
         _avatar?.chainId,
         storage?.address,
     )
-
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         userId,

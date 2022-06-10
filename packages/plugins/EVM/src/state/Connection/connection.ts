@@ -389,7 +389,7 @@ class Connection implements EVM_Connection {
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
             contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? this.account).call() ?? EMPTY_STRING,
         ])
         const [name, symbol, owner, balance] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',

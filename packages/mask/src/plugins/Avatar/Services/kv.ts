@@ -1,6 +1,6 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { KeyValue } from '@masknet/web3-providers'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFT_AVATAR_DB_NAME } from '../constants'
 
 type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
@@ -57,14 +57,12 @@ export async function setAddress(site: EnhanceableSite, userId: string, pluginID
     const storage = await createAddressDB(site).get(userId)
     const storageV2 = storage as AddressStorageV2
 
-    if (!isSameAddress(address, storageV2[pluginID])) {
-        // clear cache
-        cache.delete(getKey(site, userId))
+    // clear cache
+    cache.delete(getKey(site, userId))
 
-        await createAddressDB(site).set(userId, {
-            [userId]: { address, networkPluginID: pluginID },
-            ...(storageV2 as AddressStorageV2),
-            [pluginID]: address,
-        } as AddressStorageV2)
-    }
+    await createAddressDB(site).set(userId, {
+        ...(storageV2 as AddressStorageV2),
+        [pluginID]: address,
+        [userId]: { address, networkPluginID: pluginID },
+    } as AddressStorageV2)
 }

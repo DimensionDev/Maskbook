@@ -42,7 +42,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             switch (pluginId) {
                 case NetworkPluginID.PLUGIN_EVM: {
                     if (isBindAccount) {
-                        return saveToNextID(info, persona, proof)
+                        return saveToNextID(info, account, persona, proof)
                     }
                     return saveToRSS3(info, account, identifier)
                 }
