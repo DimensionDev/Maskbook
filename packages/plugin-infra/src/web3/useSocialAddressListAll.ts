@@ -4,7 +4,7 @@ import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-sh
 import { useWeb3State } from './useWeb3State'
 
 /**
- * Get all social addresses under a specific network.
+ * Get all social addresses under of all networks.
  */
 export function useSocialAddressListAll(
     identity?: SocialIdentity,

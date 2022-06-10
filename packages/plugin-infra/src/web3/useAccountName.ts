@@ -4,12 +4,9 @@ import { useWeb3State } from './useWeb3State'
 import { useAccount } from './useAccount'
 import { useWallets } from './useWallets'
 import { useProviderType } from './useProviderType'
-import type { Web3Helper } from '../web3-helpers'
 
 export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
-    type ProviderName = (providerType: Web3Helper.Definition[T]['ProviderType']) => string
-
-    const { Others } = useWeb3State<void, T>(pluginID)
+    const { Others } = useWeb3State(pluginID)
     const account = useAccount(pluginID, expectedAccount)
     const providerType = useProviderType(pluginID)
     const wallets = useWallets(pluginID)
@@ -20,6 +17,6 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
         if (wallet?.name) return wallet.name
 
         // else use the provider name as the account name
-        return (Others?.providerResolver.providerName as ProviderName | undefined)?.(providerType)
+        return Others?.providerResolver.providerName?.(providerType)
     }, [account, providerType, wallets.map((x) => x.address.toLowerCase()), Others])
 }

@@ -11,9 +11,9 @@ interface ChangeNetworkTipProps {
 export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
     const t = useDashboardI18N()
 
-    const providerDescriptor = useProviderDescriptor<'all'>()
-    const networkDescriptors = useNetworkDescriptors<'all'>()
-    const Web3UI = useWeb3UI<'all'>()
+    const providerDescriptor = useProviderDescriptor()
+    const networkDescriptors = useNetworkDescriptors()
+    const Web3UI = useWeb3UI()
     const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
     const targetNetwork = networkDescriptors.find((x) => x.chainId === chainId)
 

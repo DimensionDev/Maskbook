@@ -53,15 +53,14 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
     const pluginID = useValueRef(pluginIDSettings)
-    const network = useNetworkDescriptor<'all'>()
+    const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
-    const Web3State = useWeb3State<'all'>(undeterminedPluginID)
+    const Web3State = useWeb3State(undeterminedPluginID)
     const { Others, Provider } = Web3State
 
-    const { NetworkIconClickBait, ProviderIconClickBait } =
-        useWeb3UI<'all'>(undeterminedPluginID).SelectProviderDialog ?? {}
+    const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
 
     const onNetworkIconClicked = useCallback((network: Web3Helper.NetworkDescriptorAll) => {
         setUndeterminedPluginID(network.networkSupporterPluginID)

@@ -71,13 +71,13 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const classes = useStylesExtends(useStyles(), props)
 
     const actualPluginID = useCurrentWeb3NetworkPluginID()
-    const { Others: actualOthers } = useWeb3State<'all'>(actualPluginID)
+    const { Others: actualOthers } = useWeb3State(actualPluginID)
     const actualChainId = useChainId(actualPluginID)
     const actualProviderType = useProviderType(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
-    const { Others: expectedOthers } = useWeb3State<'all'>(expectedPluginID)
-    const expectedConnection = useWeb3Connection<'all'>(expectedPluginID)
+    const { Others: expectedOthers } = useWeb3State(expectedPluginID)
+    const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
     const expectedAccount = useAccount(expectedPluginID)
     const expectedChainName = expectedOthers?.chainResolver.chainFullName(expectedChainId)

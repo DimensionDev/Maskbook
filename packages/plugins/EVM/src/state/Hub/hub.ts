@@ -44,8 +44,9 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
-        return TokenList.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS)
+        const expectedChainId = options?.chainId ?? chainId
+        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(expectedChainId)
+        return TokenList.fetchFungibleTokensFromTokenLists(expectedChainId, FUNGIBLE_TOKEN_LISTS)
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -57,12 +58,14 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
+        const expectedChainId = options?.chainId ?? chainId
+
         try {
-            const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
-            if (isEIP1559) return await MetaSwap.getGasOptions(chainId)
-            return await DeBank.getGasOptions(chainId)
+            const isEIP1559 = chainResolver.isSupport(expectedChainId, 'EIP1559')
+            if (isEIP1559) return await MetaSwap.getGasOptions(expectedChainId)
+            return await DeBank.getGasOptions(expectedChainId)
         } catch (error) {
-            return EthereumWeb3.getGasOptions(chainId)
+            return EthereumWeb3.getGasOptions(expectedChainId)
         }
     }
     getFungibleAsset(
@@ -95,9 +98,9 @@ class Hub implements EVM_Hub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         try {
-            return OpenSea.getTokens(account, options)
+            return OpenSea.getTokens(account, { chainId: this.chainId, ...options })
         } catch {
-            return NFTScan.getTokens(account, options)
+            return NFTScan.getTokens(account, { chainId: this.chainId, ...options })
         }
     }
     getNonFungibleCollections(
@@ -111,13 +114,15 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const expectedCurrencyType = options?.currencyType ?? this.currencyType
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(expectedChainId)
 
         if (isNativeTokenAddress(address)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, expectedCurrencyType)
         }
 
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, expectedCurrencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,
@@ -132,7 +137,8 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
-        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(expectedChainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
         if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
@@ -157,8 +163,9 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        return DeBank.getTransactions(account, { chainId })
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        const expectedChainId = options?.chainId ?? chainId
+        return DeBank.getTransactions(account, { chainId: expectedChainId })
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
