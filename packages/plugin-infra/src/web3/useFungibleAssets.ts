@@ -36,23 +36,12 @@ export function useFungibleAssets<
         chainId,
     })
 
-    console.log({
-        chainId,
-        oChainId: options?.chainId,
-        balance,
-        nativeToken,
-    })
-
     return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
         const assets = await asyncIteratorToArray(hub?.getAllFungibleAssets?.(account))
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
-
-        console.log({
-            assets,
-        })
 
         return filteredAssets
             .filter((x) => !isBlockedToken(x))

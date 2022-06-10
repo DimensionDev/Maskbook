@@ -139,14 +139,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         return results
     }, [nativeToken, fungibleAssets, selectedChainId])
 
-    console.log('DEBUG: dataSource')
-    console.log({
-        selectedChainId,
-        fungibleAssets,
-        nativeToken,
-        dataSource,
-    })
-
     return (
         <TokenTableUI
             isLoading={fungibleAssetsLoading}
