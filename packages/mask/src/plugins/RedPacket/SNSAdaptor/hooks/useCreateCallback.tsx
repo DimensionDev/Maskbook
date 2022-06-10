@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import type { TransactionReceipt } from 'web3-core'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
@@ -54,7 +54,11 @@ interface CreateParams {
     gasError: Error | null
 }
 
-export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
+export function useCreateParamsCallback(
+    redPacketSettings: RedPacketSettings | undefined,
+    version: number,
+    publicKey: string,
+) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
@@ -107,11 +111,16 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     return getCreateParams
 }
 
+export function useCreateParams(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
+    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
+    return useAsync(() => getCreateParams(), [redPacketSettings, version, publicKey])
+}
+
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
-    const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings

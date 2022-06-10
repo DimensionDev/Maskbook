@@ -8,11 +8,19 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
-import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
-import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback'
+import {
+    useAccount,
+    useChainId,
+    useNetworkType,
+    useWeb3,
+    useNativeToken,
+    useZeroAddress,
+} from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
+import { useGasConfig } from '../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -91,11 +99,36 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
+    const nativeTokenAddress = useZeroAddress(NetworkPluginID.PLUGIN_EVM)
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
         [web3],
     )!
-    const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+
+    // #region amount minus estimate gas fee
+    const { gasPrice } = useGasConfig(chainId)
+    const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)
+    const estimateGasFee = !createParams?.gas
+        ? undefined
+        : gasPrice && gasPrice !== '0'
+        ? new BigNumber(gasPrice).multipliedBy(createParams.gas ?? '0').toFixed()
+        : undefined
+
+    const isNativeToken = isSameAddress(settings?.token?.address ?? '', nativeTokenAddress)
+    let total = isNativeToken
+        ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
+        : (settings?.total as string)
+    const isBalanceInsufficient = new BigNumber(total).isLessThanOrEqualTo(0)
+    total = isBalanceInsufficient ? '0' : total
+
+    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 6 : 0)
+    const [{ loading: isCreating }, createCallback] = useCreateCallback(
+        { ...settings!, total },
+        contract_version,
+        publicKey,
+    )
+    // #endregion
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
         const receipt = await createCallback()
@@ -210,6 +243,27 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Typography>
             </Grid>
 
+            {!estimateGasFee ? null : (
+                <>
+                    <Grid item xs={6}>
+                        <Typography variant="body1" color="textSecondary">
+                            {t.estimate_gas_fee()}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="body1" color="textPrimary" align="right">
+                            <FormattedBalance
+                                value={estimateGasFee}
+                                decimals={nativeToken?.decimals}
+                                symbol={nativeToken?.symbol}
+                                formatter={formatBalance}
+                                significant={6}
+                            />
+                        </Typography>
+                    </Grid>
+                </>
+            )}
+
             {settings?.isRandom ? null : (
                 <>
                     <Grid item xs={6}>
@@ -219,12 +273,8 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     </Grid>
                     <Grid item xs={6}>
                         <Typography variant="body1" color="textPrimary" align="right">
-                            <FormattedBalance
-                                value={new BigNumber(settings?.total ?? 0).div(settings?.shares ?? 1)}
-                                decimals={settings?.token?.decimals}
-                                symbol={settings?.token?.symbol}
-                                formatter={formatBalance}
-                            />
+                            {isBalanceInsufficient ? '0' : (Number(formatTotal) / (settings?.shares ?? 1)).toFixed(6)}{' '}
+                            {settings?.token?.symbol}
                         </Typography>
                     </Grid>
                 </>
@@ -237,12 +287,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={6}>
                 <Typography variant="body1" color="textPrimary" align="right">
-                    <FormattedBalance
-                        value={settings?.total}
-                        decimals={settings?.token?.decimals!}
-                        symbol={settings?.token?.symbol!}
-                        formatter={formatBalance}
-                    />
+                    {formatTotal} {settings?.token?.symbol}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -259,11 +304,19 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton loading={isCreating} variant="contained" size="large" fullWidth onClick={createRedpacket}>
-                    {t.send_symbol({
-                        amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
-                        symbol: settings?.token?.symbol ?? '-',
-                    })}
+                <ActionButton
+                    loading={isCreating}
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    onClick={createRedpacket}
+                    disabled={isBalanceInsufficient}>
+                    {!isBalanceInsufficient
+                        ? t.send_symbol({
+                              amount: formatTotal,
+                              symbol: settings?.token?.symbol ?? '-',
+                          })
+                        : t.insufficient_balance()}
                 </ActionButton>
             </Grid>
         </Grid>
