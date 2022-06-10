@@ -45,7 +45,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
 
-    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, tokenId)
+    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, {})
 
     const onSubmit = useCallback(async () => {
         if (loading || !account || !value || !hub?.getNonFungibleAsset) return
