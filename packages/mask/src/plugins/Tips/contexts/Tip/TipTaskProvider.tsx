@@ -32,7 +32,6 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const { value: erc721Contract } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
         erc721Address,
-        undefined,
         SchemaType.ERC721,
         {
             account,

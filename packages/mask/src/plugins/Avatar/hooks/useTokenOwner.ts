@@ -12,7 +12,7 @@ export function useTokenOwner(address: string, tokenId: string, chainId?: ChainI
     return useAsyncRetry(async () => {
         if (!address || !tokenId || !connection) return
         const token = await connection.getNonFungibleToken(address, tokenId, undefined, { chainId, account })
-        return { owner: token?.contract?.owner, name: token?.contract?.name, symbol: token?.contract?.symbol }
+        return { owner: token?.ownerId, name: token?.contract?.name, symbol: token?.contract?.symbol }
     }, [connection, tokenId, address, account, chainId])
 }
 

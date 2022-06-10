@@ -55,8 +55,6 @@ export function createNonFungibleTokenContract<ChainId, SchemaType>(
     address: string,
     name: string,
     symbol: string,
-    owner?: string,
-    balance?: number,
 ): NonFungibleTokenContract<ChainId, SchemaType> {
     return {
         chainId,
@@ -64,8 +62,6 @@ export function createNonFungibleTokenContract<ChainId, SchemaType>(
         name,
         symbol,
         address,
-        owner,
-        balance,
     }
 }
 export function createNonFungibleTokenCollection<ChainId>(
@@ -92,6 +88,7 @@ export function createNonFungibleToken<ChainId, SchemaType>(
     address: string,
     schema: SchemaType,
     tokenId: string,
+    ownerId?: string,
     metadata?: NonFungibleToken<ChainId, SchemaType>['metadata'],
     contract?: NonFungibleToken<ChainId, SchemaType>['contract'],
     collection?: NonFungibleToken<ChainId, SchemaType>['collection'],
@@ -103,6 +100,7 @@ export function createNonFungibleToken<ChainId, SchemaType>(
         schema,
         address,
         tokenId,
+        ownerId,
         metadata,
         contract,
         collection,

@@ -64,11 +64,12 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         asset.trade_contract ?? asset.nft_contract_address,
         SchemaType.ERC721,
         asset.nft_asset_id,
+        asset.nft_holder,
         createNonFungibleTokenMetadata(
             ChainId.Mainnet,
             name,
             asset.trade_symbol,
-            asset.nft_holder,
+            asset.nft_detail,
             description,
             undefined,
             mediaURL,

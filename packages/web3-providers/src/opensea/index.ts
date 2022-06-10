@@ -71,13 +71,13 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
         id: asset.token_address ?? asset.asset_contract.address,
         chainId,
         type: TokenType.NonFungible,
-        schema: SchemaType.ERC721,
+        schema: asset.asset_contract.schema_name === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         tokenId: asset.token_id,
         address: asset.token_address ?? asset.asset_contract.address,
         metadata: {
             chainId,
             name: asset.name ?? asset.collection.name,
-            symbol: asset.asset_contract.token_symbol,
+            symbol: asset.asset_contract.symbol,
             description: asset.description,
             imageURL:
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
@@ -90,7 +90,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             schema: SchemaType.ERC721,
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
-            symbol: asset.asset_contract.token_symbol,
+            symbol: asset.asset_contract.symbol,
         },
         collection: {
             chainId,
@@ -305,7 +305,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             SchemaType.ERC721,
             address,
             assetContract?.name ?? 'Unknown Token',
-            assetContract?.token_symbol ?? 'UNKNOWN',
+            assetContract?.symbol ?? 'UNKNOWN',
         )
     }
 

@@ -218,8 +218,6 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     symbol: string
     address: string
     schema: SchemaType
-    owner?: string
-    balance?: number
     logoURL?: string
     iconURL?: string
 }
@@ -255,9 +253,15 @@ export interface NonFungibleTokenCollection<ChainId> {
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
+    /** the token id */
     tokenId: string
+    /** the address or uid of owner */
+    ownerId?: string
+    /** the contract info */
     contract?: NonFungibleTokenContract<ChainId, SchemaType>
+    /** the media metadata */
     metadata?: NonFungibleTokenMetadata<ChainId>
+    /** the collection info */
     collection?: NonFungibleTokenCollection<ChainId>
 }
 
@@ -578,27 +582,32 @@ export interface Connection<
     getNonFungibleToken(
         address: string,
         tokenId: string,
-        schemaType?: SchemaType,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
+    getNonFungibleTokenOwnship(
+        address: string,
+        owner: string,
+        tokenId: string,
+        schema?: SchemaType,
+        options?: Web3ConnectionOptions,
+    ): Promise<boolean>
     getNonFungibleTokenMetadata(
         address: string,
         tokenId: string,
-        schemaType?: SchemaType,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenMetadata<ChainId>>
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
-        tokenId?: string,
-        schemaType?: SchemaType,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */
     getNonFungibleTokenCollection(
         address: string,
-        tokenId?: string,
-        schemaType?: SchemaType,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>>
     /** Get native fungible token balance. */
@@ -606,7 +615,7 @@ export interface Connection<
     /** Get fungible token balance */
     getFungibleTokenBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
     /** Get non-fungible token balance */
-    getNonFungibleTokenBalance(address: string, tokenId?: string, schemaType?: SchemaType, options?: Web3ConnectionOptions): Promise<string>
+    getNonFungibleTokenBalance(address: string, tokenId?: string, schema?: SchemaType, options?: Web3ConnectionOptions): Promise<string>
     /** Get fungible token balance */
     getFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
     /** Get non-fungible token balance */
@@ -661,7 +670,7 @@ export interface Connection<
         recipient: string,
         tokenId: string,
         amount: string,
-        schemaType?: SchemaType,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<string>
     /** Sign a transaction */

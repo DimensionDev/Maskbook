@@ -63,7 +63,6 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        tokenId?: string,
         schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
@@ -71,7 +70,6 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenCollection(
         address: string,
-        tokenId?: string,
         schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
@@ -147,6 +145,15 @@ class Connection implements BaseConnection {
         schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenOwnship(
+        address: string,
+        owner: string,
+        tokenId: string,
+        schema?: SchemaType | undefined,
+        options?: FlowConnectionOptions,
+    ): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenMetadata(

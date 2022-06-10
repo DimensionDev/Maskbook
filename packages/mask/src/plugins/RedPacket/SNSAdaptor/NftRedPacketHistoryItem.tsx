@@ -160,7 +160,6 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             NetworkPluginID.PLUGIN_EVM,
             history.token_contract.address,
             undefined,
-            undefined,
             { account },
         )
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(

@@ -46,16 +46,15 @@ export function useNonFungibleOwnerTokens(
 
         if (!listOfPairs.length) return
 
-        allListRef.current = (
-            await Promise.all(
-                listOfPairs?.map((x) =>
-                    connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
-                        account: ownerAccount,
-                    }),
-                ) ?? [],
-            )
-        ).filter((x) => x.contract?.balance) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
-    }, [contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
+        allListRef.current = (await Promise.all(
+            listOfPairs?.map((x) =>
+                connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
+                    chainId,
+                    account: ownerAccount,
+                }),
+            ) ?? [],
+        )) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+    }, [chainId, contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
 
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
 

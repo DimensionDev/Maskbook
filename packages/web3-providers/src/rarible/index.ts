@@ -16,6 +16,7 @@ import {
     createNonFungibleTokenContract,
     createNonFungibleTokenCollection,
     createNonFungibleToken,
+    isSameAddress,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import {
@@ -67,7 +68,16 @@ function createERC721TokenFromAsset(
         tokenAddress,
         SchemaType.ERC721,
         tokenId,
-        createNonFungibleTokenMetadata(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', undefined, imageURL, imageURL),
+        first(asset?.owners),
+        createNonFungibleTokenMetadata(
+            ChainId.Mainnet,
+            asset?.meta?.name ?? '',
+            '',
+            asset?.meta?.description,
+            undefined,
+            imageURL,
+            imageURL,
+        ),
         createNonFungibleTokenContract(ChainId.Mainnet, SchemaType.ERC721, tokenAddress, asset?.meta?.name ?? '', ''),
         createNonFungibleTokenCollection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
     )
@@ -182,7 +192,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const items =
             asset.items
                 .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
+                .filter((x) => isSameAddress(x.ownerId, from))
                 .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
         return createPageable(items, indicator, asset.continuation)
     }

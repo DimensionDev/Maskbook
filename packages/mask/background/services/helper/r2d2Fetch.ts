@@ -1,3 +1,5 @@
+import urlcat from 'urlcat'
+
 export const r2d2URL = 'r2d2.to'
 
 export enum R2d2Workers {
@@ -24,16 +26,20 @@ const matchers: R2d2WorkerMatchTuple[] = [
  */
 export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     const url = init instanceof Request ? init.url : (input as string)
+
+    // r2d2
     if (url.includes('r2d2.to')) return globalThis.fetch(input, init)
 
+    // ipfs
+    if (url.startsWith('ipfs://'))
+        return globalThis.fetch(
+            urlcat('https://cors.r2d2.to?https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', {
+                ipfs: url.replace('ipfs://', ''),
+            }),
+            init,
+        )
+
     const r2deWorkerType = matchers.find((x) => url.startsWith(x[0]))?.[1]
-
-    if (!r2deWorkerType) {
-        return globalThis.fetch(input, init)
-    }
-
-    const origin = new URL(url).origin
-    const r2d2ProxyURL = url.replace(origin, `https://${r2deWorkerType}.${r2d2URL}`)
-
-    return globalThis.fetch(r2d2ProxyURL, init)
+    if (!r2deWorkerType) return globalThis.fetch(input, init)
+    return globalThis.fetch(url.replace(new URL(url).origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
 }

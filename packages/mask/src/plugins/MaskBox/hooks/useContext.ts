@@ -246,7 +246,6 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: contractDetailed } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
         maskBoxInfo?.nft_address ?? '',
-        undefined,
         SchemaType.ERC721,
         { account },
     )

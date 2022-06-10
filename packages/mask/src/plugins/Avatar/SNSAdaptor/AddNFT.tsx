@@ -67,7 +67,7 @@ export function AddNFT(props: AddNFTProps) {
                 setMessage('chain does not match.')
                 return
             }
-            if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
+            if (!token || !isSameAddress(token?.ownerId, account ?? _account)) {
                 setMessage(t('nft_owner_hint'))
                 return
             }
