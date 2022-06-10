@@ -132,6 +132,8 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
         onSent?.()
     }, [sendTip, onSent])
 
+    const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
+
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
             <div className={classes.main}>
@@ -178,7 +180,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                             label={t.tip_type_nft()}
                         />
                     </RadioGroup>
-                    {tipType === TipType.NFT && !empty ? (
+                    {tipType === TipType.NFT && !empty && isEvm ? (
                         <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                             {t.tip_add_collectibles()}
                         </Button>

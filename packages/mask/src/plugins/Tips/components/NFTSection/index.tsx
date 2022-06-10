@@ -77,16 +77,17 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
         chainId,
     })
 
+    const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
         return uniqWith(
             fetchedTokens,
-            pluginId === NetworkPluginID.PLUGIN_EVM
+            isEvm
                 ? (v1, v2) => {
                       return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
                   }
                 : (v1, v2) => v1.tokenId === v2.tokenId,
         )
-    }, [fetchedTokens, pluginId])
+    }, [fetchedTokens, isEvm])
 
     const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
 
@@ -122,9 +123,11 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                     return (
                         <div className={classes.statusBox}>
                             <Typography className={classes.loadingText}>{t.tip_empty_nft()}</Typography>
-                            <Button variant="text" onClick={onAddToken}>
-                                {t.tip_add_collectibles()}
-                            </Button>
+                            {isEvm ? (
+                                <Button variant="text" onClick={onAddToken}>
+                                    {t.tip_add_collectibles()}
+                                </Button>
+                            ) : null}
                         </div>
                     )
                 })()}

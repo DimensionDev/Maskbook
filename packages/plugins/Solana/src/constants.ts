@@ -8,7 +8,7 @@ export const PLUGIN_NAME = 'Solana Chain'
 export const PLUGIN_DESCRIPTION = ''
 
 export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
-    [ChainId.Mainnet]: 'https://solana-api.projectserum.com',
+    [ChainId.Mainnet]: 'https://solana--mainnet.datahub.figment.io/apikey/30d4290fe1f4fcf371a9e27c513d099f',
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
