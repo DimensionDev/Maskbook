@@ -18,7 +18,6 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { PluginMessages } from '../../../../API'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

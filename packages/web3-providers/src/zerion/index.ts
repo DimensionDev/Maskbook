@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { FungibleAsset, Pageable, Transaction, HubOptions, createPageable } from '@masknet/web3-shared-base'
+import { FungibleAsset, Transaction, HubOptions, createPageable } from '@masknet/web3-shared-base'
 import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
