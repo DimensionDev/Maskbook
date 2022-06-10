@@ -52,8 +52,9 @@ export function AddNFT(props: AddNFTProps) {
     const [message, setMessage] = useState('')
     const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const _account = useAccount(expectedPluginID)
-    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId })
-    const hub = useWeb3Hub(currentPluginId, { chainId })
+    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId, account: account ?? _account })
+    const hub = useWeb3Hub(currentPluginId, { chainId, account: account ?? _account })
+
     const onClick = useCallback(async () => {
         if (!address) {
             setMessage(t('nft_input_address_label'))
@@ -94,7 +95,7 @@ export function AddNFT(props: AddNFTProps) {
         }
         onAddClick?.(token)
         handleClose()
-    }, [tokenId, address, onAddClick, onClose, connection, chainId, hub])
+    }, [tokenId, address, onAddClick, onClose, connection, chainId, hub, _account, account])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

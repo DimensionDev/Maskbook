@@ -88,6 +88,7 @@ class Hub implements EVM_Hub {
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+        if (options?.chainId !== ChainId.Mainnet) return
         return OpenSea.getAsset(address, tokenId, options)
     }
     getNonFungibleAssets(
