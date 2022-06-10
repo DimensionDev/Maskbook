@@ -266,6 +266,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         />
                     ) : (
                         <NFTList
+                            chainId={chainId}
                             onSelect={onChangeToken}
                             tokens={tokensInList}
                             tokenInfo={selectedToken}

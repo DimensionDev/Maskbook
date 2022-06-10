@@ -1,4 +1,3 @@
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -40,11 +39,11 @@ interface NFTListProps {
     onChangeChain?: (chainId: ChainId) => void
     tokens?: AllChainsNonFungibleToken[]
     children?: React.ReactElement
+    chainId: ChainId
 }
 
 export function NFTList(props: NFTListProps) {
-    const { onSelect, tokenInfo, onChangeChain, tokens = [], children } = props
-    const chainId = useChainId()
+    const { onSelect, tokenInfo, onChangeChain, tokens = [], children, chainId } = props
     const [currentTab, onChange, tabs, setTab] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
         Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page,
