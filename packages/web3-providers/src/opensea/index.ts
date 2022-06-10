@@ -15,14 +15,9 @@ import {
     scale10,
     TokenType,
     HubOptions,
+    createNonFungibleTokenContract,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    createERC721Contract,
-    createNativeToken,
-    createERC20Token,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types'
 import type {
     OpenSeaAssetContract,
@@ -305,13 +300,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
         )
-        return createERC721Contract(
+        return createNonFungibleTokenContract(
             chainId,
+            SchemaType.ERC721,
             address,
             assetContract?.name ?? 'Unknown Token',
             assetContract?.token_symbol ?? 'UNKNOWN',
-            undefined,
-            assetContract?.image_url,
         )
     }
 

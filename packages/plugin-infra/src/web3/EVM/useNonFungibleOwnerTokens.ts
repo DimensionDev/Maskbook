@@ -1,6 +1,6 @@
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { useRef } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NonFungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3Connection } from '../useWeb3Connection'
 
@@ -49,7 +49,7 @@ export function useNonFungibleOwnerTokens(
         allListRef.current = (
             await Promise.all(
                 listOfPairs?.map((x) =>
-                    connection.getNonFungibleToken(x[0], x[1], {
+                    connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                         account: ownerAccount,
                     }),
                 ) ?? [],

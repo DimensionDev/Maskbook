@@ -14,7 +14,7 @@ export function useNftTip(recipient: string, tokenId: string | null, contractAdd
     const sendTip = useCallback(async () => {
         if (!tokenId || !contractAddress) return
         const hash = await transferCallback(tokenId, recipient)
-        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, {
+        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, undefined, {
             chainId,
             account,
         })

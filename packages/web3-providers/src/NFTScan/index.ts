@@ -1,14 +1,13 @@
 import urlcat from 'urlcat'
-import { createPageable, HubOptions } from '@masknet/web3-shared-base'
 import {
-    ChainId,
-    createERC721Contract,
-    createERC721Token,
-    resolveIPFSLinkFromURL,
-    SchemaType,
-    createERC721Metadata,
-    createERC721Collection,
-} from '@masknet/web3-shared-evm'
+    createNonFungibleToken,
+    createNonFungibleTokenCollection,
+    createNonFungibleTokenContract,
+    createNonFungibleTokenMetadata,
+    createPageable,
+    HubOptions,
+} from '@masknet/web3-shared-base'
+import { ChainId, resolveIPFSLinkFromURL, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import getUnixTime from 'date-fns/getUnixTime'
@@ -60,11 +59,12 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
     )
 
-    return createERC721Token(
+    return createNonFungibleToken(
         ChainId.Mainnet,
         asset.trade_contract ?? asset.nft_contract_address,
+        SchemaType.ERC721,
         asset.nft_asset_id,
-        createERC721Metadata(
+        createNonFungibleTokenMetadata(
             ChainId.Mainnet,
             name,
             asset.trade_symbol,
@@ -73,15 +73,14 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
             undefined,
             mediaURL,
         ),
-        createERC721Contract(
+        createNonFungibleTokenContract(
             ChainId.Mainnet,
+            SchemaType.ERC721,
             asset.trade_contract ?? asset.nft_contract_address,
             name,
             asset.trade_symbol,
-            undefined,
-            mediaURL,
         ),
-        createERC721Collection(
+        createNonFungibleTokenCollection(
             ChainId.Mainnet,
             name,
             name,

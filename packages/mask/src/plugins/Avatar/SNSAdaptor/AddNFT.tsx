@@ -61,13 +61,13 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
 
-        const token = await connection?.getNonFungibleToken(address, tokenId, { chainId, account })
+        const token = await connection?.getNonFungibleToken(address, tokenId, undefined, { chainId, account })
         if (token) {
             if (chainId && token && token.contract?.chainId !== chainId) {
                 setMessage('chain does not match.')
                 return
             }
-            if (!token || !isSameAddress(token?.metadata?.owner, account ?? _account)) {
+            if (!token || !isSameAddress(token?.contract?.owner, account ?? _account)) {
                 setMessage(t('nft_owner_hint'))
                 return
             }

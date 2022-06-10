@@ -1,7 +1,7 @@
 import { useImageChecker } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, createERC721Token, SchemaType } from '@masknet/web3-shared-evm'
+import { createNonFungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
@@ -54,7 +54,9 @@ export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
     const { onSelect, chainId, tokenInfo, tokens, children } = props
     const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(
-        tokenInfo ? createERC721Token(chainId, tokenInfo.address, tokenInfo.tokenId) : undefined,
+        tokenInfo
+            ? createNonFungibleToken(chainId, tokenInfo.address, SchemaType.ERC721, tokenInfo.tokenId)
+            : undefined,
     )
 
     const onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {

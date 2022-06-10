@@ -12,16 +12,12 @@ import {
     OrderSide,
     TokenType,
     createPageable,
+    createNonFungibleTokenMetadata,
+    createNonFungibleTokenContract,
+    createNonFungibleTokenCollection,
+    createNonFungibleToken,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    resolveIPFSLinkFromURL,
-    createERC721Token,
-    createERC721Metadata,
-    createERC721Contract,
-    createERC721Collection,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import {
     Ownership,
     RaribleEventType,
@@ -66,21 +62,14 @@ function createERC721TokenFromAsset(
     asset?: RaribleNFTItemMapResponse,
 ): NonFungibleToken<ChainId, SchemaType.ERC721> {
     const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
-    return createERC721Token(
+    return createNonFungibleToken(
         ChainId.Mainnet,
         tokenAddress,
+        SchemaType.ERC721,
         tokenId,
-        createERC721Metadata(
-            ChainId.Mainnet,
-            asset?.meta?.name ?? '',
-            '',
-            first(asset?.owners),
-            '',
-            imageURL,
-            imageURL,
-        ),
-        createERC721Contract(ChainId.Mainnet, tokenAddress, asset?.meta?.name ?? '', ''),
-        createERC721Collection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
+        createNonFungibleTokenMetadata(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', undefined, imageURL, imageURL),
+        createNonFungibleTokenContract(ChainId.Mainnet, SchemaType.ERC721, tokenAddress, asset?.meta?.name ?? '', ''),
+        createNonFungibleTokenCollection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
     )
 }
 
@@ -193,7 +182,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const items =
             asset.items
                 .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => x.metadata?.owner?.toLowerCase() === from.toLowerCase())
+                .filter((x) => x.contract?.owner?.toLowerCase() === from.toLowerCase())
                 .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
         return createPageable(items, indicator, asset.continuation)
     }

@@ -1,5 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import type { Connection, ConnectionOptions, ConnectionState as Web3ConnectionState } from '@masknet/web3-shared-base'
+import type { Plugin } from '../types'
 
 export class ConnectionState<
     ChainId,
@@ -35,10 +36,14 @@ export class ConnectionState<
         >
 {
     constructor(
+        private context: Plugin.Shared.SharedContext,
         protected createConnection: (
-            chainId?: ChainId,
-            account?: string,
-            providerType?: ProviderType,
+            context: Plugin.Shared.SharedContext,
+            options?: {
+                chainId?: ChainId
+                account?: string
+                providerType?: ProviderType
+            },
         ) => Connection<
             ChainId,
             SchemaType,
@@ -71,10 +76,10 @@ export class ConnectionState<
     }
 
     async getConnection(options?: Web3ConnectionOptions) {
-        return this.createConnection(
-            options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
-            options?.account ?? this.subscription.account?.getCurrentValue(),
-            options?.providerType ?? this.subscription.providerType?.getCurrentValue(),
-        )
+        return this.createConnection(this.context, {
+            chainId: options?.chainId ?? this.subscription.chainId?.getCurrentValue(),
+            account: options?.account ?? this.subscription.account?.getCurrentValue(),
+            providerType: options?.providerType ?? this.subscription.providerType?.getCurrentValue(),
+        })
     }
 }

@@ -15,14 +15,21 @@ import {
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
+    NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings'
+import type { Plugin } from '@masknet/plugin-infra'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
 
-    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    constructor(
+        private chainId: ChainId,
+        private account: string,
+        private providerType: ProviderType,
+        private context?: Plugin.Shared.SharedContext,
+    ) {}
 
     private _getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType]
@@ -69,6 +76,7 @@ class Connection implements BaseConnection {
         tokenId: string,
         amount: string,
         recipient: string,
+        schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -81,12 +89,16 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
@@ -103,7 +115,12 @@ class Connection implements BaseConnection {
     getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
+    getNonFungibleTokenBalance(
+        address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
+        options?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokensBalance(
@@ -222,9 +239,18 @@ class Connection implements BaseConnection {
     }
     getNonFungibleToken(
         address: string,
-        id: string,
+        tokenId: string,
+        schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenMetadata(
+        address: string,
+        tokenId: string,
+        schemaType?: SchemaType,
+        options?: SolanaWeb3ConnectionOptions,
+    ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
     replaceRequest(
@@ -243,6 +269,15 @@ class Connection implements BaseConnection {
     }
 }
 
-export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom) {
-    return new Connection(chainId, account, providerType)
+export function createConnection(
+    context: Plugin.Shared.SharedContext,
+    options?: {
+        chainId?: ChainId
+        account?: string
+        providerType?: ProviderType
+    },
+) {
+    const { chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom } = options ?? {}
+
+    return new Connection(chainId, account, providerType, context)
 }

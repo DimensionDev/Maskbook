@@ -151,6 +151,8 @@ export namespace Plugin.Shared {
             },
         ): Promise<JsonRpcResponse>
 
+        fetch: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
+
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */

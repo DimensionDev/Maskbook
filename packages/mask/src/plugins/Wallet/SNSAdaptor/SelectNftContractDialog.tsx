@@ -235,6 +235,8 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
         keyword,
+        undefined,
+        undefined,
         { account },
     )
     return (
