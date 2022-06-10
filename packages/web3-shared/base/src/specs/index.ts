@@ -220,6 +220,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     symbol: string
     address: string
     schema: SchemaType
+    owner?: string
     balance?: number
     logoURL?: string
     iconURL?: string
