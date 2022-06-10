@@ -267,11 +267,11 @@ export function CollectionList({
             .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
     }, [allCollectibles.length])
 
-    if (!allCollectibles.length && !done && !error) return <LoadingSkeleton />
+    if (!allCollectibles.length && !done && !error && account) return <LoadingSkeleton />
 
-    if (!allCollectibles.length && error) return <RetryHint retry={next} />
+    if (!allCollectibles.length && error && account) return <RetryHint retry={next} />
 
-    if (done && !allCollectibles.length)
+    if ((done && !allCollectibles.length) || !account)
         return (
             <>
                 {addressName && (
