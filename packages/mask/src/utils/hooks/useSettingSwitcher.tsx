@@ -57,9 +57,9 @@ export function useSwitcher<T extends string | number>(
             fullWidth={fullWidth}
             sx={{
                 marginTop: 1,
-                backgroundColor: theme.palette.maskColor.dark,
+                backgroundColor: theme.palette.maskColor?.dark,
                 '&:hover': {
-                    backgroundColor: theme.palette.maskColor.dark,
+                    backgroundColor: theme.palette.maskColor?.dark,
                 },
                 color: 'white',
             }}
