@@ -337,7 +337,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
                 ChainId.Avalanche,
             ],
             supportedEnhanceableSites: [],
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedExtensionSites: [],
         },
         homeLink: 'https://app.tor.us/',
         shortenLink: 'tor.us',
