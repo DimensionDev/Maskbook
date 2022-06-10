@@ -3,13 +3,13 @@ import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import {
     CurrencyType,
     currySameAddress,
-    FungibleAsset,
+    formatBalance,
     isSameAddress,
     minus,
-    multipliedBy,
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
+import { useTokenConstants } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
@@ -17,43 +17,40 @@ import { useWeb3Hub } from './useWeb3Hub'
 import { useWeb3State } from './useWeb3State'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
+import { useFungibleToken, useNativeTokenBalance } from '../entry-web3'
 
-export function useFungibleAssets<T extends NetworkPluginID, Indicator = number>(
-    pluginID?: T,
-    schemaType?: Web3Helper.Definition[T]['SchemaType'],
-    options?: Web3Helper.Web3HubOptions<T, Indicator>,
-) {
-    type GetAllFungibleAssets = (
-        address: string,
-    ) => AsyncIterableIterator<
-        FungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
-    >
-
+export function useFungibleAssets<
+    S extends 'all' | void = void,
+    T extends NetworkPluginID = NetworkPluginID,
+    Indicator = number,
+>(pluginID?: T, schemaType?: Web3Helper.SchemaTypeScope<S, T>, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
     const account = useAccount(pluginID)
-    const chainId = useChainId(pluginID)
+    const chainId = useChainId(pluginID, options?.chainId)
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
-    const { Others } = useWeb3State<'all'>(pluginID)
+    const { Others } = useWeb3State(pluginID)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    const { value: balance = 0 } = useNativeTokenBalance()
+    const { value: nativeToken } = useFungibleToken(pluginID, NATIVE_TOKEN_ADDRESS, {
+        chainId,
+    })
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
-        const assets = await asyncIteratorToArray((hub?.getAllFungibleAssets as GetAllFungibleAssets)(account))
+        const assets = await asyncIteratorToArray(hub?.getAllFungibleAssets?.(account))
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
 
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(a.balance)
-                const zBalance = toZero(z.balance)
+                const aBalance = toZero(formatBalance(a.balance, a.decimals))
+                const zBalance = toZero(formatBalance(z.balance, z.decimals))
 
-                const aPrice = toZero(a.value?.[CurrencyType.USD] ?? '0')
-                const zPrice = toZero(z.value?.[CurrencyType.USD] ?? '0')
-
-                const aUSD = multipliedBy(aPrice, aBalance)
-                const zUSD = multipliedBy(zPrice, zBalance)
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
 
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))

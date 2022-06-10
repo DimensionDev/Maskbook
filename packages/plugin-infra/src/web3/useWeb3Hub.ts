@@ -8,22 +8,18 @@ export function useWeb3Hub<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
     Indicator = number,
->(pluginID?: T, options?: Web3Helper.Web3HubOptions<T, Indicator>) {
-    type Result = S extends 'all' ? Web3Helper.Web3HubAll : Web3Helper.Web3Hub<T>
-    type GetHub = (options?: Web3Helper.Web3HubOptions<T, Indicator>) => Promise<Web3Helper.Web3HubAll>
-
+>(pluginID?: T, options?: Web3Helper.Web3HubOptionsScope<S, T, Indicator>) {
     const { Hub } = useWeb3State(pluginID)
-    const chainId = useChainId(pluginID)
     const account = useAccount(pluginID)
+    const chainId = useChainId(pluginID)
 
     const { value: hub = null } = useAsyncRetry(async () => {
-        if (!Hub?.getHub) return
-        return (Hub.getHub as GetHub)?.({
+        return Hub?.getHub?.({
             account,
             chainId,
             ...options,
-        } as Web3Helper.Web3HubOptions<T, Indicator>)
+        } as Web3Helper.Web3HubOptionsScope<S, T>)
     }, [account, chainId, Hub, JSON.stringify(options)])
 
-    return hub as Result
+    return hub as Web3Helper.Web3HubScope<S, T>
 }

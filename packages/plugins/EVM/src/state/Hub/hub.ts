@@ -26,7 +26,7 @@ import {
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import {
-    ChainId as ChainId_EVM,
+    ChainId,
     chainResolver,
     formatEthereumAddress,
     GasOption,
@@ -34,7 +34,7 @@ import {
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
-    SchemaType as SchemaType_EVM,
+    SchemaType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
@@ -42,7 +42,7 @@ import type { EVM_Hub } from './types'
 
 class Hub implements EVM_Hub {
     constructor(
-        private chainId?: ChainId_EVM,
+        private chainId?: ChainId,
         private account?: string,
         private sourceType?: SourceType,
         private currencyType?: CurrencyType,
@@ -51,40 +51,43 @@ class Hub implements EVM_Hub {
     ) {}
 
     async getFungibleTokensFromTokenList(
-        chainId: ChainId_EVM,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Array<FungibleToken<ChainId_EVM, SchemaType_EVM>>> {
-        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
-        return TokenList.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS)
+        chainId: ChainId,
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
+        const expectedChainId = options?.chainId ?? chainId
+        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(expectedChainId)
+        return TokenList.fetchFungibleTokensFromTokenLists(expectedChainId, FUNGIBLE_TOKEN_LISTS)
     }
     async getNonFungibleTokensFromTokenList(
-        chainId: ChainId_EVM,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Array<NonFungibleToken<ChainId_EVM, SchemaType_EVM>>> {
+        chainId: ChainId,
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
     async getGasOptions(
-        chainId: ChainId_EVM,
-        options?: HubOptions<ChainId_EVM> | undefined,
+        chainId: ChainId,
+        options?: HubOptions<ChainId> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
+        const expectedChainId = options?.chainId ?? chainId
+
         try {
-            const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
-            if (isEIP1559) return await MetaSwap.getGasOptions(chainId)
-            return await DeBank.getGasOptions(chainId)
+            const isEIP1559 = chainResolver.isSupport(expectedChainId, 'EIP1559')
+            if (isEIP1559) return await MetaSwap.getGasOptions(expectedChainId)
+            return await DeBank.getGasOptions(expectedChainId)
         } catch (error) {
-            return EthereumWeb3.getGasOptions(chainId)
+            return EthereumWeb3.getGasOptions(expectedChainId)
         }
     }
     getFungibleAsset(
         address: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<FungibleAsset<ChainId_EVM, SchemaType_EVM>> {
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<FungibleAsset<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async getFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Pageable<FungibleAsset<ChainId_EVM, SchemaType_EVM>>> {
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         // only the first page is available
         if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
         try {
@@ -96,8 +99,8 @@ class Hub implements EVM_Hub {
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<NonFungibleAsset<ChainId_EVM, SchemaType_EVM> | undefined> {
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         if (
             options?.sourceType === SourceType.Alchemy_FLOW ||
             options?.networkPluginId === NetworkPluginID.PLUGIN_FLOW
@@ -108,8 +111,8 @@ class Hub implements EVM_Hub {
     }
     getNonFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Pageable<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>, string | number>> {
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, string | number>> {
         if (options?.sourceType === SourceType.Alchemy_EVM) {
             return Alchemy_EVM.getTokens(account, options)
         }
@@ -117,37 +120,40 @@ class Hub implements EVM_Hub {
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId_EVM>>> {
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
         return OpenSea.getCollections(account, options)
     }
     getFungibleTokenPrice(
-        chainId: ChainId_EVM,
+        chainId: ChainId,
         address: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
+        options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const expectedCurrencyType = options?.currencyType ?? this.currencyType
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(expectedChainId)
 
         if (isNativeTokenAddress(address)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, expectedCurrencyType)
         }
 
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, expectedCurrencyType)
     }
     getNonFungibleTokenPrice(
-        chainId: ChainId_EVM,
+        chainId: ChainId,
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
+        options?: HubOptions<ChainId> | undefined,
     ): Promise<never> {
         throw new Error('Method not implemented.')
     }
     async getFungibleTokenIconURLs(
-        chainId: ChainId_EVM,
+        chainId: ChainId,
         address: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
+        options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
-        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(expectedChainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
         if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
@@ -161,22 +167,23 @@ class Hub implements EVM_Hub {
         return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
     }
     getNonFungibleTokenIconURLs(
-        chainId: ChainId_EVM,
+        chainId: ChainId,
         address: string,
         tokenId?: string | undefined,
-        options?: HubOptions<ChainId_EVM> | undefined,
+        options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
     async getTransactions(
-        chainId: ChainId_EVM,
+        chainId: ChainId,
         account: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): Promise<Pageable<Transaction<ChainId_EVM, SchemaType_EVM>>> {
-        return DeBank.getTransactions(account, { chainId })
+        options?: HubOptions<ChainId> | undefined,
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        const expectedChainId = options?.chainId ?? chainId
+        return DeBank.getTransactions(account, { chainId: expectedChainId })
     }
 
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId_EVM, SchemaType_EVM>> {
+    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
                 indicator: i,
@@ -191,8 +198,8 @@ class Hub implements EVM_Hub {
 
     async *getAllNonFungibleAssets(
         address: string,
-        options?: HubOptions<ChainId_EVM> | undefined,
-    ): AsyncIterableIterator<NonFungibleAsset<ChainId_EVM, SchemaType_EVM>> {
+        options?: HubOptions<ChainId> | undefined,
+    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
         if (options?.sourceType === SourceType.Alchemy_EVM) {
             let api_keys = ''
             while (1) {
@@ -223,8 +230,8 @@ class Hub implements EVM_Hub {
 
     async *getAllNonFungibleCollections(
         address: string,
-        options?: HubOptions<ChainId_EVM>,
-    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId_EVM>> {
+        options?: HubOptions<ChainId>,
+    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleCollections(address, {
                 indicator: i,
@@ -240,7 +247,7 @@ class Hub implements EVM_Hub {
 }
 
 export function createHub(
-    chainId?: ChainId_EVM,
+    chainId?: ChainId,
     account?: string,
     sourceType?: SourceType,
     currencyType?: CurrencyType,

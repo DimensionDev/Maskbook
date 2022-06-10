@@ -9,15 +9,13 @@ import { useWeb3State } from './useWeb3State'
 export function useSocialAddressList<T extends NetworkPluginID>(
     pluginID?: T,
     identity?: SocialIdentity,
-    sorter?: (a: SocialAddress<T>, z: SocialAddress<T>) => number,
+    sorter?: <V = T>(a: SocialAddress<V>, z: SocialAddress<V>) => number,
 ) {
-    type Lookup = (identity: SocialIdentity) => Promise<Array<SocialAddress<T>>>
-
     const { IdentityService } = useWeb3State(pluginID)
 
     return useAsyncRetry(async () => {
         if (!identity?.identifier?.userId || !IdentityService?.lookup) return EMPTY_LIST
-        const listOfAddress = (await (IdentityService.lookup as Lookup)(identity)) ?? EMPTY_LIST
+        const listOfAddress = (await IdentityService.lookup(identity)) ?? EMPTY_LIST
         return sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
     }, [identity?.identifier?.userId, sorter, IdentityService?.lookup])
 }

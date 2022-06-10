@@ -107,11 +107,11 @@ export namespace PriceAPI {
 }
 
 export namespace HistoryAPI {
-    export interface Provider<ChainId, SchemaType, Indicator = number> {
+    export interface Provider<ChainId, SchemaType> {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>, Indicator>>
+        ): Promise<Array<Transaction<ChainId, SchemaType>>>
     }
 }
 
@@ -132,11 +132,36 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = number> {
-        getContract?: (
+        getAsset?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
+        getAssets?: (
             address: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        getBalance?: (address: string, options?: HubOptions<ChainId>) => Promise<number>
+        ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
+        getHistory?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        getListings?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        getOffers?: (
+            address: string,
+            tokenId: string,
+            opts?: HubOptions<ChainId>,
+        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        getOrders?: (
+            address: string,
+            tokenId: string,
+            side: OrderSide,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
         getToken?: (
             address: string,
             tokenId: string,
@@ -144,43 +169,16 @@ export namespace NonFungibleTokenAPI {
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
         getTokens?: (
             from: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        getAsset?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-            ownerAddress?: string,
-            contractName?: string,
-        ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        getAssets?: (
-            address: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
-        getEvents?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
-        getListings?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getOffers?: (
-            address: string,
-            tokenId: string,
             opts?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getOrders?: (
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        getContract?: (
             address: string,
-            tokenId: string,
-            side: OrderSide,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+            opts?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId, Indicator>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
     }
 }

@@ -164,49 +164,47 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     }, [nextIDConnectStatus.status])
 
     return (
-        <>
+        <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
             <Container>
-                <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
-                    <ListItemButton onClick={openWallet}>
-                        <ListItemIcon>
-                            {isWalletValid ? (
-                                <WalletIcon
-                                    size={iconSize}
-                                    badgeSize={badgeSize}
-                                    mainIcon={providerDescriptor?.icon} // switch the icon to meet design
-                                    badgeIcon={networkDescriptor?.icon}
-                                    badgeIconBorderColor={theme.palette.background.paper}
-                                />
-                            ) : (
-                                <AccountBalanceWalletIcon className={classes.iconFont} />
-                            )}
-                        </ListItemIcon>
-                        {mini ? null : (
-                            <ListItemText
-                                primary={
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                        }}>
-                                        <Typography className={classes.title}>{walletTitle}</Typography>
-                                        {shouldDisplayChainIndicator ? (
-                                            <FiberManualRecordIcon
-                                                className={classes.chainIcon}
-                                                style={{
-                                                    color: chainColor,
-                                                }}
-                                            />
-                                        ) : null}
-                                    </Box>
-                                }
+                <ListItemButton onClick={openWallet}>
+                    <ListItemIcon>
+                        {isWalletValid ? (
+                            <WalletIcon
+                                size={iconSize}
+                                badgeSize={badgeSize}
+                                mainIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                badgeIcon={networkDescriptor?.icon}
+                                badgeIconBorderColor={theme.palette.background.paper}
                             />
+                        ) : (
+                            <AccountBalanceWalletIcon className={classes.iconFont} />
                         )}
-                    </ListItemButton>
-                </GuideStep>
+                    </ListItemIcon>
+                    {mini ? null : (
+                        <ListItemText
+                            primary={
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}>
+                                    <Typography className={classes.title}>{walletTitle}</Typography>
+                                    {shouldDisplayChainIndicator ? (
+                                        <FiberManualRecordIcon
+                                            className={classes.chainIcon}
+                                            style={{
+                                                color: chainColor,
+                                            }}
+                                        />
+                                    ) : null}
+                                </Box>
+                            }
+                        />
+                    )}
+                </ListItemButton>
             </Container>
-        </>
+        </GuideStep>
     )
 }
 

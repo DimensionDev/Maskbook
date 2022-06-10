@@ -74,7 +74,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         // error: unable to sign password
         let signedPassword = ''
         try {
-            signedPassword = await connection.signMessage(password, 'personaSign', { account })
+            signedPassword = await connection.signMessage(password, 'personalSign', { account })
         } catch {
             signedPassword = ''
         }

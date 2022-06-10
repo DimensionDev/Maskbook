@@ -24,92 +24,91 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles<{ contentBackground?: string; showWalletName: boolean }>()(
-    (theme, { contentBackground, showWalletName }) => ({
-        content: {
-            padding: theme.spacing(2, 3, 3),
-        },
-        currentAccount: {
-            padding: theme.spacing(showWalletName ? '13px' : '22px', 1.5),
-            marginBottom: theme.spacing(2),
-            display: 'flex',
-            background:
-                contentBackground ??
-                (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
-            borderRadius: 8,
-            alignItems: 'center',
-        },
-        dashboardBackground: {
-            background: theme.palette.background.default,
-        },
-        accountInfo: {
-            fontSize: 16,
-            flexGrow: 1,
-            marginLeft: theme.spacing(1.5),
-        },
-        accountName: {
-            color: theme.palette.maskColor?.dark,
-            fontWeight: 700,
-            fontSize: 14,
-            marginRight: 5,
-            lineHeight: '18px',
-        },
-        balance: {
-            color: theme.palette.maskColor?.dark,
-            fontSize: 14,
-            paddingTop: 2,
-            lineHeight: '18px',
-        },
-        infoRow: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        actionButton: {
-            fontSize: 12,
-            color: 'white',
+const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { contentBackground }) => ({
+    content: {
+        padding: theme.spacing(2, 3, 3),
+    },
+    currentAccount: {
+        padding: theme.spacing(0, 1.5),
+        marginBottom: theme.spacing(2),
+        display: 'flex',
+        background:
+            contentBackground ??
+            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+        borderRadius: 8,
+        alignItems: 'center',
+        height: 82,
+    },
+    dashboardBackground: {
+        background: theme.palette.background.default,
+    },
+    accountInfo: {
+        fontSize: 16,
+        flexGrow: 1,
+        marginLeft: theme.spacing(1.5),
+    },
+    accountName: {
+        color: theme.palette.maskColor?.dark,
+        fontWeight: 700,
+        fontSize: 14,
+        marginRight: 5,
+        lineHeight: '18px',
+    },
+    balance: {
+        color: theme.palette.maskColor?.dark,
+        fontSize: 14,
+        paddingTop: 2,
+        lineHeight: '18px',
+    },
+    infoRow: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    actionButton: {
+        fontSize: 12,
+        color: 'white',
+        backgroundColor: theme.palette.maskColor?.dark,
+        marginLeft: theme.spacing(1),
+        padding: theme.spacing(1, 2),
+        '&:hover': {
             backgroundColor: theme.palette.maskColor?.dark,
-            marginLeft: theme.spacing(1),
-            padding: theme.spacing(1, 2),
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
-            },
         },
-        address: {
-            fontSize: 16,
-            marginRight: theme.spacing(1),
-            display: 'inline-block',
-        },
-        link: {
-            fontSize: 14,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        twitterProviderBorder: {
-            width: 14,
-            height: 14,
-        },
-        connectButtonWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: theme.spacing(2, 0),
-        },
-        icon: {
-            width: 17.5,
-            height: 17.5,
-            marginRight: theme.spacing(0.5),
-        },
-        copyIcon: {
-            fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
-        },
-        linkIcon: {
-            stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
-        },
-        statusBox: {
-            position: 'relative',
-        },
-    }),
-)
+    },
+    address: {
+        fontSize: 16,
+        marginRight: theme.spacing(1),
+        display: 'inline-block',
+    },
+    link: {
+        fontSize: 14,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    twitterProviderBorder: {
+        width: 14,
+        height: 14,
+    },
+    connectButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
+    },
+    icon: {
+        width: 17.5,
+        height: 17.5,
+        marginRight: theme.spacing(0.5),
+    },
+    copyIcon: {
+        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+    },
+    linkIcon: {
+        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+    },
+    statusBox: {
+        position: 'relative',
+    },
+}))
 interface WalletStatusBox {
     disableChange?: boolean
     showPendingTransaction?: boolean
@@ -120,7 +119,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
-        showWalletName: [ProviderType.MaskWallet, 'Phantom', 'Blocto'].includes(providerDescriptor?.type ?? ''),
     })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId()
@@ -129,7 +127,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { value: balance = '0' } = useBalance()
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State<'all'>()
+    const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard

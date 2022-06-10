@@ -17,8 +17,10 @@ export async function fetchJSON<T = unknown>(
 ): Promise<Result<T, string>> {
     type FetchCache = LRU<string, Promise<Response> | T>
 
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
     const isPending = cached instanceof Promise
+
     if (cached && !isPending) {
         return Ok(cached)
     }
@@ -26,7 +28,7 @@ export async function fetchJSON<T = unknown>(
     if (isPending) {
         pendingResponse = cached
     } else {
-        pendingResponse = globalThis.fetch(url, { mode: 'cors', ...requestInit })
+        pendingResponse = fetch(url, requestInit)
         if (enableCache) {
             fetchCache.set(url, pendingResponse)
         }
