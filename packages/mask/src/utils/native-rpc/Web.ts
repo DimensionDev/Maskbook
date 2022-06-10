@@ -335,7 +335,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 ivToBePublished: new Uint8Array(decodeArrayBuffer(result.ivToBePublished)),
                 target: identifier,
             }
-            receiverKeys.set(identifier, key)
+            const fullfilledResult = {
+                value: key
+            }
+            receiverKeys.set(identifier, fullfilledResult)
         }
 
         await publishPostAESKey_version39Or38(-38, postIVData, networkHint, receiverKeys)
