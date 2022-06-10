@@ -33,6 +33,7 @@ import {
 import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { isProxyENV } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
+import getUnixTime from 'date-fns/getUnixTime'
 
 const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {
@@ -91,7 +92,7 @@ function createNFTAsset(
     const owner = first(asset?.owners)
     const creator = first(asset?.creators)
     return {
-        id: asset.contract,
+        id: asset.id || asset.contract,
         chainId,
         tokenId: asset.tokenId,
         type: TokenType.NonFungible,
@@ -118,36 +119,30 @@ function createNFTAsset(
             [CurrencyType.USD]: '0',
         },
 
-        // image_url: resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? ''),
-
-        // asset_contract: null,
-
-        // description: asset?.meta?.description ?? '',
-        // name: asset?.meta?.name ?? 'Unknown',
-        // collection_name: '',
-        // animation_url: asset.meta?.animation?.url.PREVIEW,
-        // current_price: 0,
-        // current_symbol: 'ETH',
-        // end_time: null,
-        // order_payment_tokens: [] as FungibleToken<ChainId, SchemaType.ERC721>[],
-        // offer_payment_tokens: [] as FungibleToken<ChainId, SchemaType.ERC721>[],
-        // top_ownerships: owner
-        //     ? [
-        //           {
-        //               owner: {
-        //                   address: owner,
-        //                   profile_img_url: '',
-        //                   user: { username: owner },
-        //                   link: '',
-        //               },
-        //           },
-        //       ]
-        //     : [],
-        // slug: '',
-        // response_: asset,
-        // token_id: asset.tokenId,
-        // safelist_request_status: '',
-        // last_sale: null,
+        metadata: {
+            chainId,
+            name: asset.meta?.name ?? '',
+            symbol: '',
+            description: asset.meta?.description,
+            imageURL: asset.meta?.image?.url.ORIGINAL,
+            mediaURL: asset?.meta?.animation?.url.ORIGINAL,
+        },
+        contract: {
+            chainId,
+            schema: SchemaType.ERC721,
+            address: asset.contract ?? asset.id,
+            name: asset.meta?.name ?? '',
+            symbol: '',
+        },
+        collection: {
+            chainId,
+            name: asset.meta?.name ?? '',
+            slug: asset.meta?.name ?? '',
+            description: asset.meta?.description,
+            iconURL: asset.meta?.image?.url.PREVIEW ?? asset.meta?.image?.url.ORIGINAL ?? asset.meta?.image?.url.BIG,
+            verified: !asset.deleted,
+            createdAt: getUnixTime(new Date(asset.mintedAt)),
+        },
     }
 }
 

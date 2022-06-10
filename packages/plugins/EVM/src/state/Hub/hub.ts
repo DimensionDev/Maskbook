@@ -5,6 +5,8 @@ import {
     EthereumWeb3,
     MetaSwap,
     OpenSea,
+    NFTScan,
+    Rarible,
     TokenList,
     Zerion,
 } from '@masknet/web3-providers'
@@ -23,7 +25,6 @@ import {
     currySameAddress,
     CurrencyType,
     Transaction,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -101,13 +102,19 @@ class Hub implements EVM_Hub {
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        if (
-            options?.sourceType === SourceType.Alchemy_FLOW ||
-            options?.networkPluginId === NetworkPluginID.PLUGIN_FLOW
-        ) {
-            return Alchemy_EVM.getAsset(address, tokenId, options)
+        const provider = options?.sourceType
+        switch (provider) {
+            case SourceType.Alchemy_EVM:
+                return Alchemy_EVM.getAsset(address, tokenId, options)
+            case SourceType.OpenSea:
+                return OpenSea.getAsset(address, tokenId)
+            case SourceType.Rarible:
+                return Rarible.getAsset(address, tokenId)
+            case SourceType.NFTScan:
+                return NFTScan.getToken(address, tokenId)
+            default:
+                return OpenSea.getAsset(address, tokenId)
         }
-        return OpenSea.getAsset(address, tokenId, options)
     }
     getNonFungibleAssets(
         account: string,
