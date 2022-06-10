@@ -1,4 +1,14 @@
-import { CoinGecko, DeBank, EthereumWeb3, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import {
+    CoinGecko,
+    DeBank,
+    EthereumWeb3,
+    MetaSwap,
+    NFTScan,
+    OpenSea,
+    Rarible,
+    TokenList,
+    Zerion,
+} from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -91,7 +101,17 @@ class Hub implements EVM_Hub {
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        return OpenSea.getAsset(address, tokenId, options)
+        const provider = options?.sourceType
+        switch (provider) {
+            case SourceType.OpenSea:
+                return OpenSea.getAsset(address, tokenId)
+            case SourceType.Rarible:
+                return Rarible.getAsset(address, tokenId)
+            case SourceType.NFTScan:
+                return NFTScan.getToken(address, tokenId)
+            default:
+                return OpenSea.getAsset(address, tokenId)
+        }
     }
     getNonFungibleAssets(
         account: string,
