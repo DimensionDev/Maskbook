@@ -17,11 +17,11 @@ import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleTab } from '../types'
-import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
+import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { getEnumAsArray } from '@dimensiondev/kit'
@@ -137,20 +137,14 @@ export function Collectible(props: CollectibleProps) {
     // #endregion
 
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(
-        provider,
-        setProvider,
-        supportedProvider,
-        resolveCollectibleProviderName,
-        true,
-    )
+    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
 
-    if (!asset.value || !token || !asset.value.id)
+    if (!asset.value?.id || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
+                    Failed to load your collectible on {resolveSourceName(provider)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
@@ -286,9 +280,7 @@ export function Collectible(props: CollectibleProps) {
                                 name: (
                                     <>
                                         <CollectibleProviderIcon provider={x.value} />
-                                        <span className={classes.footName}>
-                                            {resolveCollectibleProviderName(x.value)}
-                                        </span>
+                                        <span className={classes.footName}>{resolveSourceName(x.value)}</span>
                                     </>
                                 ),
                                 value: x.value,

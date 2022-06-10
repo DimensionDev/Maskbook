@@ -27,21 +27,6 @@ export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet |
     Network.Main,
 )
 
-export const resolveCollectibleProviderName = createLookupTableResolver<SourceType, string>(
-    {
-        [SourceType.DeBank]: 'DeBank',
-        [SourceType.Zerion]: 'Zerion',
-        [SourceType.RSS3]: 'RSS3',
-        [SourceType.OpenSea]: 'OpenSea',
-        [SourceType.Rarible]: 'Rarible',
-        [SourceType.NFTScan]: 'NFTScan',
-        [SourceType.Zora]: 'Zora',
-    },
-    (providerType) => {
-        throw new Error(`Unknown provider type: ${providerType}.`)
-    },
-)
-
 export const resolveRaribleUserNetwork = createLookupTableResolver<RaribleSupportedChainId, string>(
     {
         [ChainId.Mainnet]: RaribleUserURL,
