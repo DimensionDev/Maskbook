@@ -260,7 +260,7 @@ function WalletUI(props: WalletUIProps) {
     const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
-    const { Others } = useWeb3State<'all'>()
+    const { Others } = useWeb3State<'all'>(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
 
     if (!address) return null
     return (
