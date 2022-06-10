@@ -10,7 +10,7 @@ import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string
@@ -129,7 +129,7 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State()
 
     return (
         <List className={classnames(classes.list, className)}>

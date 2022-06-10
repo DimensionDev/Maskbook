@@ -1,12 +1,10 @@
-import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTokenConstants } from '@masknet/web3-shared-evm'
-import { useTokenConstants as useSolTokenConstants } from '@masknet/web3-shared-solana'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import { FC, useMemo } from 'react'
+import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
@@ -58,7 +56,7 @@ export interface SelectTokenDialogProps extends PickTokenOptions {
     onClose?(): void
 }
 
-const isDashboard = location.href.includes('dashboard.html')
+const isDashboard = isDashboardPage()
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
     chainId,
@@ -77,21 +75,11 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const compact = networkIdentifier === EnhanceableSite.Minds
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    const { SOL_ADDRESS } = useSolTokenConstants(chainId)
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
 
-    const nativeTokenAddress = useMemo(() => {
-        switch (pluginId) {
-            case NetworkPluginID.PLUGIN_EVM:
-                return NATIVE_TOKEN_ADDRESS
-            case NetworkPluginID.PLUGIN_SOLANA:
-                return SOL_ADDRESS
-        }
-        return NATIVE_TOKEN_ADDRESS
-    }, [NATIVE_TOKEN_ADDRESS, pluginId])
+    const nativeTokenAddress = useNativeTokenAddress(pluginId)
 
     return (
         <InjectedDialog

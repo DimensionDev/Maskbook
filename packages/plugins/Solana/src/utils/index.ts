@@ -9,11 +9,6 @@ export function formatAddress(address: string, size?: number) {
 // #endregion
 
 // #region validator
-export function isSameAddress(a?: string, b?: string) {
-    if (!a || !b) return false
-    return a.toLowerCase() === b.toLowerCase()
-}
-
 export function isValidDomain(domain: string) {
     return /.+\.sol/i.test(domain)
 }
