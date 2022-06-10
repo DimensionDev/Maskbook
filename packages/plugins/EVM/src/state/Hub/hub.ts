@@ -123,13 +123,13 @@ class Hub implements EVM_Hub {
         if (options?.sourceType === SourceType.Alchemy_EVM) {
             return Alchemy_EVM.getTokens(account, options)
         }
-        return OpenSea.getTokens(account, options)
+        return OpenSea.getTokens(account, options as HubOptions<ChainId, number>)
     }
     getNonFungibleCollections(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
-        return OpenSea.getCollections(account, options)
+        return OpenSea.getCollections(account, options as HubOptions<ChainId, number>)
     }
     getFungibleTokenPrice(
         chainId: ChainId,
