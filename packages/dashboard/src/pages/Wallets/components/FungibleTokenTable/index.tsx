@@ -63,19 +63,19 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TokenTableProps {
-    selectedChainId?: ChainId
+    selectedChainId?: Web3Helper.ChainIdAll
 }
 
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, {
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: selectedChainId,
     })
     const {
         value: fungibleAssets = EMPTY_LIST,
         loading: fungibleAssetsLoading,
         error: fungibleAssetsError,
-    } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: selectedChainId,
     })
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
