@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             maxHeight: 180,
-            gridGap: '16px 8px',
+            gridGap: '12px 12px',
             margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
                 gridAutoRows: '110px',

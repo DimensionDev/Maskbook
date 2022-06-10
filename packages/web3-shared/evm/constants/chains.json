@@ -2997,7 +2997,7 @@
     {
         "chainId": 1030,
         "type": "Conflux",
-        "name": "Conflux eSpace",
+        "name": "Conflux",
         "network": "mainnet",
         "shortName": "Conflux",
         "features": [],
