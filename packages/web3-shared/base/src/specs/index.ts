@@ -9,7 +9,7 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<Item, Indicator = number> {
+export interface Pageable<Item, Indicator = number | string > {
     /** the indicator of the current page */
     indicator: Indicator
     /** the indicator of the next page */
@@ -64,6 +64,8 @@ export enum SourceType {
     OpenSea = 'opensea',
     Rarible = 'rarible',
     NFTScan = 'NFTScan',
+    Alchemy_EVM = 'Alchemy_EVM',
+    Alchemy_FLOW = 'Alchemy_FLOW'
 }
 
 export enum TransactionStatusType {
@@ -671,11 +673,13 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId, Indicator = number> {
+export interface HubOptions<ChainId, Indicator = number | string> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
     chainId?: ChainId
+    /** The networkPluginID as the API parameter */
+    networkPluginId?: NetworkPluginID
     /** The id of data provider */
     sourceType?: SourceType
     /** The currency type of data */

@@ -827,6 +827,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-flow': workspace:*
       '@metamask/eth-sig-util': ^4.0.0
       '@servie/events': ^3.0.0
       '@toruslabs/torus-embed': ^1.22.6
@@ -860,6 +861,7 @@ importers:
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      '@masknet/web3-shared-flow': link:../../web3-shared/flow
       '@metamask/eth-sig-util': 4.0.0
       '@servie/events': 3.0.0
       '@toruslabs/torus-embed': 1.23.2
@@ -1413,6 +1415,7 @@ importers:
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-flow': workspace:*
       '@masknet/web3-shared-solana': workspace:*
       '@types/lru-cache': ^7.10.10
       '@types/socket.io-client': ^1.4.36
@@ -1438,6 +1441,7 @@ importers:
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-flow': link:../web3-shared/flow
       '@masknet/web3-shared-solana': link:../web3-shared/solana
       '@types/socket.io-client': 1.4.36
       bignumber.js: 9.0.2
@@ -23235,13 +23239,13 @@ packages:
     engines: {node: '>=6'}
 
   /pinkie-promise/2.0.1:
-    resolution: {integrity: sha1-ITXW36ejWMBprJsXh3YogihFD/o=}
+    resolution: {integrity: sha512-0Gni6D4UcLTbv9c57DfxDGdr41XfgUjqWZu492f0cIGr16zDU06BWP/RAEvOuo7CQ0CNjHaLlM59YJJFm3NWlw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       pinkie: 2.0.4
 
   /pinkie/2.0.4:
-    resolution: {integrity: sha1-clVrgM+g1IqXToDnckjoDtT3+HA=}
+    resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
   /pirates/4.0.5:
@@ -23659,7 +23663,7 @@ packages:
       ipaddr.js: 1.9.1
 
   /prr/1.0.1:
-    resolution: {integrity: sha1-0/wRS6BplaRexok/SEzrHXj19HY=}
+    resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
 
   /ps-tree/1.2.0:
     resolution: {integrity: sha512-0VnamPPYHl4uaU/nSFeZZpR21QAWRz+sRv4iW9+v/GS/J5U5iZB5BNN6J0RMoOvdx2gWM2+ZFMIm58q24e4UYA==}
@@ -25544,7 +25548,7 @@ packages:
     dev: false
 
   /set-immediate-shim/1.0.1:
-    resolution: {integrity: sha1-SysbJ+uAip+NzEgaWOXlb1mfP2E=}
+    resolution: {integrity: sha512-Li5AOqrZWCVA2n5kryzEmqai6bKSIvpz5oUJHPVj6+dsbD3X1ixtsY5tEnsaNpH3pFAHmG8eIHUrtEtohrg+UQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -25661,7 +25665,7 @@ packages:
     dev: true
 
   /slash/1.0.0:
-    resolution: {integrity: sha1-xB8vbDn8FtHNF61LXYlhFK5HDVU=}
+    resolution: {integrity: sha512-3TYDR7xWt4dIqV2JauJr+EJeW356RXijHeUlO+8djJ+uBXPn8/2dpzBc8yQhh583sVvc9CvFAeQVgijsH+PNNg==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -25843,7 +25847,7 @@ packages:
       urix: 0.1.0
 
   /source-map-support/0.4.14:
-    resolution: {integrity: sha1-nURjdyWYuGJxtPUj9sH04Cp9au8=}
+    resolution: {integrity: sha512-V5c2CKH3UOk75aC+2MMqspzPBO84+U4WAlOoqDAlBXU3pMIBRRsBGtgaPNqFNqnvEmD9TQf0RarfVePT3gSMww==}
     dependencies:
       source-map: 0.5.7
     dev: false

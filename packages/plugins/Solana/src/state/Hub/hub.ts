@@ -76,7 +76,7 @@ class Hub implements SolanaHub {
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId, number> | undefined,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
         return MagicEden.getCollections(account, options)
     }
