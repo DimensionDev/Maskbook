@@ -27,9 +27,6 @@ const matchers: R2d2WorkerMatchTuple[] = [
 export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
     const url = init instanceof Request ? init.url : (input as string)
 
-    // r2d2
-    if (url.includes('r2d2.to')) return globalThis.fetch(input, init)
-
     // ipfs
     if (url.startsWith('ipfs://'))
         return globalThis.fetch(
@@ -39,7 +36,13 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
             init,
         )
 
+    // r2d2
+    if (url.includes('r2d2.to')) return globalThis.fetch(input, init)
+
+    // r2d2 worker
     const r2deWorkerType = matchers.find((x) => url.startsWith(x[0]))?.[1]
-    if (!r2deWorkerType) return globalThis.fetch(input, init)
-    return globalThis.fetch(url.replace(new URL(url).origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
+    if (r2deWorkerType) globalThis.fetch(url.replace(new URL(url).origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
+
+    // fallback
+    return globalThis.fetch(input, init)
 }

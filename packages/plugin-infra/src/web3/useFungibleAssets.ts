@@ -11,7 +11,6 @@ import {
     pageableToIterator,
     toZero,
 } from '@masknet/web3-shared-base'
-import { useTokenConstants } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
@@ -19,7 +18,6 @@ import { useWeb3Hub } from './useWeb3Hub'
 import { useWeb3State } from './useWeb3State'
 import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
-import { useFungibleToken, useNativeTokenBalance } from '../entry-web3'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -32,11 +30,6 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { Others } = useWeb3State(pluginID)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    const { value: balance = 0 } = useNativeTokenBalance()
-    const { value: nativeToken } = useFungibleToken(pluginID, NATIVE_TOKEN_ADDRESS, {
-        chainId,
-    })
 
     return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
@@ -48,6 +41,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             return hub.getFungibleAssets(account, {
                 indicator,
                 size: 50,
+                ...options,
             })
         })
         const assets = await asyncIteratorToArray(iterator)
@@ -101,5 +95,5 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
                 return 0
             })
-    }, [account, chainId, hub, trustedTokens, blockedTokens, Others])
+    }, [account, chainId, hub, trustedTokens, blockedTokens, Others, JSON.stringify(options)])
 }

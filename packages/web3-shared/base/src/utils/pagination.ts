@@ -3,7 +3,7 @@ import type { HubIndicator, Pageable } from '../specs'
 export function createIndicator(indicator?: HubIndicator, id?: string) {
     const index = indicator?.index ?? 0
     return {
-        id: id ?? index.toString(),
+        id: id ?? indicator?.id ?? index.toString(),
         index,
     }
 }
@@ -53,7 +53,7 @@ export async function* pageableToIterator<T>(
         const pageable = await getPageable(indicator)
         if (!pageable) return
         yield* pageable.data
-        if (!pageable.indicator) return
+        if (!pageable.nextIndicator) return
         indicator = pageable.nextIndicator as HubIndicator
     }
 }

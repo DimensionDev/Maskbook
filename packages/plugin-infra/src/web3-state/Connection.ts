@@ -36,7 +36,7 @@ export class ConnectionState<
         >
 {
     constructor(
-        private context: Plugin.Shared.SharedContext,
+        protected context: Plugin.Shared.SharedContext,
         protected createConnection: (
             context: Plugin.Shared.SharedContext,
             options?: {
