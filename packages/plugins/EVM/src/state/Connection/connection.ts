@@ -46,7 +46,7 @@ import {
 import { createContext, dispatch } from './composer'
 import { Providers } from './provider'
 import type { EVM_Connection, EVM_Web3ConnectionOptions } from './types'
-import { getReceiptStatus } from './utils'
+import { getERC721TokenAssetFromChain, getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 
@@ -405,17 +405,28 @@ class Connection implements EVM_Connection {
             contract?.methods.name().call() ?? EMPTY_STRING,
             contract?.methods.symbol().call() ?? EMPTY_STRING,
             contract?.methods.ownerOf(id).call() ?? EMPTY_STRING,
-            contract?.methods.balanceOf(options?.account ?? '').call() ?? EMPTY_STRING,
+            contract?.methods.balanceOf(options?.account ?? this.account).call() ?? EMPTY_STRING,
+            contract?.methods.tokenURI(id).call() ?? EMPTY_STRING,
         ])
-        const [name, symbol, owner, balance] = results.map((result) =>
+
+        const [name, symbol, owner, balance, tokenURI] = results.map((result) =>
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
 
+        const metadata = await getERC721TokenAssetFromChain(tokenURI)
         return createERC721Token(
             chainId,
             address,
             id,
-            createERC721Metadata(chainId, name ?? 'Unknown Token', symbol ?? 'UNKNOWN', owner),
+            createERC721Metadata(
+                chainId,
+                name ?? metadata?.name ?? 'Unknown Token',
+                symbol ?? 'UNKNOWN',
+                owner,
+                metadata?.description ?? '',
+                metadata?.imageURL,
+                metadata?.mediaURL,
+            ),
             createERC721Contract(
                 chainId,
                 address,

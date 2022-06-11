@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
+import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextID'
 import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
@@ -53,20 +53,22 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const [open, setOpen] = useState(false)
 
     const personaConnectStatus = usePersonaConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
 
     const createOrConnectPersona = useCallback(() => {
         personaConnectStatus.action?.()
     }, [personaConnectStatus])
 
     const verifyPersona = useCallback(() => {
-        CrossIsolationMessages.events.verifyNextID.sendToAll(undefined)
-    }, [])
+        nextIDConnectStatus.reset()
+    }, [nextIDConnectStatus])
 
-    const clickHandler = (() => {
-        if (personaConnectStatus.hasPersona === false) return createOrConnectPersona
-        if (personaConnectStatus.connected === false) return verifyPersona
+    const clickHandler = () => {
+        if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected) return createOrConnectPersona()
+        if (!nextIDConnectStatus.isVerified) return verifyPersona()
+        setOpen(true)
         return
-    })()
+    }
 
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
@@ -90,10 +92,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles(style)
     return (
         <>
-            <NFTAvatarButton
-                classes={{ root: classes.root, text: classes.text }}
-                onClick={clickHandler ?? (() => setOpen(true))}
-            />
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
         </>
     )

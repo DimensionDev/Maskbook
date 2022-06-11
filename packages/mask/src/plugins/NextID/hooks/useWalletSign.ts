@@ -22,7 +22,7 @@ export const useWalletSign = (message?: string, address?: string) => {
                 return
             }
         },
-        [address, message, address],
+        [address, message, address, connection],
     )
 
     useUpdateEffect(() => {

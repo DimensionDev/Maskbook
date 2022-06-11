@@ -104,10 +104,12 @@ class Hub implements EVM_Hub {
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         const provider = options?.sourceType
         switch (provider) {
+            case SourceType.OpenSea: {
+                if (options?.chainId && options.chainId !== ChainId.Mainnet) return
+                return OpenSea.getAsset(address, tokenId)
+            }
             case SourceType.Alchemy_EVM:
                 return Alchemy_EVM.getAsset(address, tokenId, options)
-            case SourceType.OpenSea:
-                return OpenSea.getAsset(address, tokenId)
             case SourceType.Rarible:
                 return Rarible.getAsset(address, tokenId)
             case SourceType.NFTScan:
@@ -227,6 +229,7 @@ class Hub implements EVM_Hub {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: i,
                 size: this.sizePerPage,
+                chainId: this.chainId,
             })
 
             yield* pageable.data

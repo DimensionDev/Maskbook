@@ -1,21 +1,26 @@
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { AllChainsNonFungibleToken } from '../types'
 
-export function useCollectibles() {
+export function useCollectibles(account: string, pluginId: NetworkPluginID, chainId: ChainId) {
     const {
         value: assets = [],
         error,
         retry,
         loading,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
+    } = useNonFungibleAssets(pluginId, undefined, {
+        chainId,
+        account,
+    })
 
     const collectibles = assets.map((x) => {
         return {
             contract: x.contract,
             metadata: x.metadata,
-            tokenId: x.id,
-        } as NonFungibleToken<ChainId, SchemaType>
+            collection: x.collection,
+            tokenId: x.tokenId,
+        } as AllChainsNonFungibleToken
     })
     return { collectibles, error, retry, loading }
 }

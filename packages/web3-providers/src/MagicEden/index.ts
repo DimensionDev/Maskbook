@@ -1,5 +1,6 @@
 import {
     createFungibleToken,
+    createPageable,
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
@@ -53,11 +54,12 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
             description: collection.description,
             imageURL: token.image || token.animationUrl,
             mediaURL: token.animationUrl || token.image,
+            owner: token.owner,
         },
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
-            address: '',
+            address: token.mintAddress,
             name: collection.name,
             symbol: collection.symbol,
         },
@@ -170,17 +172,15 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getTokens(owner: string, options?: HubOptions<ChainId>) {
+        if (options?.indicator && options.indicator > 0) return createPageable([], 0)
         const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,
             }),
         )
         const tokens = response?.results || []
-        return {
-            // All tokens get returned in single one page
-            indicator: 1,
-            hasNextPage: false,
-            data: tokens.map((token) => {
+        return createPageable(
+            tokens.map((token) => {
                 const chainId = ChainId.Mainnet
                 return {
                     id: token.mintAddress,
@@ -196,11 +196,12 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                         description: '',
                         imageURL: toImage(token.img),
                         mediaURL: toImage(token.img),
+                        owner: token.owner,
                     },
                     contract: {
                         chainId,
                         schema: SchemaType.NonFungible,
-                        address: '',
+                        address: token.mintAddress,
                         name: token.collectionName,
                         symbol: '',
                     },
@@ -214,7 +215,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     },
                 }
             }),
-        }
+            0,
+        )
     }
 
     async getEvents(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId, number> = {}) {
