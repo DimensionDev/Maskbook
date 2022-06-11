@@ -76,17 +76,18 @@ export const TipButton: FC<Props> = ({
         return Services.Identity.queryPersonaByProfile(receiver)
     }, [receiver])
 
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const {
         value: isAccountVerified,
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(() => {
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return Promise.resolve(true)
         if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
         return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
-    }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
+    }, [pluginId, receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
     const visitingIdentity = useCurrentVisitingIdentity()
 
-    const pluginId = useCurrentWeb3NetworkPluginID()
     const isVisitingUser = visitingIdentity.identifier?.userId === receiver?.userId
     const isRuntimeAvailable = useMemo(() => {
         switch (pluginId) {

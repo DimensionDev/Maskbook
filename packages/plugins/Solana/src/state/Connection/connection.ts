@@ -33,6 +33,14 @@ class Connection implements BaseConnection {
         return Providers[options?.providerType ?? this.providerType]
     }
 
+    private async _attachRecentBlockHash(transaction: Transaction, options?: SolanaWeb3ConnectionOptions) {
+        const chainId = options?.chainId ?? ChainId.Mainnet
+        const connection = this.connections.get(chainId) ?? new SolConnection(NETWORK_ENDPOINTS[chainId])
+        const blockHash = await connection.getRecentBlockhash()
+        transaction.recentBlockhash = blockHash.blockhash
+        return transaction
+    }
+
     async getWeb3(options?: SolanaWeb3ConnectionOptions) {
         return this._getWeb3Provider(options).createWeb3({
             account: options?.account ?? this.account,
@@ -71,6 +79,9 @@ class Connection implements BaseConnection {
                 lamports: Number.parseInt(amount, 10),
             }),
         )
+        transaction.feePayer = payerPubkey
+        this._attachRecentBlockHash(transaction)
+
         return this.sendTransaction(transaction)
     }
     private async transferSplToken(
