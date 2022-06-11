@@ -126,36 +126,38 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
                 const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
 
-                const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
-                const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+                try {
+                    const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
+                    const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
 
-                // the currently selected chain id
-                if (a.chainId !== z.chainId) {
-                    if (a.chainId === chainId) return -1
-                    if (z.chainId === chainId) return 1
-                }
+                    // the currently selected chain id
+                    if (a.chainId !== z.chainId) {
+                        if (a.chainId === chainId) return -1
+                        if (z.chainId === chainId) return 1
+                    }
 
-                // native token
-                if (isNativeTokenA) return -1
-                if (isNativeTokenZ) return 1
+                    // native token
+                    if (isNativeTokenA) return -1
+                    if (isNativeTokenZ) return 1
 
-                // mask token with position value
-                if (aUSD.isPositive() && isMaskTokenA) return -1
-                if (zUSD.isPositive() && isMaskTokenZ) return 1
+                    // mask token with position value
+                    if (aUSD.isPositive() && isMaskTokenA) return -1
+                    if (zUSD.isPositive() && isMaskTokenZ) return 1
 
-                // token value
-                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+                    // token value
+                    if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
 
-                // token balance
-                if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
+                    // token balance
+                    if (!aBalance.isEqualTo(zBalance)) return minus(zBalance, aBalance).isPositive() ? 1 : -1
 
-                // trusted token
-                if (isTrustedToken(a.address)) return -1
-                if (isTrustedToken(z.address)) return 1
+                    // trusted token
+                    if (isTrustedToken(a.address)) return -1
+                    if (isTrustedToken(z.address)) return 1
 
-                // mask token with position value
-                if (isMaskTokenA) return -1
-                if (isMaskTokenZ) return 1
+                    // mask token with position value
+                    if (isMaskTokenA) return -1
+                    if (isMaskTokenZ) return 1
+                } catch {}
 
                 // alphabet
                 if (a.name !== z.name) return a.name < z.name ? -1 : 1
