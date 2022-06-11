@@ -9,7 +9,6 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -143,8 +142,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TipDialogProps {
-    open?: boolean
+export interface TipDialogProps {
+    open: boolean
     onClose?: () => void
 }
 
@@ -233,7 +232,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State()
     const account = useAccount()
     const { value: domain } = useReverseAddress(pluginID, account)
     const walletTitle =

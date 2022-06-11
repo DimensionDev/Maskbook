@@ -120,7 +120,7 @@ export const TipButton: FC<Props> = ({
     const isChecking = loadingPersona || loadingVerifyInfo
     const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
 
-    const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
+    const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
@@ -133,12 +133,20 @@ export const TipButton: FC<Props> = ({
         },
         [disabled, allAddresses, receiver?.userId],
     )
+
+    useEffect(() => {
+        PluginNextIDMessages.tipTaskUpdate.sendToLocal({
+            recipientSnsId: receiver?.userId,
+            addresses: allAddresses,
+        })
+    }, [receiver?.userId, allAddresses])
+
     const dom = (
         <div
             className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
             {...rest}
             role="button"
-            onClick={sendTip}>
+            onClick={createTipTask}>
             <TipCoin viewBox="0 0 24 24" />
             {children}
         </div>
