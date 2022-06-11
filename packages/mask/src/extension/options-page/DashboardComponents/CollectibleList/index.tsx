@@ -286,7 +286,10 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                <ReversedAddress address={addressName.address} />
+                                <ReversedAddress
+                                    address={addressName.address}
+                                    pluginId={addressName.networkSupporterPluginID}
+                                />
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
