@@ -645,7 +645,7 @@ export interface Connection<
     ): Promise<string>
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
-        address: string,
+        address: string | undefined,
         recipient: string,
         tokenId: string,
         amount: string,

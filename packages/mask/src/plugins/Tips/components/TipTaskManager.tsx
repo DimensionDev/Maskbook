@@ -24,6 +24,16 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
         })
     }, [])
 
+    useEffect(() => {
+        return PluginNextIDMessages.tipTaskUpdate.on((task) => {
+            setTasks((list) => {
+                const included = list.some((t) => t.recipientSnsId === task.recipientSnsId)
+                if (!included) return list
+                return list.map((t) => (t.recipientSnsId === task.recipientSnsId ? { ...task, id: t.id } : t))
+            })
+        })
+    }, [])
+
     return (
         <>
             {tasks.map((task) => (
