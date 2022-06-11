@@ -85,7 +85,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
     }
 }
 
-export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, number> {
     async getToken(address: string, tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
             urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
@@ -217,7 +217,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         }
     }
 
-    async getHistory(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {
+    async getEvents(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId, number> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
                 mint_address: tokenId,
@@ -251,7 +251,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         { indicator = 1, size }: HubOptions<ChainId> = {},
     ) {
         const limit = size || 20
-        const offset = indicator ? (Math.max(1, indicator) - 1) * limit : 0
+        const offset = indicator ? (Math.max(1, indicator as number) - 1) * limit : 0
         const offers = await fetchFromMagicEden<WalletOffer[]>(
             urlcat('/tokens/:mint_address/offer_received', {
                 mint_address: mintAddress,
@@ -271,7 +271,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         })
     }
 
-    async getCollections(symbol: string, { indicator = 1, size }: HubOptions<ChainId> = {}) {
+    async getCollections(symbol: string, { indicator = 1, size }: HubOptions<ChainId, number> = {}) {
         indicator = Math.max(indicator || 1, 1)
         const limit = size || 20
         const offset = (Math.max(1, indicator) - 1) * limit

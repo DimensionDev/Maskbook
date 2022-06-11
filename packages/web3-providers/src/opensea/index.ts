@@ -286,7 +286,7 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
     }
 }
 
-export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, number> {
     private readonly _apiKey
     constructor(apiKey?: string) {
         this._apiKey = apiKey
@@ -324,7 +324,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(
+        from: string,
+        { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId, number> = {},
+    ) {
         const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
             urlcat('/api/v1/assets', {
                 owner: from,
@@ -345,7 +348,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createPageable(tokens, indicator, tokens.length === size ? indicator + 1 : undefined)
     }
 
-    async getHistory(
+    async getEvents(
         address: string,
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
@@ -387,7 +390,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getCollections(
         address: string,
-        { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId, number> = {},
     ) {
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {

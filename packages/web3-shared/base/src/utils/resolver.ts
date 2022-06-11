@@ -94,12 +94,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 address,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
-            urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
+        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
+            return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
     }
 }
 
@@ -167,6 +168,8 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.Rarible]: 'Rarible',
         [SourceType.NFTScan]: 'NFTScan',
         [SourceType.Zora]: 'Zora',
+        [SourceType.Alchemy_EVM]: 'Alchemy_EVM',
+        [SourceType.Alchemy_FLOW]: 'Alchemy_FLOW',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)

@@ -1,5 +1,12 @@
 import urlcat from 'urlcat'
-import { createPageable, CurrencyType, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import {
+    createPageable,
+    CurrencyType,
+    HubOptions,
+    NonFungibleToken,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
@@ -105,7 +112,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
     }
 }
 
-export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, number> {
     async getToken(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
@@ -115,7 +122,10 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(
+        from: string,
+        { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId, number> = {},
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, number>> {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number

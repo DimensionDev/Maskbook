@@ -1,10 +1,11 @@
 import {
+    Alchemy_EVM,
     CoinGecko,
     DeBank,
     EthereumWeb3,
     MetaSwap,
-    NFTScan,
     OpenSea,
+    NFTScan,
     Rarible,
     TokenList,
     Zerion,
@@ -34,8 +35,8 @@ import {
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
-    isNativeTokenAddress,
     SchemaType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
@@ -103,6 +104,8 @@ class Hub implements EVM_Hub {
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         const provider = options?.sourceType
         switch (provider) {
+            case SourceType.Alchemy_EVM:
+                return Alchemy_EVM.getAsset(address, tokenId, options)
             case SourceType.OpenSea:
                 return OpenSea.getAsset(address, tokenId)
             case SourceType.Rarible:
@@ -116,18 +119,17 @@ class Hub implements EVM_Hub {
     getNonFungibleAssets(
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        try {
-            return OpenSea.getTokens(account, { chainId: this.chainId, ...options })
-        } catch {
-            return NFTScan.getTokens(account, { chainId: this.chainId, ...options })
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, string | number>> {
+        if (options?.sourceType === SourceType.Alchemy_EVM) {
+            return Alchemy_EVM.getTokens(account, options as HubOptions<ChainId, string>)
         }
+        return OpenSea.getTokens(account, options as HubOptions<ChainId, number>)
     }
     getNonFungibleCollections(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
-        return OpenSea.getCollections(account, options)
+        return OpenSea.getCollections(account, options as HubOptions<ChainId, number>)
     }
     getFungibleTokenPrice(
         chainId: ChainId,
@@ -201,7 +203,26 @@ class Hub implements EVM_Hub {
         }
     }
 
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+    async *getAllNonFungibleAssets(
+        address: string,
+        options?: HubOptions<ChainId> | undefined,
+    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        if (options?.sourceType === SourceType.Alchemy_EVM) {
+            let api_keys = ''
+            while (1) {
+                const pageable = await this.getNonFungibleAssets(address, {
+                    indicator: api_keys,
+                    chainId: options?.chainId,
+                    sourceType: options?.sourceType,
+                })
+                api_keys = (pageable.nextIndicator as string) ?? ''
+
+                yield* pageable.data
+
+                if (pageable.data.length === 0 || !api_keys) return
+            }
+            return
+        }
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
                 indicator: i,

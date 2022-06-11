@@ -16,12 +16,12 @@ const connection = (chainId: ChainId) => {
 }
 
 export async function lookup(chainId: ChainId, name: string) {
-    const { domainKey } = await getKey(name.replace('.sol', ''))
     try {
+        const { domainKey } = await getKey(name.replace('.sol', ''))
         const registry = await NameRegistryState.retrieve(connection(chainId), domainKey)
         return registry.owner.toBase58()
-    } catch (error) {
-        return
+    } catch {
+        return ''
     }
 }
 
