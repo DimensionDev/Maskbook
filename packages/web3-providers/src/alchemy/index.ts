@@ -139,7 +139,7 @@ function createNftToken_EVM(
             symbol: '',
             description: asset.description,
             imageURL: resolveIPFSLinkFromURL(
-                asset?.metadata?.image_url ?? asset?.metadata?.image ?? asset?.media?.[0]?.gateway ?? '',
+                asset?.metadata?.image ?? asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? '',
             ),
             mediaURL: resolveIPFSLinkFromURL(
                 asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? asset?.metadata?.image,
