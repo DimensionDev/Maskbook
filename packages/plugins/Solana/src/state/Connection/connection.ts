@@ -89,7 +89,7 @@ class Connection implements BaseConnection {
             }),
         )
         transaction.feePayer = payerPubkey
-        this._attachRecentBlockHash(transaction)
+        await this._attachRecentBlockHash(transaction)
 
         return this.sendTransaction(transaction)
     }
@@ -346,7 +346,7 @@ class Connection implements BaseConnection {
         schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const asset = await MagicEden.getAsset('', address, options)
+        const asset = await MagicEden.getAsset(address, tokenId, options)
         const chainId = options?.chainId ?? ChainId.Mainnet
         return createNonFungibleToken(
             chainId,
