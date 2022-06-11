@@ -7,6 +7,11 @@ import { BaseInjectedProvider } from './BaseInjected'
 
 export class PhantomProvider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
+        injectedPhantomProvider.untilAvailable().then(() => {
+            injectedPhantomProvider.connect({
+                onlyIfTrusted: true,
+            })
+        })
         super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
