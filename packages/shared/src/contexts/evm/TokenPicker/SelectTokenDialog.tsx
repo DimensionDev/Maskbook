@@ -48,7 +48,7 @@ export interface PickTokenOptions {
     blacklist?: string[]
     tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
-    onSubmit?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
+    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {

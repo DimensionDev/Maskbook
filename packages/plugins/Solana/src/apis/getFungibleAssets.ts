@@ -5,6 +5,7 @@ import {
     FungibleAsset,
     FungibleToken,
     HubOptions,
+    isSameAddress,
     Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -25,7 +26,7 @@ export async function getSolAsset(chainId: ChainId, account: string) {
     const priceData = await fetch(requestPath).then(
         (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
     )
-    const price = priceData.solana.usd
+    const price = priceData.solana[CurrencyType.USD]
 
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
         method: 'getAccountInfo',
@@ -121,7 +122,7 @@ export async function getSplTokenList(chainId: ChainId, account: string) {
 
 export async function getSplTokenBalance(chainId: ChainId, account: string, mintAddress: string) {
     const splTokens = await getSplTokenList(chainId, account)
-    const splToken = splTokens.find((x) => x.address === mintAddress)
+    const splToken = splTokens.find((x) => isSameAddress(x.address, mintAddress))
     return splToken?.balance ?? '0'
 }
 

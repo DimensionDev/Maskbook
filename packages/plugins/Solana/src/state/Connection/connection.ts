@@ -175,8 +175,9 @@ class Connection implements BaseConnection {
     }
     async getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
         if (!options?.account) return '0'
-        const sol = await SolanaRPC.getSolAsset(options?.chainId ?? ChainId.Mainnet, options.account)
-        return sol.balance
+        const connection = this.getWeb3Connection(options)
+        const balance = await connection.getBalance(new PublicKey(options.account))
+        return balance.toString()
     }
     async getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
         if (!options?.account) return '0'
