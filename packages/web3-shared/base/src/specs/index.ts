@@ -688,8 +688,6 @@ export interface HubOptions<ChainId, Indicator = number | string> {
     size?: number
     /** The page index. */
     indicator?: Indicator
-    /** The page key of alchemy api */
-    pageKey?: string
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {

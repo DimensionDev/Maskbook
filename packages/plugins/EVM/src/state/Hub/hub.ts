@@ -121,7 +121,7 @@ class Hub implements EVM_Hub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, string | number>> {
         if (options?.sourceType === SourceType.Alchemy_EVM) {
-            return Alchemy_EVM.getTokens(account, options)
+            return Alchemy_EVM.getTokens(account, options as HubOptions<ChainId, string>)
         }
         return OpenSea.getTokens(account, options as HubOptions<ChainId, number>)
     }
@@ -211,7 +211,7 @@ class Hub implements EVM_Hub {
             let api_keys = ''
             while (1) {
                 const pageable = await this.getNonFungibleAssets(address, {
-                    pageKey: api_keys,
+                    indicator: api_keys,
                     chainId: options?.chainId,
                     sourceType: options?.sourceType,
                 })

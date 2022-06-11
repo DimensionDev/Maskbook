@@ -27,21 +27,21 @@ export * from './constants'
 export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM, string> {
     getTokens = async (
         from: string,
-        { chainId = ChainId_EVM.Mainnet, pageKey }: HubOptions<ChainId_EVM> = {},
+        { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM, string> = {},
     ): Promise<Pageable<NonFungibleToken<ChainId_EVM, SchemaType_EVM>, string>> => {
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
                 owner: from,
-                pageKey: pageKey === '' ? undefined : pageKey,
+                pageKey: indicator === '' ? undefined : indicator,
             }),
         )
 
         const assets = res?.ownedNfts?.map((nft) =>
             createNftToken_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
         )
-        return createPageable(assets, pageKey ?? '', res?.pageKey ?? '')
+        return createPageable(assets, indicator ?? '', res?.pageKey ?? '')
     }
     getAsset = async (
         address: string,
