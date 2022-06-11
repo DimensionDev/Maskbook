@@ -181,14 +181,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const AddCollectible = (
         <Box className={classes.error}>
             <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
-                {chainId === ChainId.Matic ? (
-                    <Translate.collectible_on_polygon
-                        components={{
-                            br: <br />,
-                        }}
-                    />
+                {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                    chainId === ChainId.Matic ? (
+                        <Translate.collectible_on_polygon
+                            components={{
+                                br: <br />,
+                            }}
+                        />
+                    ) : (
+                        t.collectible_no_eth()
+                    )
                 ) : (
-                    t.collectible_no_eth()
+                    t.collectible_no_collectible()
                 )}
             </Typography>
 
@@ -223,11 +227,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (chainId === ChainId.Matic && tokensInList.length) return
-        if (tokensInList.length === 0) return AddCollectible
         if (loading) {
             return LoadStatus
         }
+        if (chainId === ChainId.Matic && tokensInList.length) return
+        if (tokensInList.length === 0) return AddCollectible
         if (error) {
             return Retry
         }
