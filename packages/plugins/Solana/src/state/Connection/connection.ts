@@ -1,3 +1,4 @@
+import { MagicEden } from '@masknet/web3-providers'
 import {
     BlockResponse,
     Connection as SolanaConnection,
@@ -11,6 +12,7 @@ import { NETWORK_ENDPOINTS } from '../../constants'
 import {
     Account,
     ConnectionOptions,
+    createNonFungibleToken,
     FungibleToken,
     NonFungibleToken,
     NonFungibleTokenCollection,
@@ -18,7 +20,6 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { Web3StateSettings } from '../../settings'
-import { MagicEden } from '@masknet/web3-providers'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolanaConnection> = new Map()
@@ -226,8 +227,17 @@ class Connection implements BaseConnection {
         id: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const token = await MagicEden.getAsset(address, id, options)
-        return token as NonFungibleToken<ChainId, SchemaType>
+        const asset = await MagicEden.getAsset('', address, options)
+        const chainId = options?.chainId ?? ChainId.Mainnet
+        return createNonFungibleToken(
+            chainId,
+            SchemaType.NonFungible,
+            address,
+            address,
+            asset?.metadata,
+            asset?.contract,
+            asset?.collection,
+        )
     }
     replaceRequest(
         hash: string,

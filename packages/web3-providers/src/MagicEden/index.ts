@@ -54,6 +54,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
             description: collection.description,
             imageURL: token.image || token.animationUrl,
             mediaURL: token.animationUrl || token.image,
+            owner: token.owner,
         },
         contract: {
             chainId,
