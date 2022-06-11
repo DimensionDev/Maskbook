@@ -115,23 +115,23 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
                 .toNumber(),
         ),
     )
-
+    const orderTokens = uniqBy(
+        desktopOrder?.payment_token_contract ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)] : [],
+        (x) => x.address.toLowerCase(),
+    )
+    const offerTokens = uniqBy(
+        asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
+        (x) => x.address.toLowerCase(),
+    )
     return {
         ...createNFTToken(chainId, asset),
         link: asset.opensea_link,
+        payment_tokens: orderTokens.concat(offerTokens),
         auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now())
             ? {
                   endAt: getUnixTime(new Date(asset.endTime)),
-                  orderTokens: uniqBy(
-                      desktopOrder?.payment_token_contract
-                          ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)]
-                          : [],
-                      (x) => x.address.toLowerCase(),
-                  ),
-                  offerTokens: uniqBy(
-                      asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
-                      (x) => x.address.toLowerCase(),
-                  ),
+                  orderTokens,
+                  offerTokens,
               }
             : undefined,
         creator: {
@@ -293,6 +293,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
+        console.log(response, 'res')
         if (!response) return
         return createNFTAsset(chainId, response)
     }
