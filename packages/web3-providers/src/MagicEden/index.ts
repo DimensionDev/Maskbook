@@ -102,6 +102,52 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTToken(token, collection)
     }
 
+    async getTokens(owner: string, { indicator }: HubOptions<ChainId> = {}) {
+        if ((indicator?.index ?? 0) > 0) return createPageable([], createIndicator(indicator))
+
+        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
+            urlcat('/rpc/getNFTsByOwner/:owner', {
+                owner,
+            }),
+        )
+        const tokens = response?.results || []
+        const data = tokens.map((token) => {
+            return {
+                id: token.mintAddress,
+                chainId: ChainId.Mainnet,
+                type: TokenType.NonFungible,
+                schema: SchemaType.NonFungible,
+                tokenId: token.mintAddress,
+                address: token.mintAddress,
+                metadata: {
+                    chainId: ChainId.Mainnet,
+                    name: token.collectionName,
+                    symbol: '',
+                    description: '',
+                    imageURL: toImage(token.img),
+                    mediaURL: toImage(token.img),
+                    owner: token.owner,
+                },
+                contract: {
+                    chainId: ChainId.Mainnet,
+                    schema: SchemaType.NonFungible,
+                    address: token.mintAddress,
+                    name: token.collectionName,
+                    symbol: '',
+                },
+                collection: {
+                    chainId: ChainId.Mainnet,
+                    name: token.collectionName,
+                    slug: '',
+                    description: '',
+                    iconURL: '',
+                    verified: false,
+                },
+            }
+        })
+        return createPageable(data, createIndicator(indicator))
+    }
+
     async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const [token, auction, nft] = await Promise.all([
             this.getToken(address, tokenMint),
@@ -171,53 +217,6 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
         if (!collection) return
         return createNFTCollection(collection)
-    }
-
-    async getTokens(owner: string, { indicator }: HubOptions<ChainId> = {}) {
-        if ((indicator?.index ?? 0) > 0) return createPageable([], createIndicator(indicator))
-
-        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
-            urlcat('/rpc/getNFTsByOwner/:owner', {
-                owner,
-            }),
-        )
-        const tokens = response?.results || []
-        const data = tokens.map((token) => {
-            const chainId = ChainId.Mainnet
-            return {
-                id: token.mintAddress,
-                chainId,
-                type: TokenType.NonFungible,
-                schema: SchemaType.NonFungible,
-                tokenId: token.mintAddress,
-                address: token.mintAddress,
-                metadata: {
-                    chainId,
-                    name: token.collectionName,
-                    symbol: '',
-                    description: '',
-                    imageURL: toImage(token.img),
-                    mediaURL: toImage(token.img),
-                    owner: token.owner,
-                },
-                contract: {
-                    chainId,
-                    schema: SchemaType.NonFungible,
-                    address: token.mintAddress,
-                    name: token.collectionName,
-                    symbol: '',
-                },
-                collection: {
-                    chainId,
-                    name: token.collectionName,
-                    slug: '',
-                    description: '',
-                    iconURL: '',
-                    verified: false,
-                },
-            }
-        })
-        return createPageable(data, createIndicator(indicator))
     }
 
     async getHistory(address: string, tokenId: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {

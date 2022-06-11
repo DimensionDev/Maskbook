@@ -352,7 +352,7 @@ class Connection implements BaseConnection {
             chainId,
             address,
             SchemaType.NonFungible,
-            address,
+            tokenId,
             undefined,
             asset?.metadata,
             asset?.contract,

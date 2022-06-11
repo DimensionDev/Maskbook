@@ -241,7 +241,7 @@ class Connection implements EVM_Connection {
 
         // ERC721
         const contract = await this.getERC721Contract(address, options)
-        const tx = contract?.methods.transferFrom(options?.account ?? this.account, recipient, tokenId)
+        const tx = contract?.methods.transferFrom(account, recipient, tokenId)
         return sendTransaction(contract, tx, options?.overrides)
     }
 

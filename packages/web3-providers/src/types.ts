@@ -141,7 +141,16 @@ export namespace NonFungibleTokenAPI {
         getAssets?: (
             address: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        getToken?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        getTokens?: (
+            from: string,
+            opts?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getHistory?: (
             address: string,
             tokenId: string,
@@ -163,15 +172,6 @@ export namespace NonFungibleTokenAPI {
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: (
-            from: string,
-            opts?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getContract?: (
             address: string,
             opts?: HubOptions<ChainId>,

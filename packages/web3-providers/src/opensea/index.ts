@@ -6,7 +6,6 @@ import getUnixTime from 'date-fns/getUnixTime'
 import {
     createPageable,
     CurrencyType,
-    NonFungibleAsset,
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenEvent,
@@ -18,6 +17,7 @@ import {
     createNonFungibleTokenContract,
     createIndicator,
     createNextIndicator,
+    NonFungibleAsset,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types'
@@ -297,30 +297,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
-            urlcat('/api/v1/asset_contract/:address', { address }),
-            chainId,
-        )
-        return createNonFungibleTokenContract(
-            chainId,
-            SchemaType.ERC721,
-            address,
-            assetContract?.name ?? 'Unknown Token',
-            assetContract?.symbol ?? 'UNKNOWN',
-        )
-    }
-
-    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromOpenSea<OpenSeaResponse>(
-            urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
-            chainId,
-        )
-        if (!response) return
-        return createNFTAsset(chainId, response)
-    }
-
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         if (chainId !== ChainId.Mainnet) return createPageable([], createIndicator(indicator))
 
         const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
@@ -339,12 +316,35 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                     ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
             )
-            .map((asset: OpenSeaResponse) => createNFTToken(chainId, asset))
+            .map((asset: OpenSeaResponse) => createNFTAsset(chainId, asset))
 
         return createPageable(
             tokens,
             createIndicator(indicator),
             tokens.length === size ? createNextIndicator(indicator) : undefined,
+        )
+    }
+
+    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const response = await fetchFromOpenSea<OpenSeaResponse>(
+            urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
+            chainId,
+        )
+        if (!response) return
+        return createNFTToken(chainId, response)
+    }
+
+    async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
+            urlcat('/api/v1/asset_contract/:address', { address }),
+            chainId,
+        )
+        return createNonFungibleTokenContract(
+            chainId,
+            SchemaType.ERC721,
+            address,
+            assetContract?.name ?? 'Unknown Token',
+            assetContract?.symbol ?? 'UNKNOWN',
         )
     }
 

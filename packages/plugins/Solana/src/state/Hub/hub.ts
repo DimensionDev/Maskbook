@@ -64,7 +64,7 @@ class Hub implements SolanaHub {
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         return SolanaRPC.getFungibleAssets(account, options)
     }
-    getNonFungibleAssets(
+    getNonFungibleTokens(
         account: string,
         options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {

@@ -4,7 +4,6 @@ import {
     createNextIndicator,
     createPageable,
     CurrencyType,
-    HubIndicator,
     HubOptions,
     NonFungibleAsset,
     TokenType,
@@ -50,7 +49,7 @@ async function fetchAsset<T>(path: string, body?: unknown) {
     return response.json() as Promise<{ data: T }>
 }
 
-function createERC721TokenAsset(asset: NFTScanAsset) {
+function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<ChainId, SchemaType> {
     const payload: {
         name?: string
         description?: string
@@ -115,15 +114,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
 }
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(
-        address: string,
-        tokenId: string,
-        options?: HubOptions<ChainId, HubIndicator> | undefined,
-    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getToken(address: string, tokenId: string) {
+    async getAsset(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
             token_id: tokenId,
@@ -132,7 +123,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number

@@ -123,7 +123,7 @@ class Hub implements EVM_Hub {
             undefined,
         )
     }
-    async getNonFungibleAssets(
+    async getNonFungibleTokens(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
@@ -136,7 +136,7 @@ class Hub implements EVM_Hub {
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
         const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [Alchemy_EVM, OpenSea, Rarible]
         return attemptUntil(
-            filteredProviders.map((x) => () => x.getTokens(account, { chainId: this.chainId, ...options })),
+            filteredProviders.map((x) => () => x.getAssets(account, { chainId: this.chainId, ...options })),
             createPageable([], createIndicator(options?.indicator)),
         )
     }

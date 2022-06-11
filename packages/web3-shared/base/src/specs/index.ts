@@ -228,7 +228,6 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     name: string
     symbol: string
-    decimals?: number,
     description?: string
     /** preview image url */
     imageURL?: string
@@ -257,7 +256,7 @@ export interface NonFungibleTokenCollection<ChainId> {
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
     /** the token id */
     tokenId: string
-    /** the address or uid of owner */
+    /** the address or uid of the token owner */
     ownerId?: string
     /** the contract info */
     contract?: NonFungibleTokenContract<ChainId, SchemaType>
@@ -753,11 +752,16 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         options?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get non-fungible collections of given account with pagination supported */
-    getNonFungibleCollections?: (
+    /** Get fungible tokens of given account with pagination supported. */
+    getFungibleTokens?: (
         account: string,
-        options?: Web3HubOptions
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
+        options?: Web3HubOptions,
+    ) => Promise<Pageable<FungibleToken<ChainId, SchemaType>>>
+    /** Get non-fungible tokens of given account with pagination supported. */
+    getNonFungibleTokens?: (
+        account: string,
+        options?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (
         chainId: ChainId,
@@ -780,6 +784,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId?: string,
         options?: Web3HubOptions,
     ) => Promise<string[]>
+    /** Get non-fungible collections of given account with pagination supported */
+    getNonFungibleCollections?: (
+        account: string,
+        options?: Web3HubOptions
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
     /** Get the most recent transactions */
     getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Array<Transaction<ChainId, SchemaType>>>
 }

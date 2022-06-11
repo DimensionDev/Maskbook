@@ -444,7 +444,10 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                     const formData = new FormData(ev.currentTarget)
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
-                                    const token = await hub.getNonFungibleAsset?.(address, tokenId)
+                                    const sourceType = formData.get('sourceType') as SourceType
+                                    const token = await hub.getNonFungibleAsset?.(address, tokenId, {
+                                        sourceType,
+                                    })
                                     console.log(token)
                                 }}>
                                 <Box sx={{ marginBottom: 1 }}>
@@ -454,7 +457,12 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                     <TextField name="tokenId" label="Token Id" size="small" />
                                 </Box>
                                 <Box sx={{ marginBottom: 1 }}>
-                                    <RadioGroup defaultValue={SourceType.OpenSea} name="sourceType">
+                                    <RadioGroup defaultValue={SourceType.Alchemy_EVM} name="sourceType">
+                                        <FormControlLabel
+                                            value={SourceType.Alchemy_EVM}
+                                            control={<Radio />}
+                                            label="Alchemy"
+                                        />
                                         <FormControlLabel
                                             value={SourceType.OpenSea}
                                             control={<Radio />}
