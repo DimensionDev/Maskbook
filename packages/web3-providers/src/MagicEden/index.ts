@@ -195,6 +195,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                         description: '',
                         imageURL: toImage(token.img),
                         mediaURL: toImage(token.img),
+                        owner: token.owner,
                     },
                     contract: {
                         chainId,

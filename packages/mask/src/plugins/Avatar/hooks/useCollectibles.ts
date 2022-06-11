@@ -12,7 +12,7 @@ export function useCollectibles(account: string, pluginId: NetworkPluginID, chai
     } = useNonFungibleAssets(pluginId, undefined, {
         chainId,
         account,
-        // account: pluginId === NetworkPluginID.PLUGIN_SOLANA ? '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde' : account,
+        // account: pluginId === NetworkPluginID.PLUGIN_SOLANA ? '8GYiQArcrQvVzTxQn6XXGwAb7pC5fi4spjxowKGTLszr' : account,
         // account: '2qZeMst5bcSjNQJKbdNAczEw5XJ8UHvYD2uW6kSWvVde',
     })
 

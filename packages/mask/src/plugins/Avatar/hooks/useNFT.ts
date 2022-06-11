@@ -5,9 +5,15 @@ import { useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@m
 import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const NFTCache = new Map<string, Promise<NFT | undefined>>()
-export function useNFT(address: string, tokenId: string, pluginId: NetworkPluginID, chainId?: ChainId) {
+export function useNFT(
+    account: string,
+    address: string,
+    tokenId: string,
+    pluginId: NetworkPluginID,
+    chainId?: ChainId,
+) {
     const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
-    const [, getNFT] = useGetNFT(currentPluginId, chainId)
+    const [, getNFT] = useGetNFT(account, currentPluginId, chainId)
     return useAsyncRetry(async () => {
         if (!tokenId) return
         let f = NFTCache.get(`${address || tokenId}-${pluginId}-${tokenId}-${chainId ?? ChainId.Mainnet}`)
@@ -16,12 +22,12 @@ export function useNFT(address: string, tokenId: string, pluginId: NetworkPlugin
             NFTCache.set(`${address || tokenId}-${pluginId}-${tokenId}-${chainId ?? ChainId.Mainnet}`, f)
         }
         return f
-    }, [address, tokenId, NFTCache, chainId])
+    }, [address, tokenId, NFTCache, chainId, getNFT, pluginId])
 }
 
-function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {
-    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId })
-    const hub = useWeb3Hub<'all'>(currentPluginId, { chainId })
+function useGetNFT(account: string, currentPluginId: NetworkPluginID, chainId?: ChainId) {
+    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId, account })
+    const hub = useWeb3Hub<'all'>(currentPluginId, { chainId, account })
 
     return useAsyncFn(
         async (address: string, tokenId: string) => {
@@ -38,6 +44,7 @@ function useGetNFT(currentPluginId: NetworkPluginID, chainId?: ChainId) {
                     }
                 }
             }
+
             const nft = await connection?.getNonFungibleToken(address, tokenId)
             return {
                 amount: '0',
