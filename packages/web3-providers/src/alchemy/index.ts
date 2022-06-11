@@ -153,6 +153,7 @@ function createNftToken_EVM(
             symbol: '',
         },
         collection: {
+            address: asset?.contract?.address,
             chainId,
             name: resolveCollectionName(asset),
             slug: '',

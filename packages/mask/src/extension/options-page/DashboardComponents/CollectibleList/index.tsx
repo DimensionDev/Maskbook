@@ -309,7 +309,7 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.label} />
+                        <ReversedAddress address={addressName.label} pluginId={addressName.networkSupporterPluginID} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
