@@ -82,7 +82,7 @@ class Connection implements BaseConnection {
             }),
         )
         transaction.feePayer = payerPubkey
-        this._attachRecentBlockHash(transaction)
+        await this._attachRecentBlockHash(transaction)
 
         return this.sendTransaction(transaction)
     }
