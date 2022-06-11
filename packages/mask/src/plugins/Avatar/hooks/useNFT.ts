@@ -14,7 +14,7 @@ export function useNFT(
     const hub = useWeb3Hub<'all'>(pluginId, { chainId, account })
 
     return useAsyncRetry(async () => {
-        const asset = await hub.getNonFungibleAsset?.(address, tokenId)
+        const asset = await hub?.getNonFungibleAsset?.(address, tokenId)
         if (asset) {
             return {
                 amount: asset.price?.[CurrencyType.NATIVE] ?? '0',
@@ -35,5 +35,5 @@ export function useNFT(
             owner: nft?.metadata?.owner ?? '',
             slug: '',
         }
-    }, [pluginId, connection, hub, address, tokenId])
+    }, [pluginId, connection, hub?.getNonFungibleAsset, address, tokenId])
 }

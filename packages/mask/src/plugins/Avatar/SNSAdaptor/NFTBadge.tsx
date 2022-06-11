@@ -35,7 +35,7 @@ export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(avatar.userId)
-    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
+    const { value = { amount: '0', symbol: '', name: '', slug: '' }, loading } = useNFT(
         storage?.address ?? account,
         avatar.address,
         avatar.tokenId,

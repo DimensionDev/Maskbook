@@ -330,13 +330,13 @@ class Connection implements BaseConnection {
         id: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const asset = await MagicEden.getAsset('', address, options)
+        const asset = await MagicEden.getAsset('', id, options)
         const chainId = options?.chainId ?? ChainId.Mainnet
         return createNonFungibleToken(
             chainId,
             SchemaType.NonFungible,
             address,
-            address,
+            id,
             asset?.metadata,
             asset?.contract,
             asset?.collection,
