@@ -14,6 +14,8 @@ export function useNonFungibleTokens<S extends 'all' | void = void, T extends Ne
 
     return useAsyncRetry<Array<Web3Helper.NonFungibleTokenScope<S, T>>>(async () => {
         if (!connection) return EMPTY_LIST
-        return Promise.all(listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1], options)) ?? [])
+        return Promise.all(
+            listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1], undefined, options)) ?? [],
+        )
     }, [connection, listOfPairs?.join()])
 }

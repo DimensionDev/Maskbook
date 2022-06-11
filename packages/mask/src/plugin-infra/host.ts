@@ -29,6 +29,8 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         send: WalletRPC.sendPayload,
 
+        fetch: Services.Helper.r2d2Fetch,
+
         openPopupWindow: Services.Helper.openPopupWindow,
         closePopupWindow: Services.Helper.removePopupWindow,
 

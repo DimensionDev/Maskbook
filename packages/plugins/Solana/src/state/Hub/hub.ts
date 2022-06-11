@@ -64,7 +64,7 @@ class Hub implements SolanaHub {
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         return SolanaRPC.getFungibleAssets(account, options)
     }
-    getNonFungibleAssets(
+    getNonFungibleTokens(
         account: string,
         options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
@@ -76,7 +76,7 @@ class Hub implements SolanaHub {
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId, number> | undefined,
+        options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
         return MagicEden.getCollections(account, options)
     }
@@ -125,32 +125,6 @@ class Hub implements SolanaHub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
-    }
-
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getFungibleAssets(address, {
-                indicator: i,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
-    }
-
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator: i,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
     }
 }
 

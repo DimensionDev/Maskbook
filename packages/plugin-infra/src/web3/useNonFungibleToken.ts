@@ -8,7 +8,8 @@ import { useAccount } from './useAccount'
 export function useNonFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,
-    id?: string,
+    tokenId?: string,
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
     const chainId = useChainId(pluginID, options?.chainId)
@@ -16,11 +17,11 @@ export function useNonFungibleToken<S extends 'all' | void = void, T extends Net
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry<Web3Helper.NonFungibleTokenScope<S, T> | undefined>(async () => {
-        if (!address || !id || !connection) return
-        return connection.getNonFungibleToken(address, id, {
+        if (!address || !tokenId || !connection) return
+        return connection.getNonFungibleToken(address, tokenId, schemaType, {
             ...options,
             account: options?.account ?? account,
             chainId: options?.chainId ?? chainId,
         })
-    }, [address, id, connection, chainId, account])
+    }, [address, tokenId, schemaType, connection, chainId, account])
 }

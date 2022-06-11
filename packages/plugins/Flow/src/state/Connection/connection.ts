@@ -9,15 +9,22 @@ import {
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
+    NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { toHex } from '@masknet/shared-base'
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
 import { Web3StateSettings } from '../../settings'
+import type { Plugin } from '@masknet/plugin-infra'
 
 class Connection implements BaseConnection {
-    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    constructor(
+        private chainId: ChainId,
+        private account: string,
+        private providerType: ProviderType,
+        private context?: Plugin.Shared.SharedContext,
+    ) {}
 
     private _getWeb3Provider(options?: FlowConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType]
@@ -56,12 +63,14 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
@@ -89,6 +98,7 @@ class Connection implements BaseConnection {
         recipient: string,
         tokenId: string,
         amount: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -102,7 +112,12 @@ class Connection implements BaseConnection {
     getFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
+    getNonFungibleTokenBalance(
+        address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
+        options?: FlowConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokensBalance(
@@ -126,9 +141,27 @@ class Connection implements BaseConnection {
     }
     getNonFungibleToken(
         address: string,
-        id: string,
+        tokenId: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenOwnership(
+        address: string,
+        owner: string,
+        tokenId: string,
+        schema?: SchemaType | undefined,
+        options?: FlowConnectionOptions,
+    ): Promise<boolean> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenMetadata(
+        address: string,
+        tokenId: string,
+        schemaType?: SchemaType,
+        options?: FlowConnectionOptions,
+    ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
 
@@ -239,6 +272,15 @@ class Connection implements BaseConnection {
  * @param providerType
  * @returns
  */
-export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Blocto) {
-    return new Connection(chainId, account, providerType)
+export function createConnection(
+    context: Plugin.Shared.SharedContext,
+    options?: {
+        chainId?: ChainId
+        account?: string
+        providerType?: ProviderType
+    },
+) {
+    const { chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Blocto } = options ?? {}
+
+    return new Connection(chainId, account, providerType, context)
 }

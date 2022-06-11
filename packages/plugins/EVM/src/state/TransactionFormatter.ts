@@ -32,6 +32,7 @@ import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap'
+
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
     private connection = createConnection()

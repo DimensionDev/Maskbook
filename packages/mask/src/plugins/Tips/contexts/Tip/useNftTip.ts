@@ -27,9 +27,10 @@ export function useNftTip<T extends NetworkPluginID>(
             recipient,
             tokenId,
             '1',
+            undefined,
             connectionOptions,
         )
-        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, {
+        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, undefined, {
             chainId,
             account,
         })

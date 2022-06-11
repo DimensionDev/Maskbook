@@ -6,6 +6,7 @@ import { useWeb3Connection } from './useWeb3Connection'
 export function useNonFungibleTokenContract<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
     address: string,
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
     const connection = useWeb3Connection(pluginID, options)
@@ -13,7 +14,7 @@ export function useNonFungibleTokenContract<S extends 'all' | void = void, T ext
     return useAsyncRetry<
         NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
     >(async () => {
-        if (!connection || !address) return
-        return connection.getNonFungibleTokenContract?.(address, options)
-    }, [address, connection, JSON.stringify(options)])
+        if (!connection || !address || !options) return
+        return connection.getNonFungibleTokenContract?.(address, schemaType, options)
+    }, [address, schemaType, connection, JSON.stringify(options)])
 }
