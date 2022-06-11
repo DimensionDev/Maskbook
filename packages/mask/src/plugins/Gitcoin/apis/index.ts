@@ -40,6 +40,8 @@ export interface GitcoinGrant {
 
 export async function fetchGrant(id: string) {
     if (!/\d+/.test(id)) return
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+
     const response = await fetch(urlcat(GITCOIN_API_GRANTS_V1, { id }))
     const { grants } = (await response.json()) as {
         grants: GitcoinGrant

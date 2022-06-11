@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { CurrencyType, isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
-import { LoadingAnimation } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -71,7 +70,7 @@ export function ListingTab() {
     if (asset.loading)
         return (
             <div className={classes.empty}>
-                <LoadingAnimation />
+                <LoadingBase />
             </div>
         )
     if (!asset.value || asset.error || !dataSource.length)

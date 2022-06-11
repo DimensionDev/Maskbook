@@ -27,7 +27,9 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await restorePersonas(backup)
     await restorePosts(posts.values())
     if (process.env.manifest === '2') {
-        await restoreWallets(wallets)
+        if (wallets.length) {
+            await restoreWallets(wallets)
+        }
         await restorePlugins(plugins)
     }
 

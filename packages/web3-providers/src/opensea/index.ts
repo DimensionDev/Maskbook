@@ -33,18 +33,15 @@ import type {
     OpenSeaResponse,
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
-import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constants'
-import { isProxyENV } from '../helpers'
+import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
 
     try {
-        const response = await fetch(urlcat(OPENSEA_API_URL, url), {
-            method: 'GET',
-            headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
-            ...(!isProxyENV() && { mode: 'cors' }),
-        })
+        // TODO: backend fix 500
+        const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
         if (response.ok) {
             return (await response.json()) as T
         }
