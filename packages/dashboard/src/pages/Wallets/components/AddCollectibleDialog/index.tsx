@@ -52,7 +52,8 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
 
         // If the NonFungible token is added
         const tokenInDB = trustedNonFungibleTokens.find(
-            (x) => isSameAddress(x.contract?.owner, account) && x.tokenId === tokenId && x.address === address,
+            (x) =>
+                isSameAddress(x.contract?.owner, account) && x.tokenId === tokenId && isSameAddress(x.address, address),
         )
         if (tokenInDB) throw new Error(FormErrorType.Added)
 

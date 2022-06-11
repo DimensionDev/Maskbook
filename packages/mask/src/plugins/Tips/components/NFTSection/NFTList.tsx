@@ -16,6 +16,7 @@ interface Props {
     className: string
     nextPage(): void
     loadFinish: boolean
+    loadError?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -108,7 +109,16 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className, nextPage, loadFinish }) => {
+export const NFTList: FC<Props> = ({
+    selectedPairs,
+    tokens,
+    onChange,
+    limit = 1,
+    className,
+    nextPage,
+    loadFinish,
+    loadError,
+}) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
@@ -181,15 +191,19 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                     </ShadowRootTooltip>
                 )
             })}
+            {loadError && !loadFinish && tokens.length && (
+                <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                    <RetryHint hint={false} retry={nextPage} />
+                </Stack>
+            )}
             <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                <RetryHint hint={false} retry={nextPage} />
+                <ElementAnchor
+                    callback={() => {
+                        if (nextPage) nextPage()
+                    }}>
+                    {!loadFinish && <LoadingBase />}
+                </ElementAnchor>
             </Stack>
-            <ElementAnchor
-                callback={() => {
-                    if (nextPage) nextPage()
-                }}>
-                {!loadFinish && <LoadingBase />}
-            </ElementAnchor>
         </List>
     )
 }

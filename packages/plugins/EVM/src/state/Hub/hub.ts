@@ -209,24 +209,28 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType> | Error> {
-        let currentPage = 0
         if (options?.sourceType === SourceType.Alchemy_EVM) {
             let api_keys = ''
-            while (currentPage < this.maxPageSize) {
-                const pageable = await this.getNonFungibleAssets(address, {
-                    indicator: api_keys,
-                    chainId: options?.chainId,
-                    sourceType: options?.sourceType,
-                })
-                api_keys = (pageable.nextIndicator as string) ?? ''
+            while (1) {
+                try {
+                    const pageable = await this.getNonFungibleAssets(address, {
+                        indicator: api_keys,
+                        chainId: options?.chainId ?? this.chainId,
+                        sourceType: options?.sourceType,
+                    })
 
-                yield* pageable.data
-
-                if (pageable.data.length === 0 || !api_keys) return
+                    yield* pageable.data
+                    api_keys = (pageable.nextIndicator as string) ?? ''
+                    if (pageable.data.length === 0 || !pageable.nextIndicator) return
+                } catch (error) {
+                    yield new Error((error as Error).message)
+                }
             }
             return
         }
-        for (let i = 0; i < this.maxPageSize; i += 1) {
+
+        let currentPage = 0
+        while (currentPage < this.maxPageSize) {
             try {
                 const pageable = await this.getNonFungibleAssets(address, {
                     indicator: currentPage,

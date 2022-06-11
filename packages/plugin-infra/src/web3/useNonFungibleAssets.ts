@@ -1,10 +1,11 @@
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { asyncIteratorMerge, EMPTY_LIST } from '@masknet/shared-base'
+import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
 import { useNetworkDescriptors } from './useNetworkDescriptors'
+import { useWhatChanged } from '@simbathesailor/use-what-changed'
 
 export function useNonFungibleAssets<
     S extends 'all' | void = void,
@@ -28,20 +29,21 @@ export function useNonFungibleAssets<
         if ((!account && !options?.account) || !hub || !networks) return
         if (!hub.getAllNonFungibleAssets) return
 
-        return asyncIteratorMerge(
-            // should use networks, this code for debug
-            [networks[0]]
+        return flattenAsyncIterator(
+            networks
                 .filter((x) => x.isMainnet)
+                .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
                 .map((x) => {
                     return hub.getAllNonFungibleAssets!(options?.account ?? account, {
+                        sourceType: SourceType.Alchemy_EVM,
                         chainId: x.chainId,
                     } as Web3Helper.Web3HubOptions<T>)
                 }),
         )
-    }, [hub?.getAllNonFungibleAssets, account, options?.account, networks])
+    }, [hub?.getAllNonFungibleAssets, account, options?.account, options?.chainId, networks.length])
 
     const next = useCallback(async () => {
-        if (!iterator || done) return
+        if (!iterator) return
 
         try {
             for (const v of Array.from({ length: 48 })) {
@@ -53,6 +55,7 @@ export function useNonFungibleAssets<
                 } else {
                     if (iteratorDone) {
                         setDone(true)
+                        break
                     }
                     if (!iteratorDone && value) {
                         setAssets((pred) => [...pred, value])
@@ -64,12 +67,15 @@ export function useNonFungibleAssets<
             setError(error_ as string)
             setDone(true)
         }
-    }, [iterator, done])
+    }, [iterator])
+
+    useWhatChanged([next, iterator, networks])
 
     // Execute once after next update
     useEffect(() => {
+        if (assets.length) return
         if (next) next()
-    }, [next])
+    }, [next, assets.length])
 
     const retry = useCallback(() => {
         setAssets([])

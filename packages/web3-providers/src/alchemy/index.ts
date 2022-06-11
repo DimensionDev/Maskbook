@@ -30,6 +30,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM, string> = {},
     ): Promise<Pageable<NonFungibleToken<ChainId_EVM, SchemaType_EVM>, string>> => {
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        if (!chainInfo) return createPageable([], '')
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {

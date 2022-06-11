@@ -238,10 +238,10 @@ export function CollectionList({
     const {
         value: collectibles = EMPTY_LIST,
         done,
-        next,
+        next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account, chainId })
+    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
@@ -269,7 +269,7 @@ export function CollectionList({
 
     if (!allCollectibles.length && !done && !error && account) return <LoadingSkeleton />
 
-    if (!allCollectibles.length && error && account) return <RetryHint retry={next} />
+    if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
 
     if ((done && !allCollectibles.length) || !account)
         return (
@@ -342,10 +342,10 @@ export function CollectionList({
                             loading={renderCollectibles.length === 0}
                         />
                     </Box>
-                    {error && !done && <RetryHint hint={false} retry={next} />}
+                    {error && !done && <RetryHint hint={false} retry={nextPage} />}
                     <ElementAnchor
                         callback={() => {
-                            if (next) next()
+                            if (nextPage) nextPage()
                         }}>
                         {!done && <LoadingBase />}
                     </ElementAnchor>

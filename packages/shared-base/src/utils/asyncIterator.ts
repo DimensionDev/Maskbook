@@ -5,6 +5,6 @@ export async function asyncIteratorToArray<T>(iterable?: AsyncIterable<T>) {
     return arr
 }
 
-export async function* asyncIteratorMerge<T>(iterables: Array<AsyncIterable<T>>) {
+export async function* flattenAsyncIterator<T>(iterables: Array<AsyncIterable<T>>) {
     for (const x of iterables) yield* x
 }

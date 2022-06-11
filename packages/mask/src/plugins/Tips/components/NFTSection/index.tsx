@@ -3,7 +3,6 @@ import { RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { SchemaType } from '@masknet/web3-shared-evm'
 import { Button, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
@@ -76,14 +75,12 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     }, 10000)
 
     const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
-    // const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-    // TODO: add address and chainId && retry
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
         next,
         error: loadError,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721)
+    } = useNonFungibleAssets(pluginId, undefined, { chainId })
 
     const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
@@ -119,6 +116,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                                 }}
                                 nextPage={next}
                                 loadFinish={done}
+                                loadError={!!loadError}
                             />
                         )
                     }
