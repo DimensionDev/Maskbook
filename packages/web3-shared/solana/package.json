@@ -13,7 +13,7 @@
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@solana/web3.js": "^1.30.2",
-    "@toruslabs/solana-embed": "^0.1.6",
+    "@toruslabs/solana-embed": "^0.2.0",
     "@types/bs58": "^4.0.1",
     "bignumber.js": "9.0.2",
     "bs58": "^4.0.1",
