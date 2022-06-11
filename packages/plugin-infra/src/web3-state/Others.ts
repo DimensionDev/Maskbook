@@ -49,7 +49,7 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
         return this.options.defaultAddress
     }
     getMaskTokenAddress(chainId?: ChainId | undefined): string | undefined {
-        return
+        return ''
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale * 1000

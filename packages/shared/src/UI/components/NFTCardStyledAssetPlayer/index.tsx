@@ -2,9 +2,10 @@ import classNames from 'classnames'
 import { CircularProgress, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
-import { useImageChecker, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useImageChecker } from '../../../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

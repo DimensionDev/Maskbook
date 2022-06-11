@@ -11,7 +11,12 @@ import { EthereumAddress } from 'wallet.ts'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
-import { useChainId, useNonFungibleCollections, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useAccount,
+    useNonFungibleCollections,
+    useNonFungibleTokenContract,
+} from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -142,7 +147,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
     const contractList = assets
         .filter((x) => x.schema_name === WyvernSchemaName.ERC721)
@@ -223,8 +230,13 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isValid = EthereumAddress.isValid(keyword)
-    const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, keyword)
+    const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
+        NetworkPluginID.PLUGIN_EVM,
+        keyword,
+        { account },
+    )
     return (
         <div className={classes.searchBox}>
             {keyword !== '' && searchedTokenList.length === 0 ? (
@@ -265,7 +277,6 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    console.log({ contract })
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract)}>

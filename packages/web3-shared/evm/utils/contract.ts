@@ -35,14 +35,14 @@ export async function encodeTransaction(
 export async function sendTransaction(
     contract: BaseContract | null,
     transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    options?: SendOptions & {
-        maxPriorityFeePerGas?: string
-        maxFeePerGas?: string
-    },
+    overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
     const tx = await encodeTransaction(contract, transaction)
-    const receipt = await transaction.send(tx as PayableTx)
+    const receipt = await transaction.send({
+        ...tx,
+        ...overrides,
+    } as PayableTx)
     return receipt?.transactionHash ?? ''
 }
 

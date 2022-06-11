@@ -14,7 +14,6 @@ import { SharedContextSettings, Web3StateSettings } from '../../settings'
 import { AddressBook } from './middleware/AddressBook'
 import { Interceptor } from './middleware/Interceptor'
 import { Nonce } from './middleware/Nonce'
-import { Popup } from './middleware/Popup'
 import { Squash } from './middleware/Squash'
 import { RecentTransaction } from './middleware/Transaction'
 import { Translator } from './middleware/Translator'
@@ -106,9 +105,23 @@ class RequestContext implements Context {
 
     set config(config: Transaction | undefined) {
         if (!this.config || !config) return
-        this._requestArguments = {
-            method: this.method,
-            params: [config, 'latest'],
+        const method = this._requestArguments.method
+
+        switch (method) {
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                this._requestArguments = {
+                    method: this.method,
+                    params: [this._requestArguments.params[0], config],
+                }
+                break
+            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                this._requestArguments = {
+                    method: this.method,
+                    params: [config, 'latest'],
+                }
+                break
+            default:
+                break
         }
     }
 
@@ -194,7 +207,6 @@ composer.use(new Squash())
 composer.use(new Nonce())
 composer.use(new Translator())
 composer.use(new Interceptor())
-composer.use(new Popup())
 composer.use(new RecentTransaction())
 composer.use(new AddressBook())
 

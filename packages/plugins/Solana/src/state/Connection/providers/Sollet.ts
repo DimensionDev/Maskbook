@@ -1,3 +1,4 @@
+import base58 from 'bs58'
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
 import { ChainId, ProviderType } from '@masknet/web3-shared-solana'
@@ -23,7 +24,7 @@ export class SolletProvider extends BaseProvider implements SolanaProvider {
     override async signMessage(dataToSign: string) {
         const data = new TextEncoder().encode(dataToSign)
         const { signature } = await this.solanaProvider.sign(data, 'uft8')
-        return signature.toString('utf8')
+        return base58.encode(signature)
     }
 
     override signTransaction(transaction: Transaction) {

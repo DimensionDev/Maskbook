@@ -112,7 +112,6 @@ const DeleteWallet = memo(() => {
             try {
                 await WalletRPC.removeWallet(wallet.address, password)
                 const wallets = await WalletRPC.getWallets()
-
                 const otherWalletAddress = first(wallets)?.address
 
                 if (otherWalletAddress) {

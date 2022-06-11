@@ -39,13 +39,6 @@ export function getFootprints(address: string): Promise<Response> {
     return fetchJSON<Response>(url)
 }
 
-export async function getRSS3AddressById(id: string) {
-    if (!id) return ''
-    const url = urlcat('https://rss3.domains/name/:id', { id })
-    const rsp = await fetchJSON<NameInfo>(url)
-    return rsp.address
-}
-
 export async function getRSS3ProfileByAddress(address: string) {
     if (!address) return
     const url = urlcat('https://hub.pass3.me/:address', { address })

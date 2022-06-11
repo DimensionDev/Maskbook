@@ -3,10 +3,10 @@ import { fetchJSON } from '../helpers'
 import type { StorageAPI } from '../types'
 import { KV_ROOT_URL } from './constants'
 
-export class JSON_Storage implements StorageAPI.Storage {
+export class JSON_Storage<T> implements StorageAPI.Storage<T> {
     constructor(private prefix: string) {}
 
-    async get<T>(key: string) {
+    async get(key: string) {
         try {
             return fetchJSON<T>(
                 urlcat(KV_ROOT_URL, 'api/:name', {
@@ -24,7 +24,7 @@ export class JSON_Storage implements StorageAPI.Storage {
         }
     }
 
-    async set(key: string, value: any) {
+    async set(key: string, value: T) {
         await fetch(
             urlcat(KV_ROOT_URL, 'api/:name', {
                 name: `${this.prefix}_${key}`,
@@ -42,7 +42,7 @@ export class JSON_Storage implements StorageAPI.Storage {
 }
 
 export class KeyValueAPI implements StorageAPI.Provider {
-    createJSON_Storage(key: string): StorageAPI.Storage {
-        return new JSON_Storage(key)
+    createJSON_Storage<T>(key: string): StorageAPI.Storage<T> {
+        return new JSON_Storage<T>(key)
     }
 }

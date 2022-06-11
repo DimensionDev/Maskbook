@@ -10,7 +10,6 @@ import { useI18N } from '../locales'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -75,10 +74,10 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: theme.palette.maskColor?.dark,
         color: 'white',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
         },
         width: '100%',
     },
@@ -89,11 +88,10 @@ export interface PreviewCardProps {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { t: tr } = useBaseI18N()
     const t = useI18N()
+    const { t: tr } = useBaseI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
 
     // #region the donation dialog
@@ -122,9 +120,9 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Typography color="textPrimary">{tr('go_wrong')}</Typography>
                 <Button
                     sx={{
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor?.dark,
                         '&:hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                         },
                         width: 254,
                         color: 'white',
@@ -193,14 +191,15 @@ export function PreviewCard(props: PreviewCardProps) {
                         predicate={(pluginID, chainId) =>
                             pluginID === NetworkPluginID.PLUGIN_EVM &&
                             [ChainId.Mainnet, ChainId.Matic].includes(chainId)
-                        }>
+                        }
+                        renderInTimeline>
                         <Button
                             variant="contained"
                             fullWidth
                             sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
+                                backgroundColor: theme.palette.maskColor?.dark,
                                 '&:hover': {
-                                    backgroundColor: theme.palette.maskColor.dark,
+                                    backgroundColor: theme.palette.maskColor?.dark,
                                 },
                                 color: 'white',
                             }}

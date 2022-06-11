@@ -19,7 +19,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     title: 'Approve',
                     description: `Approve spend ${getTokenAmountDescription(
                         context.parameters?.value,
-                        await connection?.getFungibleToken(context.parameters?.to ?? '', {
+                        await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                     )}`,
@@ -31,7 +31,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
                         context.parameters?.value,
-                        await connection?.getFungibleToken(context.parameters?.to ?? '', {
+                        await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                         true,

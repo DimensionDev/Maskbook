@@ -134,7 +134,6 @@ export class ProviderState<
         const needToUpdateAccount =
             accountCopied.account === '' || !this.options.isSameAddress(account_.account, account.account)
         const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
-        const needToUpdateProviderType = this.storage.providers.value[siteType] !== providerType
 
         if (needToUpdateAccount || needToUpdateChainId) {
             await this.storage.accounts.setValue({
@@ -145,6 +144,13 @@ export class ProviderState<
                 },
             })
         }
+    }
+
+    private async setProvider(providerType: ProviderType) {
+        const siteType = getSiteType()
+        if (!siteType) return
+
+        const needToUpdateProviderType = this.storage.providers.value[siteType] !== providerType
 
         if (needToUpdateProviderType) {
             await this.storage.providers.setValue({
@@ -185,6 +191,7 @@ export class ProviderState<
 
         // update local storage
         await this.setAccount(providerType, account)
+        await this.setProvider(providerType)
 
         provider.emitter.emit('connect', account)
         return account

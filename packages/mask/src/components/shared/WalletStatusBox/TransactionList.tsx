@@ -1,9 +1,9 @@
-import { FC, forwardRef, useCallback, useMemo, useState } from 'react'
+import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { LinkOutIcon } from '@masknet/icons'
-import { useChainId, useWeb3, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
+import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     listItem: {
-        height: 54,
+        height: 52,
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(1, 1),
         '&:nth-child(even)': {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     methodName: {
-        fontWeight: 'bold',
+        fontWeight: 500,
         fontSize: 14,
         textTransform: 'capitalize',
         textOverflow: 'ellipsis',
@@ -38,7 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
     },
     timestamp: {
-        fontSize: 12,
+        fontSize: 14,
+        lineHeight: '18px',
     },
     cell: {
         fontSize: 14,
@@ -47,19 +48,23 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         boxSizing: 'border-box',
     },
+    linkText: {
+        fontSize: 14,
+        lineHeight: '18px',
+    },
     link: {
         display: 'flex',
         fill: 'none',
     },
     linkIcon: {
         fill: 'none',
-        width: 16,
-        height: 16,
+        width: 17.5,
+        height: 17.5,
         marginLeft: theme.spacing(0.5),
     },
     clear: {
         fontSize: 14,
-        color: theme.palette.primary.main,
+        color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.common.white,
         cursor: 'pointer',
     },
 }))
@@ -69,18 +74,11 @@ const statusTextColorMap: Record<TransactionStatusType, string> = {
     [TransactionStatusType.SUCCEED]: '#60DFAB',
     [TransactionStatusType.FAILED]: '#FF5F5F',
 }
-const getContractFunctionName = async (data: string | undefined) => {
-    if (!data) return null
-    const sig = data.slice(0, 10)
-    // const name = await Services.Ethereum.getContractFunctionName(sig)
-    // return name ? name.replace(/_/g, ' ') : 'Contract Interaction'
-    return ''
-}
 
 interface TransactionProps extends GridProps {
     chainId: Web3Helper.ChainIdAll
-    transaction: RecentTransaction<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>
-    onClear?(tx: RecentTransaction<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
+    transaction: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>
+    onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear = noop, ...rest }) => {
     const { t } = useI18N()
@@ -92,22 +90,15 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
     }
 
-    const web3 = useWeb3()
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State()
 
-    const { value: targetAddress } = useAsync(async () => {
-        return ''
-        // if (tx.receipt?.contractAddress) return tx.receipt.contractAddress
-        // if (tx.payload?.params?.[0].to) return tx.payload.params[0].to as string
-        // const transaction = await web3?.eth.getTransaction(tx.hash)
-        // return transaction.to
-    }, [web3, tx])
-    const address = (targetAddress || '').toLowerCase()
-    // const txData = tx.payload?.params?.[0].data as string | undefined
+    const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
+
     const { value: functionName } = useAsync(async () => {
-        return ''
-        // return getContractFunctionName(txData)
-    }, [])
+        return TransactionFormatter
+            ? (await TransactionFormatter.formatTransaction(chainId, tx._tx)).title
+            : 'Contract Interaction'
+    }, [TransactionFormatter])
 
     const handleClear = useCallback(() => {
         onClear(tx)
@@ -117,19 +108,15 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
 
     const [txStatus, setTxStatus] = useState(tx.status)
 
-    // useEffect(() => {
-    //     return WalletMessages.events.transactionStateUpdated.on((data) => {
-    //         if ('receipt' in data && tx.id === data.receipt?.transactionHash) {
-    //             switch (data.type) {
-    //                 case TransactionStateType.CONFIRMED:
-    //                     setTxStatus(TransactionStatusType.SUCCEED)
-    //                     break
-    //                 case TransactionStateType.FAILED:
-    //                     setTxStatus(TransactionStatusType.FAILED)
-    //             }
-    //         }
-    //     })
-    // }, [tx.id])
+    useEffect(() => {
+        const removeListener = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
+            setTxStatus(status)
+        })
+
+        return () => {
+            removeListener?.()
+        }
+    }, [tx.id, TransactionWatcher])
 
     return (
         <Grid container {...rest}>
@@ -148,7 +135,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Stack>
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.linkText}>
                     {address && isSameAddress(domainOrAddress, address)
                         ? Others?.formatAddress?.(address, 4)
                         : domainOrAddress || address}
@@ -162,7 +149,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                 </Link>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">
-                <Typography fontWeight={300} justifyContent="center" color={statusTextColorMap[txStatus]}>
+                <Typography fontWeight={400} justifyContent="center" color={statusTextColorMap[txStatus]} fontSize={14}>
                     {statusTextMap[txStatus]}
                 </Typography>
             </Grid>
@@ -178,8 +165,8 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
 }
 
 interface Props extends ListProps {
-    transactions: Array<RecentTransaction<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>>
-    onClear?(tx: RecentTransaction<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
+    transactions: Array<RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>>
+    onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 
 export const TransactionList: FC<Props> = forwardRef(({ className, transactions, onClear = noop, ...rest }, ref) => {

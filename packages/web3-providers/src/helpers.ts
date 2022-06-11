@@ -8,8 +8,9 @@ export function isProxyENV() {
     }
 }
 
-export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestInit?: RequestInit): Promise<T> {
-    const res = await globalThis.fetch(requestInfo, requestInit)
+export async function fetchJSON<T = unknown>(requestInfo: string, requestInit?: RequestInit): Promise<T> {
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+    const res = await fetch(requestInfo, requestInit)
     return res.json()
 }
 

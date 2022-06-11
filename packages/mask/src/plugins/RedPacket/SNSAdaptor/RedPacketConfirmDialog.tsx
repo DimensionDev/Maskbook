@@ -146,7 +146,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         network: chainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
     useEffect(() => {
         const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4

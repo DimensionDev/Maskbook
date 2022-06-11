@@ -9,10 +9,13 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<T> {
-    currentPage: number
-    hasNextPage: boolean
-    data: T[]
+export interface Pageable<Item, Indicator = number | string > {
+    /** the indicator of the current page */
+    indicator: Indicator
+    /** the indicator of the next page */
+    nextIndicator?: Indicator
+    /** items data */
+    data: Item[]
 }
 
 export type Color =
@@ -61,6 +64,8 @@ export enum SourceType {
     OpenSea = 'opensea',
     Rarible = 'rarible',
     NFTScan = 'NFTScan',
+    Alchemy_EVM = 'Alchemy_EVM',
+    Alchemy_FLOW = 'Alchemy_FLOW'
 }
 
 export enum TransactionStatusType {
@@ -82,16 +87,18 @@ export enum TransactionDescriptorType {
     RETRY = 'retry', // speed up
 }
 
-export enum IdentityAddressType {
+export enum SocialAddressType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
     UNS = 'UNS',
     DNS = 'DNS',
     RSS3 = 'RSS3',
+    KV = 'KV',
     GUN = 'GUN',
     THE_GRAPH = 'THE_GRAPH',
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
+    SOL = 'SOL'
 }
 
 export interface Identity {
@@ -109,9 +116,14 @@ export interface SocialIdentity {
     homepage?: string
 }
 
-export interface IdentityAddress {
-    type: IdentityAddressType
+export interface SocialAddress<PluginID> {
+    /** The ID of a plugin that the address belongs to */
+    networkSupporterPluginID: PluginID
+    /** The data source type */
+    type: SocialAddressType
+    /** The address in hex string */
     address: string
+    /** A human readable address title */
     label: string
 }
 
@@ -169,6 +181,10 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     icon: URL
     /** The provider name */
     name: string
+    /** The provider bar background gradient color */
+    backgroundGradient?: string
+    /** The provider icon filter color */
+    iconFilterColor?: string
     /** Enable requirements */
     enableRequirements?: {
         supportedChainIds?: ChainId[]
@@ -204,7 +220,6 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     symbol: string
     address: string
     schema: SchemaType
-    owner?: string
     balance?: number
     logoURL?: string
     iconURL?: string
@@ -214,6 +229,7 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     name: string
     symbol: string
+    owner?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -455,12 +471,17 @@ export interface RecentTransaction<ChainId, Transaction> {
     chainId: ChainId
     /** status type */
     status: TransactionStatusType
-    /** available tx candidates */
+    /** all available tx candidates */
     candidates: Record<string, Transaction>
     /** record created at */
     createdAt: Date
     /** record updated at */
     updatedAt: Date
+}
+
+export type RecentTransactionComputed<ChainId, Transaction> = RecentTransaction<ChainId, Transaction> & {
+    /** a dynamically computed field in the hook which means the minted (initial) transaction */
+    _tx: Transaction
 }
 
 export interface TokenList<ChainId, SchemaType> {
@@ -486,9 +507,9 @@ export interface ProviderEvents<ChainId, ProviderType> {
     disconnect: [ProviderType]
 }
 
-export interface WatchEvents {
+export interface WatchEvents<Transaction> {
     /** Emit when the watched transaction status updated. */
-    progress: [string, TransactionStatusType]
+    progress: [string, TransactionStatusType, Transaction | undefined]
 }
 
 export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
@@ -501,13 +522,18 @@ export interface WalletProvider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Switch to the designate chain. */
     switchChain(chainId?: ChainId): Promise<void>
     /** Create an instance from the network SDK. */
-    createWeb3(chainId?: ChainId): Promise<Web3>
+    createWeb3(options?: ProviderOptions<ChainId>): Promise<Web3>
     /** Create an instance that implement the wallet protocol. */
-    createWeb3Provider(chainId?: ChainId): Promise<Web3Provider>
+    createWeb3Provider(options?: ProviderOptions<ChainId>): Promise<Web3Provider>
     /** Create the connection. */
     connect(chainId?: ChainId): Promise<Account<ChainId>>
     /** Dismiss the connection. */
     disconnect(): Promise<void>
+}
+
+export interface ProviderOptions<ChainId> {
+    chainId: ChainId
+    account?: string
 }
 
 export interface TransactionChecker<ChainId> {
@@ -520,8 +546,6 @@ export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     account?: string
     /** Designate the provider to handle the transaction. */
     providerType?: ProviderType
-    /** Handle on popups page. */
-    popupsWindow?: boolean
     /** Fragments to merge into the transaction. */
     overrides?: Partial<Transaction>
 }
@@ -560,7 +584,6 @@ export interface Connection<
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
-        id: string,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */
@@ -586,10 +609,10 @@ export interface Connection<
     /** Get the currently chain id. */
     getChainId(options?: Web3ConnectionOptions): Promise<ChainId>
     /** Get the latest block by number. */
-    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block>
+    getBlock(no: number, options?: Web3ConnectionOptions): Promise<Block | null>
     /** Get the latest block number. */
     getBlockNumber(options?: Web3ConnectionOptions): Promise<number>
-    /** Get the latest block timestamp. */
+    /** Get the latest block unix timestamp. */
     getBlockTimestamp(options?: Web3ConnectionOptions): Promise<number>
     /** Get the latest balance of the account. */
     getBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
@@ -624,7 +647,7 @@ export interface Connection<
     ): Promise<string>
     /** Transfer non-fungible token to */
     transferNonFungibleToken(
-        address: string,
+        address: string | undefined,
         recipient: string,
         tokenId: string,
         amount: string,
@@ -644,21 +667,19 @@ export interface Connection<
     connect(options?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(options?: Web3ConnectionOptions): Promise<void>
-    /** Confirm request */
-    confirmRequest?: (options?: Web3ConnectionOptions) => Promise<void>
-    /** Reject request */
-    rejectRequest?: (options?: Web3ConnectionOptions) => Promise<void>
     /** Replace request */
     replaceRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
     /** Cancel request */
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId> {
+export interface HubOptions<ChainId, Indicator = number | string> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
     chainId?: ChainId
+    /** The networkPluginID as the API parameter */
+    networkPluginId?: NetworkPluginID
     /** The id of data provider */
     sourceType?: SourceType
     /** The currency type of data */
@@ -666,7 +687,7 @@ export interface HubOptions<ChainId> {
     /** The item size of each page. */
     size?: number
     /** The page index. */
-    page?: number
+    indicator?: Indicator
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
@@ -741,7 +762,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         options?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get the most recent transactions */
-    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
+    getTransactions: (chainId: ChainId, account: string, options?: Web3HubOptions) => Promise<Array<Transaction<ChainId, SchemaType>>>
 }
 
 export interface SettingsState {
@@ -788,10 +809,10 @@ export interface HubState<
 }
 
 export interface IdentityServiceState {
-    /** Find all social addresses related to given social identity. */
-    lookup(identity: SocialIdentity): Promise<IdentityAddress[]>
+    /** Find all social addresses related to the given identity. */
+    lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
-export interface NameServiceState<ChainId, DomainBook = Record<string, string>> {
+export interface NameServiceState<ChainId> {
     /** get address of domain name */
     lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -858,14 +879,14 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
-    emitter: Emitter<WatchEvents>
+    emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => void
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => void
     /** Update transaction status */
-    notifyTransaction: (id: string, status: TransactionStatusType) => void
+    notifyTransaction: (id: string, status: TransactionStatusType, transaction: Transaction) => void
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */

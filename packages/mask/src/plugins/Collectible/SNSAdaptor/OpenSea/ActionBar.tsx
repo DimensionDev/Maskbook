@@ -19,9 +19,9 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
+                backgroundColor: theme.palette.maskColor?.dark,
             },
             color: 'white',
         },
@@ -54,7 +54,7 @@ export function ActionBar(props: ActionBarProps) {
     const isOwner = isSameAddress(asset.value.owner?.address, account)
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
                 {!isOwner && asset.value.auction ? (
                     <ActionButton
                         className={classes.button}

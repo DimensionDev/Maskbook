@@ -1,6 +1,6 @@
 import { isExtensionSiteType } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
-import type { Account } from '@masknet/web3-shared-base'
+import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
@@ -9,7 +9,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
         super()
 
-        bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
+        bridge.on('accountChanged', this.onAccountChanged.bind(this))
         bridge.on('chainChanged', this.onChainChanged.bind(this))
         bridge.on('disconnect', this.onDisconnect.bind(this))
     }
@@ -23,8 +23,8 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         return this.bridge.untilAvailable().then(() => undefined)
     }
 
-    protected onAccountsChanged(accounts: string[]) {
-        this.emitter.emit('accounts', accounts)
+    protected onAccountChanged(account: string) {
+        this.emitter.emit('accounts', [account])
     }
 
     protected onChainChanged(chainId: string) {
@@ -35,7 +35,7 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override async createWeb3Provider(chainId?: ChainId) {
+    override async createWeb3Provider(options?: ProviderOptions<ChainId>) {
         await this.readyPromise
 
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')

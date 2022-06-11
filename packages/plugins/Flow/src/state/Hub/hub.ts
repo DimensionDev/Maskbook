@@ -1,4 +1,4 @@
-import { CoinGecko } from '@masknet/web3-providers'
+import { Alchemy_FLOW } from '@masknet/web3-providers'
 import type {
     FungibleToken,
     NonFungibleToken,
@@ -30,10 +30,11 @@ class Hub implements FlowHub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(expectedChainId)
         return [
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 FLOW_ADDRESS,
                 'Flow',
                 'FLOW',
@@ -41,7 +42,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/flow.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 FUSD_ADDRESS,
                 'Flow USD',
                 'FUSD',
@@ -49,7 +50,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/FUSD.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                chainId,
+                expectedChainId,
                 TETHER_ADDRESS,
                 'Tether USD',
                 'tUSD',
@@ -80,27 +81,31 @@ class Hub implements FlowHub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-        return FlowRPC.getFungibleAssets(options?.chainId ?? this.chainId, account)
+        const expectedChainId = options?.chainId ?? this.chainId
+        return FlowRPC.getFungibleAssets(expectedChainId, account)
     }
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
+        ownerAddress?: string,
+        contractName?: string,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        throw new Error('Method not implemented.')
+        return Alchemy_FLOW.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
     getNonFungibleAssets(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return Alchemy_FLOW.getTokens(account, options)
     }
     getFungibleTokenPrice(
         chainId: ChainId,
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        return CoinGecko.getTokenPrice(address, options?.currencyType)
+        // The Flow chain is unlisted in CoinGecko.
+        throw new Error('Method not implemented.')
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,
@@ -129,14 +134,14 @@ class Hub implements FlowHub {
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 
@@ -149,7 +154,7 @@ class Hub implements FlowHub {
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                page: i,
+                indicator: i,
                 size: this.sizePerPage,
             })
 

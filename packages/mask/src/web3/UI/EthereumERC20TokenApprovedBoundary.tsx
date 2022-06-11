@@ -22,13 +22,12 @@ const useStyles = makeStyles()((theme) => ({
     buttonLabel: {
         display: 'block',
         fontWeight: 'inherit',
-        marginTop: theme.spacing(-0.5),
-        marginBottom: theme.spacing(1),
+        transform: 'translateY(-4px)',
     },
     buttonAmount: {
         fontSize: 10,
         fontWeight: 300,
-        bottom: theme.spacing(1),
+        transform: 'translateY(12px)',
         position: 'absolute',
     },
     children: {
@@ -79,6 +78,27 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
+
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
+                    {transactionState.loading
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    &hellip;
+                </ActionButton>
+                {withChildren ? (
+                    <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
+                ) : null}
+            </Grid>
+        )
 
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
@@ -150,23 +170,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
             </Box>
-        )
-    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {transactionState.loading
-                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                        : `Updating ${token.symbol}`}
-                    &hellip;
-                </ActionButton>
-            </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)
         return (

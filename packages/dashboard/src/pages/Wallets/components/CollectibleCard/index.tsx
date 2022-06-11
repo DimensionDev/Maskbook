@@ -3,7 +3,7 @@ import { useHoverDirty } from 'react-use'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
@@ -95,10 +95,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    token: NonFungibleAsset<
-        Web3Helper.Definition[NetworkPluginID]['ChainId'],
-        Web3Helper.Definition[NetworkPluginID]['SchemaType']
-    >
+    token: Web3Helper.NonFungibleAssetScope<'all'>
     onSend(): void
     renderOrder: number
 }
@@ -108,7 +105,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, rend
     const chainId = useChainId()
     const { classes } = useStyles()
     const ref = useRef(null)
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State()
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(undefined, token.contract?.chainId)
@@ -131,7 +128,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, rend
         <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
                 <Box className={classes.chainIcon}>
-                    <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
+                    <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
                 </Box>
                 {(token.metadata?.mediaURL || token.metadata?.imageURL) && token.contract ? (
                     <Link

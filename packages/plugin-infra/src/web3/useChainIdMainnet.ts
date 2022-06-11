@@ -7,10 +7,7 @@ export function useChainIdMainnet<T extends NetworkPluginID>(
     pluginID?: T,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
-    type IsMainnet = (chainId?: Web3Helper.Definition[T]['ChainId']) => boolean
-
     const chainId = useChainId(pluginID, expectedChainId)
     const { Others } = useWeb3State(pluginID)
-
-    return (Others?.chainResolver.isMainnet as IsMainnet | undefined)?.(chainId) ?? false
+    return Others?.chainResolver.isMainnet?.(chainId) ?? false
 }

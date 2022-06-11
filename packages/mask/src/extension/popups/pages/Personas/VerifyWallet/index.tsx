@@ -105,11 +105,10 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personaSign', {
+            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
-                popupsWindow: false,
             })
 
             if (!walletSignature) throw new Error('Wallet sign failed')

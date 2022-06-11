@@ -29,10 +29,20 @@ export type TransactionDialogEvent =
 export type SelectProviderDialogEvent =
     | {
           open: true
+          walletConnectedCallback?: () => void
       }
     | {
           open: false
           address?: string
+      }
+
+export type WalletConnectQRCodeDialogEvent =
+    | {
+          open: true
+          uri: string
+      }
+    | {
+          open: false
       }
 
 export type ConnectWalletDialogEvent =
@@ -40,6 +50,7 @@ export type ConnectWalletDialogEvent =
           open: true
           network: Web3Helper.NetworkDescriptorAll
           provider: Web3Helper.ProviderDescriptorAll
+          walletConnectedCallback?: () => void
       }
     | {
           open: false
@@ -130,6 +141,11 @@ export interface WalletMessage {
      * Select nft contract dialog
      */
     selectNftContractDialogUpdated: SelectNftContractDialogEvent
+
+    /**
+     * WalletConnect QR Code dialog
+     */
+    walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
 
     /**
      * Wallet Risk Warning dialog

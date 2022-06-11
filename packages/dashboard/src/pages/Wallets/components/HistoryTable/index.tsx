@@ -64,8 +64,8 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
             onPageChange={setPage}
             hasNextPage={false}
             isLoading={loading}
-            isEmpty={!value?.data?.length}
-            dataSource={(value?.data ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
+            isEmpty={!value?.length}
+            dataSource={(value ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
             selectedChainId={selectedChainId}
         />
     )
@@ -91,7 +91,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                     {isLoading || isEmpty ? (
                         <Box flex={1}>
                             {isLoading ? <LoadingPlaceholder /> : null}
-                            {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_history_tips()} /> : null}
+                            {isEmpty && !isLoading ? (
+                                <EmptyPlaceholder children={t.wallets_empty_history_tips()} />
+                            ) : null}
                         </Box>
                     ) : (
                         <Table stickyHeader sx={{ padding: '0 44px' }}>

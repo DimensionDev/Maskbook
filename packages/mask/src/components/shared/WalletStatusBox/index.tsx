@@ -3,36 +3,41 @@ import {
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useProviderType,
     useReverseAddress,
+    useNativeToken,
     useWallet,
     useWeb3State,
-    Web3Helper,
+    useWeb3Connection,
+    useBalance,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { Copy, ExternalLink } from 'react-feather'
+import { LinkOutIcon, CopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { contentBackground }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
     currentAccount: {
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(0, 1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
+        background:
+            contentBackground ??
+            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
+        height: 82,
     },
     dashboardBackground: {
         background: theme.palette.background.default,
@@ -40,11 +45,20 @@ const useStyles = makeStyles()((theme) => ({
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        fontSize: 16,
-        marginRight: 6,
+        color: theme.palette.maskColor?.dark,
+        fontWeight: 700,
+        fontSize: 14,
+        marginRight: 5,
+        lineHeight: '18px',
+    },
+    balance: {
+        color: theme.palette.maskColor?.dark,
+        fontSize: 14,
+        paddingTop: 2,
+        lineHeight: '18px',
     },
     infoRow: {
         display: 'flex',
@@ -52,8 +66,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     actionButton: {
         fontSize: 12,
+        color: 'white',
+        backgroundColor: theme.palette.maskColor?.dark,
         marginLeft: theme.spacing(1),
         padding: theme.spacing(1, 2),
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor?.dark,
+        },
     },
     address: {
         fontSize: 16,
@@ -61,13 +80,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.primary,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-    },
-    linkIcon: {
-        marginRight: theme.spacing(1),
     },
     twitterProviderBorder: {
         width: 14,
@@ -79,14 +94,16 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: theme.spacing(2, 0),
     },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
+    icon: {
+        width: 17.5,
+        height: 17.5,
+        marginRight: theme.spacing(0.5),
+    },
+    copyIcon: {
+        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+    },
+    linkIcon: {
+        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -99,14 +116,18 @@ interface WalletStatusBox {
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
-    const { classes } = useStyles()
+    const providerDescriptor = useProviderDescriptor<'all'>()
+    const { classes } = useStyles({
+        contentBackground: providerDescriptor?.backgroundGradient,
+    })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId()
     const account = useAccount()
     const wallet = useWallet()
-    const providerType = useProviderType()
-    const providerDescriptor = useProviderDescriptor()
+    const { value: balance = '0' } = useBalance()
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+    const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard
@@ -128,6 +149,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     // #endregion
 
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
@@ -141,35 +166,22 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     isDashboardPage() ? classes.dashboardBackground : '',
                 )}>
                 <WalletIcon
-                    size={48}
-                    badgeSize={16}
-                    networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
-                    providerIcon={networkDescriptor?.icon}
+                    size={30}
+                    badgeSize={12}
+                    mainIcon={providerDescriptor?.icon}
+                    badgeIcon={networkDescriptor?.icon}
                 />
                 <div className={classes.accountInfo}>
-                    <div className={classes.infoRow} style={{ marginBottom: 6 }}>
-                        {providerType !== ProviderType.MaskWallet ? (
-                            <Typography className={classes.accountName}>
-                                {domain && Others?.formatDomainName
-                                    ? Others.formatDomainName(domain)
-                                    : providerDescriptor?.name}
-                            </Typography>
-                        ) : (
-                            <>
-                                <Typography className={classes.accountName}>
-                                    {wallet?.name ?? providerDescriptor?.name}
-                                </Typography>
-                                {domain && Others?.formatDomainName ? (
-                                    <Typography className={classes.domain}>
-                                        {Others.formatDomainName(domain)}
-                                    </Typography>
-                                ) : null}
-                            </>
-                        )}
-                    </div>
+                    {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                        <Typography className={classes.accountName}>{wallet?.name}</Typography>
+                    ) : null}
                     <div className={classes.infoRow}>
-                        <Typography className={classes.address} variant="body2" title={account}>
-                            <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
+                        <Typography className={classes.accountName}>
+                            {domain && Others?.formatDomainName ? (
+                                Others.formatDomainName(domain)
+                            ) : (
+                                <FormattedAddress address={account} size={4} formatter={Others?.formatAddress} />
+                            )}
                         </Typography>
                         <Link
                             className={classes.link}
@@ -177,7 +189,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <Copy className={classes.linkIcon} size={14} />
+                            <CopyIcon className={classNames(classes.icon, classes.copyIcon)} />
                         </Link>
                         <Link
                             className={classes.link}
@@ -185,13 +197,33 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <ExternalLink className={classes.linkIcon} size={14} />
+                            <LinkOutIcon className={classNames(classes.icon, classes.linkIcon)} />
                         </Link>
                     </div>
+                    {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.balance}>
+                                {formatBalance(balance, nativeToken?.decimals, 3)} {nativeToken?.symbol}
+                            </Typography>
+                        </div>
+                    ) : null}
                 </div>
 
                 {!props.disableChange && (
                     <section>
+                        {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
+                            <Button
+                                className={classNames(classes.actionButton)}
+                                variant="contained"
+                                size="small"
+                                onClick={async () => {
+                                    await connection.disconnect()
+                                    closeWalletStatusDialog()
+                                    openSelectProviderDialog()
+                                }}>
+                                {t('plugin_wallet_disconnect')}
+                            </Button>
+                        ) : null}
                         <Button
                             className={classNames(classes.actionButton)}
                             variant="contained"

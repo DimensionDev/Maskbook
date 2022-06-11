@@ -113,12 +113,11 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { loading } = useAsync(async () => {
         await Promise.all(
             protocols.map(async (protocol) => {
-                protocol.updateApr(chainId, web3 as Web3)
-                protocol.updateBalance(chainId, web3 as Web3, account)
+                await protocol.updateApr(chainId, web3 as Web3)
+                await protocol.updateBalance(chainId, web3 as Web3, account)
             }),
         )
     }, [chainId, web3, account, protocols])
-
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>

@@ -57,7 +57,21 @@ export default function Wallet() {
             return
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
+
+        if (payload) {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SIGN:
+                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                case EthereumMethodType.PERSONAL_SIGN:
+                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
+                    break
+                default:
+                    break
+            }
+        }
+
         const computedPayload = getPayloadConfig(payload)
+
         if (!computedPayload) return
 
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
@@ -69,17 +83,6 @@ export default function Wallet() {
             )
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
-        }
-
-        if (computedPayload) {
-            switch (payload.method) {
-                case EthereumMethodType.ETH_SIGN:
-                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                default:
-                    break
-            }
         }
     }, [location.search, location.pathname, chainId])
 

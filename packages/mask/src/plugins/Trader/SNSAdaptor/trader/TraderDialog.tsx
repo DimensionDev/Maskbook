@@ -114,12 +114,13 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chainId={chainId}
+                                /* @ts-ignore */
                                 setChainId={setChainId}
                                 classes={classes}
                                 chains={chainIdList}
                             />
                         </div>
-                        <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
+                        <Trader chainId={chainId} {...traderProps} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>

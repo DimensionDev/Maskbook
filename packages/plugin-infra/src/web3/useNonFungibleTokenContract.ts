@@ -3,21 +3,17 @@ import type { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-sh
 import type { Web3Helper } from '../web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection'
 
-export function useNonFungibleTokenContract<T extends NetworkPluginID>(
-    pluginID?: T,
-    address?: string,
-    id?: string,
-    options?: Web3Helper.Web3ConnectionOptions<T>,
+export function useNonFungibleTokenContract<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID: T,
+    address: string,
+    options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
-    type GetNonFungibleTokenContract = (
-        address: string,
-        id: string,
-        options?: Web3Helper.Web3ConnectionOptions<T>,
-    ) => Promise<NonFungibleTokenContract<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     const connection = useWeb3Connection(pluginID, options)
 
-    return useAsyncRetry(async () => {
-        if (!connection || !address || !id) return
-        return (connection.getNonFungibleTokenContract as GetNonFungibleTokenContract)(address, id)
-    }, [address, id, connection])
+    return useAsyncRetry<
+        NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
+    >(async () => {
+        if (!connection || !address) return
+        return connection.getNonFungibleTokenContract?.(address, options)
+    }, [address, connection, JSON.stringify(options)])
 }
