@@ -65,7 +65,7 @@ export function AddNFT(props: AddNFTProps) {
             return
         }
         if (!hub?.getNonFungibleAsset) {
-            setMessage('web3 error')
+            setMessage(t('plugin_avatar_web3_error'))
             return
         }
         let token: AllChainsNonFungibleToken
@@ -81,12 +81,12 @@ export function AddNFT(props: AddNFTProps) {
             token = await connection.getNonFungibleToken(address, tokenId)
         }
         if (!token) {
-            setMessage('cannot found asset')
+            setMessage(t('plugin_avatar_asset'))
             return
         }
 
         if (chainId && token && token.contract?.chainId !== chainId) {
-            setMessage('chain does not match.')
+            setMessage(t('plugin_avatar_chain_error'))
             return
         }
         if (!token || !isSameAddress(token?.metadata?.owner, account ?? _account)) {
@@ -124,14 +124,14 @@ export function AddNFT(props: AddNFTProps) {
                 <div className={classes.input}>
                     <InputBase
                         sx={{ width: '100%' }}
-                        placeholder="Input Contract Address"
+                        placeholder={t('plugin_avatar_input_token_address')}
                         onChange={(e) => onAddressChange(e.target.value)}
                     />
                 </div>
                 <div className={classes.input}>
                     <InputBase
                         sx={{ width: '100%' }}
-                        placeholder="Token ID"
+                        placeholder={t('plugin_avatar_input_token_id')}
                         onChange={(e) => onTokenIdChange(e.target.value)}
                     />
                 </div>

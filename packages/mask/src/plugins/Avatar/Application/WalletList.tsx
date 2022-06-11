@@ -185,7 +185,7 @@ export function AddressNames(props: AddressNamesProps) {
                         onConnectWallet,
                     )
                 ) : (
-                    <MenuItem key={uuid()}>
+                    <MenuItem key="Connect Wallet">
                         <Button fullWidth onClick={onConnectWallet} sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
                             {t.connect_your_wallet()}
                         </Button>
@@ -195,15 +195,15 @@ export function AddressNames(props: AddressNamesProps) {
                 {wallets
                     .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
                     ?.filter((x) => !isSameAddress(x.identity, account))
-                    .map((x) => (
-                        <div key={uuid()}>
+                    .map((x, i) => (
+                        <div key={i}>
                             {walletItem(selectedWallet, x.identity, false, true, true)}
                             <Divider key={uuid()} className={classes.divider} />
                         </div>
                     ))}
 
                 <MenuItem
-                    key={uuid()}
+                    key="Wallet Setting"
                     onClick={() => {
                         openPopupsWindow()
                         onClose()
