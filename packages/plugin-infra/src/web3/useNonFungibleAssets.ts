@@ -5,7 +5,6 @@ import { useWeb3Hub } from './useWeb3Hub'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
 import { useNetworkDescriptors } from './useNetworkDescriptors'
-import { useWhatChanged } from '@simbathesailor/use-what-changed'
 
 export function useNonFungibleAssets<
     S extends 'all' | void = void,
@@ -69,20 +68,17 @@ export function useNonFungibleAssets<
         }
     }, [iterator])
 
-    useWhatChanged([next, iterator, networks])
-
     // Execute once after next update
     useEffect(() => {
-        if (assets.length) return
         if (next) next()
-    }, [next, assets.length])
+    }, [next])
 
     const retry = useCallback(() => {
         setAssets([])
         setDone(false)
     }, [])
 
-    useEffect(() => retry(), [account, options?.account, retry])
+    useEffect(() => retry(), [account, options?.account, retry, options?.chainId])
 
     return { value: assets, next, done, retry, error }
 }

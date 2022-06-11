@@ -236,7 +236,8 @@ class Hub implements EVM_Hub {
                     indicator: currentPage,
                     chainId: options?.chainId ?? this.chainId,
                     size: this.sizePerPage,
-                chainId: this.chainId,})
+                })
+
                 yield* pageable.data
                 currentPage = currentPage + 1
                 if (pageable.data.length === 0) break

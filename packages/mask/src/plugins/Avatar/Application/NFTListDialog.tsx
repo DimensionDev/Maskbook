@@ -1,16 +1,15 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useCollectibles } from '../hooks/useCollectibles'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
-import type { BindingProof } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { AddressNames } from './WalletList'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
@@ -114,11 +113,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
 
-    const { collectibles, retry, error, loading } = useCollectibles(
-        selectedAccount,
-        selectedPluginId,
-        chainId as ChainId,
-    )
+    const {
+        value: collectibles = EMPTY_LIST,
+        done: loadFinish,
+        next: nextPage,
+        error: loadError,
+    } = useNonFungibleAssets(selectedPluginId, undefined, { chainId, account: selectedAccount })
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
@@ -215,7 +215,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
-            <Button className={classes.button} variant="text" onClick={retry}>
+            <Button className={classes.button} variant="text" onClick={nextPage}>
                 {t.retry()}
             </Button>
         </Box>
@@ -227,12 +227,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const NoNFTList = () => {
-        if (loading) {
+        if (!collectibles.length && !loadFinish && !loadError) {
             return LoadStatus
         }
         if (chainId === ChainId.Matic && tokensInList.length) return
         if (tokensInList.length === 0) return AddCollectible
-        if (error) {
+        if (loadError && !loadFinish && !collectibles.length) {
             return Retry
         }
         return
@@ -262,6 +262,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             tokenInfo={selectedToken}
                             onChange={onChangeToken}
                             children={NoNFTList()}
+                            nextPage={nextPage}
+                            loadError={!!loadError}
+                            loadFinish={loadFinish}
                         />
                     ) : (
                         <NFTList
@@ -271,6 +274,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             tokenInfo={selectedToken}
                             children={NoNFTList()}
                             onChangeChain={onChangeChain}
+                            nextPage={nextPage}
+                            loadError={!!loadError}
+                            loadFinish={loadFinish}
                         />
                     ))}
             </DialogContent>

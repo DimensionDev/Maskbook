@@ -1,7 +1,7 @@
-import { useImageChecker } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { ElementAnchor, RetryHint, useImageChecker } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton, Stack } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
 import type { AllChainsNonFungibleToken } from '../types'
@@ -55,11 +55,14 @@ interface NFTListPageProps {
     onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
     pluginId: NetworkPluginID
+    nextPage(): void
+    loadFinish: boolean
+    loadError?: boolean
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { onChange, tokenInfo, tokens, children, pluginId } = props
+    const { onChange, tokenInfo, tokens, children, pluginId, nextPage, loadError, loadFinish } = props
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
 
     const _onChange = (token: AllChainsNonFungibleToken) => {
@@ -83,6 +86,17 @@ export function NFTListPage(props: NFTListPageProps) {
                             />
                         ))}
                 </Box>
+                {loadError && !loadFinish && tokens.length && (
+                    <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                        <RetryHint hint={false} retry={nextPage} />
+                    </Stack>
+                )}
+                <ElementAnchor
+                    callback={() => {
+                        if (nextPage) nextPage()
+                    }}>
+                    {!loadFinish && tokens.length !== 0 && <LoadingBase />}
+                </ElementAnchor>
             </Box>
         </>
     )
