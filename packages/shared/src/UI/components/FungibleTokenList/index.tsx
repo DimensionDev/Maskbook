@@ -185,6 +185,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #endregion
 
     const getPlaceholder = () => {
+        if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0) return null
         if (Object.keys(fungibleTokensBalance).length === 0 || fungibleTokensBalanceLoading)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
         if (searchedTokenLoading)
