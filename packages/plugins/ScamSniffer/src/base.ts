@@ -6,7 +6,7 @@ export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
-    publisher: { name: { fallback: 'Scam Sniffer' }, link: 'https://scamsniffer.io/' },
+    publisher: { name: { fallback: 'Scam Sniffer' }, link: 'https://scamsniffer.io/?utm_source=mask-plugin' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },

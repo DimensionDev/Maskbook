@@ -11,6 +11,7 @@ import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/i18n_generated'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -78,6 +79,15 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         PluginScamRPC.enableAutoReport(checked)
     }
 
+    const openTwitter = () => {
+        const link = urlcat('https://twitter.com', '/:username', { username: result.twitterUsername })
+        openWindow(link)
+    }
+
+    const openSite = () => {
+        openWindow(result.externalUrl)
+    }
+
     useAsync(async () => {
         const enabled = await PluginScamRPC.isAutoReportEnabled()
         setAutoReport(enabled)
@@ -97,7 +107,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                         <ListItemText className={classes.highlight} primary={result.name} />
                     </ListItemButton>
                     {result.twitterUsername ? (
-                        <ListItemButton onClick={() => openWindow(`https://twitter.com/${result.twitterUsername}`)}>
+                        <ListItemButton onClick={() => openTwitter()}>
                             <ListItemIcon>
                                 <TwitterIcon className={classes.highlight} />
                             </ListItemIcon>
@@ -105,7 +115,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                         </ListItemButton>
                     ) : null}
                     {result.externalUrl ? (
-                        <ListItemButton onClick={() => openWindow(result.externalUrl)}>
+                        <ListItemButton onClick={() => openSite()}>
                             <ListItemIcon>
                                 <LinkIcon className={classes.highlight} />
                             </ListItemIcon>
