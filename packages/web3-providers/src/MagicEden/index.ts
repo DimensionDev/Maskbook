@@ -124,7 +124,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                       offerTokens: [],
                   }
                 : undefined,
-            creator: nft?.creators.length
+            creator: nft?.creators?.length
                 ? {
                       address: nft.creators[0].address,
                       nickname: 'Unknown',
