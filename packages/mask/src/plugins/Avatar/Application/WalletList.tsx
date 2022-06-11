@@ -270,8 +270,8 @@ function WalletUI(props: WalletUIProps) {
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
-                            ? domain ?? formatAddress(address, 4).toLowerCase()
-                            : formatAddress(address, 4).toLowerCase()}
+                            ? domain ?? formatAddress(address, 4)
+                            : formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
@@ -280,7 +280,7 @@ function WalletUI(props: WalletUIProps) {
                         variant="body2"
                         color="textSecondary"
                         className={classNames(classes.address, classes.walletAddress)}>
-                        {formatAddress(address, 4).toLowerCase()}
+                        {formatAddress(address, 4)}
                     </Typography>
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
