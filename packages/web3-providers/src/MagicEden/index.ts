@@ -88,7 +88,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
     }
 }
 
-export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, number> {
+export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getToken(address: string, tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
             urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),

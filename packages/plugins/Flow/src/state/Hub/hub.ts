@@ -10,8 +10,6 @@ import type {
     Pageable,
     GasOptionType,
     Transaction,
-    HubIndicator,
-    createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { createFungibleToken } from '../../helpers'
@@ -24,8 +22,6 @@ class Hub implements FlowHub {
         private account: string,
         private sourceType?: SourceType,
         private currencyType?: CurrencyType,
-        private sizePerPage = 50,
-        private maxPageSize = 25,
     ) {}
 
     async getFungibleTokensFromTokenList(
@@ -139,36 +135,6 @@ class Hub implements FlowHub {
     ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
-
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
-
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
-        }
-    }
-
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
-
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
-        }
-    }
 }
 
 export function createHub(
@@ -176,8 +142,6 @@ export function createHub(
     account = '',
     sourceType?: SourceType,
     currencyType?: CurrencyType,
-    sizePerPage?: number,
-    maxPageSize?: number,
 ) {
-    return new Hub(chainId, account, sourceType, currencyType, sizePerPage, maxPageSize)
+    return new Hub(chainId, account, sourceType, currencyType)
 }

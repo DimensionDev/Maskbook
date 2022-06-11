@@ -180,7 +180,7 @@ export namespace NonFungibleTokenAPI {
         getCollections?: (
             address: string,
             options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
     }
 }
 

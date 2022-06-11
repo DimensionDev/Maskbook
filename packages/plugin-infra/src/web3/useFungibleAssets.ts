@@ -8,6 +8,7 @@ import {
     isSameAddress,
     minus,
     NetworkPluginID,
+    pageableToIterator,
     toZero,
 } from '@masknet/web3-shared-base'
 import { useTokenConstants } from '@masknet/web3-shared-evm'
@@ -20,11 +21,11 @@ import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
 import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
 import { useFungibleToken, useNativeTokenBalance } from '../entry-web3'
 
-export function useFungibleAssets<
-    S extends 'all' | void = void,
-    T extends NetworkPluginID = NetworkPluginID,
-    Indicator = HubIndicator,
->(pluginID?: T, schemaType?: Web3Helper.SchemaTypeScope<S, T>, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
+export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
+    options?: Web3Helper.Web3HubOptionsScope<S, T>,
+) {
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, options?.chainId)
     const hub = useWeb3Hub(pluginID, options)
@@ -39,9 +40,17 @@ export function useFungibleAssets<
 
     return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
+
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
         const isBlockedToken = currySameAddress(blockedTokens.map((x) => x.address))
-        const assets = await asyncIteratorToArray(hub?.getAllFungibleAssets?.(account))
+        const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
+            if (!hub.getFungibleAssets) return
+            return hub.getFungibleAssets(account, {
+                indicator,
+                size: 50,
+            })
+        })
+        const assets = await asyncIteratorToArray(iterator)
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
 
         return filteredAssets

@@ -753,21 +753,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         options?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get all fungible assets of given account and ignore the pagination options. */
-    getAllFungibleAssets?: (
-        address: string,
-        options?: Web3HubOptions,
-    ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible assets of given account and ignore the pagination options. */
-    getAllNonFungibleAssets?: (
-        address: string,
-        options?: Web3HubOptions,
-    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible collections of given account and ignore the pagination options. */
-    getAllNonFungibleCollections?: (
-        address: string,
-        options?: Web3HubOptions,
-    ) => AsyncIterableIterator<NonFungibleTokenCollection<ChainId>>
+    /** Get non-fungible collections of given account with pagination supported */
+    getNonFungibleCollections?: (
+        account: string,
+        options?: Web3HubOptions
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (
         chainId: ChainId,

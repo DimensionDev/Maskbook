@@ -78,7 +78,7 @@ class Hub implements SolanaHub {
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId, number> | undefined,
+        options?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
         return MagicEden.getCollections(account, options)
     }
@@ -127,36 +127,6 @@ class Hub implements SolanaHub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
-    }
-
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
-
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
-        }
-    }
-
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
-
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
-        }
     }
 }
 

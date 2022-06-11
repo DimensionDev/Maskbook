@@ -357,5 +357,3 @@ export declare namespace Web3Helper {
         ? Web3HubAll
         : Hub<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['GasOption']>
 }
-
-// S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID

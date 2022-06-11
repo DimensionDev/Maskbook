@@ -1,9 +1,10 @@
 import {
+    createIndicator,
+    createNextIndicator,
     createPageable,
     HubOptions,
     NonFungibleAsset,
     NonFungibleToken,
-    Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
@@ -24,24 +25,21 @@ import type {
 } from './types'
 
 export * from './constants'
-export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM, string> {
-    getTokens = async (
-        from: string,
-        { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM, string> = {},
-    ): Promise<Pageable<NonFungibleToken<ChainId_EVM, SchemaType_EVM>, string>> => {
+export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM> {
+    getTokens = async (from: string, { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM> = {}) => {
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
                 owner: from,
-                pageKey: indicator === '' ? undefined : indicator,
+                pageKey: indicator?.id && indicator.id !== '' ? indicator.id : undefined,
             }),
         )
 
         const assets = res?.ownedNfts?.map((nft) =>
             createNftToken_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
         )
-        return createPageable(assets, indicator ?? '', res?.pageKey ?? '')
+        return createPageable(assets, createIndicator(indicator), createNextIndicator(indicator, res?.pageKey ?? ''))
     }
     getAsset = async (
         address: string,
@@ -75,10 +73,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 }
 
 export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FLOW, SchemaType_FLOW> {
-    getTokens = async (
-        from: string,
-        opts?: HubOptions<ChainId_FLOW>,
-    ): Promise<Pageable<NonFungibleToken<ChainId_FLOW, SchemaType_FLOW>>> => {
+    getTokens = async (from: string, opts?: HubOptions<ChainId_FLOW>) => {
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === opts?.chainId)
         const res = await fetchJSON<AlchemyResponse_FLOW>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
@@ -88,7 +83,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
         const assets = res?.nfts?.map((nft) =>
             createNftToken_FLOW((opts?.chainId as ChainId_FLOW | undefined) ?? ChainId_FLOW.Mainnet, nft),
         )
-        return createPageable(assets, opts?.indicator ?? 0)
+        return createPageable(assets, createIndicator(opts?.indicator))
     }
     getAsset = async (
         address: string,

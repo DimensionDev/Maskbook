@@ -1,4 +1,4 @@
-import type { HubIndicator } from '../specs'
+import type { HubIndicator, Pageable } from '../specs'
 
 export function createIndicator(indicator?: HubIndicator, id?: string) {
     const index = indicator?.index ?? 0
@@ -36,5 +36,24 @@ export function createPageable<Item, Indicator = HubIndicator>(
     return {
         data,
         indicator,
+    }
+}
+
+export async function* pageableToIterator<T>(
+    getPageable: (indicator?: HubIndicator) => Promise<Pageable<T> | void>,
+    {
+        maxSize = 25,
+    }: {
+        maxSize?: number
+    } = {},
+) {
+    let indicator = createIndicator()
+
+    for (let i = 0; i < maxSize; i += 1) {
+        const pageable = await getPageable(indicator)
+        if (!pageable) return
+        yield* pageable.data
+        if (!pageable.indicator) return
+        indicator = pageable.nextIndicator as HubIndicator
     }
 }

@@ -5,7 +5,6 @@ import {
     EthereumWeb3,
     MetaSwap,
     OpenSea,
-    NFTScan,
     Rarible,
     TokenList,
     Zerion,
@@ -28,7 +27,6 @@ import {
     attemptUntil,
     createPredicate,
     createIndicator,
-    HubIndicator,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -51,8 +49,6 @@ class Hub implements EVM_Hub {
         private account?: string,
         private sourceType?: SourceType,
         private currencyType?: CurrencyType,
-        private sizePerPage = 50,
-        private maxPageSize = 25,
     ) {}
 
     async getFungibleTokensFromTokenList(
@@ -118,9 +114,10 @@ class Hub implements EVM_Hub {
         const providers = {
             [SourceType.OpenSea]: OpenSea,
             [SourceType.Rarible]: Rarible,
+            [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
-        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [OpenSea, Rarible]
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [Alchemy_EVM, OpenSea, Rarible]
         return attemptUntil(
             filteredProviders.map((x) => () => x.getAsset(address, tokenId, options)),
             undefined,
@@ -134,9 +131,10 @@ class Hub implements EVM_Hub {
         const providers = {
             [SourceType.OpenSea]: OpenSea,
             [SourceType.Rarible]: Rarible,
+            [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
-        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [OpenSea, Rarible]
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [Alchemy_EVM, OpenSea, Rarible]
         return attemptUntil(
             filteredProviders.map((x) => () => x.getTokens(account, { chainId: this.chainId, ...options })),
             createPageable([], createIndicator(options?.indicator)),
@@ -206,70 +204,8 @@ class Hub implements EVM_Hub {
         const expectedChainId = options?.chainId ?? chainId
         return DeBank.getTransactions(account, { chainId: expectedChainId })
     }
-
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
-
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
-        }
-    }
-
-    async *getAllNonFungibleAssets(
-        address: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        if (options?.sourceType === SourceType.Alchemy_EVM) {
-            let api_keys = ''
-            while (1) {
-                const pageable = await this.getNonFungibleAssets(address, {
-                    indicator: api_keys,
-                    chainId: options?.chainId,
-                    sourceType: options?.sourceType,
-                })
-                api_keys = (pageable.nextIndicator as string) ?? ''
-
-                yield* pageable.data
-
-                if (pageable.data.length === 0 || !api_keys) return
-            }
-            return
-        }
-
-    }
-
-    async *getAllNonFungibleCollections(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleCollections(address, {
-                indicator: createIndicator(),
-                size: this.sizePerPage,
-                chainId: options?.chainId,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
-    }
 }
 
-export function createHub(
-    chainId?: ChainId,
-    account?: string,
-    sourceType?: SourceType,
-    currencyType?: CurrencyType,
-    sizePerPage?: number,
-    maxPageSize?: number,
-) {
-    return new Hub(chainId, account, sourceType, currencyType, sizePerPage, maxPageSize)
+export function createHub(chainId?: ChainId, account?: string, sourceType?: SourceType, currencyType?: CurrencyType) {
+    return new Hub(chainId, account, sourceType, currencyType)
 }
