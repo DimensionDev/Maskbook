@@ -38,10 +38,10 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedNetwork: Web3Helper.NetworkDescriptorAll | null
+    selectedChain: Web3Helper.NetworkDescriptorAll | null
 }
 
-export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
+export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
     const account = useAccount()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens()
@@ -60,8 +60,8 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         return uniqBy(
             [...trustedOwnNonFungibleTokens, ...value],
             (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
-        )
-    }, [value.length, trustedNonFungibleTokens.length])
+        ).filter((x) => (selectedChain ? x.chainId === selectedChain.chainId : true))
+    }, [value.length, trustedNonFungibleTokens.length, selectedChain?.chainId])
 
     useEffect(() => {
         if (next) next()
