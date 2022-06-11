@@ -16,7 +16,6 @@ import {
     useAccount,
     useNonFungibleCollections,
     useNonFungibleTokenContract,
-    useBalance,
     useNonFungibleTokenBalance,
 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'

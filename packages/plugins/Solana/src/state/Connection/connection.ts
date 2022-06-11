@@ -359,7 +359,7 @@ class Connection implements BaseConnection {
             asset?.collection,
         )
     }
-    getNonFungibleTokenOwnship(
+    getNonFungibleTokenOwnership(
         address: string,
         owner: string,
         tokenId: string,

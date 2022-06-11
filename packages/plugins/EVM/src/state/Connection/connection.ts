@@ -313,7 +313,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    async getNonFungibleTokenOwnship(
+    async getNonFungibleTokenOwnership(
         address: string,
         owner: string,
         tokenId: string,
@@ -359,9 +359,7 @@ class Connection implements EVM_Connection {
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
-
-            // process uri
-            let uri = await contract?.methods.uri(tokenId).call()
+            const uri = await contract?.methods.uri(tokenId).call()
             if (!uri) throw new Error('Failed to read metadata uri.')
 
             const response = await fetchJSON<ERC1155Metadata>(processURI(uri), undefined, {

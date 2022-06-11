@@ -1,5 +1,3 @@
-import { attempt, isError } from 'lodash-unified'
-
 export function createPredicate<T, P extends T>(candidates: T[]) {
     return (candidate?: unknown): candidate is P => !!candidate && candidates.includes(candidate as T)
 }

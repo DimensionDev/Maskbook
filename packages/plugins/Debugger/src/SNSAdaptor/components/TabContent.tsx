@@ -391,7 +391,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                         <TableCell>
                             <FormControl
                                 component="form"
-                                onSubmit={async (ev: FormEvent<any>) => {
+                                onSubmit={async (ev: FormEvent<HTMLFormElement>) => {
                                     ev.preventDefault()
                                     const formData = new FormData(ev.currentTarget)
                                     const address = formData.get('address') as string

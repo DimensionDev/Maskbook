@@ -17,7 +17,6 @@ import {
     createNonFungibleTokenCollection,
     createNonFungibleToken,
     isSameAddress,
-    SourceType,
     createIndicator,
     createNextIndicator,
 } from '@masknet/web3-shared-base'

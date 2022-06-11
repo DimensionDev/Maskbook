@@ -12,8 +12,6 @@ import {
     Pageable,
     SourceType,
     Transaction,
-    HubIndicator,
-    createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
