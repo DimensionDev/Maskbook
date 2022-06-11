@@ -179,7 +179,7 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
     }
 }

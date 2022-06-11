@@ -11,7 +11,7 @@ export function useFungibleTokenBalance<S extends 'all' | void = void, T extends
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!connection) return '0'
-        return connection.getFungibleTokenBalance(address ?? '')
-    }, [address, connection])
+        if (!connection || !address) return '0'
+        return connection.getFungibleTokenBalance(address ?? '', options)
+    }, [address, connection, JSON.stringify(options)])
 }

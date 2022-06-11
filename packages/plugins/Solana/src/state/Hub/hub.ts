@@ -1,17 +1,17 @@
 import { CoinGecko, MagicEden } from '@masknet/web3-providers'
 import {
-    FungibleToken,
-    NonFungibleToken,
-    SourceType,
-    FungibleAsset,
-    HubOptions,
-    NonFungibleAsset,
-    Pageable,
-    GasOptionType,
     CurrencyType,
-    Transaction,
-    NonFungibleTokenCollection,
+    FungibleAsset,
+    FungibleToken,
+    GasOptionType,
+    HubOptions,
     isSameAddress,
+    NonFungibleAsset,
+    NonFungibleToken,
+    NonFungibleTokenCollection,
+    Pageable,
+    SourceType,
+    Transaction,
     HubIndicator,
     createIndicator,
 } from '@masknet/web3-shared-base'
@@ -33,7 +33,7 @@ class Hub implements SolanaHub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return SolanaRPC.getAllSplTokens()
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -71,14 +71,14 @@ class Hub implements SolanaHub {
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         try {
-            return SolanaRPC.getNonFungibleAssets(account, options)
-        } catch {
             return MagicEden.getTokens(account, options)
+        } catch {
+            return SolanaRPC.getNonFungibleAssets(account, options)
         }
     }
     getNonFungibleCollections(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
+        options?: HubOptions<ChainId, number> | undefined,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
         return MagicEden.getCollections(account, options)
     }
@@ -111,7 +111,7 @@ class Hub implements SolanaHub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
-        throw new Error('Method not implemented.')
+        return []
     }
     getNonFungibleTokenIconURLs(
         chainId: ChainId,

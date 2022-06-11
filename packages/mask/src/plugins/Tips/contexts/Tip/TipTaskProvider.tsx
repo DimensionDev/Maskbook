@@ -1,11 +1,11 @@
-import { useChainId, useFungibleToken, useNonFungibleTokenContract, useAccount } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { GasConfig, SchemaType } from '@masknet/web3-shared-evm'
+import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
-import { TargetChainIdContext } from '../TargetChainIdContext'
+import { TargetRuntimeContext } from '../TargetRuntimeContext'
 import { ContextOptions, TipContext } from './TipContext'
 import { useNftTip } from './useNftTip'
 import { useTokenTip } from './useTokenTip'
@@ -15,39 +15,28 @@ interface Props {
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
-    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
     const [recipient, setRecipient] = useState('')
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const [erc721Address, setErc721Address] = useState<string>('')
-    const { value: nativeTokenDetailed = null } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const chainId = useChainId()
+    const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
+    const { value: nativeTokenDetailed = null } = useFungibleToken(pluginId, undefined, {
         chainId: targetChainId,
     })
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
-    const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
+    const [nonFungibleTokenId, setNonFungibleTokenId] = useState<ContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
 
-    const { value: erc721Contract } = useNonFungibleTokenContract(
-        NetworkPluginID.PLUGIN_EVM,
-        erc721Address,
-        SchemaType.ERC721,
-        {
-            account,
-        },
-    )
+    const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
 
     useEffect(() => {
         setTipType(TipType.Token)
     }, [targetChainId])
 
     useEffect(() => {
-        setRecipient(task.to || '')
-    }, [task.to])
-
-    useEffect(() => {
-        if (recipient || task.addresses.length === 0) return
+        const selected = recipient && task.addresses.includes(recipient)
+        if (selected || task.addresses.length === 0) return
         setRecipient(task.addresses[0])
     }, [recipient, task.addresses])
 
@@ -56,8 +45,14 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         setToken(nativeTokenDetailed)
     }, [nativeTokenDetailed])
     const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
-    const tokenTipTuple = useTokenTip(recipient, token, amount, gasConfig)
-    const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Address)
+    const connectionOptions =
+        pluginId === NetworkPluginID.PLUGIN_EVM
+            ? {
+                  overrides: gasConfig,
+              }
+            : undefined
+    const tokenTipTuple = useTokenTip(pluginId, recipient, token, amount, connectionOptions)
+    const nftTipTuple = useNftTip(pluginId, recipient, nonFungibleTokenId, nonFungibleTokenAddress, connectionOptions)
 
     const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
     const isSending = sendTipTuple[0]
@@ -66,8 +61,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const contextValue = useMemo(() => {
         const reset = () => {
             setAmount('')
-            setErc721TokenId(null)
-            setErc721Address('')
+            setNonFungibleTokenId(null)
+            setNonFungibleTokenAddress('')
         }
 
         return {
@@ -81,11 +76,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             setToken,
             amount,
             setAmount,
-            erc721TokenId,
-            setErc721TokenId,
-            erc721Contract: erc721Contract || null,
-            erc721Address,
-            setErc721Address,
+            nonFungibleTokenId,
+            setNonFungibleTokenId,
+            nonFungibleTokenContract: nonFungibleTokenContract || null,
+            nonFungibleTokenAddress,
+            setNonFungibleTokenAddress,
             sendTip,
             isSending,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
@@ -99,9 +94,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         task.addresses,
         tipType,
         amount,
-        erc721TokenId,
-        erc721Contract,
-        erc721Address,
+        nonFungibleTokenId,
+        nonFungibleTokenContract,
+        nonFungibleTokenAddress,
         token,
         sendTip,
         isSending,

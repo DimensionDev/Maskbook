@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { ReactElement, useCallback } from 'react'
 import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -7,7 +7,7 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useI18N } from '../../../utils'
+import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -17,11 +17,15 @@ import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleTab } from '../types'
-import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
+import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { CollectibleProviderIcon } from './CollectibleProviderIcon'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { findIndex } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -114,6 +118,8 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan]
+
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
@@ -122,31 +128,26 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    // // #region sync with settings
-    // const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
-    // const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-    //     setProvider(option.value as NonFungibleAssetProvider)
-    // }, [])
-    // // #endregion
+    // #region sync with settings
+    const collectibleProviderOptions = getEnumAsArray(SourceType)
 
-    // // #region provider switcher
-    // const CollectibleProviderSwitcher = useSwitcher(
-    //     provider,
-    //     setProvider,
-    //     getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
-    //     resolveCollectibleProviderName,
-    //     true,
-    // )
-    // // #endregion
+    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
+        setProvider(option.value as SourceType)
+    }, [])
+    // #endregion
 
-    if (!asset.value || !token)
+    // #region provider switcher
+    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
+    // #endregion
+
+    if (!asset.value?.id || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on {resolveCollectibleProviderName(provider)}.
+                    Failed to load your collectible on {resolveSourceName(provider)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
-                    {/* <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box> */}
+                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button
                             variant="contained"
@@ -274,21 +275,20 @@ export function Collectible(props: CollectibleProps) {
                     {/* flex to make foot menu right */}
                     <div />
                     <div className={classes.footMenu}>
-                        {/* <FootnoteMenu
+                        <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
                                     <>
                                         <CollectibleProviderIcon provider={x.value} />
-                                        <span className={classes.footName}>
-                                            {resolveCollectibleProviderName(x.value)}
-                                        </span>
+                                        <span className={classes.footName}>{resolveSourceName(x.value)}</span>
                                     </>
                                 ),
                                 value: x.value,
+                                disabled: !supportedProvider.includes(x.value),
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}
-                        /> */}
+                        />
                         <ArrowDropDownIcon />
                     </div>
                 </CardActions>

@@ -20,8 +20,15 @@ export function formatAddress(address: string, size = 0) {
     if (size === 0 || size >= 22) return address
     return `${address.slice(0, Math.max(0, size))}...${address.slice(-size)}`
 }
+export function formatTokenId(id: string) {
+    return id
+}
 export function isValidAddress(address?: string) {
-    return !!(address && Web3.PublicKey.isOnCurve(bs58.decode(address)))
+    try {
+        return address?.length === 44 && Web3.PublicKey.isOnCurve(bs58.decode(address))
+    } catch {
+        return false
+    }
 }
 
 export function isValidChainId(chainId: number) {

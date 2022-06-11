@@ -345,7 +345,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getHistory(
+    async getEvents(
         address: string,
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},

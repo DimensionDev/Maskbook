@@ -1,9 +1,11 @@
 import {
+    Alchemy_EVM,
     CoinGecko,
     DeBank,
     EthereumWeb3,
     MetaSwap,
     OpenSea,
+    NFTScan,
     Rarible,
     TokenList,
     Zerion,
@@ -37,8 +39,8 @@ import {
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
-    isNativeTokenAddress,
     SchemaType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
@@ -220,19 +222,27 @@ class Hub implements EVM_Hub {
         }
     }
 
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        let indicator: HubIndicator = createIndicator()
+    async *getAllNonFungibleAssets(
+        address: string,
+        options?: HubOptions<ChainId> | undefined,
+    ): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        if (options?.sourceType === SourceType.Alchemy_EVM) {
+            let api_keys = ''
+            while (1) {
+                const pageable = await this.getNonFungibleAssets(address, {
+                    indicator: api_keys,
+                    chainId: options?.chainId,
+                    sourceType: options?.sourceType,
+                })
+                api_keys = (pageable.nextIndicator as string) ?? ''
 
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator,
-                size: this.sizePerPage,
-            })
+                yield* pageable.data
 
-            yield* pageable.data
-            if (!pageable.indicator) return
-            indicator = pageable.nextIndicator as HubIndicator
+                if (pageable.data.length === 0 || !api_keys) return
+            }
+            return
         }
+
     }
 
     async *getAllNonFungibleCollections(

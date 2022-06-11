@@ -1,4 +1,4 @@
-import { Card, Link, useTheme } from '@mui/material'
+import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Wallet, NonFungibleAssetProvider, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
@@ -63,9 +63,8 @@ export interface CollectibleCardProps {
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, provider, readonly, renderOrder } = props
+    const { wallet, token, readonly, renderOrder } = props
     const { classes } = useStyles()
-    const theme = useTheme()
     return (
         <Link target="_blank" rel="noopener noreferrer" className={classes.linkWrapper}>
             <div className={classes.blocker} />

@@ -1,14 +1,17 @@
 import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../shared'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { usePublicWallets } from '../hooks/usePublicWallets'
@@ -73,14 +76,28 @@ export const TipButton: FC<Props> = ({
         return Services.Identity.queryPersonaByProfile(receiver)
     }, [receiver])
 
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const {
         value: isAccountVerified,
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(() => {
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return Promise.resolve(true)
         if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
         return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
-    }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
+    }, [pluginId, receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
+    const visitingIdentity = useCurrentVisitingIdentity()
+
+    const isVisitingUser = visitingIdentity.identifier?.userId === receiver?.userId
+    const isRuntimeAvailable = useMemo(() => {
+        switch (pluginId) {
+            case NetworkPluginID.PLUGIN_EVM:
+                return true
+            case NetworkPluginID.PLUGIN_SOLANA:
+                return isVisitingUser
+        }
+        return false
+    }, [pluginId, isVisitingUser])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -89,12 +106,21 @@ export const TipButton: FC<Props> = ({
     }, [])
 
     const publicWallets = usePublicWallets(receiver || undefined)
-    const allAddresses = useMemo(() => uniq([...publicWallets, ...addresses]), [publicWallets, addresses])
+    const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(visitingIdentity)
+    const allAddresses = useMemo(() => {
+        switch (pluginId) {
+            case NetworkPluginID.PLUGIN_EVM:
+                return uniq([...publicWallets, ...addresses])
+            case NetworkPluginID.PLUGIN_SOLANA:
+                return socialAddressList.filter((x) => x.networkSupporterPluginID === pluginId).map((x) => x.address)
+        }
+        return EMPTY_LIST
+    }, [pluginId, publicWallets, addresses, socialAddressList])
 
     const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0
+    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
 
-    const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
+    const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
@@ -107,12 +133,20 @@ export const TipButton: FC<Props> = ({
         },
         [disabled, allAddresses, receiver?.userId],
     )
+
+    useEffect(() => {
+        PluginNextIDMessages.tipTaskUpdate.sendToLocal({
+            recipientSnsId: receiver?.userId,
+            addresses: allAddresses,
+        })
+    }, [receiver?.userId, allAddresses])
+
     const dom = (
         <div
             className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
             {...rest}
             role="button"
-            onClick={sendTip}>
+            onClick={createTipTask}>
             <TipCoin viewBox="0 0 24 24" />
             {children}
         </div>

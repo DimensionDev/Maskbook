@@ -13,6 +13,9 @@
         "pnpm-lock.yaml"
     ],
     "words": [
+        "raydium",
+        "blockhash",
+        "sysvar",
         "aave",
         "adai",
         "addrs",
@@ -135,6 +138,7 @@
         "multicall",
         "multihop",
         "newsfeed",
+        "nftapi",
         "nftavatar",
         "nftrss",
         "nftscan",

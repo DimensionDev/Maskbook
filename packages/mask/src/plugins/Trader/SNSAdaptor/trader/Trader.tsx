@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -10,8 +12,8 @@ import {
     useTokenConstants,
     UST,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useUnmount, useUpdateEffect } from 'react-use'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
+import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -25,10 +27,8 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
-import { useGasConfig } from './hooks/useGasConfig'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
 
