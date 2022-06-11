@@ -12,6 +12,8 @@ import {
     Transaction,
     NonFungibleTokenCollection,
     isSameAddress,
+    HubIndicator,
+    createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../../messages'
@@ -128,28 +130,32 @@ class Hub implements SolanaHub {
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 }

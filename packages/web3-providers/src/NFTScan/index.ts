@@ -1,11 +1,15 @@
 import urlcat from 'urlcat'
 import {
+    createIndicator,
+    createNextIndicator,
     createNonFungibleToken,
     createNonFungibleTokenCollection,
     createNonFungibleTokenContract,
     createNonFungibleTokenMetadata,
     createPageable,
+    HubIndicator,
     HubOptions,
+    NonFungibleAsset,
 } from '@masknet/web3-shared-base'
 import { ChainId, resolveIPFSLinkFromURL, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
@@ -94,6 +98,10 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
 }
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getAsset(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+        throw new Error('Method not implemented.')
+    }
+
     async getToken(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
@@ -103,7 +111,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number
@@ -111,15 +119,16 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: indicator + 1,
+            page_index: (indicator?.index ?? 0) + 1,
             user_address: from,
         })
-        if (!response?.data) return createPageable([], 0)
+        if (!response?.data) return createPageable([], createIndicator(indicator))
         const total = response.data.total
+        const rest = total - ((indicator?.index ?? 0) + 1) * size
         return createPageable(
             response.data.content.map(createERC721TokenAsset) ?? [],
-            indicator,
-            total - (indicator + 1) * size > 0 ? indicator + 1 : undefined,
+            createIndicator(indicator),
+            rest > 0 ? createNextIndicator(indicator) : undefined,
         )
     }
 }

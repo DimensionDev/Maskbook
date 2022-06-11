@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { HubIndicator, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
@@ -8,7 +8,7 @@ import { useWeb3Hub } from './useWeb3Hub'
 export function useNonFungibleAssets<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
-    Indicator = number,
+    Indicator = HubIndicator,
 >(
     pluginID?: T,
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,

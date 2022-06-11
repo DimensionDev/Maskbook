@@ -4,6 +4,7 @@ import {
     CurrencyType,
     currySameAddress,
     formatBalance,
+    HubIndicator,
     isSameAddress,
     minus,
     NetworkPluginID,
@@ -22,7 +23,7 @@ import { useFungibleToken, useNativeTokenBalance } from '../entry-web3'
 export function useFungibleAssets<
     S extends 'all' | void = void,
     T extends NetworkPluginID = NetworkPluginID,
-    Indicator = number,
+    Indicator = HubIndicator,
 >(pluginID?: T, schemaType?: Web3Helper.SchemaTypeScope<S, T>, options?: Web3Helper.Web3HubOptionsScope<S, T>) {
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, options?.chainId)

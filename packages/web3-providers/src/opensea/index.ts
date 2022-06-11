@@ -16,6 +16,8 @@ import {
     TokenType,
     HubOptions,
     createNonFungibleTokenContract,
+    createIndicator,
+    createNextIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types'
@@ -318,11 +320,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createNFTAsset(chainId, response)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(
             urlcat('/api/v1/assets', {
                 owner: from,
-                offset: indicator * size,
+                offset: (indicator?.index ?? 0) * size,
                 limit: size,
             }),
             chainId,
@@ -336,7 +338,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             )
             .map((asset: OpenSeaResponse) => createNFTToken(chainId, asset))
 
-        return createPageable(tokens, indicator, tokens.length === size ? indicator + 1 : undefined)
+        return createPageable(
+            tokens,
+            createIndicator(indicator),
+            tokens.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
     async getHistory(
@@ -381,18 +387,18 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getCollections(
         address: string,
-        { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {
                 asset_owner: address,
-                offset: indicator * size,
+                offset: (indicator?.index ?? 0) * size,
                 limit: size,
             }),
             chainId,
             this._apiKey,
         )
-        if (!response) return createPageable([], 0)
+        if (!response) return createPageable([], createIndicator(indicator))
 
         const collections: Array<NonFungibleTokenCollection<ChainId>> =
             response
@@ -410,6 +416,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     createdAt: getUnixTime(new Date(x.created_date)),
                 }))
                 .filter((x) => x.address) ?? []
-        return createPageable(collections, indicator, collections.length === size ? indicator + 1 : undefined)
+
+        return createPageable(
+            collections,
+            createIndicator(indicator),
+            collections.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 }

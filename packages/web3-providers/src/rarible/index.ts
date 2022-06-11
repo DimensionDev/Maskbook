@@ -17,6 +17,9 @@ import {
     createNonFungibleTokenCollection,
     createNonFungibleToken,
     isSameAddress,
+    SourceType,
+    createIndicator,
+    createNextIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import {
@@ -61,7 +64,7 @@ function createERC721TokenFromAsset(
     tokenAddress: string,
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
-): NonFungibleToken<ChainId, SchemaType.ERC721> {
+): NonFungibleToken<ChainId, SchemaType> {
     const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
     return createNonFungibleToken(
         ChainId.Mainnet,
@@ -163,7 +166,7 @@ function _getAsset(address: string, tokenId: string) {
     })
 }
 
-export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
+export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const asset = await _getAsset(address, tokenId)
         if (!asset) return
@@ -175,7 +178,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
     }
 
-    async getTokens(from: string, { indicator = '', size = 50 }: HubOptions<ChainId, string> = {}) {
+    async getTokens(from: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
             owner: from,
             size,
@@ -187,14 +190,13 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
 
         const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
-        if (!asset) return createPageable([], indicator)
+        if (!asset) return createPageable([], createIndicator(indicator, ''))
 
         const items =
             asset.items
                 .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => isSameAddress(x.ownerId, from))
-                .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
-        return createPageable(items, indicator, asset.continuation)
+                .filter((x) => isSameAddress(x.ownerId, from)) ?? []
+        return createPageable(items, createIndicator(indicator), createNextIndicator(indicator, asset.continuation))
     }
 
     async getOffers(
@@ -260,8 +262,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     id: asset.tokenId,
                     decimals: 0,
                     chainId: ChainId.Mainnet,
-                    // symbol: '1',
-                    // schema: SchemaType.ERC721,
                     address: tokenAddress,
                     type: TokenType.NonFungible,
                 } as FungibleToken<ChainId, SchemaType>,

@@ -9,7 +9,7 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<Item, Indicator = number> {
+export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
     indicator: Indicator
     /** the indicator of the next page */
@@ -693,7 +693,14 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId, Indicator = number> {
+export interface HubIndicator {
+    /** The id of the page. */
+    id: string
+    /** The index number of the page. */
+    index: number
+}
+
+export interface HubOptions<ChainId, Indicator = HubIndicator> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */

@@ -1,4 +1,13 @@
-import { CoinGecko, DeBank, EthereumWeb3, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import {
+    CoinGecko,
+    DeBank,
+    EthereumWeb3,
+    MetaSwap,
+    OpenSea,
+    Rarible,
+    TokenList,
+    Zerion,
+} from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -14,6 +23,10 @@ import {
     currySameAddress,
     CurrencyType,
     Transaction,
+    attemptUntil,
+    createPredicate,
+    createIndicator,
+    HubIndicator,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -78,30 +91,54 @@ class Hub implements EVM_Hub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        const { indicator, sourceType } = options ?? {}
+
         // only the first page is available
-        if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
-        try {
-            return await DeBank.getAssets(account, { chainId: this.chainId, ...options })
-        } catch {
-            return Zerion.getAssets(account, { chainId: this.chainId, ...options })
+        if ((indicator ?? 0) > 0) return createPageable([], createIndicator(options?.indicator))
+
+        const providers = {
+            [SourceType.DeBank]: DeBank,
+            [SourceType.Zerion]: Zerion,
         }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [DeBank, Zerion]
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getAssets(account, { chainId: this.chainId, ...options })),
+            createPageable([], createIndicator(options?.indicator)),
+        )
     }
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        return OpenSea.getAsset(address, tokenId, options)
+        const { sourceType } = options ?? {}
+        const providers = {
+            [SourceType.OpenSea]: OpenSea,
+            [SourceType.Rarible]: Rarible,
+        }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [OpenSea, Rarible]
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getAsset(address, tokenId, options)),
+            undefined,
+        )
     }
-    getNonFungibleAssets(
+    async getNonFungibleAssets(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        try {
-            return OpenSea.getTokens(account, { chainId: this.chainId, ...options })
-        } catch {
-            return NFTScan.getTokens(account, { chainId: this.chainId, ...options })
+        const { sourceType } = options ?? {}
+        const providers = {
+            [SourceType.OpenSea]: OpenSea,
+            [SourceType.Rarible]: Rarible,
         }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [OpenSea, Rarible]
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getTokens(account, { chainId: this.chainId, ...options })),
+            createPageable([], createIndicator(options?.indicator)),
+        )
     }
     getNonFungibleCollections(
         account: string,
@@ -169,28 +206,32 @@ class Hub implements EVM_Hub {
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 
@@ -200,7 +241,7 @@ class Hub implements EVM_Hub {
     ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleCollections(address, {
-                indicator: i,
+                indicator: createIndicator(),
                 size: this.sizePerPage,
                 chainId: options?.chainId,
             })

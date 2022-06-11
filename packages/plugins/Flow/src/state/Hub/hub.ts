@@ -1,4 +1,4 @@
-import type {
+import {
     FungibleToken,
     NonFungibleToken,
     SourceType,
@@ -9,6 +9,8 @@ import type {
     Pageable,
     GasOptionType,
     Transaction,
+    HubIndicator,
+    createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
 import { createFungibleToken } from '../../helpers'
@@ -136,28 +138,32 @@ class Hub implements FlowHub {
     }
 
     async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 
     async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
+        let indicator: HubIndicator = createIndicator()
+
         for (let i = 0; i < this.maxPageSize; i += 1) {
             const pageable = await this.getNonFungibleAssets(address, {
-                indicator: i,
+                indicator,
                 size: this.sizePerPage,
             })
 
             yield* pageable.data
-
-            if (pageable.data.length === 0) return
+            if (!pageable.indicator) return
+            indicator = pageable.nextIndicator as HubIndicator
         }
     }
 }
