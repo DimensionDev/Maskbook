@@ -7,7 +7,7 @@ import {
     NonFungibleTokenContract,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, createNativeToken, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
 import {
     BlockResponse,
     Connection as SolConnection,
@@ -159,7 +159,8 @@ class Connection implements BaseConnection {
         await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
     getNativeToken(options?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const token = createNativeToken(options?.chainId ?? ChainId.Mainnet)
+        return Promise.resolve(token)
     }
     async getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
         if (!options?.account) return '0'
@@ -293,11 +294,22 @@ class Connection implements BaseConnection {
         return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
-    getFungibleToken(
+    async getFungibleToken(
         address: string,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        if (!address || isNativeTokenAddress(address)) {
+            return this.getNativeToken()
+        }
+        const splTokens = await SolanaRPC.getAllSplTokens()
+        const token = splTokens.find((x) => x.address === address)
+        return (
+            token ??
+            ({
+                address,
+                chainId: options?.chainId,
+            } as FungibleToken<ChainId, SchemaType>)
+        )
     }
     getNonFungibleToken(
         address: string,
