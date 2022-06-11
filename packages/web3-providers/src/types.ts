@@ -131,7 +131,7 @@ export namespace FungibleTokenAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = number | string> {
         getAsset?: (
             address: string,
             tokenId: string,
@@ -178,7 +178,7 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
     }
 }

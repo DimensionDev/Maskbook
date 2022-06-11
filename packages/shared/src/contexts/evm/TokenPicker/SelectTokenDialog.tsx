@@ -1,8 +1,8 @@
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
@@ -40,15 +40,15 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
 
 export interface PickTokenOptions {
     disableNativeToken?: boolean
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
     disableSearchBar?: boolean
     keyword?: string
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
-    onSubmit?(token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>): void
+    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
@@ -56,6 +56,7 @@ export interface SelectTokenDialogProps extends PickTokenOptions {
     onClose?(): void
 }
 
+const isDashboard = isDashboardPage()
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
     chainId,
@@ -70,14 +71,15 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     title,
 }) => {
     const t = useSharedI18N()
-    const isDashboard = location.href.includes('dashboard.html')
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+
+    const nativeTokenAddress = useNativeTokenAddress(pluginId)
 
     return (
         <InjectedDialog
@@ -92,7 +94,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
-                        disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
+                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
                     chainId={chainId}
                     disableSearch={disableSearchBar}

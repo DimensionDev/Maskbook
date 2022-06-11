@@ -114,6 +114,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chainId={chainId}
+                                /* @ts-ignore */
                                 setChainId={setChainId}
                                 classes={classes}
                                 chains={chainIdList}

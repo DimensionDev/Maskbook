@@ -74,7 +74,7 @@ export class DeBankAPI
     async getAssets(
         address: string,
         options?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, number>> {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),

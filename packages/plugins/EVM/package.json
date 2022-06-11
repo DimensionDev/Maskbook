@@ -15,6 +15,7 @@
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
+    "@masknet/web3-shared-flow":"workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
