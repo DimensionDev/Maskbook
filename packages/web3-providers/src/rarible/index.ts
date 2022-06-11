@@ -6,7 +6,7 @@ import {
     CurrencyType,
     HubOptions,
     FungibleToken,
-    NonFungibleAsset as NonFungibleAsset,
+    NonFungibleAsset,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
