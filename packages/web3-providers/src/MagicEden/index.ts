@@ -45,6 +45,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
     return {
         id: token.mintAddress,
         chainId,
+        ownerId: token.owner,
         type: TokenType.NonFungible,
         schema: SchemaType.NonFungible,
         tokenId: token.mintAddress,
@@ -60,7 +61,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
-            address: '',
+            address: token.mintAddress,
             name: collection.name,
             symbol: collection.symbol,
         },
@@ -173,6 +174,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     }
 
     async getTokens(owner: string, { indicator }: HubOptions<ChainId> = {}) {
+        if ((indicator?.index ?? 0) > 0) return createPageable([], createIndicator(indicator))
+
         const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,
@@ -195,11 +198,12 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     description: '',
                     imageURL: toImage(token.img),
                     mediaURL: toImage(token.img),
+                    owner: token.owner,
                 },
                 contract: {
                     chainId,
                     schema: SchemaType.NonFungible,
-                    address: '',
+                    address: token.mintAddress,
                     name: token.collectionName,
                     symbol: '',
                 },
@@ -213,7 +217,6 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 },
             }
         })
-
         return createPageable(data, createIndicator(indicator))
     }
 

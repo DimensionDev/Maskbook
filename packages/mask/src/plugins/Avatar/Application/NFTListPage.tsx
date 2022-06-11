@@ -1,11 +1,10 @@
 import { useImageChecker } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { createNonFungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
-import type { TokenInfo } from '../types'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -22,8 +21,17 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexFlow: 'row wrap',
         overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
         },
     },
     skeleton: {
@@ -42,27 +50,22 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTListPageProps {
-    chainId: ChainId
-    address: string
-    tokenInfo?: TokenInfo
-    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    onSelect?: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    tokenInfo?: AllChainsNonFungibleToken
+    tokens: AllChainsNonFungibleToken[]
+    onChange?: (token: AllChainsNonFungibleToken) => void
     children?: React.ReactElement
+    pluginId: NetworkPluginID
 }
 
 export function NFTListPage(props: NFTListPageProps) {
     const { classes } = useStyles()
-    const { onSelect, chainId, tokenInfo, tokens, children } = props
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>(
-        tokenInfo
-            ? createNonFungibleToken(chainId, tokenInfo.address, SchemaType.ERC721, tokenInfo.tokenId)
-            : undefined,
-    )
+    const { onChange, tokenInfo, tokens, children, pluginId } = props
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
 
-    const onChange = (token: NonFungibleToken<ChainId, SchemaType>) => {
+    const _onChange = (token: AllChainsNonFungibleToken) => {
         if (!token) return
         setSelectedToken(token)
-        onSelect?.(token)
+        onChange?.(token)
     }
 
     return (
@@ -70,12 +73,13 @@ export function NFTListPage(props: NFTListPageProps) {
             <Box className={classes.root}>
                 <Box className={classes.gallery}>
                     {children ??
-                        tokens.map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
+                        tokens.map((token: AllChainsNonFungibleToken, i) => (
                             <NFTImageCollectibleAvatar
+                                pluginId={pluginId}
                                 key={i}
                                 token={token}
                                 selectedToken={selectedToken}
-                                onChange={(token) => onChange(token)}
+                                onChange={(token) => _onChange(token)}
                             />
                         ))}
                 </Box>
@@ -85,12 +89,18 @@ export function NFTListPage(props: NFTListPageProps) {
 }
 
 interface NFTImageCollectibleAvatarProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
-    selectedToken?: NonFungibleToken<ChainId, SchemaType>
+    token: AllChainsNonFungibleToken
+    onChange: (token: AllChainsNonFungibleToken) => void
+    selectedToken?: AllChainsNonFungibleToken
+    pluginId: NetworkPluginID
 }
 
-function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageCollectibleAvatarProps) {
+export function NFTImageCollectibleAvatar({
+    token,
+    onChange,
+    selectedToken,
+    pluginId,
+}: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
 
@@ -100,5 +110,7 @@ function NFTImageCollectibleAvatar({ token, onChange, selectedToken }: NFTImageC
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
-    return isImageToken ? <NFTImage showBadge token={token} selectedToken={selectedToken} onChange={onChange} /> : null
+    return isImageToken ? (
+        <NFTImage pluginId={pluginId} showBadge token={token} selectedToken={selectedToken} onChange={onChange} />
+    ) : null
 }

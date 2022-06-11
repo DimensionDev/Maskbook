@@ -312,6 +312,7 @@ class Connection implements EVM_Connection {
             contract,
         )
     }
+
     async getNonFungibleTokenOwnship(
         address: string,
         owner: string,

@@ -2,15 +2,14 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import type { NFTAvatarEvent } from '@masknet/shared-base'
+import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { getAvatarId } from '../../utils/user'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile'
@@ -66,6 +65,7 @@ function NFTAvatarInFacebook() {
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
@@ -107,10 +107,10 @@ function NFTAvatarInFacebook() {
         if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
-                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
-                    identity.identifier.network,
+                    identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {
@@ -131,7 +131,7 @@ function NFTAvatarInFacebook() {
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
             try {
-                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     {
                         userId: storages.userId.value,
@@ -139,7 +139,7 @@ function NFTAvatarInFacebook() {
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
                     } as AvatarMetaDB,
-                    identity.identifier.network,
+                    identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {

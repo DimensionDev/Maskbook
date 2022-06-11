@@ -1,11 +1,12 @@
 import { makeStyles } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -37,19 +38,22 @@ export interface AddNFTProps {
     account?: string
     onClose: () => void
     chainId?: ChainId
-    onAddClick?: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    onAddClick?: (token: AllChainsNonFungibleToken) => void
     open: boolean
     title?: string
+    expectedPluginID: NetworkPluginID
 }
 export function AddNFT(props: AddNFTProps) {
-    const { onClose, open, onAddClick, title, chainId, account } = props
+    const { onClose, open, onAddClick, title, chainId, account, expectedPluginID } = props
     const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
-    const _account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    const _account = useAccount(expectedPluginID)
+    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId, account: account ?? _account })
+    const hub = useWeb3Hub(currentPluginId, { chainId, account: account ?? _account })
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -60,21 +64,38 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('nft_input_tokenid_label'))
             return
         }
-
-        const token = await connection?.getNonFungibleToken(address, tokenId, undefined, { chainId, account })
-        if (token) {
-            if (chainId && token && token.contract?.chainId !== chainId) {
-                setMessage('chain does not match.')
-                return
-            }
-            if (!token || !isSameAddress(token?.ownerId, account ?? _account)) {
-                setMessage(t('nft_owner_hint'))
-                return
-            }
-            onAddClick?.(token)
-            handleClose()
+        if (!hub?.getNonFungibleAsset) {
+            setMessage(t('plugin_avatar_web3_error'))
+            return
         }
-    }, [tokenId, address, onAddClick, onClose, connection, chainId, account])
+        let token: AllChainsNonFungibleToken
+        const asset = await hub.getNonFungibleAsset(address, tokenId)
+        if (asset) {
+            token = {
+                contract: asset.contract,
+                metadata: asset.metadata,
+                tokenId: asset.tokenId,
+                collection: asset.collection,
+            } as AllChainsNonFungibleToken
+        } else {
+            token = await connection.getNonFungibleToken(address, tokenId)
+        }
+        if (!token) {
+            setMessage(t('plugin_avatar_asset'))
+            return
+        }
+
+        if (chainId && token && token.contract?.chainId !== chainId) {
+            setMessage(t('plugin_avatar_chain_error'))
+            return
+        }
+        if (!token || !isSameAddress(token?.ownerId, account ?? _account)) {
+            setMessage(t('nft_owner_hint'))
+            return
+        }
+        onAddClick?.(token)
+        handleClose()
+    }, [tokenId, address, onAddClick, onClose, connection, chainId, hub, _account, account])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')
@@ -103,14 +124,14 @@ export function AddNFT(props: AddNFTProps) {
                 <div className={classes.input}>
                     <InputBase
                         sx={{ width: '100%' }}
-                        placeholder="Input Contract Address"
+                        placeholder={t('plugin_avatar_input_token_address')}
                         onChange={(e) => onAddressChange(e.target.value)}
                     />
                 </div>
                 <div className={classes.input}>
                     <InputBase
                         sx={{ width: '100%' }}
-                        placeholder="Token ID"
+                        placeholder={t('plugin_avatar_input_token_id')}
                         onChange={(e) => onTokenIdChange(e.target.value)}
                     />
                 </div>

@@ -1,6 +1,8 @@
+import { MagicEden } from '@masknet/web3-providers'
 import {
     Account,
     ConnectionOptions,
+    createNonFungibleToken,
     FungibleToken,
     NonFungibleToken,
     NonFungibleTokenCollection,
@@ -338,13 +340,24 @@ class Connection implements BaseConnection {
             } as FungibleToken<ChainId, SchemaType>)
         )
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         address: string,
         tokenId: string,
         schemaType?: SchemaType,
         options?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const asset = await MagicEden.getAsset('', address, options)
+        const chainId = options?.chainId ?? ChainId.Mainnet
+        return createNonFungibleToken(
+            chainId,
+            address,
+            SchemaType.NonFungible,
+            address,
+            undefined,
+            asset?.metadata,
+            asset?.contract,
+            asset?.collection,
+        )
     }
     getNonFungibleTokenOwnship(
         address: string,

@@ -115,7 +115,11 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
 }
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        options?: HubOptions<ChainId, HubIndicator> | undefined,
+    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         throw new Error('Method not implemented.')
     }
 

@@ -27,7 +27,7 @@ export function NFTInfo(props: NFTInfoProps) {
     const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
 
-    if (loading) return <CircularProgress />
+    if (loading) return <CircularProgress size={24} />
     return (
         <Box className={classes.root}>
             {!nft ? (
