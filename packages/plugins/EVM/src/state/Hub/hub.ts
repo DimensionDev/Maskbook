@@ -122,7 +122,7 @@ class Hub implements EVM_Hub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>, string | number>> {
-        if (options?.sourceType === SourceType.Alchemy_EVM) {
+        if (options?.sourceType === SourceType.Alchemy_EVM && options.chainId !== ChainId.Mainnet) {
             return Alchemy_EVM.getTokens(account, options as HubOptions<ChainId, string>)
         }
         return OpenSea.getTokens(account, options as HubOptions<ChainId, number>)

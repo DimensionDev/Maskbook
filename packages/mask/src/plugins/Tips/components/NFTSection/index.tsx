@@ -1,4 +1,4 @@
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -70,6 +70,7 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
     // Cannot get the loading status of fetching via websocket
     // loading status of `useAsyncRetry` is not the real status
     const [guessLoading, setGuessLoading] = useState(true)
+    const account = useAccount()
     useTimeoutFn(() => {
         setGuessLoading(false)
     }, 10000)
@@ -120,10 +121,10 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                             />
                         )
                     }
-                    if (tokens.length === 0 && loadError) {
+                    if (tokens.length === 0 && loadError && account) {
                         return <RetryHint retry={next} />
                     }
-                    if (tokens.length === 0 && (!done || guessLoading)) {
+                    if (tokens.length === 0 && (!done || guessLoading) && account) {
                         return (
                             <div className={classes.statusBox}>
                                 <LoadingBase />

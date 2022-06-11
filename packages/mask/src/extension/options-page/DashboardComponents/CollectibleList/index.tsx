@@ -49,7 +49,11 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         height: '100%',
     },
-    button: {},
+    button: {
+        '&:hover': {
+            border: 'solid 1px transparent',
+        },
+    },
     container: {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
@@ -302,7 +306,7 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.address} />
+                        <ReversedAddress address={addressName.label} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
