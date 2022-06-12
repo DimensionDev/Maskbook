@@ -9,7 +9,7 @@ import { DialogContent } from '@mui/material'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
-import { useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
+import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -29,7 +29,7 @@ export function NFTAvatarSettingDialog() {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const account = useAccount()
     const identity = useCurrentVisitingIdentity()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const [, saveNFTAvatar] = useSaveNFTAvatar()
@@ -40,11 +40,11 @@ export function NFTAvatarSettingDialog() {
                 if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
                 if (!identity.identifier) return
                 const image = await toPNG(info.token.metadata.imageURL)
-                if (!image || !wallet) return
+                if (!image || !account) return
                 const { profile_pic_url_hd } = await Instagram.uploadUserAvatar(image, identity.identifier.userId)
                 const avatarId = getAvatarId(profile_pic_url_hd)
                 const avatarInfo = await saveNFTAvatar(
-                    wallet.address,
+                    account,
                     {
                         address: info.token.contract.address,
                         userId: identity.identifier.userId,
@@ -82,7 +82,7 @@ export function NFTAvatarSettingDialog() {
                 }
             }
         },
-        [identity, wallet, saveNFTAvatar],
+        [identity, account, saveNFTAvatar],
     )
 
     const onClose = useCallback(() => setOpen(false), [])
@@ -95,7 +95,7 @@ export function NFTAvatarSettingDialog() {
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
                 <DialogContent>
-                    <NFTAvatar onChange={onChange} classes={classes} hideWallet />
+                    <NFTAvatar onChange={onChange} classes={classes} />
                 </DialogContent>
             </InjectedDialog>
         </DialogStackingProvider>
