@@ -41,17 +41,14 @@ export function NFTAvatarSettingDialog() {
                 if (!identity.identifier) return
                 const image = await toPNG(info.token.metadata.imageURL)
                 if (!image || !wallet) return
-
                 const { profile_pic_url_hd } = await Instagram.uploadUserAvatar(image, identity.identifier.userId)
-
                 const avatarId = getAvatarId(profile_pic_url_hd)
-
                 const avatarInfo = await saveNFTAvatar(
                     wallet.address,
                     {
+                        address: info.token.contract.address,
                         userId: identity.identifier.userId,
                         tokenId: info.token.tokenId,
-                        address: info.token.address,
                         avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,

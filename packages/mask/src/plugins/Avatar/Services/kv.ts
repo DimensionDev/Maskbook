@@ -54,8 +54,13 @@ async function _getAddress(
 export async function setAddress(site: EnhanceableSite, userId: string, pluginID: NetworkPluginID, address: string) {
     if (userId === '$unknown') return
 
-    const storage = await createAddressDB(site).get(userId)
-    const storageV2 = storage as AddressStorageV2
+    let storageV2
+    try {
+        const storage = await createAddressDB(site).get(userId)
+        storageV2 = (storage ?? {}) as AddressStorageV2
+    } catch {
+        storageV2 = {} as AddressStorageV2
+    }
 
     // clear cache
     cache.delete(getKey(site, userId))
