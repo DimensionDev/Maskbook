@@ -2822,7 +2822,7 @@
         "name": "Harmony",
         "type": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s0",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600000,
@@ -2837,7 +2837,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s1",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600001,
@@ -2852,7 +2852,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s2",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600002,
@@ -2867,7 +2867,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s3",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600003,
@@ -2882,7 +2882,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s0",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700000,
@@ -2897,7 +2897,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s1",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700001,
@@ -2912,7 +2912,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s2",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700002,
@@ -2927,7 +2927,7 @@
         "name": "Harmony",
         "type": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s3",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700003,
