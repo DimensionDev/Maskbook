@@ -353,7 +353,7 @@ class Connection implements BaseConnection {
             address,
             SchemaType.NonFungible,
             tokenId,
-            undefined,
+            asset?.ownerId,
             asset?.metadata,
             asset?.contract,
             asset?.collection,
