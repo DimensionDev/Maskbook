@@ -42,7 +42,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length, done])
 
     const next = useCallback(async () => {
-        if (!iterator) return
+        if (!iterator || done) return
 
         try {
             for (const v of Array.from({ length: 48 })) {
@@ -66,7 +66,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             setError(error_ as string)
             setDone(true)
         }
-    }, [iterator])
+    }, [iterator, done])
 
     // Execute once after next update
     useEffect(() => {
@@ -80,5 +80,11 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     useEffect(() => retry(), [options?.account ?? account, retry, options?.chainId])
 
-    return { value: assets, next, done, retry, error }
+    return {
+        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        next,
+        done,
+        retry,
+        error,
+    }
 }
