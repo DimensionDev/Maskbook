@@ -500,6 +500,17 @@ export interface Account<ChainId> {
     chainId: ChainId
 }
 
+
+export interface BalanceEvent<ChainId> {
+    /** Emit if the balance of the account updated. */
+    update: [Account<ChainId>]
+}
+
+export interface BlockNumberEvent<ChainId> {
+    /** Emit if the balance of the chain updated. */
+    update: [ChainId]
+}
+
 export interface ProviderEvents<ChainId, ProviderType> {
     /** Emit when the chain id changed. */
     chainId: [string]
@@ -543,6 +554,7 @@ export interface ProviderOptions<ChainId> {
 export interface TransactionChecker<ChainId> {
     checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType>
 }
+
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
     /** Designate the sub-network id of the transaction. */
     chainId?: ChainId
@@ -805,6 +817,7 @@ export interface SettingsState {
     /** The source type of non-fungible assets */
     nonFungibleAssetSourceType?: Subscription<SourceType>
 }
+
 export interface AddressBookState<ChainId> {
     /** The tracked addresses of currently chosen sub-network */
     addressBook?: Subscription<string[]>
@@ -1010,4 +1023,12 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     // #endregion
+}
+
+export interface BalanceNotifierState<ChainId> {
+    emitter: Emitter<BalanceEvent<ChainId>>
+}
+
+export interface BlockNumberNotifierState<ChainId> {
+    emitter: Emitter<BlockNumberEvent<ChainId>>
 }

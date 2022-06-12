@@ -15,13 +15,12 @@ export class RecentTransaction implements Middleware<Context> {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
-                    else
-                        await Transaction?.addTransaction?.(
-                            context.chainId,
-                            context.account,
-                            context.result,
-                            context.config,
-                        )
+                    await Transaction?.addTransaction?.(
+                        context.chainId,
+                        context.account,
+                        context.result,
+                        context.config,
+                    )
                     TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
