@@ -156,7 +156,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    // useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
