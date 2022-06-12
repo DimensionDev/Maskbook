@@ -186,6 +186,7 @@
     "wallets_add_token_next": "Next",
     "wallets_empty_tokens_tip": "No assets were found. Please add tokens.",
     "wallets_empty_collectible_tip": "No collectibles were found. Please add Collectibles.",
+    "wallets_reload": "Reload",
     "wallets_address_copied": "Address successfully copied",
     "public_key_copied": "Public key successfully copied",
     "wallets_address_copy": "Copy",

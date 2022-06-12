@@ -44,17 +44,16 @@ export async function getERC721TokenAssetFromChain(
     if (promise === lazyVoid) {
         try {
             // for some NFT tokens return an URL refers to a JSON file
-            promise = fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI).then(
-                async (r) => {
+            promise = globalThis
+                .r2d2Fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI)
+                .then(async (r) => {
                     const json = await r.json()
                     return {
                         ...json,
                         mediaUrl: json.image || json.animation_url,
                         imageURL: json.image || json.animation_url,
                     } as NonFungibleTokenMetadata<ChainId>
-                },
-                noop,
-            )
+                }, noop)
             assetCache[tokenURI] = await (promise as Promise<NonFungibleTokenMetadata<ChainId>>)
             return assetCache[tokenURI]
         } catch (err) {

@@ -50,10 +50,14 @@ export async function* pageableToIterator<T>(
     let indicator = createIndicator()
 
     for (let i = 0; i < maxSize; i += 1) {
-        const pageable = await getPageable(indicator)
-        if (!pageable) return
-        yield* pageable.data
-        if (!pageable.nextIndicator) return
-        indicator = pageable.nextIndicator as HubIndicator
+        try {
+            const pageable = await getPageable(indicator)
+            if (!pageable) return
+            yield* pageable.data
+            if (!pageable.nextIndicator) return
+            indicator = pageable.nextIndicator as HubIndicator
+        } catch (error) {
+            yield new Error((error as Error).message)
+        }
     }
 }

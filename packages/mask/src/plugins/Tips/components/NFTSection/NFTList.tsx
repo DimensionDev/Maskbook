@@ -1,8 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio, Stack } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -14,6 +14,9 @@ interface Props {
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string
+    nextPage(): void
+    loadFinish: boolean
+    loadError?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,9 +39,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         flexDirection: 'column',
         borderRadius: 12,
-        height: 100,
+        height: 96,
         userSelect: 'none',
-        width: 100,
+        width: 96,
         justifyContent: 'center',
     },
     disabled: {
@@ -106,7 +109,16 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className }) => {
+export const NFTList: FC<Props> = ({
+    selectedPairs,
+    tokens,
+    onChange,
+    limit = 1,
+    className,
+    nextPage,
+    loadFinish,
+    loadError,
+}) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
@@ -146,11 +158,12 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                 return (
                     <ShadowRootTooltip
                         classes={{ tooltip: classes.tooltip }}
-                        key={`${token.address}/${token.tokenId}`}
+                        key={`${token.address}/${token.tokenId + token.id}`}
                         title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
                         placement="top"
                         arrow>
                         <ListItem
+                            key={token.tokenId + token.id}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
@@ -178,6 +191,19 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                     </ShadowRootTooltip>
                 )
             })}
+            {loadError && !loadFinish && tokens.length && (
+                <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                    <RetryHint hint={false} retry={nextPage} />
+                </Stack>
+            )}
+            <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                <ElementAnchor
+                    callback={() => {
+                        if (nextPage) nextPage()
+                    }}>
+                    {!loadFinish && <LoadingBase />}
+                </ElementAnchor>
+            </Stack>
         </List>
     )
 }

@@ -36,15 +36,11 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
 
-    try {
-        // TODO: backend fix 500
-        const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
-        if (response.ok) {
-            return (await response.json()) as T
-        }
-        return
-    } catch {
-        return
+    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+    if (response.ok) {
+        return (await response.json()) as T
+    } else {
+        throw new Error('Fetch failed')
     }
 }
 
@@ -93,6 +89,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
+            owner: asset.owner.address,
         },
         collection: {
             chainId,

@@ -236,7 +236,7 @@ class Connection implements EVM_Connection {
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
-            const tx = contract?.methods.safeTransferFrom(account, recipient, tokenId, amount, '0x')
+            const tx = contract?.methods.safeTransferFrom(account, recipient, tokenId, amount ?? '', '0x')
             return sendTransaction(contract, tx, options?.overrides)
         }
 
@@ -360,7 +360,7 @@ class Connection implements EVM_Connection {
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
-            const uri = await contract?.methods.uri(tokenId).call()
+            const uri = await contract?.methods.uri(tokenId ?? '').call()
             if (!uri) throw new Error('Failed to read metadata uri.')
 
             const response = await fetchJSON<ERC1155Metadata>(processURI(uri), undefined, {
@@ -379,7 +379,7 @@ class Connection implements EVM_Connection {
 
         // ERC721
         const contract = await this.getERC721Contract(address, options)
-        const uri = await contract?.methods.tokenURI(tokenId).call()
+        const uri = await contract?.methods.tokenURI(tokenId ?? '').call()
         if (!uri) throw new Error('Failed to read metadata uri.')
         const response = await fetchJSON<ERC721Metadata>(processURI(uri), undefined, {
             fetch: this.context?.fetch,
@@ -490,7 +490,7 @@ class Connection implements EVM_Connection {
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
-            return contract?.methods?.balanceOf(actualAccount, tokenId).call() ?? '0'
+            return contract?.methods?.balanceOf(actualAccount, tokenId ?? '').call() ?? '0'
         }
 
         // ERC721

@@ -6,7 +6,7 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
+import { ChainId as ChainId_EVM, resolveIPFSLinkFromURL, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
@@ -25,7 +25,7 @@ import type {
 } from './types'
 
 export * from './constants'
-export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM> {
+export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM, SchemaType_EVM, string> {
     getAsset = async (
         address: string,
         tokenId: string,
@@ -68,6 +68,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 
     getAssets = async (from: string, { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM> = {}) => {
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
+        if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
@@ -126,6 +127,13 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
     }
 }
 
+function resolveCollectionName(asset: AlchemyNFT_EVM) {
+    if (asset?.metadata?.name) return asset?.metadata?.name
+    if (asset?.title) return asset?.title
+    if (asset?.contract?.address) return asset?.contract?.address
+    return ''
+}
+
 function createNftAsset_EVM(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
@@ -142,8 +150,12 @@ function createNftAsset_EVM(
             name: asset?.metadata?.name ?? asset?.title,
             symbol: '',
             description: asset.description,
-            imageURL: asset?.metadata?.image ?? asset?.media?.[0]?.gateway ?? '',
-            mediaURL: asset?.media?.[0]?.gateway,
+            imageURL: resolveIPFSLinkFromURL(
+                asset?.metadata?.image ?? asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? '',
+            ),
+            mediaURL: resolveIPFSLinkFromURL(
+                asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? asset?.metadata?.image,
+            ),
         },
         contract: {
             chainId,
@@ -153,8 +165,9 @@ function createNftAsset_EVM(
             symbol: '',
         },
         collection: {
+            address: asset?.contract?.address,
             chainId,
-            name: '',
+            name: resolveCollectionName(asset),
             slug: '',
             description: asset.description,
         },
