@@ -15,12 +15,12 @@ import {
     useNetworkType,
     useWeb3,
     useNativeToken,
-    useZeroAddress,
+    useNativeTokenAddress,
+    useGasConfig,
 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
-import { useGasConfig } from '../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -99,7 +99,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const nativeTokenAddress = useZeroAddress(NetworkPluginID.PLUGIN_EVM)
+    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM)
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
         [web3],
@@ -115,7 +115,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         ? new BigNumber(gasPrice).multipliedBy(createParams.gas ?? '0').toFixed()
         : undefined
 
-    const isNativeToken = isSameAddress(settings?.token?.address ?? '', nativeTokenAddress)
+    const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
     let total = isNativeToken
         ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
         : (settings?.total as string)
