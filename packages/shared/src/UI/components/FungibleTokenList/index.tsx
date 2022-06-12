@@ -184,8 +184,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #endregion
 
     const getPlaceholder = () => {
-        if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0) return null
-        if (Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance)
+        if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
+            return null
+        if ((Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance) && !searchedToken)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
         if (searchingToken)
             return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
@@ -199,7 +200,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             onSelect={(token) => onSelect?.(token)}
             onSearch={setKeyword}
             data={
-                searchedToken && sortedFungibleTokens.some((x) => isSameAddress(x.address, searchedTokenAddress))
+                searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
                     ? [searchedToken]
                     : sortedFungibleTokens
             }
