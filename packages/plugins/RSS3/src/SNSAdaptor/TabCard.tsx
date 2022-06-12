@@ -1,6 +1,6 @@
 import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
