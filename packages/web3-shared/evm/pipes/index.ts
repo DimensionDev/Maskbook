@@ -47,15 +47,15 @@ export function resolveCollectibleLink(chainId: ChainId, provider: SourceType, a
     }
 }
 
-export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: ChainId) {
+export function resolveOpenSeaLink(contractAddress: string, tokenId: string, chainId?: ChainId) {
     if (chainId === ChainId.Matic) {
         return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
-            address,
+            address: contractAddress,
             tokenId,
         })
     }
     return urlcat('https://opensea.io/assets/:address/:tokenId', {
-        address,
+        address: contractAddress,
         tokenId,
     })
 }

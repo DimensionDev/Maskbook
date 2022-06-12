@@ -6,7 +6,12 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId as ChainId_EVM, resolveIPFSLinkFromURL, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
+import {
+    ChainId as ChainId_EVM,
+    resolveIPFSLinkFromURL,
+    resolveOpenSeaLink,
+    SchemaType as SchemaType_EVM,
+} from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
@@ -138,13 +143,17 @@ function createNftToken_EVM(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
+    const contractAddress = asset.contract?.address
+    const tokenId = Number.parseInt(asset.id?.tokenId, 16).toString()
+
     return {
-        id: asset.contract?.address,
+        id: `${contractAddress}_${tokenId}`,
         chainId,
         type: TokenType.NonFungible,
         schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
-        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
-        address: asset.contract?.address,
+        tokenId,
+        address: contractAddress,
+        link: resolveOpenSeaLink(contractAddress, tokenId, chainId),
         metadata: {
             chainId,
             name: asset?.metadata?.name ?? asset?.title,
@@ -167,12 +176,12 @@ function createNftToken_EVM(
         contract: {
             chainId,
             schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
-            address: asset?.contract?.address,
+            address: contractAddress,
             name: asset?.metadata?.name ?? asset?.title,
             symbol: '',
         },
         collection: {
-            address: asset?.contract?.address,
+            address: contractAddress,
             chainId,
             name: resolveCollectionName(asset),
             slug: '',
