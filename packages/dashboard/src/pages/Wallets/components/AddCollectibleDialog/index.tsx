@@ -17,6 +17,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
+import { SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -45,7 +46,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
 
-    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, {})
+    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, SchemaType.ERC721)
 
     const onSubmit = useCallback(async () => {
         if (loading || !account || !value || !hub?.getNonFungibleAsset) return
@@ -58,7 +59,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
         const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId)
-        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, { chainId })
+        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, SchemaType.ERC721)
         const tokenDetailed = { ...token, ...tokenAsset }
 
         // If the NonFungible token is belong this account

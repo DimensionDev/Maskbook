@@ -21,7 +21,7 @@ export function useNFT(
                 name: asset.contract?.name ?? '',
                 symbol: asset.contract?.symbol ?? 'ETH',
                 image: asset.metadata?.imageURL ?? '',
-                owner: asset.metadata?.owner ?? '',
+                owner: asset.ownerId ?? '',
                 slug: asset.collection?.slug ?? '',
             }
         }
@@ -32,7 +32,7 @@ export function useNFT(
             name: nft?.contract?.name ?? '',
             symbol: nft?.contract?.symbol ?? 'ETH',
             image: nft?.metadata?.imageURL ?? '',
-            owner: nft?.metadata?.owner ?? '',
+            owner: nft?.ownerId ?? '',
             slug: '',
         }
     }, [pluginId, connection, hub?.getNonFungibleAsset, address, tokenId])

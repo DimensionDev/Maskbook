@@ -1,12 +1,5 @@
 import urlcat from 'urlcat'
-import {
-    FungibleAsset,
-    GasOptionType,
-    Pageable,
-    Transaction,
-    createPageable,
-    HubOptions,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -71,10 +64,7 @@ export class DeBankAPI
         }
     }
 
-    async getAssets(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, number>> {
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
@@ -95,10 +85,10 @@ export class DeBankAPI
                     })),
                     options?.chainId,
                 ),
-                0,
+                createIndicator(options?.indicator),
             )
         } catch {
-            return createPageable([], 0)
+            return createPageable([], createIndicator(options?.indicator))
         }
     }
 

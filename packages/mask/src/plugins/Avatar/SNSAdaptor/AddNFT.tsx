@@ -89,7 +89,7 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('plugin_avatar_chain_error'))
             return
         }
-        if (!token || !isSameAddress(token?.metadata?.owner, account ?? _account)) {
+        if (!token || !isSameAddress(token?.ownerId, account ?? _account)) {
             setMessage(t('nft_owner_hint'))
             return
         }

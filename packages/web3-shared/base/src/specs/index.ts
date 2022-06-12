@@ -9,7 +9,7 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
-export interface Pageable<Item, Indicator = number | string > {
+export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
     indicator: Indicator
     /** the indicator of the next page */
@@ -221,7 +221,6 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     address: string
     schema: SchemaType
     owner?: string
-    balance?: number
     logoURL?: string
     iconURL?: string
 }
@@ -230,7 +229,6 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     name: string
     symbol: string
-    owner?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -257,9 +255,15 @@ export interface NonFungibleTokenCollection<ChainId> {
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
+    /** the token id */
     tokenId: string
+    /** the address or uid of the token owner */
+    ownerId?: string
+    /** the contract info */
     contract?: NonFungibleTokenContract<ChainId, SchemaType>
+    /** the media metadata */
     metadata?: NonFungibleTokenMetadata<ChainId>
+    /** the collection info */
     collection?: NonFungibleTokenCollection<ChainId>
 }
 
@@ -581,17 +585,33 @@ export interface Connection<
     /** Get an non-fungible token. */
     getNonFungibleToken(
         address: string,
-        id: string,
+        tokenId: string,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
+    getNonFungibleTokenOwnership(
+        address: string,
+        owner: string,
+        tokenId: string,
+        schema?: SchemaType,
+        options?: Web3ConnectionOptions,
+    ): Promise<boolean>
+    getNonFungibleTokenMetadata(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        options?: Web3ConnectionOptions,
+    ): Promise<NonFungibleTokenMetadata<ChainId>>
     /** Get an non-fungible token contract. */
     getNonFungibleTokenContract(
         address: string,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>>
     /** Get an non-fungible token collection. */
     getNonFungibleTokenCollection(
         address: string,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>>
     /** Get native fungible token balance. */
@@ -599,7 +619,7 @@ export interface Connection<
     /** Get fungible token balance */
     getFungibleTokenBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
     /** Get non-fungible token balance */
-    getNonFungibleTokenBalance(address: string, options?: Web3ConnectionOptions): Promise<string>
+    getNonFungibleTokenBalance(address: string, tokenId?: string, schema?: SchemaType, options?: Web3ConnectionOptions): Promise<string>
     /** Get fungible token balance */
     getFungibleTokensBalance(listOfAddress: string[], options?: Web3ConnectionOptions): Promise<Record<string, string>>
     /** Get non-fungible token balance */
@@ -654,6 +674,7 @@ export interface Connection<
         recipient: string,
         tokenId: string,
         amount: string,
+        schema?: SchemaType,
         options?: Web3ConnectionOptions,
     ): Promise<string>
     /** Sign a transaction */
@@ -676,7 +697,14 @@ export interface Connection<
     cancelRequest(hash: string, config: Transaction, options?: Web3ConnectionOptions): Promise<void>
 }
 
-export interface HubOptions<ChainId, Indicator = number | string> {
+export interface HubIndicator {
+    /** The id of the page. */
+    id: string
+    /** The index number of the page. */
+    index: number
+}
+
+export interface HubOptions<ChainId, Indicator = HubIndicator> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -727,21 +755,16 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         options?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get all fungible assets of given account and ignore the pagination options. */
-    getAllFungibleAssets?: (
-        address: string,
+    /** Get fungible tokens of given account with pagination supported. */
+    getFungibleTokens?: (
+        account: string,
         options?: Web3HubOptions,
-    ) => AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>>
-    /** Get all non-fungible assets of given account and ignore the pagination options. */
-    getAllNonFungibleAssets?: (
-        address: string,
+    ) => Promise<Pageable<FungibleToken<ChainId, SchemaType> | Error>>
+    /** Get non-fungible tokens of given account with pagination supported. */
+    getNonFungibleTokens?: (
+        account: string,
         options?: Web3HubOptions,
-    ) => AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType> | Error>
-    /** Get all non-fungible collections of given account and ignore the pagination options. */
-    getAllNonFungibleCollections?: (
-        address: string,
-        options?: Web3HubOptions,
-    ) => AsyncIterableIterator<NonFungibleTokenCollection<ChainId>>
+    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (chainId: ChainId, address: string, options?: Web3HubOptions) => Promise<number>
     /** Get price of an non-fungible token */
@@ -760,6 +783,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId?: string,
         options?: Web3HubOptions,
     ) => Promise<string[]>
+    /** Get non-fungible collections of given account with pagination supported */
+    getNonFungibleCollections?: (
+        account: string,
+        options?: Web3HubOptions
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
     /** Get the most recent transactions */
     getTransactions: (
         chainId: ChainId,

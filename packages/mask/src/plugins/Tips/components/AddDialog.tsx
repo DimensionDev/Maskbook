@@ -9,7 +9,7 @@ import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
 import { ImageIcon, InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/material'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -89,10 +89,15 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             setMessage(t.tip_add_collectibles_error())
             return
         }
-        const erc721TokenDetailed = await web3Connection?.getNonFungibleToken(contractAddress, tokenId, {
-            chainId,
-            account,
-        })
+        const erc721TokenDetailed = await web3Connection?.getNonFungibleToken(
+            contractAddress,
+            tokenId,
+            SchemaType.ERC721,
+            {
+                chainId,
+                account,
+            },
+        )
 
         if (!erc721TokenDetailed) {
             setMessage(t.tip_add_collectibles_error())

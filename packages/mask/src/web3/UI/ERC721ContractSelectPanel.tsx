@@ -72,8 +72,8 @@ export interface ERC721TokenSelectPanelProps {
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract, label, chainId = ChainId.Mainnet, balance } = props
-    const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
     const { t } = useI18N()
+    const { classes } = useStyles({ hasIcon: Boolean(contract?.logoURL) })
 
     // #region select contract
     const [id] = useState(uuid)
@@ -84,7 +84,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             (ev: SelectNftContractDialogEvent) => {
                 if (ev.open || !ev.contract || ev.uuid !== id) return
                 onContractChange(ev.contract as NonFungibleTokenContract<ChainId, SchemaType.ERC721>)
-                onBalanceChange(ev.contract?.balance ?? 0)
+                onBalanceChange(Number.parseInt(ev.balance ?? '0', 10))
             },
             [id, onContractChange, onBalanceChange],
         ),
