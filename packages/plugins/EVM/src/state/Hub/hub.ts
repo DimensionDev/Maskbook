@@ -134,13 +134,13 @@ class Hub implements EVM_Hub {
             [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const chainProviders: { [key in ChainId]?: Array<typeof OpenSea | typeof Alchemy_EVM | typeof Rarible> } = {
-            [ChainId.Mainnet]: [OpenSea],
-            [ChainId.Matic]: [Alchemy_EVM],
+            [ChainId.Mainnet]: [OpenSea, Alchemy_EVM, Rarible],
+            [ChainId.Matic]: [Alchemy_EVM, OpenSea, Rarible],
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
         const filteredProviders = predicate(sourceType)
             ? [providers[sourceType]]
-            : chainProviders[options?.chainId ?? ChainId.Matic] ?? [Alchemy_EVM]
+            : chainProviders[options?.chainId ?? ChainId.Matic] ?? [Alchemy_EVM, OpenSea, Rarible]
 
         return attemptUntil(
             filteredProviders.map((x) => () => x.getAssets(account, { chainId: this.chainId, ...options })),

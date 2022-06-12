@@ -21,8 +21,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     // create iterator
     const iterator = useMemo(() => {
-        if ((!account && !options?.account) || !hub || !networks) return
-        if (!hub.getNonFungibleTokens) return
+        if ((!account && !options?.account) || !hub?.getNonFungibleTokens || !networks) return
 
         return flattenAsyncIterator(
             networks
@@ -31,7 +30,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
                         if (!hub?.getNonFungibleTokens) return
-                        return hub.getNonFungibleTokens(options?.account ?? account, {
+                        return hub?.getNonFungibleTokens(options?.account ?? account, {
                             indicator,
                             size: 50,
                             ...options,
@@ -40,7 +39,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                     })
                 }),
         )
-    }, [hub, account, options?.account, options?.chainId, networks.length])
+    }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length, done])
 
     const next = useCallback(async () => {
         if (!iterator) return
@@ -79,7 +78,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         setDone(false)
     }, [])
 
-    useEffect(() => retry(), [account, options?.account, retry, options?.chainId])
+    useEffect(() => retry(), [options?.account ?? account, retry, options?.chainId])
 
     return { value: assets, next, done, retry, error }
 }
