@@ -21,7 +21,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isValidChainId,
             getDefaultChainId: () => ChainId.Mainnet,
             getDefaultNetworkType: () => NetworkType.Ethereum,
-            getDefaultProviderType: () => ProviderType.MaskWallet,
+            getDefaultProviderType: () => ProviderType.None,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
         })
