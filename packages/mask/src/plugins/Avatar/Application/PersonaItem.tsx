@@ -117,6 +117,7 @@ export function PersonaItem(props: PersonaItemProps) {
                               tokenId: _avatar?.tokenId ?? '',
                               address: _avatar?.address ?? '',
                               chainId: _avatar.chainId ?? ChainId.Mainnet,
+                              networkPluginID: _avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                           }
                         : undefined
                 }

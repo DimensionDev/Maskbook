@@ -1,8 +1,8 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { ChainId, resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import { useNFT } from '../hooks'
 import { useWallet } from '../hooks/useWallet'
@@ -42,6 +42,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         avatar.chainId,
     )
+    const { Others } = useWeb3State<'all'>(avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const { amount, symbol, name, slug } = value
     return (
         <div
@@ -51,7 +52,11 @@ export function NFTBadge(props: NFTBadgeProps) {
                 openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
             }}>
             <Link
-                href={resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId)}
+                href={Others?.explorerResolver.nonFungibleTokenLink(
+                    avatar.chainId ?? ChainId.Mainnet,
+                    avatar.address,
+                    avatar.tokenId,
+                )}
                 target="_blank"
                 rel="noopener noreferrer">
                 <NFTAvatarRing
