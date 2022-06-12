@@ -10,6 +10,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { ERC1155 } from '@masknet/web3-contracts/types/ERC1155'
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json'
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
@@ -259,7 +260,7 @@ class Connection implements EVM_Connection {
         const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
 
         const account = options?.account ?? this.account
-        const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC20ABI as AbiItem[], options)
+        const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
         const isERC165 = await erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
 

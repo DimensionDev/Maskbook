@@ -17,6 +17,9 @@ export function useNftTip<T extends NetworkPluginID>(
     const connectionOptions = {
         account,
         ...options,
+        overrides: {
+            from: account,
+        },
     }
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
