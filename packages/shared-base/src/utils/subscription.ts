@@ -1,7 +1,7 @@
-import { noop, reject } from 'lodash-unified'
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export async function getSubscriptionCurrentValue<T>(
     getSubscription: () => Subscription<T> | undefined,

@@ -1,13 +1,21 @@
-import type { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { first } from 'lodash-unified'
+import { Explorer } from '@masknet/web3-providers'
+import { TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
+import { ChainId, getExplorerConstants } from '@masknet/web3-shared-evm'
 
 export class AccountChecker implements TransactionChecker<ChainId> {
-    checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType> {
-        console.log('DEBUG: account checker')
-        console.log({
-            chainId,
-            id,
+    static CHECK_TIMES = 30
+    static CHECK_DELAY = 30 * 1000 // seconds
+    static CHECK_LATEST_SIZE = 5
+
+    async checkStatus(id: string, chainId: ChainId, account: string): Promise<TransactionStatusType> {
+        const { API_KEYS = [], EXPLORER_API = '' } = getExplorerConstants(chainId)
+        const latestTransactions = await Explorer.getLatestTransactions(account, EXPLORER_API, {
+            offset: AccountChecker.CHECK_LATEST_SIZE,
+            apikey: first(API_KEYS),
         })
-        throw new Error('Method not implemented.')
+        const tx = latestTransactions.find((x) => x.hash === id)
+        if (!tx) return TransactionStatusType.NOT_DEPEND
+        return tx.status === '0' ? TransactionStatusType.SUCCEED : TransactionStatusType.FAILED
     }
 }

@@ -39,6 +39,7 @@ class Watcher<ChainId, Transaction> {
         protected checkers: Array<TransactionChecker<ChainId>>,
         protected options: {
             delay: number
+            getCreatorAddress: (transaction: Transaction) => string
             onNotify: (id: string, status: TransactionStatusType, transaction: Transaction) => void
         },
     ) {}
@@ -103,7 +104,7 @@ class Watcher<ChainId, Transaction> {
         for (const [id, { transaction }] of watchedTransactions) {
             for (const checker of this.checkers) {
                 try {
-                    const status = await checker.checkStatus(chainId, id)
+                    const status = await checker.checkStatus(id, chainId, this.options.getCreatorAddress(transaction))
                     if (status !== TransactionStatusType.NOT_DEPEND) {
                         this.removeTransaction(chainId, id)
                         this.options.onNotify(id, status, transaction)
@@ -165,6 +166,8 @@ export class TransactionWatcherState<ChainId, Transaction>
         protected options: {
             /** Default block delay in seconds */
             defaultBlockDelay: number
+            /** Get the author address */
+            getCreatorAddress: (transaction: Transaction) => string
         },
     ) {
         const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<
@@ -202,6 +205,7 @@ export class TransactionWatcherState<ChainId, Transaction>
                 new Watcher(this.storage, this.checkers, {
                     delay: this.options.defaultBlockDelay * 1000,
                     onNotify: this.notifyTransaction.bind(this),
+                    getCreatorAddress: this.options.getCreatorAddress,
                 }),
             )
         return this.watchers.get(chainId)!

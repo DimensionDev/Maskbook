@@ -556,7 +556,7 @@ export interface ProviderOptions<ChainId> {
 }
 
 export interface TransactionChecker<ChainId> {
-    checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType>
+    checkStatus(id: string, chainId: ChainId, account: string): Promise<TransactionStatusType>
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {

@@ -4,7 +4,7 @@ import { Web3StateSettings } from '../../../settings'
 import { getReceiptStatus } from '../../Connection/utils'
 
 export class ReceiptChecker implements TransactionChecker<ChainId> {
-    async checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType> {
+    async checkStatus(id: string, chainId: ChainId): Promise<TransactionStatusType> {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
         })
