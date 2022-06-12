@@ -11,7 +11,11 @@ function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPlugi
 }
 
 function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return addressNames?.some((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) ?? false
+    return (
+        addressNames?.some(
+            (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+        ) ?? false
+    )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
