@@ -52,7 +52,7 @@ async function _getAddress(
         }
 
     // V1 only supports EVM
-    if (storageV1.address && pluginID === NetworkPluginID.PLUGIN_EVM) return storageV1
+    if (storageV1.address) return storageV1
 
     return
 }
