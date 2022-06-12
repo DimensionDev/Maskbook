@@ -9,6 +9,8 @@ import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
+const CanvasWidth = 400
+const CanvasHeight = 400
 function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
     if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
     return formatBalance(lastSale.price.usd, lastSale.paymentToken.decimals)
@@ -34,8 +36,52 @@ export function toPNG(image: string) {
         const ctx = canvas.getContext('2d')
         if (isNull(ctx)) throw new Error('Canvas was not supported')
         img.addEventListener('load', () => {
-            ;[canvas.width, canvas.height] = [img.width, img.height]
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            if (img.width > CanvasWidth && img.height > CanvasHeight) {
+                ;[canvas.width, canvas.height] = [CanvasWidth, CanvasHeight]
+                ctx.drawImage(
+                    img,
+                    (img.width - canvas.width) / 2,
+                    (img.height - canvas.height) / 2,
+                    canvas.width,
+                    canvas.height,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height,
+                )
+            }
+            if (img.width > CanvasWidth && img.height < CanvasHeight) {
+                ;[canvas.width, canvas.height] = [CanvasWidth, img.height]
+                ctx.drawImage(
+                    img,
+                    (img.width - canvas.width) / 2,
+                    0,
+                    canvas.width,
+                    img.height,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height,
+                )
+            }
+            if (img.width < CanvasWidth && img.height > CanvasHeight) {
+                ;[canvas.width, canvas.height] = [img.width, CanvasHeight]
+                ctx.drawImage(
+                    img,
+                    0,
+                    (img.height - canvas.height) / 2,
+                    img.width,
+                    canvas.height,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height,
+                )
+            }
+            if (img.width < CanvasWidth && img.height < CanvasHeight) {
+                ;[canvas.width, canvas.height] = [img.width, img.height]
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            }
             canvas.toBlob((blob) => {
                 resolve(blob)
             }, 'image/png')
