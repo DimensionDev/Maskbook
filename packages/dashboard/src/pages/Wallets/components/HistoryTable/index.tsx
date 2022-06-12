@@ -52,7 +52,7 @@ interface HistoryTableProps {
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { value, loading } = useTransactions()
+    const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
 
     useUpdateEffect(() => {
         setPage(0)
