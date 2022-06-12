@@ -80,5 +80,11 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     useEffect(() => retry(), [options?.account ?? account, retry, options?.chainId])
 
-    return { value: assets, next, done, retry, error }
+    return {
+        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        next,
+        done,
+        retry,
+        error,
+    }
 }
