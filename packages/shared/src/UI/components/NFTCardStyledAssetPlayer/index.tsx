@@ -66,7 +66,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const { value: tokenDetailed } = useNonFungibleToken<'all'>(
         NetworkPluginID.PLUGIN_EVM,
         contractAddress,
-        tokenId,
+        url ? undefined : tokenId,
         undefined,
         {
             chainId,
