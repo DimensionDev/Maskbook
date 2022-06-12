@@ -97,7 +97,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         NetworkPluginID.PLUGIN_EVM,
         selectedPaymentToken?.address,
     )
-    console.log(asset, 'asset')
 
     const onMakeOffer = useCallback(async () => {
         if (!asset) return
@@ -105,6 +104,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!token?.value) return
         if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
         const schemaName = asset.contract?.schema
+
         await opensea?.createBuyOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
