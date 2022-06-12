@@ -1,6 +1,6 @@
-import Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import type { RequestArguments } from 'web3-core'
+import { delay } from '@dimensiondev/kit'
 import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {
@@ -14,7 +14,6 @@ import {
     NetworkType,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
-import { delay } from '@dimensiondev/kit'
 
 export class BaseProvider implements EVM_Provider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()

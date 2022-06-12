@@ -1,4 +1,3 @@
-import Web3 from 'web3'
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
