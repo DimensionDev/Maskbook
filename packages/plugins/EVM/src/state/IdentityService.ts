@@ -67,14 +67,14 @@ export class IdentityService extends IdentityServiceState {
             return result.status === 'fulfilled' ? result.value : ''
         }
 
-        const getSettleStroage = (
+        const getSettleStorage = (
             result: PromiseSettledResult<{ address: string; networkPluginID: NetworkPluginID } | undefined>,
         ) => {
             return result.status === 'fulfilled' ? result.value : undefined
         }
         const addressENS = getSettledAddress(allSettled[0])
         const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressKV = getSettleStroage(allSettled[2])?.address ?? ''
+        const addressKV = getSettleStorage(allSettled[2])?.address ?? ''
 
         return [
             isValidSocialAddress(address)
