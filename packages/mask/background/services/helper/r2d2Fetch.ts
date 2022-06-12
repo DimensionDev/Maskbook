@@ -41,7 +41,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 
     // r2d2 worker
     const r2deWorkerType = matchers.find((x) => url.startsWith(x[0]))?.[1]
-    if (r2deWorkerType) globalThis.fetch(url.replace(new URL(url).origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
+    if (r2deWorkerType)
+        return globalThis.fetch(url.replace(new URL(url).origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
 
     // fallback
     return globalThis.fetch(input, init)

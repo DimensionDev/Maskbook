@@ -1,4 +1,6 @@
 import type {
+    BalanceNotifierState,
+    BlockNumberNotifierState,
     NetworkDescriptor,
     ProviderDescriptor,
     AddressBookState,
@@ -37,6 +39,8 @@ export declare namespace Web3Plugin {
             Web3Provider,
         > {
             AddressBook?: AddressBookState<ChainId>
+            BalanceNotifier?: BalanceNotifierState<ChainId>
+            BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
             Hub?: HubState<ChainId, SchemaType, GasOption>
             IdentityService?: IdentityServiceState
             NameService?: NameServiceState<ChainId>

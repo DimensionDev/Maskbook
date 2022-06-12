@@ -1,6 +1,16 @@
-import type { RequestArguments } from 'web3-core'
+import Web3 from 'web3'
+import type { provider as Provider, RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Web3Provider } from '../types'
+
+export function createWeb3(provider: Provider) {
+    const web3 = new Web3(provider)
+    web3.eth.transactionBlockTimeout = 10 * 1000
+    web3.eth.transactionPollingTimeout = 10 * 1000
+    // @ts-ignore disable the default polling strategy
+    web3.eth.transactionPollingInterval = Number.MAX_SAFE_INTEGER
+    return web3
+}
 
 export function createWeb3Provider(request: <T>(requestArguments: RequestArguments) => Promise<T>): Web3Provider {
     const provider: Web3Provider = {

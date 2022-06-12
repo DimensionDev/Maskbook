@@ -109,6 +109,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             type="text"
             value={amount}
             variant="outlined"
+            onKeyDown={(ev) => {
+                if (ev.key === 'Enter') ev.preventDefault()
+            }}
             onChange={onChange}
             placeholder="0.0"
             InputProps={{
