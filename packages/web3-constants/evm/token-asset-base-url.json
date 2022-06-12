@@ -60,7 +60,10 @@
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/aurora"
         ],
         "Aurora_Testnet": [],
-        "Conflux": [],
+        "Conflux": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/conflux",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/conflux"
+        ],
         "Harmony": [
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
