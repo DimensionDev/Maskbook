@@ -13,7 +13,6 @@ import { useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { delay } from '@dimensiondev/kit'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
@@ -43,20 +42,9 @@ export function NFTAvatarSettingDialog() {
                 const image = await toPNG(info.token.metadata.imageURL)
                 if (!image || !wallet) return
 
-                await Instagram.uploadUserAvatar(image, identity.identifier.userId)
+                const { profile_pic_url_hd } = await Instagram.uploadUserAvatar(image, identity.identifier.userId)
 
-                await delay(1000)
-
-                const url = `${location.protocol}//${location.host}/${identity.identifier.userId}`
-
-                const response = await fetch(url)
-                const htmlString = await response.text()
-
-                const html = document.createElement('html')
-                html.innerHTML = htmlString
-
-                const imgTag = html.querySelector<HTMLImageElement>('button > img')
-                if (!imgTag?.src) return
+                const avatarId = getAvatarId(profile_pic_url_hd)
 
                 const avatarInfo = await saveNFTAvatar(
                     wallet.address,
@@ -64,7 +52,7 @@ export function NFTAvatarSettingDialog() {
                         userId: identity.identifier.userId,
                         tokenId: info.token.tokenId,
                         address: info.token.address,
-                        avatarId: getAvatarId(imgTag.src),
+                        avatarId,
                         chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                         schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
                         pluginId: info.pluginId,
