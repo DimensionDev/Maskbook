@@ -2,7 +2,7 @@ import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import { useNFT } from '../hooks'
 import { useWallet } from '../hooks/useWallet'
@@ -49,7 +49,13 @@ export function NFTBadge(props: NFTBadgeProps) {
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+                openWindow(
+                    Others?.explorerResolver.nonFungibleTokenLink(
+                        avatar.chainId ?? ChainId.Mainnet,
+                        avatar.address,
+                        avatar.tokenId,
+                    ),
+                )
             }}>
             <Link
                 href={Others?.explorerResolver.nonFungibleTokenLink(

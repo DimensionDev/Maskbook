@@ -4,7 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
@@ -18,7 +18,7 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useWallet } from '@masknet/plugin-infra/web3'
+import { useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
@@ -68,6 +68,7 @@ function NFTAvatarInTwitter() {
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
+    const { Others } = useWeb3State<'all'>(_avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM)
 
     const { t } = useI18N()
     const showAvatar = useMemo(
@@ -226,7 +227,13 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId))
+            openWindow(
+                Others?.explorerResolver.nonFungibleTokenLink(
+                    _avatar?.chainId ?? ChainId.Mainnet,
+                    _avatar?.address ?? '',
+                    _avatar?.tokenId ?? '',
+                ),
+            )
         }
 
         linkParentDom.addEventListener('click', handler)
