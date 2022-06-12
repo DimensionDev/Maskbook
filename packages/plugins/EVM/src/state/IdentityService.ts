@@ -56,21 +56,25 @@ export class IdentityService extends IdentityServiceState {
         const allSettled = await Promise.allSettled([
             web3.eth.ens.getAddress(ethereumName),
             RSS3.getNameInfo(RSS3Id).then((x) => x?.address ?? ''),
+            KeyValue.createJSON_Storage<Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>>(
+                `com.maskbook.user_${getSiteType()}`,
+            )
+                .get(identifier?.userId ?? '$unknown')
+                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM]),
         ])
-
-        const addressKVStorage = await KeyValue.createJSON_Storage<
-            Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>
-        >(`com.maskbook.user_${getSiteType()}`)
-            .get(identifier?.userId ?? '$unknown')
-            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM])
 
         const getSettledAddress = (result: PromiseSettledResult<string>) => {
             return result.status === 'fulfilled' ? result.value : ''
         }
 
+        const getSettleStroage = (
+            result: PromiseSettledResult<{ address: string; networkPluginID: NetworkPluginID } | undefined>,
+        ) => {
+            return result.status === 'fulfilled' ? result.value : undefined
+        }
         const addressENS = getSettledAddress(allSettled[0])
         const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressKV = addressKVStorage?.address ?? ''
+        const addressKV = getSettleStroage(allSettled[2])?.address ?? ''
 
         return [
             isValidSocialAddress(address)
