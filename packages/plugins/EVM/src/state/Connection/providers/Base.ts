@@ -5,6 +5,7 @@ import { Emitter } from '@servie/events'
 import type { Account, ProviderEvents, ProviderOptions } from '@masknet/web3-shared-base'
 import {
     chainResolver,
+    createWeb3,
     createWeb3Provider,
     ChainId,
     ProviderType,
@@ -79,8 +80,7 @@ export class BaseProvider implements EVM_Provider {
 
     // Create a web3 instance from the external provider by default.
     async createWeb3(options?: ProviderOptions<ChainId>) {
-        // @ts-ignore
-        return new Web3(await this.createWeb3Provider(options))
+        return createWeb3(await this.createWeb3Provider(options))
     }
 
     // Create an external provider from the basic request method.

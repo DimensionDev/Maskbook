@@ -30,8 +30,10 @@ import {
     sendTransaction,
     createERC20Token,
     parseStringOrBytes32,
+    createWeb3,
     createWeb3Provider,
     getEthereumConstants,
+    isValidAddress,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -161,7 +163,7 @@ class Connection implements EVM_Connection {
     }
 
     getWeb3(options?: EVM_Web3ConnectionOptions) {
-        const web3 = new Web3(
+        const web3 = createWeb3(
             createWeb3Provider((requestArguments: RequestArguments) => this.hijackedRequest(requestArguments, options)),
         )
         return Promise.resolve(web3)
@@ -464,7 +466,7 @@ class Connection implements EVM_Connection {
     }
     async getNativeTokenBalance(options?: EVM_Web3ConnectionOptions): Promise<string> {
         const account = options?.account ?? this.account
-        if (!account) return '0'
+        if (!isValidAddress(account)) return '0'
         return this.getBalance(options?.account ?? this.account, options)
     }
     async getFungibleTokenBalance(address: string, options?: EVM_Web3ConnectionOptions): Promise<string> {

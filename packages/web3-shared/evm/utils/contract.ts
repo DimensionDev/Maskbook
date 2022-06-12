@@ -49,7 +49,5 @@ export async function sendTransaction(
 export function createContract<T extends BaseContract>(web3: Web3 | null, address: string, ABI: AbiItem[]) {
     if (!address || !isValidAddress(address) || !web3) return null
     const contract = new web3.eth.Contract(ABI, address) as unknown as T
-    contract.transactionConfirmationBlocks = 0
-    contract.transactionPollingTimeout = 10 * 1000
     return contract
 }

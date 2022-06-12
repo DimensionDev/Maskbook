@@ -23,12 +23,10 @@ export function useBlockNumber<S extends 'all' | void = void, T extends NetworkP
     useEffect(() => {
         return (
             BlockNumberNotifier?.emitter.on('update', (actualChainId) => {
-                if (actualChainId === chainId) {
-                    asyncRetry.retry()
-                }
+                if (actualChainId === chainId) asyncRetry.retry()
             }) ?? noop
         )
-    }, [chainId, asyncRetry, BlockNumberNotifier])
+    }, [chainId, asyncRetry.retry, BlockNumberNotifier])
 
     return asyncRetry
 }
