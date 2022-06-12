@@ -60,21 +60,16 @@ export class IdentityService extends IdentityServiceState {
                 `com.maskbook.user_${getSiteType()}`,
             )
                 .get(identifier?.userId ?? '$unknown')
-                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM]),
+                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? ''),
         ])
 
         const getSettledAddress = (result: PromiseSettledResult<string>) => {
             return result.status === 'fulfilled' ? result.value : ''
         }
 
-        const getSettleStorage = (
-            result: PromiseSettledResult<{ address: string; networkPluginID: NetworkPluginID } | undefined>,
-        ) => {
-            return result.status === 'fulfilled' ? result.value : undefined
-        }
         const addressENS = getSettledAddress(allSettled[0])
         const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressKV = getSettleStorage(allSettled[2])?.address ?? ''
+        const addressKV = getSettledAddress(allSettled[2])
 
         return [
             isValidSocialAddress(address)
