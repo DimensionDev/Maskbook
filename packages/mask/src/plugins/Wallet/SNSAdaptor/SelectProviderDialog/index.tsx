@@ -16,6 +16,8 @@ import { WalletMessages } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
+import { isDashboardPage } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -96,8 +98,16 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={networks}
-                    providers={providers}
+                    networks={
+                        isDashboardPage()
+                            ? networks.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+                            : networks
+                    }
+                    providers={
+                        isDashboardPage()
+                            ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
+                            : providers
+                    }
                     undeterminedPluginID={undeterminedPluginID}
                     undeterminedNetworkID={undeterminedNetworkID}
                     onNetworkIconClicked={onNetworkIconClicked}
