@@ -34,9 +34,15 @@ async function _getAddress(
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     if (userId === '$unknown') return
 
-    const storage = await createAddressDB(site).get(userId)
-    const storageV1 = storage as AddressStorageV1
-    const storageV2 = storage as AddressStorageV2
+    let storageV1, storageV2
+    try {
+        const storage = await createAddressDB(site).get(userId)
+        storageV1 = (storage ?? {}) as AddressStorageV1
+        storageV2 = (storage ?? {}) as AddressStorageV2
+    } catch {
+        storageV1 = {} as AddressStorageV1
+        storageV2 = {} as AddressStorageV2
+    }
 
     if (!pluginID && storageV2[userId]) return storageV2[userId]
     if (storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM])
