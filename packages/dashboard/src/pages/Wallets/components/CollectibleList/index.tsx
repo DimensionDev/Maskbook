@@ -16,7 +16,7 @@ import {
     useTrustedNonFungibleTokens,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-unified'
 import { ElementAnchor } from '@masknet/shared'
 
@@ -51,7 +51,10 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
         done,
         next,
         error,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, { account })
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        account,
+        chainId: selectedChain?.chainId as ChainId,
+    })
 
     const renderCollectibles = useMemo(() => {
         const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) =>
