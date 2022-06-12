@@ -1,6 +1,6 @@
 import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
@@ -18,9 +18,7 @@ export interface TabCardProps {
 
 export function TabCard({ type, socialAddressList }: TabCardProps) {
     const t = useI18N()
-    const addressName = socialAddressList?.find(
-        (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-    )
+    const addressName = socialAddressList?.find((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
     const userAddress = addressName?.address || ''
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
