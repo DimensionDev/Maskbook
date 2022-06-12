@@ -68,7 +68,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 
     getAssets = async (from: string, { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM> = {}) => {
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
-        if (!chainInfo) return createPageable([], createIndicator())
+        if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
