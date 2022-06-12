@@ -288,7 +288,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     /** chain Id */
     chainId: ChainId
     /** permalink of asset */
-    asset_permalink: string
+    assetPermalink: string
     /** token amount */
     quantity: string
     /** transaction hash */

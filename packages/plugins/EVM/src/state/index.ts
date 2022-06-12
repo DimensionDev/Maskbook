@@ -49,7 +49,9 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
             account: Provider_.account,
         }),
         TransactionFormatter: new TransactionFormatter(context),
-        TransactionWatcher: new TransactionWatcher(context),
+        TransactionWatcher: new TransactionWatcher(context, {
+            chainId: Provider_.chainId,
+        }),
         Connection: new Connection(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,

@@ -1,7 +1,36 @@
-import { noop } from 'lodash-unified'
+import { noop, reject } from 'lodash-unified'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
 import { None, Option, Some } from 'ts-results'
+
+export async function getSubscriptionCurrentValue<T>(
+    getSubscription: () => Subscription<T> | undefined,
+): Promise<T | undefined> {
+    const getValue = () => {
+        return getSubscription()?.getCurrentValue()
+    }
+
+    const createReader = async () => {
+        try {
+            return getValue()
+        } catch (error: unknown) {
+            if (!(error instanceof Promise)) return
+            await error
+            return getValue()
+        }
+    }
+
+    const createReaders = Array.from<() => Promise<T | undefined>>({ length: 3 }).fill(() => createReader())
+
+    for (const createReader of createReaders) {
+        try {
+            return await createReader()
+        } catch {
+            continue
+        }
+    }
+    return
+}
 
 export function createConstantSubscription<T>(value: T): Subscription<T> {
     return {

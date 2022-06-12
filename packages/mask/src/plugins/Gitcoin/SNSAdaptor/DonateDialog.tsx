@@ -75,7 +75,7 @@ export function DonateDialog(props: DonateDialogProps) {
         nativeTokenDetailed.value,
     )
 
-    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
+    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeTokenDetailed.value?.address)
 
     // #region select token dialog
     const pickToken = usePickToken()
