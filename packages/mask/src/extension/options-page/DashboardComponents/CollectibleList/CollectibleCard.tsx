@@ -76,7 +76,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 <NFTCardStyledAssetPlayer
                     contractAddress={token.address}
                     chainId={token.chainId}
-                    url={token.metadata?.mediaURL ?? token.metadata?.imageURL}
+                    url={token.metadata?.mediaURL || token.metadata?.imageURL}
                     renderOrder={renderOrder}
                     tokenId={token.tokenId}
                     classes={{
