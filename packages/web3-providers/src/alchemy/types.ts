@@ -31,6 +31,7 @@ export interface AlchemyNFT_EVM {
         image: string
         image_url: string
         external_url: string
+        animation_url: string
         attributes: Array<{
             value: string
             trait_type: string

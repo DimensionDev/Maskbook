@@ -78,7 +78,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         )
 
         const assets = res?.ownedNfts?.map((nft) =>
-            createNftAsset_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
+            createNftToken_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
         )
         return createPageable(
             assets,
@@ -134,7 +134,7 @@ function resolveCollectionName(asset: AlchemyNFT_EVM) {
     return ''
 }
 
-function createNftAsset_EVM(
+function createNftToken_EVM(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
@@ -151,10 +151,17 @@ function createNftAsset_EVM(
             symbol: '',
             description: asset.description,
             imageURL: resolveIPFSLinkFromURL(
-                asset?.metadata?.image ?? asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? '',
+                asset?.metadata?.image ||
+                    asset?.metadata?.image_url ||
+                    asset?.media?.[0]?.gateway ||
+                    asset?.metadata?.animation_url ||
+                    '',
             ),
             mediaURL: resolveIPFSLinkFromURL(
-                asset?.media?.[0]?.gateway ?? asset?.metadata?.image_url ?? asset?.metadata?.image,
+                asset?.media?.[0]?.gateway ??
+                    asset?.media?.[0]?.raw ??
+                    asset?.metadata?.image_url ??
+                    asset?.metadata?.image,
             ),
         },
         contract: {
@@ -195,7 +202,7 @@ function createNFTAsset_EVM(
             name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
             symbol: '',
             description: metaDataResponse.description,
-            imageURL: metaDataResponse?.metadata?.image ?? metaDataResponse?.media?.[0]?.gateway ?? '',
+            imageURL: metaDataResponse?.metadata?.image || metaDataResponse?.media?.[0]?.gateway || '',
             mediaURL: metaDataResponse?.media?.[0]?.gateway,
         },
         contract: {
