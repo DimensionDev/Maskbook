@@ -64,6 +64,7 @@ const useStyles = makeStyles()({
         padding: 0,
         height: 'calc(100vh - 132px)',
         overflow: 'auto',
+        paddingBottom: 70,
     },
     controller: {
         display: 'grid',
