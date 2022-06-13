@@ -4,14 +4,12 @@ import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 import { findLastIndex } from 'lodash-unified'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
-import { useChainId, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
-    const chainId = useChainId()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
-    const { value: assets = [], retry, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-    console.log('useNonFungibleAssets', assets, loading)
+    const { value: assets = [] } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
         if (assets?.length) {
@@ -23,6 +21,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                         contract: NFT.address,
                         icon: NFT.metadata?.imageURL ?? '',
                         tokens: [],
+                        chainId: NFT.metadata?.chainId,
                     }
                     tempNFTs.push(sameNFT)
                 } else {

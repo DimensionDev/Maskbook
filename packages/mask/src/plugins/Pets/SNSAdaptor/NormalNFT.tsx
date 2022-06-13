@@ -74,7 +74,6 @@ export function NormalNFT(props: NormalNFTProps) {
     const [isMenuShow, setMenuShow] = useState(false)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const handleMenuShow = (e: React.MouseEvent) => {
-        console.log('e', e)
         e.preventDefault()
 
         setMousePosition({ x: e.clientX, y: e.clientY })
@@ -124,6 +123,7 @@ export function NormalNFT(props: NormalNFTProps) {
             ) : null}
             <div className={classes.fullBox} onContextMenu={handleMenuShow} />
             <RightMenu
+                showMeta={showMeta}
                 isShow={isMenuShow}
                 onClose={handleMenuClose}
                 mousePosition={mousePosition}

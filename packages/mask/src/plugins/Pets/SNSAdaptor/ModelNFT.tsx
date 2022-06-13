@@ -64,7 +64,6 @@ export function ModelNFT(props: ModelNFTProps) {
     const [isMenuShow, setMenuShow] = useState(false)
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
     const handleMenuShow = (e: React.MouseEvent) => {
-        console.log('e', e)
         e.preventDefault()
 
         setMousePosition({ x: e.clientX, y: e.clientY })
@@ -103,6 +102,7 @@ export function ModelNFT(props: ModelNFTProps) {
             </Drag>
             <RightMenu
                 isShow={isMenuShow}
+                showMeta={showMeta}
                 onClose={handleMenuClose}
                 mousePosition={mousePosition}
                 dragPosition={position}

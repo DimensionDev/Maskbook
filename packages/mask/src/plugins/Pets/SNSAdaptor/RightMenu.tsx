@@ -3,13 +3,18 @@ import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginPetMessages } from '../messages'
+import { useI18N } from '../../../utils'
 import { PluginGameMessages } from '../../Game/messages'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { NFF_TWITTER } from '../constants'
+import { ShowMeta, MenuType } from '../types'
+import { useCurrentVisitingUser } from '../hooks'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 
 type Props = {
     isShow: boolean
     mousePosition: { x: number; y: number }
     dragPosition: { x: number; y: number }
+    showMeta: ShowMeta | undefined
     onClose: () => void
 }
 
@@ -100,10 +105,12 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function RightMenu(props: Props) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
+    const visitor = useCurrentVisitingUser(0)
+    const whoAmI = useLastRecognizedIdentity()
 
-    const chainId = useChainId()
     const [isLeft, setIsLeft] = useState(false)
     const [isTop, setIsTop] = useState(false)
 
@@ -124,7 +131,6 @@ function RightMenu(props: Props) {
     }
     useEffect(() => {
         if (props.isShow) {
-            console.log('props.dragPosition.x', props.mousePosition.x)
             setIsLeft(props.mousePosition.x > window.innerWidth / 2)
             setIsTop(props.mousePosition.y > window.innerHeight / 2)
             addEvents()
@@ -139,23 +145,23 @@ function RightMenu(props: Props) {
         props.onClose()
     }, [props.dragPosition.x, props.dragPosition.y])
 
-    function onClickMenu(type: string) {
+    function onClickMenu(type: MenuType) {
         switch (type) {
-            case 'change':
+            case MenuType.Setting:
                 openDialog()
                 break
-            case 'ski':
+            case MenuType.Game:
                 openGameDialog({
                     open: true,
                     tokenProps: {
-                        tokenId: '1',
-                        contract: '0x0000000000000000000000000000000000000000',
-                        chainId,
+                        tokenId: props.showMeta?.tokenId,
+                        contract: props.showMeta?.contract,
+                        chainId: props.showMeta?.chainId,
                     },
                 })
                 break
-            case 'aboutUs':
-                window.open('https://twitter.com/NonFFriend')
+            case MenuType.About:
+                window.open(NFF_TWITTER)
                 break
         }
         props.onClose()
@@ -179,17 +185,17 @@ function RightMenu(props: Props) {
                 top: props.mousePosition.y,
                 transform: `translate(${isLeft ? '-100%' : 0}, ${isTop ? '-100%' : 0})`,
             }}>
-            <div onClick={() => onClickMenu('change')}>
-                <span>Change</span>
+            <div onClick={() => onClickMenu(MenuType.Setting)}>
+                <span>{t('plugin_pets_dialog_menu_change')}</span>
             </div>
-            {location.pathname === '/home' ? (
-                <div onClick={() => onClickMenu('ski')}>
-                    <span>Ski</span>
+            {visitor.userId === whoAmI?.identifier?.userId ? (
+                <div onClick={() => onClickMenu(MenuType.Game)}>
+                    <span>{t('plugin_pets_dialog_menu_ski')}</span>
                 </div>
             ) : null}
 
-            <div onClick={() => onClickMenu('aboutUs')}>
-                <span>About us</span>
+            <div onClick={() => onClickMenu(MenuType.About)}>
+                <span>{t('plugin_pets_dialog_menu_about')}</span>
             </div>
         </div>
     )

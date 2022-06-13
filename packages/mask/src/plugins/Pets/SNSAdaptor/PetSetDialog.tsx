@@ -147,6 +147,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             userId: user.userId,
             contract: collection.contract,
             tokenId: chosenToken?.tokenId ?? '',
+            chainId: chosenToken?.chainId,
         }
         try {
             await PluginPetRPC.setUserAddress(user)

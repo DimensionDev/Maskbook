@@ -25,6 +25,9 @@ export function useDefaultEssay(user: User) {
                 image: isMASK ? Punk3D.url : isProfile ? PunkIcon : '',
                 word: isMASK ? DEFAULT_PUNK_MASK_WORD : DEFAULT_SET_WORD,
                 type: isMASK ? ImageType.GLB : ImageType.NORMAL,
+                contract: '',
+                tokenId: '',
+                chainId: undefined,
             })
         } else {
             setEssayMeta(undefined)

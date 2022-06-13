@@ -56,7 +56,7 @@ const WalletConnectDialog = () => {
                     <GameList onPlay={handleGameOpen} onShare={handleGameShare} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow gameInfo={gameInfo} isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow gameInfo={gameInfo} tokenProps={tokenProps} isShow={isGameShow} onClose={handleGameClose} />
             <InjectedDialog onClose={closeGameShare} open={isShareShow} title="Share">
                 <DialogContent>
                     <GameShareDialog shareUrl={shareUrl} onClose={closeGameShare} />
