@@ -28,12 +28,12 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         return [
             [
                 token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
-                tipAmount.toFixed(), // amount
+                tipAmount.toFixed(0), // amount
                 address, // dest
             ],
             [
                 token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
-                grantAmount.toFixed(), // amount
+                grantAmount.toFixed(0), // amount
                 address, // dest
             ],
         ]
