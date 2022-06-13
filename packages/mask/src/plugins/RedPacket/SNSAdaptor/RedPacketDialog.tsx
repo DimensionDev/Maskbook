@@ -60,6 +60,7 @@ enum CreateRedPacketPageStep {
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
@@ -177,6 +178,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     return (
         <InjectedDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             open={props.open}
             title={title}
             onClose={isCreateStep ? onClose : () => setStep(CreateRedPacketPageStep.NewRedPacketPage)}

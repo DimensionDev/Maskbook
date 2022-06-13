@@ -96,6 +96,7 @@ export interface CompositionProps {
     onChange?(message: TypedMessage): void
     onConnectPersona(): void
     onCreatePersona(): void
+    isOpenFromApplicationBoard: boolean
     e2eEncryptionDisabled: E2EUnavailableReason | undefined
     recipients: LazyRecipients
     // Enabled features
@@ -204,7 +205,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
-                    <PluginEntryRender readonly={sending} ref={PluginEntry} />
+                    <PluginEntryRender
+                        readonly={sending}
+                        ref={PluginEntry}
+                        isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                    />
                 </div>
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
