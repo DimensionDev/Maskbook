@@ -109,12 +109,12 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
     const [txStatus, setTxStatus] = useState(tx.status)
 
     useEffect(() => {
-        const removeListener = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
+        const off = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
             setTxStatus(status)
         })
 
         return () => {
-            removeListener?.()
+            off?.()
         }
     }, [tx.id, TransactionWatcher])
 

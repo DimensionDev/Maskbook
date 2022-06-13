@@ -288,7 +288,7 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     /** chain Id */
     chainId: ChainId
     /** permalink of asset */
-    asset_permalink: string
+    assetPermalink: string
     /** token amount */
     quantity: string
     /** transaction hash */
@@ -556,7 +556,7 @@ export interface ProviderOptions<ChainId> {
 }
 
 export interface TransactionChecker<ChainId> {
-    checkStatus(chainId: ChainId, id: string): Promise<TransactionStatusType>
+    checkStatus(id: string, chainId: ChainId, account: string): Promise<TransactionStatusType>
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
@@ -927,9 +927,9 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     emitter: Emitter<WatchEvents<Transaction>>
 
     /** Add a transaction into the watch list. */
-    watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => void
+    watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
     /** Remove a transaction from the watch list. */
-    unwatchTransaction: (chainId: ChainId, id: string) => void
+    unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Update transaction status */
     notifyTransaction: (id: string, status: TransactionStatusType, transaction: Transaction) => void
 }

@@ -9,8 +9,6 @@ import { first } from 'lodash-unified'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
 
 export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
-    private id = 0
-
     constructor() {
         super()
         Web3StateSettings.readyPromise.then(this.addSharedContextListeners.bind(this))
@@ -55,10 +53,8 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
         requestArguments: RequestArguments,
         options?: ProviderOptions<ChainId>,
     ): Promise<T> {
-        this.id += 1
-
         const response = await SharedContextSettings.value.send(
-            createPayload(this.id, requestArguments.method, requestArguments.params),
+            createPayload(0, requestArguments.method, requestArguments.params),
             {
                 chainId: SharedContextSettings.value.chainId.getCurrentValue(),
                 popupsWindow: getSiteType() === ExtensionSite.Dashboard || isEnhanceableSiteType(),

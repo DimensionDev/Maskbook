@@ -1,13 +1,17 @@
+import { omit } from 'lodash-unified'
+import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
+import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
 import {
     TransactionChecker,
     TransactionStatusType,
     WatchEvents,
     TransactionWatcherState as Web3TransactionWatcherState,
+    RecentTransaction,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
-interface StorageItem<ChainId, Transaction> {
+interface TransactionWatcherItem<ChainId, Transaction> {
     at: number
     id: string
     chainId: ChainId
@@ -15,77 +19,109 @@ interface StorageItem<ChainId, Transaction> {
     transaction: Transaction
 }
 
-class Storage<ChainId, Transaction> {
-    static MAX_ITEM_SIZE = 40
-
-    private map = new Map<ChainId, Map<string, StorageItem<ChainId, Transaction>>>()
-
-    private getStorage(chainId: ChainId) {
-        if (!this.map.has(chainId)) this.map.set(chainId, new Map())
-        return this.map.get(chainId)!
-    }
-
-    public hasItem(chainId: ChainId, id: string) {
-        return this.getStorage(chainId).has(id)
-    }
-
-    public getItem(chainId: ChainId, id: string) {
-        return this.getStorage(chainId).get(id)
-    }
-
-    public setItem(chainId: ChainId, id: string, transaction: StorageItem<ChainId, Transaction>) {
-        this.getStorage(chainId).set(id, transaction)
-    }
-
-    public removeItem(chainId: ChainId, id: string) {
-        this.getStorage(chainId).delete(id)
-    }
-
-    public getItems(chainId: ChainId) {
-        const map = this.getStorage(chainId)
-        return map ? [...map.entries()].sort(([, a], [, z]) => z.at - a.at) : []
-    }
-
-    public getWatched(chainId: ChainId) {
-        return this.getItems(chainId).slice(0, Storage.MAX_ITEM_SIZE)
-    }
-
-    public getUnwatched(chainId: ChainId) {
-        return this.getItems(chainId).slice(Storage.MAX_ITEM_SIZE)
-    }
-}
+type TransactionWatcher<ChainId, Transaction> = Record<
+    // @ts-ignore
+    ChainId,
+    Record<
+        // transaction id
+        string,
+        TransactionWatcherItem<ChainId, Transaction>
+    >
+>
 
 class Watcher<ChainId, Transaction> {
-    static LATEST_TRANSACTION_SIZE = 5
+    static MAX_ITEM_SIZE = 40
 
     private timer: NodeJS.Timeout | null = null
-    private storage = new Storage<ChainId, Transaction>()
 
     constructor(
+        protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>>,
         protected checkers: Array<TransactionChecker<ChainId>>,
         protected options: {
-            delay: number
+            checkDelay: number
+            getTransactionCreator: (transaction: Transaction) => string
             onNotify: (id: string, status: TransactionStatusType, transaction: Transaction) => void
         },
     ) {}
+
+    private getStorage(chainId: ChainId) {
+        return this.storage.value[chainId]
+    }
+
+    private async setStorage(chainId: ChainId, id: string, item: TransactionWatcherItem<ChainId, Transaction>) {
+        await this.storage.setValue({
+            ...this.storage.value,
+            // @ts-ignore
+            [chainId]: {
+                ...this.storage.value[chainId],
+                [item.id]: item,
+            },
+        })
+    }
+
+    private async deleteStorage(chainId: ChainId, id: string) {
+        await this.storage.setValue({
+            ...this.storage.value,
+            // @ts-ignore
+            [chainId]: omit(this.storage.value[chainId], [id]),
+        })
+    }
+
+    private async setTransaction(
+        chainId: ChainId,
+        id: string,
+        transaction: TransactionWatcherItem<ChainId, Transaction>,
+    ) {
+        await this.setStorage(chainId, id, transaction)
+    }
+
+    private async removeTransaction(chainId: ChainId, id: string) {
+        await this.deleteStorage(chainId, id)
+    }
+
+    private getAllTransactions(chainId: ChainId) {
+        const storage = this.getStorage(chainId)
+        return storage ? [...Object.entries(storage)].sort(([, a], [, z]) => z.at - a.at) : []
+    }
+
+    private getWatched(chainId: ChainId) {
+        return this.getAllTransactions(chainId).slice(0, Watcher.MAX_ITEM_SIZE)
+    }
+
+    private getUnwatched(chainId: ChainId) {
+        return this.getAllTransactions(chainId).slice(Watcher.MAX_ITEM_SIZE)
+    }
 
     private async check(chainId: ChainId) {
         // stop any pending task
         this.stopCheck()
 
         // unwatch legacy transactions
-        this.storage.getUnwatched(chainId).forEach(([id]) => this.unwatchTransaction(chainId, id))
+        for (const [id] of this.getUnwatched(chainId)) {
+            await this.unwatchTransaction(chainId, id)
+        }
 
         // check if all transactions were sealed
-        const watchedTransactions = this.storage
-            .getWatched(chainId)
-            .filter(([, x]) => x.status !== TransactionStatusType.NOT_DEPEND)
+        const watchedTransactions = this.getWatched(chainId).filter(
+            ([, x]) => x.status === TransactionStatusType.NOT_DEPEND,
+        )
         if (!watchedTransactions.length) return
 
         for (const [id, { transaction }] of watchedTransactions) {
             for (const checker of this.checkers) {
-                const status = await checker.checkStatus(chainId, id)
-                if (status !== TransactionStatusType.NOT_DEPEND) this.options.onNotify(id, status, transaction)
+                try {
+                    const status = await checker.checkStatus(
+                        id,
+                        chainId,
+                        this.options.getTransactionCreator(transaction),
+                    )
+                    if (status !== TransactionStatusType.NOT_DEPEND) {
+                        this.removeTransaction(chainId, id)
+                        this.options.onNotify(id, status, transaction)
+                    }
+                } catch (error) {
+                    console.warn('Failed to check transaction status.')
+                }
             }
         }
 
@@ -93,71 +129,126 @@ class Watcher<ChainId, Transaction> {
         this.startCheck(chainId)
     }
 
-    private startCheck(chainId: ChainId) {
+    public startCheck(chainId: ChainId) {
         this.stopCheck()
         if (this.timer === null) {
-            this.timer = setTimeout(this.check.bind(this, chainId), this.options.delay)
+            this.timer = setTimeout(this.check.bind(this, chainId), this.options.checkDelay)
         }
     }
 
-    private stopCheck() {
+    public stopCheck() {
         if (this.timer !== null) clearTimeout(this.timer)
         this.timer = null
     }
 
-    public watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        if (!this.storage.hasItem(chainId, id)) {
-            this.storage.setItem(chainId, id, {
-                at: Date.now(),
-                id,
-                chainId,
-                status: TransactionStatusType.NOT_DEPEND,
-                transaction,
-            })
-        }
+    public async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
+        await this.setTransaction(chainId, id, {
+            at: Date.now(),
+            id,
+            chainId,
+            status: TransactionStatusType.NOT_DEPEND,
+            transaction,
+        })
         this.startCheck(chainId)
     }
 
-    public unwatchTransaction(chainId: ChainId, id: string) {
-        this.storage.removeItem(chainId, id)
+    public async unwatchTransaction(chainId: ChainId, id: string) {
+        await this.removeTransaction(chainId, id)
     }
 }
 
 export class TransactionWatcherState<ChainId, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
+    protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>> = null!
     private watchers: Map<ChainId, Watcher<ChainId, Transaction>> = new Map()
 
     emitter: Emitter<WatchEvents<Transaction>> = new Emitter()
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
+        protected chainIds: ChainId[],
         protected checkers: Array<TransactionChecker<ChainId>>,
+        protected subscriptions: {
+            chainId?: Subscription<ChainId>
+            transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
+        },
         protected options: {
             /** Default block delay in seconds */
             defaultBlockDelay: number
+            /** Get the author address */
+            getTransactionCreator: (transaction: Transaction) => string
         },
-    ) {}
+    ) {
+        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<
+            ChainId,
+            Transaction
+        >
+        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('TransactionWatcher', {
+            value: defaultValue,
+        })
+
+        this.storage = storage.value
+
+        const resume = async () => {
+            const chainId = this.subscriptions.chainId?.getCurrentValue()
+            if (chainId) this.resumeWatcher(chainId)
+
+            const transactions = this.subscriptions.transactions?.getCurrentValue() ?? []
+            for (const transaction of transactions) {
+                for (const [id, tx] of Object.entries(transaction.candidates)) {
+                    if (transaction.status === TransactionStatusType.NOT_DEPEND)
+                        await this.watchTransaction(transaction.chainId, id, tx)
+                }
+            }
+        }
+
+        // resume watcher if chain id changed
+        if (this.subscriptions.chainId) {
+            this.subscriptions.chainId.subscribe(() => resume())
+
+            getSubscriptionCurrentValue(() => {
+                return this.subscriptions.chainId
+            }).then(() => {
+                resume()
+            })
+        }
+
+        // add external transactions at startup
+        if (this.subscriptions.transactions) {
+            getSubscriptionCurrentValue(() => {
+                return this.subscriptions.transactions
+            }).then(() => {
+                resume()
+            })
+        }
+    }
 
     private getWatcher(chainId: ChainId) {
         if (!this.watchers.has(chainId))
             this.watchers.set(
                 chainId,
-                new Watcher(this.checkers, {
-                    delay: this.options.defaultBlockDelay * 1000,
+                new Watcher(this.storage, this.checkers, {
+                    checkDelay: this.options.defaultBlockDelay * 1000,
+                    getTransactionCreator: this.options.getTransactionCreator,
                     onNotify: this.notifyTransaction.bind(this),
                 }),
             )
         return this.watchers.get(chainId)!
     }
 
-    watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
+    private resumeWatcher(chainId: ChainId) {
+        const watcher = this.getWatcher(chainId)
+        watcher.startCheck(chainId)
+    }
+
+    async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
+        await this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
         this.emitter.emit('progress', id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
-    unwatchTransaction(chainId: ChainId, id: string) {
-        this.getWatcher(chainId).unwatchTransaction(chainId, id)
+    async unwatchTransaction(chainId: ChainId, id: string) {
+        await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
     notifyTransaction(id: string, status: TransactionStatusType, transaction: Transaction) {
