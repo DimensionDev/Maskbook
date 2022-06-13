@@ -21,6 +21,8 @@ const WalletConnectDialog = () => {
         if (ev?.tokenProps) setTokenProps(ev.tokenProps)
     })
 
+    const { closeDialog: _closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+
     const handleGameClose = () => {
         setGameShow(false)
         setGameInfo(undefined)
@@ -28,6 +30,7 @@ const WalletConnectDialog = () => {
 
     const handleGameOpen = (gameInfo: GameInfo) => {
         closeDialog()
+        _closeDialog()
         closeWalletDialog()
         setGameInfo(gameInfo)
         setGameShow(true)
@@ -42,7 +45,6 @@ const WalletConnectDialog = () => {
     const handleGameShare = (url: string) => {
         setShareShow(true)
         setShareUrl(url)
-        handleGameClose()
     }
     const closeGameShare = () => {
         setShareShow(false)
@@ -61,6 +63,7 @@ const WalletConnectDialog = () => {
                 gameInfo={gameInfo}
                 tokenProps={tokenProps}
                 isShow={isGameShow}
+                isShadow={isShareShow}
                 onClose={handleGameClose}
                 onShare={handleGameShare}
             />

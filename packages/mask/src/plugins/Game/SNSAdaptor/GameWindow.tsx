@@ -16,7 +16,11 @@ const useStyles = makeStyles()(() => ({
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        zIndex: 99999,
+        zIndex: 9999,
+    },
+    shadow: {
+        zIndex: 1000,
+        pointerEvents: 'none',
     },
     body: {
         position: 'absolute',
@@ -80,6 +84,7 @@ interface Props {
     gameInfo: GameInfo | undefined
     tokenProps: GameNFT | undefined
     isShow: boolean
+    isShadow: boolean
     onClose: () => void
     onShare: (url: string) => void
 }
@@ -122,7 +127,7 @@ const GameWindow = (props: Props) => {
     }
 
     return isShow ? (
-        <div className={classes.root}>
+        <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>
             <div className={classes.body}>
                 <div
                     className={classNames(classes.iframeBox, { [classes.fullScreen]: isFullScreen })}
