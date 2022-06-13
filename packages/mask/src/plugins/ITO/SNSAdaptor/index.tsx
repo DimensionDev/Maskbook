@@ -42,8 +42,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [ITO_MetaKey_2, onAttached_ITO],
     ]),
     CompositionDialogEntry: {
-        dialog({ open, onClose }) {
-            return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
+        dialog({ open, onClose, isOpenFromApplicationBoard }) {
+            return (
+                <CompositionDialog
+                    open={open}
+                    onConfirm={onClose}
+                    onClose={onClose}
+                    isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                />
+            )
         },
         label: (
             <>

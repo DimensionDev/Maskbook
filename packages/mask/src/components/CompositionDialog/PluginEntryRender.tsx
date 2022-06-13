@@ -5,7 +5,6 @@ import {
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
@@ -130,12 +129,9 @@ const DialogEntry = memo(
         const [open, setOpen] = useState(false)
         const opener = useCallback(() => setOpen(true), [])
         const close = useCallback(() => {
-            if (isOpenFromApplicationBoard) {
-                CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
-            }
-
             setOpen(false)
-        }, [isOpenFromApplicationBoard])
+        }, [])
+
         useSetPluginRef(ref, opener)
         const chip = (
             <ClickableChip
@@ -158,7 +154,7 @@ const DialogEntry = memo(
                     {chip}
                     <span style={{ display: 'none' }}>
                         {/* Dialog should use portals to render. */}
-                        <Dialog open={open} onClose={close} />
+                        <Dialog open={open} onClose={close} isOpenFromApplicationBoard={isOpenFromApplicationBoard} />
                     </span>
                 </>
             )

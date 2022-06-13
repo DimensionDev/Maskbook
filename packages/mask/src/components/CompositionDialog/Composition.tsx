@@ -22,6 +22,9 @@ const useStyles = makeStyles()({
         backgroundImage: 'none',
         maxWidth: 'none',
     },
+    hideDialogRoot: {
+        visibility: 'hidden',
+    },
 })
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -30,7 +33,7 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
     /** @deprecated */
@@ -104,7 +107,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     return (
         <DialogStackingProvider>
             <InjectedDialog
-                classes={{ paper: classes.dialogRoot }}
+                classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
                 keepMounted
                 open={open}
                 onClose={onClose}
