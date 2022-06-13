@@ -54,7 +54,7 @@
     "send_symbol": "crwdns16836:0{{amount}}crwdnd16836:0{{symbol}}crwdne16836:0",
     "back": "crwdns16838:0crwdne16838:0",
     "hint": "crwdns16840:0crwdne16840:0",
-    "amount_total": "crwdns16842:0crwdne16842:0",
+    "total_amount": "crwdns17248:0crwdne17248:0",
     "amount_per_share": "crwdns16844:0crwdne16844:0",
     "shares": "crwdns16846:0crwdne16846:0",
     "average": "crwdns16848:0crwdne16848:0",
