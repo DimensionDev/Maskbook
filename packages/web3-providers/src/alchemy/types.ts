@@ -64,10 +64,11 @@ export interface AlchemyNFT_FLOW {
     }
     title: string
     description: string
-    media: {
+    externalDomainViewUrl: string
+    media: Array<{
         uri: string
         mimeType: string
-    }
+    }>
     metadata: {
         metadata: Array<{
             name: string
@@ -146,10 +147,10 @@ export interface AlchemyResponse_FLOW_Metadata {
     title: string
     description: string
     externalDomainViewUrl: string
-    media: {
+    media: Array<{
         uri: string
         mimeType: string
-    }
+    }>
     metadata: {
         metadata: Array<{
             name: string
