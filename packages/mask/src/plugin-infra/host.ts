@@ -42,13 +42,13 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
             }
 
             WalletMessages.events.walletConnectQRCodeDialogUpdated.on(onClose)
-            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
                 open: true,
                 uri,
             })
         },
         closeWalletConnectDialog: () => {
-            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
                 open: false,
             })
         },

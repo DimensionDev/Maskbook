@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -140,11 +140,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        className={classes.player}
-                                        src={asset.value.shareUrl}
-                                        alt={asset.value.title}
-                                    />
+                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img

@@ -91,7 +91,7 @@ class Hub implements FlowHub {
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         return Alchemy_FLOW.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
-    getNonFungibleAssets(
+    getNonFungibleTokens(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {

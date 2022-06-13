@@ -178,10 +178,11 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
 }
 
 export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONFileVersion2 {
+    const now = new Date()
     const result: BackupJSONFileVersion2 = {
         _meta_: {
             maskbookVersion: item.meta.maskVersion.unwrapOr('>=2.5.0'),
-            createdAt: Number(item.meta.createdAt),
+            createdAt: Number(item.meta.createdAt.unwrapOr(now)),
             type: 'maskbook-backup',
             version: 2,
         },
@@ -197,8 +198,8 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     for (const [id, data] of item.personas) {
         result.personas.push({
             identifier: id.toText(),
-            createdAt: Number(data.createdAt),
-            updatedAt: Number(data.updatedAt),
+            createdAt: Number(data.createdAt.unwrapOr(now)),
+            updatedAt: Number(data.updatedAt.unwrapOr(now)),
             nickname: data.nickname.unwrapOr(undefined),
             linkedProfiles: [...data.linkedProfiles.keys()].map((id) => [
                 id.toText(),
@@ -219,8 +220,8 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     for (const [id, data] of item.profiles) {
         result.profiles.push({
             identifier: id.toText(),
-            createdAt: Number(data.createdAt),
-            updatedAt: Number(data.updatedAt),
+            createdAt: Number(data.createdAt.unwrapOr(now)),
+            updatedAt: Number(data.updatedAt.unwrapOr(now)),
             nickname: data.nickname.unwrapOr(undefined),
             linkedPersona: data.linkedPersona.unwrapOr(undefined)?.toText(),
             localKey: data.localKey.unwrapOr(undefined),

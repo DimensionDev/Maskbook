@@ -10,7 +10,7 @@ export function useSocialAddressListAll(
     identity?: SocialIdentity,
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
 ) {
-    // TODO: To Add Flow
+    // TODO: to add flow
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
