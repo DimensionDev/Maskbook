@@ -5,6 +5,7 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
+    SocialAddressType,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
@@ -279,10 +280,14 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                <ReversedAddress
-                                    address={addressName.address}
-                                    pluginId={addressName.networkSupporterPluginID}
-                                />
+                                {addressName.type === SocialAddressType.ADDRESS ? (
+                                    <ReversedAddress
+                                        address={addressName.address}
+                                        pluginId={addressName.networkSupporterPluginID}
+                                    />
+                                ) : (
+                                    addressName.label
+                                )}
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -302,7 +307,14 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.label} pluginId={addressName.networkSupporterPluginID} />
+                        {addressName.type === SocialAddressType.ADDRESS ? (
+                            <ReversedAddress
+                                address={addressName.address}
+                                pluginId={addressName.networkSupporterPluginID}
+                            />
+                        ) : (
+                            addressName.label
+                        )}
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
