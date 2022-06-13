@@ -42,6 +42,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
+    const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
     const onClose = useCallback(() => {
         setOpen(false)
         UI.current?.reset()
@@ -70,6 +71,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
+            setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
@@ -127,6 +129,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
                         e2eEncryptionDisabled={isE2E_Disabled}
+                        isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     />
                 </DialogContent>
                 <DialogActions sx={{ height: 68 }} />

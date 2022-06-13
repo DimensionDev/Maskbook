@@ -63,6 +63,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     open: true,
                     options: {
                         startupPlugin: base.ID,
+                        isOpenFromApplicationBoard: true,
                     },
                 })
 
