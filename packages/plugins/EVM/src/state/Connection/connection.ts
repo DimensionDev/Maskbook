@@ -804,8 +804,8 @@ class Connection implements EVM_Connection {
             options,
         )
     }
-    sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
-        return this.hijackedRequest<string>(
+    async sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
+        const hash = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
@@ -817,6 +817,14 @@ class Connection implements EVM_Connection {
             },
             options,
         )
+
+        // watch and wait for transaction
+        await Web3StateSettings.value.TransactionWatcher?.watchAndWaitTransaction(
+            options?.chainId ?? this.chainId,
+            hash,
+            transaction,
+        )
+        return hash
     }
 
     sendSignedTransaction(signature: string, options?: EVM_Web3ConnectionOptions) {

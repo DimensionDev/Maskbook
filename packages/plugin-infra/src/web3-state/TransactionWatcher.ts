@@ -245,6 +245,10 @@ export class TransactionWatcherState<ChainId, Transaction>
         await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
+    async watchAndWaitTransaction(chainId: ChainId, id: string, transaction: Transaction) {
+        throw new Error('Method not implemented.')
+    }
+
     async notifyTransaction(chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) {
         throw new Error('Method not implemented.')
     }
