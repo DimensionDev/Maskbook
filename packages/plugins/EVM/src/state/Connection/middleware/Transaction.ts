@@ -22,7 +22,7 @@ export class RecentTransaction implements Middleware<Context> {
                         context.result,
                         context.config,
                     )
-                    TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
+                    await TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                     if (isSquashed) return

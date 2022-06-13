@@ -1,4 +1,4 @@
-import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
@@ -15,7 +15,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement } from 'react'
+import { Children, cloneElement, useCallback } from 'react'
 import { useSharedI18N } from '../../locales'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
@@ -75,6 +75,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     titleTail?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
+    isOpenFromApplicationBoard?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -107,11 +108,20 @@ export function InjectedDialog(props: InjectedDialogProps) {
         title,
         titleTail = null,
         disableTitleBorder,
+        isOpenFromApplicationBoard,
         ...rest
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+
+    const closeBothCompositionDialog = useCallback(() => {
+        if (isOpenFromApplicationBoard) {
+            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+        }
+
+        onClose?.()
+    }, [isOpenFromApplicationBoard])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
@@ -150,7 +160,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
-                                onClick={onClose}>
+                                onClick={closeBothCompositionDialog}>
                                 <DialogDismissIcon
                                     style={
                                         titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard

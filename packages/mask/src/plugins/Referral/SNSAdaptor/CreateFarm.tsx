@@ -163,11 +163,11 @@ export function CreateFarm(props: PageInterface) {
     }, [props?.onChangePage, totalFarmReward, attraceFee, tokenReward])
 
     const openComposeBox = useCallback(
-        (message: string, selectedReferralData: Map<string, ReferralMetaData>) =>
+        (selectedReferralData: Map<string, ReferralMetaData>) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
-                content: makeTypedMessageText(message, selectedReferralData),
+                content: makeTypedMessageText('', selectedReferralData),
             }),
         [],
     )
@@ -192,7 +192,7 @@ export function CreateFarm(props: PageInterface) {
         closeApplicationBoardDialog()
         props.onClose?.()
 
-        openComposeBox(t.buy_or_refer_to_earn_buy_hold_referral({ token: symbol }), metadata)
+        openComposeBox(metadata)
     }, [tokenRefer, showSnackbar, currentChainId, props.onClose, currentIdentity, linkedPersona])
 
     const onConfirmedDeposit = useCallback(

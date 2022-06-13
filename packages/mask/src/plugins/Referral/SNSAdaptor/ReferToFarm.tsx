@@ -106,11 +106,11 @@ export function ReferToFarm(props: PageInterface) {
     )
 
     const openComposeBox = useCallback(
-        (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
+        (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
-                content: makeTypedMessageText(message, selectedReferralData),
+                content: makeTypedMessageText('', selectedReferralData),
             }),
         [],
     )
@@ -175,7 +175,7 @@ export function ReferToFarm(props: PageInterface) {
             closeApplicationBoardDialog()
             props.onClose?.()
 
-            openComposeBox(t.buy_refer_earn_yield({ token: token?.symbol ?? '' }), metadata)
+            openComposeBox(metadata)
         } catch (error: any) {
             onError(error?.message)
         }

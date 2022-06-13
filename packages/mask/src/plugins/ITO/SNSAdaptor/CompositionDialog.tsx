@@ -50,6 +50,7 @@ export enum ITOCreateFormPageStep {
 export interface CompositionDialogProps extends withClasses<'root'>, Omit<InjectedDialogProps, 'classes' | 'onClose'> {
     onConfirm(payload: JSON_PayloadInMask): void
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export function CompositionDialog(props: CompositionDialogProps) {
@@ -230,7 +231,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
     return (
-        <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
+        <InjectedDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+            disableBackdropClick
+            open={props.open}
+            title={t('plugin_ito_display_name')}
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
                     <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />

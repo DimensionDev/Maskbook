@@ -211,7 +211,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             return {
                 id: order.tokenId,
                 chainId: ChainId.Mainnet,
-                asset_permalink: '',
+                assetPermalink: '',
                 createdAt: Number(order.updateDate),
                 price: {
                     usd: order.buyPrice.toString(),
@@ -247,7 +247,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             return {
                 id: asset.tokenId,
                 chainId: ChainId.Mainnet,
-                asset_permalink: '',
+                assetPermalink: '',
                 createdAt: Number(asset.date ?? 0),
                 price: {
                     usd: asset.price,

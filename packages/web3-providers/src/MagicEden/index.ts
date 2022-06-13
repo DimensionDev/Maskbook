@@ -190,7 +190,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 ? auction.bids.map((x) => ({
                       id: x.bid,
                       chainId: ChainId.Mainnet,
-                      asset_permalink: link,
+                      assetPermalink: link,
                       hash: x.bid,
                       quantity: '1',
                       createdAt: x.timestamp * 1000,
@@ -263,7 +263,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 chainId: ChainId.Mainnet,
                 quantity: '1',
                 // TODO's
-                asset_permalink: '',
+                assetPermalink: '',
             }
         })
     }

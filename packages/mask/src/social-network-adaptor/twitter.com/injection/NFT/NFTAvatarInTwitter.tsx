@@ -12,8 +12,9 @@ import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/Ra
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -54,13 +55,21 @@ function NFTAvatarInTwitter() {
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
+    const account = useAccount()
+    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
+    const { value: permalink, loading } = usePermalink(
+        storage?.address ?? account,
+        _avatar?.address ?? '',
+        _avatar?.tokenId ?? '',
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        _avatar?.chainId ?? ChainId.Mainnet,
+    )
 
     console.log(_avatar)
     console.log(identity.identifier?.userId)
 
     const windowSize = useWindowSize()
     const location = useLocation()
-    const { Others } = useWeb3State<'all'>(_avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM)
 
     const showAvatar = useMemo(
         () => getAvatarId(identity.avatar ?? '') === _avatar?.avatarId && _avatar.avatarId,
@@ -128,13 +137,7 @@ function NFTAvatarInTwitter() {
         if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(
-                Others?.explorerResolver.nonFungibleTokenLink(
-                    _avatar?.chainId ?? ChainId.Mainnet,
-                    _avatar?.address ?? '',
-                    _avatar?.tokenId ?? '',
-                ),
-            )
+            openWindow(permalink)
         }
 
         linkParentDom.addEventListener('click', handler)
@@ -150,6 +153,7 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
+                    permalink={permalink}
                     borderSize={5}
                     hasRainbow
                     avatar={_avatar}
