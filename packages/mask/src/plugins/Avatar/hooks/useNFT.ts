@@ -25,7 +25,6 @@ export function useNFT(
                 slug: asset.collection?.slug ?? '',
             }
         }
-
         const nft = await connection?.getNonFungibleToken(address, tokenId)
         return {
             amount: '0',
