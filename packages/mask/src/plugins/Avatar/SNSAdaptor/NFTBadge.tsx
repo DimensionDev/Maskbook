@@ -1,8 +1,7 @@
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import { useNFT } from '../hooks'
 import { useWallet } from '../hooks/useWallet'
@@ -28,10 +27,11 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     width?: number
     hasRainbow?: boolean
     borderSize?: number
+    permalink?: string
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, size = 140, hasRainbow, borderSize } = props
+    const { avatar, size = 140, hasRainbow, borderSize, permalink } = props
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(avatar.userId)
@@ -42,23 +42,15 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         avatar.chainId,
     )
-    const { Others } = useWeb3State<'all'>(avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const { amount, symbol, name, slug } = value
     return (
         <div
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+                openWindow(permalink)
             }}>
-            <Link
-                href={Others?.explorerResolver.nonFungibleTokenLink(
-                    avatar.chainId ?? ChainId.Mainnet,
-                    avatar.address,
-                    avatar.tokenId,
-                )}
-                target="_blank"
-                rel="noopener noreferrer">
+            <Link href={permalink} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing
                     id="NFTAvatarRing"
                     width={size}

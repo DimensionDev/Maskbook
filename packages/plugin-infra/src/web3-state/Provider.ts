@@ -44,7 +44,7 @@ export class ProviderState<
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(): ProviderType
+            getDefaultProviderType(site?: EnhanceableSite | ExtensionSite): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
@@ -61,7 +61,7 @@ export class ProviderState<
             providers: Object.fromEntries(
                 [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
                     x.value,
-                    options.getDefaultProviderType(),
+                    options.getDefaultProviderType(x.value),
                 ]),
             ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
         }
@@ -115,6 +115,14 @@ export class ProviderState<
                 await this.setAccount(providerType, {
                     account: '',
                     chainId: this.options.getDefaultChainId(),
+                })
+
+                const siteType = getSiteType()
+                if (!siteType) return
+
+                this.storage.providers.setValue({
+                    ...this.storage.providers.value,
+                    [siteType]: this.options.getDefaultProviderType(),
                 })
             })
         })

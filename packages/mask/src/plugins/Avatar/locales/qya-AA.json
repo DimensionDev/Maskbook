@@ -19,9 +19,14 @@
     "copied": "crwdns16674:0crwdne16674:0",
     "collectible_on_polygon": "crwdns16676:0crwdne16676:0",
     "collectible_no_eth": "crwdns16678:0crwdne16678:0",
+    "collectible_no_collectible": "crwdns17230:0crwdne17230:0",
     "no_collectible_found": "crwdns16680:0crwdne16680:0",
     "retry": "crwdns16682:0crwdne16682:0",
     "application_hint": "crwdns16684:0crwdne16684:0",
     "provider_by": "crwdns16686:0crwdne16686:0",
+    "downloading_image": "crwdns17232:0crwdne17232:0",
+    "saving": "crwdns17234:0crwdne17234:0",
+    "download_image_error": "crwdns17236:0crwdne17236:0",
+    "connect_wallet": "crwdns17238:0crwdne17238:0",
     "wallet_non_evm_warning": "crwdns16688:0crwdne16688:0"
 }

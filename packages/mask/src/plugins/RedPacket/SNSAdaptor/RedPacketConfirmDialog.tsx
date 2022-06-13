@@ -232,7 +232,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t.amount_total()}
+                    {t.total_amount()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>

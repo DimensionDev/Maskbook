@@ -18,7 +18,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useChainId, useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -222,7 +222,6 @@ export function CollectionList({
     addressName: SocialAddress<NetworkPluginID>
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_SOLANA)
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
@@ -256,12 +255,7 @@ export function CollectionList({
         const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
 
-        return uniqCollectibles.filter((x) => {
-            return (
-                isSameAddress(selectedCollection.address, x.collection?.address) ||
-                selectedCollection.slug === x.collection?.slug
-            )
-        })
+        return uniqCollectibles.filter((x) => isSameAddress(selectedCollection.address, x.collection?.address))
     }, [selectedCollection, allCollectibles.length])
 
     const collections = useMemo(() => {
@@ -381,7 +375,9 @@ export function CollectionList({
                                         selectedCollection === 'all' ? undefined : selectedCollection?.address
                                     }
                                     collection={x}
-                                    onClick={() => setSelectedCollection(x)}
+                                    onClick={() => {
+                                        setSelectedCollection(x)
+                                    }}
                                 />
                             </Box>
                         )

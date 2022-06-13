@@ -80,11 +80,11 @@ export function FarmPost(props: FarmPostProps) {
     )
 
     const openComposeBox = useCallback(
-        (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
+        (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
-                content: makeTypedMessageText(message, selectedReferralData),
+                content: makeTypedMessageText('', selectedReferralData),
             }),
         [],
     )
@@ -110,7 +110,7 @@ export function FarmPost(props: FarmPostProps) {
                 sender: senderName,
             })
 
-            openComposeBox(t.buy_refer_earn_yield({ token: payload.referral_token_symbol }), metadata)
+            openComposeBox(metadata)
         } catch (error: any) {
             onError(error?.message)
         }

@@ -222,12 +222,12 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
 
                                     return Number(firstValue.lt(secondValue))
                                 })
-                                .map((asset, index) => (
+                                .map((asset) => (
                                     <FungibleTokenTableRow
                                         onSend={() => onSend(asset)}
                                         onSwap={() => onSwap(asset)}
                                         asset={asset}
-                                        key={index}
+                                        key={`${asset.address}_${asset.chainId}`}
                                     />
                                 ))}
                         </TableBody>

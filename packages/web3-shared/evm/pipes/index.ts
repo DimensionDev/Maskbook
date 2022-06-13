@@ -12,6 +12,19 @@ export function resolveIPFSLinkFromURL(url: string): string {
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
+export function resolveIPFS(str: string): string {
+    if (str?.length === 0) return str
+    if (str.startsWith('https://')) return str
+    if (!str.startsWith('ipfs://')) return resolveIPFSLink(str)
+    return resolveIPFSLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
+}
+
+export function resolveAR(str: string): string {
+    if (str.length === 0) return str
+    if (str.startsWith('https://')) return str
+    return urlcat('https://arweave.net/:str', { str })
+}
+
 export function resolveCollectibleAssetLink(chainId: ChainId, provider: SourceType) {
     switch (provider) {
         case SourceType.OpenSea:
@@ -47,15 +60,15 @@ export function resolveCollectibleLink(chainId: ChainId, provider: SourceType, a
     }
 }
 
-export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: ChainId) {
+export function resolveOpenSeaLink(contractAddress: string, tokenId: string, chainId?: ChainId) {
     if (chainId === ChainId.Matic) {
         return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
-            address,
+            address: contractAddress,
             tokenId,
         })
     }
     return urlcat('https://opensea.io/assets/:address/:tokenId', {
-        address,
+        address: contractAddress,
         tokenId,
     })
 }

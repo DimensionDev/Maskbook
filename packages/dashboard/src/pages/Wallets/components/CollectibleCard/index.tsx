@@ -132,10 +132,10 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ token, onSend, rend
                 </Box>
                 {(token.metadata?.mediaURL || token.metadata?.imageURL) && token.contract ? (
                     <Link
-                        target={nftLink ? '_blank' : '_self'}
+                        target={token.link ?? nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
                         className={classes.linkWrapper}
-                        href={nftLink}>
+                        href={token.link ?? nftLink}>
                         <div className={classes.blocker} />
                         <div className={classes.mediaContainer}>
                             <NFTCardStyledAssetPlayer
