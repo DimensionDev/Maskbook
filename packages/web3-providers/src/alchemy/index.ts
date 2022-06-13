@@ -6,7 +6,13 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId as ChainId_EVM, resolveIPFSLinkFromURL, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
+import {
+    ChainId as ChainId_EVM,
+    resolveAR,
+    resolveIPFS,
+    resolveIPFSLinkFromURL,
+    SchemaType as SchemaType_EVM,
+} from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
@@ -248,8 +254,15 @@ function createNftToken_FLOW(
             name: asset?.contract?.name ?? '',
             symbol: '',
             description: asset.description,
-            imageURL: asset?.metadata?.metadata?.find((data) => data?.name === 'img')?.value,
-            mediaURL: asset?.media?.uri,
+            imageURL:
+                resolveIPFS(
+                    asset?.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
+                        asset?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
+                        asset?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
+                        asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
+                        '',
+                ) || resolveAR(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || ''),
+            mediaURL: resolveIPFS(asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri || ''),
         },
         contract: {
             chainId,
@@ -284,8 +297,18 @@ function createNFTAsset_FLOW(
             name: metaDataResponse?.contract?.name,
             symbol: '',
             description: metaDataResponse.description,
-            imageURL: metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'img')?.value,
-            mediaURL: metaDataResponse?.media?.uri,
+            imageURL:
+                resolveIPFS(
+                    metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
+                        metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
+                        metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
+                        metaDataResponse?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
+                        '',
+                ) ||
+                resolveAR(metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || ''),
+            mediaURL: resolveIPFS(
+                metaDataResponse?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri || '',
+            ),
         },
         contract: {
             chainId,
