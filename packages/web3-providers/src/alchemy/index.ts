@@ -49,12 +49,12 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Contact_Metadata>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getContractMetadata/`, {
+                urlcat(`${chainInfo?.contractMetadataURL}${chainInfo?.API_KEY}/getContractMetadata/`, {
                     contractAddress: address,
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Owners>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getOwnersForToken/`, {
+                urlcat(`${chainInfo?.tokenOwnerURL}${chainInfo?.API_KEY}/getOwnersForToken/`, {
                     contractAddress: address,
                     tokenId,
                 }),
