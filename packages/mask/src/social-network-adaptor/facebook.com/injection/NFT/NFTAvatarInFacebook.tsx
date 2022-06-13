@@ -186,12 +186,11 @@ function NFTAvatarInFacebook() {
     })
     // #endregion
 
-    if (!avatar || !size || !showAvatar) return null
+    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
 
     return (
         <NFTBadge
             nftInfo={nftInfo}
-            loading={loadingWallet || loadingNFTInfo}
             avatar={avatar}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}

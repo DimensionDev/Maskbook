@@ -1,13 +1,13 @@
-import { createReactRootShadowed, startWatch } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
-import { useLocation, useUpdateEffect, useWindowSize } from 'react-use'
+import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -15,7 +15,13 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
-import { useNFT } from '../../../../plugins/Avatar/hooks'
+import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
+import { Box, Typography } from '@mui/material'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -48,6 +54,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function NFTAvatarInTwitter() {
+    const { t } = useI18N()
     const rainBowElement = useRef<Element | null>()
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
@@ -56,6 +63,8 @@ function NFTAvatarInTwitter() {
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
+    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
+
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
@@ -84,6 +93,86 @@ function NFTAvatarInTwitter() {
     }, [windowSize, location])
 
     const { classes } = useStyles()
+
+    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
+    const onUpdate = (data: NFTAvatarEvent) => {
+        setNFTEvent(data)
+    }
+    const openConfirmDialog = useShowConfirm()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
+
+    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
+    useAsync(async () => {
+        if (!account || !NFTAvatar) return
+        if (!identity.identifier) return
+
+        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
+            setAvatar(undefined)
+            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            })
+            return
+        }
+
+        const avatar = await saveNFTAvatar(
+            account,
+            {
+                ...NFTEvent,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+            } as AvatarMetaDB,
+            identity.identifier.network as EnhanceableSite,
+            RSS3_KEY_SNS.TWITTER,
+        ).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert(error.message)
+            return
+        })
+        if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            return
+        }
+        openConfirmDialog({
+            title: t('plugin_avatar_setup_share_title'),
+            content: (
+                <Box display="flex" flexDirection="column" alignItems="center">
+                    <NFTCardStyledAssetPlayer contractAddress={avatar.address} tokenId={avatar.tokenId} />
+                    <Typography mt={3} fontSize="18px">
+                        {t('plugin_avatar_setup_success')}
+                    </Typography>
+                </Box>
+            ),
+            confirmLabel: t('share'),
+            onSubmit() {
+                activatedSocialNetworkUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
+            },
+        })
+
+        setAvatar(avatar)
+        MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
+            avatar ?? {
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            },
+        )
+
+        setNFTEvent(undefined)
+    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
+
+    useEffect(() => {
+        setAvatar(_avatar)
+    }, [_avatar])
+
+    useEffect(() => {
+        return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
+    }, [onUpdate])
 
     useEffect(() => {
         if (!showAvatar) return
@@ -135,7 +224,7 @@ function NFTAvatarInTwitter() {
         if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            if (loadingWallet || loadingNFTInfo) return
+            if (!nftInfo?.permalink) return
             openWindow(nftInfo?.permalink)
         }
 
@@ -153,7 +242,6 @@ function NFTAvatarInTwitter() {
             {showAvatar ? (
                 <NFTBadge
                     nftInfo={nftInfo}
-                    loading={loadingWallet || loadingNFTInfo}
                     borderSize={5}
                     hasRainbow
                     avatar={_avatar}

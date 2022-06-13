@@ -14,6 +14,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { AvatarInfo, useSave } from '../hooks/save/useSave'
 import type { AllChainsNonFungibleToken } from '../types'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -68,12 +69,25 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
+    const profileIdentifier =
+        currentConnectedPersona?.linkedProfiles.filter(
+            (x) => x.identifier.network === activatedSocialNetworkUI.networkIdentifier,
+        )?.[0].identifier ?? identifier?.identifier
+
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
+        if (
+            !editor ||
+            !account ||
+            !token ||
+            !currentConnectedPersona?.identifier ||
+            !profileIdentifier?.userId ||
+            !proof
+        )
+            return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
-            const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
+            const avatarData = await uploadAvatar(blob, profileIdentifier.userId ?? '')
             if (!avatarData) {
                 setDisabled(false)
                 return
@@ -85,7 +99,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
-                currentConnectedPersona.linkedProfiles[0].identifier,
+                profileIdentifier,
             )
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
@@ -97,7 +111,17 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         }, 'image/png')
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
+    }, [
+        account,
+        editor,
+        identifier,
+        onClose,
+        currentConnectedPersona,
+        proof,
+        isBindAccount,
+        saveAvatar,
+        profileIdentifier,
+    ])
 
     if (!account || !image || !token || !proof) return null
 

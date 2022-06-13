@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     avatar: AvatarMetaDB
     nftInfo?: NFTInfo
-    loading: boolean
     size?: number
     width?: number
     hasRainbow?: boolean
@@ -28,7 +27,7 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, nftInfo, size = 140, hasRainbow, borderSize, loading } = props
+    const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
@@ -36,8 +35,8 @@ export function NFTBadge(props: NFTBadgeProps) {
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                if (loading) return
-                openWindow(nftInfo?.permalink ?? '')
+                if (!nftInfo?.permalink) return
+                openWindow(nftInfo.permalink)
             }}>
             <Link href={nftInfo?.permalink ?? ''} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing
@@ -49,13 +48,13 @@ export function NFTBadge(props: NFTBadgeProps) {
                     borderSize={borderSize}
                     fontSize={9}
                     text={
-                        loading
+                        !nftInfo
                             ? 'loading...'
-                            : `${formatText(nftInfo?.name ?? '', avatar.tokenId)} ${
-                                  nftInfo?.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
+                            : `${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
+                                  nftInfo.slug.toLowerCase() === 'ens' ? 'ENS' : ''
                               }`
                     }
-                    price={loading ? '' : formatPrice(nftInfo?.amount ?? '0', nftInfo?.symbol ?? 'ETH')}
+                    price={!nftInfo ? '' : formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>
         </div>

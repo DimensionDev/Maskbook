@@ -114,12 +114,11 @@ function NFTAvatarInInstagram() {
 
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 
-    if (!avatar || !size || !showAvatar) return null
+    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
 
     return (
         <NFTBadge
             nftInfo={nftInfo}
-            loading={loadingWallet || loadingNFTInfo}
             hasRainbow={false}
             avatar={avatar}
             size={size}
