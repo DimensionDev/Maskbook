@@ -30,6 +30,7 @@ export interface TokenProps {
     symbol?: string
     name?: string
     logoURI?: string
+    logoURL?: string
     chainId?: ChainId
 }
 
@@ -39,12 +40,11 @@ export interface TokenDetailedProps extends React.PropsWithChildren<{}> {
 
 export function TokenDetailed({ token }: TokenDetailedProps) {
     const { classes } = useStyles()
-
     return (
         <div className={classes.container}>
             {token && (
                 <>
-                    <TokenIcon {...token} />
+                    <TokenIcon {...token} logoURL={token.logoURL || token.logoURI} />
                     <Box className={classes.details} display="flex" flexDirection="column">
                         <Typography>{token.symbol}</Typography>
                         <span className={classes.name}>{token.name}</span>
