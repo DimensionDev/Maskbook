@@ -298,7 +298,6 @@
     "plugin_red_packet_create_with_token": "使用 {{symbol}} 创建红包",
     "plugin_nft_red_packet_create": "创建一个NFT红包",
     "plugin_red_packet_nft_account_name": "钱包账户",
-    "plugin_red_packet_nft_shift_select_tip": "您也可以使用 <text>{{text}}</text> 选择多个NFT。",
     "plugin_gitcoin_select_a_token": "选择代币",
     "plugin_gitcoin_insufficient_balance": "{{symbol}} 余额不足",
     "plugin_trader_fail_to_load": "无法加载趋势信息自  ",
