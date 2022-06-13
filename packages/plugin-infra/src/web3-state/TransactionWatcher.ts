@@ -36,11 +36,10 @@ class Watcher<ChainId, Transaction> {
 
     constructor(
         protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>>,
-        protected checkers: Array<TransactionChecker<ChainId>>,
+        protected checkers: Array<TransactionChecker<ChainId, Transaction>>,
         protected options: {
-            checkDelay: number
-            getTransactionCreator: (transaction: Transaction) => string
-            onNotify: (id: string, status: TransactionStatusType, transaction: Transaction) => void
+            delay: number
+            onNotify: (chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) => void
         },
     ) {}
 
@@ -110,14 +109,11 @@ class Watcher<ChainId, Transaction> {
         for (const [id, { transaction }] of watchedTransactions) {
             for (const checker of this.checkers) {
                 try {
-                    const status = await checker.checkStatus(
-                        id,
-                        chainId,
-                        this.options.getTransactionCreator(transaction),
-                    )
+                    const status = await checker.getStatus(chainId, id, transaction)
                     if (status !== TransactionStatusType.NOT_DEPEND) {
-                        this.removeTransaction(chainId, id)
-                        this.options.onNotify(id, status, transaction)
+                        await this.unwatchTransaction(chainId, id)
+                        this.options.onNotify(chainId, id, transaction, status)
+                        break
                     }
                 } catch (error) {
                     console.warn('Failed to check transaction status.')
@@ -132,7 +128,7 @@ class Watcher<ChainId, Transaction> {
     public startCheck(chainId: ChainId) {
         this.stopCheck()
         if (this.timer === null) {
-            this.timer = setTimeout(this.check.bind(this, chainId), this.options.checkDelay)
+            this.timer = setTimeout(this.check.bind(this, chainId), this.options.delay)
         }
     }
 
@@ -168,7 +164,7 @@ export class TransactionWatcherState<ChainId, Transaction>
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected chainIds: ChainId[],
-        protected checkers: Array<TransactionChecker<ChainId>>,
+        protected checkers: Array<TransactionChecker<ChainId, Transaction>>,
         protected subscriptions: {
             chainId?: Subscription<ChainId>
             transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
@@ -224,34 +220,32 @@ export class TransactionWatcherState<ChainId, Transaction>
         }
     }
 
-    private getWatcher(chainId: ChainId) {
+    protected getWatcher(chainId: ChainId) {
         if (!this.watchers.has(chainId))
             this.watchers.set(
                 chainId,
                 new Watcher(this.storage, this.checkers, {
-                    checkDelay: this.options.defaultBlockDelay * 1000,
-                    getTransactionCreator: this.options.getTransactionCreator,
+                    delay: this.options.defaultBlockDelay * 1000,
                     onNotify: this.notifyTransaction.bind(this),
                 }),
             )
         return this.watchers.get(chainId)!
     }
 
-    private resumeWatcher(chainId: ChainId) {
+    protected resumeWatcher(chainId: ChainId) {
         const watcher = this.getWatcher(chainId)
         watcher.startCheck(chainId)
     }
 
     async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
         await this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
-        this.emitter.emit('progress', id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
     async unwatchTransaction(chainId: ChainId, id: string) {
         await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
-    notifyTransaction(id: string, status: TransactionStatusType, transaction: Transaction) {
-        this.emitter.emit('progress', id, status, transaction)
+    async notifyTransaction(chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) {
+        throw new Error('Method not implemented.')
     }
 }

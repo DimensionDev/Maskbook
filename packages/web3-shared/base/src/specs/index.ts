@@ -555,8 +555,8 @@ export interface ProviderOptions<ChainId> {
     account?: string
 }
 
-export interface TransactionChecker<ChainId> {
-    checkStatus(id: string, chainId: ChainId, account: string): Promise<TransactionStatusType>
+export interface TransactionChecker<ChainId, Transaction> {
+    getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
@@ -931,7 +931,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Update transaction status */
-    notifyTransaction: (id: string, status: TransactionStatusType, transaction: Transaction) => void
+    notifyTransaction: (chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) => Promise<void>
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */
