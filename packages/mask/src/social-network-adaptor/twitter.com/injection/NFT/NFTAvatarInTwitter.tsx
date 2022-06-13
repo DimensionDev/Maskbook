@@ -24,7 +24,7 @@ import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
-import { usePermlink } from '../../../../plugins/Avatar/hooks/usePermlink'
+import { usePermalink } from '../../../../plugins/Avatar/hooks/usePermalink'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -67,7 +67,7 @@ function NFTAvatarInTwitter() {
     )
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
-    const { value: permlink, loading } = usePermlink(
+    const { value: permalink, loading } = usePermalink(
         storage?.address ?? account,
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
@@ -238,7 +238,7 @@ function NFTAvatarInTwitter() {
 
         const handler = () => {
             openWindow(
-                permlink ??
+                permalink ??
                     Others?.explorerResolver.nonFungibleTokenLink(
                         avatar?.chainId ?? ChainId.Mainnet,
                         avatar?.address ?? '',
@@ -252,7 +252,7 @@ function NFTAvatarInTwitter() {
         return () => {
             linkParentDom.removeEventListener('click', handler)
         }
-    }, [avatar, permlink])
+    }, [avatar, permalink])
 
     if (!avatar || !size || loadingWallet || loading) return null
 
@@ -260,7 +260,7 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
-                    permlink={permlink}
+                    permalink={permalink}
                     borderSize={5}
                     hasRainbow
                     avatar={avatar}

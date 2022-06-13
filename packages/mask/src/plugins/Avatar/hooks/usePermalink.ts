@@ -3,7 +3,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 
-export function usePermlink(
+export function usePermalink(
     account: string,
     address: string,
     tokenId: string,
