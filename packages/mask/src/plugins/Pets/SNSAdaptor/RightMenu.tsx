@@ -182,7 +182,7 @@ function RightMenu(props: Props) {
             <div onClick={() => onClickMenu('change')}>
                 <span>Change</span>
             </div>
-            {location.href === '/home' ? (
+            {location.pathname === '/home' ? (
                 <div onClick={() => onClickMenu('ski')}>
                     <span>Ski</span>
                 </div>
