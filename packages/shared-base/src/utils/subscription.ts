@@ -5,6 +5,7 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export async function getSubscriptionCurrentValue<T>(
     getSubscription: () => Subscription<T> | undefined,
+    retries = 3,
 ): Promise<T | undefined> {
     const getValue = () => {
         return getSubscription()?.getCurrentValue()
@@ -20,7 +21,7 @@ export async function getSubscriptionCurrentValue<T>(
         }
     }
 
-    const createReaders = Array.from<() => Promise<T | undefined>>({ length: 3 }).fill(() => createReader())
+    const createReaders = Array.from<() => Promise<T | undefined>>({ length: retries }).fill(() => createReader())
 
     for (const createReader of createReaders) {
         try {

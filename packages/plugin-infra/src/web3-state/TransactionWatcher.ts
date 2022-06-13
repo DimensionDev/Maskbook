@@ -7,6 +7,7 @@ import {
     TransactionStatusType,
     WatchEvents,
     TransactionWatcherState as Web3TransactionWatcherState,
+    RecentTransaction,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
@@ -165,6 +166,7 @@ export class TransactionWatcherState<ChainId, Transaction>
         protected checkers: Array<TransactionChecker<ChainId>>,
         protected subscriptions: {
             chainId?: Subscription<ChainId>
+            transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
         },
         protected options: {
             /** Default block delay in seconds */
@@ -183,6 +185,7 @@ export class TransactionWatcherState<ChainId, Transaction>
 
         this.storage = storage.value
 
+        // kick watcher to start work
         if (this.subscriptions.chainId) {
             const resume = () => {
                 const chainId = this.subscriptions.chainId?.getCurrentValue()
@@ -195,6 +198,22 @@ export class TransactionWatcherState<ChainId, Transaction>
             // storage has set up, resume watcher
             getSubscriptionCurrentValue(() => {
                 return this.subscriptions.chainId
+            }).then(() => {
+                resume()
+            })
+        }
+
+        // add external transactions at startup
+        if (this.subscriptions.transactions) {
+            const resume = () => {
+                const transactions = this.subscriptions.transactions?.getCurrentValue()
+                transactions?.forEach((x) =>
+                    Object.entries(x.candidates).forEach(([id, tx]) => this.watchTransaction(x.chainId, id, tx)),
+                )
+            }
+
+            getSubscriptionCurrentValue(() => {
+                return this.subscriptions.transactions
             }).then(() => {
                 resume()
             })
