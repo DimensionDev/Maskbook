@@ -29,7 +29,6 @@ export interface TokenProps {
     address: string
     symbol?: string
     name?: string
-    logoURI?: string
     logoURL?: string
     chainId?: ChainId
 }
@@ -44,7 +43,7 @@ export function TokenDetailed({ token }: TokenDetailedProps) {
         <div className={classes.container}>
             {token && (
                 <>
-                    <TokenIcon {...token} logoURL={token.logoURL || token.logoURI} />
+                    <TokenIcon {...token} />
                     <Box className={classes.details} display="flex" flexDirection="column">
                         <Typography>{token.symbol}</Typography>
                         <span className={classes.name}>{token.name}</span>

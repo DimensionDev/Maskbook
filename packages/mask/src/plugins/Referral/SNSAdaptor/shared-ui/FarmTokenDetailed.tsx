@@ -38,7 +38,6 @@ export interface TokenProps {
     address: string
     symbol?: string
     name?: string
-    logoURI?: string
     logoURL?: string
     chainId?: ChainId
 }
@@ -56,11 +55,7 @@ export function FarmTokenDetailed({ token, hideFarmTypeIcon = false }: FarmToken
         <Box display="flex" alignItems="center">
             {token && (
                 <>
-                    {token ? (
-                        <TokenIcon {...token} logoURL={token.logoURL || token.logoURI} />
-                    ) : (
-                        <div className={classes.tokenIcon} />
-                    )}
+                    {token ? <TokenIcon {...token} /> : <div className={classes.tokenIcon} />}
                     <Box display="flex" flexDirection="column" className={classes.tokenDetails}>
                         <Typography display="flex" alignItems="center" className={classes.farmName} fontWeight="500">
                             {token.symbol} {t.referral_farm()} {!hideFarmTypeIcon && <SponsoredFarmIcon />}
