@@ -135,6 +135,7 @@ function NFTAvatarInTwitter() {
         if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
+            if (loadingWallet || loadingNFTInfo) return
             openWindow(nftInfo?.permalink)
         }
 
