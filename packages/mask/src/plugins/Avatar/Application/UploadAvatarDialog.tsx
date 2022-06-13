@@ -65,6 +65,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
+
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
@@ -72,13 +73,11 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
-
             const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
             if (!avatarData) {
                 setDisabled(false)
                 return
             }
-
             const response = await saveAvatar(
                 account,
                 isBindAccount,
@@ -88,15 +87,14 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 proof,
                 currentConnectedPersona.linkedProfiles[0].identifier,
             )
-
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
-            location.reload()
-            onClose()
+            // location.reload()
+            // onClose()
             setDisabled(false)
         }, 'image/png')
     }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])

@@ -1,28 +1,19 @@
-import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch, useI18N } from '../../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
+import { useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
-import { trim } from 'lodash-unified'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { Box, Typography } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
-import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
-import type { EnhanceableSite } from '@masknet/shared-base'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -58,22 +49,22 @@ function NFTAvatarInTwitter() {
     const rainBowElement = useRef<Element | null>()
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { value: _avatar } = usePersonaNFTAvatar(
         identity.identifier?.userId ?? '',
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
 
-    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
+    console.log(_avatar)
+    console.log(identity.identifier?.userId)
+
     const windowSize = useWindowSize()
     const location = useLocation()
     const { Others } = useWeb3State<'all'>(_avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM)
 
-    const { t } = useI18N()
     const showAvatar = useMemo(
-        () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
-        [avatar?.avatarId, identity.avatar],
+        () => getAvatarId(identity.avatar ?? '') === _avatar?.avatarId && _avatar.avatarId,
+        [_avatar?.avatarId, identity.avatar],
     )
 
     const size = useMemo(() => {
@@ -86,86 +77,6 @@ function NFTAvatarInTwitter() {
     }, [windowSize, location])
 
     const { classes } = useStyles()
-
-    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const onUpdate = (data: NFTAvatarEvent) => {
-        setNFTEvent(data)
-    }
-    const openConfirmDialog = useShowConfirm()
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
-
-    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
-    useAsync(async () => {
-        if (!wallet || !NFTAvatar) return
-        if (!identity.identifier) return
-
-        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
-            setAvatar(undefined)
-            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
-                userId: identity.identifier.userId,
-                avatarId: getAvatarId(identity.avatar ?? ''),
-                address: '',
-                tokenId: '',
-            })
-            return
-        }
-
-        const avatar = await saveNFTAvatar(
-            wallet.address,
-            {
-                ...NFTEvent,
-                avatarId: getAvatarId(identity.avatar ?? ''),
-            } as AvatarMetaDB,
-            identity.identifier.network as EnhanceableSite,
-            RSS3_KEY_SNS.TWITTER,
-        ).catch((error) => {
-            setNFTEvent(undefined)
-            setAvatar(undefined)
-            window.alert(error.message)
-            return
-        })
-        if (!avatar) {
-            setNFTEvent(undefined)
-            setAvatar(undefined)
-            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
-            return
-        }
-        openConfirmDialog({
-            title: t('plugin_avatar_setup_share_title'),
-            content: (
-                <Box display="flex" flexDirection="column" alignItems="center">
-                    <NFTCardStyledAssetPlayer contractAddress={avatar.address} tokenId={avatar.tokenId} />
-                    <Typography mt={3} fontSize="18px">
-                        {t('plugin_avatar_setup_success')}
-                    </Typography>
-                </Box>
-            ),
-            confirmLabel: t('share'),
-            onSubmit() {
-                activatedSocialNetworkUI.utils.share?.(t('plugin_avatar_setup_pfp_share'))
-            },
-        })
-
-        setAvatar(avatar)
-        MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
-            avatar ?? {
-                userId: identity.identifier.userId,
-                avatarId: getAvatarId(identity.avatar ?? ''),
-                address: '',
-                tokenId: '',
-            },
-        )
-
-        setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
-
-    useEffect(() => {
-        setAvatar(_avatar)
-    }, [_avatar])
-
-    useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
-    }, [onUpdate])
 
     useEffect(() => {
         if (!showAvatar) return
@@ -213,18 +124,8 @@ function NFTAvatarInTwitter() {
     }, [location.pathname, showAvatar])
 
     useUpdateEffect(() => {
-        if (
-            location.pathname &&
-            location.pathname.split('/').length === 2 &&
-            trim(location.pathname, '/') !== identity.identifier?.userId
-        ) {
-            setAvatar(undefined)
-        }
-    }, [location, identity])
-
-    useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-        if (!avatar || !linkParentDom || !showAvatar) return
+        if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
             openWindow(
@@ -241,9 +142,9 @@ function NFTAvatarInTwitter() {
         return () => {
             linkParentDom.removeEventListener('click', handler)
         }
-    }, [avatar])
+    }, [_avatar, showAvatar])
 
-    if (!avatar || !size) return null
+    if (!_avatar || !size) return null
 
     return (
         <>
@@ -251,7 +152,7 @@ function NFTAvatarInTwitter() {
                 <NFTBadge
                     borderSize={5}
                     hasRainbow
-                    avatar={avatar}
+                    avatar={_avatar}
                     size={size}
                     width={15}
                     classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
