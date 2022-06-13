@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginPetMessages } from '../messages'
 import { PluginGameMessages } from '../../Game/messages'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 type Props = {
     isShow: boolean
@@ -102,6 +103,7 @@ function RightMenu(props: Props) {
     const { classes } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
 
+    const chainId = useChainId()
     const [isLeft, setIsLeft] = useState(false)
     const [isTop, setIsTop] = useState(false)
 
@@ -148,7 +150,7 @@ function RightMenu(props: Props) {
                     tokenProps: {
                         tokenId: '1',
                         contract: '0x0000000000000000000000000000000000000000',
-                        chainId: 1,
+                        chainId,
                     },
                 })
                 break
@@ -180,9 +182,12 @@ function RightMenu(props: Props) {
             <div onClick={() => onClickMenu('change')}>
                 <span>Change</span>
             </div>
-            <div onClick={() => onClickMenu('ski')}>
-                <span>Ski</span>
-            </div>
+            {location.href === '/home' ? (
+                <div onClick={() => onClickMenu('ski')}>
+                    <span>Ski</span>
+                </div>
+            ) : null}
+
             <div onClick={() => onClickMenu('aboutUs')}>
                 <span>About us</span>
             </div>

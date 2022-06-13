@@ -29,7 +29,7 @@ const useStyles = makeStyles()(() => ({
     },
     info: {
         flex: 'auto',
-        margin: '0 20px',
+        margin: '0 10px 0 20px',
     },
     infoTitle: {
         fontSize: '18px',
@@ -56,6 +56,7 @@ const useStyles = makeStyles()(() => ({
         flex: 'none',
         alignSelf: 'center',
         minWidth: '80px',
+        marginLeft: '4px',
         '&:hover': {
             backgroundColor: '#f7f7f7',
         },
@@ -64,6 +65,7 @@ const useStyles = makeStyles()(() => ({
 
 interface Props {
     onPlay: (game: GameInfo) => void
+    onShare: (game: GameInfo) => void
 }
 
 const GameList = (props: Props) => {
@@ -88,6 +90,9 @@ const GameList = (props: Props) => {
                               </div>
                               <Button className={classes.playBtn} onClick={() => props.onPlay(game)}>
                                   {t('plugin_game_list_play')}
+                              </Button>
+                              <Button className={classes.playBtn} onClick={() => props.onShare(game)}>
+                                  {t('plugin_game_share_btn')}
                               </Button>
                           </li>
                       ))

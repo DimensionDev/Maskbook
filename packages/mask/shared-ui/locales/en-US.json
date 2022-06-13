@@ -909,6 +909,8 @@
     "plugin_game_list_title": "GameList",
     "plugin_game_list_rank": "Rank",
     "plugin_game_list_play": "Play",
+    "plugin_game_share_btn": "Share",
+    "plugin_game_dialog_info": "Share this game to twitter",
     "wallet_verify_persona_sign": "Persona Sign",
     "wallet_verify_has_bound": "The wallet has been bound. Please switch wallets.",
     "wallet_verify_persona_name": "{{personaName}} Sign",
