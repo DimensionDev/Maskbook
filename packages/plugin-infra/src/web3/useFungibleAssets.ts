@@ -31,6 +31,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const blockedTokens = useBlockedFungibleTokens(pluginID)
     const { Others } = useWeb3State(pluginID)
 
+    const nativeToken = Others?.chainResolver.nativeCurrency(chainId)
+
     return useAsyncRetry<Array<Web3Helper.FungibleAssetScope<S, T>>>(async () => {
         if (!account || !hub) return EMPTY_LIST
 
@@ -45,6 +47,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             })
         })
         const assets = await asyncIteratorToArray(iterator)
+
+        if (!assets.length && nativeToken) return [{ ...nativeToken, balance: '0' }]
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
 
         return filteredAssets
@@ -95,5 +99,5 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
                 return 0
             })
-    }, [account, chainId, hub, trustedTokens, blockedTokens, Others, JSON.stringify(options)])
+    }, [account, chainId, hub, trustedTokens, blockedTokens, Others, JSON.stringify(options), nativeToken])
 }
