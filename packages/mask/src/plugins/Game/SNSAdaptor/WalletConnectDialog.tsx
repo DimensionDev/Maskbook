@@ -39,9 +39,10 @@ const WalletConnectDialog = () => {
 
     const [isShareShow, setShareShow] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
-    const handleGameShare = (gameInfo: GameInfo) => {
+    const handleGameShare = (url: string) => {
         setShareShow(true)
-        setShareUrl(gameInfo.url)
+        setShareUrl(url)
+        handleGameClose()
     }
     const closeGameShare = () => {
         setShareShow(false)
@@ -53,10 +54,16 @@ const WalletConnectDialog = () => {
             <InjectedDialog onClose={closeDialog} open={open} title="Game">
                 <DialogContent>
                     <WalletStatusBox />
-                    <GameList onPlay={handleGameOpen} onShare={handleGameShare} />
+                    <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow gameInfo={gameInfo} tokenProps={tokenProps} isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow
+                gameInfo={gameInfo}
+                tokenProps={tokenProps}
+                isShow={isGameShow}
+                onClose={handleGameClose}
+                onShare={handleGameShare}
+            />
             <InjectedDialog onClose={closeGameShare} open={isShareShow} title="Share">
                 <DialogContent>
                     <GameShareDialog shareUrl={shareUrl} onClose={closeGameShare} />

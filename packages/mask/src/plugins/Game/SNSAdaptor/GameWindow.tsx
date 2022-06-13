@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import classNames from 'classnames'
 import { styled } from '@mui/material/styles'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { IconClose, IconFull } from '../constants'
+import { IconClose, IconFull, IconShare } from '../constants'
 import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useLocation } from 'react-use'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -81,6 +81,7 @@ interface Props {
     tokenProps: GameNFT | undefined
     isShow: boolean
     onClose: () => void
+    onShare: (url: string) => void
 }
 
 const GameWindow = (props: Props) => {
@@ -114,6 +115,12 @@ const GameWindow = (props: Props) => {
         return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract}&tokenId=${tokenProps?.tokenId}&chainId=${chainId}`
     }, [props])
 
+    const handleShare = () => {
+        if (gameInfo?.url) {
+            props.onShare(gameInfo.url)
+        }
+    }
+
     return isShow ? (
         <div className={classes.root}>
             <div className={classes.body}>
@@ -125,6 +132,7 @@ const GameWindow = (props: Props) => {
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
+                    <img src={IconShare} onClick={handleShare} alt="fullscreen" />
                 </div>
             </div>
         </div>

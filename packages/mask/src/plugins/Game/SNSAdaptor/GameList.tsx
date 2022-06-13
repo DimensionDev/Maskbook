@@ -65,7 +65,6 @@ const useStyles = makeStyles()(() => ({
 
 interface Props {
     onPlay: (game: GameInfo) => void
-    onShare: (game: GameInfo) => void
 }
 
 const GameList = (props: Props) => {
@@ -90,9 +89,6 @@ const GameList = (props: Props) => {
                               </div>
                               <Button className={classes.playBtn} onClick={() => props.onPlay(game)}>
                                   {t('plugin_game_list_play')}
-                              </Button>
-                              <Button className={classes.playBtn} onClick={() => props.onShare(game)}>
-                                  {t('plugin_game_share_btn')}
                               </Button>
                           </li>
                       ))
