@@ -240,7 +240,7 @@ function createNFTAsset_EVM(
         owner: {
             address: first(ownersResponse?.owners),
         },
-        traits: metaDataResponse.metadata?.attributes.map((x) => ({
+        traits: metaDataResponse.metadata?.traits?.map((x) => ({
             type: x.trait_type,
             value: x.value,
         })),

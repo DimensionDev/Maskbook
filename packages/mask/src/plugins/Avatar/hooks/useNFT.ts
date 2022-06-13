@@ -18,8 +18,9 @@ export function useNFT(
     })
 
     return useAsyncRetry(async () => {
-        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, { chainId })
-        console.log(asset)
+        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
+            chainId,
+        })
         return {
             amount: asset?.price?.[CurrencyType.NATIVE] ?? '0',
             name: asset?.contract?.name ?? '',
