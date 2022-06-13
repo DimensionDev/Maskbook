@@ -23,7 +23,8 @@ export const QRCodeModal: React.FC<{
 
     const { classes } = useStyles()
     const style: React.CSSProperties = {
-        width: 361,
+        width: '80%',
+        maxWidth: 361,
         display: 'block',
         margin: 'auto',
         borderRadius: 16,
