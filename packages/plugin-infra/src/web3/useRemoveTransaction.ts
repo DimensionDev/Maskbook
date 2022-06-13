@@ -12,8 +12,8 @@ export function useRemoveTransactionCallback<T extends NetworkPluginID>(pluginID
     return useCallback(
         async (id: string) => {
             if (!account) return
-            TransactionWatcher?.unwatchTransaction(chainId, id)
-            return Transaction?.removeTransaction?.(chainId, account, id)
+            await TransactionWatcher?.unwatchTransaction(chainId, id)
+            await Transaction?.removeTransaction?.(chainId, account, id)
         },
         [chainId, account, Transaction],
     )

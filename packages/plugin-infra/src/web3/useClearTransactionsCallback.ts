@@ -15,9 +15,9 @@ export function useClearTransactionsCallback<T extends NetworkPluginID>(pluginID
 
         try {
             const transactions = await getSubscriptionCurrentValue(() => Transaction?.transactions)
-            transactions
-                ?.flatMap((x) => Object.keys(x.candidates))
-                .forEach((x) => TransactionWatcher?.unwatchTransaction(chainId, x))
+            for (const transaction of transactions?.flatMap((x) => Object.keys(x.candidates)) ?? []) {
+                await TransactionWatcher?.unwatchTransaction(chainId, transaction)
+            }
         } catch {
             console.warn('Failed to unwatch transaction.')
         }

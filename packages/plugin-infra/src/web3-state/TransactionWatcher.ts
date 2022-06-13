@@ -48,8 +48,8 @@ class Watcher<ChainId, Transaction> {
         return this.storage.value[chainId]
     }
 
-    private setStorage(chainId: ChainId, id: string, item: TransactionWatcherItem<ChainId, Transaction>) {
-        this.storage.setValue({
+    private async setStorage(chainId: ChainId, id: string, item: TransactionWatcherItem<ChainId, Transaction>) {
+        await this.storage.setValue({
             ...this.storage.value,
             // @ts-ignore
             [chainId]: {
@@ -59,20 +59,24 @@ class Watcher<ChainId, Transaction> {
         })
     }
 
-    private deleteStorage(chainId: ChainId, id: string) {
-        this.storage.setValue({
+    private async deleteStorage(chainId: ChainId, id: string) {
+        await this.storage.setValue({
             ...this.storage.value,
             // @ts-ignore
             [chainId]: omit(this.storage.value[chainId], [id]),
         })
     }
 
-    private setTransaction(chainId: ChainId, id: string, transaction: TransactionWatcherItem<ChainId, Transaction>) {
-        this.setStorage(chainId, id, transaction)
+    private async setTransaction(
+        chainId: ChainId,
+        id: string,
+        transaction: TransactionWatcherItem<ChainId, Transaction>,
+    ) {
+        await this.setStorage(chainId, id, transaction)
     }
 
-    private removeTransaction(chainId: ChainId, id: string) {
-        this.deleteStorage(chainId, id)
+    private async removeTransaction(chainId: ChainId, id: string) {
+        await this.deleteStorage(chainId, id)
     }
 
     private getAllTransactions(chainId: ChainId) {
@@ -93,7 +97,9 @@ class Watcher<ChainId, Transaction> {
         this.stopCheck()
 
         // unwatch legacy transactions
-        this.getUnwatched(chainId).forEach(([id]) => this.unwatchTransaction(chainId, id))
+        for (const [id] of this.getUnwatched(chainId)) {
+            await this.unwatchTransaction(chainId, id)
+        }
 
         // check if all transactions were sealed
         const watchedTransactions = this.getWatched(chainId).filter(
@@ -114,8 +120,7 @@ class Watcher<ChainId, Transaction> {
                         this.options.onNotify(id, status, transaction)
                     }
                 } catch (error) {
-                    console.log('DEBUG: check error')
-                    console.log(error)
+                    console.warn('Failed to check transaction status.')
                 }
             }
         }
@@ -136,8 +141,8 @@ class Watcher<ChainId, Transaction> {
         this.timer = null
     }
 
-    public watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        this.setTransaction(chainId, id, {
+    public async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
+        await this.setTransaction(chainId, id, {
             at: Date.now(),
             id,
             chainId,
@@ -147,8 +152,8 @@ class Watcher<ChainId, Transaction> {
         this.startCheck(chainId)
     }
 
-    public unwatchTransaction(chainId: ChainId, id: string) {
-        this.removeTransaction(chainId, id)
+    public async unwatchTransaction(chainId: ChainId, id: string) {
+        await this.removeTransaction(chainId, id)
     }
 }
 
@@ -185,17 +190,23 @@ export class TransactionWatcherState<ChainId, Transaction>
 
         this.storage = storage.value
 
-        // kick watcher to start work
-        if (this.subscriptions.chainId) {
-            const resume = () => {
-                const chainId = this.subscriptions.chainId?.getCurrentValue()
-                if (chainId) this.resumeWatcher(chainId)
-            }
+        const resume = async () => {
+            const chainId = this.subscriptions.chainId?.getCurrentValue()
+            if (chainId) this.resumeWatcher(chainId)
 
-            // resume watcher if chain id changed
+            const transactions = this.subscriptions.transactions?.getCurrentValue() ?? []
+            for (const transaction of transactions) {
+                for (const [id, tx] of Object.entries(transaction.candidates)) {
+                    if (transaction.status === TransactionStatusType.NOT_DEPEND)
+                        await this.watchTransaction(transaction.chainId, id, tx)
+                }
+            }
+        }
+
+        // resume watcher if chain id changed
+        if (this.subscriptions.chainId) {
             this.subscriptions.chainId.subscribe(() => resume())
 
-            // storage has set up, resume watcher
             getSubscriptionCurrentValue(() => {
                 return this.subscriptions.chainId
             }).then(() => {
@@ -205,13 +216,6 @@ export class TransactionWatcherState<ChainId, Transaction>
 
         // add external transactions at startup
         if (this.subscriptions.transactions) {
-            const resume = () => {
-                const transactions = this.subscriptions.transactions?.getCurrentValue()
-                transactions?.forEach((x) =>
-                    Object.entries(x.candidates).forEach(([id, tx]) => this.watchTransaction(x.chainId, id, tx)),
-                )
-            }
-
             getSubscriptionCurrentValue(() => {
                 return this.subscriptions.transactions
             }).then(() => {
@@ -238,13 +242,13 @@ export class TransactionWatcherState<ChainId, Transaction>
         watcher.startCheck(chainId)
     }
 
-    watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
-        this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
+    async watchTransaction(chainId: ChainId, id: string, transaction: Transaction) {
+        await this.getWatcher(chainId).watchTransaction(chainId, id, transaction)
         this.emitter.emit('progress', id, TransactionStatusType.NOT_DEPEND, transaction)
     }
 
-    unwatchTransaction(chainId: ChainId, id: string) {
-        this.getWatcher(chainId).unwatchTransaction(chainId, id)
+    async unwatchTransaction(chainId: ChainId, id: string) {
+        await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
     notifyTransaction(id: string, status: TransactionStatusType, transaction: Transaction) {

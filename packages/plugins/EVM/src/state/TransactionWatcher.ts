@@ -3,6 +3,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionWatcherState } from '@masknet/plugin-infra/web3'
 import { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import type { RecentTransaction } from '@masknet/web3-shared-base'
 import { TransactionCheckers } from './TransactionWatcher/checker'
 
 export class TransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
@@ -10,6 +11,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         context: Plugin.Shared.SharedContext,
         subscriptions: {
             chainId?: Subscription<ChainId>
+            transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
         },
     ) {
         super(
