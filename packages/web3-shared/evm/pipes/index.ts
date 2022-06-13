@@ -18,7 +18,7 @@ function resolveIPFSOriginLink(ipfs: string): string {
 export function resolveIPFS(str: string): string {
     if (str?.length === 0) return str
     if (str.startsWith('https://')) return str
-    if (!str.startsWith('ipfs://')) return resolveIPFSLink(str)
+    if (!str.startsWith('ipfs://')) return resolveIPFSOriginLink(str)
     return resolveIPFSOriginLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
