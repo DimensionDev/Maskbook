@@ -87,16 +87,14 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 proof,
                 currentConnectedPersona.linkedProfiles[0].identifier,
             )
-            console.log('------')
-            console.log(token)
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
                 return
             }
             showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
-            // location.reload()
-            // onClose()
+            location.reload()
+            onClose()
             setDisabled(false)
         }, 'image/png')
     }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])

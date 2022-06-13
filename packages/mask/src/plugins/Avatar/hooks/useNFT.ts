@@ -17,16 +17,15 @@ export function useNFT(
         account,
     })
 
-    console.log(chainId)
     return useAsyncRetry(async () => {
-        const asset = await hub?.getNonFungibleAsset?.(address, tokenId)
+        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, { chainId })
         console.log(asset)
         return {
             amount: asset?.price?.[CurrencyType.NATIVE] ?? '0',
             name: asset?.contract?.name ?? '',
             symbol: asset?.contract?.symbol ?? 'ETH',
             image: asset?.metadata?.imageURL ?? '',
-            owner: asset?.ownerId ?? '',
+            owner: asset?.owner?.address ?? asset?.ownerId ?? '',
             slug: asset?.collection?.slug ?? '',
             permalink:
                 asset?.link ??

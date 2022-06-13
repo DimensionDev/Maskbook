@@ -58,7 +58,6 @@ function NFTAvatarInTwitter() {
     )
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
-    console.log(_avatar)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         _avatar?.address ?? '',

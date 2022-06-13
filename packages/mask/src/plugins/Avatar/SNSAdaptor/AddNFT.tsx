@@ -68,18 +68,8 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('plugin_avatar_web3_error'))
             return
         }
-        let token: AllChainsNonFungibleToken
-        const asset = await hub.getNonFungibleAsset(address, tokenId)
-        if (asset) {
-            token = {
-                contract: asset.contract,
-                metadata: asset.metadata,
-                tokenId: asset.tokenId,
-                collection: asset.collection,
-            } as AllChainsNonFungibleToken
-        } else {
-            token = await connection.getNonFungibleToken(address, tokenId)
-        }
+
+        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId })
         if (!token) {
             setMessage(t('plugin_avatar_asset'))
             return
