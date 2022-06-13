@@ -1,5 +1,6 @@
 export interface GameDialogEvent {
     open: boolean
+    tokenProps?: GameNFT
 }
 
 export interface GameRSSNode {
@@ -17,4 +18,10 @@ export interface GameInfo {
     rank: number
     width: number
     height: number
+}
+
+export interface GameNFT {
+    tokenId?: string
+    contract?: string
+    chainId?: number
 }

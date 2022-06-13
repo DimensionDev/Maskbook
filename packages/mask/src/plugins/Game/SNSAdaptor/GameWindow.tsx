@@ -6,7 +6,7 @@ import { IconClose, IconFull } from '../constants'
 import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useLocation } from 'react-use'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import type { GameInfo } from '../types'
+import type { GameInfo, GameNFT } from '../types'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -78,18 +78,20 @@ const IFrame = styled('iframe')`
 
 interface Props {
     gameInfo: GameInfo | undefined
+    tokenProps: GameNFT | undefined
     isShow: boolean
     onClose: () => void
 }
 
 const GameWindow = (props: Props) => {
+    const { gameInfo, tokenProps, isShow, onClose } = props
     const classes = useStylesExtends(useStyles(), {})
 
     const [isFullScreen, setFullScreen] = useState(false)
 
     const handleClose = () => {
         setFullScreen(false)
-        props.onClose()
+        onClose()
     }
 
     const toggleFullscreen = () => {
@@ -98,10 +100,10 @@ const GameWindow = (props: Props) => {
 
     const windowStyle = useMemo(() => {
         return {
-            width: `${props.gameInfo?.width ?? 700}px`,
-            height: `${props.gameInfo?.height ?? 400}px`,
+            width: `${gameInfo?.width ?? 700}px`,
+            height: `${gameInfo?.height ?? 400}px`,
         }
-    }, [props.gameInfo?.width, props.gameInfo?.height])
+    }, [gameInfo?.width, gameInfo?.height])
 
     const location = useLocation()
     const twitterId = useMemo(() => {
@@ -109,16 +111,16 @@ const GameWindow = (props: Props) => {
     }, [location])
     const chainId = useChainId()
     const gameUrl = useMemo(() => {
-        return `${props.gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=&tokenId=&chainId=${chainId}`
+        return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract}&tokenId=${tokenProps?.tokenId}&chainId=${chainId}`
     }, [props])
 
-    return props.isShow ? (
+    return isShow ? (
         <div className={classes.root}>
             <div className={classes.body}>
                 <div
                     className={classNames(classes.iframeBox, { [classes.fullScreen]: isFullScreen })}
                     style={windowStyle}>
-                    {!!props.gameInfo?.url && <IFrame src={gameUrl} />}
+                    {!!gameInfo?.url && <IFrame src={gameUrl} />}
                 </div>
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />

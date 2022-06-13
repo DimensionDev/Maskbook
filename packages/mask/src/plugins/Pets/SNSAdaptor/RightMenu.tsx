@@ -106,8 +106,8 @@ function RightMenu(props: Props) {
     const [isTop, setIsTop] = useState(false)
 
     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
-    const { openDialog: openGameDialog } = useRemoteControlledDialog(
-        PluginGameMessages.events.essayDialogUpdated,
+    const { setDialog: openGameDialog } = useRemoteControlledDialog(
+        PluginGameMessages.events.gameDialogUpdated,
         () => {},
     )
 
@@ -143,7 +143,14 @@ function RightMenu(props: Props) {
                 openDialog()
                 break
             case 'ski':
-                openGameDialog()
+                openGameDialog({
+                    open: true,
+                    tokenProps: {
+                        tokenId: '1',
+                        contract: '0x0000000000000000000000000000000000000000',
+                        chainId: 1,
+                    },
+                })
                 break
             case 'aboutUs':
                 window.open('https://twitter.com/NonFFriend')

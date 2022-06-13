@@ -6,7 +6,7 @@ export interface GameMessage {
     /**
      * Pets essay set dialog
      */
-    essayDialogUpdated: GameDialogEvent
+    gameDialogUpdated: GameDialogEvent
     setResult: number
     rpc: unknown
 }

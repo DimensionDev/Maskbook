@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
-                    const { openDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated)
+                    const { openDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
 
                     return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
                 },

@@ -10,12 +10,12 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const chainId = useChainId()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
-    const { value: collectibles } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-
+    const { value: assets = [], retry, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    console.log('useNonFungibleAssets', assets, loading)
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
-        if (collectibles?.length) {
-            for (const NFT of collectibles) {
+        if (assets?.length) {
+            for (const NFT of assets) {
                 let sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.address))
                 if (!sameNFT) {
                     sameNFT = {
@@ -52,6 +52,6 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
         )
         setNfts(tempNFTs)
         return () => {}
-    }, [JSON.stringify(user), JSON.stringify(collectibles)])
+    }, [JSON.stringify(user), JSON.stringify(assets)])
     return nfts
 }

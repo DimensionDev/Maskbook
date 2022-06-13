@@ -9,13 +9,16 @@ import GameList from './GameList'
 import GameWindow from './GameWindow'
 
 import { WalletMessages } from '../../Wallet/messages'
-import type { GameInfo } from '../types'
+import type { GameInfo, GameNFT } from '../types'
 
 const WalletConnectDialog = () => {
     const [isGameShow, setGameShow] = useState(false)
+    const [tokenProps, setTokenProps] = useState<GameNFT>()
     const [gameInfo, setGameInfo] = useState<GameInfo>()
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.essayDialogUpdated, () => {})
+    const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
+        if (ev?.tokenProps) setTokenProps(ev.tokenProps)
+    })
 
     const handleGameClose = () => {
         setGameShow(false)
@@ -41,7 +44,7 @@ const WalletConnectDialog = () => {
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>
-            <GameWindow gameInfo={gameInfo} isShow={isGameShow} onClose={handleGameClose} />
+            <GameWindow gameInfo={gameInfo} tokenProps={tokenProps} isShow={isGameShow} onClose={handleGameClose} />
         </>
     )
 }
