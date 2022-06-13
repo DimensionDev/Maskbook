@@ -28,10 +28,11 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     width?: number
     hasRainbow?: boolean
     borderSize?: number
+    permlink?: string
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, size = 140, hasRainbow, borderSize } = props
+    const { avatar, size = 140, hasRainbow, borderSize, permlink } = props
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(avatar.userId)
@@ -50,19 +51,23 @@ export function NFTBadge(props: NFTBadgeProps) {
             onClick={(e) => {
                 e.preventDefault()
                 openWindow(
+                    permlink ??
+                        Others?.explorerResolver.nonFungibleTokenLink(
+                            avatar.chainId ?? ChainId.Mainnet,
+                            avatar.address,
+                            avatar.tokenId,
+                        ),
+                )
+            }}>
+            <Link
+                href={
+                    permlink ??
                     Others?.explorerResolver.nonFungibleTokenLink(
                         avatar.chainId ?? ChainId.Mainnet,
                         avatar.address,
                         avatar.tokenId,
-                    ),
-                )
-            }}>
-            <Link
-                href={Others?.explorerResolver.nonFungibleTokenLink(
-                    avatar.chainId ?? ChainId.Mainnet,
-                    avatar.address,
-                    avatar.tokenId,
-                )}
+                    )
+                }
                 target="_blank"
                 rel="noopener noreferrer">
                 <NFTAvatarRing
