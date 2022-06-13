@@ -18,7 +18,7 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
@@ -78,7 +78,6 @@ function NFTAvatarInTwitter() {
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
-    const { Others } = useWeb3State<'all'>(_avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM)
 
     const { t } = useI18N()
     const showAvatar = useMemo(
@@ -237,14 +236,7 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(
-                permalink ??
-                    Others?.explorerResolver.nonFungibleTokenLink(
-                        avatar?.chainId ?? ChainId.Mainnet,
-                        avatar?.address ?? '',
-                        avatar?.tokenId ?? '',
-                    ),
-            )
+            openWindow(permalink)
         }
 
         linkParentDom.addEventListener('click', handler)
