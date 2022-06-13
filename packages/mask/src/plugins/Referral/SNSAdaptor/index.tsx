@@ -6,7 +6,6 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { referralMetadataReader } from '../helpers'
 import { META_KEY } from '../constants'
-import type { ReferralMetaData } from '../types'
 
 import { FarmPost } from './FarmPost'
 import { ReferralDialog } from './ReferralDialog'
@@ -24,8 +23,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [
             META_KEY,
-            (meta: ReferralMetaData) =>
-                `Buy or refer ${meta.referral_token_symbol} and receive farming yield without farming!`,
+            (payload) => {
+                return {
+                    text: (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ReferralFarmsIcon style={{ width: 20, height: 19, marginRight: 4 }} />
+                            Buy or refer {payload.referral_token_symbol} to Earn Referral Farming rewards!
+                        </div>
+                    ),
+                }
+            },
         ],
     ]),
     GlobalInjection: function Component() {
