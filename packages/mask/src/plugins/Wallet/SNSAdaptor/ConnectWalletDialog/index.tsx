@@ -38,7 +38,7 @@ export function ConnectWalletDialog() {
     )
     // #endregion
 
-    const { Connection, Others } = useWeb3State<'all'>(pluginID)
+    const { Connection, Others } = useWeb3State(pluginID)
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true

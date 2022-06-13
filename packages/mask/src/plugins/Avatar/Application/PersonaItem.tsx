@@ -6,11 +6,13 @@ import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
 import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
-import type { TokenInfo } from '../types'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import type { AllChainsNonFungibleToken } from '../types'
+import { useWallet } from '../hooks/useWallet'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -36,23 +38,55 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     proof?: BindingProof
-    onSelect?: (proof: BindingProof, tokenInfo?: TokenInfo) => void
+    onSelect?: (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
+    const { loading: loadingWallet, value: storage } = useWallet(userId)
     const { value: token, loading: loadingToken } = useTokenOwner(
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
+        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
         _avatar?.chainId,
+        storage?.address,
     )
-    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(userId, token?.owner)
+    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        userId,
+        token?.owner ?? '',
+    )
+
+    const tokenDetailed: AllChainsNonFungibleToken = useMemo(
+        () => ({
+            tokenId: _avatar?.tokenId ?? '',
+            contract: {
+                chainId: _avatar?.chainId ?? ChainId.Mainnet,
+                name: token?.name ?? '',
+                symbol: token?.symbol ?? 'ETH',
+                address: _avatar?.address ?? '',
+                schema: SchemaType.ERC721,
+                owner: token?.owner,
+            },
+            metadata: {
+                chainId: _avatar?.chainId ?? ChainId.Mainnet,
+                name: token?.name ?? '',
+                symbol: token?.symbol ?? 'ETH',
+            },
+            id: _avatar?.address ?? '',
+            chainId: _avatar?.chainId ?? ChainId.Mainnet,
+            type: TokenType.NonFungible,
+            schema: SchemaType.ERC721,
+            address: _avatar?.address ?? '',
+        }),
+        [_avatar, token],
+    )
 
     const onClick = useCallback(() => {
         if (!proof) return
-        onSelect?.(proof, _avatar && isOwner ? { address: _avatar?.address, tokenId: _avatar?.tokenId } : undefined)
+        onSelect?.(proof, _avatar && isOwner ? tokenDetailed : undefined)
     }, [_avatar, proof])
 
     return (
@@ -73,7 +107,7 @@ export function PersonaItem(props: PersonaItemProps) {
             </Box>
 
             <NFTInfo
-                loading={loading || loadingToken || loadingCheckOwner}
+                loading={loading || loadingToken || loadingCheckOwner || loadingWallet}
                 owner={owner ? isOwner && _avatar?.avatarId === getAvatarId(avatar) : true}
                 nft={
                     _avatar
@@ -83,6 +117,7 @@ export function PersonaItem(props: PersonaItemProps) {
                               tokenId: _avatar?.tokenId ?? '',
                               address: _avatar?.address ?? '',
                               chainId: _avatar.chainId ?? ChainId.Mainnet,
+                              networkPluginID: _avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                           }
                         : undefined
                 }

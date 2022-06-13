@@ -47,7 +47,6 @@ function NFTAvatarInInstagram() {
     const location = useLocation()
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.INSTAGRAM)
     const windowSize = useWindowSize()
-
     const showAvatar = useMemo(() => {
         if (location.pathname?.includes('/edit')) return false
         return getAvatarId(identity.avatar ?? '') === avatar?.avatarId

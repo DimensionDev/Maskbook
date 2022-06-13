@@ -4,10 +4,9 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
@@ -19,9 +18,11 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useWallet } from '@masknet/plugin-infra/web3'
+import { useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useShowConfirm } from '../../../../../../shared/src/contexts/common'
+import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -63,9 +64,11 @@ function NFTAvatarInTwitter() {
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
+
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
+    const { Others } = useWeb3State<'all'>(_avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM)
 
     const { t } = useI18N()
     const showAvatar = useMemo(
@@ -89,6 +92,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
     const openConfirmDialog = useShowConfirm()
+    const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {
@@ -106,13 +110,13 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+        const avatar = await saveNFTAvatar(
             wallet.address,
             {
                 ...NFTEvent,
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
-            identity.identifier.network,
+            identity.identifier.network as EnhanceableSite,
             RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)
@@ -153,7 +157,7 @@ function NFTAvatarInTwitter() {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, openConfirmDialog, t])
+    }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
 
     useEffect(() => {
         setAvatar(_avatar)
@@ -223,7 +227,13 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId))
+            openWindow(
+                Others?.explorerResolver.nonFungibleTokenLink(
+                    _avatar?.chainId ?? ChainId.Mainnet,
+                    _avatar?.address ?? '',
+                    _avatar?.tokenId ?? '',
+                ),
+            )
         }
 
         linkParentDom.addEventListener('click', handler)

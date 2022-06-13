@@ -81,12 +81,12 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
                         <div className={classes.bridgeItem} key={bridge?.ID} onClick={() => openWindow(bridge?.link)}>
                             {bridge?.icon}
                             <div className={classes.bridgeInfo}>
-                                <div className={classes.bridgeName}>
+                                <Typography className={classes.bridgeName}>
                                     {bridge?.name}
                                     {bridge?.isOfficial && (
                                         <Typography className={classes.officialTag}>{t.official()}</Typography>
                                     )}
-                                </div>
+                                </Typography>
                                 {bridge?.intro && (
                                     <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
                                 )}

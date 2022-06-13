@@ -8,12 +8,10 @@ export function useNetworkDescriptor<S extends 'all' | void = void, T extends Ne
     expectedPluginID?: T,
     expectedChainIdOrNetworkTypeOrID?: string | number,
 ) {
-    type Result = S extends 'all' ? Web3Helper.NetworkDescriptorAll : Web3Helper.Web3NetworkDescriptor<T>
-
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const networkType = useNetworkType(pluginID)
 
     return getPluginDefine(pluginID)?.declareWeb3Networks?.find((x) =>
         [x.chainId, x.type, x.ID].includes(expectedChainIdOrNetworkTypeOrID ?? networkType ?? ''),
-    ) as Result
+    ) as Web3Helper.NetworkDescriptorScope<S, T>
 }

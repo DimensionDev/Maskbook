@@ -12,6 +12,7 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { Providers } from './Connection/provider'
+import { ExtensionSite } from '@masknet/shared-base'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedContext) {
@@ -21,7 +22,8 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isValidChainId,
             getDefaultChainId: () => ChainId.Mainnet,
             getDefaultNetworkType: () => NetworkType.Ethereum,
-            getDefaultProviderType: () => ProviderType.MaskWallet,
+            getDefaultProviderType: (site) =>
+                site === ExtensionSite.Popup ? ProviderType.MaskWallet : ProviderType.None,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
         })

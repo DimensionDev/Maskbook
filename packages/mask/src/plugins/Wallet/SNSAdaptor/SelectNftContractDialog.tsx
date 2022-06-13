@@ -16,6 +16,7 @@ import {
     useAccount,
     useNonFungibleCollections,
     useNonFungibleTokenContract,
+    useNonFungibleTokenBalance,
 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
@@ -128,11 +129,12 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         },
     )
     const onSubmit = useCallback(
-        (contract: NonFungibleTokenContract<ChainId, SchemaType>) => {
+        (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => {
             setKeyword('')
             setDialog({
                 open: false,
                 uuid: id,
+                balance,
                 contract,
             })
         },
@@ -147,7 +149,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
     const contractList = assets
         .filter((x) => x.schema_name === WyvernSchemaName.ERC721)
@@ -221,7 +225,7 @@ export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
     contractList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
     searchedTokenList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
-    onSubmit: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
+    onSubmit: (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
 }
 
 function SearchResultBox(props: SearchResultBoxProps) {
@@ -233,6 +237,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
     const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
         keyword,
+        undefined,
         { account },
     )
     return (
@@ -269,24 +274,25 @@ function SearchResultBox(props: SearchResultBoxProps) {
 
 interface ContractListItemProps {
     contract: NonFungibleTokenContract<ChainId, SchemaType>
-    onSubmit: (contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
+    onSubmit: (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
 }
 
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
+    const { value: balance = '0' } = useNonFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, contract.address)
     return (
         <div style={{ position: 'relative' }}>
-            <ListItem className={classes.listItem} onClick={() => onSubmit(contract)}>
+            <ListItem className={classes.listItem} onClick={() => onSubmit(balance, contract)}>
                 <Avatar className={classes.icon} src={contract.iconURL} />
                 <Typography className={classes.contractName}>
                     {contract.name}{' '}
                     {contract.symbol && contract.symbol !== 'UNKNOWN' ? '(' + contract.symbol + ')' : ''}
                 </Typography>
-                {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
+                {balance ? <Typography className={classes.balance}>{balance}</Typography> : null}
             </ListItem>
             <div className={classes.address}>
-                <Typography onClick={() => onSubmit(contract)} className={classes.addressText}>
+                <Typography onClick={() => onSubmit(balance, contract)} className={classes.addressText}>
                     {contract.address}
                 </Typography>
                 <Link

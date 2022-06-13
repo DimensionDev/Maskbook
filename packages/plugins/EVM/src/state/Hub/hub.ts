@@ -1,4 +1,14 @@
-import { CoinGecko, DeBank, EthereumWeb3, MetaSwap, NFTScan, OpenSea, TokenList, Zerion } from '@masknet/web3-providers'
+import {
+    Alchemy_EVM,
+    CoinGecko,
+    DeBank,
+    EthereumWeb3,
+    MetaSwap,
+    OpenSea,
+    Rarible,
+    TokenList,
+    Zerion,
+} from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -14,6 +24,9 @@ import {
     currySameAddress,
     CurrencyType,
     Transaction,
+    attemptUntil,
+    createPredicate,
+    createIndicator,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -24,8 +37,8 @@ import {
     getTokenAssetBaseURLConstants,
     getTokenConstants,
     getTokenListConstants,
-    isNativeTokenAddress,
     SchemaType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
@@ -36,16 +49,15 @@ class Hub implements EVM_Hub {
         private account?: string,
         private sourceType?: SourceType,
         private currencyType?: CurrencyType,
-        private sizePerPage = 50,
-        private maxPageSize = 25,
     ) {}
 
     async getFungibleTokensFromTokenList(
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
-        return TokenList.fetchFungibleTokensFromTokenLists(chainId, FUNGIBLE_TOKEN_LISTS)
+        const expectedChainId = options?.chainId ?? chainId
+        const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(expectedChainId)
+        return TokenList.fetchFungibleTokensFromTokenLists(expectedChainId, FUNGIBLE_TOKEN_LISTS)
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -57,12 +69,14 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Record<GasOptionType, GasOption>> {
+        const expectedChainId = options?.chainId ?? chainId
+
         try {
-            const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
-            if (isEIP1559) return await MetaSwap.getGasOptions(chainId)
-            return await DeBank.getGasOptions(chainId)
+            const isEIP1559 = chainResolver.isSupport(expectedChainId, 'EIP1559')
+            if (isEIP1559) return await MetaSwap.getGasOptions(expectedChainId)
+            return await DeBank.getGasOptions(expectedChainId)
         } catch (error) {
-            return EthereumWeb3.getGasOptions(chainId)
+            return EthereumWeb3.getGasOptions(expectedChainId)
         }
     }
     getFungibleAsset(
@@ -75,30 +89,59 @@ class Hub implements EVM_Hub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        const { indicator, sourceType } = options ?? {}
+
         // only the first page is available
-        if ((options?.indicator ?? 0) > 0) return createPageable([], 0)
-        try {
-            return await DeBank.getAssets(account, { chainId: this.chainId, ...options })
-        } catch {
-            return Zerion.getAssets(account, { chainId: this.chainId, ...options })
+        if ((indicator ?? 0) > 0) return createPageable([], createIndicator(options?.indicator))
+
+        const providers = {
+            [SourceType.DeBank]: DeBank,
+            [SourceType.Zerion]: Zerion,
         }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [DeBank, Zerion]
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getAssets(account, { chainId: this.chainId, ...options })),
+            createPageable([], createIndicator(options?.indicator)),
+        )
     }
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        return OpenSea.getAsset(address, tokenId, options)
+        const { sourceType } = options ?? {}
+        const providers = {
+            [SourceType.OpenSea]: OpenSea,
+            [SourceType.Rarible]: Rarible,
+            [SourceType.Alchemy_EVM]: Alchemy_EVM,
+        }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : [Alchemy_EVM, OpenSea, Rarible]
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getAsset(address, tokenId, options)),
+            undefined,
+        )
     }
-    getNonFungibleAssets(
+    async getNonFungibleTokens(
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        try {
-            return OpenSea.getTokens(account, options)
-        } catch {
-            return NFTScan.getTokens(account, options)
+        const { sourceType } = options ?? {}
+        const providers = {
+            [SourceType.OpenSea]: OpenSea,
+            [SourceType.Rarible]: Rarible,
+            [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
+        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
+        const defaultProviders =
+            options?.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible]
+        const filteredProviders = predicate(sourceType) ? [providers[sourceType]] : defaultProviders
+
+        return attemptUntil(
+            filteredProviders.map((x) => () => x.getAssets(account, { chainId: this.chainId, ...options })),
+            createPageable([], createIndicator(options?.indicator)),
+        )
     }
     getNonFungibleCollections(
         account: string,
@@ -111,13 +154,15 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<number> {
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const expectedCurrencyType = options?.currencyType ?? this.currencyType
+        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(expectedChainId)
 
         if (isNativeTokenAddress(address)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options?.currencyType ?? this.currencyType)
+            return CoinGecko.getTokenPriceByCoinId(COIN_ID, expectedCurrencyType)
         }
 
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options?.currencyType ?? this.currencyType)
+        return CoinGecko.getTokenPrice(PLATFORM_ID, address, expectedCurrencyType)
     }
     getNonFungibleTokenPrice(
         chainId: ChainId,
@@ -132,7 +177,8 @@ class Hub implements EVM_Hub {
         address: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<string[]> {
-        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(chainId)
+        const expectedChainId = options?.chainId ?? chainId
+        const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(expectedChainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
         if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
@@ -157,61 +203,12 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         options?: HubOptions<ChainId> | undefined,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        return DeBank.getTransactions(account, { chainId })
-    }
-
-    async *getAllFungibleAssets(address: string): AsyncIterableIterator<FungibleAsset<ChainId, SchemaType>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getFungibleAssets(address, {
-                indicator: i,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
-    }
-
-    async *getAllNonFungibleAssets(address: string): AsyncIterableIterator<NonFungibleAsset<ChainId, SchemaType>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleAssets(address, {
-                indicator: i,
-                size: this.sizePerPage,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
-    }
-
-    async *getAllNonFungibleCollections(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): AsyncIterableIterator<NonFungibleTokenCollection<ChainId>> {
-        for (let i = 0; i < this.maxPageSize; i += 1) {
-            const pageable = await this.getNonFungibleCollections(address, {
-                indicator: i,
-                size: this.sizePerPage,
-                chainId: options?.chainId,
-            })
-
-            yield* pageable.data
-
-            if (pageable.data.length === 0) return
-        }
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        const expectedChainId = options?.chainId ?? chainId
+        return DeBank.getTransactions(account, { chainId: expectedChainId })
     }
 }
 
-export function createHub(
-    chainId?: ChainId,
-    account?: string,
-    sourceType?: SourceType,
-    currencyType?: CurrencyType,
-    sizePerPage?: number,
-    maxPageSize?: number,
-) {
-    return new Hub(chainId, account, sourceType, currencyType, sizePerPage, maxPageSize)
+export function createHub(chainId?: ChainId, account?: string, sourceType?: SourceType, currencyType?: CurrencyType) {
+    return new Hub(chainId, account, sourceType, currencyType)
 }

@@ -1,5 +1,8 @@
 import {
     createFungibleToken,
+    createIndicator,
+    createNextIndicator,
+    createPageable,
     HubOptions,
     NonFungibleToken,
     NonFungibleTokenContract,
@@ -42,6 +45,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
     return {
         id: token.mintAddress,
         chainId,
+        ownerId: token.owner,
         type: TokenType.NonFungible,
         schema: SchemaType.NonFungible,
         tokenId: token.mintAddress,
@@ -57,7 +61,7 @@ function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungi
         contract: {
             chainId,
             schema: SchemaType.NonFungible,
-            address: '',
+            address: token.mintAddress,
             name: collection.name,
             symbol: collection.symbol,
         },
@@ -98,6 +102,52 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTToken(token, collection)
     }
 
+    async getTokens(owner: string, { indicator }: HubOptions<ChainId> = {}) {
+        if ((indicator?.index ?? 0) > 0) return createPageable([], createIndicator(indicator))
+
+        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
+            urlcat('/rpc/getNFTsByOwner/:owner', {
+                owner,
+            }),
+        )
+        const tokens = response?.results || []
+        const data = tokens.map((token) => {
+            return {
+                id: token.mintAddress,
+                chainId: ChainId.Mainnet,
+                type: TokenType.NonFungible,
+                schema: SchemaType.NonFungible,
+                tokenId: token.mintAddress,
+                address: token.mintAddress,
+                metadata: {
+                    chainId: ChainId.Mainnet,
+                    name: token.collectionName,
+                    symbol: '',
+                    description: '',
+                    imageURL: toImage(token.img),
+                    mediaURL: toImage(token.img),
+                    owner: token.owner,
+                },
+                contract: {
+                    chainId: ChainId.Mainnet,
+                    schema: SchemaType.NonFungible,
+                    address: token.mintAddress,
+                    name: token.collectionName,
+                    symbol: '',
+                },
+                collection: {
+                    chainId: ChainId.Mainnet,
+                    name: token.collectionName,
+                    slug: '',
+                    description: '',
+                    iconURL: '',
+                    verified: false,
+                },
+            }
+        })
+        return createPageable(data, createIndicator(indicator))
+    }
+
     async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const [token, auction, nft] = await Promise.all([
             this.getToken(address, tokenMint),
@@ -122,7 +172,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                       offerTokens: [],
                   }
                 : undefined,
-            creator: nft?.creators.length
+            creator: nft?.creators?.length
                 ? {
                       address: nft.creators[0].address,
                       nickname: 'Unknown',
@@ -169,59 +219,11 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTCollection(collection)
     }
 
-    async getTokens(owner: string, options?: HubOptions<ChainId>) {
-        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
-            urlcat('/rpc/getNFTsByOwner/:owner', {
-                owner,
-            }),
-        )
-        const tokens = response?.results || []
-        return {
-            // All tokens get returned in single one page
-            indicator: 1,
-            hasNextPage: false,
-            data: tokens.map((token) => {
-                const chainId = ChainId.Mainnet
-                return {
-                    id: token.mintAddress,
-                    chainId,
-                    type: TokenType.NonFungible,
-                    schema: SchemaType.NonFungible,
-                    tokenId: token.mintAddress,
-                    address: token.mintAddress,
-                    metadata: {
-                        chainId,
-                        name: token.collectionName,
-                        symbol: '',
-                        description: '',
-                        imageURL: toImage(token.img),
-                        mediaURL: toImage(token.img),
-                    },
-                    contract: {
-                        chainId,
-                        schema: SchemaType.NonFungible,
-                        address: '',
-                        name: token.collectionName,
-                        symbol: '',
-                    },
-                    collection: {
-                        chainId,
-                        name: token.collectionName,
-                        slug: '',
-                        description: '',
-                        iconURL: '',
-                        verified: false,
-                    },
-                }
-            }),
-        }
-    }
-
-    async getHistory(address: string, tokenId: string, { indicator = 1, size = 50 }: HubOptions<ChainId> = {}) {
+    async getHistory(address: string, tokenId: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
                 mint_address: tokenId,
-                offset: (indicator - 1) * size,
+                offset: (indicator?.index ?? 0) * size,
                 limit: size,
             }),
         )
@@ -244,14 +246,9 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         })
     }
 
-    async getOrders(
-        _: string,
-        mintAddress: string,
-        side: OrderSide,
-        { indicator = 1, size }: HubOptions<ChainId> = {},
-    ) {
+    async getOrders(_: string, mintAddress: string, side: OrderSide, { indicator, size }: HubOptions<ChainId> = {}) {
         const limit = size || 20
-        const offset = indicator ? (Math.max(1, indicator) - 1) * limit : 0
+        const offset = (indicator?.index ?? 0) * limit
         const offers = await fetchFromMagicEden<WalletOffer[]>(
             urlcat('/tokens/:mint_address/offer_received', {
                 mint_address: mintAddress,
@@ -271,10 +268,9 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         })
     }
 
-    async getCollections(symbol: string, { indicator = 1, size }: HubOptions<ChainId> = {}) {
-        indicator = Math.max(indicator || 1, 1)
+    async getCollections(symbol: string, { indicator, size }: HubOptions<ChainId> = {}) {
         const limit = size || 20
-        const offset = (Math.max(1, indicator) - 1) * limit
+        const offset = (indicator?.index ?? 0) * limit
         const collections = await fetchFromMagicEden<Collection[]>(
             urlcat('/collections/:symbol/listings', { symbol, offset, limit }),
         )
@@ -287,11 +283,10 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             symbol: collection.symbol,
             iconURL: toImage(collection.image),
         }))
-        const hasNextPage = data.length === limit
-        return {
-            indicator,
-            hasNextPage,
+        return createPageable(
             data,
-        }
+            createIndicator(indicator),
+            data.length === limit ? createNextIndicator(indicator) : undefined,
+        )
     }
 }

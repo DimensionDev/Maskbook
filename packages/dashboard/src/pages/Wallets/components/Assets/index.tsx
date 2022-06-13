@@ -99,13 +99,13 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                         )}
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <FungibleTokenTable selectedChainId={network?.chainId ?? null} />
+                        <FungibleTokenTable selectedChainId={network?.chainId} />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <CollectibleList selectedNetwork={network} />
+                        <CollectibleList selectedChain={network} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>

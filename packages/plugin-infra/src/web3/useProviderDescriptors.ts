@@ -7,8 +7,8 @@ import { useCurrentWeb3NetworkPluginID } from './Context'
 export function useProviderDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
 ) {
-    type Result = S extends 'all' ? Web3Helper.ProviderDescriptorAll : Web3Helper.Web3ProviderDescriptor<T>
-
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    return (getPluginDefine(pluginID)?.declareWeb3Providers ?? EMPTY_LIST) as Result[]
+    return (getPluginDefine(pluginID)?.declareWeb3Providers ?? EMPTY_LIST) as Array<
+        Web3Helper.ProviderDescriptorScope<S, T>
+    >
 }

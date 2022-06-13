@@ -20,6 +20,26 @@ export interface AccountInfo {
     lamports: number
 }
 
+export interface SplToken {
+    symbol: string
+    name: string
+    mint: string
+    decimals: 3
+    icon: string
+}
+
+export interface RaydiumTokenList {
+    name: string
+    timestamp: string
+    version: {
+        major: number
+        minor: number
+        patch: number
+    }
+    official: SplToken[]
+    unOfficial: SplToken[]
+}
+
 export type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
 export interface ProgramAccount {
     account: {
@@ -60,13 +80,16 @@ export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOpti
         headers: {
             'Content-Type': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify({
             ...options,
             jsonrpc: '2.0',
             id,
         }),
     })
-    return res.json()
+    const result = await res.json()
+    if (result.error) throw new Error(result.message || 'Fails in requesting RPC')
+    return result
 }
 
 export async function fetchJSON<T = unknown>(url: string): Promise<T> {

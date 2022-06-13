@@ -1,12 +1,5 @@
 import urlcat from 'urlcat'
-import {
-    FungibleAsset,
-    GasOptionType,
-    Pageable,
-    Transaction,
-    createPageable,
-    HubOptions,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -71,10 +64,7 @@ export class DeBankAPI
         }
     }
 
-    async getAssets(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
@@ -95,24 +85,24 @@ export class DeBankAPI
                     })),
                     options?.chainId,
                 ),
-                0,
+                createIndicator(options?.indicator),
             )
         } catch {
-            return createPageable([], 0)
+            return createPageable([], createIndicator(options?.indicator))
         }
     }
 
     async getTransactions(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return createPageable([], 0)
+        if (!CHAIN_ID) return []
 
         const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return createPageable(formatTransactions(chainId, data), 0)
+        return formatTransactions(chainId, data)
     }
 }

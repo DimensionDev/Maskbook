@@ -22,7 +22,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { WalletMessages } from '../../Wallet/messages'
-import { TargetChainIdContext, useTip } from '../contexts'
+import { TargetRuntimeContext, useTip } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
 import { AddDialog } from './AddDialog'
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
         paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
+        paddingBottom: theme.spacing(1),
         flexShrink: 0,
     },
     tab: {
@@ -69,6 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     tipForm: {
+        paddingTop: theme.spacing(1),
         flexGrow: 1,
         overflow: 'auto',
     },
@@ -141,8 +142,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TipDialogProps {
-    open?: boolean
+export interface TipDialogProps {
+    open: boolean
     onClose?: () => void
 }
 
@@ -155,17 +156,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
-    const { targetChainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const { targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
     const {
         tipType,
         amount,
         token,
         recipientSnsId,
         recipient,
-        erc721Contract,
-        erc721TokenId,
-        setErc721Address,
-        setErc721TokenId,
+        nonFungibleTokenContract,
+        nonFungibleTokenId: erc721TokenId,
+        setNonFungibleTokenAddress,
+        setNonFungibleTokenId,
         reset,
     } = useTip()
 
@@ -181,21 +182,21 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                   promote,
               })
             : t.tip_nft_share_post({
-                  name: erc721Contract?.name || 'NFT',
+                  name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId,
                   recipient,
                   promote,
               })
         return message
-    }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
     const { value: erc721Token } = useNonFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
-        erc721Contract?.address,
+        nonFungibleTokenContract?.address,
         erc721TokenId ?? '',
     )
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId()
     const successMessage = useMemo(() => {
         if (isTokenTip) return t.send_tip_successfully()
         if (erc721Token)
@@ -231,9 +232,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
+    const { Others } = useWeb3State()
+    const account = useAccount()
+    const { value: domain } = useReverseAddress(pluginID, account)
     const walletTitle =
         Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || providerDescriptor?.name
 
@@ -248,8 +249,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [openSelectProviderDialog, hasNativeAPI])
 
     const handleAddToken = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
-        setErc721Address(token.address ?? '')
-        setErc721TokenId(token.tokenId)
+        setNonFungibleTokenAddress(token.address ?? '')
+        setNonFungibleTokenId(token.tokenId)
         openAddTokenDialog(false)
     }, [])
 
@@ -292,14 +293,16 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTail={walletChip}>
                 <DialogContent className={classes.content}>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            classes={classes}
-                            chainId={targetChainId}
-                            setChainId={setTargetChainId}
-                            chains={chainIdList}
-                        />
-                    </div>
+                    {chainIdList.length ? (
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab
+                                classes={classes}
+                                chainId={targetChainId}
+                                setChainId={setTargetChainId}
+                                chains={chainIdList}
+                            />
+                        </div>
+                    ) : null}
                     <TipForm
                         className={classes.tipForm}
                         onAddToken={() => openAddTokenDialog(true)}

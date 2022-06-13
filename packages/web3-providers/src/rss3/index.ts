@@ -4,7 +4,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RSS3_ENDPOINT } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
-import { TokenType } from '@masknet/web3-shared-base'
+import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -64,16 +64,19 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         }>(url)
         return rsp?.profile
     }
-    async getAssets(address: string) {
+    async getAssets(address: string, { chainId, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+        if (chainId !== ChainId.Mainnet && chainId !== ChainId.Matic)
+            return createPageable([], createIndicator(indicator))
+
         const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
         })
 
         const { status, assets = [] } = await fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
-        if (!status) return []
+        if (!status) return createPageable([], createIndicator(indicator))
 
-        return assets
+        const data = assets
             .filter((x) => ['Ethereum-NFT', 'Polygon-NFT'].includes(x.type))
             .map((asset) => {
                 const [address, tokenId] = asset.id.split('-')
@@ -92,5 +95,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                     },
                 }
             })
+            .filter((x) => x.chainId === chainId)
+        return createPageable(data, createIndicator(indicator))
     }
 }

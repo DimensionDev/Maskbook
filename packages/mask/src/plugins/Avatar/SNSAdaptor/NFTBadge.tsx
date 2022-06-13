@@ -1,8 +1,11 @@
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import { useNFT } from '../hooks'
+import { useWallet } from '../hooks/useWallet'
 import type { AvatarMetaDB } from '../types'
 import { formatPrice, formatText } from '../utils'
 import { NFTAvatarRing } from './NFTAvatarRing'
@@ -30,24 +33,36 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140, hasRainbow, borderSize } = props
     const classes = useStylesExtends(useStyles(), props)
-
-    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
+    const account = useAccount()
+    const { loading: loadingWallet, value: storage } = useWallet(avatar.userId)
+    const { value = { amount: '0', symbol: '', name: '', slug: '' }, loading } = useNFT(
+        storage?.address ?? account,
         avatar.address,
         avatar.tokenId,
+        avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         avatar.chainId,
     )
-
+    const { Others } = useWeb3State<'all'>(avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const { amount, symbol, name, slug } = value
-
     return (
         <div
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
+                openWindow(
+                    Others?.explorerResolver.nonFungibleTokenLink(
+                        avatar.chainId ?? ChainId.Mainnet,
+                        avatar.address,
+                        avatar.tokenId,
+                    ),
+                )
             }}>
             <Link
-                href={resolveOpenSeaLink(avatar.address, avatar.tokenId, avatar.chainId)}
+                href={Others?.explorerResolver.nonFungibleTokenLink(
+                    avatar.chainId ?? ChainId.Mainnet,
+                    avatar.address,
+                    avatar.tokenId,
+                )}
                 target="_blank"
                 rel="noopener noreferrer">
                 <NFTAvatarRing
@@ -59,11 +74,11 @@ export function NFTBadge(props: NFTBadgeProps) {
                     borderSize={borderSize}
                     fontSize={9}
                     text={
-                        loading
+                        loading || loadingWallet
                             ? 'loading...'
                             : `${formatText(name, avatar.tokenId)} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`
                     }
-                    price={loading ? '' : formatPrice(amount, symbol)}
+                    price={loading || loadingWallet ? '' : formatPrice(amount, symbol)}
                 />
             </Link>
         </div>

@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface FootnoteMenuOption {
     name: React.ReactNode
     value: string | number
+    disabled?: boolean
 }
 
 export interface FootnoteMenuProps {
@@ -35,7 +36,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
     }
     const [menu, openMenu] = useMenu(
         options.map((x, i) => (
-            <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
+            <MenuItem disabled={x.disabled} selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
                 {x.name}
             </MenuItem>
         )),

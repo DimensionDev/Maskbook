@@ -9,6 +9,7 @@ import { useProviderDescriptor, useNetworkDescriptor, useWeb3State, Web3Helper }
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { WarningTriangleIcon } from '@masknet/icons'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
     content: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor?.dark,
         fontWeight: 700,
     },
     error: {
@@ -65,7 +66,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { t } = useI18N()
 
-    const { Others } = useWeb3State<'all'>(pluginID)
+    const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
     const networkDescriptor = useNetworkDescriptor(pluginID, providerType)
     const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)

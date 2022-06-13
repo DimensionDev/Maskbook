@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react'
-import { TargetChainIdContext } from './TargetChainIdContext'
+import { TargetRuntimeContext } from './TargetRuntimeContext'
 
 export const RootContext: FC<PropsWithChildren<{}>> = ({ children }) => {
-    return <TargetChainIdContext.Provider>{children}</TargetChainIdContext.Provider>
+    return <TargetRuntimeContext.Provider>{children}</TargetRuntimeContext.Provider>
 }

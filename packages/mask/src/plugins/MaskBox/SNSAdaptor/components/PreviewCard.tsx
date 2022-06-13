@@ -12,10 +12,10 @@ import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
 import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import AbstractTab from '../../../../components/shared/AbstractTab'
+import { TargetChainIdContext } from '../../contexts'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -60,7 +60,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { targetChainId } = TargetChainIdContext.useContainer()
     const theme = useTheme()
 
     const {
@@ -216,7 +216,10 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={targetChainId}
+                    renderInTimeline>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
                         classes={{ button: tabClasses.button }}

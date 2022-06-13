@@ -16,9 +16,8 @@ function useCollectibleState(token?: CollectibleToken) {
         token,
         asset,
         provider,
-        setProvider,
-
         tabIndex,
+        setProvider,
         setTabIndex,
     }
 }

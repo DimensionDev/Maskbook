@@ -75,7 +75,7 @@ export function DonateDialog(props: DonateDialogProps) {
         nativeTokenDetailed.value,
     )
 
-    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
+    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
 
     // #region select token dialog
     const pickToken = usePickToken()
@@ -123,6 +123,9 @@ export function DonateDialog(props: DonateDialogProps) {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
+
+        // clean dialog
+        setRawAmount('')
     }, [openShareTxDialog, token, donateCallback, tr, t])
 
     // #region submit button
@@ -160,7 +163,7 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </form>
-                    <Typography className={classes.tip} variant="body1">
+                    <Typography className={classes.tip} variant="body1" sx={{ marginBottom: 2 }}>
                         <Translate.gitcoin_readme
                             components={{
                                 fund: <Link target="_blank" rel="noopener noreferrer" href={t.readme_fund_link()} />,

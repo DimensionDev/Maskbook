@@ -4,7 +4,7 @@ import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } fro
 import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import type { RequestArguments } from 'web3-core'
-import { RSS3, KeyValue } from '@masknet/web3-providers'
+import { KeyValue, RSS3 } from '@masknet/web3-providers'
 import { getSiteType } from '@masknet/shared-base'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
@@ -56,9 +56,11 @@ export class IdentityService extends IdentityServiceState {
         const allSettled = await Promise.allSettled([
             web3.eth.ens.getAddress(ethereumName),
             RSS3.getNameInfo(RSS3Id).then((x) => x?.address ?? ''),
-            KeyValue.createJSON_Storage<Record<NetworkPluginID, string>>(`com.maskbook.user_${getSiteType()}`)
+            KeyValue.createJSON_Storage<Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>>(
+                `com.maskbook.user_${getSiteType()}`,
+            )
                 .get(identifier?.userId ?? '$unknown')
-                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM] ?? ''),
+                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? ''),
         ])
 
         const getSettledAddress = (result: PromiseSettledResult<string>) => {

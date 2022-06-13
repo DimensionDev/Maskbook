@@ -29,7 +29,7 @@
         "name": "Ropsten",
         "color": "rgb(255, 65, 130)",
         "network": "ropsten",
-        "fullName": "Ethereum",
+        "fullName": "Ropsten Test Network",
         "shortName": "rop",
         "features": ["EIP1559"],
         "nativeCurrency": {
@@ -53,7 +53,7 @@
         "name": "Rinkeby",
         "color": "rgb(133, 89, 255)",
         "network": "rinkeby",
-        "fullName": "Ethereum",
+        "fullName": "Rinkeby Test Network",
         "shortName": "rin",
         "features": [],
         "nativeCurrency": {
@@ -77,7 +77,7 @@
         "name": "Kovan",
         "color": "rgb(133, 89,255)",
         "network": "kovan",
-        "fullName": "Ethereum",
+        "fullName": "Kovan Test Network",
         "shortName": "kov",
         "features": [],
         "nativeCurrency": {
@@ -101,7 +101,7 @@
         "name": "Goerli",
         "color": "rgb(48, 153, 242)",
         "network": "goerli",
-        "fullName": "Ethereum",
+        "fullName": "Goerli Test Network",
         "shortName": "gor",
         "features": [],
         "nativeCurrency": {
@@ -1296,15 +1296,15 @@
             "chainId": 250,
             "name": "Fantom",
             "symbol": "FTM",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
         },
         "infoURL": "https://fantom.foundation",
         "explorers": [
             {
                 "name": "ftmscan",
                 "url": "https://ftmscan.com",
-                "standard": "EIP3091",
-                "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2225,8 +2225,7 @@
             {
                 "name": "snowtrace",
                 "url": "https://snowtrace.io/",
-                "standard": "EIP3091",
-                "logoURL": "https://snowtrace.io/images/svg/brands/main.svg?v=21.12.4.1"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2823,7 +2822,7 @@
         "name": "Harmony",
         "type": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s0",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600000,
@@ -2838,7 +2837,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s1",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600001,
@@ -2853,7 +2852,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s2",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600002,
@@ -2868,7 +2867,7 @@
         "name": "Harmony",
         "network": "mainnet",
         "type": "Harmony",
-        "shortName": "hmy-s3",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600003,
@@ -2883,7 +2882,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s0",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700000,
@@ -2898,7 +2897,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s1",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700001,
@@ -2913,7 +2912,7 @@
         "name": "Harmony",
         "network": "testnet",
         "type": "Harmony",
-        "shortName": "hmy-b-s2",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700002,
@@ -2928,7 +2927,7 @@
         "name": "Harmony",
         "type": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s3",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700003,
@@ -2998,7 +2997,7 @@
     {
         "chainId": 1030,
         "type": "Conflux",
-        "name": "Conflux eSpace",
+        "name": "Conflux",
         "network": "mainnet",
         "shortName": "Conflux",
         "features": [],

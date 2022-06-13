@@ -72,7 +72,7 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
                 {uniqBy(socialAddressList ?? EMPTY_LIST, (x) => x.address.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                            <ReversedAddress address={x.address} />
+                            <ReversedAddress address={x.address} pluginId={x.networkSupporterPluginID} />
                         </MenuItem>
                     )
                 })}

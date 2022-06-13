@@ -7,10 +7,8 @@ export function useChainColor<T extends NetworkPluginID>(
     pluginID?: T,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
-    type ChainColor = (chainId?: Web3Helper.Definition[T]['ChainId']) => string | undefined
-
     const chainId = useChainId(pluginID, expectedChainId)
     const { Others } = useWeb3State(pluginID)
 
-    return (Others?.chainResolver.chainColor as ChainColor | undefined)?.(chainId) ?? 'transparent'
+    return Others?.chainResolver.chainColor?.(chainId) ?? 'transparent'
 }

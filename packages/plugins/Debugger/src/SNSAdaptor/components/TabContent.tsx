@@ -6,16 +6,38 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useWeb3Connection,
+    useWeb3Hub,
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId as EVM_ChainId, ProviderType as EVM_ProviderType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SocialAddress, SocialIdentity, SourceType } from '@masknet/web3-shared-base'
+import {
+    ChainId as EVM_ChainId,
+    ProviderType as EVM_ProviderType,
+    SchemaType,
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
-import { Button, List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { useCallback } from 'react'
+import {
+    Box,
+    Button,
+    FormControl,
+    FormControlLabel,
+    List,
+    ListItem,
+    ListItemText,
+    Radio,
+    RadioGroup,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    TextField,
+    Typography,
+} from '@mui/material'
+import { FormEvent, useCallback } from 'react'
 
 export interface TabContentProps {
     identity?: SocialIdentity
@@ -79,8 +101,9 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const { Others } = useWeb3State<'all'>()
-    const connection = useWeb3Connection<'all'>()
+    const { Others } = useWeb3State()
+    const connection = useWeb3Connection()
+    const hub = useWeb3Hub()
     const account = useAccount()
     const chainId = useChainId()
     const { value: balance = '0' } = useBalance()
@@ -327,7 +350,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                             break
                                     }
                                 }}>
-                                Connect Wallet
+                                Connect
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -355,8 +378,114 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                             break
                                     }
                                 }}>
-                                Disconnect Wallet
+                                Disconnect
                             </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Non-Fungible Token
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <FormControl
+                                component="form"
+                                onSubmit={async (ev: FormEvent<HTMLFormElement>) => {
+                                    ev.preventDefault()
+                                    const formData = new FormData(ev.currentTarget)
+                                    const address = formData.get('address') as string
+                                    const tokenId = formData.get('tokenId') as string
+                                    const schemaType = Number.parseInt(
+                                        formData.get('schema') as string,
+                                        10,
+                                    ) as SchemaType
+                                    const token = await connection.getNonFungibleToken(address, tokenId, schemaType)
+
+                                    console.log(token)
+                                }}>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <TextField name="address" label="Contract Address" size="small" />
+                                </Box>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <TextField name="tokenId" label="Token Id" size="small" />
+                                </Box>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <RadioGroup defaultValue={SchemaType.ERC721} name="schema">
+                                        <FormControlLabel
+                                            value={SchemaType.ERC721}
+                                            control={<Radio />}
+                                            label="ERC721"
+                                        />
+                                        <FormControlLabel
+                                            value={SchemaType.ERC1155}
+                                            control={<Radio />}
+                                            label="ERC1155"
+                                        />
+                                    </RadioGroup>
+                                </Box>
+                                <Button size="small" type="submit">
+                                    Query
+                                </Button>
+                            </FormControl>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Non-Fungible Asset
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <FormControl
+                                component="form"
+                                onSubmit={async (ev: FormEvent<HTMLFormElement>) => {
+                                    ev.preventDefault()
+                                    const formData = new FormData(ev.currentTarget)
+                                    const address = formData.get('address') as string
+                                    const tokenId = formData.get('tokenId') as string
+                                    const sourceType = formData.get('sourceType') as SourceType
+                                    const token = await hub.getNonFungibleAsset?.(address, tokenId, {
+                                        sourceType,
+                                    })
+                                    console.log(token)
+                                }}>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <TextField name="address" label="Contract Address" size="small" />
+                                </Box>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <TextField name="tokenId" label="Token Id" size="small" />
+                                </Box>
+                                <Box sx={{ marginBottom: 1 }}>
+                                    <RadioGroup defaultValue={SourceType.Alchemy_EVM} name="sourceType">
+                                        <FormControlLabel
+                                            value={SourceType.Alchemy_EVM}
+                                            control={<Radio />}
+                                            label="Alchemy"
+                                        />
+                                        <FormControlLabel
+                                            value={SourceType.OpenSea}
+                                            control={<Radio />}
+                                            label="OpenSea"
+                                        />
+                                        <FormControlLabel
+                                            value={SourceType.Rarible}
+                                            control={<Radio />}
+                                            label="Rarible"
+                                        />
+                                        <FormControlLabel value={SourceType.RSS3} control={<Radio />} label="RSS3" />
+                                        <FormControlLabel value={SourceType.Zora} control={<Radio />} label="Zora" />
+                                        <FormControlLabel
+                                            value={SourceType.NFTScan}
+                                            control={<Radio />}
+                                            label="NFTScan"
+                                        />
+                                    </RadioGroup>
+                                </Box>
+                                <Button size="small" type="submit">
+                                    Query
+                                </Button>
+                            </FormControl>
                         </TableCell>
                     </TableRow>
                     <TableRow>

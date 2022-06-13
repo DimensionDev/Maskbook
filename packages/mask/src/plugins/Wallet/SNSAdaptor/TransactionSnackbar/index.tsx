@@ -27,7 +27,7 @@ export function TransactionSnackbar({ pluginID }: TransactionSnackbarProps) {
 
     const chainId = useChainId(pluginID)
     const [progress, setProgress] = useState<TransactionProgressEvent>()
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State<'all'>(progress?.pluginID)
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(progress?.pluginID)
 
     useEffect(() => {
         const removeListener = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
