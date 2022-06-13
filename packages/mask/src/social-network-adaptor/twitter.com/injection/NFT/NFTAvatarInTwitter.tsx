@@ -15,6 +15,7 @@ import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersona
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
+import { useNFT } from '../../../../plugins/Avatar/hooks'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -57,16 +58,14 @@ function NFTAvatarInTwitter() {
     )
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
-    const { value: permalink, loading } = usePermalink(
+    console.log(_avatar)
+    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         _avatar?.chainId ?? ChainId.Mainnet,
     )
-
-    console.log(_avatar)
-    console.log(identity.identifier?.userId)
 
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -137,7 +136,7 @@ function NFTAvatarInTwitter() {
         if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            openWindow(permalink)
+            openWindow(nftInfo?.permalink)
         }
 
         linkParentDom.addEventListener('click', handler)
@@ -145,15 +144,16 @@ function NFTAvatarInTwitter() {
         return () => {
             linkParentDom.removeEventListener('click', handler)
         }
-    }, [_avatar, showAvatar])
+    }, [_avatar, showAvatar, nftInfo])
 
-    if (!_avatar || !size) return null
+    if (!_avatar || !size || loadingWallet || loadingNFTInfo) return null
 
     return (
         <>
             {showAvatar ? (
                 <NFTBadge
-                    permalink={permalink}
+                    nftInfo={nftInfo}
+                    loading={loadingWallet || loadingNFTInfo}
                     borderSize={5}
                     hasRainbow
                     avatar={_avatar}

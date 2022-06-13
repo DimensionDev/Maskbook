@@ -87,6 +87,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 proof,
                 currentConnectedPersona.linkedProfiles[0].identifier,
             )
+            console.log('------')
+            console.log(token)
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
