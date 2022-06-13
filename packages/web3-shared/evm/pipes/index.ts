@@ -12,11 +12,14 @@ export function resolveIPFSLinkFromURL(url: string): string {
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
+function resolveIPFSOriginLink(ipfs: string): string {
+    return urlcat('https://ipfs.io/ipfs/:ipfs', { ipfs })
+}
 export function resolveIPFS(str: string): string {
     if (str?.length === 0) return str
     if (str.startsWith('https://')) return str
     if (!str.startsWith('ipfs://')) return resolveIPFSLink(str)
-    return resolveIPFSLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
+    return resolveIPFSOriginLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
 export function resolveAR(str: string): string {
