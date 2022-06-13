@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
-export interface TransactionWatcherItem<ChainId, Transaction> {
+interface TransactionWatcherItem<ChainId, Transaction> {
     at: number
     id: string
     chainId: ChainId
@@ -18,7 +18,7 @@ export interface TransactionWatcherItem<ChainId, Transaction> {
     transaction: Transaction
 }
 
-export type TransactionWatcher<ChainId, Transaction> = Record<
+type TransactionWatcher<ChainId, Transaction> = Record<
     // @ts-ignore
     ChainId,
     Record<
@@ -29,7 +29,6 @@ export type TransactionWatcher<ChainId, Transaction> = Record<
 >
 
 class Watcher<ChainId, Transaction> {
-    static LATEST_TRANSACTION_SIZE = 5
     static MAX_ITEM_SIZE = 40
 
     private timer: NodeJS.Timeout | null = null
@@ -38,8 +37,8 @@ class Watcher<ChainId, Transaction> {
         protected storage: StorageItem<TransactionWatcher<ChainId, Transaction>>,
         protected checkers: Array<TransactionChecker<ChainId>>,
         protected options: {
-            delay: number
-            getCreatorAddress: (transaction: Transaction) => string
+            checkDelay: number
+            getTransactionCreator: (transaction: Transaction) => string
             onNotify: (id: string, status: TransactionStatusType, transaction: Transaction) => void
         },
     ) {}
@@ -104,7 +103,11 @@ class Watcher<ChainId, Transaction> {
         for (const [id, { transaction }] of watchedTransactions) {
             for (const checker of this.checkers) {
                 try {
-                    const status = await checker.checkStatus(id, chainId, this.options.getCreatorAddress(transaction))
+                    const status = await checker.checkStatus(
+                        id,
+                        chainId,
+                        this.options.getTransactionCreator(transaction),
+                    )
                     if (status !== TransactionStatusType.NOT_DEPEND) {
                         this.removeTransaction(chainId, id)
                         this.options.onNotify(id, status, transaction)
@@ -123,7 +126,7 @@ class Watcher<ChainId, Transaction> {
     public startCheck(chainId: ChainId) {
         this.stopCheck()
         if (this.timer === null) {
-            this.timer = setTimeout(this.check.bind(this, chainId), this.options.delay)
+            this.timer = setTimeout(this.check.bind(this, chainId), this.options.checkDelay)
         }
     }
 
@@ -167,7 +170,7 @@ export class TransactionWatcherState<ChainId, Transaction>
             /** Default block delay in seconds */
             defaultBlockDelay: number
             /** Get the author address */
-            getCreatorAddress: (transaction: Transaction) => string
+            getTransactionCreator: (transaction: Transaction) => string
         },
     ) {
         const defaultValue = Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionWatcher<
@@ -203,9 +206,9 @@ export class TransactionWatcherState<ChainId, Transaction>
             this.watchers.set(
                 chainId,
                 new Watcher(this.storage, this.checkers, {
-                    delay: this.options.defaultBlockDelay * 1000,
+                    checkDelay: this.options.defaultBlockDelay * 1000,
+                    getTransactionCreator: this.options.getTransactionCreator,
                     onNotify: this.notifyTransaction.bind(this),
-                    getCreatorAddress: this.options.getCreatorAddress,
                 }),
             )
         return this.watchers.get(chainId)!
