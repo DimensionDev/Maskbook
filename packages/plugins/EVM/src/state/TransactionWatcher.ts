@@ -46,8 +46,8 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
             await Transaction.updateTransaction(chainId, transaction.from as string, id, status)
 
         // only tracked records will get notified
-        getSubscriptionCurrentValue(() => Transaction?.transactions).then((transations) => {
-            if (transations?.some((x) => Object.keys(x.candidates).includes(id)))
+        getSubscriptionCurrentValue(() => Transaction?.transactions).then((transactions) => {
+            if (transactions?.some((x) => Object.keys(x.candidates).includes(id)))
                 this.emitter.emit('progress', id, status, transaction)
         })
     }

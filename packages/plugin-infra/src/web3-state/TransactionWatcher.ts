@@ -246,6 +246,6 @@ export class TransactionWatcherState<ChainId, Transaction>
     }
 
     async notifyTransaction(chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) {
-        throw new Error('Method not implmented.')
+        throw new Error('Method not implemented.')
     }
 }
