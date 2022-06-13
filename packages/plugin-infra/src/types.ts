@@ -448,6 +448,7 @@ export namespace Plugin.SNSAdaptor {
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
         onClose(): void
+        isOpenFromApplicationBoard?: boolean
     }
     export type CompositionMetadataBadgeRender =
         | CompositionMetadataBadgeRenderStatic

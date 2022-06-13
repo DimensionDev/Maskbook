@@ -72,6 +72,7 @@ export interface CompositionRequest {
     readonly options?: {
         target?: EncryptionTargetType
         startupPlugin?: string
+        isOpenFromApplicationBoard?: boolean
     }
 }
 export enum EncryptionTargetType {

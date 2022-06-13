@@ -29,7 +29,7 @@ export interface TokenProps {
     address: string
     symbol?: string
     name?: string
-    logoURI?: string
+    logoURL?: string
     chainId?: ChainId
 }
 
@@ -39,7 +39,6 @@ export interface TokenDetailedProps extends React.PropsWithChildren<{}> {
 
 export function TokenDetailed({ token }: TokenDetailedProps) {
     const { classes } = useStyles()
-
     return (
         <div className={classes.container}>
             {token && (

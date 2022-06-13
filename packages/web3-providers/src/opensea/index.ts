@@ -156,7 +156,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             .map((x) => ({
                 id: x.order_hash,
                 chainId,
-                asset_permalink: asset.opensea_link,
+                assetPermalink: asset.opensea_link,
                 hash: x.order_hash,
                 quantity: x.quantity,
                 createdAt: x.created_time ? getUnixTime(new Date(x.created_time)) : undefined,
@@ -243,7 +243,7 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
     return {
         id: order.order_hash,
         chainId,
-        asset_permalink: order.asset.opensea_link,
+        assetPermalink: order.asset.opensea_link,
         hash: order.order_hash,
         quantity: order.quantity,
         side: order.side,
