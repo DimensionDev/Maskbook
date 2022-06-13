@@ -61,13 +61,10 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId)
         const token = await connection?.getNonFungibleToken(address ?? '', tokenId, SchemaType.ERC721)
         const tokenDetailed = { ...token, ...tokenAsset }
+        const isOwner = await connection?.getNonFungibleTokenOwnership(address, account, tokenId)
 
         // If the NonFungible token is belong this account
-        if (
-            (tokenDetailed && !isSameAddress(tokenDetailed?.contract?.owner, account)) ||
-            !tokenDetailed ||
-            !tokenDetailed.contract?.owner
-        ) {
+        if (!isOwner) {
             throw new Error(FormErrorType.NotExist)
         } else {
             await Token?.addToken?.(tokenDetailed)
