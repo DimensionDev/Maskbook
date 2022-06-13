@@ -10,8 +10,8 @@ export function useSocialAddressListAll(
     identity?: SocialIdentity,
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
 ) {
+    // TODO: to add flow
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { IdentityService: FlowIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_FLOW)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
     return useAsyncRetry(async () => {
@@ -19,9 +19,9 @@ export function useSocialAddressListAll(
         if (!userId || userId === '$unknown') return EMPTY_LIST
 
         const allSettled = await Promise.allSettled<Array<SocialAddress<NetworkPluginID>>>(
-            [EVM_IdentityService, FlowIdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
+            [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
         )
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         return sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-    }, [identity, sorter, EVM_IdentityService?.lookup, FlowIdentityService?.lookup, SolanaIdentityService?.lookup])
+    }, [identity, sorter, EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }
