@@ -24,8 +24,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             persona: ECKeyIdentifier,
             proof: BindingProof,
         ) => {
-            if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !token.tokenId) return
-            if (pluginId !== NetworkPluginID.PLUGIN_SOLANA && (!token.contract?.address || !token.tokenId)) return
+            if (!token.contract?.address || !token.tokenId) return
             const info: NextIDAvatarMeta = {
                 pluginId,
                 nickname: data.nickname,
