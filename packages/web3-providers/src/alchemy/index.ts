@@ -206,15 +206,20 @@ function createNFTAsset_EVM(
             metaDataResponse?.id?.tokenMetadata?.tokenType === 'ERC721'
                 ? SchemaType_EVM.ERC721
                 : SchemaType_EVM.ERC1155,
-        tokenId: Number.parseInt(metaDataResponse.id?.tokenId, 16).toString(),
+        tokenId: metaDataResponse.id?.tokenId,
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
             name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
             symbol: '',
             description: metaDataResponse.description,
-            imageURL: metaDataResponse?.metadata?.image || metaDataResponse?.media?.[0]?.gateway || '',
-            mediaURL: metaDataResponse?.media?.[0]?.gateway,
+            imageURL: resolveIPFSLinkFromURL(
+                metaDataResponse?.metadata?.image ||
+                    metaDataResponse?.media?.[0]?.gateway ||
+                    metaDataResponse?.media?.[0]?.raw ||
+                    '',
+            ),
+            mediaURL: resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway),
         },
         contract: {
             chainId,
