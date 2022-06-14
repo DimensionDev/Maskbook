@@ -21,10 +21,11 @@ export function useNFT(
         const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
             chainId,
         })
+        console.log(asset)
         return {
             amount: asset?.price?.[CurrencyType.USD] ?? '0',
             name: asset?.contract?.name ?? '',
-            symbol: asset?.contract?.symbol ?? 'ETH',
+            symbol: asset?.payment_tokens?.[0].symbol ?? 'ETH',
             image: asset?.metadata?.imageURL ?? '',
             owner: asset?.owner?.address ?? asset?.ownerId ?? '',
             slug: asset?.collection?.slug ?? '',
