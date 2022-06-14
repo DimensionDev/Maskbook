@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { ChainDescriptor, NetworkDescriptor, ProviderDescriptor } from '../specs'
+import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs'
 
 export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
     function resolveFallback(key: K) {
@@ -21,7 +21,7 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
                       [x.name, x.fullName, x.shortName, x.network]
                           .map((x) => x?.toLowerCase())
                           .filter(Boolean)
-                          .includes(name),
+                          .includes(name?.toLowerCase()),
                   )?.chainId
                 : undefined,
         coinMarketCapChainId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinMarketCapChainId,
@@ -94,12 +94,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 address,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
-            urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
+        nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
+            return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
                 tokenId,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
     }
 }
 
@@ -157,3 +158,31 @@ export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
 export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
     Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
 >
+
+export const resolveSourceName = createLookupTableResolver<SourceType, string>(
+    {
+        [SourceType.DeBank]: 'DeBank',
+        [SourceType.Zerion]: 'Zerion',
+        [SourceType.RSS3]: 'RSS3',
+        [SourceType.OpenSea]: 'OpenSea',
+        [SourceType.Rarible]: 'Rarible',
+        [SourceType.NFTScan]: 'NFTScan',
+        [SourceType.Zora]: 'Zora',
+        [SourceType.Alchemy_EVM]: 'Alchemy_EVM',
+        [SourceType.Alchemy_FLOW]: 'Alchemy_FLOW',
+    },
+    (providerType) => {
+        throw new Error(`Unknown provider type: ${providerType}.`)
+    },
+)
+
+export const resolveCurrencyName = createLookupTableResolver<CurrencyType, string>(
+    {
+        [CurrencyType.BTC]: 'BTC',
+        [CurrencyType.NATIVE]: 'ETH',
+        [CurrencyType.USD]: 'USD',
+    },
+    (CurrencyType) => {
+        throw new Error(`Unknown currency type: ${CurrencyType}.`)
+    },
+)

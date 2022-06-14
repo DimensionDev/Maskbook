@@ -9,13 +9,11 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
     address?: string,
     options?: Web3Helper.Web3HubOptions<T>,
 ) {
-    type GetFungibleTokenPrice = (chainId: Web3Helper.Definition[T]['ChainId'], address: string) => Promise<number>
-
     const chainId = useChainId(pluginID, options?.chainId)
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
         if (!chainId || !hub) return 0
-        return (hub.getFungibleTokenPrice as GetFungibleTokenPrice)(chainId, address ?? '')
+        return hub.getFungibleTokenPrice?.(chainId, address ?? '')
     }, [chainId, address, hub])
 }

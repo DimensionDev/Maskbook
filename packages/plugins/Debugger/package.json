@@ -17,6 +17,8 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
     "bignumber.js": "^9.0.2",
     "date-fns": "^2.28.0",
     "react-use": "^17.3.2",

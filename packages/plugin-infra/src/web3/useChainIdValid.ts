@@ -8,18 +8,9 @@ export function useChainIdValid<T extends NetworkPluginID>(
     pluginID?: T,
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
-    type IsValid = (chainId?: Web3Helper.Definition[T]['ChainId'], testnet?: boolean) => boolean
-
     const chainId = useChainId(pluginID, expectedChainId)
     const account = useAccount(pluginID)
     const { Others } = useWeb3State(pluginID)
 
-    return (
-        (!account ||
-            (Others?.chainResolver.isValid as IsValid | undefined)?.(
-                chainId,
-                process.env.NODE_ENV === 'development',
-            )) ??
-        false
-    )
+    return (!account || Others?.chainResolver.isValid?.(chainId, process.env.NODE_ENV === 'development')) ?? false
 }

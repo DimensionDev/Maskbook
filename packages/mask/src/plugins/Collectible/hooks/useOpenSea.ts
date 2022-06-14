@@ -14,6 +14,7 @@ export function useOpenSea(chainId?: ChainId) {
         return new OpenSeaPort(
             web3Provider,
             {
+                apiBaseUrl: 'https://opensea-proxy.r2d2.to',
                 apiKey: OpenSeaAPI_Key,
                 networkName: resolveOpenSeaNetwork(chainId),
             },

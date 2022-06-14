@@ -9,6 +9,7 @@ import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material
 import { TransactionIcon } from '../TransactionIcon'
 import type { Transaction } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -77,7 +78,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes } = useStyles()
-        const { Others } = useWeb3State() as Web3Helper.Web3StateAll
+        const { Others } = useWeb3State()
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">
@@ -93,7 +94,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                                 {formattedType}
                             </Typography>
                             <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
-                                {formatDateTime(transaction.timestamp, 'yyyy-MM-dd HH:mm')}
+                                {formatDateTime(fromUnixTime(transaction.timestamp), 'yyyy-MM-dd HH:mm')}
                             </Typography>
                         </Stack>
                     </Box>

@@ -14,15 +14,22 @@ import { TransactionFormatter } from './TransactionFormatter'
 import { TransactionWatcher } from './TransactionWatcher'
 import type { EVM_Web3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
+import { BalanceNotifier } from './BalanceNotifier'
+import { BlockNumberNotifier } from './BlockNumberNotifier'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
+    const Transaction_ = new Transaction(context, {
+        chainId: Provider_.chainId,
+        account: Provider_.account,
+    })
 
     return {
         Settings: Settings_,
         Provider: Provider_,
-
+        BalanceNotifier: new BalanceNotifier(),
+        BlockNumberNotifier: new BlockNumberNotifier(),
         AddressBook: new AddressBook(context, {
             chainId: Provider_.chainId,
         }),
@@ -41,12 +48,12 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3S
         Token: new Token(context, {
             account: Provider_.account,
         }),
-        Transaction: new Transaction(context, {
-            chainId: Provider_.chainId,
-            account: Provider_.account,
-        }),
+        Transaction: Transaction_,
         TransactionFormatter: new TransactionFormatter(context),
-        TransactionWatcher: new TransactionWatcher(context),
+        TransactionWatcher: new TransactionWatcher(context, {
+            chainId: Provider_.chainId,
+            transactions: Transaction_.transactions,
+        }),
         Connection: new Connection(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,

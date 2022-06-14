@@ -25,6 +25,8 @@ import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { saveCustomEssayToRSS } from '../Services/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -106,6 +108,8 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const checked = useValueRef<boolean>(petShowSettings)
     const [isReady, cancel] = useTimeout(2000)
 
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
     const extraData = useNFTsExtra(configNFTs)
@@ -145,7 +149,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         }
         try {
             await PluginPetRPC.setUserAddress(user)
-            await PluginPetRPC.saveEssay(user.address, meta, user.userId)
+            const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
+            if (signature && connection) {
+                await saveCustomEssayToRSS(user.address, meta, signature, connection)
+            }
             closeDialogHandle()
         } catch {
             showSnackbar(t('plugin_pets_dialog_fail'), { variant: 'error' })
@@ -252,7 +259,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
                         {!option.glbSupport ? (
-                            <img className={classes.thumbnail} src={option?.metadata?.imageURL} />
+                            <ImageLoader className={classes.thumbnail} src={option?.metadata?.imageURL} />
                         ) : null}
                         <Typography>{option?.metadata?.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
@@ -307,6 +314,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
+                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         size: 'large',

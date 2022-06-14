@@ -18,6 +18,9 @@ export const InMemoryStorages = {
         avatarId: '',
         address: '',
         tokenId: '',
+        schema: 1,
+        chainId: 1,
+        pluginId: '',
     }),
 }
 
@@ -44,6 +47,7 @@ export const PersistentStorages = {
             [PluginId.Pets]: false,
             [PluginId.FindTruman]: false,
             [PluginId.GoPlusSecurity]: false,
+            [PluginId.Referral]: false,
         },
     ),
 }

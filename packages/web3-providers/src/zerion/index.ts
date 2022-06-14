@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import type { FungibleAsset, Pageable, Transaction, HubOptions } from '@masknet/web3-shared-base'
+import { FungibleAsset, Transaction, HubOptions, createPageable, createIndicator } from '@masknet/web3-shared-base'
 import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
@@ -14,6 +14,7 @@ import type {
 } from './type'
 import { formatAssets, formatTransactions } from './format'
 import type { FungibleTokenAPI, HistoryAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
@@ -130,17 +131,14 @@ export class ZerionAPI
             result = [...result, ...assets.flat()]
         }
 
-        return {
-            currentPage: 0,
-            data: result,
-            hasNextPage: false,
-        }
+        if (!result.length) return createPageable(getAllEVMNativeAssets(), createIndicator(options?.indicator))
+        return createPageable(result, createIndicator(options?.indicator))
     }
 
     async getTransactions(
         address: string,
         options?: HubOptions<ChainId>,
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         let result: Array<Transaction<ChainId, SchemaType>> = []
         // xdai-assets is not support
         const pairs = getEnumAsArray(ChainId).map(
@@ -155,10 +153,6 @@ export class ZerionAPI
             result = [...result, ...formatTransactions(chainId, payload.transactions)]
         }
 
-        return {
-            currentPage: 0,
-            data: result,
-            hasNextPage: false,
-        }
+        return result
     }
 }

@@ -50,6 +50,7 @@ export enum ITOCreateFormPageStep {
 export interface CompositionDialogProps extends withClasses<'root'>, Omit<InjectedDialogProps, 'classes' | 'onClose'> {
     onConfirm(payload: JSON_PayloadInMask): void
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export function CompositionDialog(props: CompositionDialogProps) {
@@ -61,7 +62,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
-    const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
 
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
@@ -151,7 +152,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (!payload.password) {
                 const [, title] = payload.message.split(MSG_DELIMITER)
                 payload.password =
-                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personaSign', {
+                    (await connection?.signMessage(Web3Utils.sha3(title) ?? '', 'personalSign', {
                         account,
                     })) ?? ''
             }
@@ -230,7 +231,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
     return (
-        <InjectedDialog disableBackdropClick open={props.open} title={t('plugin_ito_display_name')} onClose={onClose}>
+        <InjectedDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+            disableBackdropClick
+            open={props.open}
+            title={t('plugin_ito_display_name')}
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
                     <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />

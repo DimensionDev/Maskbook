@@ -193,7 +193,11 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                 className={
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
                 }
-                style={{ display: playerState === AssetPlayerState.NORMAL ? 'none' : undefined }}>
+                style={{
+                    display: [AssetPlayerState.NORMAL, AssetPlayerState.INIT].includes(playerState)
+                        ? 'none'
+                        : undefined,
+                }}>
                 {playerState === AssetPlayerState.ERROR
                     ? props.fallbackResourceLoader ??
                       (props.fallbackImage ? (

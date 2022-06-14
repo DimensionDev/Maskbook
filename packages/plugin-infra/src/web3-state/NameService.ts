@@ -7,7 +7,7 @@ export class NameServiceState<
     ChainId extends number,
     DomainBook extends Record<string, string> = Record<string, string>,
     DomainBooks extends Record<ChainId, DomainBook> = Record<ChainId, DomainBook>,
-> implements Web3NameServiceState<ChainId, DomainBook>
+> implements Web3NameServiceState<ChainId>
 {
     protected storage: StorageItem<DomainBooks> = null!
     public domainBook?: Subscription<DomainBook>

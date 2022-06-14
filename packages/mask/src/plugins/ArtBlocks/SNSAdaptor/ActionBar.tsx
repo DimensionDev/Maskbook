@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PurchaseDialog } from './PurchaseDialog'
 import type { Project } from '../types'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -14,10 +15,10 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(0),
         },
         button: {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
             color: 'white',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
+                backgroundColor: theme.palette.maskColor?.dark,
             },
         },
     }
@@ -25,12 +26,13 @@ const useStyles = makeStyles()((theme) => {
 
 export interface ActionBarProps {
     project: Project
+    chainId: ChainId
 }
 
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { project } = props
+    const { project, chainId } = props
 
     const { open: openMintDialog, onClose: onCloseMintDialog, onOpen: onOpenMintDialog } = useControlledDialog()
 
@@ -53,7 +55,7 @@ export function ActionBar(props: ActionBarProps) {
                 disabled={project.complete || project.paused || !project.active}>
                 {status}
             </ActionButton>
-            <PurchaseDialog project={project} open={openMintDialog} onClose={onCloseMintDialog} />
+            <PurchaseDialog project={project} chainId={chainId} open={openMintDialog} onClose={onCloseMintDialog} />
         </Box>
     )
 }

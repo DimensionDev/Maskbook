@@ -2,9 +2,9 @@ import { ChangeEvent, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { useI18N } from '../../utils'
@@ -55,7 +55,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: FungibleToken<ChainId, SchemaType> | null
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
@@ -109,6 +109,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             type="text"
             value={amount}
             variant="outlined"
+            onKeyDown={(ev) => {
+                if (ev.key === 'Enter') ev.preventDefault()
+            }}
             onChange={onChange}
             placeholder="0.0"
             InputProps={{

@@ -2,6 +2,7 @@ import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
+import type { EnhanceableSite, ExtensionSite } from '../Site'
 
 enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
@@ -11,7 +12,7 @@ enum NetworkPluginID {
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
-    pluginIDSettings: NetworkPluginID
+    pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
 }
@@ -72,6 +73,7 @@ export interface CompositionRequest {
     readonly options?: {
         target?: EncryptionTargetType
         startupPlugin?: string
+        isOpenFromApplicationBoard?: boolean
     }
 }
 export enum EncryptionTargetType {
@@ -100,6 +102,9 @@ export interface NFTAvatarEvent {
     avatarId: string
     address?: string
     tokenId?: string
+    schema?: number
+    chainId?: number
+    pluginId?: string
 }
 
 /** This is a subset of browser.permissions.Permission */

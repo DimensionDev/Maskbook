@@ -1,16 +1,17 @@
 import urlcat from 'urlcat'
+import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
 import {
-    FungibleAsset,
-    GasOptionType,
-    Pageable,
-    Transaction,
-    createPageable,
-    HubOptions,
-} from '@masknet/web3-shared-base'
-import { ChainId, formatGweiToWei, getDeBankConstants, SchemaType, GasOption } from '@masknet/web3-shared-evm'
+    ChainId,
+    formatGweiToWei,
+    getDeBankConstants,
+    SchemaType,
+    GasOption,
+    formatWeiToGwei,
+} from '@masknet/web3-shared-evm'
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -48,26 +49,23 @@ export class DeBankAPI
         return {
             [GasOptionType.FAST]: {
                 estimatedSeconds: responseModified.data.fast.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.fast.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedSeconds: responseModified.data.normal.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.normal.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedSeconds: responseModified.data.slow.estimated_seconds,
-                suggestedMaxFeePerGas: responseModified.data.slow.price.toString(),
+                suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
         }
     }
 
-    async getAssets(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
@@ -76,6 +74,9 @@ export class DeBankAPI
             }),
         )
         const result = (await response.json()) as WalletTokenRecord[] | undefined
+        if (!result?.length) {
+            return createPageable(getAllEVMNativeAssets(), createIndicator(options?.indicator))
+        }
         try {
             return createPageable(
                 formatAssets(
@@ -86,24 +87,26 @@ export class DeBankAPI
                         id: x.id === 'bsc' ? 'bnb' : x.id,
                         chain: x.chain === 'bsc' ? 'bnb' : x.chain,
                     })),
+                    options?.chainId,
                 ),
+                createIndicator(options?.indicator),
             )
         } catch {
-            return createPageable()
+            return createPageable([], createIndicator(options?.indicator))
         }
     }
 
     async getTransactions(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return createPageable()
+        if (!CHAIN_ID) return []
 
         const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return createPageable(formatTransactions(chainId, data))
+        return formatTransactions(chainId, data)
     }
 }

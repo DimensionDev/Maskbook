@@ -50,7 +50,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
 }))
 
 export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly [number, (next: number) => void] }) {
-    const { origin, onNext, onChange, onClose, state } = props
+    const { origin, onNext, onChange, onClose, state, setERC721DialogHeight } = props
     const t = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -74,7 +74,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                         <span>{t.erc721_tab_title()}</span>
                     </div>
                 ),
-                children: <RedPacketERC721Form onClose={onClose} />,
+                children: <RedPacketERC721Form onClose={onClose} setERC721DialogHeight={setERC721DialogHeight} />,
                 sx: { p: 0 },
                 disabled: ![ChainId.Mainnet, ChainId.Matic, ChainId.BSC, ChainId.Conflux].includes(chainId),
             },

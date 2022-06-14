@@ -1,22 +1,23 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
-    IdentityAddress,
+    SocialAddress,
     NetworkDescriptor,
     ProviderDescriptor,
     SocialIdentity,
     Wallet,
     Web3EnableRequirement,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import type { SchemaType, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { Subscription } from 'use-subscription'
 
 export declare namespace Plugin {
     /**
@@ -141,13 +142,29 @@ export namespace Plugin.Shared {
         /** Native API supported */
         hasNativeAPI: boolean
         /** Send request to native API */
-        send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+        send(
+            payload: JsonRpcPayload,
+            options?: {
+                account?: string
+                chainId?: ChainId
+                popupsWindow?: boolean
+            },
+        ): Promise<JsonRpcResponse>
+
+        fetch: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
         /** Close popup window */
         closePopupWindow(): Promise<void>
 
+        /** Open walletconnect dialog */
+        openWalletConnectDialog(uri: string, callback: () => void): void
+        /** Close walletconnect dialog */
+        closeWalletConnectDialog(): void
+
+        /** Select a Mask Wallet account */
+        selectAccount(): Promise<string[]>
         /** Update Mask Wallet account */
         updateAccount(account: {
             account?: string
@@ -157,8 +174,6 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
-        /** Prepare to select a Mask Wallet account */
-        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
@@ -170,17 +185,16 @@ export namespace Plugin.Shared {
         /** Sign typed data */
         signTypedData(address: string, message: string): Promise<string>
 
+        /** Get all wallets */
+        getWallets(): Promise<Wallet[]>
+        /** Get the primary wallet */
+        getWalletPrimary(): Promise<Wallet | null>
         /** Add a new wallet */
         addWallet(id: string, wallet: Wallet): Promise<void>
         /** Update a wallet */
-        updateWallet(id: string, wallet: Partial<Wallet>): Promise<void>
+        updateWallet(id: string, wallet?: Partial<Wallet>): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
-
-        /** get the latest unconfirmed request */
-        shiftUnconfirmedRequest(): Promise<JsonRpcPayload | undefined>
-        /** add an unconfirmed request */
-        pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
     export interface Definition<ChainId = unknown, ProviderType = unknown, NetworkType = unknown> {
         /**
@@ -434,6 +448,7 @@ export namespace Plugin.SNSAdaptor {
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
         onClose(): void
+        isOpenFromApplicationBoard?: boolean
     }
     export type CompositionMetadataBadgeRender =
         | CompositionMetadataBadgeRenderStatic
@@ -461,7 +476,7 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             tooltipHint?: string
-            onClick?: () => void
+            onClick?: (walletConnectedCallback?: () => void) => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -527,6 +542,7 @@ export namespace Plugin.SNSAdaptor {
          * The name of the tab
          */
         label: I18NStringField | string
+
         /**
          * Used to order the sliders
          */
@@ -538,20 +554,23 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                addressNames?: IdentityAddress[]
                 personaList?: string[]
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: IdentityAddress[]): boolean
-
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
             /**
-             * Sort address name in expected order.
+             * Filter social address.
              */
-            addressNameSorter?: (a: IdentityAddress, z: IdentityAddress) => number
+            filter?: (x: SocialAddress<NetworkPluginID>) => boolean
+            /**
+             * Sort social address in expected order.
+             */
+            sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
         }
     }
 }
@@ -898,6 +917,7 @@ export enum PluginId {
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
+    Referral = 'com.maskbook.referral',
     // @masknet/scripts: insert-here
 }
 /**

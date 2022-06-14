@@ -18,6 +18,7 @@ import type {
     NonFungibleTokenEvent,
     GasOptionType,
     HubOptions,
+    HubIndicator,
 } from '@masknet/web3-shared-base'
 
 export namespace ExplorerAPI {
@@ -100,8 +101,9 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(address: string, currency: CurrencyType): Promise<number>
+        getTokenPrice(platform_id: string, address: string, currency: CurrencyType): Promise<number>
         getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
+        getTokenPriceByCoinId(coin_id: string, currency: CurrencyType): Promise<number>
     }
 }
 
@@ -110,7 +112,7 @@ export namespace HistoryAPI {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
+        ): Promise<Array<Transaction<ChainId, SchemaType>>>
     }
 }
 
@@ -121,19 +123,34 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
-        getAssets(address: string, options?: HubOptions<ChainId>): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+        getAssets(
+            address: string,
+            options?: HubOptions<ChainId>,
+        ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
     }
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        getAssets?: (address: string) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
+        getAssets?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        getToken?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        getTokens?: (
+            from: string,
+            opts?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getHistory?: (
             address: string,
             tokenId: string,
@@ -155,15 +172,6 @@ export namespace NonFungibleTokenAPI {
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: (
-            from: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
         getContract?: (
             address: string,
             opts?: HubOptions<ChainId>,
@@ -171,8 +179,8 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
     }
 }
 
@@ -183,15 +191,15 @@ export namespace RiskWarningBaseAPI {
 }
 
 export namespace StorageAPI {
-    export interface Storage {
-        set(key: string, value: any): Promise<void>
-        get<T>(key: string): Promise<T | undefined>
+    export interface Storage<T> {
+        get(key: string): Promise<T | undefined>
+        set(key: string, value: T): Promise<void>
         delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?(key: string): Storage
-        createBinaryStorage?(key: string): Storage
+        createJSON_Storage?<T>(key: string): Storage<T>
+        createBinaryStorage?<T>(key: string): Storage<T>
     }
 }
 

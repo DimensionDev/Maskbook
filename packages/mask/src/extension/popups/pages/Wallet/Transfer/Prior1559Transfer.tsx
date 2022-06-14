@@ -3,7 +3,7 @@ import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { formatGweiToWei, formatWeiToGwei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatEthereumAddress, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isZero,
     isGreaterThan,
@@ -250,7 +250,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
             const gasPrice = new BigNumber(gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas)
-            methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
+            methods.setValue('gasPrice', gasPrice.toString())
         }
     }, [methods.setValue, methods.getValues, chainId, hub])
     // #endregion
@@ -301,7 +301,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
-        [selectedAsset],
+        [selectedAsset, transferCallback],
     )
 
     const [menu, openMenu] = useMenuConfig(
@@ -517,7 +517,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                                             classes={{ icon: classes.icon }}
                                                             address={selectedAsset?.address ?? ''}
                                                             name={selectedAsset?.name}
-                                                            logoURI={selectedAsset?.logoURL}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}

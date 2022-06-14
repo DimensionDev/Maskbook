@@ -69,7 +69,6 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
-
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
         return (
             <Button variant="contained" onClick={personaConnectStatus.action}>
@@ -82,26 +81,22 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
+    const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
-        if (!currentPersona.identifier) return
+        if (!publicKeyAsHex) return
         if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
-            currentPersona.identifier.publicKeyAsHex,
-            platform,
-            visitingPersonaIdentifier.identifier.userId,
-        )
-    }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
+        return NextIDProof.queryIsBound(publicKeyAsHex, platform, visitingPersonaIdentifier.identifier.userId)
+    }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
     const {
         value: bindings,
-        loading,
+        loading: loadingBindings,
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-    }, [currentPersona, isOwn])
+        if (!publicKeyAsHex) return
+        return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
+    }, [publicKeyAsHex])
 
     const onVerify = async () => {
         reset()
@@ -115,7 +110,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         return proofs ? uniqBy(proofs, (v) => v.identity) : EMPTY_LIST
     }, [bindings?.proofs])
 
-    if (personaActionButton) {
+    if (personaActionButton && isOwn) {
         return (
             <Stack justifyContent="center" direction="row" mt="24px">
                 {personaActionButton}
@@ -123,7 +118,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (loading || loadingPersona || loadingVerifyInfo) {
+    if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
@@ -183,7 +178,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         open={openBindDialog}
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                         onBound={retryQueryBinding}
                     />
                 )}
@@ -193,7 +188,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
                         onUnBound={retryQueryBinding}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                     />
                 )}
             </>
@@ -233,7 +228,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? []}
+                    bounds={bindings?.proofs ?? EMPTY_LIST}
                     onBound={retryQueryBinding}
                 />
             )}
