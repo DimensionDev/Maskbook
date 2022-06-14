@@ -45,6 +45,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             })
         })
         const assets = await asyncIteratorToArray(iterator)
+
         const filteredAssets = assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
 
         return filteredAssets
