@@ -1,7 +1,7 @@
 import { RSS3 } from '@masknet/web3-providers'
 import type { Constant } from '@masknet/web3-shared-base/src/utils/types'
 import type { ConfigRSSNode, EssayRSSNode, PetMetaDB } from '../types'
-import { NFTS_CONFIG_ADDRESS } from '../constants'
+import { NFTS_BLOCK_ADDRESS } from '../constants'
 import { WalletRPC } from '../../Wallet/messages'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -32,12 +32,12 @@ export async function saveCustomEssayToRSS(
 }
 
 export async function getConfigNFTsFromRSS() {
-    const v = cache.get(NFTS_CONFIG_ADDRESS)
+    const v = cache.get(NFTS_BLOCK_ADDRESS)
     if (v) return v
-    const rss = RSS3.createRSS3(NFTS_CONFIG_ADDRESS, async (message: string) => {
-        return WalletRPC.signPersonalMessage(message, NFTS_CONFIG_ADDRESS)
+    const rss = RSS3.createRSS3(NFTS_BLOCK_ADDRESS, async (message: string) => {
+        return WalletRPC.signPersonalMessage(message, NFTS_BLOCK_ADDRESS)
     })
-    const data = await RSS3.getFileData<ConfigRSSNode>(rss, NFTS_CONFIG_ADDRESS, '_pet_nfts')
-    cache.set(NFTS_CONFIG_ADDRESS, data?.essay)
+    const data = await RSS3.getFileData<ConfigRSSNode>(rss, NFTS_BLOCK_ADDRESS, '_pet_nfts')
+    cache.set(NFTS_BLOCK_ADDRESS, data?.essay)
     return data?.essay
 }

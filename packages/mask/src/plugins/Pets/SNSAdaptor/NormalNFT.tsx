@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useStyles as useBoxStyles } from './PreviewBox'
@@ -5,6 +6,7 @@ import classNames from 'classnames'
 import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
+import RightMenu from './RightMenu'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -47,6 +49,14 @@ const useStyles = makeStyles()(() => ({
         width: 15,
         height: 15,
     },
+    fullBox: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
+    },
 }))
 
 interface NormalNFTProps {
@@ -61,8 +71,25 @@ export function NormalNFT(props: NormalNFTProps) {
     const classes = useStylesExtends(useStyles(), {})
     const boxClasses = useStylesExtends(useBoxStyles(), {})
 
+    const [isMenuShow, setMenuShow] = useState(false)
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+    const handleMenuShow = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        setMousePosition({ x: e.clientX, y: e.clientY })
+        setMenuShow(true)
+    }
+    const handleMenuClose = () => {
+        setMenuShow(false)
+    }
+
+    const [position, setPosition] = useState({ x: 50, y: 150 })
+    const moveHandle = (x: number, y: number) => {
+        setPosition({ x, y })
+    }
+
     return (
-        <Drag baseWidth={150} baseHeight={150}>
+        <Drag moveHandle={moveHandle} baseWidth={150} baseHeight={150}>
             {start && showMeta?.word ? (
                 <Box className={classes.wordContent}>
                     <Box
@@ -94,6 +121,14 @@ export function NormalNFT(props: NormalNFTProps) {
             {infoShow ? (
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
             ) : null}
+            <div className={classes.fullBox} onContextMenu={handleMenuShow} />
+            <RightMenu
+                showMeta={showMeta}
+                isShow={isMenuShow}
+                onClose={handleMenuClose}
+                mousePosition={mousePosition}
+                dragPosition={position}
+            />
         </Drag>
     )
 }

@@ -1,6 +1,6 @@
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
-import { Constant, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -14,13 +14,14 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
+    CircularProgress,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useNFTs, useNFTsExtra } from '../hooks'
+import { useUser, useNFTs } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
@@ -111,8 +112,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const user = useUser()
-    const nfts = useNFTs(user, configNFTs)
-    const extraData = useNFTsExtra(configNFTs)
+    const { nfts, state } = useNFTs(user, configNFTs)
+    const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
+
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 
@@ -146,6 +148,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             userId: user.userId,
             contract: collection.contract,
             tokenId: chosenToken?.tokenId ?? '',
+            chainId: chosenToken?.chainId,
         }
         try {
             await PluginPetRPC.setUserAddress(user)
@@ -202,9 +205,13 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         return imageChosen?.metadata?.imageURL
     }, [metaData.image, collection.tokens])
 
-    const renderImg = (address: string) => {
-        const matched = extraData.find((item) => isSameAddress(item.address, address))
-        return <ImageLoader className={classes.thumbnail} src={matched?.logoURL ?? ''} />
+    const mediaChose = useMemo(() => {
+        const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
+        return imageChosen?.metadata?.mediaURL
+    }, [metaData.image, collection.tokens])
+
+    const renderImg = (item: FilterContract) => {
+        return <ImageLoader className={classes.thumbnail} src={item.icon} />
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
@@ -221,12 +228,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 PaperComponent={({ children }) => paperComponent(children)}
                 renderOption={(props, option) => (
                     <MenuItem
-                        key={option.name}
+                        key={option.contract}
                         value={option.name}
-                        disabled={!option.tokens.length}
+                        disabled={!option.tokens.length || blacklist.includes(option.contract)}
                         className={classes.menuItem}>
-                        <Box {...props} component="li" className={classes.itemFix}>
-                            {renderImg(option.contract)}
+                        <Box {...props} component="span" className={classes.itemFix}>
+                            {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                         </Box>
                     </MenuItem>
@@ -238,12 +245,21 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         error={isCollectionsError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                        InputProps={{
+                            ...params.InputProps,
+                            classes: { root: classes.inputBorder },
+                            endAdornment: (
+                                <Fragment>
+                                    {state ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
+                                </Fragment>
+                            ),
+                        }}
                     />
                 )}
             />
         )
-    }, [nfts, extraData])
+    }, [nfts])
 
     const tokensRender = useMemo(() => {
         return (
@@ -259,7 +275,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
                         {!option.glbSupport ? (
-                            <ImageLoader className={classes.thumbnail} src={option?.metadata?.imageURL} />
+                            <img className={classes.thumbnail} src={option.metadata?.imageURL} />
                         ) : null}
                         <Typography>{option?.metadata?.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
@@ -284,7 +300,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             <Box>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <PreviewBox message={metaData.word} imageUrl={imageChose} tokenInfo={tokenInfoSelect} />
+                        <PreviewBox
+                            message={metaData.word}
+                            imageUrl={imageChose}
+                            mediaUrl={mediaChose}
+                            tokenInfo={tokenInfoSelect}
+                        />
                     </Grid>
                     <Grid item xs={8}>
                         {nftsRender}
