@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -216,15 +216,16 @@ export function CreateFarm(props: PageInterface) {
     )
 
     const onErrorDeposit = useCallback(
-        (error?: string) => {
-            if (error) {
-                showSnackbar(error, { variant: 'error' })
+        (message?: string) => {
+            if (message) {
+                showSnackbar(message, { variant: 'error' })
             }
             props?.onChangePage?.(PagesType.CREATE_FARM, PagesType.CREATE_FARM)
         },
         [props?.onChangePage],
     )
 
+    const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onDeposit = useCallback(async () => {
         if (!tokenRefer?.address || !tokenReward?.address) {
             showSnackbar(t.error_token_not_select(), { variant: 'error' })
@@ -234,22 +235,36 @@ export function CreateFarm(props: PageInterface) {
         if (tokenRefer.address !== NATIVE_TOKEN) {
             const totalFarmRewardNum = Number.parseFloat(totalFarmReward) + attraceFee
 
-            await runCreateERC20PairFarm(
-                onConfirmDeposit,
-                onErrorDeposit,
-                onConfirmedDeposit,
-                web3,
-                account,
-                currentChainId,
-                tokenReward,
-                tokenRefer,
-                totalFarmRewardNum,
-                Number.parseFloat(dailyFarmReward),
-            )
+            try {
+                await runCreateERC20PairFarm(
+                    onConfirmDeposit,
+                    onConfirmedDeposit,
+                    web3,
+                    connection,
+                    account,
+                    currentChainId,
+                    tokenReward,
+                    tokenRefer,
+                    totalFarmRewardNum,
+                    Number.parseFloat(dailyFarmReward),
+                )
+            } catch (err: any) {
+                onErrorDeposit(err.message)
+            }
         } else {
             showSnackbar(t.error_native_token_farm(), { variant: 'error' })
         }
-    }, [web3, account, currentChainId, tokenRefer, tokenReward, totalFarmReward, dailyFarmReward, attraceFee])
+    }, [
+        web3,
+        account,
+        connection,
+        currentChainId,
+        tokenRefer,
+        tokenReward,
+        totalFarmReward,
+        dailyFarmReward,
+        attraceFee,
+    ])
 
     const onClickCreateFarm = useCallback(() => {
         props.continue(PagesType.CREATE_FARM, PagesType.DEPOSIT, PagesType.CREATE_FARM, {

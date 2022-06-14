@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, TransactionEventType, useGitcoinConstants } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { ChainId, encodeTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 
 /**
@@ -19,6 +18,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const bulkCheckoutContract = useBulkCheckoutContract(chainId)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const donations = useMemo((): Array<[string, string, string]> => {
         if (!address || !token) return []
@@ -48,29 +48,16 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const value = toFixed(token.schema === SchemaType.Native ? amount : 0)
         const config = {
             from: account,
-            gas: await bulkCheckoutContract.methods
-                .donate(donations)
-                .estimateGas({
-                    from: account,
-                    value,
-                })
-                .catch((error) => {
-                    throw error
-                }),
             value,
         }
 
-        // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            bulkCheckoutContract.methods
-                .donate(donations)
-                .send(config as PayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
+        const tx = await encodeTransaction(bulkCheckoutContract, bulkCheckoutContract.methods.donate(donations), config)
+
+        console.log('DEBUG: get tx')
+        console.log({
+            tx,
         })
-    }, [account, amount, token, donations])
+
+        return connection.sendTransaction(tx)
+    }, [account, amount, token, donations, connection])
 }
