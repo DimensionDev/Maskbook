@@ -31,11 +31,15 @@ export function TokenIcon(props: TokenIconProps) {
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
 
-    const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
+    const { value } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
-        return [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[]
+        return {
+            key: `${address}_${chainId}`,
+            urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
+        }
     }, [chainId, address, logoURL, hub])
-    const base64 = useImageBase64(`${address}_${chainId}`, first(urls))
+    const { urls = EMPTY_LIST, key } = value ?? {}
+    const base64 = useImageBase64(key, first(urls))
 
     return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
