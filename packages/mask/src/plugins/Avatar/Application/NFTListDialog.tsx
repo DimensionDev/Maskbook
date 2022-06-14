@@ -118,7 +118,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
         done: loadFinish,
         next: nextPage,
         error: loadError,
-    } = useNonFungibleAssets(selectedPluginId, undefined, { chainId, account: selectedAccount })
+    } = useNonFungibleAssets(selectedPluginId, undefined, {
+        chainId,
+        account: selectedAccount,
+    })
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
@@ -167,6 +170,14 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => {
         setDisabled(!selectedToken || isSameToken(selectedToken, tokenInfo))
     }, [selectedToken, tokenInfo])
+
+    useEffect(() => {
+        setSelectedPluginId(currentPluginId)
+    }, [currentPluginId])
+
+    useEffect(() => {
+        setChainId(currentChainId as ChainId)
+    }, [currentChainId])
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 

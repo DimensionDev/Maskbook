@@ -391,6 +391,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
+        if (chainId !== ChainId.Mainnet) return createPageable([], createIndicator(indicator))
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {
                 asset_owner: address,
