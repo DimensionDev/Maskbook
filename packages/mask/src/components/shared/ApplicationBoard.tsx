@@ -167,7 +167,7 @@ function ApplicationBoardContent(props: Props) {
             ) : (
                 <div className={classes.placeholderWrapper}>
                     <Typography className={classes.placeholder}>
-                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                        {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
                 </div>
             )}
