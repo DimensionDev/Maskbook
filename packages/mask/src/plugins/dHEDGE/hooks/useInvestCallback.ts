@@ -32,5 +32,5 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                 : await encodeTransaction(poolV2Contract, poolV2Contract.methods.deposit(token.address, amount), config)
 
         return connection.sendTransaction(tx)
-    }, [pool, account, amount, token])
+    }, [pool, account, amount, token, connection])
 }
