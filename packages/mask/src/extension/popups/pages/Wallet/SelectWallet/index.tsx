@@ -64,6 +64,7 @@ const useStyles = makeStyles()({
         padding: 0,
         height: 'calc(100vh - 132px)',
         overflow: 'auto',
+        paddingBottom: 70,
     },
     controller: {
         display: 'grid',
@@ -159,11 +160,7 @@ const SelectWallet = memo(() => {
                         <div className={classes.network}>
                             <div className={classes.iconWrapper}>
                                 {currentNetwork.icon ? (
-                                    <WalletIcon
-                                        networkIcon={currentNetwork.icon}
-                                        size={20}
-                                        classes={{ networkIcon: classes.colorChainIcon }}
-                                    />
+                                    <WalletIcon mainIcon={currentNetwork.icon} size={20} />
                                 ) : (
                                     <ChainIcon
                                         color={currentNetwork.iconColor}

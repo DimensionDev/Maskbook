@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { getMaskColor, makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { MenuItem } from '@mui/material'
-import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { first, uniqBy } from 'lodash-unified'
 import { ReversedAddress } from '@masknet/shared'
-import type { IdentityAddress } from '@masknet/web3-shared-base'
+import { getMaskColor, makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { MenuItem } from '@mui/material'
+import { SocialAddress, NetworkPluginID, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
+import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,18 +44,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTPageProps {
-    addressNames?: IdentityAddress[]
+    identity?: SocialIdentity
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function NFTPage(props: NFTPageProps) {
-    const { addressNames } = props
+export function NFTPage({ socialAddressList }: NFTPageProps) {
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const [selectedAddress, setSelectedAddress] = useState(first(addressNames))
+    const [selectedAddress, setSelectedAddress] = useState(first(socialAddressList))
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onClose = () => setAnchorEl(null)
-    const onSelect = (option: IdentityAddress) => {
+    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
         onClose()
     }
@@ -68,15 +69,19 @@ export function NFTPage(props: NFTPageProps) {
                 onClose={onClose}
                 anchorEl={anchorEl}
                 PaperProps={{ style: { maxHeight: 192 } }}>
-                {uniqBy(addressNames ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                {uniqBy(socialAddressList ?? EMPTY_LIST, (x) => x.address.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                            <ReversedAddress address={x.address} />
+                            {x.type === SocialAddressType.ADDRESS ? (
+                                <ReversedAddress address={x.address} pluginId={x.networkSupporterPluginID} />
+                            ) : (
+                                x.label
+                            )}
                         </MenuItem>
                     )
                 })}
             </ShadowRootMenu>
-            <CollectionList addressName={selectedAddress ?? undefined} onSelectAddress={onOpen} />
+            <CollectionList addressName={selectedAddress} onSelectAddress={onOpen} />
         </div>
     )
 }

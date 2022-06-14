@@ -34,13 +34,13 @@ export class Connection extends ConnectionState<
     Web3Provider
 > {
     constructor(
-        private context: Plugin.Shared.SharedContext,
+        context: Plugin.Shared.SharedContext,
         subscription: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
             providerType?: Subscription<ProviderType>
         },
     ) {
-        super(createConnection, subscription)
+        super(context, createConnection, subscription)
     }
 }

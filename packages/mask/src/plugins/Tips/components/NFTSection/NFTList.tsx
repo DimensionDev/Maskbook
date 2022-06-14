@@ -1,9 +1,8 @@
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Checkbox, Link, List, ListItem, Radio } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio, Stack } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -11,10 +10,13 @@ import type { TipNFTKeyPair } from '../../types'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    onChange?: (id: string | null, contractAddress: string) => void
+    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
+    onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string
+    nextPage(): void
+    loadFinish: boolean
+    loadError?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,9 +39,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         flexDirection: 'column',
         borderRadius: 12,
-        height: 100,
+        height: 96,
         userSelect: 'none',
-        width: 100,
+        width: 96,
         justifyContent: 'center',
     },
     disabled: {
@@ -86,12 +88,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTItemProps {
-    token: NonFungibleToken<ChainId, SchemaType>
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId()
     return (
         <NFTCardStyledAssetPlayer
             chainId={chainId}
@@ -107,25 +109,39 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     )
 }
 
-const includes = (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
-    return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-}
-
-export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1, className }) => {
+export const NFTList: FC<Props> = ({
+    selectedPairs,
+    tokens,
+    onChange,
+    limit = 1,
+    className,
+    nextPage,
+    loadFinish,
+    loadError,
+}) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
     const reachedLimit = selectedPairs.length >= limit
 
     const toggleItem = useCallback(
-        (currentId: string | null, contractAddress: string) => {
+        (currentId: string | null, contractAddress?: string) => {
             onChange?.(currentId, contractAddress)
         },
         [onChange, isRadio, reachedLimit],
     )
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const includes =
+        pluginId === NetworkPluginID.PLUGIN_EVM
+            ? (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
+                  return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
+              }
+            : (pairs: TipNFTKeyPair[], pair: TipNFTKeyPair): boolean => {
+                  return !!pairs.find(([, tokenId]) => tokenId === pair[1])
+              }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
 
     return (
         <List className={classnames(classes.list, className)}>
@@ -142,12 +158,12 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                 return (
                     <ShadowRootTooltip
                         classes={{ tooltip: classes.tooltip }}
-                        key={token.tokenId}
+                        key={`${token.address}/${token.tokenId + token.id}`}
                         title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
                         placement="top"
                         arrow>
                         <ListItem
-                            key={token.tokenId}
+                            key={token.tokenId + token.id}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
@@ -161,11 +177,11 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                                 onChange={noop}
                                 disabled={disabled}
                                 onClick={() => {
-                                    if (disabled || !token.contract?.address) return
+                                    if (disabled) return
                                     if (selected) {
                                         toggleItem(null, '')
                                     } else {
-                                        toggleItem(token.tokenId, token.contract.address)
+                                        toggleItem(token.tokenId, token.contract?.address)
                                     }
                                 }}
                                 className={classes.checkbox}
@@ -175,6 +191,19 @@ export const NFTList: FC<Props> = ({ selectedPairs, tokens, onChange, limit = 1,
                     </ShadowRootTooltip>
                 )
             })}
+            {loadError && !loadFinish && tokens.length && (
+                <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                    <RetryHint hint={false} retry={nextPage} />
+                </Stack>
+            )}
+            <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                <ElementAnchor
+                    callback={() => {
+                        if (nextPage) nextPage()
+                    }}>
+                    {!loadFinish && <LoadingBase />}
+                </ElementAnchor>
+            </Stack>
         </List>
     )
 }

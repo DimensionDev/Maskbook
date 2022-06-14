@@ -36,19 +36,34 @@
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/polygon",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/polygon"
         ],
-        "Arbitrum": [],
+        "Arbitrum": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/arbitrum",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/arbitrum"
+        ],
         "Arbitrum_Rinkeby": [],
-        "xDai": [],
+        "xDai": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/xdai",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/xdai"
+        ],
         "Avalanche": [
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/avalanchec",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/avalanchec"
         ],
         "Avalanche_Fuji": [],
         "Celo": [],
-        "Fantom": [],
-        "Aurora": [],
+        "Fantom": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/fantom",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/fantom"
+        ],
+        "Aurora": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/aurora",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/aurora"
+        ],
         "Aurora_Testnet": [],
-        "Conflux": [],
+        "Conflux": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/conflux",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/conflux"
+        ],
         "Harmony": [
             "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony",
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"

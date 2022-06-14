@@ -7,12 +7,10 @@ export function useProviderReady<T extends NetworkPluginID>(
     pluginID?: T,
     providerType?: Web3Helper.Definition[T]['ProviderType'],
 ) {
-    type IsReady = (providerType: Web3Helper.Definition[T]['ProviderType']) => boolean
-
     const { Provider } = useWeb3State(pluginID)
 
     return useMemo(async () => {
         if (!providerType || !Provider) return false
-        return (Provider.isReady as IsReady)(providerType) ?? false
+        return Provider.isReady?.(providerType) ?? false
     }, [providerType, Provider])
 }

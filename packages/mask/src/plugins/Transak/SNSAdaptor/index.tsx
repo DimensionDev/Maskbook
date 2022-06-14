@@ -29,7 +29,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             {...EntryComponentProps}
-                            onClick={EntryComponentProps.onClick ?? openDialog}
+                            onClick={
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
+                            }
                         />
                     )
                 },

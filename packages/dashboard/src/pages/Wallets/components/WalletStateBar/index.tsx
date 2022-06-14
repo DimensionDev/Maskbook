@@ -66,8 +66,8 @@ export const WalletStateBar = memo(() => {
 
     const account = useAccount()
     const wallet = useWallet()
-    const networkDescriptor = useNetworkDescriptor<'all'>()
-    const providerDescriptor = useProviderDescriptor<'all'>()
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
     const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
@@ -163,7 +163,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
             )}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
-                    <WalletIcon providerIcon={provider.icon} inverse size={38} />
+                    <WalletIcon mainIcon={provider.icon} size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (

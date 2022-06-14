@@ -71,13 +71,13 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const classes = useStylesExtends(useStyles(), props)
 
     const actualPluginID = useCurrentWeb3NetworkPluginID()
-    const { Others: actualOthers } = useWeb3State<'all'>(actualPluginID)
+    const { Others: actualOthers } = useWeb3State(actualPluginID)
     const actualChainId = useChainId(actualPluginID)
     const actualProviderType = useProviderType(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
 
-    const { Others: expectedOthers } = useWeb3State<'all'>(expectedPluginID)
-    const expectedConnection = useWeb3Connection<'all'>(expectedPluginID)
+    const { Others: expectedOthers } = useWeb3State(expectedPluginID)
+    const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
     const expectedAccount = useAccount(expectedPluginID)
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
@@ -124,10 +124,10 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                       variant: 'contained',
                       fullWidth: true,
                       sx: {
-                          backgroundColor: theme.palette.maskColor.dark,
-                          color: theme.palette.maskColor.white,
+                          backgroundColor: theme.palette.maskColor?.dark,
+                          color: theme.palette.maskColor?.white,
                           '&:hover': {
-                              backgroundColor: theme.palette.maskColor.dark,
+                              backgroundColor: theme.palette.maskColor?.dark,
                           },
                       },
                   }
@@ -156,6 +156,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        fullWidth
                         startIcon={<PluginWalletConnectIcon />}
                         variant="contained"
                         size={props.ActionButtonPromiseProps?.size}
@@ -185,8 +186,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 <ActionButtonPromise
                     startIcon={
                         <WalletIcon
-                            networkIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                            isBorderColorNotDefault
+                            mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
                             size={18}
                         />
                     }

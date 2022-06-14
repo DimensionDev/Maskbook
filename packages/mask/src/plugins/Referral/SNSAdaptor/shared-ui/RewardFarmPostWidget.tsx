@@ -23,7 +23,7 @@ export function RewardFarmPostWidget({ title, icon, rewardData, tokenSymbol }: R
     const { classes } = useStyles()
 
     return (
-        <Grid item xs={6} marginTop="24px">
+        <Grid item xs={12} marginTop="24px">
             {title && (
                 <Grid item xs={12} container marginBottom="12px" alignItems="center">
                     {icon && icon}

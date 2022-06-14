@@ -52,7 +52,7 @@ interface HistoryTableProps {
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { value, loading } = useTransactions()
+    const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
 
     useUpdateEffect(() => {
         setPage(0)
@@ -64,8 +64,8 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
             onPageChange={setPage}
             hasNextPage={false}
             isLoading={loading}
-            isEmpty={!value?.data?.length}
-            dataSource={(value?.data ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
+            isEmpty={!value?.length}
+            dataSource={(value ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
             selectedChainId={selectedChainId}
         />
     )

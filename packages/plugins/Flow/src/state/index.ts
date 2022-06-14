@@ -8,6 +8,7 @@ import { Transaction } from './Transaction'
 import { Wallet } from './Wallet'
 import { Others } from './Others'
 import type { FlowWeb3State } from './Connection/types'
+import { IdentityService } from './IdentityService'
 
 export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3State {
     const Provider_ = new Provider(context)
@@ -19,6 +20,7 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3S
             chainId: Provider_.chainId,
             account: Provider_.account,
         }),
+        IdentityService: new IdentityService(context),
         Settings: new Settings(context),
         Transaction: new Transaction(context, {
             chainId: Provider_.chainId,

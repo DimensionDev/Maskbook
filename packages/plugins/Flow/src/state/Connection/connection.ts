@@ -1,6 +1,7 @@
+import getUnixTime from 'date-fns/getUnixTime'
 import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
-import type { BlockObject, CompositeSignature, MutateOptions, QueryOptions } from '@blocto/fcl'
+import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
 import {
     Account,
@@ -8,18 +9,27 @@ import {
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
+    NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
+import { toHex } from '@masknet/shared-base'
 import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
 import { Web3StateSettings } from '../../settings'
+import type { Plugin } from '@masknet/plugin-infra'
 
 class Connection implements BaseConnection {
-    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    constructor(
+        private chainId: ChainId,
+        private account: string,
+        private providerType: ProviderType,
+        private context?: Plugin.Shared.SharedContext,
+    ) {}
 
     private _getWeb3Provider(options?: FlowConnectionOptions) {
         return Providers[options?.providerType ?? this.providerType]
     }
+
     getWeb3(options?: FlowConnectionOptions) {
         return this._getWeb3Provider(options).createWeb3({
             account: options?.account ?? this.account,
@@ -53,22 +63,26 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject> {
-        throw new Error('Method not implemented.')
+    async getBlock(no: number, options?: FlowConnectionOptions): Promise<BlockObject | null> {
+        const web3 = await this.getWeb3(options)
+        return web3.send([web3.getBlock(), web3.atBlockHeight(no)]).then(web3.decode)
     }
-    getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
-        throw new Error('Method not implemented.')
+    async getBlockTimestamp(options?: FlowConnectionOptions): Promise<number> {
+        const web3 = await this.getWeb3(options)
+        const blockHeader: BlockHeaderObject = await web3.send([web3.getBlockHeader()]).then(web3.decode)
+        return getUnixTime(new Date(blockHeader.timestamp as unknown as string))
     }
     transferFungibleToken(
         address: string,
@@ -84,6 +98,7 @@ class Connection implements BaseConnection {
         recipient: string,
         tokenId: string,
         amount: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -97,7 +112,12 @@ class Connection implements BaseConnection {
     getFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getNonFungibleTokenBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
+    getNonFungibleTokenBalance(
+        address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
+        options?: FlowConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokensBalance(
@@ -121,9 +141,27 @@ class Connection implements BaseConnection {
     }
     getNonFungibleToken(
         address: string,
-        id: string,
+        tokenId: string,
+        schemaType?: SchemaType,
         options?: FlowConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenOwnership(
+        address: string,
+        owner: string,
+        tokenId: string,
+        schema?: SchemaType | undefined,
+        options?: FlowConnectionOptions,
+    ): Promise<boolean> {
+        throw new Error('Method not implemented.')
+    }
+    getNonFungibleTokenMetadata(
+        address: string,
+        tokenId: string,
+        schemaType?: SchemaType,
+        options?: FlowConnectionOptions,
+    ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
 
@@ -136,12 +174,12 @@ class Connection implements BaseConnection {
     }
     async getBlockNumber(options?: FlowConnectionOptions): Promise<number> {
         const web3 = await this.getWeb3(options)
-        const blockHeader = await web3.getBlockHeader()
+        const blockHeader = await web3.send([web3.getBlockHeader()]).then(web3.decode)
         return blockHeader.height
     }
     async getBalance(address: string, options?: FlowConnectionOptions): Promise<string> {
         const web3 = await this.getWeb3(options)
-        const account = await web3.getAccount(address)
+        const account = await web3.send([web3.getAccount(address)]).then(web3.decode)
         return account.balance.toFixed()
     }
     async getTransaction(id: string, options?: FlowConnectionOptions) {
@@ -153,7 +191,7 @@ class Connection implements BaseConnection {
     }
     async getTransactionStatus(id: string, options?: FlowConnectionOptions): Promise<TransactionStatusType> {
         const web3 = await this.getWeb3(options)
-        const { status } = await web3.getTransactionStatus(id)
+        const { status } = web3.getTransactionStatus(id)
         const status_ = status as TransactionStatusCode
         switch (status_) {
             case TransactionStatusCode.UNKNOWN:
@@ -172,25 +210,35 @@ class Connection implements BaseConnection {
     }
     async getTransactionNonce(address: string, options?: FlowConnectionOptions): Promise<number> {
         const web3 = await this.getWeb3(options)
-        const account = await web3.getAccount(address)
+        const account = web3.getAccount(address)
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
     }
-    switchChain(options?: FlowConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
+    async switchChain(options?: FlowConnectionOptions): Promise<void> {
+        await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
     }
     async signMessage(dataToSign: string, signType?: string, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)
-        return web3.currentUser.signUserMessage(dataToSign)
+        const data = new TextEncoder().encode(dataToSign)
+        const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
+        if (!signed) throw new Error('Failed to sign message.')
+        return signed.signature
     }
     async verifyMessage(
         dataToVerify: string,
-        signature: CompositeSignature[],
+        signature: string,
         signType?: string,
         options?: FlowConnectionOptions,
     ): Promise<boolean> {
         const web3 = await this.getWeb3(options)
-        return web3.verifyUserSignatures(dataToVerify, signature)
+        if (!options?.account) throw new Error('No account found.')
+        return web3.verifyUserSignatures(dataToVerify, [
+            {
+                addr: options?.account,
+                keyId: 1,
+                signature,
+            },
+        ])
     }
     async callTransaction(query: QueryOptions, options?: FlowConnectionOptions) {
         const web3 = await this.getWeb3(options)
@@ -224,6 +272,15 @@ class Connection implements BaseConnection {
  * @param providerType
  * @returns
  */
-export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Blocto) {
-    return new Connection(chainId, account, providerType)
+export function createConnection(
+    context: Plugin.Shared.SharedContext,
+    options?: {
+        chainId?: ChainId
+        account?: string
+        providerType?: ProviderType
+    },
+) {
+    const { chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Blocto } = options ?? {}
+
+    return new Connection(chainId, account, providerType, context)
 }

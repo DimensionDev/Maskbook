@@ -3,11 +3,8 @@ import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainId } from '@masknet/plugin-infra/web3'
+import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { isPopupPage } from '@masknet/shared-base'
-import type { TransactionProgressEvent } from '@masknet/plugin-wallet'
-import { WalletMessages } from '../../messages'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()({
@@ -16,35 +13,51 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
-export interface TransactionSnackbarProps {
-    pluginID?: NetworkPluginID
+export interface TransactionSnackbarProps<T extends NetworkPluginID> {
+    pluginID: T
 }
-export function TransactionSnackbar({ pluginID }: TransactionSnackbarProps) {
+export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const chainId = useChainId(pluginID)
-    const [progress, setProgress] = useState<TransactionProgressEvent>()
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State<'all'>(progress?.pluginID)
+    const [error, setError] = useState<Error | undefined>()
+    const [progress, setProgress] = useState<{
+        chainId: Web3Helper.Definition[T]['ChainId']
+        status: TransactionStatusType
+        id: string
+        transaction: Web3Helper.Definition[T]['Transaction']
+    }>()
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
 
     useEffect(() => {
-        const removeListener = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
+        const off = TransactionWatcher?.emitter.on('error', (error) => {
+            console.log('DEBUG: error')
+            console.log(error)
+            setError(error)
+        })
+        return () => {
+            off?.()
+        }
+    }, [TransactionWatcher])
+
+    useEffect(() => {
+        const off = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
             if (!transaction || !pluginID) return
             setProgress({
                 chainId,
-                pluginID,
                 status,
-                transactionId: id,
+                id,
                 transaction,
             })
         })
 
         return () => {
-            removeListener?.()
+            off?.()
         }
-    }, [TransactionWatcher, NetworkPluginID, chainId, pluginID])
+    }, [TransactionWatcher, chainId, pluginID])
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,
@@ -81,13 +94,6 @@ export function TransactionSnackbar({ pluginID }: TransactionSnackbarProps) {
         [showSnackbar, closeSnackbar],
     )
 
-    useEffect(() =>
-        WalletMessages.events.transactionProgressUpdated.on((progress) => {
-            // disable transaction snackbar on popup page
-            if (!isPopupPage()) setProgress(progress)
-        }),
-    )
-
     useAsync(async () => {
         if (!progress) return
 
@@ -101,15 +107,27 @@ export function TransactionSnackbar({ pluginID }: TransactionSnackbarProps) {
                     <Link
                         className={classes.link}
                         color="inherit"
-                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.transactionId)}
+                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
                     </Link>
                 ),
             },
-        } as ShowSnackbarOptions)
+        })
     }, [progress])
+
+    useAsync(async () => {
+        if (!error?.message) return
+
+        console.log({
+            error,
+        })
+
+        showSingletonSnackbar(error.message, {
+            ...resolveSnackbarConfig(TransactionStatusType.FAILED),
+        })
+    }, [error?.message])
 
     return null
 }

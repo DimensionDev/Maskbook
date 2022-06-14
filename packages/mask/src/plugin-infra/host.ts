@@ -29,6 +29,8 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 
         send: WalletRPC.sendPayload,
 
+        fetch: Services.Helper.r2d2Fetch,
+
         openPopupWindow: Services.Helper.openPopupWindow,
         closePopupWindow: Services.Helper.removePopupWindow,
 
@@ -40,13 +42,13 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
             }
 
             WalletMessages.events.walletConnectQRCodeDialogUpdated.on(onClose)
-            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
                 open: true,
                 uri,
             })
         },
         closeWalletConnectDialog: () => {
-            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToAll({
+            WalletMessages.events.walletConnectQRCodeDialogUpdated.sendToLocal({
                 open: false,
             })
         },

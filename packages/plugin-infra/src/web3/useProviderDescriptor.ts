@@ -8,12 +8,10 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
     expectedPluginID?: T,
     expectedProviderTypeOrID?: string,
 ) {
-    type Result = S extends 'all' ? Web3Helper.ProviderDescriptorAll : Web3Helper.Web3ProviderDescriptor<T>
-
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const providerType = useProviderType(pluginID)
 
     return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    ) as Result
+    ) as Web3Helper.ProviderDescriptorScope<S, T>
 }

@@ -18,6 +18,9 @@ export const InMemoryStorages = {
         avatarId: '',
         address: '',
         tokenId: '',
+        schema: 1,
+        chainId: 1,
+        pluginId: '',
     }),
 }
 

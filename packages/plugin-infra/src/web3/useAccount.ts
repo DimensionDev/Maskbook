@@ -5,7 +5,7 @@ import { UNDEFINED } from '../utils/subscription'
 import { useCurrentWeb3NetworkAccount } from './Context'
 
 export function useAccount<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
-    const { Provider, Others } = useWeb3State<void, T>(pluginID)
+    const { Provider, Others } = useWeb3State(pluginID)
     const currentAccount = useCurrentWeb3NetworkAccount(pluginID)
     const defaultAccount = useSubscription(Provider?.account ?? UNDEFINED)
     const account = expectedAccount ?? currentAccount ?? defaultAccount ?? ''

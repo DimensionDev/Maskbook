@@ -24,6 +24,13 @@ export class Squash implements Middleware<Context> {
                 const [address, tag = 'latest'] = params as [string, string]
                 return sha3([chainId, method, address, tag].join())
             }
+            case EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER: {
+                const [number, full] = params as [string, boolean]
+                return sha3([chainId, method, number, full].join())
+            }
+            case EthereumMethodType.ETH_BLOCK_NUMBER: {
+                return sha3([chainId, method].join())
+            }
             case EthereumMethodType.ETH_GET_BALANCE:
             case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
                 const [account, tag = 'latest'] = params as [string, string]
@@ -70,7 +77,11 @@ export class Squash implements Middleware<Context> {
 
         this.cache.set(id, promise)
         await next()
-        this.cache.delete(id)
+
+        // keep cache for 1s
+        setTimeout(() => {
+            this.cache.delete(id)
+        }, 1000)
 
         if (context.error) reject(context.error)
         else resolve(context.result)

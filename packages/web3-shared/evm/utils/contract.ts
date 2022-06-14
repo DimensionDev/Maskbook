@@ -25,7 +25,7 @@ export async function encodeTransaction(
         ...options,
     }
 
-    if (encoded.gas) {
+    if (!encoded.gas) {
         encoded.gas = await transaction.estimateGas(options)
     }
 
@@ -35,21 +35,19 @@ export async function encodeTransaction(
 export async function sendTransaction(
     contract: BaseContract | null,
     transaction?: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    options?: SendOptions & {
-        maxPriorityFeePerGas?: string
-        maxFeePerGas?: string
-    },
+    overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
     const tx = await encodeTransaction(contract, transaction)
-    const receipt = await transaction.send(tx as PayableTx)
+    const receipt = await transaction.send({
+        ...tx,
+        ...overrides,
+    } as PayableTx)
     return receipt?.transactionHash ?? ''
 }
 
 export function createContract<T extends BaseContract>(web3: Web3 | null, address: string, ABI: AbiItem[]) {
     if (!address || !isValidAddress(address) || !web3) return null
     const contract = new web3.eth.Contract(ABI, address) as unknown as T
-    contract.transactionConfirmationBlocks = 0
-    contract.transactionPollingTimeout = 10 * 1000
     return contract
 }

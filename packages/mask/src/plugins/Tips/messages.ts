@@ -3,6 +3,7 @@ import type { TipTask } from './types'
 
 export interface TipMessage {
     tipTask: TipTask
+    tipTaskUpdate: TipTask
 
     rpc: unknown
 }

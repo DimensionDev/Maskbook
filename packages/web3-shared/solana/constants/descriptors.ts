@@ -130,6 +130,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
             supportedExtensionSites: [],
         },
+        iconFilterColor: 'rgba(85, 27, 249, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(84, 63, 196, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_solflare`,
@@ -142,7 +145,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://solflare.com/download',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
     },
@@ -154,10 +157,10 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coin98.png', import.meta.url),
         homeLink: 'https://coin98.com/',
         shortenLink: 'solflare.com',
-        downloadLink: 'https://solflare.com/download',
+        downloadLink: 'https://coin98.com/wallet',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
     },
@@ -172,7 +175,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.sollet.io/',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
     },

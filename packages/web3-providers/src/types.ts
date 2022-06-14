@@ -18,8 +18,8 @@ import type {
     NonFungibleTokenEvent,
     GasOptionType,
     HubOptions,
+    HubIndicator,
 } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -101,22 +101,18 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(
-            address: string,
-            currency: CurrencyType,
-            chainId?: ChainId,
-            nativeToken?: boolean,
-        ): Promise<number>
+        getTokenPrice(platform_id: string, address: string, currency: CurrencyType): Promise<number>
         getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
+        getTokenPriceByCoinId(coin_id: string, currency: CurrencyType): Promise<number>
     }
 }
 
 export namespace HistoryAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType> {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>, Indicator>>
+        ): Promise<Array<Transaction<ChainId, SchemaType>>>
     }
 }
 
@@ -127,7 +123,7 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         getAssets(
             address: string,
             options?: HubOptions<ChainId>,
@@ -136,13 +132,25 @@ export namespace FungibleTokenAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType, Indicator extends string | number = number> {
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        getAssets?: (address: string) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
+        getAssets?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        getToken?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        getTokens?: (
+            from: string,
+            opts?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getHistory?: (
             address: string,
             tokenId: string,
@@ -164,15 +172,6 @@ export namespace NonFungibleTokenAPI {
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: (
-            from: string,
-            opts?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         getContract?: (
             address: string,
             opts?: HubOptions<ChainId>,
@@ -180,8 +179,8 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<number>
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined, Indicator>>
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
     }
 }
 
@@ -192,15 +191,15 @@ export namespace RiskWarningBaseAPI {
 }
 
 export namespace StorageAPI {
-    export interface Storage {
-        set(key: string, value: any): Promise<void>
-        get<T>(key: string): Promise<T | undefined>
+    export interface Storage<T> {
+        get(key: string): Promise<T | undefined>
+        set(key: string, value: T): Promise<void>
         delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?(key: string): Storage
-        createBinaryStorage?(key: string): Storage
+        createJSON_Storage?<T>(key: string): Storage<T>
+        createBinaryStorage?<T>(key: string): Storage<T>
     }
 }
 

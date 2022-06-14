@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
@@ -68,7 +68,7 @@ const VerifyWallet = memo(() => {
     }
 
     useEffect(() => {
-        // if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
+        if (request?.payload.method !== EthereumMethodType.ETH_SIGN) return
 
         navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
             state: wallet,
@@ -105,7 +105,7 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personaSign', {
+            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,

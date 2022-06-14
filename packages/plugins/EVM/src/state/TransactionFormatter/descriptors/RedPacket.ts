@@ -20,7 +20,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
             })
 
             const token = await connection?.getFungibleToken(context.parameters?._token_addr ?? '')
-            const amount = formatBalance(context.parameters?._total_tokens)
+            const amount = formatBalance(context.parameters?._total_tokens, token?.decimals)
 
             return {
                 chainId: context.chainId,

@@ -80,11 +80,11 @@ export function FarmPost(props: FarmPostProps) {
     )
 
     const openComposeBox = useCallback(
-        (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
+        (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
-                content: makeTypedMessageText(message, selectedReferralData),
+                content: makeTypedMessageText('', selectedReferralData),
             }),
         [],
     )
@@ -110,7 +110,7 @@ export function FarmPost(props: FarmPostProps) {
                 sender: senderName,
             })
 
-            openComposeBox(t.buy_refer_earn_yield({ token: payload.referral_token_symbol }), metadata)
+            openComposeBox(metadata)
         } catch (error: any) {
             onError(error?.message)
         }
@@ -157,7 +157,7 @@ export function FarmPost(props: FarmPostProps) {
                     <TokenIcon
                         address={payload.referral_token ?? ''}
                         name={payload.referral_token_name}
-                        logoURI={payload.referral_token_icon}
+                        logoURL={payload.referral_token_icon}
                     />
                     <Typography variant="h6" fontWeight={600} marginLeft="10px">
                         ${payload.referral_token_symbol} {t.buy_and_hold_referral()}

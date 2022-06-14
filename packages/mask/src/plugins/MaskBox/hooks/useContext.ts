@@ -8,7 +8,14 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
-import { ChainId, useTokenConstants, useMaskBoxConstants, ZERO_ADDRESS, isZeroAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    useTokenConstants,
+    useMaskBoxConstants,
+    ZERO_ADDRESS,
+    isZeroAddress,
+    SchemaType,
+} from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
@@ -238,7 +245,9 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #region the erc721 contract detailed
     const { value: contractDetailed } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
-        maskBoxInfo?.nft_address,
+        maskBoxInfo?.nft_address ?? '',
+        SchemaType.ERC721,
+        { account },
     )
     // #endregion
 

@@ -20,6 +20,7 @@ import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -194,10 +195,11 @@ const useStyles = makeStyles()((theme) => {
 })
 interface RedPacketERC721FormProps {
     onClose: () => void
+    setERC721DialogHeight?: (height: number) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
-    const { onClose } = props
+    const { onClose, setERC721DialogHeight } = props
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -206,8 +208,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
-    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
-    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
+    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
@@ -265,6 +267,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
     }, [tokenDetailedList.length, balance, t])
+
+    setERC721DialogHeight?.(balance > 0 ? 690 : 350)
 
     return (
         <>

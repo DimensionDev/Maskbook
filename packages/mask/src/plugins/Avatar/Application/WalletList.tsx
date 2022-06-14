@@ -8,7 +8,6 @@ import { WalletSettingIcon } from '../assets/setting'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NFTWalletConnect } from './WalletConnect'
 import { BindingProof, PopupRoutes } from '@masknet/shared-base'
 import {
     useChainId,
@@ -24,10 +23,10 @@ import { LinkIcon } from '../assets/link'
 import { CopyIcon } from '../assets/copy'
 import classNames from 'classnames'
 import { VerifyIcon } from '../assets/verify'
-import { noop } from 'lodash-unified'
 import { Verify2Icon } from '../assets/Verify2'
 import { formatAddress } from '../utils'
-import { explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface AddressNamesProps extends withClasses<'root'> {
-    onChange: (address: string) => void
+    onChange: (address: string, pluginId: NetworkPluginID, chainId: ChainId) => void
     account: string
     wallets: BindingProof[]
 }
@@ -84,10 +83,10 @@ export function AddressNames(props: AddressNamesProps) {
     const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
     const t = useI18N()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
-    const onClick = useCallback((address: string) => {
-        onChange(address)
+    const chainId = useChainId(currentPluginId)
+    const onClick = useCallback((address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
+        onChange(address, pluginId, chainId)
         setSelectedWallet(address)
         onClose()
     }, [])
@@ -102,7 +101,7 @@ export function AddressNames(props: AddressNamesProps) {
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const chainId = useChainId()
+
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
             chainId,
@@ -119,12 +118,19 @@ export function AddressNames(props: AddressNamesProps) {
         selectedWallet: string,
         wallet: string,
         enableChange: boolean,
-        onClick: (wallet: string) => void,
-        onChange?: () => void,
         verify?: boolean,
         isETH?: boolean,
+        onChange?: () => void,
     ) => (
-        <MenuItem key={wallet} value={wallet} onClick={() => onClick(account)}>
+        <MenuItem
+            value={wallet}
+            onClick={() =>
+                onClick(
+                    wallet,
+                    isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId,
+                    wallets.some((x) => isSameAddress(x.identity, wallet)) ? ChainId.Mainnet : (chainId as ChainId),
+                )
+            }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
                     <>
@@ -143,8 +149,6 @@ export function AddressNames(props: AddressNamesProps) {
         </MenuItem>
     )
 
-    if (!wallets.length && (currentPluginId !== NetworkPluginID.PLUGIN_EVM || !account)) return <NFTWalletConnect />
-
     return (
         <Stack className={classes.root}>
             <Stack
@@ -156,9 +160,8 @@ export function AddressNames(props: AddressNamesProps) {
                 <WalletUI
                     address={selectedWallet}
                     isETH={
-                        wallets.some((x) => isSameAddress(x.identity, account))
-                            ? true
-                            : currentPluginId === NetworkPluginID.PLUGIN_EVM
+                        wallets.some((x) => isSameAddress(x.identity, selectedWallet)) ||
+                        currentPluginId === NetworkPluginID.PLUGIN_EVM
                     }
                 />
                 <ArrowDropDownIcon />
@@ -176,41 +179,31 @@ export function AddressNames(props: AddressNamesProps) {
                         selectedWallet,
                         account,
                         Boolean(account),
-                        () => onClick(account),
-                        onConnectWallet,
                         wallets.some((x) => isSameAddress(x.identity, account)),
-                        wallets.some((x) => isSameAddress(x.identity, account))
-                            ? true
-                            : currentPluginId === NetworkPluginID.PLUGIN_EVM,
+                        wallets.some((x) => isSameAddress(x.identity, account)) ||
+                            currentPluginId === NetworkPluginID.PLUGIN_EVM,
+                        onConnectWallet,
                     )
                 ) : (
-                    <MenuItem key="connect">
+                    <MenuItem key="Connect Wallet">
                         <Button fullWidth onClick={onConnectWallet} sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
                             {t.connect_your_wallet()}
                         </Button>
                     </MenuItem>
                 )}
-                <Divider className={classes.divider} />
+                <Divider key={uuid()} className={classes.divider} />
                 {wallets
                     .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
                     ?.filter((x) => !isSameAddress(x.identity, account))
-                    .map((x) => (
-                        <>
-                            {walletItem(
-                                selectedWallet,
-                                x.identity,
-                                false,
-                                () => onClick(x.identity),
-                                () => noop,
-                                true,
-                                true,
-                            )}
-                            <Divider className={classes.divider} />
-                        </>
+                    .map((x, i) => (
+                        <div key={i}>
+                            {walletItem(selectedWallet, x.identity, false, true, true)}
+                            <Divider key={uuid()} className={classes.divider} />
+                        </div>
                     ))}
 
                 <MenuItem
-                    key="settings"
+                    key="Wallet Setting"
                     onClick={() => {
                         openPopupsWindow()
                         onClose()
@@ -260,19 +253,20 @@ interface WalletUIProps {
 }
 
 function WalletUI(props: WalletUIProps) {
-    const { Others } = useWeb3State()
     const { isETH, address, verify = false } = props
 
     const { classes } = useWalletUIStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { Others } = useWeb3State<'all'>(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
+
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
             <ImageIcon size={30} icon={networkDescriptor?.icon} />
-            <Stack direction="column" style={{ marginLeft: 0.5 }}>
+            <Stack direction="column" style={{ marginLeft: 4 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {currentPluginId === NetworkPluginID.PLUGIN_EVM
@@ -291,7 +285,7 @@ function WalletUI(props: WalletUIProps) {
                     <CopyIconButton text={address} className={classes.copy} />
                     <Link
                         className={classes.link}
-                        href={explorerResolver.addressLink?.(chainId, address) ?? ''}
+                        href={Others?.explorerResolver.addressLink?.(chainId as ChainId, address) ?? ''}
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">

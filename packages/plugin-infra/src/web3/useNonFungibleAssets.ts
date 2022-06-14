@@ -1,27 +1,90 @@
-import { useAsyncRetry } from 'react-use'
-import { asyncIteratorToArray } from '@masknet/shared-base'
-import type { NonFungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
+import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
+import { useNetworkDescriptors } from './useNetworkDescriptors'
 
-export function useNonFungibleAssets<T extends NetworkPluginID, Indicator extends string | number = number>(
+export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    schemaType?: Web3Helper.Definition[T]['SchemaType'],
-    options?: Web3Helper.Web3HubOptions<T, Indicator>,
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
+    options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    type GetAllNonFungibleAssets = (
-        address: string,
-    ) => AsyncIterableIterator<
-        NonFungibleAsset<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
-    >
+    const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)
+    const [done, setDone] = useState(false)
+    const [error, setError] = useState<string>()
 
     const account = useAccount(pluginID)
     const hub = useWeb3Hub(pluginID, options)
+    const networks = useNetworkDescriptors(pluginID)
 
-    return useAsyncRetry(async () => {
-        if (!account || !hub) return []
-        const assets = await asyncIteratorToArray((hub.getAllNonFungibleAssets as GetAllNonFungibleAssets)(account))
-        return assets.length && schemaType ? assets.filter((x) => x.schema === schemaType) : assets
-    }, [account, schemaType, hub])
+    // create iterator
+    const iterator = useMemo(() => {
+        if ((!account && !options?.account) || !hub?.getNonFungibleTokens || !networks) return
+
+        return flattenAsyncIterator(
+            networks
+                .filter((x) => x.isMainnet)
+                .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
+                .map((x) => {
+                    return pageableToIterator(async (indicator) => {
+                        if (!hub?.getNonFungibleTokens) return
+                        return hub?.getNonFungibleTokens(options?.account ?? account, {
+                            indicator,
+                            size: 50,
+                            ...options,
+                            chainId: x.chainId,
+                        })
+                    })
+                }),
+        )
+    }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length, done])
+
+    const next = useCallback(async () => {
+        if (!iterator || done) return
+
+        try {
+            for (const v of Array.from({ length: 48 })) {
+                const { value, done: iteratorDone } = await iterator.next()
+                if (value instanceof Error) {
+                    // Controlled error
+                    setError(value.message)
+                    break
+                } else {
+                    if (iteratorDone) {
+                        setDone(true)
+                        break
+                    }
+                    if (!iteratorDone && value) {
+                        setAssets((pred) => [...pred, value])
+                    }
+                }
+            }
+        } catch (error_) {
+            // Uncontrolled error
+            setError(error_ as string)
+            setDone(true)
+        }
+    }, [iterator, done])
+
+    // Execute once after next update
+    useEffect(() => {
+        if (next) next()
+    }, [next])
+
+    const retry = useCallback(() => {
+        setAssets([])
+        setDone(false)
+    }, [])
+
+    useEffect(() => retry(), [options?.account ?? account, retry, options?.chainId])
+
+    return {
+        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        next,
+        done,
+        retry,
+        error,
+    }
 }

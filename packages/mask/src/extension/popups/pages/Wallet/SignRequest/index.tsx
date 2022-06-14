@@ -94,26 +94,35 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (
-            (value?.payload?.method === EthereumMethodType.ETH_SIGN ||
-                value?.payload?.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) &&
-            value.computedPayload?.data
-        ) {
-            let message = value.computedPayload?.data
-
-            try {
-                message = toUtf8(value.computedPayload?.data)
-            } catch (error) {
-                console.log(error)
-            }
+        if (!value)
             return {
-                address: value.computedPayload.to,
-                data: message,
+                data: '',
+                address: '',
             }
-        }
+        if (
+            value?.payload.method === EthereumMethodType.ETH_SIGN ||
+            value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
+        ) {
+            try {
+                return {
+                    address: value.payload.params?.[0],
+                    data: toUtf8(value.payload.params?.[1] ?? ''),
+                }
+            } catch {
+                return {
+                    address: value.payload.params?.[0],
+                    data: value.payload.params?.[1],
+                }
+            }
+        } else if (value?.payload.method === EthereumMethodType.PERSONAL_SIGN)
+            return {
+                address: value.payload.params?.[1],
+                data: value.payload.params?.[0],
+            }
+
         return {
-            address: '',
             data: '',
+            address: '',
         }
     }, [value])
 

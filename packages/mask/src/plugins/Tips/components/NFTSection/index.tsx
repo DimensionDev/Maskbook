@@ -1,13 +1,14 @@
-import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useAccount, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
 import { useTimeoutFn } from 'react-use'
-import { useTip } from '../../contexts'
+import { TargetRuntimeContext, useTip } from '../../contexts'
 import { useI18N } from '../../locales'
 import type { TipNFTKeyPair } from '../../types'
 import { NFTList } from './NFTList'
@@ -25,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
+        minHeight: '100%',
     },
     statusBox: {
         display: 'flex',
@@ -56,29 +58,44 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest }) => {
-    const { erc721Address, erc721TokenId, setErc721TokenId, setErc721Address } = useTip()
+    const {
+        nonFungibleTokenAddress: tokenAddress,
+        nonFungibleTokenId: tokenId,
+        setNonFungibleTokenId,
+        setNonFungibleTokenAddress,
+    } = useTip()
     const { classes } = useStyles()
     const t = useI18N()
-    const selectedPairs: TipNFTKeyPair[] = useMemo(
-        () => (erc721Address && erc721TokenId ? [[erc721Address, erc721TokenId]] : []),
-        [erc721TokenId, erc721TokenId],
-    )
+    const selectedPairs: TipNFTKeyPair[] = useMemo(() => (tokenId ? [[tokenAddress, tokenId]] : []), [tokenId, tokenId])
     // Cannot get the loading status of fetching via websocket
     // loading status of `useAsyncRetry` is not the real status
     const [guessLoading, setGuessLoading] = useState(true)
+    const account = useAccount()
     useTimeoutFn(() => {
         setGuessLoading(false)
     }, 10000)
 
-    const { value: fetchedTokens = EMPTY_LIST, loading } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const {
+        value: fetchedTokens = EMPTY_LIST,
+        done,
+        next,
+        error: loadError,
+    } = useNonFungibleAssets(pluginId, undefined, { chainId })
 
+    const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
-        return uniqWith(fetchedTokens, (v1, v2) => {
-            return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
-        })
-    }, [fetchedTokens])
+        return uniqWith(
+            fetchedTokens,
+            isEvm
+                ? (v1, v2) => {
+                      return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
+                  }
+                : (v1, v2) => v1.tokenId === v2.tokenId,
+        )
+    }, [fetchedTokens, isEvm])
 
-    const showLoadingIndicator = tokens.length === 0 && !loading && !guessLoading
+    const showLoadingIndicator = tokens.length === 0 && done && !guessLoading
 
     useEffect(() => {
         onEmpty?.(showLoadingIndicator)
@@ -95,16 +112,22 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                                 selectedPairs={selectedPairs}
                                 tokens={tokens}
                                 onChange={(id, address) => {
-                                    setErc721TokenId(id)
-                                    setErc721Address(address)
+                                    setNonFungibleTokenId(id)
+                                    setNonFungibleTokenAddress(address || '')
                                 }}
+                                nextPage={next}
+                                loadFinish={done}
+                                loadError={!!loadError}
                             />
                         )
                     }
-                    if (loading || guessLoading) {
+                    if (tokens.length === 0 && loadError && account) {
+                        return <RetryHint retry={next} />
+                    }
+                    if (tokens.length === 0 && (!done || guessLoading) && account) {
                         return (
                             <div className={classes.statusBox}>
-                                <CircularProgress size={24} />
+                                <LoadingBase />
                                 <Typography className={classes.loadingText}>{t.tip_loading()}</Typography>
                             </div>
                         )
@@ -112,9 +135,11 @@ export const NFTSection: FC<Props> = ({ className, onAddToken, onEmpty, ...rest 
                     return (
                         <div className={classes.statusBox}>
                             <Typography className={classes.loadingText}>{t.tip_empty_nft()}</Typography>
-                            <Button variant="text" onClick={onAddToken}>
-                                {t.tip_add_collectibles()}
-                            </Button>
+                            {isEvm ? (
+                                <Button variant="text" onClick={onAddToken}>
+                                    {t.tip_add_collectibles()}
+                                </Button>
+                            ) : null}
                         </div>
                     )
                 })()}

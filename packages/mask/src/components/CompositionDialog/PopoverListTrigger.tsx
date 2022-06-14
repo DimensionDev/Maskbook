@@ -1,7 +1,7 @@
 import { RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
-import { RadioGroup } from '@mui/material'
+import { RadioGroup, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()({
@@ -23,6 +23,11 @@ const useStyles = makeStyles()({
         width: 280,
         padding: 12,
         boxSizing: 'border-box',
+    },
+    selected: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
     },
 })
 
@@ -51,7 +56,7 @@ export function PopoverListTrigger({
                 onClick={(e) => {
                     setAnchorEl(anchorEl ? null : e.currentTarget)
                 }}>
-                {selectedTitle}
+                <Typography className={classes.selected}>{selectedTitle}</Typography>
                 <RightArrowIcon />
             </div>
             <Popover

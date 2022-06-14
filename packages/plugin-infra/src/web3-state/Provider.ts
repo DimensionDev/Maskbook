@@ -1,6 +1,6 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { delay, getEnumAsArray } from '@dimensiondev/kit'
+import { delay } from '@dimensiondev/kit'
 import {
     EnhanceableSite,
     ExtensionSite,
@@ -13,10 +13,8 @@ import type { Account, WalletProvider, ProviderState as Web3ProviderState } from
 import type { Plugin } from '../types'
 
 export interface ProviderStorage<Account, ProviderType extends string> {
-    /** Providers map to account settings. */
-    accounts: Record<ProviderType, Account>
-    /** Sites map to provider type. */
-    providers: Record<EnhanceableSite | ExtensionSite, ProviderType>
+    account: Account
+    providerType: ProviderType
 }
 
 export class ProviderState<
@@ -44,51 +42,42 @@ export class ProviderState<
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(): ProviderType
+            getDefaultProviderType(site?: EnhanceableSite | ExtensionSite): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
-        const defaultValue: ProviderStorage<Account<ChainId>, ProviderType> = {
-            accounts: Object.fromEntries(
-                Object.keys(providers).map((x) => [
-                    x,
-                    {
-                        account: '',
-                        chainId: options.getDefaultChainId(),
-                    },
-                ]),
-            ) as Record<ProviderType, Account<ChainId>>,
-            providers: Object.fromEntries(
-                [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].map((x) => [
-                    x.value,
-                    options.getDefaultProviderType(),
-                ]),
-            ) as Record<EnhanceableSite | ExtensionSite, ProviderType>,
+        const site = getSiteType()
+        const defaultValue = {
+            account: {
+                account: '',
+                chainId: options.getDefaultChainId(),
+            },
+            providerType: options.getDefaultProviderType(site),
         }
-        const { storage } = this.context.createKVStorage('memory', {}).createSubScope('Provider', defaultValue)
+
+        const { storage } = this.context.createKVStorage('memory', {}).createSubScope(site ?? 'Provider', defaultValue)
         this.storage = storage
 
         this.setupSubscriptions()
         this.setupProviders()
     }
 
-    private setupSubscriptions() {
+    protected setupSubscriptions() {
         const site = this.site
         if (!site) return
 
-        this.providerType = mapSubscription(this.storage.providers.subscription, (providers) => providers[site])
+        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
         this.chainId = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription),
-            ([providerType, accounts]) => accounts[providerType].chainId,
+            mergeSubscription(this.storage.account.subscription),
+            ([account]) => account.chainId,
         )
         this.account = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription),
-            ([providerType, accounts]) => accounts[providerType].account,
+            mergeSubscription(this.storage.account.subscription),
+            ([account]) => account.account,
         )
-        this.networkType = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription),
-            ([providerType, accounts]) => this.options.getNetworkTypeFromChainId(accounts[providerType].chainId),
+        this.networkType = mapSubscription(mergeSubscription(this.storage.account.subscription), ([account]) =>
+            this.options.getNetworkTypeFromChainId(account.chainId),
         )
     }
 
@@ -116,6 +105,11 @@ export class ProviderState<
                     account: '',
                     chainId: this.options.getDefaultChainId(),
                 })
+
+                const siteType = getSiteType()
+                if (!siteType) return
+
+                this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
         })
     }
@@ -124,7 +118,7 @@ export class ProviderState<
         const siteType = getSiteType()
         if (!siteType) return
 
-        const account_ = this.storage.accounts.value[providerType]
+        const account_ = this.storage.account.value
         const accountCopied = clone(account)
 
         if (accountCopied.account !== '' && !this.options.isValidAddress(accountCopied.account))
@@ -136,12 +130,10 @@ export class ProviderState<
         const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
 
         if (needToUpdateAccount || needToUpdateChainId) {
-            await this.storage.accounts.setValue({
-                ...this.storage.accounts.value,
-                [providerType]: {
-                    ...account_,
-                    ...accountCopied,
-                },
+            await this.storage.providerType.setValue(providerType)
+            await this.storage.account.setValue({
+                ...account_,
+                ...accountCopied,
             })
         }
     }
@@ -150,13 +142,10 @@ export class ProviderState<
         const siteType = getSiteType()
         if (!siteType) return
 
-        const needToUpdateProviderType = this.storage.providers.value[siteType] !== providerType
+        const needToUpdateProviderType = this.storage.providerType.value !== providerType
 
         if (needToUpdateProviderType) {
-            await this.storage.providers.setValue({
-                ...this.storage.providers.value,
-                [siteType]: providerType,
-            })
+            await this.storage.providerType.setValue(providerType)
         }
     }
 

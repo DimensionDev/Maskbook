@@ -70,7 +70,7 @@ export interface OpenSeaAssetContract extends OpenSeaFees {
     seller_fee_basis_points: number
     buyer_fee_basis_points: number
     description: string
-    token_symbol: string
+    symbol: string
     image_url: string
     stats?: object
     traits?: object[]

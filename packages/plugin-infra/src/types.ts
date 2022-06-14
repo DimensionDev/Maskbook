@@ -1,22 +1,23 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
-    IdentityAddress,
+    SocialAddress,
     NetworkDescriptor,
     ProviderDescriptor,
     SocialIdentity,
     Wallet,
     Web3EnableRequirement,
+    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { Subscription } from 'use-subscription'
 
 export declare namespace Plugin {
     /**
@@ -149,6 +150,8 @@ export namespace Plugin.Shared {
                 popupsWindow?: boolean
             },
         ): Promise<JsonRpcResponse>
+
+        fetch: (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
 
         /** Open popup window */
         openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
@@ -445,6 +448,7 @@ export namespace Plugin.SNSAdaptor {
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
         onClose(): void
+        isOpenFromApplicationBoard?: boolean
     }
     export type CompositionMetadataBadgeRender =
         | CompositionMetadataBadgeRenderStatic
@@ -472,7 +476,7 @@ export namespace Plugin.SNSAdaptor {
         RenderEntryComponent?: (props: {
             disabled: boolean
             tooltipHint?: string
-            onClick?: () => void
+            onClick?: (walletConnectedCallback?: () => void) => void
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board
@@ -538,6 +542,7 @@ export namespace Plugin.SNSAdaptor {
          * The name of the tab
          */
         label: I18NStringField | string
+
         /**
          * Used to order the sliders
          */
@@ -549,20 +554,23 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                addressNames?: IdentityAddress[]
                 personaList?: string[]
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: IdentityAddress[]): boolean
-
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
             /**
-             * Sort address name in expected order.
+             * Filter social address.
              */
-            addressNameSorter?: (a: IdentityAddress, z: IdentityAddress) => number
+            filter?: (x: SocialAddress<NetworkPluginID>) => boolean
+            /**
+             * Sort social address in expected order.
+             */
+            sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
         }
     }
 }

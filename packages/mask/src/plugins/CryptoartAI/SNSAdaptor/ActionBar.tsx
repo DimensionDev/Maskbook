@@ -10,13 +10,15 @@ import { CheckoutDialog } from './CheckoutDialog'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {},
+        root: {
+            flex: 1,
+        },
         button: {
             flex: 1,
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
             color: 'white',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
+                backgroundColor: theme.palette.maskColor?.dark,
             },
         },
     }
