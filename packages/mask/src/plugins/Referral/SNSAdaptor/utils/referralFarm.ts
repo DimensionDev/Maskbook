@@ -83,7 +83,7 @@ export async function runCreateERC20PairFarm(
             .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
             .estimateGas(config)
 
-        await new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             farms?.methods
                 .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
                 .send({
@@ -160,7 +160,7 @@ export async function adjustFarmRewards(
                 .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
                 .estimateGas(config)
 
-            await new Promise(async (resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
                 farms?.methods
                     .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
                     .send({

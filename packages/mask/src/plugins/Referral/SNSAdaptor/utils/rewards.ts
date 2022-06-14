@@ -129,7 +129,7 @@ export async function harvestRewards(
 
         const estimatedGas = await farms?.methods.harvestRewardsNoGapcheck(requests, proofs).estimateGas(config)
 
-        await new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             farms?.methods
                 .harvestRewardsNoGapcheck(requests, proofs)
                 .send({
