@@ -4,7 +4,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 
 // TODO check ipfs inside before resolving
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
+    return urlcat('https://ipfs.io/ipfs/:ipfs', { ipfs })
 }
 
 export function resolveIPFSLinkFromURL(url: string): string {
