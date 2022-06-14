@@ -41,7 +41,7 @@ export const searchUserIdSelector = () =>
     querySelector('#ssrb_root_start').closest(1).querySelector<HTMLHeadingElement>('section main header section h2')
 
 export const searchUserIdInEditPageSelector = () =>
-    querySelector('#ssrb_root_start').closest(1).querySelector('button > img').closest(4).querySelector('h1')
+    querySelector('#react-root').querySelector('button > img').closest(4).querySelector('h1')
 
 export const searchProfileTabArticlePageSelector = () =>
     querySelector('#ssrb_root_start').closest(1).querySelector<E>('section main div[role="tablist"]')
@@ -63,6 +63,8 @@ export const searchInstagramProfileAvatarButtonSelector = () =>
 
 export const searchInstagramAvatarSettingDialog = () => querySelector('#ssrb_root_start').closest<E>(1)
 
+export const searchInstagramAvatarEditPageSettingDialog = () => querySelector('#react-root')
+
 export const searchInstagramProfileSettingButtonSelector = () =>
     querySelector('#ssrb_root_start')
         .closest(1)
@@ -75,5 +77,5 @@ export const searchInstagramProfileEditButton = () =>
 
 export const searchInstagramPostAvatarSelector = () =>
     new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>(
-        '[role="button"] > a > img[data-testid="user-avatar"]',
+        '[role="button"] > a > img[crossorigin="anonymous"]',
     )
