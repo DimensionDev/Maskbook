@@ -209,7 +209,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     </Box>
                 </ChainBoundary>
             </Box>
-            <AddNFT expectedPluginID={pluginID} open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT
+                chainId={chainId as ChainId}
+                expectedPluginID={pluginID}
+                open={open_}
+                onClose={() => setOpen_(false)}
+                onAddClick={onAddClick}
+            />
         </>
     )
 }

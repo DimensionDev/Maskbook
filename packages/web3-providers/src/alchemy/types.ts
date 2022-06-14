@@ -106,7 +106,7 @@ export interface AlchemyResponse_EVM_Metadata {
         }
         name: string
         description: string
-        attributes: Array<{
+        traits: Array<{
             value: string
             trait_type: string
         }>

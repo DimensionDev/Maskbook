@@ -41,3 +41,13 @@ export interface NFTRSSNode {
 }
 
 export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
+
+export interface NFTInfo {
+    amount: string
+    name: string
+    symbol: string
+    image: string
+    owner: string
+    slug: string
+    permalink: string
+}

@@ -4,7 +4,7 @@ import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3Connection, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types'
 
@@ -51,9 +51,9 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
-    const _account = useAccount(expectedPluginID)
-    const connection = useWeb3Connection<'all'>(currentPluginId, { chainId, account: account ?? _account })
-    const hub = useWeb3Hub(currentPluginId, { chainId, account: account ?? _account })
+    const _account = useAccount(expectedPluginID, account)
+    const currentChainId = useChainId(expectedPluginID, chainId)
+    const hub = useWeb3Hub(currentPluginId, { chainId: currentChainId, account: _account })
 
     const onClick = useCallback(async () => {
         if (!address) {
@@ -68,34 +68,24 @@ export function AddNFT(props: AddNFTProps) {
             setMessage(t('plugin_avatar_web3_error'))
             return
         }
-        let token: AllChainsNonFungibleToken
-        const asset = await hub.getNonFungibleAsset(address, tokenId)
-        if (asset) {
-            token = {
-                contract: asset.contract,
-                metadata: asset.metadata,
-                tokenId: asset.tokenId,
-                collection: asset.collection,
-            } as AllChainsNonFungibleToken
-        } else {
-            token = await connection.getNonFungibleToken(address, tokenId)
-        }
+
+        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId: currentChainId })
         if (!token) {
             setMessage(t('plugin_avatar_asset'))
             return
         }
 
-        if (chainId && token && token.contract?.chainId !== chainId) {
+        if (token.contract?.chainId && token.contract?.chainId !== currentChainId) {
             setMessage(t('plugin_avatar_chain_error'))
             return
         }
-        if (!token || !isSameAddress(token?.ownerId, account ?? _account)) {
+        if (!token || !isSameAddress(token.owner?.address ?? token?.ownerId, _account)) {
             setMessage(t('nft_owner_hint'))
             return
         }
         onAddClick?.(token)
         handleClose()
-    }, [tokenId, address, onAddClick, onClose, connection, chainId, hub, _account, account])
+    }, [tokenId, address, onAddClick, onClose, currentChainId, hub, _account])
 
     const onAddressChange = useCallback((address: string) => {
         setMessage('')

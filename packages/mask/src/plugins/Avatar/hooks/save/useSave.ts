@@ -1,4 +1,4 @@
-import type { BindingProof, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { BindingProof, ECKeyIdentifier } from '@masknet/shared-base'
 import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -23,7 +23,6 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             data: AvatarInfo,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            identifier: ProfileIdentifier,
         ) => {
             if (pluginId === NetworkPluginID.PLUGIN_SOLANA && !token.tokenId) return
             if (pluginId !== NetworkPluginID.PLUGIN_SOLANA && (!token.contract?.address || !token.tokenId)) return
@@ -44,10 +43,10 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                     if (isBindAccount) {
                         return saveToNextID(info, account, persona, proof)
                     }
-                    return saveToRSS3(info, account, identifier)
+                    return saveToRSS3(info, account)
                 }
                 default:
-                    return saveToKV(info, account, persona, identifier, proof)
+                    return saveToKV(info, account, persona, proof)
             }
         },
         [saveToNextID, saveToRSS3, pluginId],

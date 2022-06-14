@@ -53,6 +53,7 @@ export function PersonaItem(props: PersonaItemProps) {
         _avatar?.chainId,
         storage?.address,
     )
+
     const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
         _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
         userId,
