@@ -86,7 +86,7 @@ interface Props {
     isShow: boolean
     isShadow: boolean
     onClose: () => void
-    onShare: (url: string) => void
+    onShare: () => void
 }
 
 const GameWindow = (props: Props) => {
@@ -120,12 +120,6 @@ const GameWindow = (props: Props) => {
         return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract}&tokenId=${tokenProps?.tokenId}&chainId=${chainId}`
     }, [props])
 
-    const handleShare = () => {
-        if (gameInfo?.url) {
-            props.onShare(gameInfo.url)
-        }
-    }
-
     return isShow ? (
         <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>
             <div className={classes.body}>
@@ -137,7 +131,7 @@ const GameWindow = (props: Props) => {
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
-                    <img src={IconShare} onClick={handleShare} alt="fullscreen" />
+                    <img src={IconShare} onClick={props.onShare} alt="fullscreen" />
                 </div>
             </div>
         </div>
