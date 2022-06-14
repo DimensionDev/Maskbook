@@ -74,7 +74,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         props.pluginID,
         { chainId },
     )
-    const trustedFungibleTokens = useTrustedFungibleTokens()
+    const trustedFungibleTokens = useTrustedFungibleTokens(undefined, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens()
     const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
 
@@ -180,7 +180,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             : ''
     }, [keyword, sortedFungibleTokens, Others])
 
-    const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress)
+    const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
+        chainId,
+    })
     // #endregion
 
     const getPlaceholder = () => {
