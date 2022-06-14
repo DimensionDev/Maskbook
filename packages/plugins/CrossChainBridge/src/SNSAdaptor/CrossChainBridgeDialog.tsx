@@ -74,7 +74,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
             DialogProps={{ classes: { paper: classes.paperRoot } }}
             title={t.__plugin_name()}
             open={open}
-            onBack={onClose}>
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     {bridges?.map((bridge) => (
