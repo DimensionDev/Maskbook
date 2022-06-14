@@ -182,7 +182,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
     const onAddClick = (token: AllChainsNonFungibleToken) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
     }
 
     const onChangeChain = (chainId: ChainId) => {
@@ -234,7 +234,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const tokensInList = uniqBy(
         [...tokens, ...collectibles],
-        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA ? (x) => x.tokenId : (x) => x.contract?.address && x.tokenId,
+        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
+            ? (x) => x.tokenId
+            : (x) => x.contract?.address.toLowerCase() + x.tokenId,
     )
 
     const NoNFTList = () => {

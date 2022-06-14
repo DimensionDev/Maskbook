@@ -51,7 +51,7 @@ export function NFTBadge(props: NFTBadgeProps) {
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                if (!nftInfo?.permalink) return
+                if (!nftInfo.permalink) return
                 openWindow(nftInfo.permalink)
             }}>
             <Link href={nftInfo?.permalink ?? ''} target="_blank" rel="noopener noreferrer">
