@@ -228,15 +228,9 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleTokenCollection<Web3Helper.ChainIdAll> | 'all' | undefined
     >('all')
-    const { address: account } = addressName
+    const { address: account, networkSupporterPluginID: pluginID } = addressName
 
-    useEffect(() => {
-        setSelectedCollection('all')
-    }, [account])
-
-    const trustedNonFungibleTokens = useTrustedNonFungibleTokens() as Array<
-        NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    >
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(pluginID)
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -244,12 +238,16 @@ export function CollectionList({
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(pluginID, undefined, { account })
 
-    const allCollectibles = [
-        ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...collectibles,
-    ]
+    useEffect(() => {
+        setSelectedCollection('all')
+        retryFetchCollectible()
+    }, [account])
+
+    const allCollectibles = useMemo(() => {
+        return [...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)), ...collectibles]
+    }, [trustedNonFungibleTokens, collectibles])
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return allCollectibles
@@ -257,13 +255,13 @@ export function CollectionList({
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
 
         return uniqCollectibles.filter((x) => isSameAddress(selectedCollection.address, x.collection?.address))
-    }, [selectedCollection, allCollectibles.length])
+    }, [selectedCollection, allCollectibles])
 
     const collections = useMemo(() => {
         return uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
             .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
-    }, [allCollectibles.length])
+    }, [allCollectibles])
 
     const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1
 

@@ -61,7 +61,6 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
     }
 
     if (!selectedAddress) return null
-
     return (
         <div className={classes.root}>
             <ShadowRootMenu

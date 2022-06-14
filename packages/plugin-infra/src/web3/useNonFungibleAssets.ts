@@ -15,13 +15,13 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const [done, setDone] = useState(false)
     const [error, setError] = useState<string>()
 
-    const account = useAccount(pluginID)
+    const account = useAccount(pluginID, options?.account)
     const hub = useWeb3Hub(pluginID, options)
     const networks = useNetworkDescriptors(pluginID)
 
     // create iterator
     const iterator = useMemo(() => {
-        if ((!account && !options?.account) || !hub?.getNonFungibleTokens || !networks) return
+        if (!account || !hub?.getNonFungibleTokens || !networks) return
 
         return flattenAsyncIterator(
             networks
@@ -30,7 +30,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
                         if (!hub?.getNonFungibleTokens) return
-                        return hub?.getNonFungibleTokens(options?.account ?? account, {
+                        return hub?.getNonFungibleTokens(account, {
                             indicator,
                             size: 50,
                             ...options,
