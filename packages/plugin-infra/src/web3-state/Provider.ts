@@ -72,7 +72,7 @@ export class ProviderState<
         this.setupProviders()
     }
 
-    private setupSubscriptions() {
+    protected setupSubscriptions() {
         const site = this.site
         if (!site) return
 
