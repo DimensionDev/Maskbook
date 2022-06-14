@@ -83,21 +83,20 @@ export async function runCreateERC20PairFarm(
             .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
             .estimateGas(config)
 
-        await farms?.methods
-            .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
-            .send({
-                ...config,
-                gas: estimatedGas2,
-            })
-            .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                // show Confirm dialog only at the first time
-                if (no === 1) {
-                    onConfirmed(receipt.transactionHash)
-                }
-            })
-            .on(TransactionEventType.ERROR, (error: Error) => {
-                throw error
-            })
+        return new Promise(async (resolve, reject) => {
+            farms?.methods
+                .increaseReferralFarm(rewardTokenDefn, referredTokenDefn, totalFarmRewardUint128, metaState)
+                .send({
+                    ...config,
+                    gas: estimatedGas2,
+                })
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    resolve(onConfirmed(receipt.transactionHash))
+                })
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    reject(error)
+                })
+        })
     } catch (error: any) {
         onError(error?.message)
     }
@@ -161,21 +160,20 @@ export async function adjustFarmRewards(
                 .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
                 .estimateGas(config)
 
-            await farms?.methods
-                .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
-                .send({
-                    ...config,
-                    gas: estimatedGas,
-                })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    // show Confirm dialog only at the first time
-                    if (no === 1) {
-                        onConfirmed(receipt.transactionHash)
-                    }
-                })
-                .on(TransactionEventType.ERROR, (error: Error) => {
-                    throw error
-                })
+            return new Promise(async (resolve, reject) => {
+                farms?.methods
+                    .configureMetastate(rewardTokenDefn, referredTokenDefn, metaState)
+                    .send({
+                        ...config,
+                        gas: estimatedGas,
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                        resolve(onConfirmed(receipt.transactionHash))
+                    })
+                    .on(TransactionEventType.ERROR, (error: Error) => {
+                        reject(error)
+                    })
+            })
         }
     } catch (error: any) {
         onError(error?.message)
