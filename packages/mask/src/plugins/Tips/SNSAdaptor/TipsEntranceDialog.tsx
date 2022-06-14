@@ -248,6 +248,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         <InjectedDialog
             open={open}
             onClose={clickBack}
+            isOnBack={bodyViewStep !== BodyViewStep.Main}
             title={bodyViewStep}
             titleTail={
                 <WalletButton
