@@ -33,6 +33,7 @@ import {
     createWeb3Provider,
     getEthereumConstants,
     isValidAddress,
+    resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -302,7 +303,9 @@ class Connection implements EVM_Connection {
 
         if (actualSchema !== SchemaType.ERC1155) {
             const contract = await this.getERC721Contract(address, options)
-            ownerId = await contract?.methods.ownerOf(tokenId).call()
+            try {
+                ownerId = await contract?.methods.ownerOf(tokenId).call()
+            } catch {}
         }
 
         return createNonFungibleToken<ChainId, SchemaType>(
@@ -374,8 +377,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                response.image,
-                response.image,
+                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLinkFromURL(response.image),
             )
         }
 
@@ -392,8 +395,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            response.image,
-            response.image,
+            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLinkFromURL(response.image),
         )
     }
     async getNonFungibleTokenContract(

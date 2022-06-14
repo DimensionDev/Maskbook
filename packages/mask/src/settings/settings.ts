@@ -1,15 +1,33 @@
 import { isEqual } from 'lodash-unified'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
-import { updateLanguage } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, updateLanguage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { LaunchPage } from './types'
-import { createGlobalSettings, createNetworkSettings, createComplexNetworkSettings } from './createSettings'
+import {
+    createGlobalSettings,
+    createNetworkSettings,
+    createComplexNetworkSettings,
+    createComplexGlobalSettings,
+} from './createSettings'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
-export const pluginIDSettings = createGlobalSettings<NetworkPluginID>('pluginID', NetworkPluginID.PLUGIN_EVM)
+export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
+    'pluginID',
+    {
+        [EnhanceableSite.Twitter]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Facebook]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Instagram]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.OpenSea]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Minds]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Localhost]: NetworkPluginID.PLUGIN_EVM,
+        [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
+        [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
+    },
+    isEqual,
+)
 export const userGuideVersion = createGlobalSettings('userGuideVersion', 'v2')
 
 export const currentSetupGuideStatus = createNetworkSettings('currentSetupGuideStatus', '')

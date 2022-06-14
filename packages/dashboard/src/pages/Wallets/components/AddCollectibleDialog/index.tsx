@@ -9,17 +9,18 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
     useWeb3Connection,
-    useChainId,
     useNonFungibleTokenContract,
     useAccount,
     useWeb3State,
     useTrustedNonFungibleTokens,
     useCurrentWeb3NetworkPluginID,
     useWeb3Hub,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface AddCollectibleDialogProps {
+    selectedNetwork: Web3Helper.NetworkDescriptorAll
     open: boolean
     onClose: () => void
 }
@@ -34,22 +35,24 @@ enum FormErrorType {
     NotExist = 'NOT_EXIST',
 }
 
-export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
+export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose, selectedNetwork }) => {
     const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Token } = useWeb3State<'all'>()
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
     const hub = useWeb3Hub()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
 
-    const { value, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: contract, loading } = useNonFungibleTokenContract(NetworkPluginID.PLUGIN_EVM, address, undefined, {
+        chainId: selectedNetwork.chainId as ChainId,
+    })
 
     const onSubmit = useCallback(async () => {
-        if (loading || !account || !value || !hub?.getNonFungibleAsset) return
+        if (loading || !account || !hub?.getNonFungibleAsset) return
+        if (address && tokenId && !contract) throw new Error(FormErrorType.NotExist)
 
         // If the NonFungible token is added
         const tokenInDB = trustedNonFungibleTokens.find(
@@ -58,16 +61,17 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         )
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId)
-        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, SchemaType.ERC721)
+        const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId, { chainId: selectedNetwork.chainId })
+        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, undefined, {
+            chainId: selectedNetwork.chainId as ChainId,
+        })
         const tokenDetailed = { ...token, ...tokenAsset }
+        const isOwner = await connection?.getNonFungibleTokenOwnership(address, account, tokenId, undefined, {
+            chainId: selectedNetwork.chainId as ChainId,
+        })
 
         // If the NonFungible token is belong this account
-        if (
-            (tokenDetailed && !isSameAddress(tokenDetailed?.contract?.owner, account)) ||
-            !tokenDetailed ||
-            !tokenDetailed.contract?.owner
-        ) {
+        if (!isOwner) {
             throw new Error(FormErrorType.NotExist)
         } else {
             await Token?.addToken?.(tokenDetailed)
@@ -77,7 +81,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         account,
         address,
         tokenId,
-        value,
+        contract,
         loading,
         hub?.getNonFungibleAsset,
         connection?.getNonFungibleToken,

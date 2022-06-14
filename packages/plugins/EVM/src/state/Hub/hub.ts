@@ -147,7 +147,7 @@ class Hub implements EVM_Hub {
         account: string,
         options?: HubOptions<ChainId> | undefined,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
-        return OpenSea.getCollections(account, options)
+        return OpenSea.getCollections(account, { ...options, chainId: options?.chainId ?? this.chainId })
     }
     getFungibleTokenPrice(
         chainId: ChainId,
