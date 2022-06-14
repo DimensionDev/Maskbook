@@ -35,7 +35,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',
@@ -74,7 +74,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',
