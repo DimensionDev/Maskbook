@@ -22,7 +22,8 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     // create iterator
     const iterator = useMemo(() => {
         if ((!account && !options?.account) || !hub?.getNonFungibleTokens || !networks) return
-
+        setAssets(EMPTY_LIST)
+        setDone(false)
         return flattenAsyncIterator(
             networks
                 .filter((x) => x.isMainnet)
@@ -39,13 +40,14 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                     })
                 }),
         )
-    }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length, done])
+    }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length])
 
     const next = useCallback(async () => {
         if (!iterator || done) return
 
+        const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         try {
-            for (const v of Array.from({ length: 48 })) {
+            for (const v of Array.from({ length: 36 })) {
                 const { value, done: iteratorDone } = await iterator.next()
                 if (value instanceof Error) {
                     // Controlled error
@@ -57,7 +59,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                         break
                     }
                     if (!iteratorDone && value) {
-                        setAssets((pred) => [...pred, value])
+                        batchResult.push(value)
                     }
                 }
             }
@@ -66,6 +68,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             setError(error_ as string)
             setDone(true)
         }
+        setAssets((pred) => [...pred, ...batchResult])
     }, [iterator, done])
 
     // Execute once after next update
@@ -74,11 +77,9 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     }, [next])
 
     const retry = useCallback(() => {
-        setAssets([])
+        setAssets(EMPTY_LIST)
         setDone(false)
     }, [])
-
-    useEffect(() => retry(), [options?.account ?? account, retry, options?.chainId])
 
     return {
         value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
