@@ -42,19 +42,19 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 
         const allSettled = await Promise.allSettled([
             fetchJSON<AlchemyResponse_EVM_Metadata>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata/`, {
+                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata`, {
                     contractAddress: address,
                     tokenId,
                     tokenType: 'ERC721',
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Contact_Metadata>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getContractMetadata/`, {
+                urlcat(`${chainInfo?.contractMetadataURL}${chainInfo?.API_KEY}/getContractMetadata`, {
                     contractAddress: address,
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Owners>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getOwnersForToken/`, {
+                urlcat(`${chainInfo?.tokenOwnerURL}${chainInfo?.API_KEY}/getOwnersForToken`, {
                     contractAddress: address,
                     tokenId,
                 }),

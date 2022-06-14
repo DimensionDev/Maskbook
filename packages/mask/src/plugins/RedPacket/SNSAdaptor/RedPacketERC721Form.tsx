@@ -195,10 +195,11 @@ const useStyles = makeStyles()((theme) => {
 })
 interface RedPacketERC721FormProps {
     onClose: () => void
+    setERC721DialogHeight?: (height: number) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
-    const { onClose } = props
+    const { onClose, setERC721DialogHeight } = props
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -266,6 +267,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
     }, [tokenDetailedList.length, balance, t])
+
+    setERC721DialogHeight?.(balance > 0 ? 690 : 350)
 
     return (
         <>

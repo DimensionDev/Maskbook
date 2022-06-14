@@ -75,7 +75,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                     <Tab key={key} value={key} label={assetTabsLabel[key]} />
                                 ))}
                         </TabList>
-                        {pluginId === NetworkPluginID.PLUGIN_EVM && (
+                        {pluginId === NetworkPluginID.PLUGIN_EVM && (currentTab === AssetTab.Token ? true : !!network) && (
                             <Button
                                 size="small"
                                 color="secondary"
@@ -109,7 +109,9 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            {addCollectibleOpen && <AddCollectibleDialog open onClose={() => setAddCollectibleOpen(false)} />}
+            {addCollectibleOpen && network && (
+                <AddCollectibleDialog selectedNetwork={network} open onClose={() => setAddCollectibleOpen(false)} />
+            )}
         </>
     )
 })
