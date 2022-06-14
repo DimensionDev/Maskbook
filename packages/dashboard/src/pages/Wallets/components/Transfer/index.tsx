@@ -21,7 +21,7 @@ export const Transfer = memo(() => {
     const { state } = useLocation() as {
         state: {
             token?: FungibleToken<ChainId, SchemaType>
-            erc721Token?: FungibleToken<ChainId, SchemaType>
+            nonFungibleToken?: FungibleToken<ChainId, SchemaType>
             type?: TransferTab
         } | null
     }
@@ -34,7 +34,7 @@ export const Transfer = memo(() => {
 
     useEffect(() => {
         if (!state) return
-        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
+        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
 
         setTab(TransferTab.Collectibles)
     }, [state])

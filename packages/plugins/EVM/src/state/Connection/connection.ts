@@ -301,7 +301,9 @@ class Connection implements EVM_Connection {
 
         if (actualSchema !== SchemaType.ERC1155) {
             const contract = await this.getERC721Contract(address, options)
-            ownerId = await contract?.methods.ownerOf(tokenId).call()
+            try {
+                ownerId = await contract?.methods.ownerOf(tokenId).call()
+            } catch {}
         }
 
         return createNonFungibleToken<ChainId, SchemaType>(

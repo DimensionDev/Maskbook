@@ -83,7 +83,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
-                    erc721Token: detail,
+                    nonFungibleToken: detail,
                 },
             })
         },
@@ -146,12 +146,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             <div className={classes.root}>
                                 {dataSource.map((x, index) => (
                                     <div className={classes.card} key={index}>
-                                        <CollectibleCard
-                                            token={x}
-                                            renderOrder={index}
-                                            // TODO: transfer not support multi chain, should remove is after supported
-                                            onSend={() => onSend(x as unknown as any)}
-                                        />
+                                        <CollectibleCard token={x} renderOrder={index} onSend={() => onSend(x)} />
                                     </div>
                                 ))}
                             </div>
