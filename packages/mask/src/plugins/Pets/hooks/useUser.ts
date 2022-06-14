@@ -4,10 +4,11 @@ import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginPetRPC } from '../messages'
 import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
         if (!(account && whoAmI?.identifier?.userId)) return
