@@ -117,7 +117,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 chainId: ChainId.Mainnet,
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
-                tokenId: token?.title?.match(/\d+/)?.[0],
+                tokenId: token?.title?.match(/\d+/)?.[0] ?? '',
                 address: token.mintAddress,
                 metadata: {
                     chainId: ChainId.Mainnet,
@@ -137,7 +137,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 },
                 collection: {
                     chainId: ChainId.Mainnet,
-                    name: token.collectionName ?? token?.collectionTittle,
+                    name: token.collectionName ?? token?.collectionTitle,
                     slug: '',
                     description: '',
                     iconURL: '',
