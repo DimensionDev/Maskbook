@@ -21,7 +21,6 @@ export function useNFT(
         const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
             chainId,
         })
-        console.log(asset)
         return {
             amount: asset?.price?.[CurrencyType.USD] ?? '0',
             name: asset?.contract?.name ?? '',
