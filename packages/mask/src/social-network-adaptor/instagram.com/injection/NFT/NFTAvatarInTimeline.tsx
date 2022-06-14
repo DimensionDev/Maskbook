@@ -51,7 +51,6 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
 
                 if (!id) return
 
-                console.log(id)
                 const info = getInjectNodeInfo(element)
 
                 if (!info) return
