@@ -149,7 +149,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             value: x.value,
         })),
         price: {
-            usd: getOrderUnitPrice(
+            [CurrencyType.USD]: getOrderUnitPrice(
                 asset.last_sale?.total_price,
                 asset.last_sale?.payment_token.decimals,
                 asset.last_sale?.quantity ?? '1',
