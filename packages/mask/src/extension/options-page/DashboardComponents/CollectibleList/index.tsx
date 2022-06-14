@@ -377,9 +377,9 @@ export function CollectionList({
                                 ALL
                             </AllNetworkButton>
                         </Box>
-                        {collections?.[0]?.name &&
-                            collections.map((x, i) => {
-                                return (
+                        {collections.map((x, i) => {
+                            return (
+                                x?.name?.length > 0 && (
                                     <Box
                                         display="flex"
                                         key={i}
@@ -397,7 +397,8 @@ export function CollectionList({
                                         />
                                     </Box>
                                 )
-                            })}
+                            )
+                        })}
                     </Box>
                 )}
             </Stack>
