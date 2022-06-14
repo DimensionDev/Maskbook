@@ -76,6 +76,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
+    isOnBack?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -160,7 +161,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
-                                onClick={closeBothCompositionDialog}>
+                                onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
                                         titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard

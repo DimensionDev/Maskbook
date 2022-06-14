@@ -1,5 +1,5 @@
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { BaseProvider } from './providers/Base'
+import type { BaseProvider } from './providers/Base'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
 import { MaskWalletProvider } from './providers/MaskWallet'
 import { MetaMaskProvider } from './providers/MetaMask'
@@ -9,12 +9,13 @@ import { Coin98Provider } from './providers/Coin98'
 import { MathWalletProvider } from './providers/MathWallet'
 import FortmaticProvider from './providers/Fortmatic'
 import TorusProvider from './providers/Torus'
+import { NoneProvider } from './providers/None'
 
 /**
  * Register all supported providers
  */
 export const Providers: Record<ProviderType, BaseProvider> = {
-    [ProviderType.None]: new BaseProvider(),
+    [ProviderType.None]: new NoneProvider(),
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
     [ProviderType.WalletConnect]: new WalletConnectProvider(),

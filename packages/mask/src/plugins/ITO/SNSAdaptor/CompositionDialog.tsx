@@ -197,10 +197,11 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onClose = useCallback(() => {
         const [, setValue] = state
         setStep(ITOCreateFormPageStep.NewItoPage)
+        if (step === ITOCreateFormPageStep.ConfirmItoPage) return
         setPoolSettings(undefined)
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props, state, step])
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -234,6 +235,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         <InjectedDialog
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             disableBackdropClick
+            isOnBack={step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}
             onClose={onClose}>

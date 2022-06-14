@@ -181,7 +181,7 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
-                    chainId={chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={payload.token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming}
