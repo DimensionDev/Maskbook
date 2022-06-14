@@ -38,7 +38,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'block !important',
             margin: 12,
         },
-        overflow: 'hidden',
     },
 }))
 
