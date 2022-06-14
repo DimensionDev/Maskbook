@@ -10,6 +10,7 @@ import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
 import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar'
 import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog'
+import { ExtensionSite, getSiteType } from '@masknet/shared-base'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
@@ -24,7 +25,9 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
-                <TransactionSnackbar pluginID={NetworkPluginID.PLUGIN_EVM} />
+                {getSiteType() !== ExtensionSite.Popup ? (
+                    <TransactionSnackbar pluginID={NetworkPluginID.PLUGIN_EVM} />
+                ) : null}
                 <WalletConnectQRCodeDialog />
             </>
         )
