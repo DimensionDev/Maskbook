@@ -185,7 +185,7 @@ function createNftToken_EVM(
         collection: {
             address: contractAddress,
             chainId,
-            name: resolveCollectionName(asset),
+            name: '',
             slug: '',
             description: asset.description,
         },

@@ -265,6 +265,8 @@ export function CollectionList({
             .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
     }, [allCollectibles.length])
 
+    const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1
+
     if (!allCollectibles.length && !done && !error && account) return <LoadingSkeleton />
 
     if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
@@ -362,39 +364,43 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                <Box>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                        <AllNetworkButton
-                            className={classes.networkSelected}
-                            onClick={() => setSelectedCollection('all')}>
-                            ALL
-                        </AllNetworkButton>
+                {!isFromAlchemy && (
+                    <Box>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                            <AllNetworkButton
+                                className={classes.networkSelected}
+                                onClick={() => setSelectedCollection('all')}>
+                                ALL
+                            </AllNetworkButton>
+                        </Box>
+                        {collections.map((x, i) => {
+                            return (
+                                x?.name?.length > 0 && (
+                                    <Box
+                                        display="flex"
+                                        key={i}
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                        <CollectionIcon
+                                            selectedCollection={
+                                                selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                            }
+                                            collection={x}
+                                            onClick={() => {
+                                                setSelectedCollection(x)
+                                            }}
+                                        />
+                                    </Box>
+                                )
+                            )
+                        })}
                     </Box>
-                    {collections.map((x, i) => {
-                        return (
-                            <Box
-                                display="flex"
-                                key={i}
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                                <CollectionIcon
-                                    selectedCollection={
-                                        selectedCollection === 'all' ? undefined : selectedCollection?.address
-                                    }
-                                    collection={x}
-                                    onClick={() => {
-                                        setSelectedCollection(x)
-                                    }}
-                                />
-                            </Box>
-                        )
-                    })}
-                </Box>
+                )}
             </Stack>
         </Box>
     )
