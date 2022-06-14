@@ -48,15 +48,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const value = toFixed(token.schema === SchemaType.Native ? amount : 0)
         const config = {
             from: account,
-            gas: await bulkCheckoutContract.methods
-                .donate(donations)
-                .estimateGas({
-                    from: account,
-                    value,
-                })
-                .catch((error) => {
-                    throw error
-                }),
             value,
         }
 
