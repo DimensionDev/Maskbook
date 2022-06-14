@@ -66,7 +66,6 @@ function NFTAvatarInFacebook() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
-
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(

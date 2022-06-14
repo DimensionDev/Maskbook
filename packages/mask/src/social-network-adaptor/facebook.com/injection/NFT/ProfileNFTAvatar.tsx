@@ -105,9 +105,6 @@ function NFTAvatarInFacebookSecondStep() {
                     address: '',
                     tokenId: '',
                     avatarId,
-                    chainId: ChainId.Mainnet,
-                    pluginId: NetworkPluginID.PLUGIN_EVM,
-                    schema: SchemaType.ERC721,
                 })
             }
         }
