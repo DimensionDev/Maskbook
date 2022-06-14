@@ -5,7 +5,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconClose, IconFull, IconShare } from '../constants'
 import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useLocation } from 'react-use'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import type { GameInfo, GameNFT } from '../types'
 
 const useStyles = makeStyles()(() => ({
@@ -92,6 +92,7 @@ interface Props {
 const GameWindow = (props: Props) => {
     const { gameInfo, tokenProps, isShow, onClose } = props
     const classes = useStylesExtends(useStyles(), {})
+    const account = useAccount()
 
     const [isFullScreen, setFullScreen] = useState(false)
 
@@ -117,8 +118,10 @@ const GameWindow = (props: Props) => {
     }, [location])
     const chainId = useChainId()
     const gameUrl = useMemo(() => {
-        return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract}&tokenId=${tokenProps?.tokenId}&chainId=${chainId}`
-    }, [props])
+        return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract ?? ''}&tokenId=${
+            tokenProps?.tokenId ?? ''
+        }&chainId=${chainId}&account=${account}`
+    }, [props, account])
 
     return isShow ? (
         <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>

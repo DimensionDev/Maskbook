@@ -9,7 +9,7 @@ import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
-    const { value: assets = [] } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets = [], loading: state } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
         if (assets?.length) {
@@ -52,5 +52,5 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
         setNfts(tempNFTs)
         return () => {}
     }, [JSON.stringify(user), JSON.stringify(assets)])
-    return nfts
+    return { nfts, state }
 }

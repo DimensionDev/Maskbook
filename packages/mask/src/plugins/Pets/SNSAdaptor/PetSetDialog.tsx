@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -14,6 +14,7 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
+    CircularProgress,
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
@@ -111,7 +112,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const user = useUser()
-    const nfts = useNFTs(user, configNFTs)
+    const { nfts, state } = useNFTs(user, configNFTs)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
@@ -247,12 +248,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         InputProps={{
                             ...params.InputProps,
                             classes: { root: classes.inputBorder },
-                            // endAdornment: (
-                            //     <Fragment>
-                            //         {state !== 'done' ? <CircularProgress color="inherit" size={20} /> : null}
-                            //         {params.InputProps.endAdornment}
-                            //     </Fragment>
-                            // ),
+                            endAdornment: (
+                                <Fragment>
+                                    {state ? <CircularProgress color="inherit" size={20} /> : null}
+                                    {params.InputProps.endAdornment}
+                                </Fragment>
+                            ),
                         }}
                     />
                 )}

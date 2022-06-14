@@ -4,6 +4,7 @@ import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
 import type { GameInfo } from '../types'
+import { Share_Twitter } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,7 +33,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const shareText = `I just play game ${gameInfo?.name} ${gameInfo?.twitterId} with @realMaskNetwork (powered by @NonFFriend). Visit my profile to check it out! Install Mask Network extension from mask.io and set yours.\n #mask_io #nonfungiblefriends`
+    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.twitterId} on my Twitter profile. Install the Mask Network Extension mask.io  and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
 
     const onShareClick = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)
