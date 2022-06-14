@@ -57,6 +57,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
                 display: 'block !important',
                 margin: 12,
             },
+            overflow: 'hidden',
         },
         dialogTitle: {
             display: 'grid',
