@@ -9,6 +9,8 @@ export const Alchemy_EVM_NetworkMap = {
             // cspell:disable-next-line
             API_KEY: '3TJz6QYDHCj0ZhCdGvc5IC6EtMMMTKG1',
             baseURL: 'https://eth-mainnet.alchemyapi.io/v2/',
+            contractMetadataURL: 'https://eth-mainnet.g.alchemy.com/nft/v2/',
+            tokenOwnerURL: 'https://eth-mainnet.g.alchemy.com/nft/v2/',
         },
         {
             chainId: ChainId_EVM.Matic,
