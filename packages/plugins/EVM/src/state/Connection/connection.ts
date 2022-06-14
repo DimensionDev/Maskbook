@@ -1,5 +1,5 @@
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
-import { first } from 'lodash-unified'
+import { first, reject } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -56,6 +56,7 @@ import { Providers } from './provider'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
+import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 
 const EMPTY_STRING = () => Promise.resolve('')
 const ZERO = () => Promise.resolve(0)
@@ -805,6 +806,7 @@ class Connection implements EVM_Connection {
         )
     }
     async sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
+        // send a transaction which will add into the iternal transaction list and start to watch it for confirmation
         const hash = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
@@ -818,13 +820,21 @@ class Connection implements EVM_Connection {
             options,
         )
 
-        // watch and wait for transaction
-        await Web3StateSettings.value.TransactionWatcher?.watchAndWaitTransaction(
-            options?.chainId ?? this.chainId,
-            hash,
-            transaction,
-        )
-        return hash
+        return new Promise<string>((resolve, reject) => {
+            const { Transaction, TransactionWatcher } = Web3StateSettings.value
+            if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
+
+            const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
+                if (status !== TransactionStatusType.NOT_DEPEND) return
+                const transactions = await getSubscriptionCurrentValue(() => Transaction?.transactions)
+                const currentTransaction = transactions?.find((x) => {
+                    const hashes = Object.keys(x.candidates)
+                    return hashes.includes(hash) && hashes.includes(id)
+                })
+                if (currentTransaction) resolve(currentTransaction.indexId)
+            }
+            TransactionWatcher?.emitter.on('progress', onProgress)
+        })
     }
 
     sendSignedTransaction(signature: string, options?: EVM_Web3ConnectionOptions) {

@@ -25,7 +25,7 @@ export async function encodeTransaction(
         ...options,
     }
 
-    if (encoded.gas) {
+    if (!encoded.gas) {
         encoded.gas = await transaction.estimateGas(options)
     }
 

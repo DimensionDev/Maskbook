@@ -930,8 +930,6 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
-    /** Watch and wait for a transaction. */
-    watchAndWaitTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
     /** Update transaction status */
     notifyTransaction: (chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) => Promise<void>
 }
