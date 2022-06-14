@@ -1,11 +1,10 @@
-import { useAsyncFn } from 'react-use'
-import stringify from 'json-stable-stringify'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { TransactionEventType, useITOConstants } from '@masknet/web3-shared-evm'
-import { useITO_Contract } from './useITO_Contract'
-import { checkAvailability } from '../utils/checkAvailability'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { encodeTransaction, useITOConstants } from '@masknet/web3-shared-evm'
+import stringify from 'json-stable-stringify'
+import { useAsyncFn } from 'react-use'
+import { checkAvailability } from '../utils/checkAvailability'
+import { useITO_Contract } from './useITO_Contract'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -30,23 +29,10 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
             return
         }
 
-        // estimate gas and compose transaction
         const config = {
             from: account,
-            gas: await ITO_Contract.methods.claim(pids).estimateGas({ from: account }),
         }
-
-        // send transaction and wait for hash
-        return new Promise<string>(async (resolve, reject) => {
-            ITO_Contract.methods
-                .claim(pids)
-                .send(config as NonPayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
-        })
-    }, [account, chainId, ITO_Contract, stringify(pids), isV1])
+        const tx = await encodeTransaction(ITO_Contract, ITO_Contract.methods.claim(pids), config)
+        return connection.sendTransaction(tx)
+    }, [account, chainId, ITO_Contract, stringify(pids), isV1, connection])
 }

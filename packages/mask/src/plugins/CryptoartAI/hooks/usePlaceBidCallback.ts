@@ -1,14 +1,14 @@
-import { useAsyncFn } from 'react-use'
-import { ZERO_ADDRESS, TransactionEventType } from '@masknet/web3-shared-evm'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { encodeTransaction, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
+import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { artistAcceptingBidsV2_contract, cANFTMarket_contract } = useCryptoArtAI_Contract(chainId)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(
         async (priceInWei: number) => {
@@ -19,41 +19,19 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
             const config = {
                 from: account,
                 value: toFixed(priceInWei),
-                gas: !is24Auction
-                    ? await artistAcceptingBidsV2_contract?.methods.placeBid(editionNumber).estimateGas({
-                          from: account,
-                          value: toFixed(priceInWei),
-                      })
-                    : await cANFTMarket_contract?.methods.placeBid(editionNumber, ZERO_ADDRESS).estimateGas({
-                          from: account,
-                          value: toFixed(priceInWei),
-                      }),
             }
-
-            // send transaction and wait for hash
-            return new Promise<string>(async (resolve, reject) => {
-                if (!is24Auction) {
-                    artistAcceptingBidsV2_contract?.methods
-                        .placeBid(editionNumber)
-                        .send(config as NonPayableTx)
-                        .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                            resolve(receipt.transactionHash)
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            reject(error)
-                        })
-                } else {
-                    cANFTMarket_contract?.methods
-                        .placeBid(editionNumber, ZERO_ADDRESS)
-                        .send(config as NonPayableTx)
-                        .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                            resolve(receipt.transactionHash)
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            reject(error)
-                        })
-                }
-            })
+            const tx = is24Auction
+                ? await encodeTransaction(
+                      artistAcceptingBidsV2_contract!,
+                      artistAcceptingBidsV2_contract!.methods.placeBid(editionNumber),
+                      config,
+                  )
+                : await encodeTransaction(
+                      cANFTMarket_contract!,
+                      cANFTMarket_contract!.methods.placeBid(editionNumber, ZERO_ADDRESS),
+                      config,
+                  )
+            return connection.sendTransaction(tx)
         },
         [account, chainId, is24Auction, editionNumber, artistAcceptingBidsV2_contract, cANFTMarket_contract],
     )

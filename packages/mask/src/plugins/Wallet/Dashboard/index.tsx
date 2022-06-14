@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog'
 import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog'
@@ -23,7 +24,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <ConnectWalletDialog />
                 <WalletRiskWarningDialog />
                 <GasSettingDialog />
-                <TransactionSnackbar />
+                <TransactionSnackbar pluginID={NetworkPluginID.PLUGIN_EVM} />
                 <WalletConnectQRCodeDialog />
             </>
         )

@@ -16,7 +16,6 @@ import {
     FungibleToken,
     currySameAddress,
 } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../utils'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
@@ -30,8 +29,6 @@ export function useSwapCallback(
     token: Partial<FungibleToken<ChainId, SchemaType>>,
     isQualificationHasLucky = false,
 ) {
-    const { t } = useI18N()
-
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })

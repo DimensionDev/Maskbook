@@ -57,6 +57,7 @@ import { Providers } from './provider'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
+import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 
 const EMPTY_STRING = () => Promise.resolve('')
 const ZERO = () => Promise.resolve(0)
@@ -807,8 +808,9 @@ class Connection implements EVM_Connection {
             options,
         )
     }
-    sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
-        return this.hijackedRequest<string>(
+    async sendTransaction(transaction: Transaction, options?: EVM_Web3ConnectionOptions) {
+        // send a transaction which will add into the internal transaction list and start to watch it for confirmation
+        const hash = await this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
@@ -820,6 +822,22 @@ class Connection implements EVM_Connection {
             },
             options,
         )
+
+        return new Promise<string>((resolve, reject) => {
+            const { Transaction, TransactionWatcher } = Web3StateSettings.value
+            if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
+
+            const onProgress = async (id: string, status: TransactionStatusType, transaction?: Transaction) => {
+                if (status === TransactionStatusType.NOT_DEPEND) return
+                const transactions = await getSubscriptionCurrentValue(() => Transaction?.transactions)
+                const currentTransaction = transactions?.find((x) => {
+                    const hashes = Object.keys(x.candidates)
+                    return hashes.includes(hash) && hashes.includes(id)
+                })
+                if (currentTransaction) resolve(currentTransaction.indexId)
+            }
+            TransactionWatcher?.emitter.on('progress', onProgress)
+        })
     }
 
     sendSignedTransaction(signature: string, options?: EVM_Web3ConnectionOptions) {
