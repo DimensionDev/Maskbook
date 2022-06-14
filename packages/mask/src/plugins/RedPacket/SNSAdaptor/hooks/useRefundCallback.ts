@@ -9,7 +9,7 @@ export function useRefundCallback(version: number, from: string, id?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [isRefunded, setIsRefunded] = useState(false)
     const redPacketContract = useRedPacketContract(chainId, version)
-    const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const [state, refundCallback] = useAsyncFn(async () => {
         if (!redPacketContract || !id) return

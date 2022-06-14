@@ -4,12 +4,7 @@ import Web3Utils from 'web3-utils'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    encodeTransaction,
-    SchemaType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, encodeTransaction, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
 import { useRedPacketContract } from './useRedPacketContract'
 
@@ -115,7 +110,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
-    const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings

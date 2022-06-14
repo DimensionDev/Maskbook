@@ -97,7 +97,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     )!
     const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
     const openShareTxDialog = useOpenShareTxDialog()
-    const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const createRedpacket = useCallback(async () => {
         const hash = await createCallback()
         if (typeof hash !== 'string') return
