@@ -117,7 +117,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
         (x) => x.address.toLowerCase(),
     )
     const offerTokens = uniqBy(
-        asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
+        asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
         (x) => x.address.toLowerCase(),
     )
     return {
