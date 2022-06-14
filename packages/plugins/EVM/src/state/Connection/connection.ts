@@ -33,6 +33,7 @@ import {
     createWeb3Provider,
     getEthereumConstants,
     isValidAddress,
+    resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -375,8 +376,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                response.image,
-                response.image,
+                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLinkFromURL(response.image),
             )
         }
 
@@ -393,8 +394,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            response.image,
-            response.image,
+            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLinkFromURL(response.image),
         )
     }
     async getNonFungibleTokenContract(

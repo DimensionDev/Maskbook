@@ -48,7 +48,7 @@
     "erc20_tab_title": "Token",
     "claimed": "Claimed",
     "details": "Lucky Drop Details",
-    "display_name": "Plugin: Lucky Drop",
+    "display_name": "Lucky Drop",
     "select_existing": "History",
     "create_new": "New",
     "send_symbol": "Send {{amount}} {{symbol}}",
