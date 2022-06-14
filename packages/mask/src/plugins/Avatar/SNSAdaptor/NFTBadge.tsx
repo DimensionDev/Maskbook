@@ -30,6 +30,22 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, nftInfo, size = 140, hasRainbow, borderSize } = props
     const classes = useStylesExtends(useStyles(), props)
 
+    if (!nftInfo)
+        return (
+            <div className={classes.root}>
+                <NFTAvatarRing
+                    id="NFTAvatarRing"
+                    width={size}
+                    strokeWidth={14}
+                    stroke="black"
+                    hasRainbow={hasRainbow}
+                    borderSize={borderSize}
+                    fontSize={9}
+                    text="loading..."
+                    price=""
+                />
+            </div>
+        )
     return (
         <div
             className={classes.root}
@@ -47,14 +63,10 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={
-                        !nftInfo
-                            ? 'loading...'
-                            : `${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
-                                  nftInfo.slug.toLowerCase() === 'ens' ? 'ENS' : ''
-                              }`
-                    }
-                    price={!nftInfo ? '' : formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
+                    text={`${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
+                        nftInfo.slug.toLowerCase() === 'ens' ? 'ENS' : ''
+                    }`}
+                    price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />
             </Link>
         </div>
