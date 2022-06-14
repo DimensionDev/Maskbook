@@ -16,7 +16,7 @@ import { WalletMessages } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
-import { isDashboardPage } from '@masknet/shared-base'
+import { getSiteType, isDashboardPage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,11 +52,12 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     }, [open])
     // #endregion
 
+    const site = getSiteType()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
-    const pluginID = useValueRef(pluginIDSettings)
+    const pluginIDs = useValueRef(pluginIDSettings)
     const network = useNetworkDescriptor()
-    const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
+    const [undeterminedPluginID, setUndeterminedPluginID] = useState(site ? pluginIDs[site] : undefined)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
     const Web3State = useWeb3State(undeterminedPluginID)
