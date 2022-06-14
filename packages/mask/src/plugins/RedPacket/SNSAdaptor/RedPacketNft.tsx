@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { explorerResolver, TransactionStateType, networkResolver } from '@masknet/web3-shared-evm'
+import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -258,13 +258,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
-    const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
+    const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
         web3?.eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
 
-    const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash === 'string') {
+            retryAvailability()
+        }
+    }, [claimCallback, retryAvailability])
 
     const openAddressLinkOnExplorer = useCallback(() => {
         openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
@@ -273,20 +278,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const [sourceType, setSourceType] = useState('')
 
     useEffect(() => {
-        if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
-            return
-        }
-
-        if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            retryAvailability()
-        }
-
-        resetCallback()
-    }, [claimState.type, retryAvailability])
-
-    useEffect(() => {
         retryAvailability()
-        resetCallback()
     }, [account])
 
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
@@ -452,7 +444,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                         variant="contained"
                                         loading={isClaiming}
                                         disabled={isClaiming}
-                                        onClick={claimCallback}
+                                        onClick={claim}
                                         className={classes.button}
                                         fullWidth>
                                         {isClaiming ? t.claiming() : t.claim()}
