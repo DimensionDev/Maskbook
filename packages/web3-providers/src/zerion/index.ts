@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import { values } from 'lodash-unified'
+import { unionWith, values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FungibleAsset, Transaction, HubOptions, createPageable, createIndicator } from '@masknet/web3-shared-base'
 import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
@@ -131,8 +131,10 @@ export class ZerionAPI
             result = [...result, ...assets.flat()]
         }
 
-        if (!result.length) return createPageable(getAllEVMNativeAssets(), createIndicator(options?.indicator))
-        return createPageable(result, createIndicator(options?.indicator))
+        return createPageable(
+            unionWith(result, getAllEVMNativeAssets(), (a, z) => a.symbol === z.symbol),
+            createIndicator(options?.indicator),
+        )
     }
 
     async getTransactions(
