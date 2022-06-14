@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import type { NFTInfo } from '../types'
 
 export function useNFT(
@@ -20,6 +20,7 @@ export function useNFT(
     return useAsyncRetry(async () => {
         const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
             chainId,
+            sourceType: SourceType.OpenSea,
         })
         return {
             amount: asset?.price?.[CurrencyType.NATIVE] ?? '0',
