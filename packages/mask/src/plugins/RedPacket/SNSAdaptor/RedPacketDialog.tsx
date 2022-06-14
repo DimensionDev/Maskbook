@@ -131,7 +131,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
+    // nft dialog height depends on the detailed step
+    const [ERC721DialogHeight, setERC721DialogHeight] = useState(350)
+
+    const dialogContentHeight =
+        state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : ERC721DialogHeight
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -144,6 +148,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         state={tokenState}
                         onClose={onClose}
                         onChange={onChange}
+                        setERC721DialogHeight={(height: number) => setERC721DialogHeight(height)}
                     />
                 ),
                 sx: { p: 0 },
