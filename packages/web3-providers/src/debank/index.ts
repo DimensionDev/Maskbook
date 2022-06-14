@@ -11,6 +11,7 @@ import {
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -73,6 +74,9 @@ export class DeBankAPI
             }),
         )
         const result = (await response.json()) as WalletTokenRecord[] | undefined
+        if (!result?.length) {
+            return createPageable(getAllEVMNativeAssets(), createIndicator(options?.indicator))
+        }
         try {
             return createPageable(
                 formatAssets(
