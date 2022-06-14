@@ -4,7 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../utils/user'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
@@ -113,6 +113,9 @@ function NFTAvatarInTwitter() {
                 avatarId: getAvatarId(identity.avatar ?? ''),
                 address: '',
                 tokenId: '',
+                schema: SchemaType.ERC721,
+                pluginId: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainId.Mainnet,
             })
             return
         }
@@ -155,12 +158,15 @@ function NFTAvatarInTwitter() {
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
-            avatar ?? {
+            (avatar ?? {
                 userId: identity.identifier.userId,
                 avatarId: getAvatarId(identity.avatar ?? ''),
                 address: '',
                 tokenId: '',
-            },
+                schema: SchemaType.ERC721,
+                pluginId: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainId.Mainnet,
+            }) as NFTAvatarEvent,
         )
 
         setNFTEvent(undefined)
