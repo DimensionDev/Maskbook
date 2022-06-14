@@ -7,7 +7,7 @@ import type { AllChainsNonFungibleToken } from '../types'
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
         position: 'relative',
-        margin: theme.spacing(1.25, 1, 1.25, 1),
+        padding: 4,
         borderRadius: '100%',
         display: 'flex',
         alignItems: 'center',

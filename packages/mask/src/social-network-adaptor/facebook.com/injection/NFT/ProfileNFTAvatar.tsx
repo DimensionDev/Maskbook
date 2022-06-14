@@ -18,6 +18,8 @@ import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -74,6 +76,9 @@ function NFTAvatarInFacebookFirstStep() {
                 avatarId: '',
                 address: info.token.contract.address,
                 tokenId: info.token.tokenId,
+                pluginId: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                chainId: info.token.chainId ?? ChainId.Mainnet,
+                schema: info.token.schema ?? SchemaType.ERC721,
             })
         },
         [identity],
@@ -151,6 +156,11 @@ function NFTAvatarListInFaceBookMobile() {
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginId.setValue(
+                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+            )
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
         },
         [identity],
     )

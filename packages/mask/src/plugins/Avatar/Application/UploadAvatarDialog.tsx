@@ -65,20 +65,19 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
+
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
+        if (!editor || !account || !token || !currentConnectedPersona?.identifier || !proof) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
-
-            const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
+            const avatarData = await uploadAvatar(blob, proof.identity)
             if (!avatarData) {
                 setDisabled(false)
                 return
             }
-
             const response = await saveAvatar(
                 account,
                 isBindAccount,
@@ -86,9 +85,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
-                currentConnectedPersona.linkedProfiles[0].identifier,
             )
-
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)

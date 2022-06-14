@@ -102,6 +102,9 @@ export interface NFTAvatarEvent {
     avatarId: string
     address?: string
     tokenId?: string
+    schema?: number
+    chainId?: number
+    pluginId?: string
 }
 
 /** This is a subset of browser.permissions.Permission */

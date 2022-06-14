@@ -1,5 +1,5 @@
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import type { BindingProof, ECKeyIdentifier, EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
+import type { BindingProof, ECKeyIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
@@ -10,13 +10,7 @@ import type { NextIDAvatarMeta } from '../../types'
 export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
     const connection = useWeb3Connection<'all'>(pluginId)
     return useAsyncFn(
-        async (
-            info: NextIDAvatarMeta,
-            account: string,
-            persona: ECKeyIdentifier,
-            identifier: ProfileIdentifier,
-            proof: BindingProof,
-        ) => {
+        async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
             const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
                 account,
             })
