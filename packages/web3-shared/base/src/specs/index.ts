@@ -527,6 +527,8 @@ export interface ProviderEvents<ChainId, ProviderType> {
 }
 
 export interface WatchEvents<Transaction> {
+    /** Emit when error occur */
+    error: [Error]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
@@ -930,7 +932,9 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     watchTransaction: (chainId: ChainId, id: string, transaction: Transaction) => Promise<void>
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
-    /** Update transaction status */
+    /** Notify error */
+    notifyError: (error: Error) => Promise<void>
+    /** Notify transaction status */
     notifyTransaction: (chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) => Promise<void>
 }
 export interface ProviderState<ChainId, ProviderType, NetworkType> {

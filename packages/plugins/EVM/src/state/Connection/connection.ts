@@ -823,11 +823,6 @@ class Connection implements EVM_Connection {
             options,
         )
 
-        console.log('DEBUG: submitted')
-        console.log({
-            hash,
-        })
-
         return new Promise<string>((resolve, reject) => {
             const { Transaction, TransactionWatcher } = Web3StateSettings.value
             if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
