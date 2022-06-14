@@ -14,6 +14,7 @@ import type {
 } from './type'
 import { formatAssets, formatTransactions } from './format'
 import type { FungibleTokenAPI, HistoryAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
@@ -130,6 +131,7 @@ export class ZerionAPI
             result = [...result, ...assets.flat()]
         }
 
+        if (!result.length) return createPageable(getAllEVMNativeAssets(), createIndicator(options?.indicator))
         return createPageable(result, createIndicator(options?.indicator))
     }
 

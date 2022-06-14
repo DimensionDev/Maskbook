@@ -31,14 +31,6 @@ export class RecentTransaction implements Middleware<Context> {
                     const status = getReceiptStatus(receipt)
                     if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return
 
-                    // update in house transaction state
-                    await Transaction?.updateTransaction?.(
-                        context.chainId,
-                        context.account,
-                        receipt.transactionHash,
-                        status,
-                    )
-
                     // update built-in notifier
                     BalanceNotifier?.emitter.emit('update', {
                         chainId: context.chainId,

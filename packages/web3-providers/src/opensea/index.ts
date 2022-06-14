@@ -92,6 +92,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             owner: asset.owner.address,
         },
         collection: {
+            address: asset.token_address ?? asset.asset_contract.address,
             chainId,
             name: asset.collection.name,
             slug: asset.collection.slug,
@@ -117,7 +118,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
         (x) => x.address.toLowerCase(),
     )
     const offerTokens = uniqBy(
-        asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
+        asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
         (x) => x.address.toLowerCase(),
     )
     return {

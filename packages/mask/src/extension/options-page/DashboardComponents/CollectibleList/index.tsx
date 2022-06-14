@@ -5,6 +5,7 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
+    SocialAddressType,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
@@ -264,6 +265,8 @@ export function CollectionList({
             .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
     }, [allCollectibles.length])
 
+    const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1
+
     if (!allCollectibles.length && !done && !error && account) return <LoadingSkeleton />
 
     if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
@@ -279,10 +282,14 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                <ReversedAddress
-                                    address={addressName.address}
-                                    pluginId={addressName.networkSupporterPluginID}
-                                />
+                                {addressName.type === SocialAddressType.ADDRESS ? (
+                                    <ReversedAddress
+                                        address={addressName.address}
+                                        pluginId={addressName.networkSupporterPluginID}
+                                    />
+                                ) : (
+                                    addressName.label
+                                )}
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -302,7 +309,14 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        <ReversedAddress address={addressName.label} pluginId={addressName.networkSupporterPluginID} />
+                        {addressName.type === SocialAddressType.ADDRESS ? (
+                            <ReversedAddress
+                                address={addressName.address}
+                                pluginId={addressName.networkSupporterPluginID}
+                            />
+                        ) : (
+                            addressName.label
+                        )}
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
@@ -350,39 +364,43 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                <Box>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                        <AllNetworkButton
-                            className={classes.networkSelected}
-                            onClick={() => setSelectedCollection('all')}>
-                            ALL
-                        </AllNetworkButton>
+                {!isFromAlchemy && (
+                    <Box>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                            <AllNetworkButton
+                                className={classes.networkSelected}
+                                onClick={() => setSelectedCollection('all')}>
+                                ALL
+                            </AllNetworkButton>
+                        </Box>
+                        {collections.map((x, i) => {
+                            return (
+                                x?.name?.length > 0 && (
+                                    <Box
+                                        display="flex"
+                                        key={i}
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                        <CollectionIcon
+                                            selectedCollection={
+                                                selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                            }
+                                            collection={x}
+                                            onClick={() => {
+                                                setSelectedCollection(x)
+                                            }}
+                                        />
+                                    </Box>
+                                )
+                            )
+                        })}
                     </Box>
-                    {collections.map((x, i) => {
-                        return (
-                            <Box
-                                display="flex"
-                                key={i}
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                                <CollectionIcon
-                                    selectedCollection={
-                                        selectedCollection === 'all' ? undefined : selectedCollection?.address
-                                    }
-                                    collection={x}
-                                    onClick={() => {
-                                        setSelectedCollection(x)
-                                    }}
-                                />
-                            </Box>
-                        )
-                    })}
-                </Box>
+                )}
             </Stack>
         </Box>
     )

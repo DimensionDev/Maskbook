@@ -172,12 +172,13 @@ export function DonateDialog(props: DonateDialogProps) {
                     </Typography>
                     <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
+                            classes={{ button: classes.button }}
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
-                                loading={loading}
                                 className={classes.button}
+                                loading={loading}
                                 fullWidth
                                 size="large"
                                 disabled={!!validationMessage || loading}
