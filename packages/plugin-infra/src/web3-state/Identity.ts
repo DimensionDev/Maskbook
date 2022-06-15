@@ -14,7 +14,7 @@ export class IdentityServiceState implements Web3SocialIdentityState {
 
     private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
-        return `${identity.identifier.network}_${identity.identifier.userId}_${identity.bio}`
+        return `${identity.identifier.network}_${identity.identifier.userId}_${identity.bio}_${identity.homepage}`
     }
 
     protected getFromCache(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
