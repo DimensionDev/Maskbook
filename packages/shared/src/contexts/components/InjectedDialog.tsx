@@ -1,5 +1,6 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { omit } from 'lodash-unified'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
@@ -145,7 +146,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                         root: dialogBackdropRoot,
                     },
                 }}
-                {...rest}
+                {...omit(rest, 'isOnBack')}
                 {...extraProps}>
                 <ErrorBoundary>
                     {title ? (
