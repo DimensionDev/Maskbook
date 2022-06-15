@@ -20619,7 +20619,7 @@ packages:
     dev: false
 
   /json-rpc-random-id/1.0.1:
-    resolution: {integrity: sha1-uknZat7RRE27jaPSA3SKy7zeyMg=}
+    resolution: {integrity: sha512-RJ9YYNCkhVDBuP4zN5BBtYAzEl03yq/jIIsyif0JY9qyJuQQZNeDK7anAPKKlyEtLSj2s8h6hNh2F8zO5q7ScA==}
     dev: false
 
   /json-schema-traverse/0.4.1:
