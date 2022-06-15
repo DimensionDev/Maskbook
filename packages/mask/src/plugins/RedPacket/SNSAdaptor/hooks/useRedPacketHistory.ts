@@ -1,19 +1,19 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
-import { useBlockNumber, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
 import * as chain from '../utils/chain'
 import { RedPacketRPC } from '../../messages'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
-    const { value: blockNumber = 0 } = useBlockNumber(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     return useAsyncRetry(async () => {
-        if (!blockNumber || !connection) return []
-
+        if (!connection) return EMPTY_LIST
+        const blockNumber = await connection.getBlockNumber()
         return getRedPacketHistory(address, chainId, blockNumber, connection)
-    }, [address, chainId, blockNumber, connection])
+    }, [address, chainId, connection])
 }
 
 async function getRedPacketHistory(
