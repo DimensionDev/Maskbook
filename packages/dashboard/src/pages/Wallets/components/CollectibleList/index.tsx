@@ -44,7 +44,11 @@ interface CollectibleListProps {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const trustedNonFungibleTokens = useTrustedNonFungibleTokens()
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        undefined,
+        selectedChain?.chainId as ChainId,
+    )
 
     const {
         value = EMPTY_LIST,
@@ -57,9 +61,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) =>
     })
 
     const renderCollectibles = useMemo(() => {
-        const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) =>
-            isSameAddress(x.contract?.owner, account),
-        )
+        const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) => isSameAddress(x.ownerId, account))
         return uniqBy(
             [...trustedOwnNonFungibleTokens, ...value],
             (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
