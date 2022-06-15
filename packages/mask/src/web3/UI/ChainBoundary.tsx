@@ -24,6 +24,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { WalletIcon } from '@masknet/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -71,6 +72,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const classes = useStylesExtends(useStyles(), props)
 
     const actualPluginID = useCurrentWeb3NetworkPluginID()
+    const plugin = useActivatedPlugin(actualPluginID, 'any')
+
     const { Others: actualOthers } = useWeb3State(actualPluginID)
     const actualChainId = useChainId(actualPluginID)
     const actualProviderType = useProviderType(actualPluginID)
@@ -171,6 +174,54 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         )
 
     if (isMatched) return <>{props.children}</>
+
+    if (actualPluginID !== expectedPluginID) {
+        return renderBox(
+            <>
+                {!noSwitchNetworkTip ? (
+                    <Typography color={MaskColorVar.errorPlugin}>
+                        <span>
+                            {t('plugin_wallet_not_available_on', {
+                                network: plugin?.name?.fallback ?? 'Unknown Plugin',
+                            })}
+                        </span>
+                    </Typography>
+                ) : null}
+                {expectedChainAllowed ? (
+                    <ActionButtonPromise
+                        fullWidth
+                        className={classes.switchButton}
+                        startIcon={
+                            <WalletIcon
+                                mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
+                                size={18}
+                            />
+                        }
+                        sx={props.ActionButtonPromiseProps?.sx}
+                        style={{ borderRadius: 10 }}
+                        init={
+                            <span>
+                                {t('plugin_wallet_connect_network', {
+                                    network: 'EVM',
+                                })}
+                            </span>
+                        }
+                        waiting={t('plugin_wallet_connect_network_under_going', {
+                            network: 'EVM',
+                        })}
+                        complete={t('plugin_wallet_connect_network', {
+                            network: 'EVM',
+                        })}
+                        failed={t('retry')}
+                        executor={onSwitchChain}
+                        completeOnClick={onSwitchChain}
+                        failedOnClick="use executor"
+                        {...props.ActionButtonPromiseProps}
+                    />
+                ) : null}
+            </>,
+        )
+    }
 
     return renderBox(
         <>
