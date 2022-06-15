@@ -1,6 +1,6 @@
 import type Web3 from 'web3'
 import { AbiItem, toHex } from 'web3-utils'
-import { pick } from 'lodash-unified'
+import { identity, pickBy } from 'lodash-unified'
 import type {
     BaseContract,
     NonPayableTransactionObject,
@@ -10,16 +10,39 @@ import type {
 import type { Transaction } from '../types'
 import { isValidAddress } from './address'
 
-export async function encodeTransaction(
+export function encodeTransaction(transaction: Transaction): PayableTx & {
+    maxPriorityFeePerGas?: string
+    maxFeePerGas?: string
+} {
+    return pickBy(
+        {
+            from: transaction?.from as string | undefined,
+            to: transaction.to,
+            value: transaction?.value ? toHex(transaction.value) : undefined,
+            gas: transaction?.gas ? toHex(transaction.gas) : undefined,
+            gasPrice: transaction?.gasPrice ? toHex(transaction.gasPrice) : undefined,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas
+                ? toHex(transaction.maxPriorityFeePerGas)
+                : undefined,
+            maxFeePerGas: transaction?.maxFeePerGas ? toHex(transaction.maxFeePerGas) : undefined,
+            data: transaction.data,
+            nonce: transaction?.nonce ? toHex(transaction.nonce) : undefined,
+            chainId: transaction?.chainId ? toHex(transaction.chainId) : undefined,
+        },
+        identity,
+    )
+}
+
+export async function encodeContractTransaction(
     contract: BaseContract,
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
     overrides?: Partial<Transaction>,
 ) {
-    const encoded: PayableTx & {
+    const tx: PayableTx & {
         maxPriorityFeePerGas?: string
         maxFeePerGas?: string
     } = {
-        from: (overrides?.from as string) ?? contract.defaultAccount ?? undefined,
+        from: (overrides?.from as string | undefined) ?? contract.defaultAccount ?? '',
         to: contract.options.address,
         data: transaction.encodeABI(),
         value: overrides?.value ? toHex(overrides.value) : undefined,
@@ -31,11 +54,14 @@ export async function encodeTransaction(
         chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
     }
 
-    if (!encoded.gas) {
-        encoded.gas = await transaction.estimateGas(pick(encoded, ['from', 'value']))
+    if (!tx.gas) {
+        tx.gas = await transaction.estimateGas({
+            from: tx.from as string | undefined,
+            value: tx.value,
+        })
     }
 
-    return encoded
+    return encodeTransaction(tx)
 }
 
 export async function sendTransaction(
@@ -44,7 +70,7 @@ export async function sendTransaction(
     overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
-    const tx = await encodeTransaction(contract, transaction, overrides)
+    const tx = await encodeContractTransaction(contract, transaction, overrides)
     const receipt = await transaction.send(tx as PayableTx)
     return receipt?.transactionHash ?? ''
 }

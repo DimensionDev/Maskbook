@@ -34,6 +34,7 @@ import {
     getEthereumConstants,
     isValidAddress,
     resolveIPFSLinkFromURL,
+    encodeTransaction,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -839,10 +840,10 @@ class Connection implements EVM_Connection {
             {
                 method: EthereumMethodType.ETH_CALL,
                 params: [
-                    {
+                    encodeTransaction({
                         ...transaction,
                         ...options.overrides,
-                    },
+                    }),
                     'latest',
                 ],
             },
@@ -856,10 +857,10 @@ class Connection implements EVM_Connection {
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [
-                    {
+                    encodeTransaction({
                         ...transaction,
                         ...options.overrides,
-                    },
+                    }),
                 ],
             },
             options,
