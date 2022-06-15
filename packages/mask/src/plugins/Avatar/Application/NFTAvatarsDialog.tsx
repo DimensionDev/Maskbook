@@ -80,7 +80,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     ? t.application_edit_profile_dialog_title()
                     : t.application_dialog_title()
             }
-            isonback={step !== CreateNFTAvatarStep.Persona}
+            isOnBack={step !== CreateNFTAvatarStep.Persona}
             open={props.open}
             onClose={onBack}>
             <DialogContent className={classes.root}>
