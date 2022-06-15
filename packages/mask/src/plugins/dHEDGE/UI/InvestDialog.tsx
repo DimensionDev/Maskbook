@@ -92,17 +92,17 @@ export function InvestDialog() {
     const [{ loading: isInvesting }, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
     const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
+        ? t('plugin_dhedge_share_text', {
+              amount: formatBalance(amount, token.decimals),
+              symbol: `${cashTag}${token.symbol}`,
+              pool: pool?.name,
+              account_promote: t('plugin_dhedge_account_promote', {
+                  context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+              }),
+          })
         : ''
     const invest = useCallback(async () => {
         const hash = await investCallback()
