@@ -17,7 +17,13 @@ import { currentMaskWalletAccountSettings, currentMaskWalletChainIdSettings } fr
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { WalletConnectQRCodeDialogEvent } from '@masknet/plugin-wallet'
 
-const SharedContext: Omit<Plugin.Shared.SharedContext, 'createKVStorage' | 'currentPersona'> = {
+const SharedContext: Omit<Plugin.Shared.SharedContext, 'createKVStorage'> = {
+    currentPersona: createSubscriptionFromAsync(
+        Services.Settings.getCurrentPersonaIdentifier,
+        undefined,
+        MaskMessages.events.currentPersonaIdentifier.on,
+    ),
+
     nativeType: nativeAPI?.type,
     hasNativeAPI,
 
@@ -84,15 +90,9 @@ const SharedContext: Omit<Plugin.Shared.SharedContext, 'createKVStorage' | 'curr
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
-            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
-            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues)
+            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues)
         },
-        currentPersona: createSubscriptionFromAsync(
-            Services.Settings.getCurrentPersonaIdentifier,
-            undefined,
-            MaskMessages.events.currentPersonaIdentifier.on,
-            signal,
-        ),
         ... SharedContext,
     }
 }
