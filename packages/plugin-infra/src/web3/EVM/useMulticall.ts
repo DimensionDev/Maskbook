@@ -5,7 +5,6 @@ import { ChainId, decodeOutputString, UnboxTransactionObject } from '@masknet/we
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useMulticallContract } from './useMulticallContract'
 import { useChainId } from '../useChainId'
-import { useBlockNumber } from '../useBlockNumber'
 import { useWeb3 } from '../useWeb3'
 import { useWeb3Connection } from '../useWeb3Connection'
 
