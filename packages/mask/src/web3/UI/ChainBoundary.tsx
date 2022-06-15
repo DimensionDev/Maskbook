@@ -101,6 +101,11 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
 
         if (!expectedChainAllowed) return
 
+        if (isPluginIDMatched || actualProviderType === ProviderType.MaskWallet) {
+            await expectedConnection.connect({ chainId: expectedChainId })
+            return
+        }
+
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
             openSelectProviderDialog()
             return
@@ -216,7 +221,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         executor={onSwitchChain}
                         completeOnClick={onSwitchChain}
                         failedOnClick="use executor"
-                        {...props.ActionButtonPromiseProps}
+                        {...buttonProps}
                     />
                 ) : null}
             </>,
