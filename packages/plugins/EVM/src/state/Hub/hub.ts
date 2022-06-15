@@ -1,3 +1,4 @@
+import type { PartialRequired } from '@masknet/shared-base'
 import {
     Alchemy_EVM,
     CoinGecko,
@@ -42,8 +43,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
-
-type PartialRequired<T, RequiredKeys extends keyof T> = Omit<T, RequiredKeys> & Pick<Required<T>, RequiredKeys>
 
 class Hub implements EVM_Hub {
     constructor(

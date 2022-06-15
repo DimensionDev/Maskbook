@@ -57,7 +57,7 @@ import { Providers } from './provider'
 import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types'
 import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
-import { getSubscriptionCurrentValue } from '@masknet/shared-base'
+import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
 const EMPTY_STRING = () => Promise.resolve('')
 const ZERO = () => Promise.resolve(0)
@@ -158,18 +158,24 @@ class Connection implements EVM_Connection {
         }
     }
 
-    private getOptions(initial?: EVM_Web3ConnectionOptions): Omit<Required<EVM_Web3ConnectionOptions>, 'overrides'> & Pick<EVM_Web3ConnectionOptions, 'overrides'> {
+    private getOptions(
+        initial?: EVM_Web3ConnectionOptions,
+        overrides?: Partial<EVM_Web3ConnectionOptions>,
+    ): PartialRequired<EVM_Web3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
         return {
             account: this.account,
             chainId: this.chainId,
             providerType: this.providerType,
             ...initial,
+            ...overrides,
         }
     }
 
     getWeb3(initial?: EVM_Web3ConnectionOptions) {
         const web3 = createWeb3(
-            createWeb3Provider((requestArguments: RequestArguments) => this.hijackedRequest(requestArguments, this.getOptions(initial))),
+            createWeb3Provider((requestArguments: RequestArguments) =>
+                this.hijackedRequest(requestArguments, this.getOptions(initial)),
+            ),
         )
         return Promise.resolve(web3)
     }
@@ -582,8 +588,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address))
-            return this.getNativeToken(options)
+        if (!address || isNativeTokenAddress(options.chainId, address)) return this.getNativeToken(options)
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
