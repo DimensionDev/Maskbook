@@ -7,8 +7,6 @@ export class TransactionWatcher implements Middleware<Context> {
         await next()
 
         if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && context.error) {
-            console.log('DEBUG: context error')
-            console.log(context)
             Web3StateSettings.value.TransactionWatcher?.notifyError(context.error)
         }
     }

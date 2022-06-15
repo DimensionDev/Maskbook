@@ -34,8 +34,6 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useEffect(() => {
         const off = TransactionWatcher?.emitter.on('error', (error) => {
-            console.log('DEBUG: error')
-            console.log(error)
             setError(error)
         })
         return () => {

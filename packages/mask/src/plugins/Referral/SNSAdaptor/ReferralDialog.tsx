@@ -161,6 +161,7 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
     return (
         <InjectedDialog
             open={open}
+            isOnBack={currentPage.page !== PagesType.LANDING}
             onClose={onHandleClose}
             titleBarIconStyle="close"
             title={
