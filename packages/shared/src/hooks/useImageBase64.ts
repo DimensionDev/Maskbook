@@ -13,16 +13,17 @@ function readAsDataURL(blob: Blob) {
 const cache = new Map<string, string>()
 
 export function useImageBase64(
-    key: string,
+    key?: string,
     url?: string,
     options?: {
         fetch: typeof globalThis.fetch
     },
 ) {
     const fetch = options?.fetch ?? globalThis.fetch
-    const [base64, setBase64] = useState(cache.get(key) ?? '')
+    const [base64, setBase64] = useState(cache.get(key ?? '') ?? '')
 
     useAsyncRetry(async () => {
+        if (!key) return
         const hit = cache.get(key)
         if (hit) {
             setBase64(hit)

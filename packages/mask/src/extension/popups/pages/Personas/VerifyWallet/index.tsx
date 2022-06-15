@@ -68,7 +68,11 @@ const VerifyWallet = memo(() => {
     }
 
     useEffect(() => {
-        if (request?.payload.method !== EthereumMethodType.ETH_SIGN) return
+        if (
+            request?.payload.method !== EthereumMethodType.ETH_SIGN &&
+            request?.payload.method !== EthereumMethodType.PERSONAL_SIGN
+        )
+            return
 
         navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
             state: wallet,

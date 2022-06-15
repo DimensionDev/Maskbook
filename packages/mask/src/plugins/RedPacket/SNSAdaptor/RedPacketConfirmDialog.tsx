@@ -9,7 +9,7 @@ import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
-import { useAccount, useChainId, useNetworkType, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
@@ -97,11 +97,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     )!
     const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
     const openShareTxDialog = useOpenShareTxDialog()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const createRedpacket = useCallback(async () => {
-        const hash = await createCallback()
+        const result = await createCallback()
+
+        const { hash, receipt, events } = result ?? {}
         if (typeof hash !== 'string') return
-        const receipt = await connection.getTransactionReceipt(hash)
         if (typeof receipt?.transactionHash !== 'string') return
         await openShareTxDialog({
             hash: receipt.transactionHash,
@@ -110,7 +110,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string

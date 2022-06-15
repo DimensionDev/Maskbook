@@ -1,7 +1,7 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { encodeTransaction } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 
@@ -34,7 +34,11 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             chainId,
         }
 
-        const tx = await encodeTransaction(nftRedPacketContract, nftRedPacketContract.methods.claim(...params), config)
+        const tx = await encodeContractTransaction(
+            nftRedPacketContract,
+            nftRedPacketContract.methods.claim(...params),
+            config,
+        )
         return connection.sendTransaction(tx)
     }, [id, connection, signedMsg, account, chainId, totalAmount])
 }

@@ -115,6 +115,7 @@ export class ProviderState<
     }
 
     private async setAccount(providerType: ProviderType, account: Partial<Account<ChainId>>) {
+        if (this.storage.providerType.value !== providerType) return
         const siteType = getSiteType()
         if (!siteType) return
 
@@ -130,7 +131,6 @@ export class ProviderState<
         const needToUpdateChainId = accountCopied.chainId && account_.chainId !== accountCopied.chainId
 
         if (needToUpdateAccount || needToUpdateChainId) {
-            await this.storage.providerType.setValue(providerType)
             await this.storage.account.setValue({
                 ...account_,
                 ...accountCopied,
@@ -179,8 +179,8 @@ export class ProviderState<
         }
 
         // update local storage
-        await this.setAccount(providerType, account)
         await this.setProvider(providerType)
+        await this.setAccount(providerType, account)
 
         provider.emitter.emit('connect', account)
         return account

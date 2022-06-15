@@ -24,5 +24,5 @@ export function useTradeCallback(trade: TradeComputed<NativeTokenWrapper> | null
             result = await unwrapCallback(false, tradeAmount)
         }
         return result
-    }, [wrapCallback, unwrapCallback])
+    }, [wrapCallback, unwrapCallback, trade])
 }

@@ -1,11 +1,17 @@
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { omit } from 'lodash-unified'
+import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, encodeTransaction, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
-import { omit } from 'lodash-unified'
+import {
+    ChainId,
+    encodeContractTransaction,
+    SchemaType,
+    useTokenConstants,
+    decodeEvents,
+} from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -111,11 +117,11 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
-
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
@@ -138,12 +144,23 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             gas,
         }
 
-        const tx = await encodeTransaction(
+        const tx = await encodeContractTransaction(
             redPacketContract,
             redPacketContract.methods.create_red_packet(...params),
             config,
         )
 
-        return connection.sendTransaction(tx)
+        const hash = await connection.sendTransaction(tx)
+        const receipt = await connection.getTransactionReceipt(hash)
+        if (receipt) {
+            const events = decodeEvents(web3, redPacketContract.options.jsonInterface, receipt)
+
+            return {
+                hash,
+                receipt,
+                events,
+            }
+        }
+        return { hash, receipt }
     }, [account, connection, redPacketContract, redPacketSettings, chainId, getCreateParams])
 }

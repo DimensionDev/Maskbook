@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { SocialIdentity, SocialAddress, NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
-import { ChainId, formatAddress } from '@masknet/web3-shared-solana'
+import { ChainId, formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
 import { SolanaRPC } from '../messages'
 
 const SOL_RE = /\S{1,256}\.sol\b/
@@ -20,14 +20,13 @@ export class IdentityService extends IdentityServiceState {
 
     protected override async getFromRemote(identity: SocialIdentity) {
         const { identifier, bio = '', nickname = '' } = identity
-        const addressMatched = identity.bio?.match(/\w{44}/)
+        const addressMatched = identity.bio?.match(/\b\w{44}\b/)
         const address = addressMatched?.[0]
         const solanaName = getSolanaName(identifier?.userId ?? '', nickname, bio)
-
         const solanaDomainAddress = await SolanaRPC.lookup(ChainId.Mainnet, solanaName)
 
         return [
-            address && !address.startsWith('0x')
+            address && !address.startsWith('0x') && isValidAddress(address)
                 ? {
                       networkSupporterPluginID: NetworkPluginID.PLUGIN_SOLANA,
                       type: SocialAddressType.ADDRESS,

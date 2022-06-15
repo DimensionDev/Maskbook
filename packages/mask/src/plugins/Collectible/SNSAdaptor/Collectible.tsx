@@ -140,7 +140,7 @@ export function Collectible(props: CollectibleProps) {
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
 
-    if (!asset.value?.id || !token)
+    if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
