@@ -1,7 +1,3 @@
 {
-    "promote": "crwdns16896:0crwdne16896:0",
-    "account_promote$default": "crwdns17290:0crwdne17290:0",
-    "account_promote$twitter": "crwdns17292:0$t(mask:twitter_account)crwdne17292:0",
-    "account_promote$facebook": "crwdns17294:0$t(mask:facebook_account)crwdne17294:0",
-    "share_text": "crwdns17296:0{{input_amount}}crwdnd17296:0{{input_symbol}}crwdnd17296:0{{output_amount}}crwdnd17296:0{{output_symbol}}crwdnd17296:0{{account_promote}}crwdnd17296:0$t(mask:hash_tag)crwdne17296:0"
+    "promote": "crwdns16896:0crwdne16896:0"
 }
