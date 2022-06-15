@@ -1,3 +1,4 @@
+import type { PartialRequired } from '@masknet/shared-base'
 import { Alchemy_FLOW } from '@masknet/web3-providers'
 import type {
     FungibleToken,
@@ -24,15 +25,31 @@ class Hub implements FlowHub {
         private currencyType?: CurrencyType,
     ) {}
 
+    private getOptions(
+        initial?: HubOptions<ChainId>,
+        overrides?: Partial<HubOptions<ChainId>>,
+    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
+        return {
+            chainId: this.chainId,
+            account: this.account,
+            sourceType: this.sourceType,
+            currencyType: this.currencyType,
+            ...initial,
+            ...overrides,
+        }
+    }
+
     async getFungibleTokensFromTokenList(
         chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        const expectedChainId = options?.chainId ?? chainId
-        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(expectedChainId)
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(options.chainId)
         return [
             createFungibleToken(
-                expectedChainId,
+                options.chainId,
                 FLOW_ADDRESS,
                 'Flow',
                 'FLOW',
@@ -40,7 +57,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/flow.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                expectedChainId,
+                options.chainId,
                 FUSD_ADDRESS,
                 'Flow USD',
                 'FUSD',
@@ -48,7 +65,7 @@ class Hub implements FlowHub {
                 new URL('../../assets/FUSD.png', import.meta.url).toString(),
             ),
             createFungibleToken(
-                expectedChainId,
+                options.chainId,
                 TETHER_ADDRESS,
                 'Tether USD',
                 'tUSD',
@@ -59,49 +76,45 @@ class Hub implements FlowHub {
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
-    getGasOptions(
-        chainId: ChainId,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<Record<GasOptionType, GasOption>> {
+    getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>): Promise<Record<GasOptionType, GasOption>> {
         throw new Error('Method not implemented.')
     }
-    getFungibleAsset(
-        address: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<FungibleAsset<ChainId, SchemaType>> {
+    getFungibleAsset(address: string, initial?: HubOptions<ChainId>): Promise<FungibleAsset<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async getFungibleAssets(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-        const expectedChainId = options?.chainId ?? this.chainId
-        return FlowRPC.getFungibleAssets(expectedChainId, account)
+        const options = this.getOptions(initial, {
+            account,
+        })
+        return FlowRPC.getFungibleAssets(options.chainId, options.account)
     }
     async getNonFungibleAsset(
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
         ownerAddress?: string,
         contractName?: string,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+        const options = this.getOptions(initial)
         return Alchemy_FLOW.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
     getNonFungibleTokens(
         account: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return Alchemy_FLOW.getAssets(account, options)
+        const options = this.getOptions(initial, {
+            account,
+        })
+        return Alchemy_FLOW.getAssets(options.account, options)
     }
-    getFungibleTokenPrice(
-        chainId: ChainId,
-        address: string,
-        options?: HubOptions<ChainId> | undefined,
-    ): Promise<number> {
+    getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         // The Flow chain is unlisted in CoinGecko.
         throw new Error('Method not implemented.')
     }
@@ -109,14 +122,14 @@ class Hub implements FlowHub {
         chainId: ChainId,
         address: string,
         tokenId: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<never> {
         throw new Error('Method not implemented.')
     }
     async getFungibleTokenIconURLs(
         chainId: ChainId,
         address: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
@@ -124,14 +137,14 @@ class Hub implements FlowHub {
         chainId: ChainId,
         address: string,
         tokenId?: string | undefined,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
     getTransactions(
         chainId: ChainId,
         account: string,
-        options?: HubOptions<ChainId> | undefined,
+        initial?: HubOptions<ChainId>,
     ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
