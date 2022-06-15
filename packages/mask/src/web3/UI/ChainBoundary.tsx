@@ -216,7 +216,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         executor={onSwitchChain}
                         completeOnClick={onSwitchChain}
                         failedOnClick="use executor"
-                        {...props.ActionButtonPromiseProps}
+                        {...buttonProps}
                     />
                 ) : null}
             </>,
