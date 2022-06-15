@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { encodeTransaction, useITOConstants } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction, useITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { useAsyncFn } from 'react-use'
 import { checkAvailability } from '../utils/checkAvailability'
@@ -32,7 +32,7 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
         const config = {
             from: account,
         }
-        const tx = await encodeTransaction(ITO_Contract, ITO_Contract.methods.claim(pids), config)
+        const tx = await encodeContractTransaction(ITO_Contract, ITO_Contract.methods.claim(pids), config)
         return connection.sendTransaction(tx)
     }, [account, chainId, ITO_Contract, stringify(pids), isV1, connection])
 }

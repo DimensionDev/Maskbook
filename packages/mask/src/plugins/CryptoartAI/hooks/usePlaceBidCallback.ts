@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { encodeTransaction, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
@@ -21,12 +21,12 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
                 value: toFixed(priceInWei),
             }
             const tx = is24Auction
-                ? await encodeTransaction(
+                ? await encodeContractTransaction(
                       artistAcceptingBidsV2_contract!,
                       artistAcceptingBidsV2_contract!.methods.placeBid(editionNumber),
                       config,
                   )
-                : await encodeTransaction(
+                : await encodeContractTransaction(
                       cANFTMarket_contract!,
                       cANFTMarket_contract!.methods.placeBid(editionNumber, ZERO_ADDRESS),
                       config,
