@@ -115,7 +115,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     return useAsyncFn(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
-
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
@@ -144,6 +143,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             config,
         )
 
+        sessionStorage.setItem('red_packet_total', paramsObj.total)
         return connection.sendTransaction(tx)
     }, [account, connection, redPacketContract, redPacketSettings, chainId, getCreateParams])
 }

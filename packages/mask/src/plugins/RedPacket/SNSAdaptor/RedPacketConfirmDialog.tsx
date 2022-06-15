@@ -126,7 +126,8 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         payload.current.shares = settings.shares
         payload.current.password = privateKey
         payload.current.rpid = CreationSuccess.id
-        payload.current.total = CreationSuccess.total
+        payload.current.total = CreationSuccess.total ?? sessionStorage.getItem('red_packet_total')
+        sessionStorage.removeItem('red_packet_total')
         payload.current.duration = settings.duration
         payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
         payload.current.token = settings.token
