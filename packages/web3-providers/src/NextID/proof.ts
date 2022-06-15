@@ -81,8 +81,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
+        const cacheKeyOfQueryPlatform = getPersonaQueryURL(platform, identity)
         const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         deleteCache(cacheKeyOfQueryPersona)
+        deleteCache(cacheKeyOfQueryPlatform)
         deleteCache(cacheKeyOfExistedBinding)
 
         return result
@@ -98,7 +100,11 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(urlcat(BASE_URL, '/v1/proof', { platform, identity }))
+        const response = await fetchJSON<NextIDBindings>(
+            urlcat(BASE_URL, '/v1/proof', { platform, identity }),
+            undefined,
+            true,
+        )
 
         // TODO: merge Pagination into this
         return response.unwrap().ids
