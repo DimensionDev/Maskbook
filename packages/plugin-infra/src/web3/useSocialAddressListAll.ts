@@ -37,5 +37,5 @@ export function useSocialAddressListAll(
         const allSettled = await cached
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         return sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-    }, [identity?.identifier?.toText(), sorter, EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+    }, [identity, sorter, EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }
