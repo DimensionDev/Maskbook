@@ -16,5 +16,5 @@ export function useTrustedFungibleTokens<S extends 'all' | void = void, T extend
         return fungibleTokens
             .filter((x) => (schemaType ? x.schema === schemaType : true))
             .filter((x) => (chainId ? x.chainId === chainId : true))
-    }, [schemaType, fungibleTokens])
+    }, [schemaType, fungibleTokens, chainId])
 }
