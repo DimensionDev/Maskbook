@@ -170,6 +170,7 @@ class Connection implements EVM_Connection {
             ...initial,
             overrides: {
                 from: this.account,
+                chainId: this.chainId,
                 ...initial?.overrides,
                 ...overrides?.overrides,
             },

@@ -1,6 +1,6 @@
 import type Web3 from 'web3'
-import type { AbiItem } from 'web3-utils'
-import { omit } from 'lodash-unified'
+import { AbiItem, toHex } from 'web3-utils'
+import { pick } from 'lodash-unified'
 import type {
     BaseContract,
     NonPayableTransactionObject,
@@ -15,15 +15,24 @@ export async function encodeTransaction(
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
     overrides?: Partial<Transaction>,
 ) {
-    const encoded: Transaction = {
-        from: contract.defaultAccount ?? undefined,
+    const encoded: PayableTx & {
+        maxPriorityFeePerGas?: string
+        maxFeePerGas?: string
+    } = {
+        from: (overrides?.from as string) ?? contract.defaultAccount ?? undefined,
         to: contract.options.address,
         data: transaction.encodeABI(),
-        ...overrides,
+        value: overrides?.value ? toHex(overrides.value) : undefined,
+        gas: overrides?.gas ? toHex(overrides.gas) : undefined,
+        gasPrice: overrides?.gasPrice ? toHex(overrides.gasPrice) : undefined,
+        maxPriorityFeePerGas: overrides?.maxPriorityFeePerGas ? toHex(overrides.maxPriorityFeePerGas) : undefined,
+        maxFeePerGas: overrides?.maxFeePerGas ? toHex(overrides.maxFeePerGas) : undefined,
+        nonce: overrides?.nonce ? toHex(overrides.nonce) : undefined,
+        chainId: overrides?.chainId ? toHex(overrides.chainId) : undefined,
     }
 
     if (!encoded.gas) {
-        encoded.gas = await transaction.estimateGas(overrides as PayableTx)
+        encoded.gas = await transaction.estimateGas(pick(encoded, ['from', 'value']))
     }
 
     return encoded
