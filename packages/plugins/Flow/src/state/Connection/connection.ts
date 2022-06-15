@@ -1,11 +1,19 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-unified'
+import { first, isNative } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
 import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
-import { ChainId, ProviderType, SchemaType, TransactionStatusCode } from '@masknet/web3-shared-flow'
+import {
+    ChainId,
+    createNativeToken,
+    getTokenConstants,
+    ProviderType,
+    SchemaType,
+    TransactionStatusCode,
+} from '@masknet/web3-shared-flow'
 import {
     Account,
     FungibleToken,
+    isSameAddress,
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
@@ -17,6 +25,11 @@ import { Providers } from './provider'
 import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
 import { Web3StateSettings } from '../../settings'
 import type { Plugin } from '@masknet/plugin-infra'
+
+function isNativeTokenAddress(chainId: ChainId, address: string) {
+    const { FLOW_ADDRESS } = getTokenConstants(chainId)
+    return isSameAddress(address, FLOW_ADDRESS)
+}
 
 class Connection implements BaseConnection {
     constructor(
@@ -115,13 +128,20 @@ class Connection implements BaseConnection {
         throw new Error('Method not implemented.')
     }
     getNativeToken(initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        const token = createNativeToken(options.chainId)
+        return Promise.resolve(token)
     }
     getNativeTokenBalance(initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
     getFungibleTokenBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        if (!address || isNativeTokenAddress(options.chainId, address)) {
+            return this.getNativeTokenBalance(options)
+        }
+        // TODO
+        return Promise.resolve('0')
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -148,6 +168,10 @@ class Connection implements BaseConnection {
     }
 
     getFungibleToken(address: string, initial?: FlowConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+        const options = this.getOptions(initial)
+        if (!address || isNativeTokenAddress(options.chainId, address)) {
+            return this.getNativeToken(options)
+        }
         throw new Error('Method not implemented.')
     }
     getNonFungibleToken(

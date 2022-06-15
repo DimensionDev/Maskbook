@@ -120,12 +120,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
     })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection()
     const chainId = useChainId()
     const account = useAccount()
     const wallet = useWallet()
-    const { value: balance = '0' } = useBalance()
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: balance = '0', loading: loadingBalance } = useBalance()
+    const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(undefined, account)
@@ -200,30 +200,29 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             <LinkOutIcon className={classNames(classes.icon, classes.linkIcon)} />
                         </Link>
                     </div>
-                    {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.balance}>
-                                {formatBalance(balance, nativeToken?.decimals, 3)} {nativeToken?.symbol}
-                            </Typography>
-                        </div>
-                    ) : null}
+
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.balance}>
+                            {loadingNativeToken || loadingBalance
+                                ? '-'
+                                : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                        </Typography>
+                    </div>
                 </div>
 
                 {!props.disableChange && (
                     <section>
-                        {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
-                            <Button
-                                className={classNames(classes.actionButton)}
-                                variant="contained"
-                                size="small"
-                                onClick={async () => {
-                                    await connection.disconnect()
-                                    closeWalletStatusDialog()
-                                    openSelectProviderDialog()
-                                }}>
-                                {t('plugin_wallet_disconnect')}
-                            </Button>
-                        ) : null}
+                        <Button
+                            className={classNames(classes.actionButton)}
+                            variant="contained"
+                            size="small"
+                            onClick={async () => {
+                                await connection.disconnect()
+                                closeWalletStatusDialog()
+                                openSelectProviderDialog()
+                            }}>
+                            {t('plugin_wallet_disconnect')}
+                        </Button>
                         <Button
                             className={classNames(classes.actionButton)}
                             variant="contained"
