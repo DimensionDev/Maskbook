@@ -75,11 +75,12 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const actualChainId = useChainId(actualPluginID)
     const actualProviderType = useProviderType(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
+    const account = useAccount(actualPluginID)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
-    const expectedAccount = useAccount(expectedPluginID)
+
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
@@ -151,7 +152,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         )
     }
 
-    if (!expectedAccount)
+    if (!account)
         return renderBox(
             <>
                 {!props.hiddenConnectButton ? (
