@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: 'calc(100% - 24px)',
+            gap: 8,
         },
         button: {
             flex: 1,

@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             flex: 1,
+            gap: 8,
         },
         button: {
             flex: 1,
