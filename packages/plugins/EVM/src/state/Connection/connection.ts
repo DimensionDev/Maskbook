@@ -172,7 +172,7 @@ class Connection implements EVM_Connection {
                 chainId: this.chainId,
                 ...initial?.overrides,
                 ...overrides?.overrides,
-            }
+            },
         }
     }
 
