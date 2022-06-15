@@ -1,4 +1,4 @@
-import { useBlockNumber, useChainId, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'
@@ -12,7 +12,6 @@ export function useAllPoolsAsSeller(address: string) {
     const allPoolsRef = useRef<PoolFromNetwork[]>([])
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { value: blockNumber = 0 } = useBlockNumber(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
         allPoolsRef.current = []
@@ -24,11 +23,12 @@ export function useAllPoolsAsSeller(address: string) {
                 pools: EMPTY_LIST,
                 loadMore: false,
             }
+        const blockNumber = await connection.getBlockNumber()
         const _pools = await getAllPoolsAsSeller(address, blockNumber, chainId, connection)
         const pools = _pools.filter((a) => !allPoolsRef.current.map((b) => b.pool.pid).includes(a.pool.pid))
         allPoolsRef.current = allPoolsRef.current.concat(pools)
         return { pools: allPoolsRef.current, loadMore: pools.length > 0 }
-    }, [address, blockNumber, chainId, connection])
+    }, [address, chainId, connection])
 }
 
 async function getAllPoolsAsSeller(
