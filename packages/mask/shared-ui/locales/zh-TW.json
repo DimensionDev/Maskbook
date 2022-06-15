@@ -152,8 +152,6 @@
     "relative_time_months_ago": "{{months}} 月前",
     "relative_time_seconds_ago": "{{seconds}} 秒前",
     "relative_time_years_ago": "{{years}} 年前",
-    "plugin_wallet_guiding_step_1": "1. 選擇網路",
-    "plugin_wallet_guiding_step_2": "2. 選擇錢包",
     "plugin_wallet_select_a_nft_contract": "選擇一份NFT合約",
     "plugin_wallet_select_a_nft_owner": "選擇一位NFT合約擁有者",
     "plugin_wallet_select_a_nft_operator": "選擇一位NFT合約執行者",
