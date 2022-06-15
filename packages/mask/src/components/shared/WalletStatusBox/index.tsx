@@ -13,7 +13,7 @@ import {
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography } from '@mui/material'

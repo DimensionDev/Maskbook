@@ -1,5 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import { first, isNative } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import { unreachable } from '@dimensiondev/kit'
 import type { BlockHeaderObject, BlockObject, MutateOptions, QueryOptions } from '@blocto/fcl'
 import {
