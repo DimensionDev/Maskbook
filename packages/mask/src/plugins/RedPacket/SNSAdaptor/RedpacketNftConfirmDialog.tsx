@@ -258,7 +258,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
-                            {wallet?.name ? `(${wallet.name})` : ''} {formatEthereumAddress(account, 4)}
+                            {formatEthereumAddress(account, 4)}
                             {isNativeTokenAddress(wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"
