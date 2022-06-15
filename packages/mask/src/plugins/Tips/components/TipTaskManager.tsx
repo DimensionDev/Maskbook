@@ -14,7 +14,7 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {
-        setTasks((list) => list.filter((t) => t !== task))
+        setTasks((list) => list.filter((t) => t.id !== task.id))
     }, [])
 
     useEffect(() => {

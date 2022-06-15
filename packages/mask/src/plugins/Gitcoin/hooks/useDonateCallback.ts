@@ -52,12 +52,6 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         }
 
         const tx = await encodeTransaction(bulkCheckoutContract, bulkCheckoutContract.methods.donate(donations), config)
-
-        console.log('DEBUG: get tx')
-        console.log({
-            tx,
-        })
-
         return connection.sendTransaction(tx)
     }, [account, amount, token, donations, connection])
 }

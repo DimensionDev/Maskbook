@@ -54,8 +54,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
-        if (chainId !== ChainId.Mainnet) {
-            return []
+        if (!open || chainId !== ChainId.Mainnet) {
+            return EMPTY_LIST
         }
 
         const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
@@ -73,7 +73,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         return tokens?.map((token) => {
             return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
         })
-    }, [web3, chainId])
+    }, [open, web3, chainId])
 
     const { value: detailedAaveTokens } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
@@ -104,6 +104,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 <InjectedDialog
                     open={open}
                     title={t('plugin_savings')}
+                    isOnBack={Boolean(selectedProtocol)}
                     onClose={() => {
                         if (selectedProtocol === null) {
                             onClose?.()

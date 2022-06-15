@@ -66,7 +66,14 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classes.chip}
-                icon={<TokenIcon address={token.address} name={token.name} logoURL={token.logoURL} />}
+                icon={
+                    <TokenIcon
+                        address={token.address}
+                        chainId={token.chainId}
+                        name={token.name}
+                        logoURL={token.logoURL}
+                    />
+                }
                 deleteIcon={<ErrorIcon className={classes.icon} />}
                 label={token.symbol}
                 color="default"
@@ -86,6 +93,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
                     classes={{ icon: classes.tokenIcon }}
                     address={token.address}
                     name={token.name}
+                    chainId={token.chainId}
                     logoURL={token.logoURL}
                 />
             }

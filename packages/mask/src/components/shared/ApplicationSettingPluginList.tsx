@@ -15,12 +15,17 @@ export interface Application {
 
 // #region kv storage
 export function setUnlistedApp(app: Application, unlisted: boolean) {
-    PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID].setValue(unlisted)
+    const state = PersistentStorages.ApplicationEntryUnListedList.storage.current
+    if (!state.initialized) return
+    PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({
+        ...state.value,
+        [app.entry.ApplicationEntryID]: unlisted,
+    })
 }
 
 export function getUnlistedApp(app: Application): boolean {
-    const state = PersistentStorages.ApplicationEntryUnListedList.storage[app.entry.ApplicationEntryID]
-    return state.initialized ? state.value : true
+    const state = PersistentStorages.ApplicationEntryUnListedList.storage.current
+    return state.initialized ? state.value[app.entry.ApplicationEntryID] : true
 }
 // #endregion
 

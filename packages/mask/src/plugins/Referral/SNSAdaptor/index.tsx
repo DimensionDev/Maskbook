@@ -59,7 +59,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         : clickHandler
                                 }
                             />
-                            <ReferralDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <ReferralDialog open={open} onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },

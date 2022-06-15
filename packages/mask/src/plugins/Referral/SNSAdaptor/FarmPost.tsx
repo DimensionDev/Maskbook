@@ -192,7 +192,10 @@ export function FarmPost(props: FarmPostProps) {
                 )}
             </Card>
             <Grid container className={classes.actions}>
-                <ChainBoundary expectedChainId={SWAP_CHAIN_ID} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                <ChainBoundary
+                    expectedChainId={SWAP_CHAIN_ID}
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    renderInTimeline>
                     <WalletConnectedBoundary offChain>
                         <Grid item xs={6} display="flex" textAlign="center">
                             <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>

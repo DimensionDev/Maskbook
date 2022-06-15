@@ -5,8 +5,8 @@ import { ChainId, decodeOutputString, UnboxTransactionObject } from '@masknet/we
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useMulticallContract } from './useMulticallContract'
 import { useChainId } from '../useChainId'
-import { useBlockNumber } from '../useBlockNumber'
 import { useWeb3 } from '../useWeb3'
+import { useWeb3Connection } from '../useWeb3Connection'
 
 // #region types
 // [target, gasLimit, callData]
@@ -103,10 +103,8 @@ export type MulticallState =
  * @param calls
  */
 export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const chainId = targetChainId ?? currentChainId
-    const { value: defaultBlockNumber = 0 } = useBlockNumber(NetworkPluginID.PLUGIN_EVM)
-    const blockNumber = targetBlockNumber ?? defaultBlockNumber
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, targetChainId)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,
@@ -119,6 +117,9 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 })
                 return
             }
+
+            const blockNumber = targetBlockNumber ?? (await connection.getBlockNumber())
+
             try {
                 setMulticallState({
                     type: MulticallStateType.PENDING,
@@ -153,7 +154,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 throw error
             }
         },
-        [chainId, blockNumber, multicallContract],
+        [chainId, targetBlockNumber, multicallContract],
     )
     return [multicallState, multicallCallback] as const
 }
