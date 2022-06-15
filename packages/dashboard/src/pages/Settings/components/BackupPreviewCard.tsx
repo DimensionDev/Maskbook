@@ -53,7 +53,7 @@ export default function BackupPreviewCard({ json }: Props) {
             sub: true,
         },
         {
-            name: t.settings_backup_preview_fils(),
+            name: t.settings_backup_preview_file(),
             value: json.files,
             sub: true,
         },

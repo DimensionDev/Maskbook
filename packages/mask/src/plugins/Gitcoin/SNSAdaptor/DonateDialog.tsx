@@ -97,25 +97,23 @@ export function DonateDialog(props: DonateDialogProps) {
     const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     // #endregion
 
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-
     const openShareTxDialog = useOpenShareTxDialog()
     const donate = useCallback(async () => {
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
+        const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const shareText = token
-            ? [
-                  `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account')
-                            } (mask.io) to donate Gitcoin grants.`
-                          : ''
-                  }`,
-                  t.promote(),
-                  '#mask_io',
-                  postLink,
-              ].join('\n')
+            ? t.share_text({
+                  title,
+                  balance: formatBalance(amount, token?.decimals),
+                  symbol: `${cashTag}${token?.symbol || ''}`,
+                  account_promote: t.account_promote({
+                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                  }),
+                  link: postLink.toString(),
+              })
             : ''
         await openShareTxDialog({
             hash,

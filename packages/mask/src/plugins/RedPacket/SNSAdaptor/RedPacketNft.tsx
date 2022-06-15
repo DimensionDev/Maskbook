@@ -286,22 +286,21 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const postLink = usePostLink()
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const shareText = useMemo(() => {
-        const isTwitterOrFacebook = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
             network: networkResolver.networkName(networkType) || '',
-            account: isTwitter(activatedSocialNetworkUI) ? i18n('twitter_account') : i18n('facebook_account'),
-        }
+            account_promote: t.account_promote({
+                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+            }),
+        } as const
         if (availability?.isClaimed) {
-            return isTwitterOrFacebook
-                ? t.nft_share_claimed_message(options)
-                : t.nft_share_claimed_message_not_twitter(options)
+            return t.nft_share_claimed_message(options)
         }
-        return isTwitterOrFacebook
-            ? t.nft_share_foreshow_message(options)
-            : t.nft_share_foreshow_message_not_twitter(options)
-    }, [availability?.isClaimed, t, i18n])
+        return t.nft_share_foreshow_message(options)
+    }, [availability?.isClaimed, t])
 
     const onShare = useCallback(() => {
         if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
