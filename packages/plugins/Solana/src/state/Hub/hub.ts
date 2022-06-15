@@ -70,18 +70,22 @@ class Hub implements SolanaHub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
-        return SolanaRPC.getFungibleAssets(account, options)
+        const options = this.getOptions(initial, {
+            account,
+        })
+        return SolanaRPC.getFungibleAssets(options.account, options)
     }
     getNonFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
+        const options = this.getOptions(initial, {
+            account,
+        })
         try {
-            return MagicEden.getTokens(account, options)
+            return MagicEden.getTokens(options.account, options)
         } catch {
-            return SolanaRPC.getNonFungibleAssets(account, options)
+            return SolanaRPC.getNonFungibleAssets(options.account, options)
         }
     }
     getNonFungibleCollections(
@@ -91,7 +95,7 @@ class Hub implements SolanaHub {
         const options = this.getOptions(initial, {
             account,
         })
-        return MagicEden.getCollections(account, options)
+        return MagicEden.getCollections(options.account, options)
     }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         const options = this.getOptions(initial)

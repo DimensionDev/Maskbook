@@ -167,7 +167,12 @@ class Connection implements EVM_Connection {
             chainId: this.chainId,
             providerType: this.providerType,
             ...initial,
-            ...overrides,
+            overrides: {
+                from: this.account,
+                chainId: this.chainId,
+                ...initial?.overrides,
+                ...overrides?.overrides,
+            }
         }
     }
 
@@ -251,13 +256,13 @@ class Connection implements EVM_Connection {
         if (actualSchema === SchemaType.ERC1155) {
             const contract = await this.getERC1155Contract(address, options)
             const tx = contract?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x')
-            return sendTransaction(contract, tx, options?.overrides)
+            return sendTransaction(contract, tx, options.overrides)
         }
 
         // ERC721
         const contract = await this.getERC721Contract(address, options)
         const tx = contract?.methods.transferFrom(options.account, recipient, tokenId)
-        return sendTransaction(contract, tx, options?.overrides)
+        return sendTransaction(contract, tx, options.overrides)
     }
 
     async getGasPrice(initial?: EVM_Web3ConnectionOptions): Promise<string> {
@@ -274,19 +279,20 @@ class Connection implements EVM_Connection {
         const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
         const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
 
-        const account = options?.account ?? this.account
         const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
-        const isERC165 = await erc165Contract?.methods.supportsInterface(ERC165_INTERFACE_ID).call({ from: account })
+        const isERC165 = await erc165Contract?.methods
+            .supportsInterface(ERC165_INTERFACE_ID)
+            .call({ from: options.account })
 
         const isERC721 = await erc165Contract?.methods
             .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
-            .call({ from: account })
+            .call({ from: options.account })
         if (isERC165 && isERC721) return SchemaType.ERC721
 
         const isERC1155 = await erc165Contract?.methods
             .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
-            .call({ from: account })
+            .call({ from: options.account })
         if (isERC165 && isERC1155) return SchemaType.ERC1155
 
         const isERC20 = (await this.getCode(address, options)) !== '0x'
@@ -479,7 +485,7 @@ class Connection implements EVM_Connection {
     }
     async switchChain(initial?: EVM_Web3ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options?.providerType ?? this.providerType].switchChain(options?.chainId)
+        await Providers[options.providerType].switchChain(options.chainId)
     }
     async getNativeTokenBalance(initial?: EVM_Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
@@ -527,7 +533,7 @@ class Connection implements EVM_Connection {
         const entities: Array<[string, string]> = []
 
         if (listOfAddress.some(currySameAddress(NATIVE_TOKEN_ADDRESS))) {
-            entities.push([NATIVE_TOKEN_ADDRESS, await this.getBalance(this.account, options)])
+            entities.push([NATIVE_TOKEN_ADDRESS, await this.getBalance(options.account, options)])
         }
 
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x))
@@ -558,7 +564,7 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(this.chainId)
+        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options.chainId)
         const contract = await this.getWeb3Contract<BalanceChecker>(
             BALANCE_CHECKER_ADDRESS ?? '',
             BalanceCheckerABI as AbiItem[],
@@ -567,7 +573,7 @@ class Connection implements EVM_Connection {
         const result = await contract?.methods.balances([options.account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,
-            chainId: numberToHex(options?.chainId ?? this.chainId),
+            chainId: numberToHex(options.chainId),
         })
 
         if (result?.length !== listOfAddress.length) return {}
@@ -604,7 +610,7 @@ class Connection implements EVM_Connection {
             result.status === 'fulfilled' ? result.value : '',
         ) as string[]
         return createERC20Token(
-            options?.chainId ?? this.chainId,
+            options.chainId,
             address,
             parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
             parseStringOrBytes32(symbol, symbolBytes32, 'UNKNOWN'),
@@ -834,7 +840,7 @@ class Connection implements EVM_Connection {
                 params: [
                     {
                         ...transaction,
-                        ...options?.overrides,
+                        ...options.overrides,
                     },
                     'latest',
                 ],
@@ -851,7 +857,7 @@ class Connection implements EVM_Connection {
                 params: [
                     {
                         ...transaction,
-                        ...options?.overrides,
+                        ...options.overrides,
                     },
                 ],
             },

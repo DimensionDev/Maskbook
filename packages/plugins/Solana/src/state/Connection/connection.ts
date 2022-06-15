@@ -378,7 +378,7 @@ class Connection implements BaseConnection {
             token ??
             ({
                 address,
-                chainId: options?.chainId,
+                chainId: options.chainId,
             } as FungibleToken<ChainId, SchemaType>)
         )
     }

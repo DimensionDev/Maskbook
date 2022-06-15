@@ -109,8 +109,10 @@ class Hub implements FlowHub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
-        return Alchemy_FLOW.getAssets(account, options)
+        const options = this.getOptions(initial, {
+            account,
+        })
+        return Alchemy_FLOW.getAssets(options.account, options)
     }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         // The Flow chain is unlisted in CoinGecko.
