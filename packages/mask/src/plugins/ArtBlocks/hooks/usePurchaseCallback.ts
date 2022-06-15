@@ -14,15 +14,13 @@ export function usePurchaseCallback(chainId: ChainId, projectId: string, amount:
     return useAsyncFn(async () => {
         if (!genArt721MinterContract) return
 
-        const value = new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed()
-        const config = {
-            from: account,
-            value,
-        }
         const tx = await encodeTransaction(
             genArt721MinterContract,
             genArt721MinterContract.methods.purchase(projectId),
-            config,
+            {
+                from: account,
+                value: new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed(),
+            },
         )
         return connection.sendTransaction(tx)
     }, [account, amount, chainId, genArt721MinterContract, connection])

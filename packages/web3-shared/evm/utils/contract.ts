@@ -6,27 +6,23 @@ import type {
     PayableTransactionObject,
     PayableTx,
 } from '@masknet/web3-contracts/types/types'
-import type { SendOptions } from 'web3-eth-contract'
 import type { Transaction } from '../types'
 import { isValidAddress } from './address'
 
 export async function encodeTransaction(
     contract: BaseContract,
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    options?: Partial<SendOptions> & {
-        maxPriorityFeePerGas?: string
-        maxFeePerGas?: string
-    },
+    overrides?: Partial<Transaction>,
 ) {
     const encoded: Transaction = {
-        from: contract.defaultAccount ?? options?.from,
+        from: contract.defaultAccount ?? undefined,
         to: contract.options.address,
         data: transaction.encodeABI(),
-        ...options,
+        ...overrides,
     }
 
     if (!encoded.gas) {
-        encoded.gas = await transaction.estimateGas(options)
+        encoded.gas = await transaction.estimateGas(overrides as PayableTx)
     }
 
     return encoded
@@ -38,13 +34,8 @@ export async function sendTransaction(
     overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
-    const tx = await encodeTransaction(contract, transaction, {
-        from: overrides?.from as string | undefined,
-    })
-    const receipt = await transaction.send({
-        ...tx,
-        ...overrides,
-    } as PayableTx)
+    const tx = await encodeTransaction(contract, transaction, overrides)
+    const receipt = await transaction.send(tx as PayableTx)
     return receipt?.transactionHash ?? ''
 }
 
