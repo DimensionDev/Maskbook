@@ -11,5 +11,9 @@
     "last_updated": "crwdns16724:0crwdne16724:0",
     "by": "crwdns16726:0crwdne16726:0",
     "view_on": "crwdns16728:0crwdne16728:0",
-    "readme_fund_link": "crwdns16730:0crwdne16730:0"
+    "readme_fund_link": "crwdns16730:0crwdne16730:0",
+    "account_promote$default": "crwdns17276:0crwdne17276:0",
+    "account_promote$twitter": "crwdns17278:0$t(mask:twitter_account)crwdne17278:0",
+    "account_promote$facebook": "crwdns17280:0$t(mask:facebook_account)crwdne17280:0",
+    "share_text": "crwdns17282:0{{title}}crwdnd17282:0{{balance}}crwdnd17282:0{{symbol}}crwdnd17282:0{{account_promote}}crwdnd17282:0$t(promote)crwdnd17282:0$t(mask:hash_tag)crwdnd17282:0{{link}}crwdne17282:0"
 }
