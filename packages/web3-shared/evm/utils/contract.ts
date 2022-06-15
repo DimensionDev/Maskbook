@@ -13,13 +13,13 @@ import { isValidAddress } from './address'
 export async function encodeTransaction(
     contract: BaseContract,
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    options?: SendOptions & {
+    options?: Partial<SendOptions> & {
         maxPriorityFeePerGas?: string
         maxFeePerGas?: string
     },
 ) {
     const encoded: Transaction = {
-        from: contract.defaultAccount ?? undefined,
+        from: contract.defaultAccount ?? options?.from,
         to: contract.options.address,
         data: transaction.encodeABI(),
         ...options,
@@ -38,7 +38,9 @@ export async function sendTransaction(
     overrides?: Partial<Transaction>,
 ) {
     if (!contract || !transaction) throw new Error('Invalid contract or transaction.')
-    const tx = await encodeTransaction(contract, transaction)
+    const tx = await encodeTransaction(contract, transaction, {
+        from: overrides?.from as string | undefined,
+    })
     const receipt = await transaction.send({
         ...tx,
         ...overrides,
