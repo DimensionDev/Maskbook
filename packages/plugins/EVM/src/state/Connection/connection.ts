@@ -111,7 +111,8 @@ class Connection implements EVM_Connection {
     private get hijackedRequest() {
         return <T extends unknown>(requestArguments: RequestArguments, initial?: EVM_Web3ConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
-                const context = createContext(this, requestArguments, this.getOptions(initial))
+                const options = this.getOptions(initial)
+                const context = createContext(this, requestArguments, options)
 
                 try {
                     await dispatch(context, async () => {
@@ -121,24 +122,24 @@ class Connection implements EVM_Connection {
                                 case EthereumMethodType.MASK_LOGIN:
                                     context.write(
                                         await Web3StateSettings.value.Provider?.connect(
-                                            context.chainId,
-                                            context.providerType,
+                                            options.chainId,
+                                            options.providerType,
                                         ),
                                     )
                                     break
                                 case EthereumMethodType.MASK_LOGOUT:
                                     context.write(
-                                        await Web3StateSettings.value.Provider?.disconnect(context.providerType),
+                                        await Web3StateSettings.value.Provider?.disconnect(options.providerType),
                                     )
                                     break
                                 default:
                                     const web3Provider = await Providers[
                                         isReadOnlyMethod(context.method)
                                             ? ProviderType.MaskWallet
-                                            : context.providerType
+                                            : options.providerType
                                     ].createWeb3Provider({
-                                        account: context.account,
-                                        chainId: context.chainId,
+                                        account: options.account,
+                                        chainId: options.chainId,
                                     })
 
                                     // send request and set result in the context
