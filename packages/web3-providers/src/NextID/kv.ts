@@ -3,7 +3,7 @@
  */
 import urlcat from 'urlcat'
 import type { NextIDStoragePayload, NextIDPlatform } from '@masknet/shared-base'
-import { fetchJSON } from './helper'
+import { deleteCache, fetchJSON } from './helper'
 import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants'
@@ -44,7 +44,11 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             persona: string
             proofs: Proof[]
         }
-        const response = await fetchJSON<Response>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        const response = await fetchJSON<Response>(
+            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            undefined,
+            true,
+        )
         if (!response.ok) return Err('User not found')
         const proofs = (response.val.proofs ?? [])
             .filter((x) => x.platform === platform)
@@ -123,6 +127,8 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             patch: formatPatchData(pluginId, patchData),
             created_at: createdAt,
         }
+
+        deleteCache(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
 
         return fetchJSON(urlcat(BASE_URL, '/v1/kv'), {
             body: JSON.stringify(requestBody),
