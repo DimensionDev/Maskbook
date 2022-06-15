@@ -233,7 +233,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const tokensInList = uniqBy(
-        [...tokens, ...collectibles],
+        [...tokens.filter((x) => x.chainId === chainId), ...collectibles],
         selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
             ? (x) => x.tokenId
             : (x) => x.contract?.address.toLowerCase() + x.tokenId,
