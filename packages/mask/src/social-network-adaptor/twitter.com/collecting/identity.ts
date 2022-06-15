@@ -135,12 +135,14 @@ function resolveCurrentVisitingIdentityInner(
             nickname,
             avatar,
             bio,
+            homepage,
         }
+
         Services.Helper.resolveTCOLink(homepage).then((link) => {
-            if (cancel?.aborted || !link) return
+            if (cancel?.aborted) return
             ref.value = {
                 ...ref.value,
-                homepage: link,
+                homepage: link ?? homepage,
             }
         })
     }
