@@ -200,7 +200,7 @@ class Hub implements EVM_Hub {
         const { TOKEN_ASSET_BASE_URI = [] } = getTokenAssetBaseURLConstants(options.chainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
-        if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+        if (isSameAddress(getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
             return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
         }
 
