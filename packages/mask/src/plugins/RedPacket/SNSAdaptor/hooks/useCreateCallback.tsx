@@ -142,7 +142,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             redPacketContract.methods.create_red_packet(...params),
             config,
         )
-
+        // TODO: kill this storage and support contract event deocde
         sessionStorage.setItem('red_packet_total', paramsObj.total)
         return connection.sendTransaction(tx)
     }, [account, connection, redPacketContract, redPacketSettings, chainId, getCreateParams])
