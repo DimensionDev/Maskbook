@@ -123,7 +123,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         : clickHandler
                                 }
                             />
-                            <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <ClaimAllDialog open={open} onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },
