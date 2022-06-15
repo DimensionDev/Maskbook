@@ -37,7 +37,7 @@ async function getAllPoolsAsSeller(
     chainId: ChainId,
     connection: Web3Helper.Web3Connection<NetworkPluginID.PLUGIN_EVM>,
 ) {
-    if (!connection) return []
+    if (!connection) return EMPTY_LIST
 
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
