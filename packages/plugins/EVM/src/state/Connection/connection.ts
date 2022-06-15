@@ -232,7 +232,6 @@ class Connection implements EVM_Connection {
                 {
                     ...tx,
                     gas: await this.estimateTransaction(tx, 50000, options),
-                    ...options.overrides,
                 },
                 options,
             )
