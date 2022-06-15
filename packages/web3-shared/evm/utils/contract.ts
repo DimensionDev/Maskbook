@@ -13,9 +13,8 @@ import { isValidAddress } from './address'
 export async function encodeTransaction(
     contract: BaseContract,
     transaction: PayableTransactionObject<unknown> | NonPayableTransactionObject<unknown>,
-    initial?: Partial<Transaction>,
+    overrides?: Partial<Transaction>,
 ) {
-    const overrides = omit(initial, 'chainId')
     const encoded: Transaction = {
         from: contract.defaultAccount ?? undefined,
         to: contract.options.address,
