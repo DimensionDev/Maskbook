@@ -179,8 +179,8 @@ export class ProviderState<
         }
 
         // update local storage
-        await this.setAccount(providerType, account)
         await this.setProvider(providerType)
+        await this.setAccount(providerType, account)
 
         provider.emitter.emit('connect', account)
         return account
