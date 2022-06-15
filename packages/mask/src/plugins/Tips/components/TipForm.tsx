@@ -54,6 +54,8 @@ const useStyles = makeStyles()((theme) => {
         },
         actionButton: {
             marginTop: theme.spacing(1.5),
+            paddingTop: 12,
+            paddingBottom: 12,
             fontSize: 16,
         },
         button: {
