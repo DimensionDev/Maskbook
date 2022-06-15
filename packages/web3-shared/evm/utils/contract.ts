@@ -1,5 +1,6 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
+import { omit } from 'lodash-unified'
 import type {
     BaseContract,
     NonPayableTransactionObject,
@@ -18,7 +19,7 @@ export async function encodeTransaction(
         from: contract.defaultAccount ?? undefined,
         to: contract.options.address,
         data: transaction.encodeABI(),
-        ...overrides,
+        ...omit(overrides, 'chainId'),
     }
 
     if (!encoded.gas) {

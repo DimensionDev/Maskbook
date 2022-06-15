@@ -57,10 +57,7 @@ const SharedContext: Omit<Plugin.Shared.SharedContext, 'createKVStorage'> = {
     chainId: createSubscriptionFromValueRef(currentMaskWalletChainIdSettings),
 
     wallets: createSubscriptionFromAsync(
-        () => {
-            console.log('DEBUG: wallet rpc get wallets')
-            return WalletRPC.getWallets()
-        },
+        () => WalletRPC.getWallets(),
         EMPTY_LIST,
         WalletMessages.events.walletsUpdated.on,
     ),
@@ -93,7 +90,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues)
         },
-        ... SharedContext,
+        ...SharedContext,
     }
 }
 
