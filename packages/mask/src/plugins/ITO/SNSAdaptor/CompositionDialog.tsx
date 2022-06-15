@@ -235,7 +235,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         <InjectedDialog
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             disableBackdropClick
-            isOnBack={step === ITOCreateFormPageStep.ConfirmItoPage}
+            isonback={step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}
             onClose={onClose}>

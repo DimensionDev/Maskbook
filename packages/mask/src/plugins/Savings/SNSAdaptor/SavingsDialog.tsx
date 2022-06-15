@@ -104,7 +104,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 <InjectedDialog
                     open={open}
                     title={t('plugin_savings')}
-                    isOnBack={Boolean(selectedProtocol)}
+                    isonback={Boolean(selectedProtocol)}
                     onClose={() => {
                         if (selectedProtocol === null) {
                             onClose?.()
