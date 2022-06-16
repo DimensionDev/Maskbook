@@ -1,15 +1,17 @@
+import { CheckIcon, LinkOutIcon, VerifiedIcon } from '@masknet/icons'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
     Button,
     FormControl,
     FormControlLabel,
+    Link,
     MenuItem,
     Radio,
     RadioGroup,
@@ -21,13 +23,14 @@ import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { CopyIconButton } from '../../NextID/components/CopyIconButton'
 import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
 import { NFTSection } from './NFTSection'
 import { TokenSection } from './TokenSection'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
     return {
         root: {
             display: 'flex',
@@ -54,6 +57,28 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             marginLeft: theme.spacing(1),
         },
+        select: {
+            display: 'flex',
+            alignItems: 'center',
+            [`& .${refs.icon}`]: {
+                display: 'none',
+            },
+        },
+        menuItem: {
+            height: 40,
+        },
+        icon: {},
+        link: {
+            display: 'inline-flex',
+            alignItems: 'center',
+        },
+        actionIcon: {
+            marginRight: theme.spacing(1),
+            color: theme.palette.text.secondary,
+        },
+        checkIcon: {
+            marginLeft: 'auto',
+        },
         controls: {
             marginTop: theme.spacing(1),
             display: 'flex',
@@ -78,7 +103,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     const currentChainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles({})
     const {
         recipient,
         recipients: recipientAddresses,
@@ -124,6 +149,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                         ref={selectRef}
                         value={recipient}
                         disabled={isSending}
+                        classes={{ select: classes.select }}
                         onChange={(e) => {
                             setRecipient(e.target.value)
                         }}
@@ -138,9 +164,34 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                                 invisible: true,
                             },
                         }}>
-                        {recipientAddresses.map((address) => (
-                            <MenuItem key={address} value={address}>
-                                {Others?.formatDomainName?.(address) || address}
+                        {recipientAddresses.map((addressConfig) => (
+                            <MenuItem
+                                className={classes.menuItem}
+                                key={addressConfig.address}
+                                value={addressConfig.address}>
+                                {Others?.formatAddress?.(addressConfig.address, 4) || addressConfig.address}
+                                <CopyIconButton
+                                    className={cx(classes.actionIcon, classes.icon)}
+                                    text={addressConfig.address}
+                                />
+                                <Link
+                                    className={cx(classes.link, classes.icon)}
+                                    onClick={(e) => e.stopPropagation()}
+                                    href={
+                                        Others?.explorerResolver.addressLink(ChainId.Mainnet, addressConfig.address) ??
+                                        ''
+                                    }
+                                    target="_blank"
+                                    title={t.view_on_explorer()}
+                                    rel="noopener noreferrer">
+                                    <LinkOutIcon className={classes.actionIcon} />
+                                </Link>
+                                {addressConfig.verified ? (
+                                    <VerifiedIcon className={cx(classes.actionIcon, classes.icon)} />
+                                ) : null}
+                                {addressConfig.address === recipient ? (
+                                    <CheckIcon className={cx(classes.checkIcon, classes.icon)} />
+                                ) : null}
                             </MenuItem>
                         ))}
                     </Select>

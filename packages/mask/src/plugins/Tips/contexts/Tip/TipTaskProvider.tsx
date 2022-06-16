@@ -35,9 +35,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [targetChainId])
 
     useEffect(() => {
-        const selected = recipient && task.addresses.includes(recipient)
+        const selected = recipient && task.addresses.find((x) => x.address === recipient)
         if (selected || task.addresses.length === 0) return
-        setRecipient(task.addresses[0])
+        setRecipient(task.addresses[0].address)
     }, [recipient, task.addresses])
 
     useEffect(() => {

@@ -7,19 +7,20 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
-import { uniq } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../shared'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useProfilePublicKey } from '../hooks/useProfilePublicKey'
 import { usePublicWallets } from '../hooks/usePublicWallets'
 import { useI18N } from '../locales'
 import { PluginNextIDMessages } from '../messages'
+import type { AddressConfig } from '../types'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: string[]
+    addresses?: AddressConfig[]
     receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
@@ -71,24 +72,22 @@ export const TipButton: FC<Props> = ({
     const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: receiverPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!receiver) return
-        return Services.Identity.queryPersonaByProfile(receiver)
-    }, [receiver])
+    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const receiverUserId = receiver?.userId
 
     const pluginId = useCurrentWeb3NetworkPluginID()
     const {
         value: isAccountVerified,
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
-    } = useAsyncRetry(() => {
-        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return Promise.resolve(true)
-        if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
-        return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
-    }, [pluginId, receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
+    } = useAsyncRetry(async () => {
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return true
+        if (!personaPubkey || !receiverUserId) return false
+        return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
+    }, [pluginId, personaPubkey, platform, receiverUserId])
     const visitingIdentity = useCurrentVisitingIdentity()
 
-    const isVisitingUser = visitingIdentity.identifier?.userId === receiver?.userId
+    const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
@@ -100,19 +99,19 @@ export const TipButton: FC<Props> = ({
     }, [pluginId, isVisitingUser])
 
     useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retryLoadVerifyInfo()
-        })
+        return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
     }, [])
 
-    const publicWallets = usePublicWallets(receiver || undefined)
+    const publicWallets = usePublicWallets(personaPubkey)
     const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(visitingIdentity)
     const allAddresses = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
-                return uniq([...publicWallets, ...addresses])
+                return uniqBy([...publicWallets, ...addresses], (v) => v.address)
             case NetworkPluginID.PLUGIN_SOLANA:
-                return socialAddressList.filter((x) => x.networkSupporterPluginID === pluginId).map((x) => x.address)
+                return socialAddressList
+                    .filter((x) => x.networkSupporterPluginID === pluginId)
+                    .map((x) => ({ address: x.address }))
         }
         return EMPTY_LIST
     }, [pluginId, publicWallets, addresses, socialAddressList])
@@ -125,21 +124,21 @@ export const TipButton: FC<Props> = ({
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (!allAddresses.length || !receiver?.userId) return
+            if (!allAddresses.length || !receiverUserId) return
             PluginNextIDMessages.tipTask.sendToLocal({
-                recipientSnsId: receiver.userId,
+                recipientSnsId: receiverUserId,
                 addresses: allAddresses,
             })
         },
-        [disabled, allAddresses, receiver?.userId],
+        [disabled, allAddresses, receiverUserId],
     )
 
     useEffect(() => {
         PluginNextIDMessages.tipTaskUpdate.sendToLocal({
-            recipientSnsId: receiver?.userId,
+            recipientSnsId: receiverUserId,
             addresses: allAddresses,
         })
-    }, [receiver?.userId, allAddresses])
+    }, [receiverUserId, allAddresses])
 
     const dom = (
         <div

@@ -1,28 +1,29 @@
 import { PluginId } from '@masknet/plugin-infra'
-import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo, ProfileIdentifier } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { first, uniq } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { MaskMessages } from '../../../utils'
+import type { AddressConfig } from '../types'
 import { useKvGet } from './useKv'
-import { useProfilePublicKey } from './useProfilePublicKey'
 
-export function usePublicWallets(profile: ProfileIdentifier | undefined) {
-    const publicKey = useProfilePublicKey(profile)
-    const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(publicKey)
-    const [NextIDWalletsState, queryWallets] = useAsyncFn(async () => {
-        if (!publicKey) return EMPTY_LIST
+export function usePublicWallets(personaPubkey: string | undefined): AddressConfig[] {
+    const [{ value: nextIdWallets }, queryWallets] = useAsyncFn(async (): Promise<AddressConfig[]> => {
+        if (!personaPubkey) return EMPTY_LIST
 
-        const bindings = await NextIDProof.queryExistedBindingByPersona(publicKey, true)
+        const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
         if (!bindings) return EMPTY_LIST
 
-        const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)
+        const wallets = bindings.proofs
+            .filter((p) => p.platform === NextIDPlatform.Ethereum)
+            .map((p) => ({ address: p.identity, verified: true }))
         return wallets
-    }, [publicKey])
+    }, [personaPubkey])
     useAsync(queryWallets, [queryWallets])
 
-    const walletsFromCloud = useMemo(() => {
+    const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(personaPubkey)
+    const walletsFromCloud = useMemo((): AddressConfig[] | null => {
         if (!kv?.ok) return null
         const { proofs } = kv.val
         if (!proofs.length) return null
@@ -35,15 +36,15 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
         if (!tipWallets) return null
         return tipWallets
             .filter((x) => {
-                if (NextIDWalletsState.value) {
+                if (nextIdWallets) {
                     // Sometimes, the wallet might get deleted from next.id
-                    return x.isPublic && NextIDWalletsState.value.includes(x.identity)
+                    return x.isPublic && nextIdWallets.find((y) => y.address === x.identity)
                 } else {
                     return x.isPublic
                 }
             })
-            .map((x) => x.identity)
-    }, [kv, NextIDWalletsState.value])
+            .map((x) => ({ address: x.identity, verified: true }))
+    }, [kv, nextIdWallets])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -53,6 +54,6 @@ export function usePublicWallets(profile: ProfileIdentifier | undefined) {
 
     return useMemo(() => {
         // If user configured wallets for tips, it couldn't be null.
-        return walletsFromCloud || uniq(NextIDWalletsState.value || [])
-    }, [NextIDWalletsState.value, walletsFromCloud])
+        return walletsFromCloud || uniqBy(nextIdWallets || [], (x) => x.address)
+    }, [nextIdWallets, walletsFromCloud])
 }
