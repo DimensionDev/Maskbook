@@ -59,8 +59,8 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
                 </Typography>
             ) : (
                 <List>
-                    {histories.map((history) => (
-                        <div key={history.rpid}>
+                    {histories.map((history, i) => (
+                        <div key={i}>
                             <RedPacketInHistoryList history={history} onSelect={onSelect} />
                         </div>
                     ))}
