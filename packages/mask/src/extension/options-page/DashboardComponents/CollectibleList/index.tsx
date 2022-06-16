@@ -243,6 +243,7 @@ export function CollectionList({
         done,
         next: nextPage,
         error,
+        loading,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
