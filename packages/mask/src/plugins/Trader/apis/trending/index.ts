@@ -15,7 +15,7 @@ import {
     resolveCoinAddress,
     resolveCoinId,
 } from './hotfix'
-import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
 /**
@@ -145,15 +145,15 @@ export async function checkAvailabilityOnDataProvider(
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
-    const networkType = chainResolver.chainNetworkType(chainId)
-    if (!networkType) return []
+    const isMainnet = chainResolver.isMainnet(chainId)
+    if (!isMainnet) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
-            .filter((x) => (networkType === NetworkType.Ethereum ? true : x.value !== DataProvider.UNISWAP_INFO))
+            .filter((x) => (isMainnet ? true : x.value !== DataProvider.UNISWAP_INFO))
             .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
-            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? networkType === NetworkType.Ethereum : true))
+            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? isMainnet : true))
             .map(
                 async (x) =>
                     [
