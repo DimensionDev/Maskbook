@@ -18,8 +18,7 @@ import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PluginId } from '@masknet/plugin-infra'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
@@ -40,11 +39,14 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         content: {
+            position: 'relative',
+            top: '-36px',
             paddingTop: 0,
-            paddingBottom: 0,
+            paddingBottom: '0 !important',
         },
         cardHeader: {
             padding: theme.spacing(2),
+            paddingBottom: theme.spacing(6.5),
             background:
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
@@ -71,12 +73,12 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
-            color: theme.palette.public.dark,
+            color: theme.palette.maskColor?.dark,
         },
         symbol: {
             fontWeight: 700,
             fontSize: 18,
-            color: theme.palette.public.dark,
+            color: theme.palette.maskColor?.dark,
             marginLeft: theme.spacing(0.5),
             marginRight: theme.spacing(0.5),
         },
@@ -84,10 +86,10 @@ const useStyles = makeStyles()((theme) => {
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
-            color: theme.palette.public.white,
+            color: theme.palette.maskColor?.white,
             fontWeight: 400,
             fontSize: 10,
-            background: theme.palette.public.dark,
+            background: theme.palette.maskColor?.dark,
             borderRadius: theme.spacing(0.5),
         },
         avatar: {
@@ -140,8 +142,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
-            code: coin.symbol,
-            address: account,
+            // TODO: fix it
+            // code: coin.symbol,
+            // address: account,
         })
     }, [account, trending?.coin?.symbol])
     // #endregion
@@ -231,7 +234,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
-
                                                 formatter={formatCurrency}
                                             />
                                         </Typography>

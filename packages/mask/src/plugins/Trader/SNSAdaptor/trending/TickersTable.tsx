@@ -64,7 +64,7 @@ export function TickersTable(props: TickersTableProps) {
                     const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
                         <Link
-                            color={(theme) => theme.palette.public.primary}
+                            color={(theme) => theme.palette.maskColor?.primary}
                             target="_blank"
                             rel="noopener noreferrer"
                             href={ticker.trade_url}>

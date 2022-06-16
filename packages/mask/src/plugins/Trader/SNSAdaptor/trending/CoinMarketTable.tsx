@@ -58,8 +58,6 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                                 <TableCell className={classes.cell}>
                                     <FormattedCurrency
-                                        sign="$"
-                                        symbol="USD"
                                         value={trending.market?.market_cap ?? 0}
                                         formatter={formatCurrency}
                                     />
@@ -76,7 +74,6 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                 <TableCell className={classes.cell}>
                                     <FormattedCurrency
                                         value={trending.market?.circulating_supply ?? 0}
-                                        symbol={trending.coin.symbol}
                                         formatter={formatCurrency}
                                     />
                                 </TableCell>
@@ -90,8 +87,6 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                             </TableCell>
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
-                                    sign="$"
-                                    symbol="USD"
                                     value={trending.market?.total_volume ?? 0}
                                     formatter={formatCurrency}
                                 />
@@ -107,7 +102,6 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                 <TableCell className={classes.cell}>
                                     <FormattedCurrency
                                         value={trending.market?.total_supply ?? 0}
-                                        symbol={trending.coin.symbol}
                                         formatter={formatCurrency}
                                     />
                                 </TableCell>

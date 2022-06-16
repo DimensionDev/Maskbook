@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 16,
     },
     copy: {
-        color: theme.palette.public.secondaryDark,
+        color: theme.palette.maskColor?.second,
         fontSize: 16,
     },
 }))
@@ -36,7 +36,7 @@ export const ContractSection = ({ logoURL, address }: ContractSectionProps) => {
                 classes={{
                     icon: classes.icon,
                 }}
-                logoURI={logoURL}
+                logoURL={logoURL}
                 address={address}
             />
             <Typography variant="body2" component="span" fontWeight={700}>
