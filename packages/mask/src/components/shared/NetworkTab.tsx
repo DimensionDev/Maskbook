@@ -74,6 +74,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                 {usedNetworks.map((x) => {
                     return (
                         <Tab
+                            aria-label={x.name}
                             key={x.chainId}
                             value={x.chainId.toString()}
                             label={

@@ -11,7 +11,7 @@ const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & Mas
     return (
         <Stack p={3}>
             <TabContext value={tabs.includes(state) ? state : tabs[0]}>
-                <MaskTabList variant="round" {...rest} onChange={(e, v) => setState(v)} aria-label="My tab?">
+                <MaskTabList variant="round" {...rest} onChange={(e, v) => setState(v)} aria-label="round style tabs">
                     {tabs.map((x) => (
                         <Tab key={x} value={x} label={x} />
                     ))}

@@ -16,7 +16,7 @@ const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & Mas
                     'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
             }}>
             <TabContext value={tabs.includes(state) ? state : tabs[0]}>
-                <MaskTabList variant="base" {...rest} onChange={(e, v) => setState(v)} aria-label="My tab?">
+                <MaskTabList variant="base" {...rest} onChange={(e, v) => setState(v)} aria-label="base tabs">
                     {tabs.map((x) => (
                         <Tab key={x} value={x} label={x} />
                     ))}
