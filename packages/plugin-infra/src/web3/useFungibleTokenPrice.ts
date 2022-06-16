@@ -13,7 +13,7 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry(async () => {
-        if (!chainId || !hub) return 0
+        if (!chainId || !hub || !address) return 0
         return hub.getFungibleTokenPrice?.(chainId, address ?? '')
     }, [chainId, address, hub])
 }

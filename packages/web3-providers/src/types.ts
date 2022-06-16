@@ -286,6 +286,7 @@ export namespace SecurityAPI {
         is_whitelisted?: '0' | '1'
         is_in_dex?: '0' | '1'
         is_anti_whale?: '0' | '1'
+        trust_list?: '0' | '1'
     }
 
     export interface ContractSecurity {
@@ -460,4 +461,31 @@ export namespace MaskBaseAPI {
     export type StoredKeyInfo = api.IStoredKeyInfo
 
     export interface Provider {}
+}
+
+export namespace TokenPriceBaseAPI {
+    export interface PriceRecord {
+        [currency: string]: number
+    }
+
+    /** Base on response of coingecko's token price API */
+    export interface CryptoPrice {
+        [token: string]: PriceRecord
+    }
+
+    export interface Provider {
+        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
+        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
+    }
+}
+
+export namespace TokenAPI {
+    export interface tokenInfo {
+        id: string
+        market_cap: string
+        price: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<tokenInfo | undefined>
+    }
 }
