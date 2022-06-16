@@ -222,10 +222,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
 
-    const claimers = Array.from({ length: availability ? Number(availability.claimed) : 0 }).map(() => ({
-        address: '',
-        name: '',
-    }))
+    const claimerNumber = Array.from({ length: availability ? Number(availability.claimed) : 0 }).length
     const total_remaining = availability?.balance
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
@@ -350,7 +347,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: String(claimers.length ?? 0),
+                                    claimedShares: String(claimerNumber),
                                     shares: String(history.shares),
                                 }}
                             />
