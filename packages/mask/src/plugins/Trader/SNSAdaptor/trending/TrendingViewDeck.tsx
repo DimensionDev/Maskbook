@@ -142,9 +142,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
-            // TODO: fix it
-            // code: coin.symbol,
-            // address: account,
+            code: coin.symbol,
+            address: account,
         })
     }, [account, trending?.coin?.symbol])
     // #endregion
