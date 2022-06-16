@@ -912,9 +912,10 @@
     },
     {
         "chainId": 77,
-        "name": "POA",
+        "type": "xDai",
+        "name": "POA Sokol",
         "network": "sokol",
-        "shortName": "poa",
+        "shortName": "sokol",
         "features": [],
         "nativeCurrency": {
             "chainId": 77,

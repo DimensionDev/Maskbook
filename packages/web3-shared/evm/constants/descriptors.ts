@@ -155,6 +155,16 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_sokol`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Sokol,
+        type: NetworkType.xDai,
+        name: 'Sokol',
+        icon: new URL('../assets/sokol.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
+        isMainnet: false,
+    },
+    {
         ID: `${PLUGIN_ID}_celo`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Celo,

@@ -1,4 +1,5 @@
 import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
+import Azuro from '@masknet/web3-constants/evm/azuro.json'
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
@@ -119,3 +120,6 @@ export const useAaveConstants = hookTransform(getAaveConstants)
 
 export const getLidoConstants = transform(ChainId, Lido)
 export const useLidoConstants = hookTransform(getLidoConstants)
+
+export const getAzuroConstants = transform(ChainId, Azuro)
+export const useAzuroConstants = hookTransform(getAzuroConstants)

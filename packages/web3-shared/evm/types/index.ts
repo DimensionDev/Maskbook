@@ -36,6 +36,7 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+    Sokol = 77,
 
     // Avalanche
     Avalanche = 43114,
