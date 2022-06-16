@@ -222,7 +222,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
 
-    const claimerNumber = Array.from({ length: availability ? Number(availability.claimed) : 0 }).length
+    const claimerNumber = availability ? Number(availability.claimed) : 0
     const total_remaining = availability?.balance
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
