@@ -53,7 +53,7 @@ interface NetworkTabProps<T extends NetworkPluginID>
     chainId: Web3Helper.Definition[T]['ChainId']
 }
 
-export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps) {
+export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const isDashboard = isDashboardPage()
     const { chainId, setChainId, chains } = props
 
@@ -78,7 +78,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                             value={x.chainId.toString()}
                             label={
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <WalletIcon networkIcon={x.icon} size={18} />
+                                    <WalletIcon mainIcon={x.icon} size={18} />
                                     <Typography
                                         variant="body2"
                                         fontSize={14}
