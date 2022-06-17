@@ -15,7 +15,7 @@ import {
     resolveCoinAddress,
     resolveCoinId,
 } from './hotfix'
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
 /**
@@ -145,6 +145,7 @@ export async function checkAvailabilityOnDataProvider(
 }
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
+    const networkType = chainResolver.chainNetworkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
     if (!isMainnet) return []
     if (!type || !keyword)
@@ -153,7 +154,7 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
             .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
-            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? isMainnet : true))
+            .filter((x) => (x.value === DataProvider.UNISWAP_INFO ? networkType === NetworkType.Ethereum : true))
             .map(
                 async (x) =>
                     [
@@ -233,7 +234,7 @@ async function getCoinTrending(
                         resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
                         info.platforms[
                             Object.keys(info.platforms).find(
-                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === chainId,
+                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === String(chainId),
                             ) ?? ''
                         ],
                 },
