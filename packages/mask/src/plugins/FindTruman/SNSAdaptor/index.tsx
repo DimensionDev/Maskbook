@@ -115,7 +115,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 12,
+                appBoardSortingDefaultPriority: 13,
                 icon,
                 name: <Trans i18nKey="plugin_find_truman_name" />,
                 iconFilterColor,
