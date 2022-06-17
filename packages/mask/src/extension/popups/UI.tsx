@@ -25,9 +25,9 @@ const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermis
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 function PluginRenderDelayed() {
-    const [a, b] = useState(false)
-    useEffect(() => b(true), [])
-    if (!a) return null
+    const [canRenderPlugin, setRenderPlugins] = useState(false)
+    useEffect(() => setRenderPlugins(true), [])
+    if (!canRenderPlugin) return null
     return <PluginRender />
 }
 

@@ -27,16 +27,12 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
 
     {
         const tag = `[Backup] Restore ${backup.personas.size} personas, ${backup.profiles.size} profiles, ${backup.relations.length} relations`
-        console.time(tag)
         await restorePersonas(backup)
-        console.timeEnd(tag)
     }
 
     {
         const tag = `[Backup] Restore ${backup.posts.size} posts`
-        console.time(tag)
         await restorePosts(posts.values())
-        console.timeEnd(tag)
     }
     if (process.env.manifest === '2') {
         if (wallets.length) {

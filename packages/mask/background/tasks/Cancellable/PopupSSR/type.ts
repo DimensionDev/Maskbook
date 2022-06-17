@@ -7,5 +7,4 @@ export interface PopupSSR_Props {
     avatar: string | null | undefined
     nickname: string | undefined
     linkedProfilesCount: number
-    // walletsCount: number
 }
