@@ -138,7 +138,7 @@ export async function checkAvailabilityOnDataProvider(
     if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
     else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider)
-    // data fetched before update in nonblocking way
+    // data fetched before update in non-blocking way
     else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
