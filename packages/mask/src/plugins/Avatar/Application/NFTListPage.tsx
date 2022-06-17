@@ -40,8 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         objectFit: 'cover',
         borderRadius: '100%',
         boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
+        padding: 4,
     },
     skeletonBox: {
         marginLeft: 'auto',

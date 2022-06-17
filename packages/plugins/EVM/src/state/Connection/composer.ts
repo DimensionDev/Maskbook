@@ -15,8 +15,9 @@ import { AddressBook } from './middleware/AddressBook'
 import { Interceptor } from './middleware/Interceptor'
 import { Nonce } from './middleware/Nonce'
 import { Squash } from './middleware/Squash'
-import { RecentTransaction } from './middleware/Transaction'
+import { RecentTransaction } from './middleware/RecentTransaction'
 import { Translator } from './middleware/Translator'
+import { TransactionWatcher } from './middleware/TransactionWatcher'
 
 class Composer<T> {
     private listOfMiddleware: Array<Middleware<T>> = []
@@ -208,6 +209,7 @@ composer.use(new Nonce())
 composer.use(new Translator())
 composer.use(new Interceptor())
 composer.use(new RecentTransaction())
+composer.use(new TransactionWatcher())
 composer.use(new AddressBook())
 
 export function dispatch(context: Context, next: () => Promise<void>) {

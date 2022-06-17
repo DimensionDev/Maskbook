@@ -103,11 +103,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount(currentPluginId)
-    const currentChainId = useChainId<'all'>(currentPluginId)
-    const [chainId, setChainId] = useState<ChainId>(currentChainId as ChainId)
+    const currentChainId = useChainId(currentPluginId)
+    const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
     const [open_, setOpen_] = useState(false)
     const [selectedAccount, setSelectedAccount] = useState(account ?? wallets?.[0]?.identity ?? '')
-    const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId)
+    const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId ?? NetworkPluginID.PLUGIN_EVM)
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
@@ -182,7 +182,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
     const onAddClick = (token: AllChainsNonFungibleToken) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address && x.tokenId))
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
     }
 
     const onChangeChain = (chainId: ChainId) => {
@@ -233,9 +233,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const tokensInList = uniqBy(
-        [...tokens, ...collectibles],
-        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA ? (x) => x.tokenId : (x) => x.contract?.address && x.tokenId,
-    )
+        [...tokens.filter((x) => x.chainId === chainId), ...collectibles],
+        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
+            ? (x) => x.tokenId
+            : (x) => x.contract?.address.toLowerCase() + x.tokenId,
+    ).filter((x) => x.chainId === chainId)
 
     const NoNFTList = () => {
         if (!collectibles.length && !loadFinish && !loadError) {

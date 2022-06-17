@@ -33,32 +33,29 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     }
 
     override setupSubscriptions() {
-        const site = this.site
-        if (!site) return
-
-        this.providerType = mapSubscription(this.storage.providers.subscription, (providers) => providers[site])
+        this.providerType = mapSubscription(this.storage.providerType.subscription, (provider) => provider)
 
         this.chainId = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription, this.context.chainId),
-            ([providerType, accounts, chainId]) => {
+            mergeSubscription(this.providerType, this.storage.account.subscription, this.context.chainId),
+            ([providerType, account, chainId]) => {
                 if (providerType === ProviderType.MaskWallet) return chainId
-                return accounts[providerType].chainId
+                return account.chainId
             },
         )
         this.account = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription, this.context.account),
-            ([providerType, accounts, maskAccount]) => {
+            mergeSubscription(this.providerType, this.storage.account.subscription, this.context.account),
+            ([providerType, account, maskAccount]) => {
                 if (providerType === ProviderType.MaskWallet) return maskAccount
 
-                return accounts[providerType].account
+                return account.account
             },
         )
         this.networkType = mapSubscription(
-            mergeSubscription(this.providerType, this.storage.accounts.subscription, this.context.chainId),
-            ([providerType, accounts, chainId]) => {
+            mergeSubscription(this.providerType, this.storage.account.subscription, this.context.chainId),
+            ([providerType, account, chainId]) => {
                 if (providerType === ProviderType.MaskWallet) return this.options.getNetworkTypeFromChainId(chainId)
 
-                return this.options.getNetworkTypeFromChainId(accounts[providerType].chainId)
+                return this.options.getNetworkTypeFromChainId(account.chainId)
             },
         )
     }

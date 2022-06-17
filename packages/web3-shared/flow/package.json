@@ -15,7 +15,7 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@onflow/types": "^0.0.5",
     "bignumber.js": "9.0.2",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "urlcat": "^2.0.4"
   }
 }

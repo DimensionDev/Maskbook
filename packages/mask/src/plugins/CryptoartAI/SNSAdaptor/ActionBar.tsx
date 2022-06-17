@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             flex: 1,
+            gap: 8,
         },
         button: {
             flex: 1,
@@ -65,7 +66,7 @@ export function ActionBar(props: ActionBarProps) {
             {!assetSource?.isSoldOut &&
             !assetSource?.is24Auction &&
             (!assetSource?.trade?.latestBid || assetSource?.trade?.latestBid < assetSource?.priceInEth) &&
-            assetSource?.trade?.isCanAuction ? (
+            assetSource?.trade?.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"

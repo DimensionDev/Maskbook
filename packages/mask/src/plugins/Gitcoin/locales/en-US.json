@@ -11,5 +11,9 @@
     "last_updated": "Last update:",
     "by": "By",
     "view_on": "View on Gitcoin",
-    "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund"
+    "readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
+    "account_promote$default": "",
+    "account_promote$twitter": "Follow @$t(mask:twitter_account) (mask.io) to donate Gitcoin grants",
+    "account_promote$facebook": "Follow @$t(mask:facebook_account) (mask.io) to donate Gitcoin grants",
+    "share_text": "I just donated {{title}} with {{balance}} {{symbol}}.\n{{account_promote}}\n$t(promote)\n$t(mask:hash_tag)\n{{link}}"
 }

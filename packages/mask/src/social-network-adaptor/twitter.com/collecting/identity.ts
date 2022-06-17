@@ -125,24 +125,18 @@ function resolveCurrentVisitingIdentityInner(
     const assign = async () => {
         await delay(5000)
         const bio = getBio()
-        const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+        const homepage = await Services.Helper.resolveTCOLink(getPersonalHomepage())
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
+            homepage: homepage ?? '',
         }
-        Services.Helper.resolveTCOLink(homepage).then((link) => {
-            if (cancel?.aborted || !link) return
-            ref.value = {
-                ...ref.value,
-                homepage: link,
-            }
-        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
         new MutationObserverWatcher(selector)

@@ -29,7 +29,7 @@ import type {
     OpenSeaCustomAccount,
     OpenSeaResponse,
 } from './types'
-import { getOrderUSDPrice, toImage } from './utils'
+import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
@@ -123,7 +123,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
     )
     return {
         ...createNFTToken(chainId, asset),
-        link: asset.opensea_link,
+        link: asset.opensea_link ?? asset.permalink,
         payment_tokens: orderTokens.concat(offerTokens),
         auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now())
             ? {
@@ -148,6 +148,13 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             type: x.trait_type,
             value: x.value,
         })),
+        price: {
+            [CurrencyType.USD]: getOrderUnitPrice(
+                asset.last_sale?.total_price,
+                asset.last_sale?.payment_token.decimals,
+                asset.last_sale?.quantity ?? '1',
+            )?.toString(),
+        },
         orders: asset.orders
             ?.sort((a, z) =>
                 new BigNumber(getOrderUSDPrice(z.current_price, z.payment_token_contract?.usd_price) ?? 0)

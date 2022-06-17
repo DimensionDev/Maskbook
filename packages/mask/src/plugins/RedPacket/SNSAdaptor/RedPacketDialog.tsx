@@ -187,6 +187,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             open={props.open}
             title={title}
             onClose={isCreateStep ? onClose : () => setStep(CreateRedPacketPageStep.NewRedPacketPage)}
+            isOnBack={step !== CreateRedPacketPageStep.NewRedPacketPage}
             disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (

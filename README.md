@@ -44,7 +44,7 @@ For general introductions, see [Mask.io](https://mask.io).
 
 ## Developer documentation
 
-Please check out [docs](docs)
+Please check out [docs](https://docs.mask.io/)
 
 ## Reporting a Vulnerability
 

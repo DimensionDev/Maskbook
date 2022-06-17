@@ -98,7 +98,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const [{ loading: isCreating }, createCallback] = useCreateCallback(settings!, contract_version, publicKey)
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
-        const receipt = await createCallback()
+        const result = await createCallback()
+
+        const { hash, receipt, events } = result ?? {}
+        if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
         await openShareTxDialog({
             hash: receipt.transactionHash,
@@ -107,7 +110,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string

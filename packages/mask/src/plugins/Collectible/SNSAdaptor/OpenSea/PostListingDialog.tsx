@@ -33,7 +33,7 @@ export interface PostListingDialogProps {
 
 export function PostListingDialog(props: PostListingDialogProps) {
     const { asset, open, onClose } = props
-    const paymentTokens = asset?.auction?.offerTokens ?? []
+    const paymentTokens = asset?.auction?.offerTokens ?? asset?.payment_tokens ?? []
 
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -43,7 +43,6 @@ export function PostListingDialog(props: PostListingDialogProps) {
         <Tab key="price" label={t('plugin_collectible_set_price')} />,
         <Tab key="bid" label={t('plugin_collectible_highest_bid')} />,
     ]
-
     return (
         <InjectedDialog title={t('plugin_collectible_post_listing')} open={open} onClose={onClose} maxWidth="md">
             <DialogContent className={classes.content}>

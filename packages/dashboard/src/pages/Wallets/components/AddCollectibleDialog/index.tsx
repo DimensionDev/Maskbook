@@ -74,6 +74,8 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         if (!isOwner) {
             throw new Error(FormErrorType.NotExist)
         } else {
+            tokenDetailed.owner = { address: account }
+            tokenDetailed.ownerId = account
             await Token?.addToken?.(tokenDetailed)
             onClose()
         }

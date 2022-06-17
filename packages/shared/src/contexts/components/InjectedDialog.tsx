@@ -1,5 +1,6 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { omit } from 'lodash-unified'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
@@ -76,6 +77,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
+    isOnBack?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -144,7 +146,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                         root: dialogBackdropRoot,
                     },
                 }}
-                {...rest}
+                {...omit(rest, 'isOnBack')}
                 {...extraProps}>
                 <ErrorBoundary>
                     {title ? (
@@ -160,7 +162,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
-                                onClick={closeBothCompositionDialog}>
+                                onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
                                         titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
