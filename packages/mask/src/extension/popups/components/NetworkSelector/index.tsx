@@ -8,7 +8,6 @@ import {
     useAccount,
     useChainId,
     Web3Helper,
-    useWeb3State,
     useProviderType,
 } from '@masknet/plugin-infra/web3'
 import { currentMaskWalletAccountSettings } from '../../../../plugins/Wallet/settings'
@@ -61,14 +60,13 @@ export const NetworkSelector = memo(() => {
         (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
     ) as Array<NetworkDescriptor<ChainId, NetworkType>>
 
-    const web3State = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
     const onChainChange = useCallback(
         async (chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) => {
             if (providerType === ProviderType.MaskWallet) {
-                await web3State.Provider?.connect(chainId, ProviderType.MaskWallet)
+                await WalletRPC.updateMaskAccount({ chainId })
             }
             return WalletRPC.updateMaskAccount({
                 chainId,

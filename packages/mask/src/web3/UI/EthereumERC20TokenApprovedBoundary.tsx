@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Grid, Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
@@ -13,10 +13,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         position: 'relative',
         marginTop: theme.spacing(1.5),
-        lineHeight: '22px',
+        lineHeight: '20px',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '13px 0',
+        padding: '12px 0',
         fontSize: 18,
     },
     buttonLabel: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumERC20TokenApprovedBoundaryProps {
+export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'button'> {
     amount: string
     spender?: string
     token?: FungibleToken<ChainId, SchemaType>
@@ -63,7 +63,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     } = props
 
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)

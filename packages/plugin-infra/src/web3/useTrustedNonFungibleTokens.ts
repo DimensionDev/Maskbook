@@ -1,23 +1,20 @@
 import { useMemo } from 'react'
-import { Subscription, useSubscription } from 'use-subscription'
-import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useSubscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useWeb3State } from './useWeb3State'
 import { EMPTY_ARRAY } from '../utils/subscription'
 
-export function useTrustedNonFungibleTokens<T extends NetworkPluginID>(
+export function useTrustedNonFungibleTokens<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    schemaType?: Web3Helper.Definition[T]['SchemaType'],
+    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
+    chainId?: Web3Helper.ChainIdScope<S, T>,
 ) {
     const { Token } = useWeb3State(pluginID)
-    const nonFungibleTokens = useSubscription(
-        (Token?.trustedNonFungibleTokens ?? EMPTY_ARRAY) as Subscription<
-            Array<NonFungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
-        >,
-    )
-    return useMemo(() => {
-        return nonFungibleTokens.length && schemaType
-            ? nonFungibleTokens.filter((x) => x.schema === schemaType)
-            : nonFungibleTokens
-    }, [schemaType, nonFungibleTokens])
+    const nonFungibleTokens = useSubscription(Token?.trustedNonFungibleTokens ?? EMPTY_ARRAY)
+    return useMemo<Array<Web3Helper.NonFungibleTokenScope<S, T>>>(() => {
+        return nonFungibleTokens
+            .filter((x) => (schemaType ? x.schema === schemaType : true))
+            .filter((x) => (chainId ? x.chainId === chainId : true))
+    }, [schemaType, nonFungibleTokens, chainId])
 }

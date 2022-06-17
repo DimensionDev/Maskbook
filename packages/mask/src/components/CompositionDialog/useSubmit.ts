@@ -5,7 +5,7 @@ import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { ITO_MetadataReader } from '../../plugins/ITO/SNSAdaptor/helpers'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
+import { RedPacketMetadataReader, RedPacketNftMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -31,14 +31,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 activatedSocialNetworkUI.encryptionNetwork,
             )
             const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
-            const decoratedText = decorateEncryptedText(encrypted, t, content.meta)
+            const [imageTemplateType, decoratedText] = decorateEncryptedText(encrypted, t, content.meta)
 
             if (encode === 'image') {
                 const defaultText = t('additional_post_box__steganography_post_pre', {
                     random: new Date().toLocaleString(),
                 })
-                if (decoratedText !== null) {
-                    await pasteImage(decoratedText.replace(encrypted, ''), encrypted, 'eth', reason)
+                if (decoratedText) {
+                    await pasteImage(decoratedText.replace(encrypted, ''), encrypted, imageTemplateType, reason)
                 } else {
                     await pasteImage(defaultText, encrypted, 'v2', reason)
                 }
@@ -74,31 +74,44 @@ async function pasteImage(
 
 // TODO: Provide API to plugin to post-process post content,
 // then we can move these -PreText's and meta readers into plugin's own context
-function decorateEncryptedText(encrypted: string, t: I18NFunction, meta?: Meta) {
+function decorateEncryptedText(
+    encrypted: string,
+    t: I18NFunction,
+    meta?: Meta,
+): [imageTemplateType: ImageTemplateTypes, text: string] | never[] {
     const hasOfficialAccount = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
     const officialAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
 
-    if (RedPacketMetadataReader(meta).ok) {
-        return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
-                  encrypted,
-                  account: officialAccount,
-              })
-            : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+    if (RedPacketMetadataReader(meta).ok || RedPacketNftMetadataReader(meta).ok) {
+        return [
+            'eth',
+            hasOfficialAccount
+                ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
+                      encrypted,
+                      account: officialAccount,
+                  })
+                : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted }),
+        ]
     } else if (ITO_MetadataReader(meta).ok) {
-        return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_ito_twitter_official_account', {
-                  encrypted,
-                  account: officialAccount,
-              })
-            : t('additional_post_box__encrypted_post_pre_ito', { encrypted })
+        return [
+            'v2',
+            hasOfficialAccount
+                ? t('additional_post_box__encrypted_post_pre_ito_twitter_official_account', {
+                      encrypted,
+                      account: officialAccount,
+                  })
+                : t('additional_post_box__encrypted_post_pre_ito', { encrypted }),
+        ]
     } else if (FileInfoMetadataReader(meta).ok) {
-        return hasOfficialAccount
-            ? t('additional_post_box__encrypted_post_pre_file_service_twitter_official_account', {
-                  encrypted,
-                  account: officialAccount,
-              })
-            : t('additional_post_box__encrypted_post_pre_file_service', { encrypted })
+        return [
+            'v2',
+            hasOfficialAccount
+                ? t('additional_post_box__encrypted_post_pre_file_service_twitter_official_account', {
+                      encrypted,
+                      account: officialAccount,
+                  })
+                : t('additional_post_box__encrypted_post_pre_file_service', { encrypted }),
+        ]
     }
-    return null
+    return []
 }

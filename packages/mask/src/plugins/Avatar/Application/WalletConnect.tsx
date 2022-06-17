@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { providerResolver } from '@masknet/web3-shared-evm'
+import { providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { useProviderType } from '@masknet/plugin-infra/web3'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { WalletIcon } from '../assets/wallet'
@@ -9,7 +9,6 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/i18n_generated'
 import type { HTMLProps } from 'react'
 import { ApplicationSmallIcon } from '../assets/application'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -48,7 +47,7 @@ interface NFTWalletConnectProps extends withClasses<'root'> {}
 
 export function NFTWalletConnect(props: NFTWalletConnectProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
+    const providerType = useProviderType()
     const t = useI18N()
 
     const { setDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -75,7 +74,7 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                 {providerType ? (
                     <Link
                         className={classes.link}
-                        href={providerResolver.providerHomeLink(providerType)}
+                        href={providerResolver.providerHomeLink(providerType as ProviderType)}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={stop}>

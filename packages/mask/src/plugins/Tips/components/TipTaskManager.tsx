@@ -14,13 +14,23 @@ export const TipTaskManager: FC<React.PropsWithChildren<{}>> = ({ children }) =>
     const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
 
     const removeTask = useCallback((task: Task) => {
-        setTasks((list) => list.filter((t) => t !== task))
+        setTasks((list) => list.filter((t) => t.id !== task.id))
     }, [])
 
     useEffect(() => {
         return PluginNextIDMessages.tipTask.on((task) => {
             id += 1
             setTasks((list) => [...list, { id, ...task }])
+        })
+    }, [])
+
+    useEffect(() => {
+        return PluginNextIDMessages.tipTaskUpdate.on((task) => {
+            setTasks((list) => {
+                const included = list.some((t) => t.recipientSnsId === task.recipientSnsId)
+                if (!included) return list
+                return list.map((t) => (t.recipientSnsId === task.recipientSnsId ? { ...task, id: t.id } : t))
+            })
         })
     }, [])
 

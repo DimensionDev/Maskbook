@@ -4,7 +4,7 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
-import { ChainId, chainResolver, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import type { Account } from '@masknet/web3-shared-base'
@@ -113,7 +113,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
         if (!this.connection) return
-        this.connection.reject(error || new Error('User closed modal.'))
+        this.connection.reject(error || new Error('User rejected'))
     }
 
     private async login(chainId?: ChainId) {
@@ -122,13 +122,29 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
         this.connector = this.createConnector()
 
-        await this.connector.createSession({
-            chainId,
-        })
-
         this.connection = {
             resolve,
             reject,
+        }
+
+        if (this.connector.connected) {
+            const { chainId, accounts } = this.connector
+            const account = first(accounts)
+            if (chainId !== 0 && account && isValidAddress(account)) {
+                this.connection.resolve({
+                    chainId,
+                    account,
+                })
+            } else {
+                await this.connector.killSession()
+                await this.connector.createSession({
+                    chainId,
+                })
+            }
+        } else {
+            await this.connector.createSession({
+                chainId,
+            })
         }
 
         return deferred.finally(() => {

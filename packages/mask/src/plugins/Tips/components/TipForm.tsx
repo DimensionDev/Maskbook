@@ -1,9 +1,9 @@
-import { useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -17,10 +17,10 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useRef, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { TargetChainIdContext, useTip, useTipValidate } from '../contexts'
+import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
 import { NFTSection } from './NFTSection'
@@ -54,6 +54,8 @@ const useStyles = makeStyles()((theme) => {
         },
         actionButton: {
             marginTop: theme.spacing(1.5),
+            paddingTop: 12,
+            paddingBottom: 12,
             fontSize: 16,
         },
         button: {
@@ -95,8 +97,9 @@ interface Props extends BoxProps {
 
 export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest }) => {
     const t = useI18N()
-    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const currentChainId = useChainId()
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const { classes } = useStyles()
     const {
         recipient,
@@ -108,24 +111,30 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
         setTipType,
     } = useTip()
     const [isValid, validateMessage] = useTipValidate()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
     const selectRef = useRef(null)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount()
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const [empty, setEmpty] = useState(false)
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
-    const enabledNft =
-        !isSending &&
-        chainId === currentChainId &&
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId)
+    const enabledNft = useMemo(() => {
+        if (isSending) return false
+        if (chainId !== currentChainId) return false
+        if (pluginId === NetworkPluginID.PLUGIN_EVM) {
+            return [EVM_ChainId.Mainnet, EVM_ChainId.BSC, EVM_ChainId.Matic].includes(currentChainId as EVM_ChainId)
+        }
+        return pluginId === NetworkPluginID.PLUGIN_SOLANA
+    }, [chainId, currentChainId, pluginId])
     const send = useCallback(async () => {
         const hash = await sendTip()
         if (typeof hash !== 'string') return
         onSent?.()
     }, [sendTip, onSent])
+
+    const isEvm = pluginId === NetworkPluginID.PLUGIN_EVM
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -173,7 +182,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                             label={t.tip_type_nft()}
                         />
                     </RadioGroup>
-                    {tipType === TipType.NFT && !empty ? (
+                    {tipType === TipType.NFT && !empty && isEvm ? (
                         <Button variant="text" className={classes.addButton} onClick={onAddToken}>
                             {t.tip_add_collectibles()}
                         </Button>
@@ -189,7 +198,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
             </div>
             {account ? (
                 <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedPluginID={pluginId}
                     expectedChainId={chainId}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{

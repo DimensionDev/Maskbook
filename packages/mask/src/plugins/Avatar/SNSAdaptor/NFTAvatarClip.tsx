@@ -6,6 +6,9 @@ import { useNFT } from '../hooks'
 import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
 import { v4 as uuid } from 'uuid'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 // from twitter page
 const ViewBoxWidth = 200
@@ -145,9 +148,13 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { id = uuid(), width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? '')
+    const account = useAccount()
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
+        account,
         avatarMetadata?.address ?? '',
         avatarMetadata?.token_id ?? '',
+        NetworkPluginID.PLUGIN_EVM,
+        ChainId.Mainnet,
     )
     const { amount, name, symbol, slug } = value
     if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null

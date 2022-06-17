@@ -3,7 +3,7 @@ import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
-import type { SelectTokenInfo, TokenInfo } from '../types'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
@@ -13,17 +13,9 @@ import { makeStyles } from '@masknet/theme'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
-        padding: '1px !important',
+        padding: '0px !important',
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
+            display: 'none',
         },
     },
 }))
@@ -42,12 +34,12 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
-    const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
+    const [tokenInfo, setTokenInfo] = useState<AllChainsNonFungibleToken>()
     const [proof, setProof] = useState<BindingProof>()
     const t = useI18N()
     const { classes } = useStyles()
 
-    const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => {
+    const onPersonaChange = (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => {
         setWallets(wallets)
         setTokenInfo(tokenInfo)
         setProof(proof)
@@ -80,6 +72,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     ? t.application_edit_profile_dialog_title()
                     : t.application_dialog_title()
             }
+            isOnBack={step !== CreateNFTAvatarStep.Persona}
             open={props.open}
             onClose={onBack}>
             <DialogContent className={classes.root}>
@@ -96,6 +89,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         account={selectedTokenInfo?.account}
                         image={selectedTokenInfo?.image}
                         token={selectedTokenInfo?.token}
+                        pluginId={selectedTokenInfo?.pluginId}
                         onBack={onBack}
                         onClose={onClose}
                     />

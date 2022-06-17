@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { LoadingAnimation } from '@masknet/shared'
 import { SourceType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -56,7 +55,7 @@ export function HistoryTab(props: HistoryTabProps) {
     if (asset.loading)
         return (
             <div className={classes.empty}>
-                <LoadingAnimation />
+                <LoadingBase />
             </div>
         )
     if (events.length)

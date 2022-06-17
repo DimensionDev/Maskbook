@@ -75,7 +75,7 @@ export function DonateDialog(props: DonateDialogProps) {
         nativeTokenDetailed.value,
     )
 
-    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM)
+    const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
 
     // #region select token dialog
     const pickToken = usePickToken()
@@ -97,25 +97,23 @@ export function DonateDialog(props: DonateDialogProps) {
     const [{ loading }, donateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
     // #endregion
 
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-
     const openShareTxDialog = useOpenShareTxDialog()
     const donate = useCallback(async () => {
         const hash = await donateCallback()
         if (typeof hash !== 'string') return
+        const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const shareText = token
-            ? [
-                  `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account')
-                            } (mask.io) to donate Gitcoin grants.`
-                          : ''
-                  }`,
-                  t.promote(),
-                  '#mask_io',
-                  postLink,
-              ].join('\n')
+            ? t.share_text({
+                  title,
+                  balance: formatBalance(amount, token?.decimals),
+                  symbol: `${cashTag}${token?.symbol || ''}`,
+                  account_promote: t.account_promote({
+                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                  }),
+                  link: postLink.toString(),
+              })
             : ''
         await openShareTxDialog({
             hash,
@@ -123,6 +121,9 @@ export function DonateDialog(props: DonateDialogProps) {
                 activatedSocialNetworkUI.utils.share?.(shareText)
             },
         })
+
+        // clean dialog
+        setRawAmount('')
     }, [openShareTxDialog, token, donateCallback, tr, t])
 
     // #region submit button
@@ -160,7 +161,7 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </form>
-                    <Typography className={classes.tip} variant="body1">
+                    <Typography className={classes.tip} variant="body1" sx={{ marginBottom: 2 }}>
                         <Translate.gitcoin_readme
                             components={{
                                 fund: <Link target="_blank" rel="noopener noreferrer" href={t.readme_fund_link()} />,
@@ -169,12 +170,13 @@ export function DonateDialog(props: DonateDialogProps) {
                     </Typography>
                     <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
+                            classes={{ button: classes.button }}
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
                             token={token.schema === SchemaType.ERC20 ? token : undefined}>
                             <ActionButton
-                                loading={loading}
                                 className={classes.button}
+                                loading={loading}
                                 fullWidth
                                 size="large"
                                 disabled={!!validationMessage || loading}

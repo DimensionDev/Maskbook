@@ -3,7 +3,7 @@ import { first, uniqBy } from 'lodash-unified'
 import { ReversedAddress } from '@masknet/shared'
 import { getMaskColor, makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem } from '@mui/material'
-import type { SocialAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
+import { SocialAddress, NetworkPluginID, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -72,7 +72,11 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
                 {uniqBy(socialAddressList ?? EMPTY_LIST, (x) => x.address.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                            <ReversedAddress address={x.address} />
+                            {x.type === SocialAddressType.ADDRESS ? (
+                                <ReversedAddress address={x.address} pluginId={x.networkSupporterPluginID} />
+                            ) : (
+                                x.label
+                            )}
                         </MenuItem>
                     )
                 })}

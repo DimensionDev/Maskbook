@@ -1,12 +1,12 @@
-import classNames from 'classnames'
-import { Chip, ChipProps, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ErrorIcon from '@mui/icons-material/Error'
-import { noop } from 'lodash-unified'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenIcon } from '@masknet/shared'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
+import ErrorIcon from '@mui/icons-material/Error'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Chip, ChipProps, CircularProgress } from '@mui/material'
+import classNames from 'classnames'
+import { noop } from 'lodash-unified'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SelectTokenChipProps {
-    token?: FungibleToken<ChainId, SchemaType> | null
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     error?: Error
     loading?: boolean
     readonly?: boolean
@@ -66,7 +66,14 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classes.chip}
-                icon={<TokenIcon address={token.address} name={token.name} logoURL={token.logoURL} />}
+                icon={
+                    <TokenIcon
+                        address={token.address}
+                        chainId={token.chainId}
+                        name={token.name}
+                        logoURL={token.logoURL}
+                    />
+                }
                 deleteIcon={<ErrorIcon className={classes.icon} />}
                 label={token.symbol}
                 color="default"
@@ -86,6 +93,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
                     classes={{ icon: classes.tokenIcon }}
                     address={token.address}
                     name={token.name}
+                    chainId={token.chainId}
                     logoURL={token.logoURL}
                 />
             }

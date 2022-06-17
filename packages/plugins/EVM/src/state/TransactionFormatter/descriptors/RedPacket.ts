@@ -20,11 +20,11 @@ export class RedPacketDescriptor implements TransactionDescriptor {
             })
 
             const token = await connection?.getFungibleToken(context.parameters?._token_addr ?? '')
-            const amount = formatBalance(context.parameters?._total_tokens)
+            const amount = formatBalance(context.parameters?._total_tokens, token?.decimals)
 
             return {
                 chainId: context.chainId,
-                title: 'Create Red Packet',
+                title: 'Create Lucky Drop',
                 description: i18NextInstance.t('plugin_red_packet_create_with_token', {
                     amount,
                     symbol: token?.symbol,
@@ -33,7 +33,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
         } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
             return {
                 chainId: context.chainId,
-                title: 'Create NFT Red Packet',
+                title: 'Create NFT Lucky Drop',
                 description: i18NextInstance.t('plugin_nft_red_packet_create'),
             }
         }

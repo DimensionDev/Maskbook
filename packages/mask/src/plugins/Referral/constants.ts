@@ -21,6 +21,8 @@ export const supportedChainId = ChainId.Mainnet
 export const SWAP_CHAIN_ID = ChainId.Mainnet
 export const supportedOracleChainId = ORACLE_CHAIN_ID.mainnet
 
+export const TOKEN_LIST_URL = 'https://discovery.attrace.com/mainnet/tokens.json'
+
 // testnet example
 // export const supportedChainId = ChainId.Rinkeby
 // export const SWAP_CHAIN_ID = ChainId.Mainnet

@@ -145,7 +145,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://solflare.com/download',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
     },
@@ -160,7 +160,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://coin98.com/wallet',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: [],
         },
     },
@@ -175,7 +175,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         downloadLink: 'https://www.sollet.io/',
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
             supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
     },

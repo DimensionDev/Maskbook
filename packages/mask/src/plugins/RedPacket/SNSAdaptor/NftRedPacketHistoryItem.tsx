@@ -159,6 +159,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const { value: contractDetailed } = useNonFungibleTokenContract(
             NetworkPluginID.PLUGIN_EVM,
             history.token_contract.address,
+            undefined,
             { account },
         )
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(

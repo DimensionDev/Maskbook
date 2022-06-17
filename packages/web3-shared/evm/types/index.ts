@@ -263,6 +263,7 @@ export enum NetworkType {
 }
 
 export enum ProviderType {
+    None = 'None',
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',

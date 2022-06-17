@@ -47,6 +47,8 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
     "@metamask/eth-sig-util": "^4.0.0",
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",

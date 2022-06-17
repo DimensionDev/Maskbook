@@ -21,6 +21,19 @@ export interface EVM_Connection extends Web3Helper.Web3Connection<NetworkPluginI
     estimateTransaction(config: Transaction, fallback?: number, options?: EVM_Web3ConnectionOptions): Promise<string>
 }
 
+export interface ERC721Metadata {
+    name: string
+    description: string
+    image: string
+}
+
+export interface ERC1155Metadata {
+    name: string
+    decimals: number
+    description: string
+    image: string
+}
+
 export interface Context {
     readonly account: string
     readonly chainId: ChainId

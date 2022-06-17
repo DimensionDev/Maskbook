@@ -1,13 +1,17 @@
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
-import type { TransactionReceipt } from 'web3-core'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, TransactionEventType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
+import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
+import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
+import { FungibleToken, isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    encodeContractTransaction,
+    SchemaType,
+    useTokenConstants,
+    decodeEvents,
+} from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -112,11 +116,12 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
-
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
@@ -133,23 +138,29 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = toFixed(token.schema === SchemaType.Native ? paramsObj.total : 0)
-        const config: PayableTx = {
+        const config = {
             from: account,
             value,
             gas,
         }
 
-        // send transaction and wait for hash
-        return new Promise<TransactionReceipt>(async (resolve, reject) => {
-            redPacketContract.methods
-                .create_red_packet(...params)
-                .send(config)
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                    resolve(receipt)
-                })
-                .on(TransactionEventType.ERROR, (error: Error) => {
-                    reject(error)
-                })
-        })
-    }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
+        const tx = await encodeContractTransaction(
+            redPacketContract,
+            redPacketContract.methods.create_red_packet(...params),
+            config,
+        )
+
+        const hash = await connection.sendTransaction(tx)
+        const receipt = await connection.getTransactionReceipt(hash)
+        if (receipt) {
+            const events = decodeEvents(web3, redPacketContract.options.jsonInterface, receipt)
+
+            return {
+                hash,
+                receipt,
+                events,
+            }
+        }
+        return { hash, receipt }
+    }, [account, connection, redPacketContract, redPacketSettings, chainId, getCreateParams])
 }

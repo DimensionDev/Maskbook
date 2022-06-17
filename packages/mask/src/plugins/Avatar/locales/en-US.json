@@ -19,9 +19,14 @@
     "copied": "Copied",
     "collectible_on_polygon": "Only NFTs on Ethereum are supported to preview. We are currently<br/>working on supporting Polygon NFTs as well. <br/>Please add your collectibles here.",
     "collectible_no_eth": "No any collectible is available to preview. Please add your collectible here.",
+    "collectible_no_collectible": "No any collectible is available to preview.",
     "no_collectible_found": "No collectible found.",
     "retry": "Retry",
     "application_hint": "Socialize and show off your NFTs. People can bid,buy, view your valuable NFTs without leaving Twitter.",
     "provider_by": "Provided by",
+    "downloading_image": "Downloading image...",
+    "saving": "Saving...",
+    "download_image_error": "Download image error",
+    "connect_wallet": "Please connect your wallet!",
     "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future."
 }

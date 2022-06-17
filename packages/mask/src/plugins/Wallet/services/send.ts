@@ -2,7 +2,14 @@ import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@dimensiondev/kit'
-import { ChainId, EthereumMethodType, getPayloadConfig, getPayloadId, getRPCConstants } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    EthereumMethodType,
+    getPayloadConfig,
+    getPayloadId,
+    getRPCConstants,
+    isRiskMethod,
+} from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
@@ -25,18 +32,6 @@ type Options = {
 }
 
 const UNCONFIRMED_CALLBACK_MAP = new Map<number, (error: Error | null, response?: JsonRpcResponse) => void>()
-const RISK_METHOD_LIST = [
-    EthereumMethodType.ETH_SIGN,
-    EthereumMethodType.PERSONAL_SIGN,
-    EthereumMethodType.ETH_SIGN_TYPED_DATA,
-    EthereumMethodType.ETH_DECRYPT,
-    EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
-    EthereumMethodType.ETH_SEND_TRANSACTION,
-]
-
-function isRiskMethod(method: EthereumMethodType) {
-    return RISK_METHOD_LIST.includes(method)
-}
 
 let id = 0
 const { RPC_WEIGHTS = [] } = getRPCConstants(ChainId.Mainnet)

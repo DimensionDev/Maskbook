@@ -1,12 +1,5 @@
 import urlcat from 'urlcat'
-import {
-    FungibleAsset,
-    GasOptionType,
-    Pageable,
-    Transaction,
-    createPageable,
-    HubOptions,
-} from '@masknet/web3-shared-base'
+import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -18,6 +11,8 @@ import {
 import { formatAssets, formatTransactions } from './format'
 import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
+import { unionWith } from 'lodash-unified'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -71,10 +66,7 @@ export class DeBankAPI
         }
     }
 
-    async getAssets(
-        address: string,
-        options?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
         const response = await fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
@@ -85,34 +77,38 @@ export class DeBankAPI
         const result = (await response.json()) as WalletTokenRecord[] | undefined
         try {
             return createPageable(
-                formatAssets(
-                    (result ?? []).map((x) => ({
-                        ...x,
+                unionWith(
+                    formatAssets(
+                        (result ?? []).map((x) => ({
+                            ...x,
 
-                        // rename bsc to bnb
-                        id: x.id === 'bsc' ? 'bnb' : x.id,
-                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
-                    })),
-                    options?.chainId,
+                            // rename bsc to bnb
+                            id: x.id === 'bsc' ? 'bnb' : x.id,
+                            chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                        })),
+                        options?.chainId,
+                    ),
+                    getAllEVMNativeAssets(),
+                    (a, z) => a.symbol === z.symbol,
                 ),
-                0,
+                createIndicator(options?.indicator),
             )
         } catch {
-            return createPageable([], 0)
+            return createPageable([], createIndicator(options?.indicator))
         }
     }
 
     async getTransactions(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return createPageable([], 0)
+        if (!CHAIN_ID) return []
 
         const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return createPageable(formatTransactions(chainId, data), 0)
+        return formatTransactions(chainId, data)
     }
 }

@@ -1,24 +1,26 @@
-import { useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { usePickToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { useGasConfig } from '../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
-import { TargetChainIdContext, useTip } from '../../contexts'
+import { TargetRuntimeContext, useTip } from '../../contexts'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
     const { token, setToken, amount, setAmount, isSending, setGasConfig } = useTip()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { Others } = useWeb3State<'all'>()
+
+    const account = useAccount()
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginId,
         token?.address,
-        { chainId },
+        { chainId, account },
     )
     const { gasPrice, gasConfig } = useGasConfig(chainId)
     const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -60,7 +62,7 @@ export const TokenSection: FC = () => {
         if (picked) {
             setToken(picked)
         }
-    }, [pickToken, token?.address, chainId])
+    }, [pickToken, token?.address, pluginId, chainId])
     // #endregion
     return (
         <TokenAmountPanel

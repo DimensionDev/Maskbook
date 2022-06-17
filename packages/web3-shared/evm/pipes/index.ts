@@ -4,12 +4,25 @@ import { SourceType } from '@masknet/web3-shared-base'
 
 // TODO check ipfs inside before resolving
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
+    return urlcat('https://ipfs.io/ipfs/:ipfs', { ipfs })
 }
 
 export function resolveIPFSLinkFromURL(url: string): string {
     if (!url.startsWith('ipfs://')) return url
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
+}
+
+export function resolveIPFS(str: string): string {
+    if (str?.length === 0) return str
+    if (str.startsWith('https://')) return str
+    if (!str.startsWith('ipfs://')) return resolveIPFSLink(str)
+    return resolveIPFSLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
+}
+
+export function resolveAR(str: string): string {
+    if (str.length === 0) return str
+    if (str.startsWith('https://')) return str
+    return urlcat('https://arweave.net/:str', { str })
 }
 
 export function resolveCollectibleAssetLink(chainId: ChainId, provider: SourceType) {
@@ -47,15 +60,15 @@ export function resolveCollectibleLink(chainId: ChainId, provider: SourceType, a
     }
 }
 
-export function resolveOpenSeaLink(address: string, tokenId: string, chainId?: ChainId) {
+export function resolveOpenSeaLink(contractAddress: string, tokenId: string, chainId?: ChainId) {
     if (chainId === ChainId.Matic) {
         return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
-            address,
+            address: contractAddress,
             tokenId,
         })
     }
     return urlcat('https://opensea.io/assets/:address/:tokenId', {
-        address,
+        address: contractAddress,
         tokenId,
     })
 }

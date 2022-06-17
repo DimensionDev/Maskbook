@@ -10,6 +10,7 @@ import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import { useI18N } from '../../../../utils'
 import { pluginIDSettings } from '../../../../settings/settings'
+import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -38,7 +39,7 @@ export function ConnectWalletDialog() {
     )
     // #endregion
 
-    const { Connection, Others } = useWeb3State<'all'>(pluginID)
+    const { Connection, Others } = useWeb3State(pluginID)
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
@@ -56,8 +57,12 @@ export function ConnectWalletDialog() {
 
         await connection.connect()
 
-        if (pluginID) {
-            pluginIDSettings.value = pluginID
+        const site = getSiteType()
+        if (pluginID && site) {
+            pluginIDSettings.value = {
+                ...pluginIDSettings.value,
+                [site]: pluginID,
+            }
         }
 
         setConnectWalletDialog({

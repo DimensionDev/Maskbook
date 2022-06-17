@@ -35,7 +35,7 @@ export function toPNG(image: string) {
         if (isNull(ctx)) throw new Error('Canvas was not supported')
         img.addEventListener('load', () => {
             ;[canvas.width, canvas.height] = [img.width, img.height]
-            ctx.drawImage(img, 0, 0, img.width, img.height)
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
             canvas.toBlob((blob) => {
                 resolve(blob)
             }, 'image/png')
@@ -59,11 +59,9 @@ export function formatPrice(amount: string, symbol: string) {
 
 export function formatText(name: string, tokenId: string) {
     const _name = name.replace(/#\d*/, '').trim()
-    let token = tokenId
-    if (tokenId.length > 10) {
-        token = tokenId.slice(0, 6) + '...' + tokenId.slice(-4)
-    }
-    return `${_name} #${token}`
+    const __name = `${_name} #${tokenId}`
+    if (__name.length > 35) return `${__name.slice(0, 35)}...`
+    return __name
 }
 
 export function formatTokenId(symbol: string, tokenId: string) {

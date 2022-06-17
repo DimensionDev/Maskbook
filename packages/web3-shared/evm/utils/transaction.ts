@@ -1,6 +1,6 @@
 import { sha3, toHex } from 'web3-utils'
 import { unreachable } from '@dimensiondev/kit'
-import { Transaction, TransactionStateType } from '../types'
+import { Transaction, TransactionStateType, EthereumMethodType } from '../types'
 import { isEmptyHex } from './address'
 import { ZERO_ADDRESS } from '../constants'
 
@@ -10,6 +10,19 @@ export function isEIP1559Transaction(receipt: Transaction) {
 
 export function isFinalState(type: TransactionStateType) {
     return [TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(type)
+}
+
+const RISK_METHOD_LIST = [
+    EthereumMethodType.ETH_SIGN,
+    EthereumMethodType.PERSONAL_SIGN,
+    EthereumMethodType.ETH_SIGN_TYPED_DATA,
+    EthereumMethodType.ETH_DECRYPT,
+    EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
+    EthereumMethodType.ETH_SEND_TRANSACTION,
+]
+
+export function isRiskMethod(method: EthereumMethodType) {
+    return RISK_METHOD_LIST.includes(method)
 }
 
 /**

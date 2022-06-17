@@ -27,7 +27,7 @@ export function ArticleTab(props: ArticleTabProps) {
     const { asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
-    const resourceUrl = asset.value.shareUrl || asset.value.ossUrl
+    const resourceUrl = asset.value.ossUrl || asset.value.ossUrlCompress || asset.value.shareUrl
     return (
         <CollectibleTab>
             <div className={classes.body}>

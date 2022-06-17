@@ -18,10 +18,12 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexDirection: 'column',
             padding: theme.spacing(2),
+            counterReset: 'steps 0',
         },
         section: {
             flexGrow: 1,
             marginTop: 21,
+            counterIncrement: 'steps 1',
             '&:first-child': {
                 marginTop: 0,
             },
@@ -29,6 +31,9 @@ const useStyles = makeStyles()((theme) => {
         title: {
             fontSize: 14,
             fontWeight: 'bold',
+            '&:before': {
+                content: 'counter(steps) ". "',
+            },
         },
         list: {
             marginTop: 12,
@@ -79,7 +84,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             maxHeight: 180,
-            gridGap: '16px 8px',
+            gridGap: '12px 12px',
             margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
                 gridAutoRows: '110px',
@@ -149,7 +154,7 @@ export function PluginProviderRender({
     onNetworkIconClicked,
     onProviderIconClicked,
 }: PluginProviderRenderProps) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     const selectedNetwork = useMemo(() => {
@@ -161,7 +166,7 @@ export function PluginProviderRender({
             <Box className={classes.root}>
                 <section className={classes.section}>
                     <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_guiding_step_1')}
+                        {t('plugin_wallet_choose_network')}
                     </Typography>
                     <List className={classes.list}>
                         {networks
@@ -172,14 +177,14 @@ export function PluginProviderRender({
                                     onNetworkIconClicked={onNetworkIconClicked}
                                     NetworkIconClickBait={NetworkIconClickBait}
                                     network={network}
-                                    undeterminedNetworkID={undeterminedNetworkID}
+                                    selected={undeterminedNetworkID === network.ID}
                                 />
                             ))}
                     </List>
                 </section>
                 <section className={classes.section}>
                     <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_guiding_step_2')}
+                        {t('plugin_wallet_choose_wallet')}
                     </Typography>
                     <List className={classes.wallets}>
                         {providers
@@ -233,10 +238,10 @@ interface NetworkItemProps {
     onNetworkIconClicked: PluginProviderRenderProps['onNetworkIconClicked']
     NetworkIconClickBait?: PluginProviderRenderProps['NetworkIconClickBait']
     network: Web3Helper.NetworkDescriptorAll
-    undeterminedNetworkID: string | undefined
+    selected: boolean
 }
 
-function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, undeterminedNetworkID }: NetworkItemProps) {
+function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, selected }: NetworkItemProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State<'all'>(network.networkSupporterPluginID)
     return (
@@ -254,10 +259,9 @@ function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, unde
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {undeterminedNetworkID === network.ID && <SelectedIcon className={classes.checkedBadge} />}
+                {selected && <SelectedIcon className={classes.checkedBadge} />}
             </div>
-            <Typography
-                className={cx(classes.networkName, undeterminedNetworkID === network.ID ? classes.selected : '')}>
+            <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}
             </Typography>
         </ListItem>

@@ -1,32 +1,37 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import type { NFT } from '../types'
-import { useWeb3Connection, useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
+import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NFTInfo } from '../types'
 
-const NFTCache = new Map<string, Promise<NFT | undefined>>()
-export function useNFT(address: string, tokenId: string, chainId?: ChainId) {
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+export function useNFT(
+    account: string,
+    address: string,
+    tokenId: string,
+    pluginId: NetworkPluginID,
+    chainId?: ChainId,
+) {
+    const { Others } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
+    const hub = useWeb3Hub<'all'>(pluginId, {
+        chainId,
+        account,
+    })
+
     return useAsyncRetry(async () => {
-        if (!address || !tokenId) return
-        let f = NFTCache.get(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`)
-        if (!f) {
-            f = _getNFT(connection, address, tokenId, account, chainId)
-            NFTCache.set(`${address}-${tokenId}-${chainId ?? ChainId.Mainnet}`, f)
-        }
-        return f
-    }, [address, tokenId, NFTCache, connection, chainId, account])
-}
-
-async function _getNFT(connection: any, address: string, tokenId: string, account: string, chainId?: ChainId) {
-    const nft = await connection.getNonFungibleToken(address, tokenId, { chainId, account })
-    return {
-        amount: '0',
-        name: nft?.contract?.name ?? '',
-        symbol: nft?.contract?.symbol ?? 'ETH',
-        image: nft?.metadata?.imageURL ?? '',
-        owner: nft?.metadata?.owner ?? '',
-        slug: '',
-    }
+        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
+            chainId,
+        })
+        return {
+            amount: asset?.price?.[CurrencyType.USD] ?? '0',
+            name: asset?.contract?.name ?? '',
+            symbol: asset?.payment_tokens?.[0].symbol ?? 'ETH',
+            image: asset?.metadata?.imageURL ?? '',
+            owner: asset?.owner?.address ?? asset?.ownerId ?? '',
+            slug: asset?.collection?.slug ?? '',
+            permalink:
+                asset?.link ??
+                Others?.explorerResolver.nonFungibleTokenLink(chainId ?? ChainId.Mainnet, address, tokenId) ??
+                '',
+        } as NFTInfo
+    }, [hub?.getNonFungibleAsset, address, tokenId, Others, chainId])
 }

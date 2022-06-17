@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -10,12 +12,11 @@ import {
     useTokenConstants,
     UST,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useUnmount, useUpdateEffect } from 'react-use'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
+import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { useI18N as useBaseI18N } from '../../../../utils'
 import { useI18N } from '../../locales'
 import { isNativeTokenWrapper } from '../../helpers'
 import { PluginTraderMessages } from '../../messages'
@@ -25,10 +26,8 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
-import { useGasConfig } from './hooks/useGasConfig'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
 
@@ -59,7 +58,6 @@ export function Trader(props: TraderProps) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
-    const { t: tr } = useBaseI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     // #region trade state
@@ -227,27 +225,21 @@ export function Trader(props: TraderProps) {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
     const shareText = useMemo(() => {
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
         return focusedTrade?.value && inputToken && outputToken
-            ? [
-                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
-                      inputToken.symbol
-                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
-                      outputToken.symbol
-                  }.${
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? tr('twitter_account') : tr('facebook_account')
-                            } (mask.io) to swap cryptocurrencies on ${
-                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                            }.`
-                          : ''
-                  }`,
-                  '#mask_io',
-                  t.promote(),
-              ].join('\n')
+            ? t.share_text({
+                  input_amount: formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6),
+                  input_symbol: `${cashTag}${inputToken.symbol}`,
+                  output_amount: formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6),
+                  output_symbol: `${cashTag}${outputToken.symbol}`,
+                  account_promote: t.account_promote({
+                      context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                  }),
+              })
             : ''
-    }, [focusedTrade?.value, inputToken, outputToken, tr, t])
+    }, [focusedTrade?.value, inputToken, outputToken, t])
     const openShareTxDialog = useOpenShareTxDialog()
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
