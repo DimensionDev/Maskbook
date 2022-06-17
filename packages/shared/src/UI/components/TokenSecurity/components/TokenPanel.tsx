@@ -20,11 +20,12 @@ const useStyles = makeStyles()((theme) => ({
     subtitle: {
         color: theme.palette.text.secondary,
         fontWeight: 400,
-        fontSize: 14,
+        fontSize: 16,
     },
     cardValue: {
         color: theme.palette.text.primary,
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 700,
     },
     tooltip: {
         fontSize: 12,
@@ -64,85 +65,83 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
     })
 
     return (
-        <Stack>
-            <Stack direction="row" className={classes.card} spacing={2}>
-                <Stack height={128} justifyContent="space-between" flex={1}>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
+        <Stack className={classes.card} spacing={2}>
+            <Stack height={128} justifyContent="space-between" flex={1}>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
+                    <Typography className={classes.cardValue}>
+                        {tokenSecurity.token_symbol}
+                        {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}
+                    </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_token_contract_address()}</Typography>
+                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.token_symbol}
-                            {tokenSecurity.token_name && `(${tokenSecurity.token_name})`}
+                            {tokenSecurity.contract
+                                ? formatEthereumAddress(tokenSecurity.contract, 4)
+                                : DEFAULT_PLACEHOLDER}
                         </Typography>
+                        <Link
+                            lineHeight="14px"
+                            href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                        </Link>
                     </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_token_contract_address()}</Typography>
-                        <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
-                            <Typography className={classes.cardValue}>
-                                {tokenSecurity.contract
-                                    ? formatEthereumAddress(tokenSecurity.contract, 4)
-                                    : DEFAULT_PLACEHOLDER}
-                            </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_contract_creator()}</Typography>
+                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
+                        <Typography className={classes.cardValue}>
+                            {tokenSecurity.creator_address
+                                ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
+                                : DEFAULT_PLACEHOLDER}
+                        </Typography>
+                        {tokenSecurity.creator_address && (
                             <Link
                                 lineHeight="14px"
-                                href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
+                                href={explorerResolver.addressLink(
+                                    tokenSecurity.chainId,
+                                    tokenSecurity.creator_address,
+                                )}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <ExternalLink color={theme.palette.text.strong} size={14} />
                             </Link>
-                        </Stack>
+                        )}
                     </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_contract_creator()}</Typography>
-                        <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
-                            <Typography className={classes.cardValue}>
-                                {tokenSecurity.creator_address
-                                    ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
-                                    : DEFAULT_PLACEHOLDER}
-                            </Typography>
-                            {tokenSecurity.creator_address && (
-                                <Link
-                                    lineHeight="14px"
-                                    href={explorerResolver.addressLink(
-                                        tokenSecurity.chainId,
-                                        tokenSecurity.creator_address,
-                                    )}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <ExternalLink color={theme.palette.text.strong} size={14} />
-                                </Link>
-                            )}
-                        </Stack>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_contract_owner()}</Typography>
+                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
+                        <Typography className={classes.cardValue}>
+                            {tokenSecurity.owner_address
+                                ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
+                                : DEFAULT_PLACEHOLDER}
+                        </Typography>
+                        {tokenSecurity.owner_address && (
+                            <Link
+                                lineHeight="14px"
+                                href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                            </Link>
+                        )}
                     </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_contract_owner()}</Typography>
-                        <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
-                            <Typography className={classes.cardValue}>
-                                {tokenSecurity.owner_address
-                                    ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
-                                    : DEFAULT_PLACEHOLDER}
-                            </Typography>
-                            {tokenSecurity.owner_address && (
-                                <Link
-                                    lineHeight="14px"
-                                    href={explorerResolver.addressLink(
-                                        tokenSecurity.chainId,
-                                        tokenSecurity.owner_address,
-                                    )}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <ExternalLink color={theme.palette.text.strong} size={14} />
-                                </Link>
-                            )}
-                        </Stack>
-                    </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
-                        {totalSupply}
-                    </Stack>
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
-                        {tokenMarketCap ? `$${formatCurrency(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
-                    </Stack>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
+                    <Typography className={classes.cardValue}> {totalSupply} </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
+                    <Typography className={classes.cardValue}>
+                        {' '}
+                        {tokenMarketCap ? formatCurrency(tokenMarketCap) : DEFAULT_PLACEHOLDER}{' '}
+                    </Typography>
                 </Stack>
             </Stack>
         </Stack>

@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
@@ -25,6 +25,7 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -124,6 +125,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+
+    const { value: tokenSecurityInfo, error } = useTokenSecurity(
+        chainId,
+        coin.contract_address?.trim(),
+        isTokenSecurityClosed,
+    )
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
@@ -206,8 +217,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </div>
                 }
                 subheader={
-                    <>
-                        <Typography component="p" variant="body1">
+                    <Stack>
+                        <Typography component="p" variant="body1" marginBottom="8px">
                             {market ? (
                                 <>
                                     {typeof coin.market_cap_rank === 'number' ? (
@@ -233,7 +244,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
                             />
                         </Typography>
-                    </>
+                        {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
+                            <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                        )}
+                    </Stack>
                 }
                 disableTypography
             />
