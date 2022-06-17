@@ -11,8 +11,10 @@ import GameShareDialog from './GameShareDialog'
 
 import { WalletMessages } from '../../Wallet/messages'
 import type { GameInfo, GameNFT } from '../types'
+import { useI18N } from '../../../utils'
 
 const WalletConnectDialog = () => {
+    const { t } = useI18N()
     const [isGameShow, setGameShow] = useState(false)
     const [tokenProps, setTokenProps] = useState<GameNFT>()
     const [gameInfo, setGameInfo] = useState<GameInfo>()
@@ -46,7 +48,7 @@ const WalletConnectDialog = () => {
 
     return (
         <>
-            <InjectedDialog onClose={closeDialog} open={open} title="Game">
+            <InjectedDialog onClose={closeDialog} open={open} title={t('plugin_game_name')}>
                 <DialogContent>
                     <WalletStatusBox />
                     <GameList onPlay={handleGameOpen} />
@@ -60,13 +62,11 @@ const WalletConnectDialog = () => {
                 onClose={handleGameClose}
                 onShare={handleGameShare}
             />
-            <InjectedDialog onClose={closeGameShare} open={isShareShow} title="Share">
+            <InjectedDialog onClose={closeGameShare} open={isShareShow} title={t('plugin_game_share_title')}>
                 <DialogContent>
                     <GameShareDialog gameInfo={gameInfo} onClose={closeGameShare} />
                 </DialogContent>
             </InjectedDialog>
-
-            {/* {!!isShareShow && <GameShareDialog shareUrl={shareUrl} onClose={closeGameShare} />} */}
         </>
     )
 }

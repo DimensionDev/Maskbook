@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, List, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useGameList } from '../hook'
@@ -73,19 +73,19 @@ const GameList = (props: Props) => {
     const gameList = useGameList()
 
     return (
-        <div className={classes.walletBar}>
-            <h2 className={classes.title}>{t('plugin_game_list_title')}</h2>
+        <List className={classes.walletBar}>
+            <Typography className={classes.title}>{t('plugin_game_list_title')}</Typography>
             <ul className={classes.gameList}>
                 {gameList
                     ? gameList.map((game: any) => (
                           <li className={classes.gameBar} key={game.id}>
                               <img className={classes.logo} src={game.image} alt="" />
                               <div className={classes.info}>
-                                  <div className={classes.infoTitle}>{game.name}</div>
-                                  <div className={classes.introduction}>{game.description}</div>
-                                  <div className={classes.rank}>
+                                  <Typography className={classes.infoTitle}>{game.name}</Typography>
+                                  <Typography className={classes.introduction}>{game.description}</Typography>
+                                  <Typography className={classes.rank}>
                                       {t('plugin_game_list_rank')} {game.rank}
-                                  </div>
+                                  </Typography>
                               </div>
                               <Button className={classes.playBtn} onClick={() => props.onPlay(game)}>
                                   {t('plugin_game_list_play')}
@@ -94,7 +94,7 @@ const GameList = (props: Props) => {
                       ))
                     : null}
             </ul>
-        </div>
+        </List>
     )
 }
 

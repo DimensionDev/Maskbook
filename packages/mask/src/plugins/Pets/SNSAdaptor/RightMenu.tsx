@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Typography } from '@mui/material'
 import { PluginPetMessages } from '../messages'
 import { useI18N } from '../../../utils'
 import { PluginGameMessages } from '../../Game/messages'
@@ -186,16 +187,16 @@ function RightMenu(props: Props) {
                 transform: `translate(${isLeft ? '-100%' : 0}, ${isTop ? '-100%' : 0})`,
             }}>
             <div onClick={() => onClickMenu(MenuType.Setting)}>
-                <span>{t('plugin_pets_dialog_menu_change')}</span>
+                <Typography>{t('plugin_pets_dialog_menu_change')}</Typography>
             </div>
             {visitor.userId === whoAmI?.identifier?.userId ? (
                 <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <span>{t('plugin_pets_dialog_menu_ski')}</span>
+                    <Typography>{t('plugin_pets_dialog_menu_ski')}</Typography>
                 </div>
             ) : null}
 
             <div onClick={() => onClickMenu(MenuType.About)}>
-                <span>{t('plugin_pets_dialog_menu_about')}</span>
+                <Typography>{t('plugin_pets_dialog_menu_about')}</Typography>
             </div>
         </div>
     )

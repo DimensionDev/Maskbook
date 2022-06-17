@@ -1,15 +1,18 @@
-import { ImageType, ShowMeta } from './../types'
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginPetRPC } from '../messages'
 import type { User } from '../types'
+import { ImageType, ShowMeta } from './../types'
 import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants'
 import { useUser } from './useUser'
 
 export function useEssay(user: User, refresh?: number) {
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsync(async () => {
         if (!user.address) return null
-        const metaData = await PluginPetRPC.getEssay(user.address)
+        const metaData = await PluginPetRPC.getCustomEssayFromRSS(user.address, connection)
         return metaData?.userId === user.userId ? metaData : null
     }, [user, refresh]).value
 }

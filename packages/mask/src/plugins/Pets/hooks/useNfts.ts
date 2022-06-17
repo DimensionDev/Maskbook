@@ -5,11 +5,12 @@ import { findLastIndex } from 'lodash-unified'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
-    const { value: assets = [], loading: state } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets = EMPTY_LIST, loading: state } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         const tempNFTs: FilterContract[] = []
         if (assets?.length) {

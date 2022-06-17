@@ -8,6 +8,8 @@ import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { useI18N } from '../../../utils'
 import { PetShareDialog } from './PetShareDialog'
 import { PetSetDialog } from './PetSetDialog'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',
@@ -16,13 +18,13 @@ enum PetFriendNFTStep {
 
 export function PetDialog() {
     const { t } = useI18N()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)
-
     useAsync(async () => {
-        setConfigNFTs(await PluginPetRPC.getConfigEssay())
+        setConfigNFTs(await PluginPetRPC.getConfigNFTsFromRSS(connection))
     }, [])
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)

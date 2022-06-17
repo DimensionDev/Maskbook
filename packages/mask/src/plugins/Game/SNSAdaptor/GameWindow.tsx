@@ -7,6 +7,8 @@ import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/
 import { useLocation } from 'react-use'
 import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import type { GameInfo, GameNFT } from '../types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -92,7 +94,7 @@ interface Props {
 const GameWindow = (props: Props) => {
     const { gameInfo, tokenProps, isShow, onClose } = props
     const classes = useStylesExtends(useStyles(), {})
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [isFullScreen, setFullScreen] = useState(false)
 
@@ -118,9 +120,14 @@ const GameWindow = (props: Props) => {
     }, [location])
     const chainId = useChainId()
     const gameUrl = useMemo(() => {
-        return `${gameInfo?.url}?dom=nff&twitterId=${twitterId}&contract=${tokenProps?.contract ?? ''}&tokenId=${
-            tokenProps?.tokenId ?? ''
-        }&chainId=${chainId}&account=${account}`
+        return urlcat(gameInfo?.url ?? '', {
+            dom: 'nff',
+            twitterId,
+            contract: tokenProps?.contract,
+            tokenId: tokenProps?.tokenId,
+            chainId,
+            account,
+        })
     }, [props, account])
 
     return isShow ? (
