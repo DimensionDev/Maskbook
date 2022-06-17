@@ -7,6 +7,7 @@ import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
 import { TargetRuntimeContext } from '../TargetRuntimeContext'
 import { ContextOptions, TipContext } from './TipContext'
+import { useAddNameService } from './useAddNameService'
 import { useNftTip } from './useNftTip'
 import { useTokenTip } from './useTokenTip'
 
@@ -17,6 +18,7 @@ interface Props {
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
     const [recipient, setRecipient] = useState('')
+    const recipients = useAddNameService(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
@@ -35,10 +37,10 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [targetChainId])
 
     useEffect(() => {
-        const selected = recipient && task.addresses.find((x) => x.address === recipient)
-        if (selected || task.addresses.length === 0) return
-        setRecipient(task.addresses[0].address)
-    }, [recipient, task.addresses])
+        const selected = recipient && recipients.find((x) => x.address === recipient)
+        if (selected || recipients.length === 0) return
+        setRecipient(recipients[0].address)
+    }, [recipient, recipients])
 
     useEffect(() => {
         if (!nativeTokenDetailed) return
@@ -69,7 +71,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             recipient,
             recipientSnsId: task.recipientSnsId || '',
             setRecipient,
-            recipients: task.addresses,
+            recipients,
             tipType,
             setTipType,
             token,
@@ -91,7 +93,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         chainId,
         recipient,
         task.recipientSnsId,
-        task.addresses,
+        recipients,
         tipType,
         amount,
         nonFungibleTokenId,

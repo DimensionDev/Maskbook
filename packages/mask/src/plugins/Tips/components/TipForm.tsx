@@ -104,15 +104,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const { classes, cx } = useStyles({})
-    const {
-        recipient,
-        recipients: recipientAddresses,
-        setRecipient,
-        isSending,
-        sendTip,
-        tipType,
-        setTipType,
-    } = useTip()
+    const { recipient, recipients, setRecipient, isSending, sendTip, tipType, setTipType } = useTip()
     const [isValid, validateMessage] = useTipValidate()
     const { Others } = useWeb3State()
     const selectRef = useRef(null)
@@ -164,12 +156,14 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                                 invisible: true,
                             },
                         }}>
-                        {recipientAddresses.map((addressConfig) => (
+                        {recipients.map((addressConfig) => (
                             <MenuItem
                                 className={classes.menuItem}
                                 key={addressConfig.address}
                                 value={addressConfig.address}>
-                                {Others?.formatAddress?.(addressConfig.address, 4) || addressConfig.address}
+                                {addressConfig.name ||
+                                    Others?.formatAddress?.(addressConfig.address, 4) ||
+                                    addressConfig.address}
                                 <CopyIconButton
                                     className={cx(classes.actionIcon, classes.icon)}
                                     text={addressConfig.address}
