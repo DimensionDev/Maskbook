@@ -13,6 +13,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 ) {
     const [assets, setAssets] = useState<Array<Web3Helper.NonFungibleAssetScope<S, T>>>(EMPTY_LIST)
     const [done, setDone] = useState(false)
+    const [loading, toggleLoading] = useState(false)
     const [error, setError] = useState<string>()
 
     const account = useAccount(pluginID)
@@ -46,8 +47,9 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         if (!iterator || done) return
 
         const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
+        toggleLoading(true)
         try {
-            for (const v of Array.from({ length: 36 })) {
+            for (const v of Array.from({ length: options?.size ?? 36 })) {
                 const { value, done: iteratorDone } = await iterator.next()
                 if (value instanceof Error) {
                     // Controlled error
@@ -68,6 +70,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
             setError(error_ as string)
             setDone(true)
         }
+        toggleLoading(false)
         setAssets((pred) => [...pred, ...batchResult])
     }, [iterator, done])
 
@@ -84,6 +87,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     return {
         value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
         next,
+        loading,
         done,
         retry,
         error,
