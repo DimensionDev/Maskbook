@@ -8,7 +8,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "clipboard-polyfill": "^3.0.3",
-    "core-js": "3.22.5"
+    "core-js": "3.22.7"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
