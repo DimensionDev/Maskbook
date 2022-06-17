@@ -133,6 +133,14 @@
     },
     {
         "type": "event",
+        "name": "ReinforcementAbilityChanged",
+        "inputs": [
+            { "type": "uint128", "name": "newReinforcementAbility", "internalType": "uint128", "indexed": false }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "Transfer",
         "inputs": [
             { "type": "address", "name": "from", "internalType": "address", "indexed": true },
@@ -154,6 +162,7 @@
         "name": "addLiquidity",
         "inputs": [{ "type": "uint128", "name": "amount", "internalType": "uint128" }]
     },
+    { "type": "function", "stateMutability": "payable", "outputs": [], "name": "addLiquidityNative", "inputs": [] },
     {
         "type": "function",
         "stateMutability": "nonpayable",
@@ -161,8 +170,9 @@
         "name": "addReserve",
         "inputs": [
             { "type": "uint128", "name": "initReserve", "internalType": "uint128" },
-            { "type": "uint128", "name": "profitReserve", "internalType": "uint128" },
-            { "type": "uint48", "name": "leaf", "internalType": "uint48" }
+            { "type": "uint128", "name": "finalReserve", "internalType": "uint128" },
+            { "type": "uint48", "name": "leaf", "internalType": "uint48" },
+            { "type": "address", "name": "oracle", "internalType": "address" }
         ]
     },
     {
@@ -197,6 +207,18 @@
         "inputs": [
             { "type": "uint256", "name": "conditionId", "internalType": "uint256" },
             { "type": "uint128", "name": "amount", "internalType": "uint128" },
+            { "type": "uint64", "name": "outcomeId", "internalType": "uint64" },
+            { "type": "uint64", "name": "deadline", "internalType": "uint64" },
+            { "type": "uint64", "name": "minOdds", "internalType": "uint64" }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "payable",
+        "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+        "name": "betNative",
+        "inputs": [
+            { "type": "uint256", "name": "conditionId", "internalType": "uint256" },
             { "type": "uint64", "name": "outcomeId", "internalType": "uint64" },
             { "type": "uint64", "name": "deadline", "internalType": "uint64" },
             { "type": "uint64", "name": "minOdds", "internalType": "uint64" }
@@ -241,6 +263,13 @@
         "type": "function",
         "stateMutability": "nonpayable",
         "outputs": [],
+        "name": "changeReinforcementAbility",
+        "inputs": [{ "type": "uint128", "name": "newReinforcementAbility", "internalType": "uint128" }]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
         "name": "changeWithdrawTimeout",
         "inputs": [{ "type": "uint64", "name": "newWithdrawTimeout", "internalType": "uint64" }]
     },
@@ -269,13 +298,6 @@
     {
         "type": "function",
         "stateMutability": "view",
-        "outputs": [{ "type": "uint128", "name": "feeMultiplier", "internalType": "uint128" }],
-        "name": "getFeeMultiplier",
-        "inputs": []
-    },
-    {
-        "type": "function",
-        "stateMutability": "view",
         "outputs": [{ "type": "uint48", "name": "leaf", "internalType": "uint48" }],
         "name": "getLeaf",
         "inputs": []
@@ -292,13 +314,6 @@
             { "type": "uint48", "name": "l", "internalType": "uint48" },
             { "type": "uint48", "name": "r", "internalType": "uint48" }
         ]
-    },
-    {
-        "type": "function",
-        "stateMutability": "view",
-        "outputs": [{ "type": "uint128", "name": "fee", "internalType": "uint128" }],
-        "name": "getOracleFee",
-        "inputs": []
     },
     {
         "type": "function",
@@ -446,16 +461,6 @@
         "type": "function",
         "stateMutability": "nonpayable",
         "outputs": [],
-        "name": "sendOracleReward",
-        "inputs": [
-            { "type": "address", "name": "oracle", "internalType": "address" },
-            { "type": "uint128", "name": "amount", "internalType": "uint128" }
-        ]
-    },
-    {
-        "type": "function",
-        "stateMutability": "nonpayable",
-        "outputs": [],
         "name": "setApprovalForAll",
         "inputs": [
             { "type": "address", "name": "operator", "internalType": "address" },
@@ -580,7 +585,24 @@
         "type": "function",
         "stateMutability": "nonpayable",
         "outputs": [],
+        "name": "withdrawLiquidityNative",
+        "inputs": [
+            { "type": "uint48", "name": "depNum", "internalType": "uint48" },
+            { "type": "uint40", "name": "percent", "internalType": "uint40" }
+        ]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
         "name": "withdrawPayout",
+        "inputs": [{ "type": "uint256", "name": "tokenId", "internalType": "uint256" }]
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "name": "withdrawPayoutNative",
         "inputs": [{ "type": "uint256", "name": "tokenId", "internalType": "uint256" }]
     },
     {
@@ -596,5 +618,6 @@
         "outputs": [{ "type": "uint64", "name": "", "internalType": "uint64" }],
         "name": "withdrawals",
         "inputs": [{ "type": "uint48", "name": "", "internalType": "uint48" }]
-    }
+    },
+    { "type": "receive", "stateMutability": "payable" }
 ]

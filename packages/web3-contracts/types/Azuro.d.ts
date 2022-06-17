@@ -109,6 +109,10 @@ export type PeriodChanged = ContractEventLog<{
     newPeriod: string
     0: string
 }>
+export type ReinforcementAbilityChanged = ContractEventLog<{
+    newReinforcementAbility: string
+    0: string
+}>
 export type Transfer = ContractEventLog<{
     from: string
     to: string
@@ -128,10 +132,13 @@ export interface Azuro extends BaseContract {
     methods: {
         addLiquidity(amount: number | string | BN): NonPayableTransactionObject<void>
 
+        addLiquidityNative(): PayableTransactionObject<void>
+
         addReserve(
             initReserve: number | string | BN,
-            profitReserve: number | string | BN,
+            finalReserve: number | string | BN,
             leaf: number | string | BN,
+            oracle: string,
         ): NonPayableTransactionObject<void>
 
         approve(to: string, tokenId: number | string | BN): NonPayableTransactionObject<void>
@@ -148,6 +155,13 @@ export interface Azuro extends BaseContract {
             minOdds: number | string | BN,
         ): NonPayableTransactionObject<string>
 
+        betNative(
+            conditionId: number | string | BN,
+            outcomeId: number | string | BN,
+            deadline: number | string | BN,
+            minOdds: number | string | BN,
+        ): PayableTransactionObject<string>
+
         changeAzuroBet(newAzuroBet: string): NonPayableTransactionObject<void>
 
         changeCore(newCore: string): NonPayableTransactionObject<void>
@@ -157,6 +171,8 @@ export interface Azuro extends BaseContract {
         changeMinDepo(newMinDepo: number | string | BN): NonPayableTransactionObject<void>
 
         changeOracleReward(newOracleFee: number | string | BN): NonPayableTransactionObject<void>
+
+        changeReinforcementAbility(newReinforcementAbility: number | string | BN): NonPayableTransactionObject<void>
 
         changeWithdrawTimeout(newWithdrawTimeout: number | string | BN): NonPayableTransactionObject<void>
 
@@ -168,8 +184,6 @@ export interface Azuro extends BaseContract {
 
         getApproved(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
-        getFeeMultiplier(): NonPayableTransactionObject<string>
-
         getLeaf(): NonPayableTransactionObject<string>
 
         getLeavesAmount(
@@ -179,8 +193,6 @@ export interface Azuro extends BaseContract {
             l: number | string | BN,
             r: number | string | BN,
         ): NonPayableTransactionObject<string>
-
-        getOracleFee(): NonPayableTransactionObject<string>
 
         getParent(fromNumber: number | string | BN): NonPayableTransactionObject<string>
 
@@ -229,8 +241,6 @@ export interface Azuro extends BaseContract {
             _data: string | number[],
         ): NonPayableTransactionObject<void>
 
-        sendOracleReward(oracle: string, amount: number | string | BN): NonPayableTransactionObject<void>
-
         setApprovalForAll(operator: string, approved: boolean): NonPayableTransactionObject<void>
 
         supportsInterface(interfaceId: string | number[]): NonPayableTransactionObject<boolean>
@@ -272,7 +282,14 @@ export interface Azuro extends BaseContract {
             percent: number | string | BN,
         ): NonPayableTransactionObject<void>
 
+        withdrawLiquidityNative(
+            depNum: number | string | BN,
+            percent: number | string | BN,
+        ): NonPayableTransactionObject<void>
+
         withdrawPayout(tokenId: number | string | BN): NonPayableTransactionObject<void>
+
+        withdrawPayoutNative(tokenId: number | string | BN): NonPayableTransactionObject<void>
 
         withdrawTimeout(): NonPayableTransactionObject<string>
 
@@ -317,6 +334,9 @@ export interface Azuro extends BaseContract {
 
         PeriodChanged(cb?: Callback<PeriodChanged>): EventEmitter
         PeriodChanged(options?: EventOptions, cb?: Callback<PeriodChanged>): EventEmitter
+
+        ReinforcementAbilityChanged(cb?: Callback<ReinforcementAbilityChanged>): EventEmitter
+        ReinforcementAbilityChanged(options?: EventOptions, cb?: Callback<ReinforcementAbilityChanged>): EventEmitter
 
         Transfer(cb?: Callback<Transfer>): EventEmitter
         Transfer(options?: EventOptions, cb?: Callback<Transfer>): EventEmitter
@@ -365,6 +385,9 @@ export interface Azuro extends BaseContract {
 
     once(event: 'PeriodChanged', cb: Callback<PeriodChanged>): void
     once(event: 'PeriodChanged', options: EventOptions, cb: Callback<PeriodChanged>): void
+
+    once(event: 'ReinforcementAbilityChanged', cb: Callback<ReinforcementAbilityChanged>): void
+    once(event: 'ReinforcementAbilityChanged', options: EventOptions, cb: Callback<ReinforcementAbilityChanged>): void
 
     once(event: 'Transfer', cb: Callback<Transfer>): void
     once(event: 'Transfer', options: EventOptions, cb: Callback<Transfer>): void
