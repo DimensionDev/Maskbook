@@ -101,7 +101,7 @@ export function AddNFT(props: AddNFTProps) {
                 return
             }
 
-            const isOwner = await connection?.getNonFungibleTokenOwnership(address, _account, tokenId, undefined, {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, _account, undefined, {
                 chainId: currentChainId,
             })
 
