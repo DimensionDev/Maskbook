@@ -27,5 +27,7 @@
     "dialog_confirm_label": "crwdns16698:0crwdne16698:0",
     "share_dialog_transaction": "crwdns16700:0crwdne16700:0",
     "share_dialog_view_on_explorer": "crwdns16702:0crwdne16702:0",
-    "share_dialog_transaction_confirmed": "crwdns16704:0crwdne16704:0"
+    "share_dialog_transaction_confirmed": "crwdns16704:0crwdne16704:0",
+    "load_failed": "crwdns17242:0crwdne17242:0",
+    "load_retry": "crwdns17244:0crwdne17244:0"
 }
