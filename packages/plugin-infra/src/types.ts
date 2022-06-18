@@ -918,7 +918,7 @@ export enum PluginId {
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
-    Predict = 'com.predict',
+    Predict = 'com.maskbook.predict',
     // @masknet/scripts: insert-here
 }
 /**

@@ -277,6 +277,18 @@
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
+        },
+        {
+            "input": "./packages/mask/src/plugins/Predict/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Predict/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.predict",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
         }
     ]
 }
