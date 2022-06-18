@@ -1,4 +1,4 @@
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
@@ -6,7 +6,8 @@ import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'
-import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
 import { TipButton } from '../../../plugins/Tips/components'
@@ -21,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     copy: {
+        color: theme.palette.text.primary,
         fontSize: 16,
         cursor: 'pointer',
     },
@@ -65,9 +67,8 @@ interface Item {
 
 export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable, onUnBind }) => {
     const t = useI18N()
-    const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
-    const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const visitingPersona = useCurrentVisitingIdentity()
 
     if (platform === NextIDPlatform.Ethereum) {
@@ -79,7 +80,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                     <CopyIconButton text={identity} className={classes.copy} />
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(1, identity) ?? ''}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, identity) ?? ''}
                         target="_blank"
                         title={t.view_on_explorer()}
                         rel="noopener noreferrer">

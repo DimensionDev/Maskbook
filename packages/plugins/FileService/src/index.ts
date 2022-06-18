@@ -1,6 +1,8 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base'
 
+export { FileInfoMetadataReader } from './helpers'
+
 registerPlugin({
     ...base,
     SNSAdaptor: {

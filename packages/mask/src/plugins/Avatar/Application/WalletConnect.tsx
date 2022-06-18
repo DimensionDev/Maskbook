@@ -1,14 +1,14 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { resolveProviderHomeLink, useProviderType } from '@masknet/web3-shared-evm'
+import { providerResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { useProviderType } from '@masknet/plugin-infra/web3'
 import { Box, Button, Link, Typography } from '@mui/material'
 import { WalletIcon } from '../assets/wallet'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../locales/i18n_generated'
 import type { HTMLProps } from 'react'
 import { ApplicationSmallIcon } from '../assets/application'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,19 +71,21 @@ export function NFTWalletConnect(props: NFTWalletConnectProps) {
                 <Typography variant="body1" sx={{ marginLeft: 0.5 }} color="#07101b" fontWeight={500}>
                     Mask Network
                 </Typography>
-                <Link
-                    className={classes.link}
-                    href={resolveProviderHomeLink(providerType)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={stop}>
-                    <LaunchIcon fontSize="small" />
-                </Link>
+                {providerType ? (
+                    <Link
+                        className={classes.link}
+                        href={providerResolver.providerHomeLink(providerType as ProviderType)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={stop}>
+                        <LaunchIcon fontSize="small" />
+                    </Link>
+                ) : null}
             </Box>
             <Rectangle className={classes.rectangle} />
             <Box className={classes.button}>
                 <Button
-                    onClick={() => openSelectProviderDialog({ open: true, pluginID: NetworkPluginID.PLUGIN_EVM })}
+                    onClick={() => openSelectProviderDialog({ open: true })}
                     style={{ width: 254, backgroundColor: '#07101b', color: 'white', borderRadius: 9999 }}
                     startIcon={<WalletIcon style={{ width: 18, height: 18 }} />}>
                     {t.connect_your_wallet()}

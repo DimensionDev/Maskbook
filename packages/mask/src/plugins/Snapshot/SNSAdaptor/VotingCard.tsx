@@ -3,7 +3,9 @@ import classNames from 'classnames'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { toChecksumAddress } from 'web3-utils'
+import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { PluginSnapshotRPC } from '../messages'
@@ -12,7 +14,8 @@ import { useProposal } from './hooks/useProposal'
 import { usePower } from './hooks/usePower'
 import { VoteConfirmDialog } from './VoteConfirmDialog'
 import { useRetry } from './hooks/useRetry'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
+import { getSnapshotVoteType } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -25,12 +28,14 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.mode === 'dark' ? 'white' : 'black',
             transitionDuration: '0s !important',
             '&:hover': {
-                border: '2px solid rgb(29, 161, 242) !important',
+                border: '1px solid rgb(29, 161, 242)',
+                boxShadow: 'inset 0 0 10px rgb(29, 161, 242)',
                 backgroundColor: 'transparent !important',
             },
         },
         buttonActive: {
-            border: '2px solid rgb(29, 161, 242)',
+            border: '1px solid rgb(29, 161, 242)',
+            boxShadow: 'inset 0 0 2px rgb(29, 161, 242)',
             backgroundColor: 'transparent',
             color: theme.palette.mode === 'dark' ? 'white' : 'black',
         },
@@ -41,8 +46,10 @@ export function VotingCard() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { payload: proposal } = useProposal(identifier.id)
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: power } = usePower(identifier)
     const choices = proposal.choices
     const [choice, setChoice] = useState(0)
@@ -52,11 +59,48 @@ export function VotingCard() {
     const networkPluginId = useCurrentWeb3NetworkPluginID()
     const retry = useRetry()
     const onVoteConfirm = useSnackbarCallback(
-        () => {
+        async () => {
             setLoading(true)
-            return PluginSnapshotRPC.vote(identifier, choice, account, proposal.type)
+            const message = {
+                from: toChecksumAddress(account),
+                space: identifier.space,
+                timestamp: Math.floor(Date.now() / 1e3),
+                proposal: identifier.id,
+                choice: proposal.type === 'single-choice' ? choice : [choice],
+                metadata: JSON.stringify({}),
+            }
+
+            const domain = SNAPSHOT_VOTE_DOMAIN
+
+            const types = getSnapshotVoteType(proposal.type)
+
+            const data = {
+                message,
+                domain,
+                types,
+            }
+            const sig = await connection?.signMessage(
+                JSON.stringify({
+                    domain,
+                    types: {
+                        EIP712Domain: [
+                            { name: 'name', type: 'string' },
+                            { name: 'version', type: 'string' },
+                        ],
+                        Vote: types.Vote,
+                    },
+                    primaryType: 'Vote',
+                    message,
+                }),
+                'typedDataSign',
+                { account: toChecksumAddress(account) },
+            )
+
+            const body = JSON.stringify({ data, sig, address: toChecksumAddress(account) })
+
+            return PluginSnapshotRPC.vote(body)
         },
-        [choice, identifier],
+        [choice, identifier, account, proposal, connection, chainId],
         () => {
             setLoading(false)
             setOpen(false)
@@ -90,6 +134,8 @@ export function VotingCard() {
                     ))}
 
                     <Button
+                        color="primary"
+                        variant="contained"
                         className={classes.button}
                         disabled={choice === 0 || !account || !power}
                         onClick={() => setOpen(true)}>

@@ -18,14 +18,6 @@ const define: SocialNetworkUI.Definition = {
     configuration: {},
     customization: {},
     injection: {},
-    permission: {
-        async has() {
-            return true
-        },
-        async request() {
-            return true
-        },
-    },
     utils: { createPostContext: null! },
     async init(signal) {
         const state: Readonly<SocialNetworkUI.AutonomousState> = {
@@ -40,7 +32,6 @@ const define: SocialNetworkUI.Definition = {
                 if (signal.aborted) return state
                 // TODO: heck, this is not what we expected.
                 this.networkIdentifier = ui.networkIdentifier
-                this.permission = _.permission
                 this.declarativePermissions = _.declarativePermissions
                 this.utils = _.utils
                 return _.init(signal)

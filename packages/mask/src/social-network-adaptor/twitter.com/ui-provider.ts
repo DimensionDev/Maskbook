@@ -13,7 +13,6 @@ import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customizat
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
-import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
@@ -50,13 +49,16 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '612px !important',
+            width: '600px !important',
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
             [smallQuery]: {
                 display: 'block !important',
                 margin: 12,
+            },
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
         },
         dialogTitle: {
@@ -65,7 +67,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.maskColor.modelTitleBg,
+            background: theme.palette.maskColor?.modelTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -156,7 +158,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileTabContent: injectProfileTabContentAtTwitter,
-        profileSlider: injectProfileSliderAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,

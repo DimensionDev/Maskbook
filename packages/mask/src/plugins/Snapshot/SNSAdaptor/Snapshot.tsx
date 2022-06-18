@@ -5,17 +5,16 @@ import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
 import { ProposalTab } from './ProposalTab'
 import { ProgressTab } from './ProgressTab'
-import { useChainId } from '@masknet/web3-shared-evm'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             '--contentHeight': '400px',
             '--tabHeight': '35px',
-
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
         },
         content: {
@@ -75,7 +74,7 @@ export function Snapshot() {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="proposal" label="Proposal" />,
@@ -128,7 +127,11 @@ export function Snapshot() {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId} />
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    renderInTimeline
+                />
             </Box>
         </>
     )

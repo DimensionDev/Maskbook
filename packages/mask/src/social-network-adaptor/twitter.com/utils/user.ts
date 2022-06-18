@@ -49,7 +49,7 @@ export const getBio = () => {
 
 export const getPersonalHomepage = () => {
     const node = personalHomepageSelector().evaluate()
-    return node?.getAttribute('href') || ''
+    return node?.getAttribute('href') ?? ''
 }
 
 export const getAvatar = () => {

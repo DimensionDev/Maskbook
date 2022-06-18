@@ -1,13 +1,11 @@
 {
   "name": "@masknet/null",
   "private": true,
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "types": "./dist/index.d.ts"
 }

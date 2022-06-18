@@ -1,4 +1,4 @@
-import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types'
+import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types/index.js'
 
 // This interface uses by-name style JSON RPC.
 
@@ -13,8 +13,8 @@ export interface MaskNetworkAPIs {
     app_resume(): Promise<void>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
-    settings_getTrendingDataSource(): Promise<DataProvider>
-    settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
+    // settings_getTrendingDataSource(): Promise<DataProvider>
+    // settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
     settings_getTheme(): Promise<Appearance>
     settings_setTheme(params: { theme: Appearance }): Promise<void>
@@ -220,51 +220,6 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
-}
-
-/**
- * Keep updating to packages/web3-shared/evm/types/index.ts
- */
-export enum NetworkType {
-    Ethereum = 'Ethereum',
-    Binance = 'Binance',
-    Polygon = 'Polygon',
-    Arbitrum = 'Arbitrum',
-    xDai = 'xDai',
-    Celo = 'Celo',
-    Fantom = 'Fantom',
-    Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
-    Boba = 'Boba',
-    Fuse = 'Fuse',
-    Metis = 'Metis',
-    Optimistic = 'Optimistic',
-    Harmony = 'Harmony',
-    Conflux = 'Conflux',
-    Astar = 'Astar',
-}
-
-export enum ProviderType {
-    MaskWallet = 'Maskbook',
-    MetaMask = 'MetaMask',
-    WalletConnect = 'WalletConnect',
-    Fortmatic = 'Fortmatic',
-    Coin98 = 'Coin98',
-    MathWallet = 'MathWallet',
-    WalletLink = 'WalletLink',
-    CustomNetwork = 'CustomNetwork',
-}
-
-export enum FungibleAssetProvider {
-    ZERION = 'Zerion',
-    DEBANK = 'Debank',
-}
-
-export enum NonFungibleAssetProvider {
-    OPENSEA = 'OpenSea',
-    RARIBLE = 'Rarible',
-    NFTSCAN = 'NFTScan',
-    ZORA = 'Zora',
 }
 
 export interface PriceRecord {

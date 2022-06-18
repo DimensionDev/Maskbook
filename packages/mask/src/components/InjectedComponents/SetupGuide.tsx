@@ -27,7 +27,6 @@ import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import type { NextIDPayload } from '@masknet/shared-base'
 import { SetupGuideStep } from './SetupGuide/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
@@ -39,12 +38,6 @@ import type { IdentityResolved } from '@masknet/plugin-infra'
 interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
-}
-
-interface SignInfo {
-    payload: NextIDPayload
-    personaSign: string
-    twitterPost: string
 }
 
 function SetupGuideUI(props: SetupGuideUIProps) {
@@ -84,11 +77,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const handler = (val: IdentityResolved) => {
             if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
-        ui.collecting.identityProvider?.recognized.addListener(handler)
-
-        return () => {
-            ui.collecting.identityProvider?.recognized.removeListener(handler)
-        }
+        return ui.collecting.identityProvider?.recognized.addListener(handler)
     }, [username])
 
     useEffect(() => {

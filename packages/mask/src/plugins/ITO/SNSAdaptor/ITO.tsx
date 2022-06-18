@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-    formatBalance,
     formatEthereumAddress,
-    FungibleTokenDetailed,
-    getChainDetailed,
-    isSameAddress,
-    currySameAddress,
-    resolveLinkOnExplorer,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useChainIdValid,
     useTokenConstants,
     isNativeTokenAddress,
+    explorerResolver,
+    chainResolver,
+    ChainId,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
-import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
+import {
+    isZero,
+    ZERO,
+    isGreaterThan,
+    NetworkPluginID,
+    isSameAddress,
+    formatBalance,
+    FungibleToken,
+} from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -22,11 +24,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import urlcat from 'urlcat'
+import { startCase } from 'lodash-unified'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
@@ -43,10 +45,10 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { startCase } from 'lodash-unified'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 export interface IconProps {
     size?: number
@@ -157,7 +159,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: theme.palette.maskColor?.dark,
         color: 'white',
         fontSize: 14,
         paddingTop: 10,
@@ -166,7 +168,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         paddingBottom: 10,
         lineHeight: '20px',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
         },
     },
     textProviderErr: {
@@ -185,7 +187,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 35,
         '&:hover': {
             background: 'none',
+            borderColor: '#fff !important',
         },
+        background: 'none',
     },
     loadingWrap: {
         display: 'flex',
@@ -207,8 +211,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 // #region token item
 interface TokenItemProps {
     price: string
-    token: FungibleTokenDetailed
-    exchangeToken: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType>
+    exchangeToken: FungibleToken<ChainId, SchemaType>
 }
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
@@ -220,12 +224,13 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             <TokenIcon
                 classes={{ icon: classes.tokenIcon }}
                 address={exchangeToken.address}
-                logoURI={exchangeToken.logoURI}
+                logoURL={exchangeToken.logoURL}
+                chainId={token.chainId}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
                 {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
-                    ? getChainDetailed(exchangeToken.chainId)?.nativeCurrency.symbol
+                    ? chainResolver.nativeCurrency(exchangeToken.chainId)?.symbol
                     : exchangeToken.symbol}{' '}
                 / {token.symbol}
             </Typography>
@@ -241,11 +246,10 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const postLink = usePostLink()
-    const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
+    const [, destructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)
 
@@ -276,7 +280,6 @@ export function ITO(props: ITO_Props) {
         value: availability,
         computed: availabilityComputed,
         loading: loadingAvailability,
-        error: errorAvailability,
         retry: retryAvailability,
     } = useAvailabilityComputed(payload)
 
@@ -355,36 +358,19 @@ export function ITO(props: ITO_Props) {
     }, [retryPoolTradeInfo, retryAvailability])
 
     // #region claim
-    const [claimState, claimCallback] = useClaimCallback([pid], payload.contract_address)
-
-    const { setDialog: setClaimTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-
-            if (
-                claimState.type !== TransactionStateType.CONFIRMED ||
-                (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
-            )
-                return
-            window.location.reload()
-        },
-    )
-
-    useEffect(() => {
-        if (
-            claimState.type === TransactionStateType.UNKNOWN ||
-            (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
-        )
-            return
-        setClaimTransactionDialog({
-            open: true,
-            state: claimState,
-            summary: `Claiming ${formatBalance(availability?.swapped ?? 0, token.decimals)} ${
-                token?.symbol ?? 'Token'
-            }.`,
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback([pid], payload.contract_address)
+    const openShareTxDialog = useOpenShareTxDialog()
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash !== 'string') return
+        openShareTxDialog({
+            hash,
+            buttonLabel: t('dismiss'),
+            onShare() {
+                window.location.reload()
+            },
         })
-    }, [claimState /* update tx dialog only if state changed */])
+    }, [claimCallback, openShareTxDialog, t])
 
     // #endregion
 
@@ -412,14 +398,6 @@ export function ITO(props: ITO_Props) {
     }, [])
 
     // #region withdraw
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (destructState.type !== TransactionStateType.CONFIRMED) return
-            window.location.reload()
-        },
-    )
 
     useEffect(() => {
         const timeToExpired = endTime - Date.now()
@@ -438,28 +416,8 @@ export function ITO(props: ITO_Props) {
         return () => clearTimeout(timer)
     }, [endTime, listOfStatus])
 
-    useEffect(() => {
-        if (destructState.type === TransactionStateType.UNKNOWN || !canWithdraw) return
-        let summary = t('plugin_ito_withdraw')
-        if (!noRemain) {
-            summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
-        }
-        availability?.exchange_addrs.forEach((addr, i) => {
-            const token = exchange_tokens.find(currySameAddress(addr))
-            const comma = noRemain && i === 0 ? ' ' : ', '
-            if (token) {
-                summary += comma + formatBalance(availability?.exchanged_tokens[i], token.decimals) + ' ' + token.symbol
-            }
-        })
-        setTransactionDialog({
-            open: true,
-            state: destructState,
-            summary,
-        })
-    }, [destructState, canWithdraw])
-
     const onWithdraw = useCallback(async () => {
-        destructCallback(payload.pid)
+        await destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
     // #endregion
 
@@ -569,12 +527,13 @@ export function ITO(props: ITO_Props) {
         if (!availability?.claimed) {
             return (
                 <ActionButton
-                    onClick={claimCallback}
+                    loading={isClaiming}
+                    onClick={claim}
                     variant="contained"
                     size="large"
-                    disabled={claimState.type === TransactionStateType.HASH}
+                    disabled={isClaiming}
                     className={classes.actionButton}>
-                    {claimState.type === TransactionStateType.HASH ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
+                    {isClaiming ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
                 </ActionButton>
             )
         }
@@ -587,7 +546,7 @@ export function ITO(props: ITO_Props) {
             )
         }
         return null
-    }, [availability?.claimed, canWithdraw, claimState])
+    }, [availability?.claimed, canWithdraw, isClaiming])
 
     const FooterBuyerWithLockTimeButton = useMemo(
         () => (
@@ -660,9 +619,7 @@ export function ITO(props: ITO_Props) {
                     })}
                     <Link
                         className={classes.tokenLink}
-                        href={urlcat(resolveLinkOnExplorer(token.chainId), '/token/:address', {
-                            address: token.address,
-                        })}
+                        href={explorerResolver.fungibleTokenLink(token.chainId, token.address)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <OpenInNewIcon fontSize="small" className={classes.totalIcon} />
@@ -784,8 +741,11 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ padding: 12, flex: 1 }}>
-                                    <EthereumChainBoundary chainId={payload.chain_id}>
-                                        <EthereumWalletConnectedBoundary
+                                    <ChainBoundary
+                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                        expectedChainId={payload.chain_id}
+                                        renderInTimeline>
+                                        <WalletConnectedBoundary
                                             hideRiskWarningConfirmed
                                             startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                             classes={{ button: classes.actionButton }}>
@@ -803,8 +763,8 @@ export function ITO(props: ITO_Props) {
                                                     ? startCase((ifQualified as Qual_V2).errorMsg)
                                                     : null}
                                             </ActionButton>
-                                        </EthereumWalletConnectedBoundary>
-                                    </EthereumChainBoundary>
+                                        </WalletConnectedBoundary>
+                                    </ChainBoundary>
                                 </Box>
                             </>
                         )
@@ -916,12 +876,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             <Typography variant="body1" className={classes.loadingITO}>
                 {t('loading_failed')}
             </Typography>
-            <ActionButton
-                onClick={retryPoolPayload}
-                variant="outlined"
-                size="large"
-                color="primary"
-                className={classes.loadingITO_Button}>
+            <ActionButton onClick={retryPoolPayload} variant="outlined" className={classes.loadingITO_Button}>
                 {t('try_again')}
             </ActionButton>
         </Card>

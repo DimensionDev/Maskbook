@@ -1,9 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
+import { languages } from './locales/languages'
 
-export const base: Plugin.Shared.Definition = {
+export const base: Plugin.Shared.Definition<ChainId> = {
     ID: PLUGIN_ID,
     name: { fallback: 'Trader' },
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
@@ -31,4 +32,5 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
+    i18n: languages,
 }

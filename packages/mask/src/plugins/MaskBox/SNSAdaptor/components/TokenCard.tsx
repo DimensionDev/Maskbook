@@ -1,6 +1,8 @@
+import { useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { Typography, CircularProgress } from '@mui/material'
+import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { CircularProgress, Typography } from '@mui/material'
 import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
@@ -19,26 +21,21 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenCardProps {
     tokenId: string
-    contractDetailed: ERC721ContractDetailed
+    contractDetailed: NonFungibleTokenContract<ChainId, SchemaType>
     renderOrder: number
 }
 
 export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
     const { contractDetailed, tokenId, renderOrder } = props
     const { classes } = useStyles()
-    const { tokenDetailed } = useERC721TokenDetailed(contractDetailed, tokenId)
+    const { value: tokenDetailed } = useNonFungibleToken(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
 
     return tokenDetailed ? (
         <>
-            <CollectibleCard
-                readonly
-                provider={NonFungibleAssetProvider.OPENSEA}
-                token={tokenDetailed}
-                renderOrder={renderOrder}
-            />
+            <CollectibleCard readonly provider={SourceType.OpenSea} token={tokenDetailed} renderOrder={renderOrder} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
-                    {tokenDetailed.info.name ?? tokenId}
+                    {tokenDetailed.contract?.name ?? tokenId}
                 </Typography>
             </div>
         </>

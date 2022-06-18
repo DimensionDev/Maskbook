@@ -35,7 +35,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',
@@ -74,7 +74,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',
@@ -84,7 +84,7 @@ const AccountDetail = memo(() => {
 
     const [, onVerify] = useAsyncFn(async () => {
         if (!selectedAccount?.identifier || !currentPersona?.identifier) return
-        await Service.SocialNetwork.connectSocialNetwork(
+        await Service.SocialNetwork.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,
             'nextID',

@@ -1,24 +1,19 @@
 import classNames from 'classnames'
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
-import {
-    ERC721TokenDetailed,
-    ERC721ContractDetailed,
-    useERC721TokenDetailedCallback,
-    useAccount,
-    isSameAddress,
-    formatNFT_TokenId,
-} from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
+import { useI18N as useBaseI18N } from '../../../utils'
+import { Translate, useI18N } from '../locales'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
-import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
 import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -97,18 +92,20 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 394,
     },
     wrapper: {
+        position: 'relative',
         display: 'flex',
-        overflow: 'hidden',
         flexDirection: 'column',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2.5),
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
-        width: 120,
-        minHeight: 153,
         borderRadius: 8,
+        padding: 0,
+        marginBottom: theme.spacing(2.5),
+        background: theme.palette.background.paper,
+        width: 120,
+        height: 180,
+        minHeight: 153,
+        overflow: 'hidden',
     },
     iframe: {
-        minHeight: 153,
+        minHeight: 147,
     },
     nftNameWrapper: {
         width: '100%',
@@ -151,15 +148,16 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         },
     },
     selectWrapper: {
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
+        position: 'relative',
         display: 'flex',
-        overflow: 'hidden',
-        padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
-        height: 180,
-        userSelect: 'none',
+        padding: 0,
+        marginBottom: theme.spacing(2.5),
+        background: theme.palette.background.paper,
         width: 120,
+        height: 180,
+        overflow: 'hidden',
     },
     hide: {
         display: 'none !important',
@@ -298,13 +296,13 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-export type OrderedERC721Token = ERC721TokenDetailed & { index: number }
+export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & { index: number }
 
 export interface SelectNftTokenDialogProps extends withClasses<never> {
     open: boolean
     loadingOwnerList: boolean
     onClose: () => void
-    contract: ERC721ContractDetailed | null | undefined
+    contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721> | null | undefined
     existTokenDetailedList: OrderedERC721Token[]
     tokenDetailedOwnerList: OrderedERC721Token[]
     setExistTokenDetailedList: React.Dispatch<React.SetStateAction<OrderedERC721Token[]>>
@@ -320,14 +318,17 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose,
         loadingOwnerList,
     } = props
-    const { t } = useI18N()
-    const account = useAccount()
+    const { t: tr } = useBaseI18N()
+    const t = useI18N()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [tokenDetailed, setTokenDetailed] = useState<OrderedERC721Token>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
         useState<OrderedERC721Token[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
-    const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
+    const [tokenId, setTokenId] = useState('')
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
@@ -401,11 +402,19 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     // #region fetch token detail
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
-        const _tokenDetailed = await erc721TokenDetailedCallback()
-        setTokenDetailed(_tokenDetailed?.info.owner ? { ..._tokenDetailed, index: 0 } : undefined)
+        const _tokenDetailed = (await connection?.getNonFungibleToken(
+            contract?.address ?? '',
+            tokenId,
+            SchemaType.ERC721,
+            {
+                account,
+                chainId,
+            },
+        )) as NonFungibleToken<ChainId, SchemaType.ERC721>
+        setTokenDetailed(_tokenDetailed?.ownerId ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
-    }, [erc721TokenDetailedCallback])
+    }, [connection, contract, tokenId, chainId, account])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -416,7 +425,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
     }, [tokenDetailedOwnerList.length])
 
-    const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
+    const isOwner = isSameAddress(account, tokenDetailed?.ownerId) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
     // #endregion
 
@@ -435,8 +444,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
     const NonExistedTokenList = () => (
-        <Trans
-            i18nKey="plugin_red_packet_nft_non_existed_tip"
+        <Translate.nft_non_existed_tip
             components={{
                 tokenIdList: (
                     <span>
@@ -452,12 +460,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         />
     )
 
+    const maxSharesOptions = { amount: NFT_RED_PACKET_MAX_SHARES.toString() }
+
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            title={t('plugin_red_packet_nft_select_collection')}
-            maxWidth="xs">
+        <InjectedDialog open={open} onClose={onClose} title={t.nft_select_collection()} maxWidth="xs">
             {tokenDetailedOwnerList.length === 0 ? (
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>
@@ -476,17 +482,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 className={classes.searchButton}
                                 variant="contained"
                                 onClick={onSearch}>
-                                {t('search')}
+                                {t.search()}
                             </Button>
                         </div>
                         {loadingToken || !tokenDetailed || !contract ? (
                             <Box className={classes.noResultBox}>
                                 <Typography>
-                                    {loadingToken
-                                        ? t('wallet_loading_token')
-                                        : searched
-                                        ? t('wallet_search_no_result')
-                                        : null}
+                                    {loadingToken ? t.loading_token() : searched ? t.search_no_result() : null}
                                 </Typography>
                             </Box>
                         ) : (
@@ -494,7 +496,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <NFTCardStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
-                                    url={tokenDetailed.info.mediaUrl}
+                                    url={tokenDetailed.metadata?.mediaURL || tokenDetailed.metadata?.imageURL}
                                     tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
@@ -504,7 +506,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
                                     <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                                        {tokenDetailed.info.name}
+                                        {tokenDetailed.contract?.name}
                                     </Typography>
                                 </div>
                             </Box>
@@ -512,21 +514,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     </Box>
                     <div className={classes.selectSharesExceedBox}>
                         <Typography className={classes.selectSharesExceed}>
-                            {isSelectSharesExceed
-                                ? t('plugin_red_packet_nft_max_shares_tip', { amount: NFT_RED_PACKET_MAX_SHARES })
-                                : null}
+                            {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
                         </Typography>
                         <Box className={classes.selectAmountBox}>
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
                                         {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
-                                            ? t('plugin_red_packet_nft_max_shares_tip', {
-                                                  amount: NFT_RED_PACKET_MAX_SHARES,
-                                              })
-                                            : t('plugin_red_packet_nft_max_shares', {
-                                                  amount: NFT_RED_PACKET_MAX_SHARES,
-                                              })}
+                                            ? t.nft_max_shares_tip(maxSharesOptions)
+                                            : t.nft_max_shares(maxSharesOptions)}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -546,10 +542,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
-                            ? t('wallet_add_nft_invalid_owner')
+                            ? t.nft_invalid_owner()
                             : isAdded
-                            ? t('wallet_add_nft_already_added')
-                            : t('confirm')}
+                            ? t.nft_already_added()
+                            : tr('confirm')}
                     </Button>
                 </DialogContent>
             ) : (
@@ -574,21 +570,19 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 className={classes.searchButton}
                                 variant="contained"
                                 onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
-                                {t('search')}
+                                {t.search()}
                             </Button>
                         </div>
                         {(loadingToken || !tokenDetailed) && searched ? (
                             <Box className={classes.noResultBox}>
-                                <Typography>
-                                    {loadingToken ? t('wallet_loading_token') : t('wallet_search_no_result')}
-                                </Typography>
+                                <Typography>{loadingToken ? t.loading_token() : t.search_no_result()}</Typography>
                             </Box>
-                        ) : tokenDetailed?.info.name ? (
+                        ) : tokenDetailed?.contract?.name ? (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed?.info.mediaUrl} />
+                                <img className={classes.nftImg} src={tokenDetailed?.metadata?.mediaURL} />
                                 <div className={classes.nftNameWrapper}>
                                     <Typography className={classes.nftName} color="textSecondary">
-                                        {tokenDetailed?.info.name}
+                                        {tokenDetailed?.contract.name}
                                     </Typography>
                                 </div>
                             </Box>
@@ -606,12 +600,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
                                             </div>
                                             <Typography className={classNames(classes.selectAllCheckBoxText)}>
-                                                {t('select_all')}
+                                                {tr('select_all')}
                                             </Typography>
                                         </div>
                                         <Typography>
-                                            <Trans
-                                                i18nKey="plugin_red_packet_nft_shift_select_tip"
+                                            <Translate.nft_shift_select_tip
                                                 components={{
                                                     text: <span style={{ color: '#1C68F3' }} />,
                                                 }}
@@ -670,9 +663,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 ) : null}
                             </Typography>
                             <Typography className={classes.selectSharesExceed}>
-                                {isSelectSharesExceed
-                                    ? t('plugin_red_packet_nft_max_shares_tip', { amount: NFT_RED_PACKET_MAX_SHARES })
-                                    : null}
+                                {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
                             </Typography>
                         </div>
 
@@ -681,12 +672,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 title={
                                     <Typography className={classes.tooltipText}>
                                         {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
-                                            ? t('plugin_red_packet_nft_max_shares_tip', {
-                                                  amount: NFT_RED_PACKET_MAX_SHARES,
-                                              })
-                                            : t('plugin_red_packet_nft_max_shares', {
-                                                  amount: NFT_RED_PACKET_MAX_SHARES,
-                                              })}
+                                            ? t.nft_max_shares_tip(maxSharesOptions)
+                                            : t.nft_max_shares(maxSharesOptions)}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -714,10 +701,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
-                            ? t('wallet_add_nft_invalid_owner')
+                            ? t.nft_invalid_owner()
                             : isAdded
-                            ? t('wallet_add_nft_already_added')
-                            : t('confirm')}
+                            ? t.nft_already_added()
+                            : tr('confirm')}
                     </Button>
                 </DialogContent>
             )}
@@ -745,11 +732,11 @@ function NFTCard(props: NFTCardProps) {
     return (
         <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
-                url={token.info.mediaUrl}
-                contractAddress={token.contractDetailed.address}
+                url={token.metadata?.mediaURL || token.metadata?.imageURL}
+                contractAddress={token.contract?.address}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
-                chainId={token.contractDetailed.chainId}
+                chainId={token.contract?.chainId}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
@@ -758,7 +745,7 @@ function NFTCard(props: NFTCardProps) {
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {formatNFT_TokenId(token.tokenId, 2)}
+                    {formatTokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 

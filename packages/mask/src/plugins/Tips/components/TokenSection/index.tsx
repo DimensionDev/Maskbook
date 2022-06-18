@@ -1,29 +1,29 @@
+import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { usePickToken } from '@masknet/shared'
-import {
-    EthereumTokenType,
-    isNativeTokenAddress,
-    useFungibleTokenBalance,
-    useGasPrice,
-    isEIP1559Supported,
-} from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FC, useCallback, useEffect, useMemo } from 'react'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { useGasConfig } from '../../../Trader/SNSAdaptor/trader/hooks/useGasConfig'
-import { TargetChainIdContext, useTip } from '../../contexts'
+import { TargetRuntimeContext, useTip } from '../../contexts'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {
     const { token, setToken, amount, setAmount, isSending, setGasConfig } = useTip()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { targetChainId: chainId, pluginId } = TargetRuntimeContext.useContainer()
+    const { Others } = useWeb3State<'all'>()
+
+    const account = useAccount()
+
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || EthereumTokenType.Native,
-        token?.address || '',
-        chainId,
+        pluginId,
+        token?.address,
+        { chainId, account },
     )
     const { gasPrice, gasConfig } = useGasConfig(chainId)
-    const { value: defaultGasPrice = '1' } = useGasPrice(chainId)
+    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
 
     const maxAmount = useMemo(() => {
@@ -36,7 +36,7 @@ export const TokenSection: FC = () => {
     useEffect(() => {
         if (isNativeToken) {
             setGasConfig(
-                isEIP1559Supported(chainId)
+                Others?.chainResolver.isSupport(chainId, '1559')
                     ? {
                           gas: GAS_LIMIT,
                           maxFeePerGas: gasConfig?.maxFeePerGas || defaultGasPrice,
@@ -62,7 +62,7 @@ export const TokenSection: FC = () => {
         if (picked) {
             setToken(picked)
         }
-    }, [pickToken, token?.address, chainId])
+    }, [pickToken, token?.address, pluginId, chainId])
     // #endregion
     return (
         <TokenAmountPanel

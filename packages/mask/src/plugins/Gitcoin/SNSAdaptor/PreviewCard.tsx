@@ -1,16 +1,17 @@
 import { useCallback } from 'react'
+import urlcat from 'urlcat'
 import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useI18N as useBaseI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
-import urlcat from 'urlcat'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -73,21 +74,24 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        color: theme.palette.mode === 'dark' ? 'white' : 'black',
+        backgroundColor: theme.palette.maskColor?.dark,
+        color: 'white',
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor?.dark,
+        },
         width: '100%',
     },
 }))
 
-interface PreviewCardProps {
+export interface PreviewCardProps {
     id: string
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { t } = useI18N()
+    const t = useI18N()
+    const { t: tr } = useBaseI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const isGitCoinSupported = (chainId: ChainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)
     const theme = useTheme()
 
     // #region the donation dialog
@@ -113,18 +117,18 @@ export function PreviewCard(props: PreviewCardProps) {
     if (error)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
-                <Typography color="textPrimary">{t('go_wrong')}</Typography>
+                <Typography color="textPrimary">{tr('go_wrong')}</Typography>
                 <Button
                     sx={{
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor?.dark,
                         '&:hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                         },
                         width: 254,
                         color: 'white',
                     }}
                     onClick={retry}>
-                    {t('retry')}
+                    {tr('retry')}
                 </Button>
             </Box>
         )
@@ -151,12 +155,12 @@ export function PreviewCard(props: PreviewCardProps) {
                     <div className={classes.meta}>
                         <QueryBuilderIcon fontSize="small" color="disabled" />
                         <Typography variant="body2" color="textSecondary">
-                            {t('plugin_gitcoin_last_updated')} {grant.last_update_natural}
+                            {t.last_updated()} {grant.last_update_natural}
                         </Typography>
                     </div>
                     <div className={classes.meta}>
                         <Typography variant="body2" color="textSecondary">
-                            {t('plugin_gitcoin_by')}
+                            {t.by()}
                         </Typography>
                         <Avatar
                             alt={grant.admin_profile.handle}
@@ -172,35 +176,37 @@ export function PreviewCard(props: PreviewCardProps) {
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <Button
-                        variant="outlined"
                         fullWidth
                         className={classes.button}
-                        style={{
-                            lineHeight: 0,
-                            padding: 19,
-                        }}
                         target="_blank"
                         rel="noopener noreferrer"
                         href={urlcat('https://gitcoin.co', grant.url)}>
-                        {t('plugin_gitcoin_view_on')}
+                        {t.view_on()}
                     </Button>
                 </Box>
                 <Box sx={{ flex: 1, padding: 1.5 }}>
-                    <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={ChainId.Mainnet}
+                        predicate={(pluginID, chainId) =>
+                            pluginID === NetworkPluginID.PLUGIN_EVM &&
+                            [ChainId.Mainnet, ChainId.Matic].includes(chainId)
+                        }
+                        renderInTimeline>
                         <Button
                             variant="contained"
                             fullWidth
                             sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
+                                backgroundColor: theme.palette.maskColor?.dark,
                                 '&:hover': {
-                                    backgroundColor: theme.palette.maskColor.dark,
+                                    backgroundColor: theme.palette.maskColor?.dark,
                                 },
                                 color: 'white',
                             }}
                             onClick={onDonate}>
-                            {t('plugin_gitcoin_donate')}
+                            {t.donate()}
                         </Button>
-                    </EthereumChainBoundary>
+                    </ChainBoundary>
                 </Box>
             </Box>
         </>

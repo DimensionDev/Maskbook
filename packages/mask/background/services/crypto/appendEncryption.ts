@@ -1,4 +1,10 @@
-import { appendEncryptionTarget, EC_Key, EC_KeyCurveEnum, SupportedPayloadVersions } from '@masknet/encryption'
+import {
+    appendEncryptionTarget,
+    EC_Key,
+    EC_KeyCurveEnum,
+    SocialNetworkEnum,
+    SupportedPayloadVersions,
+} from '@masknet/encryption'
 import type { EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
 import { updatePostDB, queryPostDB } from '../../database/post'
@@ -10,6 +16,7 @@ export async function appendShareTarget(
     post: PostIVIdentifier,
     target: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
+    network: SocialNetworkEnum,
 ): Promise<void> {
     if (version === -39 || version === -40) throw new TypeError('invalid version')
     const key = await getPostKeyCache(post)
@@ -38,7 +45,7 @@ export async function appendShareTarget(
         },
     )
 
-    publishPostAESKey_version39Or38(-38, post.toIV(), whoAmI.network, e2e)
+    publishPostAESKey_version39Or38(-38, post.toIV(), network, e2e)
 
     updatePostDB(
         {

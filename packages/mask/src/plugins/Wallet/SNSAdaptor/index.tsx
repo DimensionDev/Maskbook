@@ -2,17 +2,16 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { SelectProviderDialog } from './SelectProviderDialog'
-import { SelectWalletDialog } from './SelectWalletDialog'
-import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './WalletStatusDialog'
-import { WalletRenameWalletDialog } from './RenameWalletDialog'
 import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
-import { RestoreLegacyWalletDialog } from './RestoreLegacyWalletDialog'
 import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBoardDialog'
+import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -21,18 +20,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <>
                 <TransactionDialog />
-                <SelectWalletDialog />
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
                 <ApplicationBoardDialog />
                 <ConnectWalletDialog />
-                <WalletConnectQRCodeDialog />
-                <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
-                <RestoreLegacyWalletDialog />
                 <GasSettingDialog />
-                <TransactionSnackbar />
+                {getEnumAsArray(NetworkPluginID).map(({ key, value: pluginID }) => (
+                    <TransactionSnackbar key={key} pluginID={pluginID} />
+                ))}
+                <WalletConnectQRCodeDialog />
             </>
         )
     },

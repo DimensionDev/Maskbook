@@ -20,7 +20,7 @@
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "urlcat": "^2.0.4"
   }
 }

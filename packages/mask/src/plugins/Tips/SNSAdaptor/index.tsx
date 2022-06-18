@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
-
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
@@ -30,7 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 {...EntryComponentProps}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
 
                             <TipsEntranceDialog open={open} onClose={() => setOpen(false)} />

@@ -1,0 +1,7 @@
+{
+    "promote": "Instantly token exchange on Twitter. Install Mask.io to explore “better server” on Multi-chain Dex.",
+    "account_promote$default": "",
+    "account_promote$twitter": "Follow @$t(mask:twitter_account) to swap cryptocurrencies on Twitter",
+    "account_promote$facebook": "Follow @$t(mask:facebook_account) to swap cryptocurrencies on Facebook",
+    "share_text": "I just swapped {{input_amount}} {{input_symbol}} for {{output_amount}} {{output_symbol}}. {{account_promote}}\n$t(mask:hash_tag)"
+}

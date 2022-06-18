@@ -1,15 +1,17 @@
 import { makeStyles, useTabs } from '@masknet/theme'
-import { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Tabs, Typography } from '@mui/material'
+import { useEffect } from 'react'
 import { Application_NFT_LIST_PAGE, SUPPORTED_CHAIN_IDS } from '../constants'
-import type { TokenInfo } from '../types'
+import type { AllChainsNonFungibleToken } from '../types'
 import { NFTListPage } from './NFTListPage'
 
 const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme, props) => ({
     selected: {
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
-        border: 'none',
+        border: '1px solid transparent',
         borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: `${theme.palette.text.primary} !important`,
         minHeight: 37,
@@ -19,6 +21,7 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
     tab: {
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F6F8F8',
         color: theme.palette.text.secondary,
+        borderTop: '1px solid transparent',
         border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         minHeight: 37,
         height: 37,
@@ -31,29 +34,49 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
     },
 }))
 interface NFTListProps {
-    address: string
-    tokenInfo?: TokenInfo
-    onSelect: (token: ERC721TokenDetailed) => void
-    onChangePage?: (page: Application_NFT_LIST_PAGE) => void
-    tokens?: ERC721TokenDetailed[]
+    tokenInfo?: AllChainsNonFungibleToken
+    onSelect: (token: AllChainsNonFungibleToken) => void
+    onChangeChain?: (chainId: ChainId) => void
+    tokens?: AllChainsNonFungibleToken[]
     children?: React.ReactElement
+    chainId: ChainId
+    nextPage(): void
+    loadFinish: boolean
+    loadError?: boolean
 }
 
 export function NFTList(props: NFTListProps) {
-    const { address, onSelect, tokenInfo, onChangePage, tokens = [], children } = props
-
-    const [currentTab, onChange, tabs] = useTabs(
+    const {
+        onSelect,
+        tokenInfo,
+        onChangeChain,
+        tokens = [],
+        children,
+        chainId,
+        nextPage,
+        loadError,
+        loadFinish,
+    } = props
+    const [currentTab, onChange, tabs, setTab] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
         Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page,
     )
 
     const { classes } = useStyles({ currentTab })
-    const _onChange = (event: unknown, value: any) => {
+    const _onChange = (event: unknown, value: Application_NFT_LIST_PAGE) => {
         onChange(event, value)
-        onChangePage?.(value)
-    }
 
-    if (!address) return null
+        onChangeChain?.(
+            value === Application_NFT_LIST_PAGE.Application_nft_tab_eth_page ? ChainId.Mainnet : ChainId.Matic,
+        )
+    }
+    useEffect(() => {
+        setTab(
+            chainId === ChainId.Matic
+                ? Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page
+                : Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
+        )
+    }, [chainId, setTab])
     return (
         <TabContext value={currentTab}>
             <Tabs
@@ -63,7 +86,7 @@ export function NFTList(props: NFTListProps) {
                 sx={{
                     minHeight: 37,
                     height: 37,
-                    '.MuiTabs-indicator': { display: 'none' },
+                    '.MuiTabsindicator': { display: 'none' },
                     position: 'absolute',
                     width: '99.5%',
                     justifyContent: 'center',
@@ -89,12 +112,14 @@ export function NFTList(props: NFTListProps) {
             {SUPPORTED_CHAIN_IDS.map((x, i) => (
                 <TabPanel key={i} value={x === ChainId.Mainnet ? tabs.ETH : tabs.Polygon} className={classes.tabPanel}>
                     <NFTListPage
-                        tokens={tokens.filter((y) => y.contractDetailed.chainId === x) ?? []}
+                        pluginId={NetworkPluginID.PLUGIN_EVM}
+                        tokens={tokens}
                         tokenInfo={tokenInfo}
-                        chainId={x}
-                        address={address}
-                        onSelect={onSelect}
+                        onChange={onSelect}
                         children={children}
+                        nextPage={nextPage}
+                        loadError={!!loadError}
+                        loadFinish={loadFinish}
                     />
                 </TabPanel>
             ))}

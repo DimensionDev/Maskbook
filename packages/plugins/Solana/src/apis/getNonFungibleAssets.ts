@@ -1,7 +1,14 @@
 import { Connection } from '@metaplex/js'
-import { ChainId } from '@masknet/web3-shared-solana'
+import {
+    createPageable,
+    HubOptions,
+    NonFungibleAsset,
+    NonFungibleToken,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra/web3'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 import { ENDPOINT_KEY } from '../constants'
 
@@ -24,7 +31,7 @@ interface ExternalMetadata {
     }
 }
 
-async function getNftList(chainId: ChainId, account: string) {
+async function getNftList(chainId: ChainId, account: string): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
         params: [
@@ -48,7 +55,7 @@ async function getNftList(chainId: ChainId, account: string) {
     if (!data.result?.length) return []
     const connection = new Connection(ENDPOINT_KEY)
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
-    const promises = nftTokens.map(async (x) => {
+    const promises = nftTokens.map(async (x): Promise<NonFungibleAsset<ChainId, SchemaType> | null> => {
         const pda = await Metadata.getPDA(x.account.data.parsed.info.mint)
         const metadata = await Metadata.load(connection, pda)
         if (!metadata) return null
@@ -59,43 +66,36 @@ async function getNftList(chainId: ChainId, account: string) {
             tokenId: pubkey,
             chainId,
             type: TokenType.NonFungible,
-            name: metadata.data.data.name,
-            description: externalMeta?.description,
+            schema: SchemaType.NonFungible,
+            address: '',
             contract: {
+                chainId,
                 name: metadata.data.data.name,
                 symbol: metadata.data.data.symbol,
-                chainId: ChainId.Mainnet,
                 address: pubkey,
-                tokenId: pubkey,
+                schema: SchemaType.NonFungible,
             },
             metadata: {
+                chainId,
                 name: metadata.data.data.name,
-                description: metadata.data.data.name,
+                symbol: metadata.data.data.symbol,
+                description: externalMeta?.description,
+                mediaURL: externalMeta?.animation ?? externalMeta?.image ?? '',
                 mediaType: externalMeta?.properties?.category || 'Unknown',
-                iconURL: '',
-                assetURL: externalMeta?.animation ?? externalMeta?.image ?? '',
             },
-        } as Web3Plugin.NonFungibleToken
+        }
     })
 
     const allSettled = await Promise.allSettled(promises)
-    const tokens = allSettled
-        .map((x) => (x.status === 'fulfilled' ? x.value : null))
-        .filter(Boolean) as Web3Plugin.NonFungibleToken[]
-    return tokens
+    const assets = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean)
+    return assets as Array<NonFungibleAsset<ChainId, SchemaType>>
 }
 
 export async function getNonFungibleAssets(
     address: string,
-    pagination: Pagination,
-    providerType?: string,
-    network?: Web3Plugin.NetworkDescriptor,
-): Promise<Pageable<Web3Plugin.NonFungibleToken>> {
-    const tokens = await getNftList(ChainId.Mainnet, address)
+    options?: HubOptions<ChainId>,
+): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    const tokens = await getNftList(options?.chainId ?? ChainId.Mainnet, address)
 
-    return {
-        currentPage: 1,
-        hasNextPage: false,
-        data: tokens,
-    }
+    return createPageable(tokens, 0)
 }

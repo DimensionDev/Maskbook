@@ -1,12 +1,15 @@
 /// <reference path="./typeson.d.ts" />
-import { Typeson } from 'typeson'
+import { Typeson, TypesonPromise } from 'typeson'
 import type { Serialization } from 'async-call-rpc'
-import { Ok, Err, Some, None } from 'ts-results'
+import { Err, None, Ok, Some } from 'ts-results'
 import * as BN from 'bignumber.js'
 
 // @ts-ignore
-import { builtin, blob, file, filelist, imagebitmap, specialNumbers, cryptokey } from 'typeson-registry'
+import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '../Identifier'
+import { responseRegedit } from './response'
+import { readableStreamRegedit } from './readableStream'
+import { requestRegedit } from './request'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined
@@ -27,6 +30,9 @@ function setup() {
 
     typeson.register({
         Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],
+        ReadableStream: [...readableStreamRegedit],
+        Response: [...responseRegedit],
+        Request: [...requestRegedit],
     })
 
     for (const a of pendingRegister) a()
@@ -52,7 +58,7 @@ export function registerSerializableClass(name: string, constructor: NewableFunc
 export function registerSerializableClass<T, Q>(
     name: string,
     isT: (x: unknown) => boolean,
-    ser: (x: T) => Q,
+    ser: (x: T) => Q | TypesonPromise<Q>,
     de_ser: (x: Q) => T,
 ): void
 export function registerSerializableClass(name: string, a: any, b?: any, c?: any): void {

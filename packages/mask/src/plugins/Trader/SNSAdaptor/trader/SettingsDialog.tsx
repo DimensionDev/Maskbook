@@ -10,8 +10,10 @@ import { PluginTraderMessages } from '../../messages'
 import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
-import { GasOptionConfig, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
+import { chainResolver, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { InfoIcon } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,7 +64,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const slippage = useValueRef(currentSlippageSettings)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
@@ -115,7 +117,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                         </Alert>
                     ) : null}
                 </Accordion>
-                {isEIP1559Supported(chainId) ? (
+                {chainResolver.isSupport(chainId, 'EIP1559') ? (
                     <Gas1559Settings
                         onCancel={closeDialog}
                         onSave={onSubmit}

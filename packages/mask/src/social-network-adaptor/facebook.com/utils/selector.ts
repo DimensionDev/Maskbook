@@ -30,7 +30,7 @@ export const bioDescriptionSelector = () =>
 export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
 
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[data-pagelet="ProfileTabs"] a[role="tab"]')
+    querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
 
 export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
@@ -88,7 +88,12 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="LeftRail"] li:nth-child(2)')
+    /* cspell:disable-next-line */
+    querySelector<E>('#ssrb_left_rail_start')
+        .closest(1)
+        .querySelector('h2')
+        .closest(1)
+        .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
@@ -98,21 +103,21 @@ export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileTabs"] [aria-selected="true"]')
 
-// fot inserting web3 tab
+// for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)')
 
-// fot getting the inserted web3 tab
+// for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
     querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
 
-// fot inserting web3 tab content
+// for inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]')
         .closest(1)
         .querySelector('div:first-of-type')
 
-// fot getting profile section style
+// for getting profile section style
 export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
 

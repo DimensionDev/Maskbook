@@ -8,12 +8,14 @@
   "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../icons" },
+    { "path": "../../injected-script/sdk" },
     { "path": "../../plugin-infra" },
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../theme" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/flow" },
+    { "path": "../../web3-shared/evm" },
     { "path": "../../web3-providers" }
   ]
 }

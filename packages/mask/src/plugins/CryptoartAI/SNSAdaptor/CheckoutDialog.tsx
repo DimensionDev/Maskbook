@@ -1,21 +1,20 @@
-import { useCallback, useMemo, useEffect } from 'react'
-import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-unified'
+import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { useChainId, useFungibleTokenWatched, TransactionStateType, formatBalance } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { first } from 'lodash-unified'
+import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { WalletMessages } from '../../Wallet/messages'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
-import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils'
+import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,13 +84,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
-    const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, selectedPaymentToken?.address)
 
-    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
+    const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
@@ -113,29 +112,17 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
               },
           )
         : ''
-
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    if (purchaseState.type === TransactionStateType.HASH) onClose()
-                }
-                resetCallback()
+    const openShareTxDialog = useOpenShareTxDialog()
+    const purchase = useCallback(async () => {
+        const hash = await purchaseCallback()
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
             },
-            [purchaseState, onClose],
-        ),
-    )
-
-    useEffect(() => {
-        if (purchaseState.type === TransactionStateType.UNKNOWN) return
-        setTransactionDialog({
-            open: true,
-            shareText,
-            state: purchaseState,
-            summary: t('plugin_cryptoartai_buy') + ' ' + asset?.value?.title,
         })
-    }, [purchaseState])
+    }, [purchaseCallback, openShareTxDialog])
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
@@ -153,11 +140,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        className={classes.player}
-                                        src={asset.value.shareUrl}
-                                        alt={asset.value.title}
-                                    />
+                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img
@@ -191,16 +174,17 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <WalletConnectedBoundary>
                             <ActionButton
+                                loading={isPurchasing}
                                 className={classes.button}
                                 fullWidth
                                 variant="contained"
-                                disabled={!!validationMessage}
-                                onClick={onCheckout}>
+                                disabled={!!validationMessage || isPurchasing}
+                                onClick={purchase}>
                                 {validationMessage || t('plugin_cryptoartai_buy_now')}
                             </ActionButton>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

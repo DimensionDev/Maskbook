@@ -1,32 +1,27 @@
-import { rightShift } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    GasConfig,
-    isSameAddress,
-    useTokenConstants,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
-import { useCallback } from 'react'
+import { useAccount, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { useAsyncFn } from 'react-use'
 import type { TipTuple } from './type'
 
-export function useTokenTip(
+export function useTokenTip<T extends NetworkPluginID>(
+    pluginId: T,
     recipient: string,
-    token: FungibleTokenDetailed | null,
+    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null,
     amount: string,
-    gasConfig?: GasConfig,
+    options?: Web3Helper.Web3ConnectionOptions<T>,
 ): TipTuple {
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const { Connection } = useWeb3State<'all'>(pluginId)
+    const account = useAccount(pluginId)
+    const connectionOptions = {
+        account,
+        ...options,
+    }
+    const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
+        const connection = await Connection?.getConnection?.()
+        if (!token?.address || !connection) return
+        const totalAmount = rightShift(amount, token.decimals).toFixed()
+        return connection.transferFungibleToken(token?.address, recipient, totalAmount, '', connectionOptions)
+    }, [JSON.stringify(connectionOptions), token?.address, token?.decimals, amount])
 
-    const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
-
-    const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
-    const [transferState, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
-
-    const sendTip = useCallback(async () => {
-        const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()
-        await transferCallback(transferAmount, recipient, gasConfig)
-    }, [amount, token, recipient, transferCallback, gasConfig])
-
-    return [transferState, sendTip]
+    return [isTransferring, sendTip]
 }

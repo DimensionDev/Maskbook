@@ -1,29 +1,21 @@
-import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
+/// <reference types="web3" />
+
+import type EVM_Web3 from 'web3'
+import type {
+    RequestArguments,
+    Transaction as Web3Transaction,
+    TransactionReceipt as Web3TransactionReceipt,
+    TransactionConfig as TransactionConfig_,
+} from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-
-export interface SendOverrides {
-    chainId?: ChainId
-    account?: string
-    providerType?: ProviderType
-}
-
-export interface RequestOptions {
-    popupsWindow?: boolean
-}
-
-export enum CurrencyType {
-    USD = 'usd',
-}
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-export type Primitive = string | number | boolean | symbol | undefined | null | bigint
-
-export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
-
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
 export enum ChainId {
+    // Mainnet
     Mainnet = 1,
     Ropsten = 3,
     Rinkeby = 4,
@@ -82,29 +74,14 @@ export enum ChainId {
     Astar = 592,
 }
 
-export enum LockStatus {
-    INIT = 0,
-    UNLOCK = 1,
-    LOCKED = 2,
-}
-
+/**
+ * @deprecated
+ */
 export interface Wallet {
     /** User define wallet name. Default address.prefix(6) */
     name: string
     /** The address of wallet */
     address: string
-    /** A list of trusted ERC20 contract address */
-    erc20_token_whitelist: Set<string>
-    /** A list of untrusted ERC20 contract address */
-    erc20_token_blacklist: Set<string>
-    /** A list of trusted ERC721 contract address */
-    erc721_token_whitelist: Set<string>
-    /** A list of untrusted ERC721 contract address */
-    erc721_token_blacklist: Set<string>
-    /** A list of trusted ERC1155 contract address */
-    erc1155_token_whitelist: Set<string>
-    /** A list of untrusted ERC1155 contract address */
-    erc1155_token_blacklist: Set<string>
     /** yep: removable, nope: unremovable */
     configurable: boolean
     /** yep: Mask Wallet, nope: External Wallet */
@@ -113,193 +90,27 @@ export interface Wallet {
     hasDerivationPath: boolean
 }
 
-// #region Ether
-export interface NativeToken {
-    type: EthereumTokenType.Native
-    address: string
-    chainId: ChainId
+export enum SchemaType {
+    Native = 1,
+    ERC20 = 2,
+    ERC721 = 3,
+    ERC1155 = 4,
 }
 
-export interface NativeTokenDetailed extends NativeToken {
-    name: string
-    symbol: string
-    decimals: number
-    logoURI?: string
-}
-// #endregion
-
-// #region ERC20
-export interface ERC20Token {
-    type: EthereumTokenType.ERC20
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC20TokenDetailed extends ERC20Token {
-    name?: string
-    symbol?: string
-    decimals: number
-    logoURI?: string[]
-}
-// #endregion
-
-// #region ERC721
-export interface ERC721Token {
-    type: EthereumTokenType.ERC721
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC721ContractDetailed extends ERC721Token {
-    name: string
-    symbol: string
-    baseURI?: string
-    iconURL?: string
-}
-
-export interface ERC721TokenInfo {
-    name?: string
-    description?: string
-    tokenURI?: string
-    mediaUrl?: string
-    imageURL?: string
-    owner?: string
-    // loading tokenURI
-    hasTokenDetailed?: boolean
-}
-
-export interface ERC721TokenDetailed {
-    tokenId: string
-    info: ERC721TokenInfo
-    contractDetailed: ERC721ContractDetailed
-    collection?: {
-        name: string
-        image?: string
-        slug: string
-    }
-}
-
-export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
-    record_id: string
-}
-
-export interface ERC721TokenCollectionInfo {
-    name: string
-    chainId?: ChainId
-    iconURL?: string
-    slug: string
-    address: string
-    addresses?: string[]
-    symbol: string
-    balance: number
-}
-
-// #endregion
-
-// #region ERC1155
-export interface ERC1155Token {
-    type: EthereumTokenType.ERC1155
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC1155TokenDetailed extends ERC1155Token {
-    name: string
-    tokenId: string
-    uri?: string
-}
-
-export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
-    asset?: {
-        name?: string
-        decimals?: string
-        description?: string
-        image?: string
-        properties?: Record<string, string | any[] | Record<string, any>>
-    }
-}
-// #endregion
-
-// #region fungible token
-export type FungibleToken = NativeToken | ERC20Token
-export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
-// #endregion
-
-// #region non-fungible token
-export type NonFungibleToken = ERC721Token | ERC1155Token
-export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
-// #endregion
-
-// #region token out of mask
-export type FungibleTokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
-    chain_id: ChainId
-}
-
-export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
-    chain_id: ChainId
-}
-// #endregion
-
-interface TokenDetailedMap {
-    [EthereumTokenType.Native]: NativeTokenDetailed
-    [EthereumTokenType.ERC20]: ERC20TokenDetailed
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
-}
-
-interface TokenAssetDetailedMap {
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
-}
-
-export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
-
-export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
-    TokenAssetDetailedMap[T]
-
-// Learn more: https://eips.ethereum.org/EIPS/eip-747
-export interface EthereumAssetDetailed {
-    type: string // ERC20
-    options: {
-        address: string
-        symbol?: string
-        decimals?: number
-        image?: string
-    }
-}
-export interface EthereumChainDetailed {
-    chainId: string // A 0x-prefixed hexadecimal string
-    chainName: string
-    nativeCurrency: {
-        name: string
-        symbol: string // 2-6 characters long
-        decimals: number
-    }
-    rpcUrls: string[]
-    blockExplorerUrls: string[]
-}
-
-export enum EthereumTokenType {
-    Native = 0,
-    ERC20 = 1,
-    ERC721 = 2,
-    ERC1155 = 3,
-}
-
-export type EIP1559GasConfig = {
+export interface EIP1559GasConfig {
     gas: number
     maxFeePerGas: number | string
     maxPriorityFeePerGas: number | string
 }
 
-export type PriorEIP1559GasConfig = {
+export interface PriorEIP1559GasConfig {
     gas: number
     gasPrice: number | string
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
 
-export type GasOptionConfig = {
+export interface GasOptionConfig {
     maxFeePerGas?: number | string
     maxPriorityFeePerGas?: number | string
     gasPrice?: number | string
@@ -311,7 +122,9 @@ export enum EthereumMethodType {
     WATCH_ASSET = 'wallet_watchAsset',
     WATCH_ASSET_LEGACY = 'metamask_watchAsset',
     PERSONAL_SIGN = 'personal_sign',
+    // https://eips.ethereum.org/EIPS/eip-3085
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+    // https://eips.ethereum.org/EIPS/eip-3326
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
@@ -320,6 +133,8 @@ export enum EthereumMethodType {
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
     ETH_GAS_PRICE = 'eth_gasPrice',
+    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
+    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
     ETH_GET_BALANCE = 'eth_getBalance',
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
@@ -337,164 +152,10 @@ export enum EthereumMethodType {
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 
     // only for mask
-    MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
+    MASK_LOGIN = 'MASK_LOGIN',
+    MASK_LOGOUT = 'MASK_LOGOUT',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-    MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
-    MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
 }
-
-export enum EthereumErrorType {
-    ERR_SIGN_TRANSACTION = 'Failed to sign transaction.',
-    ERR_SEND_TRANSACTION = 'Failed to send transaction.',
-    ERR_SIGN_MESSAGE = 'Failed to sign message.',
-}
-
-export type EthereumTransactionConfig = TransactionConfig_ & {
-    // EIP1559
-    maxFeePerGas?: string
-    maxPriorityFeePerGas?: string
-}
-
-// RPC need to be confirmed by the user
-export enum EthereumRpcType {
-    // transaction
-    CANCEL = 'cancel',
-    RETRY = 'retry', // speed up
-
-    // contract interaction
-    SEND_ETHER = 'sendEther',
-    CONTRACT_INTERACTION = 'contractInteraction',
-    CONTRACT_DEPLOYMENT = 'contractDeployment',
-
-    // asset
-    WATCH_ASSET = 'wallet_watchAsset',
-
-    // wallet
-    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
-
-    // sign
-    SIGN = 'eth_sign',
-    SIGN_TYPED_DATA = 'eth_signTypedData_v4',
-
-    // decrypt
-    ETH_DECRYPT = 'eth_decrypt',
-    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
-}
-
-export type EthereumRpcComputed =
-    | {
-          type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
-
-          /**
-           * The original transaction config
-           */
-          _tx: EthereumTransactionConfig
-      }
-    | {
-          type: EthereumRpcType.SEND_ETHER
-
-          /**
-           * The original transaction config
-           */
-          _tx: EthereumTransactionConfig
-      }
-    | {
-          type: EthereumRpcType.CONTRACT_DEPLOYMENT
-
-          /**
-           * code in bytes
-           */
-          code: string
-
-          /**
-           * The original transaction config
-           */
-          _tx: EthereumTransactionConfig
-      }
-    | {
-          type: EthereumRpcType.CONTRACT_INTERACTION
-
-          /**
-           * the method type name of the invoked contract
-           */
-          name: string
-
-          /**
-           * parameters in an array of bytes (only built-in abis)
-           */
-          parameters?: {
-              [key in string]?: string
-          }
-
-          /**
-           * The original transaction config
-           */
-          _tx: EthereumTransactionConfig
-      }
-    | {
-          type: EthereumRpcType.SIGN
-
-          /**
-           * the sign to address
-           */
-          to: string
-
-          /**
-           * the original message
-           */
-          data: string
-      }
-    | {
-          type: EthereumRpcType.SIGN_TYPED_DATA
-
-          /**
-           * the sign to address
-           */
-          to: string
-
-          /**
-           * typed data
-           */
-          data: any
-      }
-    | {
-          type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY
-
-          /**
-           * the account address
-           */
-          account: string
-      }
-    | {
-          type: EthereumRpcType.ETH_DECRYPT
-
-          /**
-           * the decrypt to address
-           * Learn more: https://docs.metamask.io/guide/rpc-api.html#eth-decrypt
-           */
-          to: string
-
-          /**
-           * the secret message
-           */
-          secret: string
-      }
-    | {
-          type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN
-
-          /**
-           * the chain detailed
-           */
-          chain?: EthereumChainDetailed
-      }
-    | {
-          type: EthereumRpcType.WATCH_ASSET
-
-          /**
-           * the asset detailed
-           */
-          asset: EthereumAssetDetailed
-      }
 
 export enum TransactionEventType {
     TRANSACTION_HASH = 'transactionHash',
@@ -503,44 +164,12 @@ export enum TransactionEventType {
     ERROR = 'error',
 }
 
-export enum TransactionStatusType {
-    NOT_DEPEND = 0,
-    SUCCEED = 1,
-    FAILED = 2,
-    CANCELLED = 3,
-}
-
-export type GasOptions = {
+export interface GasOptions {
     rapid: number
     fast: number
     standard: number
     slow: number
     custom: number
-}
-
-export interface Asset {
-    token: FungibleTokenDetailed
-    /**
-     * The chain name of assets
-     */
-    chain: 'eth' | string
-    /**
-     * The total balance of token
-     */
-    balance: string
-    /**
-     * The estimated price
-     */
-    price?: {
-        [key in CurrencyType]: string
-    }
-    /**
-     * The estimated value
-     */
-    value?: {
-        [key in CurrencyType]: string
-    }
-    logoURI?: string
 }
 
 export enum DomainProvider {
@@ -568,6 +197,7 @@ export enum TransactionType {
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_LUCKY_DROP = 'create_lucky_drop',
+    CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
     REFUND = 'refund',
@@ -594,45 +224,9 @@ export interface TransactionPair {
     amount: number
 }
 
-export type TransactionGasFee = {
+export interface TransactionGasFee {
     eth: number
     usd: number
-}
-
-export interface Transaction {
-    type: string | undefined
-    id: string
-    timeAt: Date
-    toAddress: string
-    failed: boolean
-    pairs: TransactionPair[]
-    gasFee: TransactionGasFee | undefined
-    transactionType: string
-}
-
-// #region address name
-export enum AddressNameType {
-    ADDRESS = 'ADDRESS',
-    ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
-    RSS3 = 'RSS3',
-    GUN = 'GUN',
-    THE_GRAPH = 'THE_GRAPH',
-    TWITTER_BLUE = 'TWITTER_BLUE',
-}
-
-export interface AddressName {
-    type: AddressNameType
-    label: string
-    resolvedAddress: string
-}
-// #endregion
-
-export enum GasOption {
-    Low = 'low',
-    Medium = 'medium',
-    High = 'high',
 }
 
 export enum TransactionStateType {
@@ -672,21 +266,29 @@ export enum NetworkType {
 }
 
 export enum ProviderType {
+    None = 'None',
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     Fortmatic = 'Fortmatic',
+    Torus = 'Torus',
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',
     CustomNetwork = 'CustomNetwork',
 }
 
+/**
+ * @deprecated use SourceType instead
+ */
 export enum FungibleAssetProvider {
     ZERION = 'Zerion',
     DEBANK = 'Debank',
 }
 
+/**
+ * @deprecated use SourceType instead
+ */
 export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
     RARIBLE = 'Rarible',
@@ -694,11 +296,78 @@ export enum NonFungibleAssetProvider {
     ZORA = 'Zora',
 }
 
-export interface PriceRecord {
-    [currency: string]: number
-}
+export type TransactionState =
+    | {
+          type: TransactionStateType.UNKNOWN
+      }
+    | {
+          type: TransactionStateType.WAIT_FOR_CONFIRMING
 
-/** Base on response of coingecko's token price API */
-export interface CryptoPrice {
-    [token: string]: PriceRecord
+          // @deprecated don't depend on this property will be removed in the future
+          hash?: string
+      }
+    | {
+          type: TransactionStateType.HASH
+          hash: string
+      }
+    | {
+          type: TransactionStateType.RECEIPT
+          receipt: TransactionReceipt
+      }
+    | {
+          type: TransactionStateType.CONFIRMED
+          no: number
+          receipt: TransactionReceipt
+          reason?: string
+      }
+    | {
+          type: TransactionStateType.FAILED
+          error: Error & { code?: number }
+          receipt?: TransactionReceipt
+      }
+
+export type Web3 = EVM_Web3
+export type Web3Provider = {
+    send(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
+    sendAsync(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
+    request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
+
+    on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): Web3Provider
+    on(name: 'disconnect', listener: (error: { message: string; code: number; data?: unknown }) => void): Web3Provider
+    on(name: 'chainChanged', listener: (chainId: string) => void): Web3Provider
+    on(name: 'accountsChanged', listener: (accounts: string[]) => void): Web3Provider
+    on(name: 'message', listener: (message: { type: string; data: unknown }) => void): Web3Provider
+    on(name: string, listener: (event: any) => void): Web3Provider
+
+    removeListener(name: string, listener: (event: any) => void): Web3Provider
 }
+export type GasOption = {
+    estimatedSeconds: number
+    // eip1559 only
+    estimatedBaseFee?: string
+    // note: for prior 1559 it means gasPrice
+    suggestedMaxFeePerGas: string
+    suggestedMaxPriorityFeePerGas: string
+}
+export type Signature = string
+export type Block = {
+    hash: string
+    nonce: string
+    timestamp: string
+}
+export type Transaction = TransactionConfig_ & {
+    // CELO
+    feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
+    gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
+    gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
+}
+export type TransactionReceipt = Web3TransactionReceipt
+export type TransactionDetailed = Web3Transaction
+export type TransactionSignature = string
+export type TransactionParameter = string | undefined

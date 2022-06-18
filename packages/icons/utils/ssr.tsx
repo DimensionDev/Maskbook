@@ -31,7 +31,6 @@ svg {
 
 // This file will output to ./dist/utils/ so target actually points to ../build.html
 const target = resolve(fileURLToPath(import.meta.url), '../../../build.html')
-console.log(target)
 writeFileSync(target, render())
 function render() {
     // @ts-ignore esm emit bug

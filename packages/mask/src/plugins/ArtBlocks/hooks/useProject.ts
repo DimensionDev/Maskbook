@@ -1,11 +1,9 @@
 import { fetchProject } from '../apis'
-import { useAsync } from 'react-use'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useAsyncRetry } from 'react-use'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
-export function useFetchProject(projectId: string) {
-    const chainId = useChainId()
-
-    return useAsync(async () => {
+export function useFetchProject(projectId: string, chainId: ChainId) {
+    return useAsyncRetry(async () => {
         if (!projectId) return null
 
         return fetchProject(chainId, projectId)

@@ -1,5 +1,5 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
-import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
+import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, useTheme } from '@mui/material'
 
 const mindsBreakPoint = 1221 /** px */
 
@@ -42,7 +42,7 @@ const Icon = styled(ListItemIcon)`
 
 export function ToolboxHintAtMinds(props: { category: 'wallet' | 'application' }) {
     const mini = useMediaQuery(`(max-width: ${mindsBreakPoint}px)`)
-
+    const mode = useTheme().palette.mode
     return (
         <ToolboxHintUnstyled
             mini={mini}

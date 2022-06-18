@@ -18,6 +18,9 @@ export const InMemoryStorages = {
         avatarId: '',
         address: '',
         tokenId: '',
+        schema: 1,
+        chainId: 1,
+        pluginId: '',
     }),
 }
 
@@ -27,23 +30,26 @@ export const PersistentStorages = {
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
-    ApplicationEntryUnListedList: createPersistentKVStorage<{ [key: string]: boolean }>(
+    ApplicationEntryUnListedList: createPersistentKVStorage<{ current: { [key: string]: boolean } }>(
         ApplicationEntryUnlistedListKey,
         {
-            [PluginId.RedPacket]: false,
-            [PluginId.FileService]: false,
-            [PluginId.ITO]: false,
-            [`${PluginId.ITO}_claim`]: false,
-            [PluginId.CrossChainBridge]: false,
-            [PluginId.MaskBox]: false,
-            [PluginId.Savings]: false,
-            [PluginId.Avatar]: false,
-            [PluginId.Trader]: false,
-            [PluginId.Tips]: false,
-            [PluginId.Transak]: false,
-            [PluginId.Pets]: false,
-            [PluginId.FindTruman]: false,
-            [PluginId.GoPlusSecurity]: false,
+            current: {
+                [PluginId.RedPacket]: false,
+                [PluginId.FileService]: false,
+                [PluginId.ITO]: false,
+                [`${PluginId.ITO}_claim`]: false,
+                [PluginId.CrossChainBridge]: false,
+                [PluginId.MaskBox]: false,
+                [PluginId.Savings]: false,
+                [PluginId.Avatar]: false,
+                [PluginId.Trader]: false,
+                [PluginId.Tips]: false,
+                [PluginId.Transak]: false,
+                [PluginId.Pets]: false,
+                [PluginId.FindTruman]: false,
+                [PluginId.GoPlusSecurity]: false,
+                [PluginId.Referral]: false,
+            },
         },
     ),
 }

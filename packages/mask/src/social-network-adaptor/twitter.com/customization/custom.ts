@@ -9,7 +9,6 @@ import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB }
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
-import { noop } from 'lodash-unified'
 import { parseColor } from '@masknet/theme'
 
 const themeColorRef = new ValueRef('rgb(29, 161, 242)')
@@ -36,30 +35,17 @@ export function startWatchThemeColor(signal: AbortSignal) {
         if (textColor) textColorRef.value = textColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
-    const watcher = new MutationObserverWatcher(composeAnchorSelector())
+    new MutationObserverWatcher(composeAnchorSelector())
         .addListener('onAdd', updateThemeColor)
         .addListener('onChange', updateThemeColor)
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
-    const unwatchAnchor = () => watcher.stopWatch()
-    let unwatchHeadingText = noop
+        .startWatch({ childList: true, subtree: true }, signal)
 
     if (isMobileTwitter) {
-        const headingWatcher = new MutationObserverWatcher(headingTextSelector())
+        new MutationObserverWatcher(headingTextSelector())
             .addListener('onAdd', updateThemeColor)
             .addListener('onChange', updateThemeColor)
-            .startWatch({
-                childList: true,
-                subtree: true,
-            })
-        unwatchHeadingText = () => headingWatcher.stopWatch()
+            .startWatch({ childList: true, subtree: true }, signal)
     }
-    signal.addEventListener('abort', () => {
-        unwatchAnchor()
-        unwatchHeadingText()
-    })
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(themeColorRef)
@@ -84,7 +70,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
             colors.forEach((color) => {
                 if (typeof theme.palette[color] === 'object') {
-                    Object.assign(theme.palette[color], colorSchema[color])
+                    Object.assign(theme.palette[color] ?? {}, colorSchema[color])
                 }
             })
 
@@ -140,7 +126,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             variant: 'outlined',
                         },
                         style: {
-                            background: theme.palette.maskColor.thirdMain,
+                            background: theme.palette.maskColor?.thirdMain,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -161,7 +147,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             variant: 'flat',
                         },
                         style: {
-                            background: theme.palette.maskColor.thirdMain,
+                            background: theme.palette.maskColor?.thirdMain,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -190,7 +176,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                         : '0 8px 25px rgba(0, 0, 0, 0.2)',
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: theme.palette.maskColor.primaryMain,
+                                background: theme.palette.maskColor?.primaryMain,
                                 opacity: 0.6,
                                 color: theme.palette.background.paper,
                             },
@@ -203,7 +189,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         style: {
                             color: theme.palette.text.primary,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.thirdMain,
+                                background: theme.palette.maskColor?.thirdMain,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -217,16 +203,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            background: theme.palette.maskColor.primary,
-                            color: theme.palette.maskColor.white,
+                            background: theme.palette.maskColor?.primary,
+                            color: theme.palette.maskColor?.white,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.primary,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                background: theme.palette.maskColor?.primary,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.primary)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.3).toRgbString(),
                                 opacity: 0.6,
                             },
                         },
@@ -237,20 +223,20 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
-                            color: theme.palette.maskColor.primary,
+                            backgroundColor: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor?.primary,
                             ['&:hover']: {
                                 background:
                                     theme.palette.mode === 'dark'
-                                        ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
-                                        : theme.palette.maskColor.white,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                        ? parseColor(theme.palette.maskColor?.primary).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor?.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.primary)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.primary,
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                color: theme.palette.maskColor?.primary,
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
                                 opacity: 0.4,
                             },
                         },
@@ -261,12 +247,12 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            color: theme.palette.maskColor.primary,
+                            color: theme.palette.maskColor?.primary,
                             ['&:hover']: {
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.primary,
+                                color: theme.palette.maskColor?.primary,
                                 opacity: 0.4,
                             },
                         },
@@ -279,16 +265,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'warning',
                         },
                         style: {
-                            backgroundColor: theme.palette.maskColor.warn,
-                            color: theme.palette.maskColor.white,
+                            backgroundColor: theme.palette.maskColor?.warn,
+                            color: theme.palette.maskColor?.white,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.warn,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.warn)
+                                background: theme.palette.maskColor?.warn,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.warn)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.5).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.warn).setAlpha(0.5).toRgbString(),
                                 opacity: 0.6,
                             },
                         },
@@ -299,20 +285,20 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'warning',
                         },
                         style: {
-                            backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
-                            color: theme.palette.maskColor.warn,
+                            backgroundColor: parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor?.warn,
                             ['&:hover']: {
                                 background:
                                     theme.palette.mode === 'dark'
-                                        ? parseColor(theme.palette.maskColor.warn).setAlpha(0.3).toRgbString()
-                                        : theme.palette.maskColor.white,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.warn)
+                                        ? parseColor(theme.palette.maskColor?.warn).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor?.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.warn)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.warn,
-                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+                                color: theme.palette.maskColor?.warn,
+                                background: parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
                                 opacity: 0.4,
                             },
                         },
@@ -323,12 +309,12 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'warning',
                         },
                         style: {
-                            color: theme.palette.maskColor.warn,
+                            color: theme.palette.maskColor?.warn,
                             ['&:hover']: {
-                                background: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.warn,
+                                color: theme.palette.maskColor?.warn,
                                 opacity: 0.4,
                             },
                         },
@@ -341,16 +327,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'success',
                         },
                         style: {
-                            background: theme.palette.maskColor.success,
-                            color: theme.palette.maskColor.white,
+                            background: theme.palette.maskColor?.success,
+                            color: theme.palette.maskColor?.white,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.success,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.success)
+                                background: theme.palette.maskColor?.success,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.success)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.5).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.success).setAlpha(0.5).toRgbString(),
                                 opacity: 0.6,
                             },
                         },
@@ -361,20 +347,20 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'success',
                         },
                         style: {
-                            background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
-                            color: theme.palette.maskColor.warn,
+                            background: parseColor(theme.palette.maskColor?.success).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor?.warn,
                             ['&:hover']: {
                                 background:
                                     theme.palette.mode === 'dark'
-                                        ? parseColor(theme.palette.maskColor.success).setAlpha(0.3).toRgbString()
-                                        : theme.palette.maskColor.white,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.success)
+                                        ? parseColor(theme.palette.maskColor?.success).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor?.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.success)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.success,
-                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
+                                color: theme.palette.maskColor?.success,
+                                background: parseColor(theme.palette.maskColor?.success).setAlpha(0.1).toRgbString(),
                                 opacity: 0.4,
                             },
                         },
@@ -385,12 +371,12 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'success',
                         },
                         style: {
-                            color: theme.palette.maskColor.success,
+                            color: theme.palette.maskColor?.success,
                             ['&:hover']: {
-                                background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.success).setAlpha(0.1).toRgbString(),
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.success,
+                                color: theme.palette.maskColor?.success,
                                 opacity: 0.4,
                             },
                         },
@@ -403,16 +389,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'error',
                         },
                         style: {
-                            backgroundColor: theme.palette.maskColor.danger,
-                            color: theme.palette.maskColor.white,
+                            backgroundColor: theme.palette.maskColor?.danger,
+                            color: theme.palette.maskColor?.white,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.danger,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.danger)
+                                background: theme.palette.maskColor?.danger,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.danger)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.5).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.danger).setAlpha(0.5).toRgbString(),
                                 opacity: 0.6,
                             },
                         },
@@ -423,20 +409,20 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'error',
                         },
                         style: {
-                            backgroundColor: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
-                            color: theme.palette.maskColor.danger,
+                            backgroundColor: parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor?.danger,
                             ['&:hover']: {
                                 background:
                                     theme.palette.mode === 'dark'
-                                        ? parseColor(theme.palette.maskColor.danger).setAlpha(0.3).toRgbString()
-                                        : theme.palette.maskColor.white,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.danger)
+                                        ? parseColor(theme.palette.maskColor?.danger).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor?.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.danger)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.danger,
-                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+                                color: theme.palette.maskColor?.danger,
+                                background: parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
                                 opacity: 0.4,
                             },
                         },
@@ -447,12 +433,12 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'error',
                         },
                         style: {
-                            color: theme.palette.maskColor.danger,
+                            color: theme.palette.maskColor?.danger,
                             ['&:hover']: {
-                                background: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.danger,
+                                color: theme.palette.maskColor?.danger,
                                 opacity: 0.4,
                             },
                         },
@@ -465,7 +451,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         },
                         style: {
                             borderRadius: 99,
-                            background: theme.palette.maskColor.thirdMain,
+                            background: theme.palette.maskColor?.thirdMain,
                             color: theme.palette.text.primary,
                             ['&:hover']: {
                                 backgroundColor: theme.palette.background.paper,
@@ -494,7 +480,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: theme.palette.maskColor.primaryMain,
+                                background: theme.palette.maskColor?.primaryMain,
                                 opacity: 0.6,
                                 color: theme.palette.background.paper,
                             },
@@ -508,7 +494,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: theme.palette.text.primary,
                             borderRadius: 99,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.thirdMain,
+                                background: theme.palette.maskColor?.thirdMain,
                             },
                             [`&.${buttonClasses.disabled}`]: {
                                 opacity: 0.4,
@@ -521,17 +507,17 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            background: theme.palette.maskColor.primary,
-                            color: theme.palette.maskColor.white,
+                            background: theme.palette.maskColor?.primary,
+                            color: theme.palette.maskColor?.white,
                             borderRadius: 99,
                             ['&:hover']: {
-                                background: theme.palette.maskColor.primary,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                background: theme.palette.maskColor?.primary,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.primary)
                                     .setAlpha(0.3)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.3).toRgbString(),
                                 opacity: 0.6,
                             },
                         },
@@ -542,21 +528,21 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
-                            color: theme.palette.maskColor.primary,
+                            backgroundColor: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
+                            color: theme.palette.maskColor?.primary,
                             borderRadius: 99,
                             ['&:hover']: {
                                 background:
                                     theme.palette.mode === 'dark'
-                                        ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
-                                        : theme.palette.maskColor.white,
-                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
+                                        ? parseColor(theme.palette.maskColor?.primary).setAlpha(0.3).toRgbString()
+                                        : theme.palette.maskColor?.white,
+                                boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor?.primary)
                                     .setAlpha(0.1)
                                     .toRgbString()}`,
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.primary,
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                color: theme.palette.maskColor?.primary,
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
                                 opacity: 0.4,
                             },
                         },
@@ -567,13 +553,13 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             color: 'info',
                         },
                         style: {
-                            color: theme.palette.maskColor.primary,
+                            color: theme.palette.maskColor?.primary,
                             borderRadius: 99,
                             ['&:hover']: {
-                                background: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
+                                background: parseColor(theme.palette.maskColor?.primary).setAlpha(0.1).toRgbString(),
                             },
                             [`&.${buttonClasses.disabled}`]: {
-                                color: theme.palette.maskColor.primary,
+                                color: theme.palette.maskColor?.primary,
                                 opacity: 0.4,
                             },
                         },

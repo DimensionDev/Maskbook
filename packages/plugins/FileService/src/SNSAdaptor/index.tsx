@@ -41,6 +41,16 @@ const definition: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
+                    const clickHandler = () =>
+                        CrossIsolationMessages.events.requestComposition.sendToLocal({
+                            reason: 'timeline',
+                            open: true,
+                            options: {
+                                startupPlugin: base.ID,
+                                isOpenFromApplicationBoard: true,
+                            },
+                        })
+
                     return (
                         <ApplicationEntry
                             title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
@@ -48,15 +58,9 @@ const definition: Plugin.SNSAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             onClick={
-                                EntryComponentProps.onClick ??
-                                (() =>
-                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                        reason: 'timeline',
-                                        open: true,
-                                        options: {
-                                            startupPlugin: base.ID,
-                                        },
-                                    }))
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
                             }
                         />
                     )

@@ -1,8 +1,10 @@
 import classNames from 'classnames'
 import { CircularProgress, useTheme } from '@mui/material'
-import { ChainId, useImageChecker, useERC721TokenDetailed, ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
+import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useImageChecker } from '../../../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -31,9 +33,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
-    chainId?: ChainId
-    contractAddress?: string
+    chainId?: Web3Helper.ChainIdAll
     tokenId?: string
+    contractAddress?: string
     url?: string
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
@@ -48,7 +50,7 @@ const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
-        chainId = ChainId.Mainnet,
+        chainId,
         contractAddress = '',
         tokenId = '',
         isNative = false,
@@ -61,11 +63,18 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
-    const { tokenDetailed } = useERC721TokenDetailed(
-        { address: contractAddress, chainId } as ERC721ContractDetailed,
-        tokenId,
+    const { value: tokenDetailed } = useNonFungibleToken<'all'>(
+        NetworkPluginID.PLUGIN_EVM,
+        contractAddress,
+        url ? undefined : tokenId,
+        undefined,
+        {
+            chainId,
+        },
     )
-    const { value: isImageToken } = useImageChecker(url || tokenDetailed?.info.imageURL || tokenDetailed?.info.mediaUrl)
+    const { value: isImageToken } = useImageChecker(
+        url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL,
+    )
 
     const fallbackImageURL =
         theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
@@ -75,7 +84,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             <img
                 width="100%"
                 style={{ objectFit: 'cover' }}
-                src={url || tokenDetailed?.info.imageURL || tokenDetailed?.info.mediaUrl}
+                src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
                 onError={(event) => {
                     const target = event.currentTarget as HTMLImageElement
                     target.src = fallbackImageURL.toString()

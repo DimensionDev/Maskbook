@@ -5,6 +5,16 @@
     "outDir": "../dist/sdk",
     "tsBuildInfoFile": "../dist/sdk.tsbuildinfo"
   },
-  "files": ["./index.ts", "./bridgedEthereum.ts", "./bridgedCoin98.ts", "./bridgedSolana.ts", "utils.ts"],
+  "files": [
+    "index.ts",
+    "Base.ts",
+    "Phantom.ts",
+    "Solflare.ts",
+    "Coin98.ts",
+    "MetaMask.ts",
+    "MathWallet.ts",
+    "WalletLink.ts",
+    "utils.ts"
+  ],
   "references": [{ "path": "../shared/" }]
 }

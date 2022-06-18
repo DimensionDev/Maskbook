@@ -5,7 +5,7 @@ import {
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
@@ -13,7 +13,6 @@ import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 const useStyles = makeStyles()((theme) => ({
     sup: {
@@ -28,7 +27,7 @@ export interface PluginEntryRenderRef {
     openPlugin(id: string): void
 }
 export const PluginEntryRender = memo(
-    forwardRef<PluginEntryRenderRef, { readonly: boolean }>((props, ref) => {
+    forwardRef<PluginEntryRenderRef, { readonly: boolean; isOpenFromApplicationBoard: boolean }>((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
@@ -52,7 +51,12 @@ export const PluginEntryRender = memo(
                             {'onClick' in entry ? (
                                 <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
                             ) : (
-                                <DialogEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
+                                <DialogEntry
+                                    {...entry}
+                                    {...extra}
+                                    ref={trackPluginRef(ID)}
+                                    isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                                />
                             )}
                         </ErrorBoundary>
                     )
@@ -89,7 +93,12 @@ function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: () => void
 }
 
 type PluginRef = { open(): void }
-type ExtraPluginProps = { unstable: boolean; id: string; readonly: boolean }
+type ExtraPluginProps = {
+    unstable: boolean
+    id: string
+    readonly: boolean
+    isOpenFromApplicationBoard?: boolean
+}
 const CustomEntry = memo(
     forwardRef<PluginRef, Plugin.SNSAdaptor.CompositionDialogEntryCustom & ExtraPluginProps>((props, ref) => {
         const { classes } = useStyles()
@@ -116,10 +125,13 @@ const CustomEntry = memo(
 const DialogEntry = memo(
     forwardRef<PluginRef, Plugin.SNSAdaptor.CompositionDialogEntryDialog & ExtraPluginProps>((props, ref) => {
         const { classes } = useStyles()
-        const { dialog: Dialog, id, label, unstable, keepMounted } = props
+        const { dialog: Dialog, id, label, unstable, keepMounted, isOpenFromApplicationBoard } = props
         const [open, setOpen] = useState(false)
         const opener = useCallback(() => setOpen(true), [])
-        const close = useCallback(() => setOpen(false), [])
+        const close = useCallback(() => {
+            setOpen(false)
+        }, [])
+
         useSetPluginRef(ref, opener)
         const chip = (
             <ClickableChip
@@ -142,7 +154,7 @@ const DialogEntry = memo(
                     {chip}
                     <span style={{ display: 'none' }}>
                         {/* Dialog should use portals to render. */}
-                        <Dialog open={open} onClose={close} />
+                        <Dialog open={open} onClose={close} isOpenFromApplicationBoard={isOpenFromApplicationBoard} />
                     </span>
                 </>
             )

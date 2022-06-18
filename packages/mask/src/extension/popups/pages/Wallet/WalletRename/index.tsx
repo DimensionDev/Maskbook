@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
-import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
@@ -12,6 +11,8 @@ import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
+import { useWallet } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     header: {
@@ -47,7 +48,7 @@ const WalletRename = memo(() => {
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { selectedWallet } = WalletContext.useContainer()
-    const currentWallet = useWallet()
+    const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const wallet = selectedWallet ?? currentWallet
 
     const {

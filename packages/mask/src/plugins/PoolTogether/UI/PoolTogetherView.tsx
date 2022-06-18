@@ -1,6 +1,7 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
@@ -9,13 +10,12 @@ import { usePool, usePools } from '../hooks/usePools'
 import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         // width: '100%',
         boxShadow: 'none',
-        border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
         backgroundColor: '#290b5a',
         textAlign: 'center',
@@ -61,9 +61,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'unset',
     },
     progress: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        padding: theme.spacing(1),
+        padding: 12,
     },
 }))
 
@@ -106,7 +104,11 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }, [_pools, maskPool])
 
     if (loading || loadingMask) {
-        return <CircularProgress className={classes.progress} color="primary" size={15} />
+        return (
+            <Box className={classes.progress}>
+                <CircularProgress />
+            </Box>
+        )
     }
 
     if (error || errorMask) {
@@ -146,9 +148,11 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                 </CardContent>
             </Card>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary
-                    chainId={ChainId.Mainnet}
-                    isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={ChainId.Mainnet}
+                    predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
+                    renderInTimeline
                 />
             </Box>
         </>

@@ -2,10 +2,10 @@ import { makeStyles } from '@masknet/theme'
 import { memo, MouseEvent } from 'react'
 import { Box, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
-import { ChainId, Wallet, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { ArrowDropIcon, MaskBlueIcon, PopupLinkIcon } from '@masknet/icons'
+import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -77,7 +77,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 interface WalletHeaderUIProps {
-    currentNetwork: Web3Plugin.NetworkDescriptor
+    currentNetwork: NetworkDescriptor<ChainId, NetworkType>
     chainId: ChainId
     onOpenNetworkSelector: (event: MouseEvent<HTMLDivElement>) => void
     onActionClick: () => void
@@ -98,7 +98,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                         if (!disabled) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon networkIcon={currentNetwork.icon} size={30} />
+                        <WalletIcon mainIcon={currentNetwork.icon} size={30} />
                     ) : (
                         <ChainIcon
                             color={currentNetwork.iconColor}
@@ -133,7 +133,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             <Link
                                 onClick={(event) => event.stopPropagation()}
                                 style={{ width: 12, height: 12 }}
-                                href={resolveAddressLinkOnExplorer(chainId, wallet.address ?? '')}
+                                href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <PopupLinkIcon className={classes.icon} />

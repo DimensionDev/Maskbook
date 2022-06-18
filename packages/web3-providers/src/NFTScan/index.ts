@@ -1,19 +1,23 @@
+import urlcat from 'urlcat'
 import {
-    ChainId,
-    createERC721ContractDetailed,
-    createERC721Token,
-    ERC721TokenDetailed,
-    resolveIPFSLinkFromURL,
-    ERC721ContractDetailed,
-} from '@masknet/web3-shared-evm'
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    CurrencyType,
+    HubOptions,
+    NonFungibleAsset,
+    TokenType,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
-import urlcat from 'urlcat'
+import getUnixTime from 'date-fns/getUnixTime'
 import type { NonFungibleTokenAPI } from '..'
-import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
-import type { NFTScanAsset, NFT_Assets } from './types'
+import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
+import type { NFTScanAsset } from './types'
 import { courier, isProxyENV } from '../helpers'
 
+const IPFS_BASE = 'https://ipfs.io/ipfs/:id'
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
 async function getToken() {
@@ -45,60 +49,72 @@ async function fetchAsset<T>(path: string, body?: unknown) {
     return response.json() as Promise<{ data: T }>
 }
 
-function createERC721ContractDetailedFromAssetContract(asset: NFTScanAsset) {
-    return createERC721ContractDetailed(
-        ChainId.Mainnet,
-        asset.trade_contract ?? asset.nft_contract_address,
-        undefined,
-        asset.trade_symbol,
-    )
-}
-
-function createERC721TokenAsset(asset: NFTScanAsset) {
+function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<ChainId, SchemaType> {
     const payload: {
         name?: string
         description?: string
         image?: string
     } = JSON.parse(asset.nft_json ?? '{}')
-    const detailed = createERC721ContractDetailedFromAssetContract(asset)
-    return createERC721Token(
-        detailed,
-        {
-            name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
-            description: payload?.description ?? '',
-            mediaUrl: resolveIPFSLinkFromURL(
-                JSON.parse(asset.nft_json ?? '{}').image ?? asset.nft_content_uri ?? payload.image ?? '',
-            ),
-            owner: asset.nft_holder ?? '',
+    const name = payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? ''
+    const description = payload?.description ?? asset.nft_detail
+    const mediaURL = urlcat(IPFS_BASE, { id: asset.nft_cover })
+    const chainId = ChainId.Mainnet
+    const creator = asset.nft_creator
+    const owner = asset.nft_holder
+
+    return {
+        id: asset.nft_contract_address,
+        chainId,
+        tokenId: asset.token_id ?? asset.nft_asset_id,
+        type: TokenType.NonFungible,
+        address: asset.nft_contract_address,
+        schema: SchemaType.ERC721,
+        creator: {
+            address: creator,
+            avatarURL: '',
+            nickname: creator,
+            link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
         },
-        asset.token_id,
-    )
+        owner: {
+            address: owner,
+            avatarURL: '',
+            nickname: owner,
+            link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
+        },
+        traits: [],
+        price: {
+            [CurrencyType.USD]: asset.last_price,
+        },
+
+        metadata: {
+            chainId,
+            name,
+            symbol: asset.trade_symbol,
+            description,
+            imageURL: mediaURL,
+            mediaURL,
+        },
+        contract: {
+            chainId,
+            schema: SchemaType.ERC721,
+            address: asset.nft_contract_address,
+            name,
+            symbol: asset.trade_symbol,
+        },
+        collection: {
+            chainId,
+            name,
+            slug: name,
+            description,
+            iconURL: urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.nft_contract_address + '.png' }),
+            verified: !!asset.nft_asset_id,
+            createdAt: getUnixTime(new Date(asset.nft_create_time)),
+        },
+    }
 }
 
-export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
-    async getContractBalance(address: string) {
-        const response = await fetchAsset<NFT_Assets[]>('getGroupByNftContract', {
-            erc: 'erc721',
-            user_address: address,
-        })
-        if (!response?.data) return []
-        return response.data
-            .map((x) => {
-                const contractDetailed = createERC721ContractDetailed(
-                    ChainId.Mainnet,
-                    x.nft_contract_address,
-                    x.nft_platform_name,
-                    undefined,
-                    undefined,
-                    x.nft_platform_image,
-                )
-                const balance = x.nft_asset.length
-                return { contractDetailed, balance }
-            })
-            .sort((a, b) => a.balance - b.balance)
-    }
-
-    async getToken(address: string, tokenId: string) {
+export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getAsset(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
             token_id: tokenId,
@@ -107,10 +123,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(
-        from: string,
-        { chainId = ChainId.Mainnet, page = 0, size = 50, pageInfo }: NonFungibleTokenAPI.Options,
-    ) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number
@@ -118,62 +131,16 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: page + 1,
+            page_index: (indicator?.index ?? 0) + 1,
             user_address: from,
-            erc: pageInfo?.type ?? 'erc721',
         })
-        if (!response?.data)
-            return {
-                data: [],
-                hasNextPage: false,
-            }
-        const data =
-            response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
+        if (!response?.data) return createPageable([], createIndicator(indicator))
         const total = response.data.total
-        return {
-            data,
-            hasNextPage: total - (page + 1) * size > 0,
-        }
+        const rest = total - ((indicator?.index ?? 0) + 1) * size
+        return createPageable(
+            response.data.content.map(createERC721TokenAsset) ?? [],
+            createIndicator(indicator),
+            rest > 0 ? createNextIndicator(indicator) : undefined,
+        )
     }
-
-    async getTokenDetailedOwnerList(owner: string, contractDetailed: ERC721ContractDetailed, size = 100, page = 0) {
-        const response = await fetchAsset<{
-            content: NFTScanAsset[]
-            page_index: number
-            page_size: number
-            total: number
-        }>('getNftByContractAndUserAddress', {
-            page_size: size,
-            page_index: page + 1,
-            user_address: owner,
-            nft_address: contractDetailed.address,
-        })
-
-        if (!response?.data) return { data: [] as ERC721TokenDetailed[], hasNextPage: false }
-        const total = response.data.total
-        const data: ERC721TokenDetailed[] = response.data.content.map((t) => ({
-            tokenId: t.token_id,
-            contractDetailed,
-            info: {
-                name: t.nft_name,
-                description: t.nft_detail,
-                mediaUrl: resolveIPFSLinkFromURL(JSON.parse(t.nft_json ?? '{}').image ?? t.nft_content_uri ?? ''),
-                tokenURI: t.nft_token_uri,
-            },
-        }))
-        return {
-            data,
-            hasNextPage: total - (page + 1) * size > 0,
-        }
-    }
-}
-
-export function getNFTScanNFTList(address: string) {
-    const nftScanAPI = new NFTScanAPI()
-    return nftScanAPI.getContractBalance(address)
-}
-
-export function getNFTScanNFTs(address: string, type: 'erc721' | 'erc1155', page?: number, size?: number) {
-    const nftScanAPI = new NFTScanAPI()
-    return nftScanAPI.getTokens(address, { page, size, pageInfo: { type } })
 }

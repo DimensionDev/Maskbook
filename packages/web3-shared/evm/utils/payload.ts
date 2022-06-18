@@ -1,21 +1,26 @@
+import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { EthereumMethodType, EthereumTransactionConfig } from '../types'
+import type { JsonRpcPayload } from 'web3-core-helpers'
+import { EthereumMethodType, Transaction } from '../types'
 
-export function getPayloadChainId(payload: JsonRpcPayload) {
-    switch (payload.method) {
-        // here are methods that contracts may emit
-        case EthereumMethodType.ETH_CALL:
-        case EthereumMethodType.ETH_ESTIMATE_GAS:
-        case EthereumMethodType.ETH_SEND_TRANSACTION:
-            const config = first(payload.params) as { chainId?: string } | undefined
-            return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
-        default:
-            return
+export function addGasMargin(value: BigNumber.Value, scale = 3000) {
+    return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)
+}
+
+export function createPayload(id: number, method: string, params: any[]) {
+    return {
+        id,
+        jsonrpc: '2.0',
+        method,
+        params,
     }
 }
 
-export function getPayloadAccount(payload: JsonRpcPayload): string | undefined {
+export function getPayloadId(payload: JsonRpcPayload) {
+    return typeof payload.id === 'string' ? Number.parseInt(payload.id, 10) : payload.id
+}
+
+export function getPayloadFrom(payload: JsonRpcPayload): string | undefined {
     switch (payload.method) {
         case EthereumMethodType.ETH_SIGN:
             return first(payload.params)
@@ -23,51 +28,31 @@ export function getPayloadAccount(payload: JsonRpcPayload): string | undefined {
             return payload.params?.[1]
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             return first(payload.params)
-        case EthereumMethodType.ETH_SEND_TRANSACTION:
-            return getPayloadConfig(payload)?.from as string | undefined
         default:
-            return
+            const config = getPayloadConfig(payload)
+            return config?.from as string | undefined
     }
+}
+
+export function getPayloadChainId(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
 }
 
 export function getPayloadConfig(payload: JsonRpcPayload) {
     switch (payload.method) {
+        case EthereumMethodType.ETH_CALL:
+        case EthereumMethodType.ETH_ESTIMATE_GAS:
+        case EthereumMethodType.ETH_SIGN_TRANSACTION:
         case EthereumMethodType.ETH_SEND_TRANSACTION: {
-            const [config] = payload.params as [EthereumTransactionConfig]
+            const [config] = payload.params as [Transaction]
             return config
         }
         case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-            const [, config] = payload.params as [string, EthereumTransactionConfig]
+            const [, config] = payload.params as [string, Transaction]
             return config
         }
         default:
             return
     }
-}
-
-export function getPayloadHash(payload: JsonRpcPayload) {
-    switch (payload.method) {
-        case EthereumMethodType.ETH_SEND_TRANSACTION: {
-            return ''
-        }
-        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-            const [hash] = payload.params as [string]
-            return hash
-        }
-        default:
-            return ''
-    }
-}
-
-export function getPayloadNonce(payload: JsonRpcPayload) {
-    const config = getPayloadConfig(payload)
-    return config?.nonce
-}
-
-export function getTransactionHash(response?: JsonRpcResponse) {
-    if (!response) return ''
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return ''
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return ''
-    return hash
 }

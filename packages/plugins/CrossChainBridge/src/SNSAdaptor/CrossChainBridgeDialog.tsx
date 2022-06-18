@@ -66,6 +66,7 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { open, onClose } = props
+    // @ts-ignore
     const bridges = getCrossChainBridge(t)
 
     return (
@@ -73,19 +74,19 @@ export function CrossChainBridgeDialog(props: CrossChainBridgeDialogProps) {
             DialogProps={{ classes: { paper: classes.paperRoot } }}
             title={t.__plugin_name()}
             open={open}
-            onBack={onClose}>
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     {bridges?.map((bridge) => (
                         <div className={classes.bridgeItem} key={bridge?.ID} onClick={() => openWindow(bridge?.link)}>
                             {bridge?.icon}
                             <div className={classes.bridgeInfo}>
-                                <div className={classes.bridgeName}>
+                                <Typography className={classes.bridgeName}>
                                     {bridge?.name}
                                     {bridge?.isOfficial && (
                                         <Typography className={classes.officialTag}>{t.official()}</Typography>
                                     )}
-                                </div>
+                                </Typography>
                                 {bridge?.intro && (
                                     <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
                                 )}

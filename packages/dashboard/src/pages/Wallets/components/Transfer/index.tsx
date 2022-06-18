@@ -4,12 +4,14 @@ import { Box, Tab } from '@mui/material'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { TransferERC20 } from './TransferERC20'
-import { ERC721TokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { useLocation } from 'react-router-dom'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferERC721 } from './TransferERC721'
 import { TransferTab } from './types'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useNativeToken } from '@masknet/plugin-infra/web3'
+
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export * from './types'
@@ -17,9 +19,13 @@ export * from './types'
 export const Transfer = memo(() => {
     const t = useDashboardI18N()
     const { state } = useLocation() as {
-        state: { token?: Web3Plugin.FungibleToken; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
+        state: {
+            token?: FungibleToken<ChainId, SchemaType>
+            nonFungibleToken?: FungibleToken<ChainId, SchemaType>
+            type?: TransferTab
+        } | null
     }
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const transferTabsLabel: Record<TransferTab, string> = {
         [TransferTab.Token]: t.wallets_assets_token(),
         [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
@@ -28,7 +34,7 @@ export const Transfer = memo(() => {
 
     useEffect(() => {
         if (!state) return
-        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
+        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
 
         setTab(TransferTab.Collectibles)
     }, [state])

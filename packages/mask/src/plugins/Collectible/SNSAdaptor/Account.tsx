@@ -1,5 +1,6 @@
 import { useI18N } from '../../../utils'
-import { useAccount, isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 export interface AccountProps {
     address?: string

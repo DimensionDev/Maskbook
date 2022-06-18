@@ -13,6 +13,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
+    divider: {
+        width: '100%',
+        height: 1,
+        background: theme.palette.divider,
+        margin: '8px 0',
+    },
     rightIcon: {
         marginLeft: 'auto',
     },
@@ -48,8 +54,8 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                     value={EncryptionMethodType.Text}
                     title={t('compose_encrypt_method_text')}
                     subTitle={t('compose_encrypt_method_text_sub_title')}
-                    showDivider
                 />
+                <div className={classes.divider} />
                 <PopoverListItem
                     value={EncryptionMethodType.Image}
                     title={t('compose_encrypt_method_image')}

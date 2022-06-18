@@ -2,13 +2,7 @@ import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-scr
 import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatEthereumAddress,
-    formatBalance,
-    useFungibleTokenDetailed,
-    EthereumTokenType,
-} from '@masknet/web3-shared-evm'
-import { Trans } from 'react-i18next'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -20,6 +14,9 @@ import { MarketsIcon, MarketsClaimIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
+import { useFungibleToken } from '@masknet/plugin-infra/web3'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -45,8 +42,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [ITO_MetaKey_2, onAttached_ITO],
     ]),
     CompositionDialogEntry: {
-        dialog({ open, onClose }) {
-            return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
+        dialog({ open, onClose, isOpenFromApplicationBoard }) {
+            return (
+                <CompositionDialog
+                    open={open}
+                    onConfirm={onClose}
+                    onClose={onClose}
+                    isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                />
+            )
         },
         label: (
             <>
@@ -60,6 +64,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <MarketsIcon />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
+            const clickHandler = () =>
+                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                    reason: 'timeline',
+                    open: true,
+                    options: {
+                        startupPlugin: base.ID,
+                        isOpenFromApplicationBoard: true,
+                    },
+                })
+
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -70,15 +84,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             onClick={
-                                EntryComponentProps.onClick ??
-                                (() =>
-                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                        reason: 'timeline',
-                                        open: true,
-                                        options: {
-                                            startupPlugin: base.ID,
-                                        },
-                                    }))
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
                             }
                         />
                     )
@@ -101,6 +109,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: `${base.ID}_claim`,
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
@@ -108,9 +117,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 {...EntryComponentProps}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
-                            <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <ClaimAllDialog open={open} onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },
@@ -136,10 +149,7 @@ interface BadgeProps {
 }
 function Badge({ payload }: BadgeProps) {
     const { classes } = useStyles()
-    const { value: tokenDetailed, loading: loadingToken } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
-        payload.token,
-    )
+    const { value: tokenDetailed, loading: loadingToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, payload.token)
     const balance = formatBalance(payload.total, tokenDetailed?.decimals)
     const symbol = tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
     const sellerName = payload.seller.name

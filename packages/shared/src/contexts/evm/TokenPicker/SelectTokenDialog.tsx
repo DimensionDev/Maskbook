@@ -1,9 +1,8 @@
-import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
-import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
+import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
+import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
+import type { FungibleToken } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
 import { useBaseUIRuntime } from '../../base'
@@ -41,22 +40,23 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
 
 export interface PickTokenOptions {
     disableNativeToken?: boolean
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
     disableSearchBar?: boolean
     keyword?: string
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: FungibleTokenDetailed[]
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
+    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
 }
 
 export interface SelectTokenDialogProps extends PickTokenOptions {
     open: boolean
-    onSelect?(token: FungibleTokenDetailed): void
     onClose?(): void
 }
 
+const isDashboard = isDashboardPage()
 export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     open,
     chainId,
@@ -66,20 +66,20 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     whitelist,
     blacklist = EMPTY_LIST,
     selectedTokens = EMPTY_LIST,
-    onSelect,
+    onSubmit,
     onClose,
     title,
 }) => {
     const t = useSharedI18N()
-    const isDashboard = location.href.includes('dashboard.html')
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+
+    const nativeTokenAddress = useNativeTokenAddress(pluginId)
 
     return (
         <InjectedDialog
@@ -88,15 +88,15 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             onClose={onClose}
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
-                <ERC20TokenList
+                <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSelect}
+                    onSelect={onSubmit}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
-                        disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
+                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
-                    targetChainId={chainId}
+                    chainId={chainId}
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     FixedSizeListProps={{

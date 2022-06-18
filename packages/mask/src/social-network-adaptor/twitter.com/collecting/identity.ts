@@ -31,18 +31,22 @@ function recognizeDesktop() {
     return { watcher, collect }
 }
 
-function recognizeMobile() {
-    const collect = () => {
-        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
-        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+function _getNickname(nickname?: string) {
+    const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
+    let _nickname = ''
+    if (!nicknameNode?.childNodes.length) return nickname
 
-        return { handle, nickname, avatar }
+    for (const child of nicknameNode.childNodes) {
+        const ele = child as HTMLDivElement
+        if (ele.tagName === 'IMG') {
+            _nickname += ele.getAttribute('alt') ?? ''
+        }
+        if (ele.tagName === 'SPAN') {
+            _nickname += ele.textContent?.trim()
+        }
     }
 
-    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
-
-    return { watcher, collect }
+    return _nickname ?? nickname
 }
 
 function resolveLastRecognizedIdentityInner(
@@ -56,7 +60,7 @@ function resolveLastRecognizedIdentityInner(
         const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
         const handle =
             searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
-        const nickname = (searchSelfNicknameSelector().evaluate()?.textContent?.trim() || dataFromScript.nickname) ?? ''
+        const nickname = _getNickname(dataFromScript.nickname) ?? ''
 
         if (handle) {
             ref.value = {
@@ -68,21 +72,20 @@ function resolveLastRecognizedIdentityInner(
     }
 
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()
@@ -122,41 +125,34 @@ function resolveCurrentVisitingIdentityInner(
     const assign = async () => {
         await delay(5000)
         const bio = getBio()
-        const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+        const homepage = await Services.Helper.resolveTCOLink(getPersonalHomepage())
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
+            homepage: homepage ?? '',
         }
-        Services.Helper.resolveTCOLink(homepage).then((link) => {
-            if (cancel?.aborted || !link) return
-            ref.value = {
-                ...ref.value,
-                homepage: link,
-            }
-        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src', 'content'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src', 'content'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()
