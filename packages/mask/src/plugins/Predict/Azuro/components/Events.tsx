@@ -51,9 +51,6 @@ export function Events(props: { games: AzuroGame[] | undefined; retry: () => voi
     const setOpenPlaceBetDialog = useCallback(() => onOpenPlaceBetDialog, [onOpenPlaceBetDialog])
     const setPick = useCallback(() => setConditionPick, [setConditionPick])
     const setGame = useCallback(() => setGamePick, [setGamePick])
-    console.log('gamePick: ', gamePick)
-    console.log('conditionPick: ', conditionPick)
-    console.log('openPlaceBetDialog: ', openPlaceBetDialog)
 
     if (loading) {
         return <Loader />

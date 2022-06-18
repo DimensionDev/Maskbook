@@ -21,7 +21,6 @@ export function MyBetsView() {
 
     const [filter, setFilter] = useState<UserFilter>(UserFilter.All)
     const { value: bets, error, loading, retry } = useFetchUserGames(filter)
-    console.log(bets, error, loading)
 
     const handleFilter = (event: React.MouseEvent<HTMLElement>, newFilter: UserFilter) => {
         setFilter(newFilter)

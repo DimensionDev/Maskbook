@@ -58,7 +58,7 @@ export function Odds(props: OddsProps) {
     } = props
     const DEFAULT_PARAM_ID = 1
 
-    const handleOnClickOdd = (pick: Pick, game: AzuroGame) => {
+    const handleOnClickOdd = (pick: Pick) => {
         setPick(pick)
         setGamePick(game)
         setOpenPlaceBetDialog()
@@ -79,7 +79,7 @@ export function Odds(props: OddsProps) {
                             container
                             justifyContent="space-between"
                             className={classes.choice}
-                            onClick={() => handleOnClickOdd(pick, game)}>
+                            onClick={() => handleOnClickOdd(pick)}>
                             <Typography className={classes.outcome}>{title}</Typography>
                             <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
                         </Grid>
@@ -95,9 +95,9 @@ export function Odds(props: OddsProps) {
                 <Grid key={condition.paramId} container alignItems="center" flexWrap="nowrap">
                     <Grid container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
                         <Typography>{param[condition.paramId]}</Typography>
-                        {condition.odds.map(({ outcomeRegistryId, outcomeId, conditionId, value }) => {
-                            const key = `${conditionId}-${outcomeId}-${outcomeRegistryId}`
-                            const title = outcomeRegistry[outcomeRegistryId](game)
+                        {condition.odds.map((pick) => {
+                            const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
+                            const title = outcomeRegistry[pick.outcomeRegistryId](game)
 
                             return (
                                 <Grid
@@ -106,9 +106,9 @@ export function Odds(props: OddsProps) {
                                     flexWrap="nowrap"
                                     justifyContent="space-between"
                                     className={classes.OUchoice}
-                                    onClick={() => console.log('odd')}>
+                                    onClick={() => handleOnClickOdd(pick)}>
                                     <Typography className={classes.outcome}>{title.slice(0, 1)}</Typography>
-                                    <Typography className={classes.odds}>{value.toFixed(2)}</Typography>
+                                    <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
                                 </Grid>
                             )
                         })}

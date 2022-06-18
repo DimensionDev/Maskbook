@@ -77,7 +77,6 @@ export function EventsView(): JSX.Element {
     const markets = useMarketList(value?.games)
     const leagues = useLeagueList(value?.games)
     const sorts = [DEFAULT_LABEL, 'Start Date', 'Newest']
-    console.log(value, error)
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const term = event.target.value

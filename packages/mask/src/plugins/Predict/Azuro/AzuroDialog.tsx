@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FolderTabPanel, FolderTabs, makeStyles } from '@masknet/theme'
 import { Card, CardContent, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
@@ -49,17 +49,19 @@ export function AzuroDialog(props: AzuroDialogProps) {
     const [searchTerm, setSearchTerm] = useState('')
     const { RPC_URLS } = useRPCConstants(chainId)
 
-    setSelectedChainId(chainId)
-
-    configure({
-        rpcUrl: RPC_URLS?.[0] ?? '',
-        ipfsGateway: 'https://ipfs-gateway.azuro.org/ipfs/',
-    })
-
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const term = event.target.value
         setSearchTerm(term)
     }
+
+    useEffect(() => {
+        setSelectedChainId(chainId)
+
+        configure({
+            rpcUrl: RPC_URLS?.[0] ?? '',
+            ipfsGateway: 'https://ipfs-gateway.azuro.org/ipfs/',
+        })
+    }, [configure, setSelectedChainId, chainId])
 
     return (
         <Card className={classes.root}>

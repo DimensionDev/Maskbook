@@ -11,7 +11,6 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
 
     return useAsyncRetry(async () => {
         const userBets = await fetchMyBets(account, chainId as ChainId)
-        console.log(userBets)
 
         return userBets.filter((userBet) =>
             filter === UserFilter.Active.valueOf()
