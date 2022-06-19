@@ -1,4 +1,4 @@
-import { first, groupBy, uniq } from 'lodash-unified'
+import { first, groupBy } from 'lodash-unified'
 import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import * as coinGeckoAPI from '../coingecko'
@@ -10,13 +10,11 @@ import {
     isBlockedKeyword,
     isMirroredKeyword,
     resolveAlias,
-    resolveChainId,
-    resolveCoinAddress,
     resolveCoinId,
 } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinMarketCap } from '@masknet/web3-providers'
+import { CoinGecko, CoinMarketCap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -190,80 +188,7 @@ async function getCoinTrending(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            const info = await coinGeckoAPI.getCoinInfo(id)
-            const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
-            const twitter_url = info.links.twitter_screen_name
-                ? `https://twitter.com/${info.links.twitter_screen_name}`
-                : ''
-            const facebook_url = info.links.facebook_username ? `https://t.me/${info.links.facebook_username}` : ''
-            const telegram_url = info.links.telegram_channel_identifier
-                ? `https://t.me/${info.links.telegram_channel_identifier}`
-                : ''
-
-            return {
-                lastUpdated: info.last_updated,
-                dataProvider,
-                currency,
-                coin: {
-                    id,
-                    name: info.name,
-                    symbol: info.symbol.toUpperCase(),
-                    is_mirrored: isMirroredKeyword(info.symbol),
-
-                    // TODO: use current language setting
-                    description: info.description.en,
-                    market_cap_rank: info.market_cap_rank,
-                    image_url: info.image.small,
-                    tags: info.categories.filter(Boolean),
-                    announcement_urls: info.links.announcement_url.filter(Boolean),
-                    community_urls: getCommunityLink(
-                        [
-                            twitter_url,
-                            facebook_url,
-                            telegram_url,
-                            info.links.subreddit_url,
-                            ...info.links.chat_url,
-                            ...info.links.official_forum_url,
-                        ].filter(Boolean),
-                    ),
-                    source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
-                    home_urls: info.links.homepage.filter(Boolean),
-                    blockchain_urls: uniq(
-                        [platform_url, ...info.links.blockchain_site].filter(Boolean).map((url) => url.toLowerCase()),
-                    ),
-                    platform_url,
-                    facebook_url,
-                    twitter_url,
-                    telegram_url,
-                    contract_address:
-                        resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
-                        info.platforms[
-                            Object.keys(info.platforms).find(
-                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === String(chainId),
-                            ) ?? ''
-                        ],
-                },
-                market: (() => {
-                    const entries = Object.entries(info.market_data).map(([key, value]) => {
-                        if (value && typeof value === 'object') {
-                            return [key, value[currency.id] ?? 0]
-                        }
-                        return [key, value]
-                    })
-                    return Object.fromEntries(entries)
-                })(),
-                tickers: info.tickers.slice(0, 30).map((x) => ({
-                    logo_url: x.market.logo,
-                    trade_url: x.trade_url,
-                    market_name: x.market.name,
-                    base_name: x.base,
-                    target_name: x.target,
-                    price: x.converted_last.usd,
-                    volume: x.converted_volume.usd,
-                    score: x.trust_score,
-                    updated: new Date(x.timestamp),
-                })),
-            }
+            return CoinGecko.getCoinTrending(chainId, id, currency)
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
