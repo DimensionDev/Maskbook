@@ -592,7 +592,7 @@ export interface Connection<
     /** Get gas price */
     getGasPrice(initial?: Web3ConnectionOptions): Promise<string>
     /** Get schema type of given token address. */
-    getSchemaType(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
+    getTokenSchema(address: string, initial?: Web3ConnectionOptions): Promise<SchemaType | undefined>
     /** Get a native fungible token. */
     getNativeToken(initial?: Web3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>>
     /** Get a fungible token. */
@@ -606,8 +606,8 @@ export interface Connection<
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
     getNonFungibleTokenOwnership(
         address: string,
-        owner: string,
         tokenId: string,
+        owner: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
@@ -665,7 +665,7 @@ export interface Connection<
     /** Get the source code of a on-chain program. */
     getCode(address: string, initial?: Web3ConnectionOptions): Promise<string>
     /** Switch to sub network */
-    switchChain?: (initial?: Web3ConnectionOptions) => Promise<void>
+    switchChain?: (chainId: ChainId, initial?: Web3ConnectionOptions) => Promise<void>
     /** Sign message */
     signMessage(dataToSign: string, signType?: string, initial?: Web3ConnectionOptions): Promise<Signature>
     /** Verify message */
@@ -706,10 +706,10 @@ export interface Connection<
     connect(initial?: Web3ConnectionOptions): Promise<Account<ChainId>>
     /** Break connection */
     disconnect(initial?: Web3ConnectionOptions): Promise<void>
-    /** Replace request */
-    replaceRequest(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
-    /** Cancel request */
-    cancelRequest(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
+    /** Replace transaction */
+    requestTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
+    /** Cancel transaction */
+    cancelTransaction(hash: string, config: Transaction, initial?: Web3ConnectionOptions): Promise<void>
 }
 
 export interface HubIndicator {

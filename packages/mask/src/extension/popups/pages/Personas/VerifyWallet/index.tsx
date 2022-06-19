@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
@@ -44,21 +44,15 @@ const VerifyWallet = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
-    const { value: bounds } = useAsync(async () => {
-        if (!wallet.account) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
-    }, [wallet])
-    const isBound = useMemo(() => {
-        if (!bounds || !bounds.length) return false
-        const res = bounds.filter((x) => x.persona === currentPersona?.identifier.publicKeyAsHex)
-        if (res.length > 0) {
-            const final = res[0].proofs.filter((x) => {
-                return isSameAddress(x.identity, wallet?.account)
-            })
-            if (final.length > 0) return true
-        }
-        return false
-    }, [bounds])
+
+    const { value: isBound } = useAsync(async () => {
+        if (!wallet.account || !currentPersona?.identifier.publicKeyAsHex) return false
+        return NextIDProof.queryIsBound(
+            currentPersona.identifier.publicKeyAsHex,
+            NextIDPlatform.Ethereum,
+            wallet.account,
+        )
+    }, [wallet.account, currentPersona?.identifier.publicKeyAsHex])
 
     const walletName = () => {
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)

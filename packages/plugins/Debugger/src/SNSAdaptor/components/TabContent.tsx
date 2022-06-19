@@ -173,9 +173,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
 
     const onSwitchChain = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {
-            return connection?.switchChain?.({
-                chainId,
-            })
+            return connection?.switchChain?.(chainId)
         },
         [connection],
     )
