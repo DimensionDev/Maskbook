@@ -18,6 +18,7 @@ import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 import { Alchemy_EVM_API, Alchemy_FLOW_API } from './alchemy'
 import { EthereumWeb3API } from './web3'
 import { MagicEdenAPI } from './MagicEden'
+import { CoinMarketCapAPI } from './CoinMarketCap'
 
 export * from './helpers'
 export * from './types'
@@ -45,3 +46,4 @@ export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()
 export const Alchemy_EVM = new Alchemy_EVM_API()
 export const Alchemy_FLOW = new Alchemy_FLOW_API()
+export const CoinMarketCap = new CoinMarketCapAPI()

@@ -2,7 +2,6 @@ import { first, groupBy, uniq } from 'lodash-unified'
 import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import * as coinGeckoAPI from '../coingecko'
-import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
@@ -17,6 +16,7 @@ import {
 } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
+import { CoinMarketCap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -31,7 +31,7 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
                 name: x.toUpperCase(),
             }))
         case DataProvider.COIN_MARKET_CAP:
-            return Object.values(coinMarketCapAPI.getAllCurrencies()).map((x) => ({
+            return Object.values(CoinMarketCap.getCurrencies()).map((x) => ({
                 id: String(x.id),
                 name: x.symbol.toUpperCase(),
                 symbol: x.token,
@@ -56,15 +56,7 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
         case DataProvider.COIN_GECKO:
             return coinGeckoAPI.getAllCoins()
         case DataProvider.COIN_MARKET_CAP:
-            const { data: cmcCoins } = await coinMarketCapAPI.getAllCoins()
-            return cmcCoins
-                .filter((x) => x.status === 'active')
-                .map((x) => ({
-                    id: String(x.id),
-                    name: x.name,
-                    symbol: x.symbol,
-                    contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-                }))
+            return CoinMarketCap.getCoins()
         case DataProvider.UNISWAP_INFO:
             // the uniswap has got huge tokens based (more than 2.2k) since we fetch coin info dynamically
             return []
@@ -273,90 +265,7 @@ async function getCoinTrending(
                 })),
             }
         case DataProvider.COIN_MARKET_CAP:
-            const currencyName = currency.name.toUpperCase()
-            const [{ data: coinInfo, status }, { data: quotesInfo }, { data: market }] = await Promise.all([
-                coinMarketCapAPI.getCoinInfo(id),
-                coinMarketCapAPI.getQuotesInfo(id, currencyName),
-                coinMarketCapAPI.getLatestMarketPairs(id, currencyName),
-            ])
-            const trending: Trending = {
-                lastUpdated: status.timestamp,
-                platform: coinInfo.platform,
-                coin: {
-                    id,
-                    name: coinInfo.name,
-                    symbol: coinInfo.symbol,
-                    is_mirrored: isMirroredKeyword(coinInfo.symbol),
-                    announcement_urls: coinInfo.urls.announcement?.filter(Boolean),
-                    tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),
-                    message_board_urls: coinInfo.urls.message_board?.filter(Boolean),
-                    source_code_urls: coinInfo.urls.source_code?.filter(Boolean),
-                    community_urls: getCommunityLink(
-                        [
-                            ...(coinInfo.urls.twitter ?? []),
-                            ...(coinInfo.urls.reddit ?? []),
-                            ...(coinInfo.urls.chat ?? []),
-                        ].filter(Boolean),
-                    ),
-                    home_urls: coinInfo.urls.website?.filter(Boolean),
-                    blockchain_urls: [
-                        `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
-                        ...(coinInfo.urls.explorer ?? []),
-                    ].filter(Boolean),
-                    tags: coinInfo.tags ?? void 0,
-                    image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
-                    platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
-                    twitter_url: coinInfo.urls.twitter?.find((x) => x.includes('twitter')),
-                    telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
-                    market_cap_rank: quotesInfo?.[id]?.cmc_rank,
-                    description: coinInfo.description,
-                    contract_address:
-                        resolveCoinAddress(chainId, id, DataProvider.COIN_MARKET_CAP) ??
-                        coinInfo.contract_address.find(
-                            (x) => resolveChainId(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) === chainId,
-                        )?.contract_address,
-                },
-                currency,
-                dataProvider,
-                tickers: market.market_pairs
-                    .map((pair) => ({
-                        logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.exchange.id}.png`,
-                        trade_url: pair.market_url,
-                        market_name: pair.exchange.name,
-                        market_reputation: pair.market_reputation,
-                        base_name: pair.market_pair_base.exchange_symbol,
-                        target_name: pair.market_pair_quote.exchange_symbol,
-                        price:
-                            pair.market_pair_base.currency_id === market.id
-                                ? pair.quote[currencyName].price
-                                : pair.quote[currencyName].price_quote,
-                        volume: pair.quote[currencyName].volume_24h,
-                        score: String(pair.market_score),
-                        updated: new Date(pair.quote[currencyName].last_updated),
-                    }))
-                    .sort((a, z) => {
-                        if (a.market_reputation !== z.market_reputation)
-                            return z.market_reputation - a.market_reputation // reputation from high to low
-                        if (a.price.toFixed(2) !== z.price.toFixed(2)) return z.price - a.price // price from high to low
-                        return z.volume - a.volume // volume from high to low
-                    }),
-            }
-            const quotesInfo_ = quotesInfo?.[id]
-            if (quotesInfo_)
-                trending.market = {
-                    circulating_supply: quotesInfo_.total_supply ?? void 0,
-                    total_supply: quotesInfo_.total_supply ?? void 0,
-                    max_supply: quotesInfo_.max_supply ?? void 0,
-                    market_cap: quotesInfo_.quote[currencyName].market_cap,
-                    current_price: quotesInfo_.quote[currencyName].price,
-                    total_volume: quotesInfo_.quote[currencyName].volume_24h,
-                    price_change_percentage_1h: quotesInfo_.quote[currencyName].percent_change_1h,
-                    price_change_percentage_24h: quotesInfo_.quote[currencyName].percent_change_24h,
-                    price_change_percentage_1h_in_currency: quotesInfo_.quote[currencyName].percent_change_1h,
-                    price_change_percentage_24h_in_currency: quotesInfo_.quote[currencyName].percent_change_24h,
-                    price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
-                }
-            return trending
+            return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
             const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(chainId, id)
             return {
@@ -438,15 +347,15 @@ export async function getPriceStats(
             const endDate = new Date()
             const startDate = new Date()
             startDate.setDate(startDate.getDate() - days)
-            const stats = await coinMarketCapAPI.getHistorical(
+            const stats = await CoinMarketCap.getHistorical(
                 id,
                 currency.name.toUpperCase(),
                 days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
                 endDate,
                 interval,
             )
-            if (stats.data.is_active === 0) return []
-            return Object.entries(stats.data).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
+            if (stats.is_active === 0) return []
+            return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
         case DataProvider.UNISWAP_INFO:
             const endTime = new Date()
             const startTime = new Date()
