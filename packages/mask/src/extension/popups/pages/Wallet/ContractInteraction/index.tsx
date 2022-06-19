@@ -23,7 +23,7 @@ import {
     useNativeTokenPrice,
     useNetworkType,
     useReverseAddress,
-    useSchemaType,
+    useTokenSchema,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -236,7 +236,7 @@ const ContractInteraction = memo(() => {
         }
     }, [request, t, NATIVE_TOKEN_ADDRESS])
 
-    const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
+    const { value: contractType } = useTokenSchema(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
