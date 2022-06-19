@@ -25,11 +25,11 @@ const useStyles = makeStyles()((theme, props) => ({
     },
 }))
 
-interface PlacerholderProps {
+interface PlaceholderProps {
     retry?: () => void
 }
 
-export function Placeholder(props: PlacerholderProps) {
+export function Placeholder(props: PlaceholderProps) {
     const { retry } = props
     const { classes } = useStyles()
     const { t } = useI18N()

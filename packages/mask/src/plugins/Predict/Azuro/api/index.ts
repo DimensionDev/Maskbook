@@ -20,7 +20,6 @@ export async function fetchEvents(chainId: ChainId) {
             canceled: false,
         },
     })
-    console.log('events: ', events)
 
     return events
 }

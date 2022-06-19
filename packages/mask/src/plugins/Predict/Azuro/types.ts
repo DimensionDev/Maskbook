@@ -38,9 +38,24 @@ interface Participant {
     image: string
 }
 
-export interface ContractAdresses {
+export interface ContractAddresses {
     core: string
     lp: string
     bet: string
     token: string
+}
+
+export enum OutcomesWithParam {
+    Nine = 9,
+    Ten = 10,
+    Eleven = 11,
+    Twelve = 12,
+    Thirteen = 13,
+    Fourteen = 14,
+}
+
+export enum ConditionStatus {
+    CREATED = 0,
+    RESOLVED = 1,
+    CANCELED = 2,
 }

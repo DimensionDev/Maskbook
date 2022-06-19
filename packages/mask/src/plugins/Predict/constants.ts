@@ -1,11 +1,11 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { ContractAdresses } from './Azuro/types'
+import type { ContractAddresses } from './Azuro/types'
 
 export const PREDICT_PLUGIN_NAME = 'Predict'
 
 export const DEFAULT_LABEL = 'Default'
 
-export const contractAddresses: { [key in ChainId]?: ContractAdresses } = {
+export const contractAddresses: { [key in ChainId]?: ContractAddresses } = {
     [ChainId.Sokol]: {
         core: '0xEf182ba80c2DA39710Fe0834b5Ac2E8e68820704',
         lp: '0x03792012947c6AC35C3B65eAd42E9edd9B7eD6c4',

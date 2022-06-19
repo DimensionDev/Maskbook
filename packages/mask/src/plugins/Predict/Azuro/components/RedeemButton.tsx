@@ -2,11 +2,12 @@ import { Grid } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import type { UserBet } from '../types'
+import { ConditionStatus, UserBet } from '../types'
 import { useAsyncFn } from 'react-use'
 import { useAzuroContract } from '../hooks/useAzuroContract'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     redeemButton: {
@@ -25,20 +26,33 @@ export function RedeemButton(props: RedeemButtonProps) {
     const { classes } = useStyles()
     const azuroContract = useAzuroContract()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const isResultPositive = bet.result > 0
 
-    const [{ loading, error }, doFetch] = useAsyncFn(async () => {
+    const [{ loading }, doFetch] = useAsyncFn(async () => {
+        if (!azuroContract) return
+
         const config = {
             from: account,
-            gas: await azuroContract?.methods.withdrawPayout(bet.nftId).estimateGas({ from: account }),
         }
 
-        const tx = await azuroContract?.methods.withdrawPayout(bet.nftId).send(config)
-        const txHash = tx?.transactionHash
+        const tx = await encodeContractTransaction(
+            azuroContract,
+            azuroContract.methods.withdrawPayoutNative(bet.nftId),
+            config,
+        )
+
+        const hash = await connection.sendTransaction(tx)
+        if (!hash) return
 
         retry()
-    }, [bet.nftId, retry])
 
-    const isRedeemable = (bet.result > 0 && bet.gameInfo.state === 1) || bet.gameInfo.state === 2
+        return hash
+    }, [bet.nftId, retry, connection, azuroContract, account])
+
+    const isRedeemable =
+        (isResultPositive && bet.gameInfo.state === ConditionStatus.RESOLVED) ||
+        bet.gameInfo.state === ConditionStatus.CANCELED
 
     return (
         <Grid textAlign="center">

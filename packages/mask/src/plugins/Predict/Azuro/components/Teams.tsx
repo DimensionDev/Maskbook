@@ -51,7 +51,7 @@ export function Teams(props: TeamsProps) {
                 <img
                     className={classes.emblem}
                     src={new URL(participants[1].image, import.meta.url).toString()}
-                    alt="team home"
+                    alt="away home"
                 />
                 <Typography className={classes.name}>{participants[1].name}</Typography>
             </Grid>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { FolderTabPanel, FolderTabs, makeStyles } from '@masknet/theme'
 import { Card, CardContent, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
@@ -42,17 +42,7 @@ export function AzuroDialog(props: AzuroDialogProps) {
     const { classes } = useStyles()
     const isDashboard = isDashboardPage()
     const chainId = useChainId()
-    const [market, setMarket] = useState('')
-    const [sport, setSport] = useState('')
-    const [league, setLeague] = useState('')
-    const [sortType, setSortType] = useState('')
-    const [searchTerm, setSearchTerm] = useState('')
     const { RPC_URLS } = useRPCConstants(chainId)
-
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const term = event.target.value
-        setSearchTerm(term)
-    }
 
     useEffect(() => {
         setSelectedChainId(chainId)

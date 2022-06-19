@@ -5,8 +5,11 @@ import { outcomeRegistry, param } from '../helpers'
 import type { AzuroGame } from '@azuro-protocol/sdk'
 import { RedeemButton } from './RedeemButton'
 
-import type { UserBet } from '../types'
+import { OutcomesWithParam, UserBet, ConditionStatus } from '../types'
 import { Live } from './Live'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { useBetToken } from '../hooks/useBetToken'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,21 +41,26 @@ export function BetInfos(props: BetInfosProps) {
     const { t } = useI18N()
     const { bet, retry } = props
     const { classes } = useStyles()
+    const outcomesWithParams = Object.values(OutcomesWithParam)
+    const isPositiveResult = bet.result > 0
+    const isNegativeResult = bet.result < 0
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const betToken = useBetToken(chainId)
 
     return (
         <Grid container justifyContent="center" direction="column" className={classes.container} wrap="nowrap">
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t('plugin_azuro_status')} </Typography>
                 <Typography>
-                    {bet.gameInfo.state === 0 ? (
+                    {bet.gameInfo.state === ConditionStatus.CREATED ? (
                         bet.gameInfo.startsAt > Date.now() ? (
                             t('plugin_azuro_pending')
                         ) : (
                             <Live />
                         )
-                    ) : bet.gameInfo.state === 1 ? (
+                    ) : bet.gameInfo.state === ConditionStatus.RESOLVED ? (
                         t('plugin_azuro_finished')
-                    ) : bet.gameInfo.state === 2 ? (
+                    ) : bet.gameInfo.state === ConditionStatus.CANCELED ? (
                         t('plugin_azuro_canceled')
                     ) : null}
                 </Typography>
@@ -61,14 +69,7 @@ export function BetInfos(props: BetInfosProps) {
                 <Typography className={classes.label}>{t('plugin_azuro_pick')} </Typography>
                 <Typography>
                     {outcomeRegistry[bet.outcomeRegistryId](bet.gameInfo as AzuroGame)}{' '}
-                    {bet.outcomeRegistryId === 9 ||
-                    bet.outcomeRegistryId === 10 ||
-                    bet.outcomeRegistryId === 11 ||
-                    bet.outcomeRegistryId === 12 ||
-                    bet.outcomeRegistryId === 13 ||
-                    bet.outcomeRegistryId === 14
-                        ? param[bet.paramId]
-                        : null}
+                    {outcomesWithParams.includes(bet.outcomeRegistryId) ? param[bet.paramId] : null}
                 </Typography>
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>
@@ -77,16 +78,18 @@ export function BetInfos(props: BetInfosProps) {
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t('plugin_azuro_amount')} </Typography>
-                <Typography title={bet.amount.toString()}>{bet.amount.toFixed(6)} USDT </Typography>
+                <Typography title={bet.amount.toString()}>
+                    {bet.amount.toFixed(6)} {betToken?.name}
+                </Typography>
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t('plugin_azuro_result')} </Typography>
                 <Typography>
-                    {bet.result > 0 && bet.gameInfo.state === 1 ? (
+                    {isPositiveResult && bet.gameInfo.state === ConditionStatus.RESOLVED ? (
                         <span className={classes.won}>+{bet.result}</span>
-                    ) : bet.result < 0 && bet.gameInfo.state === 1 ? (
+                    ) : isNegativeResult && bet.gameInfo.state === ConditionStatus.RESOLVED ? (
                         <span className={classes.lost}>{bet.result}</span>
-                    ) : bet.gameInfo.state === 2 ? (
+                    ) : bet.gameInfo.state === ConditionStatus.CANCELED ? (
                         <Typography>{bet.result}</Typography>
                     ) : (
                         <Typography>&#8212;</Typography>

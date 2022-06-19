@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { UserBet, UserFilter } from '../types'
+import { ConditionStatus, UserBet, UserFilter } from '../types'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { fetchMyBets } from '../api'
@@ -14,9 +14,10 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
 
         return userBets.filter((userBet) =>
             filter === UserFilter.Active.valueOf()
-                ? userBet.gameInfo.state === 0
+                ? userBet.gameInfo.state === ConditionStatus.CREATED
                 : filter === UserFilter.Ended.valueOf()
-                ? userBet.gameInfo.state === 1 || userBet.gameInfo.state === 2
+                ? userBet.gameInfo.state === ConditionStatus.RESOLVED ||
+                  userBet.gameInfo.state === ConditionStatus.CANCELED
                 : true,
         )
     }, [filter, account, fetchMyBets])

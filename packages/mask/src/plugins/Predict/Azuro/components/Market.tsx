@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { marketRegistry } from '../helpers'
@@ -21,11 +21,9 @@ export function Market(props: MarketProps) {
     const { classes } = useStyles()
 
     return (
-        <Grid>
-            <Typography className={classes.label}>
-                {t('plugin_azuro_market')}:&nbsp;
-                <span className={classes.title}>{marketRegistry[marketRegistryId]}</span>
-            </Typography>
-        </Grid>
+        <Typography className={classes.label}>
+            {t('plugin_azuro_market')}:&nbsp;
+            <span className={classes.title}>{marketRegistry[marketRegistryId]}</span>
+        </Typography>
     )
 }

@@ -1,22 +1,20 @@
-import { InjectedDialog, LoadingAnimation, TokenAmountPanel } from '@masknet/shared'
+import { InjectedDialog, LoadingAnimation, TokenAmountPanel, useOpenShareTxDialog } from '@masknet/shared'
 import { Card, CardContent, DialogContent, Typography, Grid, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAzuroConstants, TransactionStateType, ChainId } from '@masknet/web3-shared-evm'
+import { useAzuroConstants, ChainId } from '@masknet/web3-shared-evm'
 import { useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { AzuroGame, RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
 import type { Odds } from './types'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useBoolean } from 'react-use'
 import { marketRegistry, outcomeRegistry } from './helpers'
 import { usePlaceBetCallback, useMinRate, useActualRate } from './hooks'
-import { ConfirmModal } from '../../Tips/components/common/ConfirmModal'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { SuccessIcon } from '@masknet/icons'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { contractAddresses } from '../constants'
@@ -70,21 +68,21 @@ export interface PlaceBetDialogProps {
 
 export function PlaceBetDialog(props: PlaceBetDialogProps) {
     const { open, onClose, game, condition } = props
-    const { t } = useI18N()
+    const { t: tr } = useBaseI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [amount, setAmount] = useState('')
-    const [slippage, setSlippage] = useState<number>(2)
-    const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
+    const [slippage, setSlippage] = useState(2)
     const chainId = useChainId()
     const { AZURO_LP } = useAzuroConstants()
     const {
         value: token,
         error,
         loading,
-    } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, contractAddresses[chainId as ChainId]?.token)
-    console.log('amount: --------------------- ', amount)
-    console.log('token: --------------------- ', token)
-
+    } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        chainId === ChainId.Sokol ? contractAddresses[chainId as ChainId]?.token : '',
+    )
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
     const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
 
@@ -93,7 +91,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     const { minRate, loading: minRateLoading } = useMinRate(slippage, actualRate ?? 0)
     const rawMinRate = rightShift(minRate, RATE_DECIMALS)
 
-    const [transactionState, transactionCallback, resetTransactionCallback] = usePlaceBetCallback(
+    const [{ loading: isPlacing }, placeBetCallback] = usePlaceBetCallback(
         condition.conditionId,
         rawAmount,
         condition.outcomeId,
@@ -102,44 +100,47 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     )
 
     const validationMessage = useMemo(() => {
-        if (isZero(amount) || !amount) return t('plugin_azuro_enter_an_amount')
+        if (isZero(amount) || !amount) return t.plugin_azuro_enter_an_amount()
         if (isGreaterThan(rightShift(amount ?? 0, token?.decimals ?? 0), balance ?? 0))
-            return t('plugin_azuro_insufficient_amount')
+            return t.plugin_azuro_insufficient_amount()
 
         return ''
-    }, [amount, balance, token?.decimals])
+    }, [amount, balance, token?.decimals, t])
 
     const handleSlippage = (event: React.MouseEvent<HTMLElement>, newSlippage: number) => setSlippage(newSlippage)
     const event = `${game.participants[0].name} vs ${game.participants[1].name}`
     const outcome = outcomeRegistry[condition.outcomeRegistryId](game)
-    const shareText = t(
-        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-            ? 'plugin_azuro_share'
-            : 'plugin_azuro_share_no_official_account',
-        {
-            account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-        },
-    )
-    const handleConfirm = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(shareText)
-        openConfirmModal(false)
-        onClose?.()
-    }, [shareText, onClose])
-    const successMessage = <Typography>{t('plugin_azuro_success_message')}</Typography>
+    const shareText = useMemo(() => {
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        return isOnTwitter || isOnFacebook
+            ? t.plugin_azuro_share({ account: isOnTwitter ? tr('twitter_account') : tr('facebook_account') })
+            : t.plugin_azuro_share_no_official_account()
+    }, [activatedSocialNetworkUI])
 
-    useEffect(() => {
-        if (transactionState.type !== TransactionStateType.CONFIRMED) return
-        openConfirmModal(true)
-    }, [transactionState])
+    const successMessage = <Typography>{t.plugin_azuro_success_message()}</Typography>
+
+    const openShareTxDialog = useOpenShareTxDialog()
+    const placeBet = useCallback(async () => {
+        const hash = await placeBetCallback()
+
+        if (typeof hash !== 'string') return
+        await openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
+    }, [placeBetCallback, openShareTxDialog])
 
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>
-                <InjectedDialog open={open} title={t('plugin_azuro_place_bet')} onClose={onClose}>
+                <InjectedDialog open={open} title={t.plugin_azuro_place_bet()} onClose={onClose}>
                     <DialogContent>
                         <div className={classes.container}>
                             <TokenAmountPanel
-                                label={t('plugin_azuro_amount')}
+                                label={t.plugin_azuro_amount()}
                                 amount={amount}
                                 balance={balance ?? '0'}
                                 token={token}
@@ -198,37 +199,36 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 </Grid>
                             </Grid>
                             <WalletConnectedBoundary>
-                                <EthereumERC20TokenApprovedBoundary
-                                    amount={rightShift(amount || '0', token?.decimals).toFixed()}
-                                    spender={AZURO_LP}
-                                    token={token}>
+                                {chainId === ChainId.Sokol ? (
+                                    <EthereumERC20TokenApprovedBoundary
+                                        amount={rightShift(amount || '0', token?.decimals).toFixed()}
+                                        spender={AZURO_LP}
+                                        token={token}>
+                                        <ActionButton
+                                            className={classes.actionButton}
+                                            size="large"
+                                            variant="contained"
+                                            disabled={!!validationMessage}
+                                            onClick={placeBet}
+                                            fullWidth>
+                                            {validationMessage || t.plugin_azuro_place_bet()}
+                                        </ActionButton>
+                                    </EthereumERC20TokenApprovedBoundary>
+                                ) : (
                                     <ActionButton
                                         className={classes.actionButton}
                                         size="large"
                                         variant="contained"
-                                        disabled={!!validationMessage}
-                                        onClick={transactionCallback}
+                                        disabled={isPlacing || !!validationMessage}
+                                        onClick={placeBet}
                                         fullWidth>
-                                        {validationMessage || t('plugin_azuro_place_bet')}
+                                        {isPlacing ? tr('loading') : validationMessage || t.plugin_azuro_place_bet()}
                                     </ActionButton>
-                                </EthereumERC20TokenApprovedBoundary>
+                                )}
                             </WalletConnectedBoundary>
                         </div>
                     </DialogContent>
                 </InjectedDialog>
-                <ConfirmModal
-                    title={t('plugin_azuro_bet_placed')}
-                    open={confirmModalIsOpen}
-                    onClose={() => {
-                        openConfirmModal(false)
-                        resetTransactionCallback()
-                        onClose?.()
-                    }}
-                    icon={<SuccessIcon style={{ height: 64, width: 64 }} />}
-                    message={successMessage}
-                    confirmText={t('plugin_azuro_share_button')}
-                    onConfirm={handleConfirm}
-                />
             </CardContent>
         </Card>
     )

@@ -8,7 +8,6 @@ import {
     Select,
     SelectChangeEvent,
     TextField,
-    Typography,
 } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../../utils'
@@ -152,15 +151,15 @@ export function EventsView(): JSX.Element {
         </Select>
     ))
 
-    if (error) {
-        return (
-            <div className={classes.contentEmpty}>
-                <Typography variant="body2" textAlign="center">
-                    {t('go_wrong')}
-                </Typography>
-            </div>
-        )
-    }
+    // if (error) {
+    //     return (
+    //         <div className={classes.contentEmpty}>
+    //             <Typography variant="body2" textAlign="center">
+    //                 {t('go_wrong')}
+    //             </Typography>
+    //         </div>
+    //     )
+    // }
 
     return (
         <div className={classes.container}>

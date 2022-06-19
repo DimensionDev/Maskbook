@@ -7,8 +7,9 @@ import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useAzuroContract() {
-    const { AZURO_LP: AZURO_LP_ADDRESS } = useAzuroConstants()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { AZURO_LP: AZURO_LP_ADDRESS } = useAzuroConstants(chainId)
+
     const azuroContract = useContract<Azuro>(chainId, AZURO_LP_ADDRESS, AzuroContractABI as AbiItem[])
 
     return azuroContract
