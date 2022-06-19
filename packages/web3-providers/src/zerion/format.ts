@@ -64,7 +64,8 @@ export function formatAssets(
     return data.map(({ asset, quantity }) => {
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE'].includes(symbol)
+        const isNativeToken = (symbol: string) =>
+            ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTAR'].includes(symbol)
         const address = isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '' : asset.asset_code
 
         return {
