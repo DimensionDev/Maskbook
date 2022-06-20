@@ -20,5 +20,5 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
                   userBet.gameInfo.state === ConditionStatus.CANCELED
                 : true,
         )
-    }, [filter, account, fetchMyBets])
+    }, [filter, account])
 }
