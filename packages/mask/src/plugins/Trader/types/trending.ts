@@ -22,7 +22,7 @@ export interface Platform {
 }
 
 export type CommunityType = 'twitter' | 'facebook' | 'telegram' | 'reddit' | 'other' | 'discord'
-export type CommunityUrls = { type: Partial<CommunityType>; link: string }[]
+export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
 
 export interface Coin {
     id: string
