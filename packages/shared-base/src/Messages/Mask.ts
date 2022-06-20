@@ -105,6 +105,7 @@ export interface NFTAvatarEvent {
     schema?: number
     chainId?: number
     pluginId?: string
+    flag?: number
 }
 
 /** This is a subset of browser.permissions.Permission */

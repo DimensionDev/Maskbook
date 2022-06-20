@@ -85,6 +85,7 @@ export function AddressNames(props: AddressNamesProps) {
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const [selectedWallet, setSelectedWallet] = useState(account || wallets?.[0]?.identity || '')
     const chainId = useChainId(currentPluginId)
+
     const onClick = useCallback((address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
         onChange(address, pluginId, chainId)
         setSelectedWallet(address)
@@ -133,9 +134,7 @@ export function AddressNames(props: AddressNamesProps) {
             }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <>
-                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
-                    </>
+                    <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}

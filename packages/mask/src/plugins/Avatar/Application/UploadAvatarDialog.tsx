@@ -10,10 +10,9 @@ import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
 import { useSubscription } from 'use-subscription'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { AvatarInfo, useSave } from '../hooks/save/useSave'
-import type { AllChainsNonFungibleToken } from '../types'
+import { SelectTokenInfo, SET_NFT_FLAG } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -30,12 +29,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface UploadAvatarDialogProps {
-    account?: string
     isBindAccount?: boolean
-    image?: string | File
-    token?: AllChainsNonFungibleToken
     proof?: BindingProof
-    pluginId?: NetworkPluginID
+    tokenInfo?: SelectTokenInfo
     onBack: () => void
     onClose: () => void
 }
@@ -54,9 +50,14 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
     }
 }
 
+async function uploadBackgroundImage(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
+    // test
+    return {} as AvatarInfo
+}
+
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
-    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
+    const { onClose, onBack, proof, isBindAccount = false, tokenInfo } = props
+    const currentPluginId = useCurrentWeb3NetworkPluginID(tokenInfo?.pluginId)
     const { classes } = useStyles()
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -66,25 +67,37 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
 
-    const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
+    const [, saveAvatar] = useSave(currentPluginId, (tokenInfo?.token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentConnectedPersona?.identifier || !proof) return
+        if (!editor || !tokenInfo?.account || !tokenInfo?.token || !currentConnectedPersona?.identifier || !proof)
+            return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
-            const avatarData = await uploadAvatar(blob, proof.identity)
-            if (!avatarData) {
-                setDisabled(false)
-                return
+
+            let avatarData: AvatarInfo | undefined
+            if (tokenInfo.flag === SET_NFT_FLAG.NFT_PFP) {
+                avatarData = await uploadAvatar(blob, proof.identity)
+                if (!avatarData) {
+                    setDisabled(false)
+                    return
+                }
+            } else {
+                avatarData = await uploadBackgroundImage(blob, proof.identity)
+                if (!avatarData) {
+                    setDisabled(false)
+                    return
+                }
             }
             const response = await saveAvatar(
-                account,
+                tokenInfo.account,
                 isBindAccount,
-                token,
+                tokenInfo.token,
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
+                tokenInfo.flag,
             )
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
@@ -96,16 +109,16 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         }, 'image/png')
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
+    }, [tokenInfo, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
 
-    if (!account || !image || !token || !proof) return null
+    if (!tokenInfo?.account || !tokenInfo?.image || !tokenInfo?.token || !proof) return null
 
     return (
         <>
             <DialogContent sx={{ overFlow: 'hidden' }}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
-                    image={image!}
+                    image={tokenInfo.image}
                     style={{ width: '100%', height: '100%' }}
                     scale={scale ?? 1}
                     rotate={0}

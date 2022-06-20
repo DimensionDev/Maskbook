@@ -29,5 +29,9 @@
     "share_dialog_view_on_explorer": "View on Explorer",
     "share_dialog_transaction_confirmed": "Your transaction was confirmed!",
     "load_failed": "Load failed",
-    "load_retry": "Reload"
+    "load_retry": "Reload",
+    "change": "Change",
+    "connect_your_wallet": "Connect your wallet",
+    "wallet_settings": "Wallet settings",
+    "pending": "pending..."
 }

@@ -28,5 +28,7 @@
     "saving": "Saving...",
     "download_image_error": "Download image error",
     "connect_wallet": "Please connect your wallet!",
+    "set_nft_pfp": "NFT PFP",
+    "set_nft_background": "NFT Background",
     "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future."
 }

@@ -56,6 +56,7 @@ export function NFTAvatarSettingDialog() {
                     },
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.INSTAGRAM,
+                    info.flag,
                     pluginId,
                 )
 

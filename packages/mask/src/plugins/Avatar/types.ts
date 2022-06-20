@@ -28,6 +28,7 @@ export interface SelectTokenInfo {
     token: AllChainsNonFungibleToken
     image: string
     pluginId: NetworkPluginID
+    flag: SET_NFT_FLAG
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {
@@ -37,7 +38,8 @@ export interface NextIDAvatarMeta extends AvatarMetaDB {
 
 export interface NFTRSSNode {
     signature: string
-    nft: AvatarMetaDB
+    nft?: AvatarMetaDB
+    background?: AvatarMetaDB
 }
 
 export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
@@ -51,3 +53,10 @@ export interface NFTInfo {
     slug: string
     permalink: string
 }
+
+export enum SET_NFT_FLAG {
+    NFT_PFP = 0,
+    NFT_BACKGROUND = 1,
+}
+
+export type AllNextIDAvatarMeta = NextIDAvatarMeta & { background?: NextIDAvatarMeta }

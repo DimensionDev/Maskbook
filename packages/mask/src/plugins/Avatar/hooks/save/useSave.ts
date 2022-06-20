@@ -3,7 +3,7 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types'
+import type { AllChainsNonFungibleToken, NextIDAvatarMeta, SET_NFT_FLAG } from '../../types'
 import { useSaveKV } from './useSaveKV'
 import { useSaveToNextID } from './useSaveToNextID'
 import { useSaveToRSS3 } from './useSaveToRSS3'
@@ -23,6 +23,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             data: AvatarInfo,
             persona: ECKeyIdentifier,
             proof: BindingProof,
+            flag: SET_NFT_FLAG,
         ) => {
             if (!token.contract?.address || !token.tokenId) return
             const info: NextIDAvatarMeta = {
@@ -40,12 +41,12 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             switch (pluginId) {
                 case NetworkPluginID.PLUGIN_EVM: {
                     if (isBindAccount) {
-                        return saveToNextID(info, account, persona, proof)
+                        return saveToNextID(info, account, persona, proof, flag)
                     }
-                    return saveToRSS3(info, account)
+                    return saveToRSS3(info, account, flag)
                 }
                 default:
-                    return saveToKV(info, account, persona, proof)
+                    return saveToKV(info, account, persona, proof, flag)
             }
         },
         [saveToNextID, saveToRSS3, pluginId],

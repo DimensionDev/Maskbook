@@ -4,7 +4,13 @@ import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, EnhanceableSite, i18NextInstance, createSubscriptionFromValueRef } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    EnhanceableSite,
+    i18NextInstance,
+    createSubscriptionFromValueRef,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
@@ -12,7 +18,7 @@ import { createPluginHost, createSharedContext } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
+import { sharedUINetworkIdentifier, sharedUIComponentOverwrite, sharedNextIDPlatform } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -44,6 +50,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     if (ui.customization.sharedComponentOverwrite) {
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
+    sharedNextIDPlatform.value = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
 
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })

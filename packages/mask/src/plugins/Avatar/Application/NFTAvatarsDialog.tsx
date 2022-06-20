@@ -86,10 +86,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     <UploadAvatarDialog
                         proof={proof}
                         isBindAccount={wallets?.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))}
-                        account={selectedTokenInfo?.account}
-                        image={selectedTokenInfo?.image}
-                        token={selectedTokenInfo?.token}
-                        pluginId={selectedTokenInfo?.pluginId}
+                        tokenInfo={selectedTokenInfo}
                         onBack={onBack}
                         onClose={onClose}
                     />
