@@ -581,6 +581,12 @@ export namespace TokenAPI {
         getTokenInfo(tokenName: string): Promise<TokenInfo | undefined>
     }
 }
+
+export enum TrendingCoinType {
+    Fungible = 1,
+    NonFungible = 2,
+}
+
 export namespace TrendingAPI {
     export interface Settings {
         currency: Currency
@@ -612,6 +618,7 @@ export namespace TrendingAPI {
         chainId?: ChainId
         name: string
         symbol: string
+        type: TrendingCoinType
         decimals?: number
         is_mirrored?: boolean
         platform_url?: string

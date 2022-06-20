@@ -25,6 +25,7 @@ import { setStorage } from '../../storage'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { Box } from '@mui/system'
 import { TabContext } from '@mui/lab'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -111,7 +112,8 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region multiple coins share the same symbol
-    const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
+    const { value: coins = EMPTY_LIST } = useAvailableCoins(tagType, name, dataProvider)
+    console.log('coins', coins)
     // #endregion
 
     // #region merge trending
@@ -137,7 +139,7 @@ export function TraderView(props: TraderViewProps) {
     // #region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
     const {
-        value: stats = [],
+        value: stats = EMPTY_LIST,
         loading: loadingStats,
         retry: retryStats,
     } = usePriceStats({
@@ -245,7 +247,7 @@ export function TraderView(props: TraderViewProps) {
         )
     // #endregion
 
-    const { coin, market, tickers } = trending
+    const { coin, tickers } = trending
 
     return (
         <TrendingViewDeck

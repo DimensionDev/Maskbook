@@ -18,6 +18,7 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { PluginMessages } from '../../../../API'
+import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -93,6 +94,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                         id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
+                        type: TrendingCoinType.Fungible,
                         contract_address: token.address,
                         decimals: token.decimals,
                     },

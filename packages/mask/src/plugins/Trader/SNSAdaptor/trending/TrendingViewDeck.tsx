@@ -15,7 +15,7 @@ import { PluginTransakMessages } from '../../../Transak/messages'
 import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { getCurrentPreferredCoinIdSettings } from '../../settings'
-import { CoinMenu, CoinMenuOption } from './CoinMenu'
+import { CoinMenu } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -27,6 +27,7 @@ import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
 import type { TrendingAPI } from '@masknet/web3-providers'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -121,14 +122,13 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
         coins,
-        currency,
         trending,
         dataProvider,
         stats,
         children,
         showDataProviderIcon = false,
         TrendingCardProps,
-        dataProviders = [],
+        dataProviders = EMPTY_LIST,
     } = props
     const { coin, market } = trending
 
@@ -137,7 +137,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     // #region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -170,12 +170,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
-        (option: CoinMenuOption) => {
+        (value: string) => {
             const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
-            settings[option.coin.symbol.toLowerCase()] = option.value
+            const coin = coins.find((x) => x.id === value)
+            if (!coin) return
+            settings[coin.symbol.toLowerCase()] = value
             getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
         },
-        [dataProvider, currentPreferredCoinIdSettings],
+        [dataProvider, coins, currentPreferredCoinIdSettings],
     )
     // #endregion
 
@@ -228,7 +230,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             coin,
                                             value: coin.id,
                                         }))}
-                                        selectedIndex={coins.findIndex((x) => x.id === coin.id)}
+                                        value={coins.find((x) => x.id === coin.id)?.id}
                                         onChange={onCoinMenuChange}>
                                         <IconButton sx={{ padding: 0 }} size="small">
                                             <ArrowDropIcon />
