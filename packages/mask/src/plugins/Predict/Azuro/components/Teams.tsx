@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../locales'
 import { VersusIcon } from '../icons/VersusIcon'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,7 +30,7 @@ interface TeamsProps {
 }
 
 export function Teams(props: TeamsProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { participants } = props
     const { classes } = useStyles()
 
@@ -40,7 +40,7 @@ export function Teams(props: TeamsProps) {
                 <img
                     className={classes.emblem}
                     src={new URL(participants[0].image, import.meta.url).toString()}
-                    alt="team home"
+                    alt={t.plugin_azuro_home_team()}
                 />
                 <Typography className={classes.name}>{participants[0].name}</Typography>
             </Grid>
@@ -51,7 +51,7 @@ export function Teams(props: TeamsProps) {
                 <img
                     className={classes.emblem}
                     src={new URL(participants[1].image, import.meta.url).toString()}
-                    alt="away home"
+                    alt={t.plugin_azuro_away_team()}
                 />
                 <Typography className={classes.name}>{participants[1].name}</Typography>
             </Grid>

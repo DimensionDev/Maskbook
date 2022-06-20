@@ -184,6 +184,7 @@
     "hide": "Hide",
     "reset": "Reset",
     "editor": "Editor",
+    "refresh": "Refresh",
     "retry": "Retry",
     "go_wrong": "Something went wrong.",
     "search_box_placeholder": "Type here to search",

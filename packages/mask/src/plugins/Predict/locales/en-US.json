@@ -16,6 +16,7 @@
     "plugin_azuro_canceled": "Canceled",
     "plugin_azuro_redeemed": "Redeemed",
     "plugin_azuro_redeem": "Redeem",
+    "plugin_azuro_search_events": "Search events...",
     "plugin_azuro_place_bet": "Place bet",
     "plugin_azuro_enter_an_amount": "Enter an amount",
     "plugin_azuro_insufficient_amount": "Insufficient balance",
@@ -27,5 +28,8 @@
     "plugin_azuro_result": "Result",
     "plugin_azuro_amount": "Amount",
     "plugin_azuro_odd": "Odd",
-    "plugin_azuro_pick": "Pick"
+    "plugin_azuro_pick": "Pick",
+    "plugin_azuro_versus": "vs",
+    "plugin_azuro_home_team": "Home team",
+    "plugin_azuro_away_team": "Away team"
 }

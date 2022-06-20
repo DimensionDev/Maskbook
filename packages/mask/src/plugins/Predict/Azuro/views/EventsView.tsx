@@ -10,12 +10,13 @@ import {
     TextField,
 } from '@mui/material'
 import { useState } from 'react'
-import { useI18N } from '../../../../utils'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useFetchGames, useLeagueList, useMarketList } from '../hooks'
 import { Events } from '../components/Events'
 import { Sport } from '../types'
 import { DEFAULT_LABEL } from '../../constants'
+import { useI18N } from '../../locales'
+import { useI18N as useBaseI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,7 +65,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function EventsView(): JSX.Element {
-    const { t } = useI18N()
+    const { t: tr } = useBaseI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [searchTerm, setSearchTerm] = useState<string>('')
 
@@ -90,7 +92,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={market.toString()}
-            label={t('plugin_azuro_market')}
+            label={t.plugin_azuro_market()}
             onChange={(event: SelectChangeEvent) => setMarket(Number(event.target.value))}>
             {markets?.map((market) => (
                 <MenuItem key={market.id} value={market.id}>
@@ -108,7 +110,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={league}
-            label={t('plugin_azuro_league')}
+            label={t.plugin_azuro_league()}
             onChange={(event: SelectChangeEvent) => setLeague(event.target.value)}>
             <MenuItem key={DEFAULT_LABEL} value={DEFAULT_LABEL}>
                 {DEFAULT_LABEL}
@@ -141,7 +143,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={sort}
-            label={t('plugin_azuro_sort')}
+            label={t.plugin_azuro_sort()}
             onChange={(event: SelectChangeEvent) => setSort(event.target.value)}>
             {sorts?.map((sort) => (
                 <MenuItem key={sort} value={sort}>
@@ -151,36 +153,26 @@ export function EventsView(): JSX.Element {
         </Select>
     ))
 
-    // if (error) {
-    //     return (
-    //         <div className={classes.contentEmpty}>
-    //             <Typography variant="body2" textAlign="center">
-    //                 {t('go_wrong')}
-    //             </Typography>
-    //         </div>
-    //     )
-    // }
-
     return (
         <div className={classes.container}>
             <Grid container direction="row" justifyContent="space-between" wrap="nowrap" className={classes.filters}>
                 <TextField
                     className={classes.searchField}
                     size="small"
-                    placeholder="Search events..."
+                    placeholder={t.plugin_azuro_search_events()}
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="market">{t('plugin_azuro_market')}</InputLabel>
+                    <InputLabel id="market">{t.plugin_azuro_market()}</InputLabel>
                     {marketSelect}
                 </FormControl>
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="league">{t('plugin_azuro_league')}</InputLabel>
+                    <InputLabel id="league">{t.plugin_azuro_league()}</InputLabel>
                     {leagueSelect}
                 </FormControl>
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="sort">{t('plugin_azuro_sort')}</InputLabel>
+                    <InputLabel id="sort">{t.plugin_azuro_sort()}</InputLabel>
                     {sortSelect}
                 </FormControl>
             </Grid>
@@ -194,7 +186,7 @@ export function EventsView(): JSX.Element {
                     size="small"
                     className={classes.retryButton}
                     onClick={() => retry()}>
-                    Refresh
+                    {tr('refresh')}
                 </Button>
             ) : null}
         </div>
