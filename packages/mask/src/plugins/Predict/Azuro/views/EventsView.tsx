@@ -177,7 +177,7 @@ export function EventsView(): JSX.Element {
                 </FormControl>
             </Grid>
             <div>
-                <Events games={value?.gamesWithFilters} retry={retry} loading={loading} />
+                <Events games={value?.gamesFiltered} retry={retry} loading={loading} />
             </div>
             {value?.games && value.games.length > 0 ? (
                 <Button

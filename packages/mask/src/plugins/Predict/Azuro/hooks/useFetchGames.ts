@@ -9,24 +9,21 @@ export function useFetchGames(searchTerm: string, market: number, league: string
     return useAsyncRetry(async () => {
         const games = await fetchEvents(chainId as ChainId)
 
-        let gamesWithFilters = games.filter((game) =>
-            game.participants.some((participant) => participant.name.toLowerCase().includes(searchTerm.toLowerCase())),
-        )
+        const gamesFiltered = games.filter((game) => {
+            if (market !== 0) return game.marketRegistryId === market
+            if (league !== 'Default') return game.league === league
 
-        if (market !== 0) {
-            gamesWithFilters = gamesWithFilters.filter((game) => game.marketRegistryId === market)
-        }
-
-        if (league !== 'Default') {
-            gamesWithFilters = gamesWithFilters.filter((game) => game.league === league)
-        }
+            return game.participants.some((participant) =>
+                participant.name.toLowerCase().includes(searchTerm.toLowerCase()),
+            )
+        })
 
         if (sort !== 'Default') {
             sort === 'Start Date'
-                ? gamesWithFilters.sort((a, b) => a.startsAt - b.startsAt)
-                : gamesWithFilters.sort((a, b) => b.startsAt - a.startsAt)
+                ? gamesFiltered.sort((a, b) => a.startsAt - b.startsAt)
+                : gamesFiltered.sort((a, b) => b.startsAt - a.startsAt)
         }
 
-        return { games, gamesWithFilters }
+        return { games, gamesFiltered }
     }, [searchTerm, market, league, sort, chainId])
 }
