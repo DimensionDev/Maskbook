@@ -2,7 +2,7 @@ import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react
 import { useAsync } from 'react-use'
 import { LinkOutIcon } from '@masknet/icons'
 import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     clear: {
         fontSize: 14,
-        color: theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.common.white,
+        color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
         cursor: 'pointer',
     },
 }))
@@ -130,7 +130,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                         {functionName}
                     </Typography>
                     <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
-                        {format(tx.createdAt, 'yyyy.MM.dd hh:mm')}
+                        {format(tx.createdAt, 'yyyy.MM.dd HH:mm')}
                     </Typography>
                 </Stack>
             </Grid>

@@ -44,12 +44,19 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         fontSize: 14,
         paddingRight: theme.spacing(1),
     },
+    progressIcon: {
+        fontSize: 14,
+        color: theme.palette.common.white,
+    },
     progress: {
         fontSize: 14,
         color: theme.palette.common.black,
     },
     warningTriangleIcon: {
         fontSize: 20,
+    },
+    retryButton: {
+        fontSize: 12,
     },
 }))
 
@@ -68,7 +75,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
-    const networkDescriptor = useNetworkDescriptor(pluginID, providerType)
+    const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
     const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
     if (!Others) return null
 
@@ -92,7 +99,11 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
-                                    <CircularProgress className={classes.progress} size={14} sx={{ marginRight: 1 }} />
+                                    <CircularProgress
+                                        className={classes.progressIcon}
+                                        size={14}
+                                        sx={{ marginRight: 1 }}
+                                    />
                                     <Typography variant="body2" className={classes.progress}>
                                         {t('initializing')}
                                     </Typography>
@@ -100,17 +111,17 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             ) : null}
                             {!loading && error ? (
                                 <Typography className={classes.error} color="red" variant="body2">
-                                    {error.message?.includes('Already processing eth_requestAccounts') ||
-                                    error.message?.includes(
-                                        "Request of type 'wallet_requestPermissions' already pending for origin",
-                                    )
-                                        ? t('plugin_wallet_metamask_error_already_request')
-                                        : error.message ?? 'Something went wrong.'}
+                                    {t('plugin_wallet_connecting_error')}
                                 </Typography>
                             ) : null}
                         </Box>
                         {!connected && error ? (
-                            <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
+                            <ActionButton
+                                color="primary"
+                                variant="contained"
+                                onClick={retry}
+                                disabled={loading}
+                                className={classes.retryButton}>
                                 {t('plugin_wallet_connect_with_retry')}
                             </ActionButton>
                         ) : null}

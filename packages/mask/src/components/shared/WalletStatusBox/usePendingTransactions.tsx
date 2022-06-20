@@ -3,7 +3,7 @@ import {
     useRemoveTransactionCallback,
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     pendingSummary: {
         cursor: 'default',
-        color: theme.palette.warning.main,
+        color: theme.palette.maskColor?.warn ?? '#FFB100',
         fontSize: 14,
     },
     noPendingTransactions: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     clearAll: {
         cursor: 'pointer',
-        color: theme.palette.primary.main,
+        color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
     },
     hide: {
         display: 'none',

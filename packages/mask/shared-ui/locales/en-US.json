@@ -300,6 +300,7 @@
     "plugin_wallet_connect_with": "Connect with",
     "plugin_wallet_connect_with_retry": "Try Again",
     "plugin_wallet_connected_with": "Connected with",
+    "plugin_wallet_connecting_error": "Error connecting",
     "plugin_wallet_metamask_error_already_request": "You've opened the popup, please confirm.",
     "plugin_wallet_connect_tip": "Please make sure that your {{providerName}} wallet is provided by the official <providerLink>{{providerShortenLink}}</providerLink>.",
     "plugin_wallet_disconnect": "Disconnect",
