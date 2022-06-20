@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     pendingSummary: {
         cursor: 'default',
-        color: theme.palette.maskColor?.warn ?? '#FFB100',
+        color: theme.palette.maskColor?.warn,
         fontSize: 14,
     },
     noPendingTransactions: {
