@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     clearAll: {
+        fontSize: 14,
         cursor: 'pointer',
         color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
     },

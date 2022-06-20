@@ -21,9 +21,9 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         display: 'flex',
         flexWrap: 'nowrap',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 12,
         backgroundColor: MaskColorVar.warningBackground,
-        padding: '14.5px 14.5px 16px 14.5px',
+        padding: '13px 12px',
         borderRadius: 8,
     },
     tipContentText: {
@@ -111,7 +111,12 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             ) : null}
                             {!loading && error ? (
                                 <Typography className={classes.error} color="red" variant="body2">
-                                    {t('plugin_wallet_connecting_error')}
+                                    {error.message?.includes('Already processing eth_requestAccounts') ||
+                                    error.message?.includes(
+                                        "Request of type 'wallet_requestPermissions' already pending for origin",
+                                    )
+                                        ? t('plugin_wallet_metamask_error_already_request')
+                                        : error.message ?? 'Something went wrong.'}
                                 </Typography>
                             ) : null}
                         </Box>
