@@ -3,14 +3,14 @@ import { ConditionStatus, UserBet, UserFilter } from '../types'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { fetchMyBets } from '../api'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]> {
     const account = useAccount()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncRetry(async () => {
-        const userBets = await fetchMyBets(account, chainId as ChainId)
+        const userBets = await fetchMyBets(account, chainId)
 
         return userBets.filter((userBet) =>
             filter === UserFilter.Active.valueOf()
