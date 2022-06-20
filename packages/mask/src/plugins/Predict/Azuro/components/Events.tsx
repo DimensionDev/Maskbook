@@ -58,8 +58,8 @@ export function Events(props: { games: AzuroGame[] | undefined; retry: () => voi
 
     return (
         <div className={classes.container}>
-            {games && games?.length > 0 ? (
-                games?.map((game: AzuroGame) => (
+            {games && games.length > 0 ? (
+                games.map((game: AzuroGame) => (
                     <Event
                         key={`${game.id}-${game.marketRegistryId}`}
                         game={game}
