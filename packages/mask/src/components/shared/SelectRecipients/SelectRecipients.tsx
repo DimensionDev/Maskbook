@@ -60,7 +60,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         onSetSelected([...selected, item])
 
         if (!item || !item.fromNextID || !item.linkedPersona) return
-        console.log('relation', item)
+        await Services.Identity.updateProfileInfo(item.identifier, { avatarURL: item.avatar, nickname: item.nickname })
         await Services.Identity.createNewRelation(item.identifier, item.linkedPersona)
     }
 
