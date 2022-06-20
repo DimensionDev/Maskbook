@@ -109,8 +109,6 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     }, [amount, balance, token?.decimals, t])
 
     const handleSlippage = (event: React.MouseEvent<HTMLElement>, newSlippage: number) => setSlippage(newSlippage)
-    const event = `${game.participants[0].name} vs ${game.participants[1].name}`
-    const outcome = outcomeRegistry[condition.outcomeRegistryId](game)
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
         const isOnFacebook = isFacebook(activatedSocialNetworkUI)
@@ -150,7 +148,10 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                             <Grid container className={classes.infosContainer}>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Event:</Typography>
-                                    <Typography>{event}</Typography>
+                                    <Typography>
+                                        {game.participants[0].name} {t.plugin_azuro_versus()}
+                                        {game.participants[1].name}
+                                    </Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Market:</Typography>
@@ -158,7 +159,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Outcome:</Typography>
-                                    <Typography>{outcome}</Typography>
+                                    <Typography>{outcomeRegistry[condition.outcomeRegistryId](game)}</Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Odds:</Typography>
