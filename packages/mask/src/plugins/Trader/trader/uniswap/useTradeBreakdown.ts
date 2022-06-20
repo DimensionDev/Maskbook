@@ -54,16 +54,20 @@ function computeRealizedLPFeeAmount(trade?: Trade | null): CurrencyAmount<Curren
 
 export function useTradeBreakdown(trade: Trade | null) {
     return useMemo(() => {
-        if (!trade) return null
-        const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
-        const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
-        return {
-            realizedLPFeePercent,
-            realizedLPFeeAmount,
+        try {
+            if (!trade) return null
+            const realizedLPFeePercent = computeRealizedLPFeePercent(trade)
+            const realizedLPFeeAmount = computeRealizedLPFeeAmount(trade)
+            return {
+                realizedLPFeePercent,
+                realizedLPFeeAmount,
 
-            // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
-            realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
-            priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
+                // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
+                realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
+                priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
+            }
+        } catch {
+            return null
         }
     }, [trade])
 }

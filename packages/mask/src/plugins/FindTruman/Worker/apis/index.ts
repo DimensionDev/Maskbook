@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import Services from '../../../../extension/service'
+import { WalletRPC } from '../../../Wallet/messages'
 import {
     DecryptedClue,
     ExchangeStatus,
@@ -75,7 +75,7 @@ export function fetchPollResult(pollId: string) {
 }
 
 export async function submitPuzzle(address: string, data: SubmitPuzzleParams) {
-    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    const sig = await WalletRPC.signPersonalMessage(JSON.stringify(data), address)
     return request<string>('/puzzles/submit', {
         method: 'POST',
         body: JSON.stringify({ data, sig }),
@@ -83,7 +83,7 @@ export async function submitPuzzle(address: string, data: SubmitPuzzleParams) {
 }
 
 export async function submitPoll(address: string, data: SubmitPollParams) {
-    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    const sig = await WalletRPC.signPersonalMessage(JSON.stringify(data), address)
     return request<string>('/polls/submit', {
         method: 'POST',
         body: JSON.stringify({ data, sig }),
@@ -100,7 +100,7 @@ export async function submitCompletion(address: string, params: SubmitCompletion
             answers,
         },
     }
-    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    const sig = await WalletRPC.signPersonalMessage(JSON.stringify(data), address)
     return request<string>('/subjective_questions/_/answer', {
         method: 'POST',
         body: JSON.stringify({ data, sig }),
@@ -124,7 +124,7 @@ export function fetchMysteryBoxInfo(id: number) {
 }
 
 export async function openMysteryBox(address: string, data: OpenMysteryBoxParams) {
-    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    const sig = await WalletRPC.signPersonalMessage(JSON.stringify(data), address)
     return request<MysteryBox>('/mystery-boxes/_/open', {
         method: 'POST',
         body: JSON.stringify({ data, sig }),

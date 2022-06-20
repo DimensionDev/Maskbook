@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'

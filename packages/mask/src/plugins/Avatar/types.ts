@@ -1,4 +1,6 @@
-import type { ChainId, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface AvatarMetaDB {
     userId: string
@@ -6,6 +8,8 @@ export interface AvatarMetaDB {
     address: string
     avatarId: string
     chainId?: ChainId
+    schema?: SchemaType
+    pluginId?: NetworkPluginID
 }
 
 export interface NFT {
@@ -17,18 +21,33 @@ export interface NFT {
     slug: string
 }
 
+export type AllChainsNonFungibleToken = NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+
 export interface SelectTokenInfo {
     account: string
-    token: ERC721TokenDetailed
+    token: AllChainsNonFungibleToken
     image: string
-}
-
-export interface TokenInfo {
-    address: string
-    tokenId: string
+    pluginId: NetworkPluginID
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {
     nickname: string
     imageUrl: string
+}
+
+export interface NFTRSSNode {
+    signature: string
+    nft: AvatarMetaDB
+}
+
+export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
+
+export interface NFTInfo {
+    amount: string
+    name: string
+    symbol: string
+    image: string
+    owner: string
+    slug: string
+    permalink: string
 }

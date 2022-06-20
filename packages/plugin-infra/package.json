@@ -13,6 +13,11 @@
       "webpack": "./src/entry-web3.ts",
       "default": "./dist/entry-web3.js"
     },
+    "./web3-evm": {
+      "types": "./dist/entry-web3-evm.d.ts",
+      "webpack": "./src/entry-web3-evm.ts",
+      "default": "./dist/entry-web3-evm.js"
+    },
     "./dom": {
       "types": "./dist/entry-dom.d.ts",
       "webpack": "./src/entry-dom.ts",
@@ -40,6 +45,9 @@
       "web3": [
         "./dist/entry-web3.d.ts"
       ],
+      "web3-evm": [
+        "./dist/entry-web3-evm.d.ts"
+      ],
       "dom": [
         "./dist/entry-dom.d.ts"
       ],
@@ -56,19 +64,36 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
+    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/encryption": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/web3-constants": "workspace:*",
+    "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
     "@servie/events": "^3.0.0",
+    "@types/ethereum-blockies": "^0.1.0",
     "@types/use-subscription": "^1.0.0",
-    "async-call-rpc": "^6.0.2",
+    "async-call-rpc": "^6.1.0",
     "bignumber.js": "^9.0.2",
-    "react-use": "^17.3.2",
+    "ethereum-blockies": "^0.1.1",
+    "lru-cache": "^7.10.1",
+    "react-use": "^17.4.0",
     "unstated-next": "^1.1.0",
-    "use-subscription": "1.6.0"
+    "urlcat": "^2.0.4",
+    "use-subscription": "1.6.0",
+    "wallet.ts": "^1.0.1",
+    "web3": "1.7.3",
+    "web3-core-helpers": "1.7.3",
+    "web3-utils": "1.7.3"
+  },
+  "devDependencies": {
+    "@types/lru-cache": "^7.10.10"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

@@ -1,37 +1,33 @@
 import React, { useCallback } from 'react'
 import { Grid, Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import {
-    ApproveStateType,
-    ERC20TokenDetailed,
-    formatBalance,
-    useERC20TokenApproveCallback,
-} from '@masknet/web3-shared-evm'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
         flexDirection: 'column',
         position: 'relative',
         marginTop: theme.spacing(1.5),
-        lineHeight: '22px',
+        lineHeight: '20px',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '13px 0',
+        padding: '12px 0',
         fontSize: 18,
     },
     buttonLabel: {
         display: 'block',
         fontWeight: 'inherit',
-        marginTop: theme.spacing(-0.5),
-        marginBottom: theme.spacing(1),
+        transform: 'translateY(-4px)',
     },
     buttonAmount: {
         fontSize: 10,
         fontWeight: 300,
-        bottom: theme.spacing(1),
+        transform: 'translateY(12px)',
         position: 'absolute',
     },
     children: {
@@ -40,10 +36,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumERC20TokenApprovedBoundaryProps {
+export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'button'> {
     amount: string
     spender?: string
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType>
     fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
     render?: (disable: boolean) => React.ReactNode
@@ -67,7 +63,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     } = props
 
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
@@ -82,6 +78,27 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
+
+    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
+        return (
+            <Grid container>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
+                    {transactionState.loading
+                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
+                        : `Updating ${token.symbol}`}
+                    &hellip;
+                </ActionButton>
+                {withChildren ? (
+                    <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
+                ) : null}
+            </Grid>
+        )
 
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
@@ -153,23 +170,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     <Box className={classes.children}>{render ? (render(true) as any) : children}</Box>
                 ) : null}
             </Box>
-        )
-    if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
-        return (
-            <Grid container>
-                <ActionButton
-                    className={classes.button}
-                    fullWidth
-                    variant="contained"
-                    size="large"
-                    disabled
-                    {...props.ActionButtonProps}>
-                    {approveStateType === ApproveStateType.PENDING
-                        ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                        : `Updating ${token.symbol}`}
-                    &hellip;
-                </ActionButton>
-            </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)
         return (

@@ -1,14 +1,9 @@
 import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import {
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    useAccount,
-    useFungibleTokenBalance,
-} from '@masknet/web3-shared-evm'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -17,7 +12,7 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
@@ -52,11 +47,11 @@ export function InvestDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [pool, setPool] = useState<Pool>()
-    const [token, setToken] = useState<FungibleTokenDetailed>()
+    const [token, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
 
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
@@ -90,24 +85,24 @@ export function InvestDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
 
     // #region blocking
-    const [isInvesting, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
+    const [{ loading: isInvesting }, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
     const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
+        ? t('plugin_dhedge_share_text', {
+              amount: formatBalance(amount, token.decimals),
+              symbol: `${cashTag}${token.symbol}`,
+              pool: pool?.name,
+              account_promote: t('plugin_dhedge_account_promote', {
+                  context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+              }),
+          })
         : ''
     const invest = useCallback(async () => {
         const hash = await investCallback()
@@ -152,10 +147,6 @@ export function InvestDialog() {
     }, [token, openSwapDialog])
     // #endregion
 
-    // #region transaction dialog
-
-    // on close transaction dialog
-
     // #region submit button
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
@@ -188,7 +179,7 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    <EthereumWalletConnectedBoundary>
+                    <WalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
                             <ActionButton
                                 className={classes.button}
@@ -203,7 +194,7 @@ export function InvestDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
@@ -215,7 +206,7 @@ export function InvestDialog() {
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         )}
-                    </EthereumWalletConnectedBoundary>
+                    </WalletConnectedBoundary>
                 </DialogContent>
             </InjectedDialog>
         </div>

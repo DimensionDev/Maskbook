@@ -3,8 +3,8 @@ import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { NetworkPluginID, useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
 import { compact, sortBy } from 'lodash-unified'
@@ -16,9 +16,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets()
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const location = useLocation()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
@@ -28,11 +28,10 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
-        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
-                    const domain = await NameService?.reverse?.(x.identity)
+                    const domain = await NameService?.reverse?.(chainId, x.identity)
 
                     if (domain)
                         return {
@@ -68,7 +67,7 @@ const ConnectedWallets = memo(() => {
                 return x
             })
             .reverse()
-    }, [wallets, NameService, proofs])
+    }, [wallets, NameService, proofs, chainId])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(
         async (wallet?: ConnectedWalletInfo) => {

@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -9,14 +9,15 @@ import {
     useProviderDescriptor,
     useWallet,
     useWeb3State,
-    Web3Plugin,
     useReverseAddress,
+    useRecentTransactions,
+    Web3Helper,
+    useAccount,
 } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
-import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -63,12 +64,11 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStateBar = memo(() => {
     const t = useDashboardI18N()
 
+    const account = useAccount()
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
@@ -80,15 +80,16 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
-    const { value: domain } = useReverseAddress(wallet?.address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
 
-    if (!wallet) {
+    if (!account) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            wallet={wallet}
+            name={wallet?.name ?? providerDescriptor.name}
+            address={account}
             domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
@@ -101,9 +102,10 @@ export const WalletStateBar = memo(() => {
 
 interface WalletStateBarUIProps {
     isPending: boolean
-    network?: Web3Plugin.NetworkDescriptor
-    provider?: Web3Plugin.ProviderDescriptor
-    wallet?: Web3Plugin.Wallet
+    network?: Web3Helper.NetworkDescriptorAll
+    provider?: Web3Helper.ProviderDescriptorAll
+    name?: string
+    address?: string
     domain?: string
     openConnectWalletDialog(): void
     openMenu: ReturnType<typeof useNetworkSelector>[1]
@@ -113,7 +115,8 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
     isPending,
     network,
     provider,
-    wallet,
+    name,
+    address,
     domain,
     openConnectWalletDialog,
     openMenu,
@@ -121,9 +124,9 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
 
-    if (!wallet || !network || !provider) return null
+    if (!network || !provider) return null
 
     return (
         <Stack justifyContent="center" direction="row" alignItems="center">
@@ -160,24 +163,24 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
             )}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
-                    <WalletIcon providerIcon={provider.icon} inverse size={38} />
+                    <WalletIcon mainIcon={provider.icon} size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : provider.name}
+                            {domain && Others?.formatDomainName ? Others.formatDomainName(domain) : provider.name}
                         </Box>
                     ) : (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {wallet.name}
-                            {domain && Utils?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            {name}
+                            {domain && Others?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
                             ) : null}
                         </Box>
                     )}
 
                     <Box fontSize={12}>
-                        <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />
+                        <FormattedAddress address={address} size={10} formatter={Others?.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

@@ -1,9 +1,9 @@
 import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useAccount, NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -167,7 +167,7 @@ function ApplicationBoardContent(props: Props) {
             ) : (
                 <div className={classes.placeholderWrapper}>
                     <Typography className={classes.placeholder}>
-                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                        {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
                 </div>
             )}
@@ -178,7 +178,7 @@ function ApplicationBoardContent(props: Props) {
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
@@ -215,7 +215,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const clickHandler = (() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
-            return openSelectProviderDialog
+            return (walletConnectedCallback?: () => void) =>
+                setSelectProviderDialog({ open: true, walletConnectedCallback })
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
             return createOrConnectPersona

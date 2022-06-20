@@ -1,121 +1,64 @@
 import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    ChainId,
-    getChainIdFromNetworkType,
-    getNetworkTypeFromChainId,
-    NetworkType,
-    ProviderType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
-    currentAccountSettings,
-    currentChainIdSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentNetworkSettings,
-    currentProviderSettings,
 } from '../settings'
-import { getWallets, hasWallet, updateWallet } from './wallet'
-import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { Flags } from '../../../../shared'
+import { WalletRPC } from '../messages'
+import { defer, DeferTuple } from '@dimensiondev/kit'
 
-export async function updateAccount(
-    options: {
-        name?: string
-        account?: string
-        chainId?: ChainId
-        networkType?: NetworkType
-        providerType?: ProviderType
-    } = {},
-) {
-    if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
-
-    // make sure account and provider type to be updating both
-    if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
-        throw new Error('Account and provider type must be updating both')
-
-    const { name, account, chainId, providerType, networkType } = options
-
-    // update wallet in the DB
-    if (
-        account &&
-        providerType &&
-        EthereumAddress.isValid(account) &&
-        providerType !== ProviderType.MaskWallet &&
-        !(await hasWallet(account))
-    ) {
-        await updateWallet(account, {})
-    }
-
-    // update global settings
-    if (chainId) {
-        currentChainIdSettings.value = chainId
-        if (hasNativeAPI) {
-            nativeAPI?.api.wallet_switchBlockChain({ networkId: chainId })
-        }
-    }
-    if (networkType) currentNetworkSettings.value = networkType
-    if (account !== undefined) currentAccountSettings.value = account
-    if (providerType) currentProviderSettings.value = providerType
-    if (currentProviderSettings.value === ProviderType.MaskWallet) {
+export async function setDefaultMaskAccount() {
+    if (currentMaskWalletAccountSettings.value) return
+    const wallets = await WalletRPC.getWallets()
+    const address = first(wallets)?.address
+    if (address)
         await updateMaskAccount({
-            account,
-            chainId,
-            networkType,
+            account: address,
         })
-    }
 }
 
 export async function updateMaskAccount(options: { account?: string; chainId?: ChainId; networkType?: NetworkType }) {
-    if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
-    if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
+    if (options.chainId && !options.networkType) options.networkType = chainResolver.chainNetworkType(options.chainId)
+    if (!options.chainId && options.networkType) options.chainId = networkResolver.networkChainId(options.networkType)
 
     const { account, chainId, networkType } = options
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (networkType) currentMaskWalletNetworkSettings.value = networkType
-    if (account && EthereumAddress.isValid(account)) currentMaskWalletAccountSettings.value = account
+    if (account && EthereumAddress.isValid(account)) {
+        currentMaskWalletAccountSettings.value = account
+        await resolveMaskAccount([account])
+    }
 }
 
-export async function resetAccount(
-    options: {
-        account?: string
-        chainId?: ChainId
-        networkType?: NetworkType
-        providerType?: ProviderType
-    } = {},
-) {
-    const { account = '', chainId, networkType, providerType } = options
-    currentAccountSettings.value = account
-    if (providerType === ProviderType.MaskWallet) currentMaskWalletAccountSettings.value = account
-    if (chainId) currentChainIdSettings.value = chainId
-    if (networkType) currentNetworkSettings.value = networkType
-    if (providerType) currentProviderSettings.value = providerType
+export async function resetMaskAccount() {
+    currentMaskWalletChainIdSettings.value = ChainId.Mainnet
+    currentMaskWalletNetworkSettings.value = NetworkType.Ethereum
+    currentMaskWalletAccountSettings.value = ''
 }
 
 // #region select wallet with popups
-let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
+let deferred: DeferTuple<string[], Error> | null
 
-export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
-    callbackMemorized = callback
+export async function selectMaskAccount(): Promise<string[]> {
+    deferred = defer()
+    return deferred?.[0] ?? []
 }
 
-export async function selectAccount(accounts: string[], chainId: ChainId) {
-    callbackMemorized?.(accounts, chainId)
+export async function resolveMaskAccount(accounts: string[]) {
+    const [, resolve] = deferred ?? []
+    resolve?.(accounts)
+    deferred = null
+}
+
+export async function rejectMaskAccount() {
+    const [, resolve] = deferred ?? []
+    resolve?.([])
+    deferred = null
 }
 // #endregion
-
-export async function setDefaultWallet() {
-    if (currentAccountSettings.value) return
-    const wallets = await getWallets()
-    const address = first(wallets)?.address
-    if (address)
-        await updateAccount({
-            account: address,
-            providerType: ProviderType.MaskWallet,
-        })
-}
 
 export async function getSupportedNetworks() {
     return [

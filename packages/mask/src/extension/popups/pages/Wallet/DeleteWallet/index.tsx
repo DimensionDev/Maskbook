@@ -3,14 +3,15 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
 import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { useWallet } from '@masknet/plugin-infra/web3'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
 
@@ -110,8 +111,7 @@ const DeleteWallet = memo(() => {
         if (wallet?.address) {
             try {
                 await WalletRPC.removeWallet(wallet.address, password)
-                const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
-
+                const wallets = await WalletRPC.getWallets()
                 const otherWalletAddress = first(wallets)?.address
 
                 if (otherWalletAddress) {
@@ -122,12 +122,6 @@ const DeleteWallet = memo(() => {
                     currentMaskWalletAccountSettings.value = ''
                 }
 
-                if (currentAccountSettings.value === wallet.address) {
-                    await WalletRPC.updateAccount({
-                        account: first(wallets)?.address ?? '',
-                        providerType: ProviderType.MaskWallet,
-                    })
-                }
                 navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {

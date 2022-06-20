@@ -1,7 +1,8 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
-registerPlugin({
+registerPlugin<ChainId>({
     ...base,
     SNSAdaptor: {
         load: () => import('./SNSAdaptor'),

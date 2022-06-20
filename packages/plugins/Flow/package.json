@@ -9,16 +9,23 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@blocto/fcl": "^0.0.78-alpha.8",
+    "@blocto/fcl": "^0.0.78-alpha.10",
     "@masknet/icons": "workspace:*",
+    "@masknet/injected-script": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
+    "@servie/events": "^3.0.0",
     "bignumber.js": "^9.0.2",
-    "react-use": "^17.3.2"
+    "date-fns": "^2.28.0",
+    "react-use": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.0"
   }
 }

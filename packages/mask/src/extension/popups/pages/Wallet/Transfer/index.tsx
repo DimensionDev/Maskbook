@@ -1,12 +1,14 @@
 import { memo, useMemo, useState } from 'react'
 import { MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, isEIP1559Supported, ProviderType, useChainId, useWallets } from '@masknet/web3-shared-evm'
+import { chainResolver } from '@masknet/web3-shared-evm'
 import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
+import { useChainId, useWallets } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils'
 import { useTitle } from '../../../hook/useTitle'
 
@@ -28,8 +30,8 @@ const useStyles = makeStyles()({
 const Transfer = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
 
@@ -43,13 +45,13 @@ const Transfer = memo(() => {
             return (
                 <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
                     <div className={classes.assetSymbol}>
-                        <TokenIcon address={asset.token.address} />
-                        <Typography>{asset.token.symbol}</Typography>
+                        <TokenIcon address={asset.address} />
+                        <Typography>{asset.symbol}</Typography>
                     </div>
                     <Typography>
                         <FormattedBalance
                             value={asset.balance}
-                            decimals={asset.token.decimals}
+                            decimals={asset.decimals}
                             significant={4}
                             formatter={formatBalance}
                         />
@@ -63,7 +65,7 @@ const Transfer = memo(() => {
 
     return (
         <>
-            {isEIP1559Supported(chainId) ? (
+            {chainResolver.isSupport(chainId, 'EIP1559') ? (
                 <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
             ) : (
                 <Prior1559Transfer

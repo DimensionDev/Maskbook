@@ -1,7 +1,10 @@
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import AbstractTab, { AbstractTabProps } from './AbstractTab'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptors, Web3Helper } from '@masknet/plugin-infra/web3'
+import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import TabContext from '@mui/lab/TabContext'
+import { Stack, Tab, Typography } from '@mui/material'
+import { WalletIcon } from '@masknet/shared'
 
 interface StyleProps {
     chainLength: number
@@ -43,28 +46,52 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    chains: ChainId[]
-    setChainId: (chainId: ChainId) => void
-    chainId: ChainId
+interface NetworkTabProps<T extends NetworkPluginID>
+    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    chains: Array<Web3Helper.Definition[T]['ChainId']>
+    setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
+    chainId: Web3Helper.Definition[T]['ChainId']
 }
-export function NetworkTab(props: NetworkTabProps) {
+
+export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const isDashboard = isDashboardPage()
-    const classes = useStylesExtends(useStyles({ chainLength: props.chains.length, isDashboard }), props)
     const { chainId, setChainId, chains } = props
-    const createTabItem = (name: string, chainId: ChainId) => ({
-        label: <span>{name}</span>,
-        sx: { p: 0 },
-        cb: () => setChainId(chainId),
-    })
 
-    const tabProps: AbstractTabProps = {
-        tabs: chains.map((chainId) => createTabItem(getChainDetailed(chainId)?.chain ?? 'Unknown', chainId)),
-        index: chains.indexOf(chainId),
-        classes,
-        hasOnlyOneChild: true,
-        scrollable: true,
-    }
+    const networks = useNetworkDescriptors()
+    const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
+    const networkIds = usedNetworks.map((x) => x.chainId.toString())
+    const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
 
-    return <AbstractTab {...tabProps} />
+    return (
+        <TabContext value={currentTab}>
+            <MaskTabList
+                variant="flexible"
+                onChange={(e, v) => {
+                    setChainId(Number.parseInt(v, 10))
+                    setTab(v)
+                }}
+                aria-label="Network Tabs">
+                {usedNetworks.map((x) => {
+                    return (
+                        <Tab
+                            aria-label={x.name}
+                            key={x.chainId}
+                            value={x.chainId.toString()}
+                            label={
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <WalletIcon mainIcon={x.icon} size={18} />
+                                    <Typography
+                                        variant="body2"
+                                        fontSize={14}
+                                        fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
+                                        {x.name}
+                                    </Typography>
+                                </Stack>
+                            }
+                        />
+                    )
+                })}
+            </MaskTabList>
+        </TabContext>
+    )
 }

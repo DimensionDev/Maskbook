@@ -1,6 +1,5 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
-import Services from '../../../../extension/service'
+import type { Proposal, Profile3Box, VoteSuccess, RawVote, Strategy } from '../../types'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants'
 
@@ -128,79 +127,14 @@ export async function getScores(
     )
 }
 
-export async function vote(identifier: ProposalIdentifier, choice: number, address: string, voteType: string) {
-    const message = {
-        from: address,
-        space: identifier.space,
-        timestamp: Math.floor(Date.now() / 1e3),
-        proposal: identifier.id,
-        choice: voteType === 'single-choice' ? choice : [choice],
-        metadata: JSON.stringify({}),
-    }
-
-    const domain = {
-        name: 'snapshot',
-        version: '0.1.4',
-    }
-
-    const types = {
-        Vote: [
-            {
-                name: 'from',
-                type: 'address',
-            },
-            {
-                name: 'space',
-                type: 'string',
-            },
-            {
-                name: 'timestamp',
-                type: 'uint64',
-            },
-            {
-                name: 'proposal',
-                type: 'string',
-            },
-            {
-                name: 'choice',
-                type: voteType === 'single-choice' ? 'uint32' : 'uint32[]',
-            },
-            {
-                name: 'metadata',
-                type: 'string',
-            },
-        ],
-    }
-
-    const data = {
-        message,
-        domain,
-        types,
-    }
-
-    const sig = await Services.Ethereum.typedDataSign(
-        address,
-        JSON.stringify({
-            domain,
-            types: {
-                EIP712Domain: [
-                    { name: 'name', type: 'string' },
-                    { name: 'version', type: 'string' },
-                ],
-                Vote: types.Vote,
-            },
-            primaryType: 'Vote',
-            message,
-        }),
-    )
-
+export async function vote(body: string) {
     const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ data, sig, address }),
+        body,
     })
 
     const result: VoteSuccess = await response.json()

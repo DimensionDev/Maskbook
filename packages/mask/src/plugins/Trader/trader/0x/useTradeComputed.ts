@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export function useTradeComputed(
     trade: SwapQuoteResponse | null,
     strategy: TradeStrategy,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
     return useMemo(() => {
         if (!trade) return null

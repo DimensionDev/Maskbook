@@ -1,18 +1,10 @@
-import { ReactNode, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
-import type { TransactionReceipt } from 'web3-core'
-import {
-    createLookupTableResolver,
-    resolveTransactionLinkOnExplorer,
-    TransactionState,
-    TransactionStateType,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { WalletMessages } from '../../messages'
-import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
-import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()({
@@ -21,51 +13,74 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
 })
-
-export function TransactionSnackbar() {
-    const chainId = useChainId()
+export interface TransactionSnackbarProps<T extends NetworkPluginID> {
+    pluginID: T
+}
+export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
     const { classes } = useStyles()
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>()
+
+    const chainId = useChainId(pluginID)
+    const [error, setError] = useState<Error | undefined>()
+    const [progress, setProgress] = useState<{
+        chainId: Web3Helper.Definition[T]['ChainId']
+        status: TransactionStatusType
+        id: string
+        transaction: Web3Helper.Definition[T]['Transaction']
+    }>()
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
+
+    useEffect(() => {
+        const off = TransactionWatcher?.emitter.on('error', (error) => {
+            setError(error)
+        })
+        return () => {
+            off?.()
+        }
+    }, [TransactionWatcher])
+
+    useEffect(() => {
+        const off = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
+            if (!transaction || !pluginID) return
+            setProgress({
+                chainId,
+                status,
+                id,
+                transaction,
+            })
+        })
+
+        return () => {
+            off?.()
+        }
+    }, [TransactionWatcher, chainId, pluginID])
+
     const resolveSnackbarConfig = createLookupTableResolver<
-        TransactionStateType,
+        TransactionStatusType,
         Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>
     >(
         {
-            [TransactionStateType.WAIT_FOR_CONFIRMING]: {
+            [TransactionStatusType.NOT_DEPEND]: {
                 processing: true,
                 variant: 'default',
                 message: t('plugin_wallet_snackbar_wait_for_confirming'),
             },
-            [TransactionStateType.HASH]: {
-                processing: true,
-                variant: 'default',
-                message: t('plugin_wallet_snackbar_hash'),
-            },
-            [TransactionStateType.CONFIRMED]: {
+            [TransactionStatusType.SUCCEED]: {
                 processing: false,
                 variant: 'success',
                 message: t('plugin_wallet_snackbar_confirmed'),
             },
-            [TransactionStateType.RECEIPT]: {
-                processing: false,
-                variant: 'success',
-                message: t('plugin_wallet_snackbar_success'),
-            },
-            [TransactionStateType.FAILED]: {
+            [TransactionStatusType.FAILED]: {
                 processing: false,
                 variant: 'error',
                 message: t('plugin_wallet_snackbar_failed'),
             },
-            [TransactionStateType.UNKNOWN]: {
-                processing: false,
-                variant: 'error',
-                message: '',
-            },
         },
         {},
     )
+
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
@@ -77,69 +92,40 @@ export function TransactionSnackbar() {
         [showSnackbar, closeSnackbar],
     )
 
-    const getTitle = useCallback((state: TransactionState, payload: any, hash?: string) => {
-        return (
-            <RecentTransactionDescription
-                hash={hash ?? ''}
-                computedPayload={payload}
-                receipt={(state as { receipt: TransactionReceipt }).receipt}
-            />
-        )
-    }, [])
+    useAsync(async () => {
+        if (!progress) return
 
-    const getFullMessage = useCallback(
-        (message: ReactNode, hash?: string) => {
-            if (!hash) return message
-            const link = resolveTransactionLinkOnExplorer(chainId, hash)
-            return (
-                <Link className={classes.link} color="inherit" href={link} target="_blank" rel="noopener noreferrer">
-                    {message} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
-                </Link>
-            )
-        },
-        [chainId],
-    )
+        const computed = await TransactionFormatter?.formatTransaction?.(progress.chainId, progress.transaction)
+        if (!computed) return
 
-    useEffect(() => {
-        return WalletMessages.events.transactionProgressUpdated.on(async (progress) => {
-            if (location.href.includes('popups.html')) return
-            if (progress.state.type === TransactionStateType.UNKNOWN) return
-
-            const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
-            const config = resolveSnackbarConfig(progress.state.type)
-            const hash =
-                (progress.state as { hash?: string }).hash ??
-                (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
-
-            const transactionComputedPayloadName = (payload && 'name' in payload && payload.name) || ''
-            if (
-                ['swapExactETHForTokens', 'swapExactTokensForETH', 'swapExactTokensForTokens'].includes(
-                    transactionComputedPayloadName,
-                )
-            ) {
-                if (progress.state.type === TransactionStateType.CONFIRMED) {
-                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
-                        ...config,
-                        ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
-                    })
-                    return
-                }
-
-                if (progress.state.type === TransactionStateType.FAILED) {
-                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_token'), {
-                        ...config,
-                        ...{ message: getFullMessage('Transaction failed', hash) },
-                    })
-                    return
-                }
-            }
-
-            showSingletonSnackbar(getTitle(progress.state, payload, hash), {
-                ...config,
-                ...{ message: getFullMessage(config.message, hash) },
-            } as ShowSnackbarOptions)
+        showSingletonSnackbar(computed.title, {
+            ...resolveSnackbarConfig(progress.status),
+            ...{
+                message: (
+                    <Link
+                        className={classes.link}
+                        color="inherit"
+                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.id)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
+                    </Link>
+                ),
+            },
         })
-    }, [getTitle, getFullMessage])
+    }, [progress])
+
+    useAsync(async () => {
+        if (!error?.message) return
+
+        console.log({
+            error,
+        })
+
+        showSingletonSnackbar(error.message, {
+            ...resolveSnackbarConfig(TransactionStatusType.FAILED),
+        })
+    }, [error?.message])
 
     return null
 }

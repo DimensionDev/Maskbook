@@ -1,42 +1,28 @@
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType } from '@masknet/web3-shared-evm'
+import { useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [isRefunded, setIsRefunded] = useState(false)
-    const redPacketContract = useRedPacketContract(version)
+    const redPacketContract = useRedPacketContract(chainId, version)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const [state, refundCallback] = useAsyncFn(async () => {
         if (!redPacketContract || !id) return
 
         setIsRefunded(false)
-        // estimate gas and compose transaction
         const config = {
             from,
-            gas: await redPacketContract.methods
-                .refund(id)
-                .estimateGas({
-                    from,
-                })
-                .catch((error) => {
-                    throw error
-                }),
         }
-
-        // step 2: blocking
-        return new Promise<string>((resolve, reject) => {
-            redPacketContract.methods
-                .refund(id)
-                .send(config as NonPayableTx)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                    setIsRefunded(true)
-                })
-                .once(TransactionEventType.ERROR, reject)
-        })
-    }, [id, redPacketContract, from])
+        const tx = await encodeContractTransaction(redPacketContract, redPacketContract.methods.refund(id), config)
+        const hash = await connection.sendTransaction(tx)
+        setIsRefunded(true)
+        return hash
+    }, [id, redPacketContract, from, connection])
 
     return [state, isRefunded, refundCallback] as const
 }

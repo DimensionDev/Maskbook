@@ -1,44 +1,47 @@
-import {
-    ChainId,
-    isSameAddress,
-    safeNonPayableTransactionCall,
-    useAccount,
-    useERC721TokenContract,
-} from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginNFTAvatarRPC } from '../messages'
-import { getNFTByOpensea } from '../utils'
 import { usePersonas } from './usePersonas'
+import { PluginNFTAvatarRPC } from '../messages'
+import type { EnhanceableSite } from '@masknet/shared-base'
 
-export function useTokenOwner(address: string, tokenId: string, chainId?: ChainId) {
-    const ERC721Contract = useERC721TokenContract(address, chainId ?? ChainId.Mainnet)
+export function useTokenOwner(
+    address: string,
+    tokenId: string,
+    pluginId: NetworkPluginID,
+    chainId?: ChainId,
+    account?: string,
+) {
+    const hub = useWeb3Hub<'all'>(pluginId, {
+        chainId,
+        account,
+    })
+
     return useAsyncRetry(async () => {
-        if (!ERC721Contract || !tokenId) return
-        const nft = await getNFTByOpensea(address, tokenId)
-        if (nft) return nft
-        const allSettled = await Promise.allSettled([
-            safeNonPayableTransactionCall(ERC721Contract?.methods.ownerOf(tokenId)),
-            safeNonPayableTransactionCall(ERC721Contract.methods.name()),
-            safeNonPayableTransactionCall(ERC721Contract.methods.symbol()),
-        ])
-        const result = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))
-        return { owner: result[0], name: result[1], symbol: result[2] }
-    }, [ERC721Contract, tokenId])
+        if (!address || !tokenId || !hub?.getNonFungibleAsset) return
+        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId })
+        return {
+            owner: token?.owner?.address ?? token?.ownerId,
+            name: token?.contract?.name,
+            symbol: token?.contract?.symbol,
+        }
+    }, [hub, tokenId, address, account, chainId])
 }
 
-export function useCheckTokenOwner(userId: string, owner?: string) {
-    const account = useAccount()
+export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
     const { value: persona, loading } = usePersonas(userId)
-    const { value: address, loading: loadingAddress } = useAsyncRetry(
-        () => PluginNFTAvatarRPC.getAddress(userId, activatedSocialNetworkUI.networkIdentifier),
+    const { value: storage, loading: loadingAddress } = useAsyncRetry(
+        async () =>
+            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
         [userId],
     )
 
     return {
         loading: loading || loadingAddress,
         isOwner: Boolean(
-            (address && owner && isSameAddress(address, owner)) ||
+            (storage?.address && isSameAddress(storage.address, owner) && pluginId === storage.networkPluginID) ||
                 persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }

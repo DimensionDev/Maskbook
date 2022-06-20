@@ -1,18 +1,19 @@
-import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { formatBalance, useChainId, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
+import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import { useCallback, useMemo } from 'react'
+import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
@@ -83,11 +84,11 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)
-    const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
+    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, selectedPaymentToken?.address)
 
     const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ?? '0',
@@ -139,11 +140,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         <Box className={classes.mediaContent}>
                             {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        className={classes.player}
-                                        src={asset.value.shareUrl}
-                                        alt={asset.value.title}
-                                    />
+                                    <NFTCardStyledAssetPlayer url={asset.value.ossUrl || asset.value.shareUrl} />
                                 </Link>
                             ) : (
                                 <img
@@ -177,7 +174,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <EthereumWalletConnectedBoundary>
+                        <WalletConnectedBoundary>
                             <ActionButton
                                 loading={isPurchasing}
                                 className={classes.button}
@@ -187,7 +184,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                 onClick={purchase}>
                                 {validationMessage || t('plugin_cryptoartai_buy_now')}
                             </ActionButton>
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

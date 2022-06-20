@@ -1,8 +1,8 @@
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
-import { Alert, Box, Skeleton, Typography } from '@mui/material'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -11,6 +11,7 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
+import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ITO_CardProps extends withClasses<never> {
-    token?: ERC20TokenDetailed
+    token?: FungibleToken<ChainId, SchemaType.ERC20>
     onUpdateAmount: (amount: string) => void
     onUpdateBalance: () => void
 }
@@ -63,19 +64,20 @@ export function ITO_Card(props: ITO_CardProps) {
     // #region claim
     const [{ loading: isClaiming }, claimCallback] = useMaskClaimCallback()
     const openShareTxDialog = useOpenShareTxDialog()
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareText = [
-        `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(packet?.claimable, 18, 6)}.${
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? `Follow @${
-                      isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                  } (mask.io) to claim airdrop.`
-                : ''
-        }`,
-        '#mask_io',
-        postLink,
-    ].join('\n')
+    const shareText = useMemo(() => {
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
+        const cashTag = isOnTwitter ? '$' : ''
+        return t('plugin_ito_share_text', {
+            symbol: `${cashTag}${token?.symbol}`,
+            balance: formatBalance(packet?.claimable, 18, 6),
+            account_promote: t('plugin_ito_account_promote', {
+                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+            }),
+            link: postLink,
+        })
+    }, [t, postLink, packet?.claimable, token?.symbol])
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()
@@ -89,7 +91,7 @@ export function ITO_Card(props: ITO_CardProps) {
 
         onUpdateBalance()
         packetRetry()
-    }, [openShareTxDialog, claimCallback])
+    }, [shareText, openShareTxDialog, claimCallback])
     // #endregion
 
     // #region update parent amount

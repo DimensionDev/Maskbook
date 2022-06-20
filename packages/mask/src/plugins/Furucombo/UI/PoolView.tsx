@@ -1,5 +1,6 @@
+import { useAccount, useChainIdMatched } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainIdMatched } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, Divider, Grid, Typography, Container } from '@mui/material'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
 import { useI18N } from '../../../utils'
@@ -88,8 +89,8 @@ export function PoolView(props: PoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { category, chainId, address, name, protocol, liquidity, apy, angels } = props.investable
-    const account = useAccount()
-    const isValidChainId = useChainIdMatched(chainId)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const isValidChainId = useChainIdMatched(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const displayRewardIcon = (rewardToken: Token) => {
         if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />

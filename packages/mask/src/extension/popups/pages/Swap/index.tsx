@@ -1,17 +1,15 @@
+import { useCallback } from 'react'
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { ThemeProvider, Typography } from '@mui/material'
 import { SharedContextProvider } from '@masknet/shared'
-import { useCallback } from 'react'
-import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
+import { TransactionStatusType, NetworkPluginID } from '@masknet/web3-shared-base'
 import Services from '../../../service'
 import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
-import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
-import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra/web3'
+import { useChainId, useReverseAddress, useRecentTransactions, useWallet } from '@masknet/plugin-infra/web3'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -68,53 +66,48 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const theme = useSwapPageTheme()
-    const { value: pendingTransactions = [] } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
-    const wallet = useWallet()
+    const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
-            internal: true,
         })
     }, [chainId])
 
-    const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
 
     applyMaskColorVars(document.body, Appearance.light)
 
     return (
-        <Web3Provider value={SwapWeb3Context}>
-            <ThemeProvider theme={theme}>
-                <SharedContextProvider>
-                    <div className={classes.page}>
-                        <div className={classes.container}>
-                            <header className={classes.header}>
-                                <WalletStateBarUI
-                                    className={classes.walletStateBar}
-                                    isPending={pendingTransactions.length > 0}
-                                    openConnectWalletDialog={openPopupsWindow}
-                                    walletName={wallet?.name}
-                                    domain={domain}
-                                    walletAddress={wallet?.address}
-                                />
-                            </header>
-                            <main className={classes.main}>
-                                <Typography variant="h1" className={classes.title}>
-                                    {t('plugin_trader_swap')}
-                                </Typography>
-                                <TargetChainIdContext.Provider>
-                                    <AllProviderTradeContext.Provider>
-                                        <SwapBox />
-                                    </AllProviderTradeContext.Provider>
-                                </TargetChainIdContext.Provider>
-                            </main>
-                        </div>
+        <ThemeProvider theme={theme}>
+            <SharedContextProvider>
+                <div className={classes.page}>
+                    <div className={classes.container}>
+                        <header className={classes.header}>
+                            <WalletStateBarUI
+                                className={classes.walletStateBar}
+                                isPending={pendingTransactions.length > 0}
+                                openConnectWalletDialog={openPopupsWindow}
+                                walletName={wallet?.name}
+                                domain={domain}
+                                walletAddress={wallet?.address}
+                            />
+                        </header>
+                        <main className={classes.main}>
+                            <Typography variant="h1" className={classes.title}>
+                                {t('plugin_trader_swap')}
+                            </Typography>
+                            <TargetChainIdContext.Provider>
+                                <AllProviderTradeContext.Provider>
+                                    <SwapBox />
+                                </AllProviderTradeContext.Provider>
+                            </TargetChainIdContext.Provider>
+                        </main>
                     </div>
-                </SharedContextProvider>
-            </ThemeProvider>
-        </Web3Provider>
+                </div>
+            </SharedContextProvider>
+        </ThemeProvider>
     )
 }

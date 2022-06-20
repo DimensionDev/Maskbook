@@ -1,21 +1,27 @@
 import type { TradeInfo } from '../../../types'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { MINIMUM_AMOUNT } from '../../../constants'
 import BigNumber from 'bignumber.js'
-import { useNativeTokenPrice, useTokenPrice } from '../../../../Wallet/hooks/useTokenPrice'
-import { ChainId, EthereumTokenType, formatBalance, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
+import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
-    const { value: nativeToken } = useNativeTokenDetailed(chainId)
-    const nativeTokenPrice = useNativeTokenPrice(chainId)
+    const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, '', { chainId })
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const {
         tradeState: [{ outputToken }],
     } = AllProviderTradeContext.useContainer()
 
-    const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
+    const { value: outputTokenPrice = 0 } = useFungibleTokenPrice(
+        NetworkPluginID.PLUGIN_EVM,
+        outputToken?.address.toLowerCase(),
+        {
+            chainId,
+        },
+    )
 
     return useMemo(() => {
         if (outputToken && nativeToken && (outputTokenPrice || nativeTokenPrice)) {
@@ -36,7 +42,7 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         const finalPrice = new BigNumber(
                             formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
                         )
-                            .times(outputToken.type !== EthereumTokenType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 
                         return {

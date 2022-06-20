@@ -3,6 +3,7 @@ import { Box, DialogContent, Button } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
 import { makeStyles, MaskDialog } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -47,7 +48,7 @@ export enum DialogTabs {
 export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress, onConfirm }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [isVisible, setVisible] = useState(true)
 
@@ -59,7 +60,7 @@ export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress,
         <MaskDialog open={!!unbindAddress && isVisible} maxWidth="xs" title="">
             <DialogContent className={classes.wrapper}>
                 <Box className={classes.title}>
-                    {t.delete()} {Utils?.formatAddress?.(unbindAddress, 4)} &#xFF1F;
+                    {t.delete()} {Others?.formatAddress?.(unbindAddress, 4)} &#xFF1F;
                 </Box>
                 <Box className={classes.content}>{t.disconnect_warning()}</Box>
                 <Button className={classes.confirmButton} onClick={handleConfirm}>

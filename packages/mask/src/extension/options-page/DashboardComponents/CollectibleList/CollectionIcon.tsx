@@ -4,8 +4,8 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection?: ERC721ContractDetailed
+    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll>
     onClick?(): void
 }
 
@@ -49,7 +49,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             PopperProps={{
                 disablePortal: true,
             }}
-            title={collection.name}
+            title={collection?.name ?? ''}
             arrow>
             <Box
                 className={classNames(
@@ -57,19 +57,19 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                {collection.iconURL ? (
+                {collection?.iconURL ? (
                     <Image
                         width={24}
                         height={24}
                         component="img"
                         className={classes.collectionImg}
-                        src={collection.iconURL}
+                        src={collection?.iconURL}
                     />
                 ) : (
                     <TokenIcon
                         classes={{ icon: classes.collectionImg }}
-                        name={collection.name}
-                        address={collection.address}
+                        name={collection?.name}
+                        address={collection.name}
                     />
                 )}
             </Box>

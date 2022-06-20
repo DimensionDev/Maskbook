@@ -1,18 +1,21 @@
-import { makeStyles } from '@masknet/theme'
-import { formatBalance, useChainId, useTransactionCallback } from '@masknet/web3-shared-evm'
-import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
+import { makeStyles } from '@masknet/theme'
+import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Context } from '../../hooks/useContext'
 import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
+import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
+import AbstractTab from '../../../../components/shared/AbstractTab'
+import { TargetChainIdContext } from '../../contexts'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -38,13 +41,13 @@ const useTabsStyles = makeStyles()((theme) => ({
         marginTop: `${theme.spacing(2)} !important`,
     },
     button: {
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: theme.palette.maskColor?.dark,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
+            backgroundColor: theme.palette.maskColor?.dark,
         },
         margin: '0 !important',
     },
@@ -57,7 +60,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const chainId = useChainId()
+    const { targetChainId } = TargetChainIdContext.useContainer()
     const theme = useTheme()
 
     const {
@@ -97,7 +100,7 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
     // #region open box
-    const [isOpening, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
+    const [{ loading: isOpening }, openBoxCallback] = useTransactionCallback(txConfig, openBoxTransaction?.method)
     const onRefresh = useCallback(() => {
         state[1](CardTab.Articles)
         setPaymentCount(1)
@@ -137,10 +140,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor?.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                         },
                     }}
                     size="small"
@@ -157,10 +160,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor.dark,
+                        backgroundColor: theme.palette.maskColor?.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
+                            backgroundColor: theme.palette.maskColor?.dark,
                         },
                     }}
                     size="small"
@@ -213,8 +216,11 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <EthereumChainBoundary chainId={chainId} renderInTimeline>
-                    <EthereumWalletConnectedBoundary
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={targetChainId}
+                    renderInTimeline>
+                    <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
                         classes={{ button: tabClasses.button }}
                         renderInTimeline>
@@ -224,11 +230,11 @@ export function PreviewCard(props: PreviewCardProps) {
                             fullWidth
                             variant="contained"
                             sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
+                                backgroundColor: theme.palette.maskColor?.dark,
                                 color: 'white',
                                 width: '100%',
                                 '&:hover': {
-                                    background: theme.palette.maskColor.dark,
+                                    background: theme.palette.maskColor?.dark,
                                 },
                             }}
                             disabled={boxState !== BoxState.READY || isOpening}
@@ -245,8 +251,8 @@ export function PreviewCard(props: PreviewCardProps) {
                                 )
                             })()}
                         </ActionButton>
-                    </EthereumWalletConnectedBoundary>
-                </EthereumChainBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
             </Box>
         </>
     )

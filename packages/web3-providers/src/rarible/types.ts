@@ -94,6 +94,8 @@ export interface Meta {
 }
 
 export interface RaribleNFTItemMapResponse {
+    mintedAt: string
+    lastUpdatedAt: string
     contract: string
     creators: Creator[]
     date: string

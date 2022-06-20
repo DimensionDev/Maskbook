@@ -1,28 +1,24 @@
 import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
-import {
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    SocketState,
-    useAccount,
-    useChainId,
-    useCollections,
-    useERC721ContractDetailed,
-    useERC721Tokens,
-} from '@masknet/web3-shared-evm'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
+import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
+import { WyvernSchemaName } from 'opensea-js/lib/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
 import { EthereumAddress } from 'wallet.ts'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import { unionBy } from 'lodash-unified'
-import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
+import {
+    useChainId,
+    useAccount,
+    useNonFungibleCollections,
+    useNonFungibleTokenContract,
+    useNonFungibleTokenBalance,
+} from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -120,11 +116,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const chainId = useChainId()
-
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -135,11 +129,12 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         },
     )
     const onSubmit = useCallback(
-        (contract: ERC721ContractDetailed) => {
+        (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => {
             setKeyword('')
             setDialog({
                 open: false,
                 uuid: id,
+                balance,
                 contract,
             })
         },
@@ -154,30 +149,25 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, state: loadingCollectionState } = useCollections(account, chainId, open)
+    const { value: assets = [], loading } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
 
-    const erc721InDb = useERC721Tokens()
-    const allContractsInDb = unionBy(
-        erc721InDb.map((x) => ({ ...x.contractDetailed, address: formatEthereumAddress(x.contractDetailed.address) })),
-        'address',
-    ).map((x) => ({ contractDetailed: x, balance: undefined }))
-
-    const renderAssets = assets.map((x) => ({
-        contractDetailed: {
-            type: EthereumTokenType.ERC721,
-            address: x.address,
-            chainId,
-            name: x.name,
-            symbol: x.symbol,
-            baseURI: x.iconURL,
-            iconURL: x.iconURL,
-        } as ERC721ContractDetailed,
-        balance: x.balance,
-    }))
-
-    const contractList = renderAssets
-        ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-        : allContractsInDb
+    const contractList = assets
+        .filter((x) => x.schema_name === WyvernSchemaName.ERC721)
+        .map(
+            (x) =>
+                ({
+                    address: x.address,
+                    chainId,
+                    schema: SchemaType.ERC721,
+                    name: x.name,
+                    symbol: x.symbol,
+                    baseURI: x.iconURL,
+                    iconURL: x.iconURL,
+                    balance: x.balance,
+                } as NonFungibleTokenContract<ChainId, SchemaType>),
+        )
 
     // #region fuse
     const fuse = useMemo(
@@ -187,9 +177,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                 threshold: 0.45,
                 minMatchCharLength: 3,
                 keys: [
-                    { name: 'contractDetailed.name', weight: 0.5 },
-                    { name: 'contractDetailed.symbol', weight: 0.8 },
-                    { name: 'contractDetailed.address', weight: 1 },
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                    { name: 'address', weight: 1 },
                 ],
             }),
         [contractList],
@@ -209,15 +199,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         }}
                     />
                 </div>
-                {loadingCollectionState === SocketState.done && (
-                    <SearchResultBox
-                        keyword={keyword}
-                        contractList={contractList}
-                        searchedTokenList={searchedTokenList}
-                        onSubmit={onSubmit}
-                    />
-                )}
-                {loadingCollectionState !== SocketState.done && (
+
+                {loading ? (
                     <Box
                         display="flex"
                         alignItems="center"
@@ -225,6 +208,13 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         sx={{ paddingTop: 4, paddingBottom: 4 }}>
                         <CircularProgress size={24} />
                     </Box>
+                ) : (
+                    <SearchResultBox
+                        keyword={keyword}
+                        contractList={contractList}
+                        searchedTokenList={searchedTokenList}
+                        onSubmit={onSubmit}
+                    />
                 )}
             </DialogContent>
         </InjectedDialog>
@@ -233,17 +223,23 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
-    contractList: NonFungibleTokenAPI.ContractBalance[]
-    searchedTokenList: NonFungibleTokenAPI.ContractBalance[]
-    onSubmit: (contract: ERC721ContractDetailed) => void
+    contractList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
+    searchedTokenList: Array<NonFungibleTokenContract<ChainId, SchemaType>>
+    onSubmit: (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
 }
 
 function SearchResultBox(props: SearchResultBoxProps) {
     const { keyword, searchedTokenList, onSubmit, contractList } = props
-    const { classes } = useStyles()
-    const isValid = EthereumAddress.isValid(keyword)
-    const { value: contractDetailed, loading } = useERC721ContractDetailed(keyword)
     const { t } = useI18N()
+    const { classes } = useStyles()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const isValid = EthereumAddress.isValid(keyword)
+    const { value: contractDetailed = null, loading } = useNonFungibleTokenContract(
+        NetworkPluginID.PLUGIN_EVM,
+        keyword,
+        undefined,
+        { account },
+    )
     return (
         <div className={classes.searchBox}>
             {keyword !== '' && searchedTokenList.length === 0 ? (
@@ -259,7 +255,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
                         </Box>
                     ) : (
                         <List>
-                            <ContractListItem key="0" onSubmit={onSubmit} contract={{ contractDetailed }} />
+                            <ContractListItem key="0" onSubmit={onSubmit} contract={contractDetailed} />
                         </List>
                     )}
                 </div>
@@ -277,33 +273,32 @@ function SearchResultBox(props: SearchResultBoxProps) {
 }
 
 interface ContractListItemProps {
-    contract: NonFungibleTokenAPI.ContractBalance
-    onSubmit: (contract: ERC721ContractDetailed) => void
+    contract: NonFungibleTokenContract<ChainId, SchemaType>
+    onSubmit: (balance: string, contract: NonFungibleTokenContract<ChainId, SchemaType>) => void
 }
 
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    const chainId = contract.contractDetailed.chainId
-
-    return (
+    const { value: balance = '0' } = useNonFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, contract.address, {
+        chainId: contract.chainId,
+    })
+    return balance === '0' ? null : (
         <div style={{ position: 'relative' }}>
-            <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                <Avatar className={classes.icon} src={contract.contractDetailed.iconURL} />
+            <ListItem className={classes.listItem} onClick={() => onSubmit(balance, contract)}>
+                <Avatar className={classes.icon} src={contract.iconURL} />
                 <Typography className={classes.contractName}>
-                    {contract.contractDetailed.name}{' '}
-                    {contract.contractDetailed.symbol && contract.contractDetailed.symbol !== 'UNKNOWN'
-                        ? '(' + contract.contractDetailed.symbol + ')'
-                        : ''}
+                    {contract.name}{' '}
+                    {contract.symbol && contract.symbol !== 'UNKNOWN' ? '(' + contract.symbol + ')' : ''}
                 </Typography>
-                {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
+                {balance ? <Typography className={classes.balance}>{balance}</Typography> : null}
             </ListItem>
             <div className={classes.address}>
-                <Typography onClick={() => onSubmit(contract.contractDetailed)} className={classes.addressText}>
-                    {contract.contractDetailed.address}
+                <Typography onClick={() => onSubmit(balance, contract)} className={classes.addressText}>
+                    {contract.address}
                 </Typography>
                 <Link
-                    href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
+                    href={explorerResolver.addressLink(contract.chainId, contract.address)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <OpenInNewIcon className={classes.openIcon} fontSize="small" />

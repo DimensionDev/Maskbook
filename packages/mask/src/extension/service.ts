@@ -7,8 +7,8 @@ import {
     AsyncCallOptions,
     CallbackBasedChannel,
     EventBasedChannel,
-    _AsyncVersionOf,
-    _AsyncGeneratorVersionOf,
+    AsyncVersionOf,
+    AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import { serializer, getLocalImplementation } from '@masknet/shared-base'
@@ -25,13 +25,12 @@ export const Services = {
     Identity: add(() => import('../../background/services/identity'), 'Identity'),
     Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
-    Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
-export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
+export const ServicesWithProgress: AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
     () => import('./service-generator'),
     'ServicesWithProgress',
     true,
@@ -44,7 +43,6 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             '../../background/services/identity',
             './background-script/BackupService',
             '../../background/services/helper',
-            './background-script/EthereumService',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',
@@ -60,7 +58,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
  * @param key Name of the service. Used for better debugging.
  * @param generator Is the service is a generator?
  */
-function add<T extends object>(impl: () => Promise<T>, key: string, generator = false): _AsyncVersionOf<T> {
+function add<T extends object>(impl: () => Promise<T>, key: string, generator = false): AsyncVersionOf<T> {
     const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)

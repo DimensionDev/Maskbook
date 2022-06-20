@@ -1,14 +1,13 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import {
+    useClearTransactionsCallback,
+    useRemoveTransactionCallback,
+    useRecentTransactions,
+} from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { useState } from 'react'
-import {
-    useClearRecentTransactions,
-    useRecentTransactions,
-    useRemoveRecentTransaction,
-} from '../../../plugins/Wallet/hooks'
 import { useI18N } from '../../../utils'
 import { TransactionList } from './TransactionList'
 
@@ -22,6 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'default',
         color: theme.palette.warning.main,
         fontSize: 14,
+    },
+    noPendingTransactions: {
+        padding: theme.spacing(1, 0),
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
     },
     clearAll: {
         cursor: 'pointer',
@@ -37,18 +42,16 @@ export function usePendingTransactions() {
     const { t } = useI18N()
 
     // #region recent pending transactions
-    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
 
     // frozenTxes would not be reactive to pendingTransactions,
     // it would be recreated then the list shows up.
     const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>([])
 
-    const clearRecentTxes = useClearRecentTransactions()
-    const removeRecentTx = useRemoveRecentTransaction()
+    const clearRecentTxes = useClearTransactionsCallback()
+    const removeRecentTx = useRemoveTransactionCallback()
 
-    const transactions = pendingTransactions.slice(0, 5).filter((tx) => !meltedTxHashes.includes(tx.hash))
+    const transactions = pendingTransactions.slice(0, 5).filter((tx) => !meltedTxHashes.includes(tx.id))
     // #endregion
     const summary = pendingTransactions.length ? (
         <section className={classes.summaryWrapper}>
@@ -70,15 +73,20 @@ export function usePendingTransactions() {
         </section>
     ) : null
 
-    const transactionList = (
-        <TransactionList
-            transactions={transactions}
-            onClear={(tx) => {
-                setMeltedTxHashes((list) => [...list, tx.hash])
-                removeRecentTx(tx.hash)
-            }}
-        />
-    )
+    const transactionList =
+        transactions.length > 0 ? (
+            <TransactionList
+                transactions={transactions}
+                onClear={(tx) => {
+                    setMeltedTxHashes((list) => [...list, tx.id])
+                    removeRecentTx(tx.id)
+                }}
+            />
+        ) : (
+            <Typography className={classes.noPendingTransactions}>
+                {t('wallet_status_no_pending_transactions')}
+            </Typography>
+        )
 
     return { summary, transactionList }
 }

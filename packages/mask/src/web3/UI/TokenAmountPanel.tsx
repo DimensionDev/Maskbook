@@ -2,10 +2,10 @@ import { ChangeEvent, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { useI18N } from '../../utils'
 
@@ -55,7 +55,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     disableToken?: boolean
     disableBalance?: boolean
     label: string
-    token?: FungibleTokenDetailed | null
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     onAmountChange: (amount: string) => void
     InputProps?: Partial<InputProps>
     MaxChipProps?: Partial<ChipProps>
@@ -81,7 +81,6 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const { t } = useI18N()
 
     const classes = useStylesExtends(useStyles(), props)
-    const { Utils } = useWeb3State()
 
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -110,6 +109,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
             type="text"
             value={amount}
             variant="outlined"
+            onKeyDown={(ev) => {
+                if (ev.key === 'Enter') ev.preventDefault()
+            }}
             onChange={onChange}
             placeholder="0.0"
             InputProps={{
@@ -145,7 +147,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     value={balance}
                                     decimals={token.decimals}
                                     significant={6}
-                                    formatter={Utils?.formatBalance}
+                                    formatter={formatBalance}
                                 />
                             </Typography>
                         ) : null}
@@ -171,7 +173,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                             .dividedBy(maxAmountShares)
                                             .decimalPlaces(0, 1)
                                         onAmountChange(
-                                            Utils?.formatBalance?.(amount, token.decimals, maxAmountSignificant) ?? '0',
+                                            formatBalance(amount, token.decimals, maxAmountSignificant) ?? '0',
                                         )
                                     }}
                                     {...MaxChipProps}

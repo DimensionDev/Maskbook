@@ -1,10 +1,11 @@
+import { useCallback, useState } from 'react'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
-import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
@@ -12,8 +13,7 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import Services from '../../../extension/service'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
@@ -60,16 +60,17 @@ enum CreateRedPacketPageStep {
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const { t } = useI18N()
-    const chainId = useChainId()
-    const account = useAccount()
+    const t = useI18N()
     const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
 
     const onClose = useCallback(() => {
@@ -81,9 +82,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props, state])
 
     const currentIdentity = useCurrentIdentity()
-
-    const { value: linkedPersona } = useCurrentLinkedPersona()
     const lastRecognized = useLastRecognizedIdentity()
+    const { value: linkedPersona } = useCurrentLinkedPersona()
     const senderName =
         lastRecognized.identifier?.userId ?? currentIdentity?.identifier.userId ?? linkedPersona?.nickname
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
@@ -97,9 +97,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await Services.Ethereum.personalSign(
+                    if (!connection) return
+                    payload.password = await connection.signMessage(
                         Web3Utils.sha3(payload.sender.message) ?? '',
-                        account,
+                        'personalSign',
+                        { account },
                     )
                     payload.password = payload.password!.slice(2)
                 }
@@ -112,7 +114,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             onClose()
             closeApplicationBoardDialog()
         },
-        [onClose, chainId, senderName],
+        [onClose, chainId, senderName, connection],
     )
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
@@ -129,12 +131,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
+    // nft dialog height depends on the detailed step
+    const [ERC721DialogHeight, setERC721DialogHeight] = useState(350)
+
+    const dialogContentHeight =
+        state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : ERC721DialogHeight
 
     const tabProps: AbstractTabProps = {
         tabs: [
             {
-                label: t('plugin_red_packet_create_new'),
+                label: t.create_new(),
                 children: (
                     <RedPacketCreateNew
                         origin={settings}
@@ -142,12 +148,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         state={tokenState}
                         onClose={onClose}
                         onChange={onChange}
+                        setERC721DialogHeight={(height: number) => setERC721DialogHeight(height)}
                     />
                 ),
                 sx: { p: 0 },
             },
             {
-                label: t('plugin_red_packet_select_existing'),
+                label: t.select_existing(),
                 children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
                 sx: { p: 0 },
             },
@@ -172,10 +179,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreateStep ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
+    const title = isCreateStep ? t.display_name() : t.details()
 
     return (
-        <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
+        <InjectedDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+            open={props.open}
+            title={title}
+            onClose={isCreateStep ? onClose : () => setStep(CreateRedPacketPageStep.NewRedPacketPage)}
+            isOnBack={step !== CreateRedPacketPageStep.NewRedPacketPage}
+            disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                     <AbstractTab height={dialogContentHeight} {...tabProps} />

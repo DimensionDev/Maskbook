@@ -1,13 +1,9 @@
+import { useCallback, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { leftShift } from '@masknet/web3-shared-base'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    useArtBlocksConstants,
-    useFungibleTokenWatched,
-} from '@masknet/web3-shared-evm'
+import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
+import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
 import {
     Card,
     CardActions,
@@ -18,16 +14,15 @@ import {
     Link,
     Typography,
 } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import type { Project } from '../types'
 
@@ -48,6 +43,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface ActionBarProps {
+    chainId: ChainId
     project: Project
     open: boolean
     onClose: () => void
@@ -56,25 +52,26 @@ export interface ActionBarProps {
 export function PurchaseDialog(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { project, open, onClose } = props
+    const { project, open, onClose, chainId } = props
 
-    const { token, balance } = useFungibleTokenWatched({
-        type: project.currencySymbol === 'ETH' || !project.currencySymbol ? 0 : 1,
-        address: project.currencyAddress ? project.currencyAddress : '',
-    })
+    const { token, balance } = useFungibleTokenWatched(
+        NetworkPluginID.PLUGIN_EVM,
+        project.currencyAddress ? project.currencyAddress : '',
+    )
 
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [{ loading: isPurchasing }, purchaseCallback] = usePurchaseCallback(
+        chainId,
         project.projectId,
         project.pricePerTokenInWei,
-        token.value?.type,
+        token.value?.schema,
     )
     const price = useMemo(
         () => leftShift(project.pricePerTokenInWei, token.value?.decimals),
         [project.pricePerTokenInWei, token.value?.decimals],
     )
-
     const postLink = usePostLink()
+
     const shareText = [
         t(
             isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
@@ -142,7 +139,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                             label={t('plugin_artblocks_price_per_mint')}
                             amount={price.toString()}
                             balance={balance.value ?? '0'}
-                            token={token.value as FungibleTokenDetailed}
+                            token={token.value as FungibleToken<ChainId, SchemaType>}
                             onAmountChange={() => {}}
                         />
                         <FormControlLabel
@@ -173,17 +170,17 @@ export function PurchaseDialog(props: ActionBarProps) {
                         />
                     </CardContent>
                     <CardActions>
-                        <EthereumWalletConnectedBoundary>
-                            {token.value?.type === EthereumTokenType.Native ? actionButton : null}
-                            {token.value?.type === EthereumTokenType.ERC20 ? (
+                        <WalletConnectedBoundary>
+                            {token.value?.schema === SchemaType.Native ? actionButton : null}
+                            {token.value?.schema === SchemaType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
-                                    token={token.value as ERC20TokenDetailed}>
+                                    token={token.value}>
                                     {actionButton}
                                 </EthereumERC20TokenApprovedBoundary>
                             ) : null}
-                        </EthereumWalletConnectedBoundary>
+                        </WalletConnectedBoundary>
                     </CardActions>
                 </Card>
             </DialogContent>

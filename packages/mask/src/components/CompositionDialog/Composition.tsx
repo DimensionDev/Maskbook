@@ -22,6 +22,9 @@ const useStyles = makeStyles()({
         backgroundImage: 'none',
         maxWidth: 'none',
     },
+    hideDialogRoot: {
+        visibility: 'hidden',
+    },
 })
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -30,7 +33,7 @@ export interface PostDialogProps {
 let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const connectStatus = usePersonaConnectStatus()
     /** @deprecated */
@@ -42,6 +45,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
+    const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
     const onClose = useCallback(() => {
         setOpen(false)
         UI.current?.reset()
@@ -70,6 +74,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
+            setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
@@ -103,7 +108,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     return (
         <DialogStackingProvider>
             <InjectedDialog
-                classes={{ paper: classes.dialogRoot }}
+                classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
                 keepMounted
                 open={open}
                 onClose={onClose}
@@ -128,6 +133,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
                         e2eEncryptionDisabled={isE2E_Disabled}
+                        isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     />
                 </DialogContent>
                 <DialogActions sx={{ height: 68 }} />

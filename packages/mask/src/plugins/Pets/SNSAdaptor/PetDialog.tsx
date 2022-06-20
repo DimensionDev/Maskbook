@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAsync, useTimeout } from 'react-use'
-import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
+import type { Constant } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'

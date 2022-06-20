@@ -57,16 +57,16 @@ export function ArticleTab(props: ArticleTabProps) {
 
     return useMemo(() => {
         if (!asset.value) return null
+        // TODO: Migrate `hasNativeAPI` to `@masknet/shared` to use it in <NFTCardStyledAssetPlayer /> directly.
         const resourceUrl = hasNativeAPI
-            ? asset.value.image_url || asset.value.animation_url
-            : asset.value.animation_url || asset.value.image_url
+            ? asset.value.metadata?.imageURL || asset.value.metadata?.mediaURL
+            : asset.value.metadata?.mediaURL || asset.value.metadata?.imageURL
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    {/* Todo: Migrate `hasNativeAPI` to `@masknet/shared` to use it in <NFTCardStyledAssetPlayer /> directly.  */}
                     <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={hasNativeAPI} />
                 </div>
             </CollectibleTab>
         )
-    }, [asset.value?.animation_url, asset.value?.image_url, classes])
+    }, [asset.value?.metadata?.mediaURL, asset.value?.metadata?.imageURL, classes])
 }

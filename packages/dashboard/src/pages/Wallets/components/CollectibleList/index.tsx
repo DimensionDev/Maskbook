@@ -1,23 +1,24 @@
-import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Stack, TablePagination } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Button, Stack } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginMessages } from '../../../../API'
 import { TransferTab } from '../Transfer'
 import {
-    useNetworkDescriptor,
-    useWeb3State as useWeb3PluginState,
-    Web3Plugin,
     useAccount,
     useCurrentWeb3NetworkPluginID,
-    NetworkPluginID,
+    useNonFungibleAssets,
+    useTrustedNonFungibleTokens,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { useAsyncRetry } from 'react-use'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { uniqBy } from 'lodash-unified'
+import { ElementAnchor } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     root: {
@@ -37,171 +38,139 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    selectedChain: Web3Helper.NetworkDescriptorAll | null
 }
 
-const ITEM_SIZE = {
-    width: 150,
-    height: 250,
-}
-
-export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
-    const [page, setPage] = useState(0)
+export const CollectibleList = memo<CollectibleListProps>(({ selectedChain }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const { Asset } = useWeb3PluginState()
-    const network = useNetworkDescriptor()
-    const [loadingSize, setLoadingSize] = useState(0)
-    const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
+    const trustedNonFungibleTokens = useTrustedNonFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        undefined,
+        selectedChain?.chainId as ChainId,
+    )
 
     const {
-        value = { data: EMPTY_LIST, hasNextPage: false },
-        error: collectiblesError,
-        loading: isQuerying,
-        retry,
-    } = useAsyncRetry(
-        async () => Asset?.getNonFungibleAssets?.(account, { page, size: 20 }, undefined, selectedNetwork || undefined),
-        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
-    )
-    useEffect(() => {
-        const unsubscribeTokens = PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        const unsubscribeSocket = PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
-        return () => {
-            unsubscribeTokens()
-            unsubscribeSocket()
-        }
-    }, [retry])
+        value = EMPTY_LIST,
+        done,
+        next,
+        error,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        account,
+        chainId: selectedChain?.chainId as ChainId,
+    })
+
+    const renderCollectibles = useMemo(() => {
+        const trustedOwnNonFungibleTokens = trustedNonFungibleTokens.filter((x) => isSameAddress(x.ownerId, account))
+        return uniqBy(
+            [...trustedOwnNonFungibleTokens, ...value],
+            (x) => x?.contract?.address.toLowerCase() + x?.tokenId,
+        ).filter((x) => (selectedChain ? x.chainId === selectedChain.chainId : true))
+    }, [value.length, trustedNonFungibleTokens.length, selectedChain?.chainId])
 
     useEffect(() => {
-        if (!loadingSize) return
-        const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
-        setRenderData(render)
-    }, [value.data, loadingSize, page])
+        if (next) next()
+    }, [next])
 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
-        (detail: Web3Plugin.NonFungibleToken) => {
+        (
+            detail: NonFungibleToken<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => {
             // Sending NFT is only available on EVM currently.
             if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
-                    erc721Token: detail,
+                    nonFungibleToken: detail,
                 },
             })
         },
         [currentPluginId],
     )
 
-    const hasNextPage = (page + 1) * loadingSize < value.data.length
-    const isLoading = renderData.length === 0 && isQuerying
-
     return (
         <CollectibleListUI
-            isLoading={isLoading}
-            isEmpty={!!collectiblesError || renderData.length === 0}
-            page={page}
-            onPageChange={setPage}
-            hasNextPage={hasNextPage}
-            showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
-            dataSource={renderData}
-            chainId={network?.chainId ?? 1}
+            isError={!!error}
+            isLoading={renderCollectibles.length === 0 && !done && !error}
+            isDone={done}
+            isEmpty={!error && renderCollectibles.length === 0 && done}
+            dataSource={renderCollectibles}
             onSend={onSend}
-            setLoadingSize={(size) => setLoadingSize(size)}
+            onRetry={next}
         />
     )
 })
 
 export interface CollectibleListUIProps {
-    page: number
-    onPageChange: Dispatch<SetStateAction<number>>
-    hasNextPage: boolean
+    isError: boolean
     isLoading: boolean
+    isDone: boolean
     isEmpty: boolean
-    showPagination: boolean
-    chainId: number
-    dataSource: Web3Plugin.NonFungibleToken[]
-    onSend(detail: Web3Plugin.NonFungibleToken): void
-    setLoadingSize(fn: (pre: number | undefined) => number): void
+    chainId?: Web3Helper.ChainIdAll
+    dataSource: Array<
+        NonFungibleToken<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >
+    >
+    onSend(
+        detail: NonFungibleToken<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
+    onRetry?: () => void
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
-    ({
-        page,
-        onPageChange,
-        isLoading,
-        isEmpty,
-        hasNextPage,
-        showPagination,
-        chainId,
-        dataSource,
-        onSend,
-        setLoadingSize,
-    }) => {
+    ({ isEmpty, isLoading, isDone, onRetry, dataSource, onSend, isError }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const ref = useRef<HTMLDivElement>(null)
 
-        useEffect(() => {
-            if (!ref.current) return
-            const width = ref.current.offsetWidth
-            const height = ref.current.offsetHeight - 60
-            const baseSize = Math.floor(width / ITEM_SIZE.width) * Math.floor(height / ITEM_SIZE.height)
-            // Ensure load 10 NFTs at least.
-            setLoadingSize((prev) => prev || Math.max(Math.floor(baseSize * 0.8), 10))
-        }, [ref.current])
-
         return (
             <Stack flexDirection="column" justifyContent="space-between" height="100%" ref={ref}>
-                {isLoading ? (
-                    <LoadingPlaceholder />
-                ) : isEmpty ? (
-                    <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
-                ) : (
-                    <Box>
-                        <div className={classes.root}>
-                            {dataSource.map((x, index) => (
-                                <div className={classes.card} key={index}>
-                                    <CollectibleCard
-                                        chainId={chainId}
-                                        token={x}
-                                        renderOrder={index}
-                                        // TODO: transfer not support multi chain, should remove is after supported
-                                        onSend={() => onSend(x as unknown as any)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </Box>
-                )}
-
-                {showPagination ? (
-                    <Box className={classes.footer}>
-                        <TablePagination
-                            count={-1}
-                            component="div"
-                            onPageChange={() => {}}
-                            page={page}
-                            rowsPerPage={20}
-                            rowsPerPageOptions={[20]}
-                            labelDisplayedRows={() => null}
-                            backIconButtonProps={{
-                                onClick: () => onPageChange((prev) => prev - 1),
-                                size: 'small',
-                                disabled: page === 0,
-                            }}
-                            nextIconButtonProps={{
-                                onClick: () => onPageChange((prev) => prev + 1),
-                                disabled: !hasNextPage,
-                                size: 'small',
-                            }}
-                        />
-                    </Box>
-                ) : null}
+                {(() => {
+                    if (isLoading) return <LoadingPlaceholder />
+                    if (isEmpty) return <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                    if (!dataSource.length && isError)
+                        return (
+                            <Stack flexDirection="row" justifyContent="center" height="100%" alignItems="center">
+                                <Button>{t.wallets_reload()}</Button>
+                            </Stack>
+                        )
+                    return (
+                        <Box>
+                            <div className={classes.root}>
+                                {dataSource.map((x, index) => (
+                                    <div className={classes.card} key={index}>
+                                        <CollectibleCard token={x} renderOrder={index} onSend={() => onSend(x)} />
+                                    </div>
+                                ))}
+                            </div>
+                            {!isDone && !isError && (
+                                <Stack direction="row" justifyContent="center" pt={2}>
+                                    <LoadingBase />
+                                </Stack>
+                            )}
+                            {isError && (
+                                <Stack flexDirection="row" justifyContent="center" pt={3} alignItems="center">
+                                    <Button>{t.wallets_reload()}</Button>
+                                </Stack>
+                            )}
+                            <ElementAnchor
+                                callback={() => {
+                                    if (onRetry) onRetry()
+                                }}>
+                                <Stack />
+                            </ElementAnchor>
+                        </Box>
+                    )
+                })()}
             </Stack>
         )
     },
