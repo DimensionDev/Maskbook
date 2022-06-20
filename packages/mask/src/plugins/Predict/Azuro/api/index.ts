@@ -1,18 +1,16 @@
-import { fetchGames, fetchUserBets, setSelectedChainId, setContractAddresses } from '@azuro-protocol/sdk'
+import { fetchGames, fetchUserBets } from '@azuro-protocol/sdk'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { contractAddresses } from '../../constants'
+import { configureAzuroSDK } from '../helpers/configureAzuroSDK'
 
 export async function fetchMyBets(account: string, chainId: ChainId) {
-    setSelectedChainId(chainId)
-    setContractAddresses(contractAddresses[chainId])
+    await configureAzuroSDK(chainId)
 
     const bets = await fetchUserBets({ account })
     return bets
 }
 
 export async function fetchEvents(chainId: ChainId) {
-    setSelectedChainId(chainId)
-    setContractAddresses(contractAddresses[chainId])
+    await configureAzuroSDK(chainId)
 
     const events = await fetchGames({
         filters: {

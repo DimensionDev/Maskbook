@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { FolderTabPanel, FolderTabs, makeStyles } from '@masknet/theme'
 import { Card, CardContent, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
@@ -7,7 +6,6 @@ import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { isDashboardPage } from '@masknet/shared-base'
 import { MyBetsView } from './views/MyBetsView'
 import { EventsView } from './views/EventsView'
-import { configure, setSelectedChainId } from '@azuro-protocol/sdk'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { useRPCConstants } from '@masknet/web3-shared-evm'
 
@@ -43,15 +41,6 @@ export function AzuroDialog(props: AzuroDialogProps) {
     const isDashboard = isDashboardPage()
     const chainId = useChainId()
     const { RPC_URLS } = useRPCConstants(chainId)
-
-    useEffect(() => {
-        setSelectedChainId(chainId)
-
-        configure({
-            rpcUrl: RPC_URLS?.[0] ?? '',
-            ipfsGateway: 'https://ipfs-gateway.azuro.org/ipfs/',
-        })
-    }, [configure, setSelectedChainId, chainId])
 
     return (
         <Card className={classes.root}>
