@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -54,18 +53,14 @@ export function RedeemButton(props: RedeemButtonProps) {
         (isResultPositive && bet.gameInfo.state === ConditionStatus.RESOLVED) ||
         bet.gameInfo.state === ConditionStatus.CANCELED
 
-    return (
-        <Grid textAlign="center">
-            {isRedeemable ? (
-                <LoadingButton
-                    onClick={() => doFetch()}
-                    className={classes.redeemButton}
-                    size="small"
-                    loading={loading}
-                    disabled={bet.isRedeemed || loading}>
-                    {bet.isRedeemed ? t('plugin_azuro_redeemed') : t('plugin_azuro_redeem')}
-                </LoadingButton>
-            ) : null}
-        </Grid>
-    )
+    return isRedeemable ? (
+        <LoadingButton
+            onClick={() => doFetch()}
+            className={classes.redeemButton}
+            size="small"
+            loading={loading}
+            disabled={bet.isRedeemed || loading}>
+            {bet.isRedeemed ? t('plugin_azuro_redeemed') : t('plugin_azuro_redeem')}
+        </LoadingButton>
+    ) : null
 }
