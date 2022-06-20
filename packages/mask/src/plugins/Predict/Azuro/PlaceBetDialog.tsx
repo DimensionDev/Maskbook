@@ -13,7 +13,7 @@ import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundar
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { marketRegistry, outcomeRegistry } from './helpers'
-import { usePlaceBetCallback, useMinRate, useActualRate } from './hooks'
+import { usePlaceBetCallback, useActualRate } from './hooks'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -89,8 +89,8 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
 
     const rawAmount = rightShift(String(amount), USDT_DECIMALS)
     const deadline = Math.floor(Date.now() / 1000) + 2000
-    const { minRate, loading: minRateLoading } = useMinRate(slippage, actualRate ?? 0)
-    const rawMinRate = rightShift(minRate, RATE_DECIMALS)
+    const minRate = (1 + (((actualRate ?? 0) - 1) * (100 - slippage)) / 100).toFixed(8)
+    const rawMinRate = rightShift(minRate ?? '0', RATE_DECIMALS)
 
     const [{ loading: isPlacing }, placeBetCallback] = usePlaceBetCallback(
         condition.conditionId,
@@ -177,7 +177,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                     <Typography>
                                         {!amount ? (
                                             condition.value.toFixed(2)
-                                        ) : minRateLoading || actualRateLoading ? (
+                                        ) : actualRateLoading ? (
                                             <LoadingAnimation />
                                         ) : (
                                             minRate
