@@ -200,37 +200,47 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 </Grid>
                             </Grid>
                             <WalletConnectedBoundary>
-                                <ChainBoundary
-                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                    expectedChainId={ChainId.Sokol}>
-                                    <EthereumERC20TokenApprovedBoundary
-                                        amount={rightShift(amount || '0', token?.decimals).toFixed()}
-                                        spender={AZURO_LP}
-                                        token={token}>
+                                {chainId === ChainId.Sokol ? (
+                                    <ChainBoundary
+                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                        expectedChainId={ChainId.Sokol}>
+                                        <EthereumERC20TokenApprovedBoundary
+                                            amount={rightShift(amount || '0', token?.decimals).toFixed()}
+                                            spender={AZURO_LP}
+                                            token={token}>
+                                            <ActionButton
+                                                className={classes.actionButton}
+                                                size="large"
+                                                variant="contained"
+                                                disabled={!!validationMessage}
+                                                onClick={placeBet}
+                                                fullWidth>
+                                                {validationMessage || t.plugin_azuro_place_bet()}
+                                            </ActionButton>
+                                        </EthereumERC20TokenApprovedBoundary>
+                                    </ChainBoundary>
+                                ) : (
+                                    ''
+                                )}
+                                {chainId === ChainId.xDai ? (
+                                    <ChainBoundary
+                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                        expectedChainId={ChainId.xDai}>
                                         <ActionButton
                                             className={classes.actionButton}
                                             size="large"
                                             variant="contained"
-                                            disabled={!!validationMessage}
+                                            disabled={isPlacing || !!validationMessage}
                                             onClick={placeBet}
                                             fullWidth>
-                                            {validationMessage || t.plugin_azuro_place_bet()}
+                                            {isPlacing
+                                                ? tr('loading')
+                                                : validationMessage || t.plugin_azuro_place_bet()}
                                         </ActionButton>
-                                    </EthereumERC20TokenApprovedBoundary>
-                                </ChainBoundary>
-                                <ChainBoundary
-                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                    expectedChainId={ChainId.xDai}>
-                                    <ActionButton
-                                        className={classes.actionButton}
-                                        size="large"
-                                        variant="contained"
-                                        disabled={isPlacing || !!validationMessage}
-                                        onClick={placeBet}
-                                        fullWidth>
-                                        {isPlacing ? tr('loading') : validationMessage || t.plugin_azuro_place_bet()}
-                                    </ActionButton>
-                                </ChainBoundary>
+                                    </ChainBoundary>
+                                ) : (
+                                    ''
+                                )}
                             </WalletConnectedBoundary>
                         </div>
                     </DialogContent>
