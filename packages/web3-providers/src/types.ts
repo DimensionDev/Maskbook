@@ -569,22 +569,22 @@ export namespace TrendingAPI {
 
     export type HistoricalInterval = '1d' | '2h' | '1h' | '15m' | '5m'
 
+    export type PriceStats = {
+        market_caps: Stat[]
+        prices: Stat[]
+        total_volumes: Stat[]
+    }
+
     export interface Provider<ChainId> {
         getCoinTrending(chainId: ChainId, id: string, currency: Currency): Promise<Trending>
 
         // #region get all coins
         getCoins(): Promise<Coin[]>
         // #endregion
-        getHistorical(
-            id: string,
-            currency: string,
-            startDate: Date,
-            endDate: Date,
-            interval: HistoricalInterval,
-        ): Promise<Record<string, Record<string, Stat>> | HistoricalCoinInfo>
 
         // #region get all currency
         getCurrencies(): Promise<Currency[]>
         // #endregion
+        getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
     }
 }

@@ -3,21 +3,10 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { PriceAPI, TrendingAPI } from '..'
 import { uniq } from 'lodash-unified'
-import type { CoinInfo } from './type'
 import { DataProvider } from '@masknet/public-api'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
-
-const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
-
-export async function getCoinInfo(coinId: string) {
-    const response = await fetch(
-        `${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
-        // TODO: handle flags
-        // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-        { cache: 'default' },
-    )
-    return response.json() as Promise<CoinInfo>
-}
+import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
+import { COINGECKO_URL_BASE } from './constants'
 
 export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<ChainId> {
     async getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
@@ -131,20 +120,23 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
     }
 
     getCoins(): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
+        return getAllCoins()
     }
 
-    getCurrencies(): Promise<TrendingAPI.Currency[]> {
-        throw new Error('To be implemented.')
+    async getCurrencies(): Promise<TrendingAPI.Currency[]> {
+        const currencies = await getAllCurrencies()
+        return currencies.map((x) => ({
+            id: x,
+            name: x.toUpperCase(),
+        }))
     }
 
-    getHistorical(
-        id: string,
-        currency: string,
-        startDate: Date,
-        endDate: Date,
-        interval: TrendingAPI.HistoricalInterval,
-    ): Promise<Record<string, Record<string, TrendingAPI.Stat>> | TrendingAPI.HistoricalCoinInfo> {
-        throw new Error('To be implemented.')
+    async getPriceStats(
+        chainId: ChainId,
+        coinId: string,
+        currency: TrendingAPI.Currency,
+        days: number,
+    ): Promise<TrendingAPI.Stat[]> {
+        return (await getStats(coinId, currency.id, days)).prices
     }
 }

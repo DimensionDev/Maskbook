@@ -1,11 +1,19 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import type { TrendingAPI } from '../types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
+import { BTC_FIRST_LEGER_DATE, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from './helper'
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type'
-import { fetchJSON } from '../helpers'
+import { fetchJSON, getTraderAllAPICachedFlag } from '../helpers'
+
+export enum Days {
+    MAX = 0,
+    ONE_DAY = 1,
+    ONE_WEEK = 7,
+    ONE_MONTH = 30,
+    ONE_YEAR = 365,
+}
 
 // #regin get quote info
 export interface QuotesInfo {
@@ -44,9 +52,7 @@ export async function getQuotesInfo(id: string, currency: string) {
 
     try {
         const response = await fetch(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
-            // TODO: handle flags
-            // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-            cache: 'default',
+            cache: getTraderAllAPICachedFlag(),
         })
         return response.json() as Promise<{
             data: Record<string, QuotesInfo>
@@ -185,9 +191,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 
     try {
         const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
-            // TODO: handle flags
-            // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-            cache: 'default',
+            cache: getTraderAllAPICachedFlag(),
         })
         return response.json() as Promise<{
             data: {
@@ -247,9 +251,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         const response = await fetchJSON<
             ResultData<Record<string, Record<string, TrendingAPI.Stat>> | TrendingAPI.HistoricalCoinInfo>
         >(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
-            // TODO: handle flags
-            // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-            cache: 'default',
+            cache: getTraderAllAPICachedFlag(),
         })
 
         return response.data
@@ -341,5 +343,33 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 price_change_percentage_7d_in_currency: quotesInfo_.quote[currencyName].percent_change_7d,
             }
         return trending
+    }
+
+    async getPriceStats(
+        chainId: ChainId,
+        coinId: string,
+        currency: TrendingAPI.Currency,
+        days: number,
+    ): Promise<TrendingAPI.Stat[]> {
+        const interval = (() => {
+            if (days === 0) return '1d' // max
+            if (days > 365) return '1d' // 1y
+            if (days > 90) return '2h' // 3m
+            if (days > 30) return '1h' // 1m
+            if (days > 7) return '15m' // 1w
+            return '5m'
+        })()
+        const endDate = new Date()
+        const startDate = new Date()
+        startDate.setDate(startDate.getDate() - days)
+        const stats = await this.getHistorical(
+            coinId,
+            currency.name.toUpperCase(),
+            days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
+            endDate,
+            interval,
+        )
+        if (stats.is_active === 0) return []
+        return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
     }
 }

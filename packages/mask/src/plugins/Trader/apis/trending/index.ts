@@ -1,20 +1,12 @@
 import { first, groupBy } from 'lodash-unified'
 import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
-import * as coinGeckoAPI from '../coingecko'
-import * as uniswapAPI from '../uniswap'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import {
-    isBlockedId,
-    isBlockedKeyword,
-    isMirroredKeyword,
-    resolveAlias,
-    resolveCoinId,
-} from './hotfix'
+import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
+import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap } from '@masknet/web3-providers'
+import { CoinGecko, CoinMarketCap, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -23,27 +15,11 @@ import { CoinGecko, CoinMarketCap } from '@masknet/web3-providers'
 export async function getCurrencies(dataProvider: DataProvider): Promise<Currency[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            const currencies = await coinGeckoAPI.getAllCurrencies()
-            return currencies.map((x) => ({
-                id: x,
-                name: x.toUpperCase(),
-            }))
+            return CoinGecko.getCurrencies()
         case DataProvider.COIN_MARKET_CAP:
-            return Object.values(CoinMarketCap.getCurrencies()).map((x) => ({
-                id: String(x.id),
-                name: x.symbol.toUpperCase(),
-                symbol: x.token,
-                description: x.name,
-            }))
+            return CoinMarketCap.getCurrencies()
         case DataProvider.UNISWAP_INFO:
-            return [
-                {
-                    id: 'usd',
-                    name: 'USD',
-                    symbol: '$',
-                    description: 'Unite State Dollar',
-                },
-            ]
+            return UniSwap.getCurrencies()
         default:
             unreachable(dataProvider)
     }
@@ -52,12 +28,11 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return coinGeckoAPI.getAllCoins()
+            return CoinGecko.getCoins()
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCoins()
         case DataProvider.UNISWAP_INFO:
-            // the uniswap has got huge tokens based (more than 2.2k) since we fetch coin info dynamically
-            return []
+            return UniSwap.getCoins()
         default:
             unreachable(dataProvider)
     }
@@ -88,7 +63,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = (await uniswapAPI.getAllCoinsByKeyword(chainId, keyword)).filter(
+            const coins = (await UniSwap.getCoinsByKeyword(chainId, keyword)).filter(
                 (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
             if (coins.length) {
@@ -192,25 +167,7 @@ async function getCoinTrending(
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
-            const { token, marketInfo, tickersInfo } = await uniswapAPI.getCoinInfo(chainId, id)
-            return {
-                currency,
-                dataProvider: DataProvider.UNISWAP_INFO,
-                market: marketInfo,
-                coin: {
-                    id,
-                    name: token?.name || '',
-                    symbol: token?.symbol || '',
-                    decimals: Number(token?.decimals || '0'),
-                    is_mirrored: isMirroredKeyword(token?.symbol || ''),
-                    blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
-                    image_url: `https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
-                    platform_url: `https://info.uniswap.org/token/${id}`,
-                    contract_address: id,
-                },
-                tickers: tickersInfo,
-                lastUpdated: '',
-            }
+            return UniSwap.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -259,47 +216,11 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return (await coinGeckoAPI.getPriceStats(id, currency.id, days === Days.MAX ? 11430 : days)).prices
+            return CoinGecko.getPriceStats(chainId, id, currency, days === Days.MAX ? 11430 : days)
         case DataProvider.COIN_MARKET_CAP:
-            const interval = (() => {
-                if (days === 0) return '1d' // max
-                if (days > 365) return '1d' // 1y
-                if (days > 90) return '2h' // 3m
-                if (days > 30) return '1h' // 1m
-                if (days > 7) return '15m' // 1w
-                return '5m'
-            })()
-            const endDate = new Date()
-            const startDate = new Date()
-            startDate.setDate(startDate.getDate() - days)
-            const stats = await CoinMarketCap.getHistorical(
-                id,
-                currency.name.toUpperCase(),
-                days === Days.MAX ? BTC_FIRST_LEGER_DATE : startDate,
-                endDate,
-                interval,
-            )
-            if (stats.is_active === 0) return []
-            return Object.entries(stats).map(([date, x]) => [date, x[currency.name.toUpperCase()][0]])
+            return CoinMarketCap.getPriceStats(chainId, id, currency, days)
         case DataProvider.UNISWAP_INFO:
-            const endTime = new Date()
-            const startTime = new Date()
-            startTime.setDate(endTime.getDate() - days)
-            const uniswap_interval = (() => {
-                if (days === 0 || days > 365) return 86400 // max
-                if (days > 90) return 7200 // 1y
-                if (days > 30) return 3600 // 3m
-                if (days > 7) return 900 // 1w
-                return 300 // 5m
-            })()
-            return uniswapAPI.getPriceStats(
-                chainId,
-                id,
-                currency,
-                uniswap_interval,
-                Math.floor((days === Days.MAX ? BTC_FIRST_LEGER_DATE.getTime() : startTime.getTime()) / 1000),
-                Math.floor(endTime.getTime() / 1000),
-            )
+            return UniSwap.getPriceStats(chainId, id, currency, days)
         default:
             return []
     }
