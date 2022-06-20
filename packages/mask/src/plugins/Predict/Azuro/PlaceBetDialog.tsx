@@ -18,6 +18,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { contractAddresses } from '../constants'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -199,7 +200,9 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 </Grid>
                             </Grid>
                             <WalletConnectedBoundary>
-                                {chainId === ChainId.Sokol ? (
+                                <ChainBoundary
+                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                    expectedChainId={ChainId.Sokol}>
                                     <EthereumERC20TokenApprovedBoundary
                                         amount={rightShift(amount || '0', token?.decimals).toFixed()}
                                         spender={AZURO_LP}
@@ -214,7 +217,10 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                             {validationMessage || t.plugin_azuro_place_bet()}
                                         </ActionButton>
                                     </EthereumERC20TokenApprovedBoundary>
-                                ) : (
+                                </ChainBoundary>
+                                <ChainBoundary
+                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                    expectedChainId={ChainId.xDai}>
                                     <ActionButton
                                         className={classes.actionButton}
                                         size="large"
@@ -224,7 +230,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                         fullWidth>
                                         {isPlacing ? tr('loading') : validationMessage || t.plugin_azuro_place_bet()}
                                     </ActionButton>
-                                )}
+                                </ChainBoundary>
                             </WalletConnectedBoundary>
                         </div>
                     </DialogContent>
