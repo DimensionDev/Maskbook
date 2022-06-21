@@ -547,8 +547,9 @@ export namespace TrendingAPI {
     }
 
     export interface Contract {
-        chainId: ChainId
+        chainId?: ChainId
         address: string
+        iconURL?: string
     }
 
     export interface Trending {

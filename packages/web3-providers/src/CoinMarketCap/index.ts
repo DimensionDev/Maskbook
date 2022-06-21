@@ -1,7 +1,7 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import type { TrendingAPI } from '../types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { BTC_FIRST_LEGER_DATE, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
+import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type'
@@ -272,6 +272,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 ({
                     chainId: resolveChainIdByName(x.platform.name, coinInfo.symbol),
                     address: x.contract_address,
+                    iconURL: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${x.platform.coin.id}.png`,
                 } as TrendingAPI.Contract),
         )
 
@@ -301,7 +302,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                     ...(coinInfo.urls.explorer ?? []),
                 ].filter(Boolean),
                 tags: coinInfo.tags ?? void 0,
-                image_url: `https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`,
+                image_url: `${CMC_STATIC_BASE_URL}/img/coins/64x64/${id}.png`,
                 platform_url: `https://coinmarketcap.com/currencies/${coinInfo.slug}/`,
                 twitter_url: coinInfo.urls.twitter?.find((x) => x.includes('twitter')),
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
@@ -313,7 +314,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             dataProvider: DataProvider.COIN_MARKET_CAP,
             tickers: market.market_pairs
                 .map((pair) => ({
-                    logo_url: `https://s2.coinmarketcap.com/static/img/exchanges/32x32/${pair.exchange.id}.png`,
+                    logo_url: `${CMC_STATIC_BASE_URL}/img/exchanges/32x32/${pair.exchange.id}.png`,
                     trade_url: pair.market_url,
                     market_name: pair.exchange.name,
                     market_reputation: pair.market_reputation,

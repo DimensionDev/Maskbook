@@ -1,10 +1,10 @@
 import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenu } from '../../../../utils'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { useTheme } from '@mui/system'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { CheckCircleIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -43,11 +43,17 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
     }
     const [menu, openMenu] = useMenu(
         options.map((x, i) => (
-            <MenuItem disabled={x.disabled} selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
+            <MenuItem disabled={x.disabled} key={x.value} onClick={() => onSelect(x)}>
                 <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
                     <Stack flexGrow={1}>{x.name}</Stack>
                     {selectedIndex === i ? (
-                        <CheckCircleIcon style={{ fontSize: 20, color: theme.palette.maskColor.primary }} />
+                        <CheckCircleIcon
+                            style={{
+                                fontSize: 20,
+                                color: theme.palette.maskColor.primary,
+                                boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
+                            }}
+                        />
                     ) : (
                         <RadioButtonUncheckedIcon
                             style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}

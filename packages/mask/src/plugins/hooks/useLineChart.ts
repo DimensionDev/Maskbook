@@ -16,7 +16,7 @@ export function useLineChart(
     const { color = 'steelblue', tickFormat = ',.2s', formatTooltip = (value: number) => value } = opts
     const { top, right, bottom, left, width, height } = dimension
     const contentWidth = width - left - right
-    const contentHeight = height - top - bottom - 64
+    const contentHeight = height - top - bottom
     useEffect(() => {
         if (!svgRef.current) return
 

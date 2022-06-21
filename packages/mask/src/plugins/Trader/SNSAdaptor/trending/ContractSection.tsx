@@ -1,6 +1,6 @@
 import { PopupCopyIcon } from '@masknet/icons'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -8,8 +8,9 @@ import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 
 export interface ContractSectionProps {
-    chainId: ChainId
+    chainId?: ChainId
     address: string
+    iconURL?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ContractSection = ({ address, chainId }: ContractSectionProps) => {
+export const ContractSection = ({ address, chainId, iconURL }: ContractSectionProps) => {
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -35,7 +36,13 @@ export const ContractSection = ({ address, chainId }: ContractSectionProps) => {
 
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
-            {chainId ? <WalletIcon size={16} mainIcon={chain?.icon} /> : <Box width={16} />}
+            {chainId ? (
+                <WalletIcon size={16} mainIcon={chain?.icon} />
+            ) : iconURL ? (
+                <TokenIcon AvatarProps={{ sx: { width: 16, height: 16 } }} logoURL={iconURL} address={address} />
+            ) : (
+                <Box width={16} />
+            )}
             <Typography variant="body2" component="span" fontWeight={700}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>

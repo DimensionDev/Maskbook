@@ -87,7 +87,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const [menu, openMenu] = useMenu(
         contracts.map((x, i) => (
             <MenuItem key={x.chainId}>
-                <ContractSection address={x.address} chainId={x.chainId} />
+                <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>
         )),
         false,
@@ -116,6 +116,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         justifyContent="flex-end"
                                         style={{ position: 'relative', right: -5 }}>
                                         <ContractSection
+                                            iconURL={contracts[0].iconURL}
                                             chainId={contracts[0].chainId}
                                             address={contracts[0].address}
                                         />
@@ -137,14 +138,16 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         </Typography>
                                     </TableCell>
                                     <TableCell align="right">
-                                        {links.map((x, i) => (
-                                            <Linking
-                                                key={i}
-                                                href={x}
-                                                LinkProps={{ className: classes.link }}
-                                                TypographyProps={{ fontWeight: 700 }}
-                                            />
-                                        ))}
+                                        <Stack display="inline-flex" direction="row" gap={1}>
+                                            {links.map((x, i) => (
+                                                <Linking
+                                                    key={i}
+                                                    href={x}
+                                                    LinkProps={{ className: classes.link }}
+                                                    TypographyProps={{ fontWeight: 700 }}
+                                                />
+                                            ))}
+                                        </Stack>
                                     </TableCell>
                                 </TableRow>
                             )
