@@ -1,13 +1,14 @@
 import { useChainId } from '@masknet/plugin-infra/web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
-import { fetchEvents } from '../api'
+import { PluginPredictRPC } from '../../messages'
 
 export function useFetchGames(searchTerm: string, market: number, league: string, sort: string) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncRetry(async () => {
-        const games = await fetchEvents(chainId as ChainId)
+        const games = await PluginPredictRPC.fetchEvents(chainId)
+        console.log(games)
 
         const gamesFiltered = games.filter((game) => {
             if (market !== 0) return game.marketRegistryId === market
