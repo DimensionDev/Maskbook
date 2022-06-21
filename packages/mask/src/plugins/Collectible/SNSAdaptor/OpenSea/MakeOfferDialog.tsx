@@ -15,7 +15,7 @@ import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { UnreviewedWarning } from '.././UnreviewedWarning'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => {
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+            padding: 0,
         },
         panel: {
             marginTop: theme.spacing(2),
@@ -54,11 +54,10 @@ const useStyles = makeStyles()((theme) => {
         label: {},
         buttons: {
             width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
+            margin: 0,
         },
         button: {
             flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
     }
 })
@@ -244,33 +243,69 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                     <CardActions className={classes.footer}>
                         <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
-                                <ActionButtonPromise
-                                    className={classes.button}
-                                    variant="contained"
-                                    disabled={!!validationMessage}
-                                    size="large"
-                                    init={
-                                        validationMessage ||
-                                        t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer')
-                                    }
-                                    waiting={t(
-                                        isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
-                                    )}
-                                    complete={t('plugin_collectible_done')}
-                                    failed={t('plugin_collectible_retry')}
-                                    executor={onMakeOffer}
-                                    completeOnClick={onClose}
-                                    failedOnClick="use executor"
-                                />
                                 {insufficientBalance ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConvertClick}>
-                                        {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
-                                    </ActionButton>
-                                ) : null}
+                                    <Box style={{ display: 'flex', flex: 1 }}>
+                                        <Box style={{ padding: 16, flex: 1 }}>
+                                            <ActionButtonPromise
+                                                className={classes.button}
+                                                variant="contained"
+                                                disabled={!!validationMessage}
+                                                size="large"
+                                                fullWidth
+                                                init={
+                                                    validationMessage ||
+                                                    t(
+                                                        isAuction
+                                                            ? 'plugin_collectible_place_bid'
+                                                            : 'plugin_collectible_make_offer',
+                                                    )
+                                                }
+                                                waiting={t(
+                                                    isAuction
+                                                        ? 'plugin_collectible_place_bid'
+                                                        : 'plugin_collectible_make_offer',
+                                                )}
+                                                complete={t('plugin_collectible_done')}
+                                                failed={t('plugin_collectible_retry')}
+                                                executor={onMakeOffer}
+                                                completeOnClick={onClose}
+                                                failedOnClick="use executor"
+                                            />
+                                        </Box>
+                                        <Box style={{ padding: 16, flex: 1 }}>
+                                            <ActionButton
+                                                className={classes.button}
+                                                variant="contained"
+                                                size="large"
+                                                fullWidth
+                                                onClick={onConvertClick}>
+                                                {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
+                                            </ActionButton>
+                                        </Box>
+                                    </Box>
+                                ) : (
+                                    <PluginWalletStatusBar
+                                        actionProps={{
+                                            disabled: !!validationMessage,
+                                            title:
+                                                validationMessage ||
+                                                t(
+                                                    isAuction
+                                                        ? 'plugin_collectible_place_bid'
+                                                        : 'plugin_collectible_make_offer',
+                                                ),
+                                            waiting: t(
+                                                isAuction
+                                                    ? 'plugin_collectible_place_bid'
+                                                    : 'plugin_collectible_make_offer',
+                                            ),
+                                            action: async () => {
+                                                onMakeOffer()
+                                                onClose()
+                                            },
+                                        }}
+                                    />
+                                )}
                             </Box>
                         </ChainBoundary>
                     </CardActions>
