@@ -45,7 +45,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
             })
             if (!connection) throw new Error('Failed to build connection.')
 
-            await connection.switchChain?.({ chainId })
+            await connection.switchChain?.(chainId)
         },
         [Connection, providerDescriptor],
     )

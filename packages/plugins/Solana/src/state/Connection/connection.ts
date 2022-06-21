@@ -176,7 +176,7 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getSchemaType(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
+    getTokenSchema(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
@@ -193,9 +193,9 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    async switchChain(initial?: SolanaWeb3ConnectionOptions) {
+    async switchChain(chainId: ChainId, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(options.chainId)
+        await Providers[options.providerType].switchChain(chainId)
     }
     getNativeToken(initial?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
@@ -403,8 +403,8 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenOwnership(
         address: string,
-        owner: string,
         tokenId: string,
+        owner: string,
         schema?: SchemaType | undefined,
         initial?: SolanaWeb3ConnectionOptions,
     ): Promise<boolean> {
@@ -418,14 +418,14 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    replaceRequest(
+    requestTransaction(
         hash: string,
         config: Transaction,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelRequest(
+    cancelTransaction(
         hash: string,
         config: Transaction,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
