@@ -33,6 +33,7 @@ import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
+import { injectApplicationsBoardDefault } from '../../social-network/defaults/inject/ApplicationsBoard'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -154,6 +155,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        applicationsBoard: injectApplicationsBoardDefault(),
         toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,

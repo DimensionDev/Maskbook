@@ -17,6 +17,7 @@ import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from
 import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
 import { injectProfileTabAtInstagram } from './injection/ProfileTab'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
+import { injectApplicationsBoardDefault } from '../../social-network/defaults/inject/ApplicationsBoard'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
@@ -43,6 +44,7 @@ const define: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        applicationsBoard: injectApplicationsBoardDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
         profileAvatar: injectNFTAvatarInInstagram,

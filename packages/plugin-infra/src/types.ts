@@ -389,6 +389,8 @@ export namespace Plugin.SNSAdaptor {
             Web3,
             Web3Provider
         >
+        /** This UI will be an entry for plugins to inject routes into application board dialog */
+        ApplicationBoardDialogEntry?: ApplicationBoardDialogEntry
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -412,6 +414,13 @@ export namespace Plugin.SNSAdaptor {
             ) => () => void
         }
     }
+    // #region Application entry
+    export interface ApplicationBoardDialogEntry {
+        /** route components */
+        routes: Record<string, React.ReactNode>
+    }
+    // #endregion
+
     // #region Composition entry
     /**
      * The entry has two type:

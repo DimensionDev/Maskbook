@@ -25,6 +25,7 @@ import { mindsShared } from './shared'
 import { makeStyles } from '@masknet/theme'
 import { MindsRenderFragments } from './customization/render-fragments'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
+import { injectApplicationsBoardDefault } from '../../social-network/defaults/inject/ApplicationsBoard'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -140,6 +141,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        applicationsBoard: injectApplicationsBoardDefault(),
         toolbox: injectToolboxHintAtMinds,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,

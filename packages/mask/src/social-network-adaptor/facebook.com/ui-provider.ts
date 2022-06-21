@@ -34,6 +34,7 @@ import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
+import { injectApplicationsBoardDefault } from '../../social-network/defaults/inject/ApplicationsBoard'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -161,6 +162,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        applicationsBoard: injectApplicationsBoardDefault(),
         newPostComposition: {
             start: injectCompositionFacebook,
             supportedOutputTypes: {
