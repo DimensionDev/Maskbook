@@ -38,7 +38,7 @@ const NETWORK_ID_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const NETWORK_NANE_MAP: { [key in string]: ChainId } = {
+const NETWORK_NAME_MAP: { [key in string]: ChainId } = {
     Ethereum: ChainId.Mainnet,
     'BNB Smart Chain (BEP20)': ChainId.BSCT,
     Polygon: ChainId.Matic,
@@ -60,7 +60,7 @@ export function resolveChainId(id: string, dataProvider: DataProvider) {
 }
 
 export function resolveChainIdByName(name: string, symbol: string) {
-    return NETWORK_NANE_MAP[name]
+    return NETWORK_NAME_MAP[name]
 }
 
 export function getCommunityLink(links: string[]): TrendingAPI.CommunityUrls {

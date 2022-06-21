@@ -1,9 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-// import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
-// import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { unreachable } from '@dimensiondev/kit'
 import { DataProvider } from '@masknet/public-api'
-import { CoinGekoIcon, CoinMarketCapIcon, UniswapIcon } from '@masknet/icons'
+import { CoinGeckoIcon, CoinMarketCapIcon, UniswapIcon } from '@masknet/icons'
 
 interface StyleProps {
     size: number
@@ -37,7 +35,7 @@ export function DataProviderIcon(props: DataProviderIconProps) {
     const classes = useStylesExtends(useStyles({ size }), {})
     switch (props.provider) {
         case DataProvider.COIN_GECKO:
-            return <CoinGekoIcon style={{ width: size, height: size }} />
+            return <CoinGeckoIcon style={{ width: size, height: size }} />
         case DataProvider.COIN_MARKET_CAP:
             return <CoinMarketCapIcon style={{ width: size, height: size }} />
         case DataProvider.UNISWAP_INFO:

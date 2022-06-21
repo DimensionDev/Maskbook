@@ -1,8 +1,8 @@
 import { createIcon } from '../utils'
 import type { SvgIcon } from '@mui/material'
 
-export const CoinGekoIcon: typeof SvgIcon = createIcon(
-    'CoinGekoIcon',
+export const CoinGeckoIcon: typeof SvgIcon = createIcon(
+    'CoinGeckoIcon',
     <g>
         <g clipPath="url(#clip0_1867_25253)">
             <path
