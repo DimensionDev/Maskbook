@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import { Typography, MenuItem } from '@mui/material'
+import { Typography, MenuItem, Stack } from '@mui/material'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import type { Coin } from '../../types'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { useTheme } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => ({
     symbol: {
@@ -27,6 +30,7 @@ export function CoinMenu(props: CoinMenuProps) {
     const { options, selectedIndex = -1, children, onChange } = props
 
     const { classes } = useStyles()
+    const theme = useTheme()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const onOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: CoinMenuOption) => {
@@ -45,10 +49,19 @@ export function CoinMenu(props: CoinMenuProps) {
                 PaperProps={{ style: { maxHeight: 192 } }}>
                 {options.map((x, i) => (
                     <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
-                        <Typography>
-                            <span>{x.coin.name}</span>
-                            <span className={classes.symbol}>({x.coin.symbol})</span>
-                        </Typography>
+                        <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
+                            <Typography flexGrow={1}>
+                                <span>{x.coin.name}</span>
+                                <span className={classes.symbol}>({x.coin.symbol})</span>
+                            </Typography>
+                            {selectedIndex === i ? (
+                                <CheckCircleIcon style={{ fontSize: 20, color: theme.palette.maskColor.primary }} />
+                            ) : (
+                                <RadioButtonUncheckedIcon
+                                    style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                                />
+                            )}
+                        </Stack>
                     </MenuItem>
                 ))}
             </ShadowRootMenu>

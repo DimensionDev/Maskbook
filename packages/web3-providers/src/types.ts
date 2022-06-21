@@ -21,6 +21,7 @@ import type {
     HubIndicator,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -545,11 +546,17 @@ export namespace TrendingAPI {
         updated: Date
     }
 
+    export interface Contract {
+        chainId: ChainId
+        address: string
+    }
+
     export interface Trending {
         currency: Currency
         dataProvider: DataProvider
         coin: Coin
         platform?: Platform
+        contracts?: Contract[]
         market?: Market
         tickers: Ticker[]
         lastUpdated: string

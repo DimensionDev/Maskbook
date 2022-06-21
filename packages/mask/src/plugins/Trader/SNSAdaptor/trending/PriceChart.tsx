@@ -30,6 +30,8 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
             bottom: theme.spacing(1),
             right: theme.spacing(1),
             position: 'absolute',
+            right: 0,
+            bottom: -64,
         },
         refresh: {
             bottom: theme.spacing(1),

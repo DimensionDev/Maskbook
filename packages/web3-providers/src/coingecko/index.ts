@@ -7,6 +7,9 @@ import { DataProvider } from '@masknet/public-api'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
 import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
 import { COINGECKO_URL_BASE } from './constants'
+import { resolveChain } from './helper'
+import { fetchJSON } from '..'
+import type { Platform } from './type'
 
 export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<ChainId> {
     async getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
@@ -42,6 +45,13 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
         return Object.fromEntries(Object.keys(response).map((address) => [address, response[address][currencyType]]))
     }
 
+    async getSupportedPlatform() {
+        const requestPath = `${COINGECKO_URL_BASE}/asset_platforms`
+        const response = await fetchJSON<Platform[]>(requestPath)
+
+        return response.filter((x) => x.id && x.chain_identifier) ?? []
+    }
+
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
@@ -53,9 +63,15 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
             ? `https://t.me/${info.links.telegram_channel_identifier}`
             : ''
 
+        const platforms = await this.getSupportedPlatform()
+
         return {
             lastUpdated: info.last_updated,
             dataProvider: DataProvider.COIN_GECKO,
+            contracts: Object.entries(info.platforms).map(([key, address]) => ({
+                chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveChain(key),
+                address,
+            })),
             currency,
             coin: {
                 id,

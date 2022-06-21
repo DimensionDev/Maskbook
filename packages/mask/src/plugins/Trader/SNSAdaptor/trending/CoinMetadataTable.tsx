@@ -1,10 +1,21 @@
-import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, Typography, Stack } from '@mui/material'
+import {
+    TableContainer,
+    Paper,
+    Table,
+    TableRow,
+    TableCell,
+    TableBody,
+    Typography,
+    Stack,
+    MenuItem,
+    IconButton,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
 import { Linking } from './Linking'
-import { useI18N } from '../../../../utils'
+import { useI18N, useMenu } from '../../../../utils'
 import { ContractSection } from './ContractSection'
-import type { CommunityType, Trending } from '../../types'
+import type { CommunityType } from '../../types'
 import {
     DiscordRoundIcon,
     FacebookRoundIcon,
@@ -13,6 +24,8 @@ import {
     TwitterRoundIcon,
 } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
+import type { TrendingAPI } from '@masknet/web3-providers'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -49,16 +62,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMetadataTableProps {
-    trending: Trending
+    trending: TrendingAPI.Trending
     dataProvider: DataProvider
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    facebook: <FacebookRoundIcon />,
-    twitter: <TwitterRoundIcon />,
-    telegram: <TelegramRoundIcon />,
-    discord: <DiscordRoundIcon />,
-    reddit: <RedditRoundIcon />,
+    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
+    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
+    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
+    discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
+    reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
     other: null,
 }
 
@@ -68,6 +81,17 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { classes } = useStyles()
 
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
+
+    const contracts = trending.contracts ?? []
+
+    const [menu, openMenu] = useMenu(
+        contracts.map((x, i) => (
+            <MenuItem key={x.chainId}>
+                <ContractSection address={x.address} chainId={x.chainId} />
+            </MenuItem>
+        )),
+        false,
+    )
 
     return (
         <Stack>
@@ -79,7 +103,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table className={classes.table} size="small">
                     <TableBody>
-                        {trending.coin.contract_address ? (
+                        {contracts.length ? (
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
@@ -87,10 +111,19 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="right">
-                                    <ContractSection
-                                        logoURL={trending.coin.image_url}
-                                        address={trending.coin.contract_address}
-                                    />
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="flex-end"
+                                        style={{ position: 'relative', right: -5 }}>
+                                        <ContractSection
+                                            chainId={contracts[0].chainId}
+                                            address={contracts[0].address}
+                                        />
+                                        <IconButton size="small" onClick={openMenu}>
+                                            <MoreHorizIcon style={{ fontSize: 16 }} />
+                                        </IconButton>
+                                        {menu}
+                                    </Stack>
                                 </TableCell>
                             </TableRow>
                         ) : null}

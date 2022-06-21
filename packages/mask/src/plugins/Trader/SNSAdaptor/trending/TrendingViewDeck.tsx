@@ -6,7 +6,7 @@ import { first, last } from 'lodash-unified'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
-import type { Coin, Currency, Stat, Trending } from '../../types'
+import type { Coin, Currency, Stat } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
@@ -26,6 +26,7 @@ import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
 import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { TrendingTokenSecurity } from './TrendingTokenSecurity'
+import type { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -39,8 +40,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         content: {
-            position: 'relative',
-            top: '-36px',
             paddingTop: 0,
             paddingBottom: '0 !important',
         },
@@ -104,11 +103,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content'> {
+export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
     stats: Stat[]
     coins: Coin[]
     currency: Currency
-    trending: Trending
+    trending: TrendingAPI.Trending
     dataProvider: DataProvider
     children?: React.ReactNode
     showDataProviderIcon?: boolean
@@ -136,12 +135,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const isAllowanceCoin = useTransakAllowanceCoin(coin)
+    const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
+            // @ts-ignore
             code: coin.symbol,
             address: account,
         })

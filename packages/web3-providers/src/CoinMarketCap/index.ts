@@ -2,7 +2,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import type { TrendingAPI } from '../types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
-import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from './helper'
+import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type'
 import { fetchJSON, getTraderAllAPICachedFlag } from '../helpers'
@@ -266,9 +266,19 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             getQuotesInfo(id, currencyName),
             getLatestMarketPairs(id, currencyName),
         ])
+
+        const contracts = coinInfo.contract_address.map(
+            (x) =>
+                ({
+                    chainId: resolveChainIdByName(x.platform.name, coinInfo.symbol),
+                    address: x.contract_address,
+                } as TrendingAPI.Contract),
+        )
+
         const trending: TrendingAPI.Trending = {
             lastUpdated: status.timestamp,
             platform: coinInfo.platform,
+            contracts,
             coin: {
                 id,
                 name: coinInfo.name,
@@ -297,11 +307,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 telegram_url: coinInfo.urls.chat?.find((x) => x.includes('telegram')),
                 market_cap_rank: quotesInfo?.[id]?.cmc_rank,
                 description: coinInfo.description,
-                contract_address:
-                    resolveCoinAddress(chainId, id, DataProvider.COIN_MARKET_CAP) ??
-                    coinInfo.contract_address.find(
-                        (x) => resolveChainId(x.platform.coin.id, DataProvider.COIN_MARKET_CAP) === chainId,
-                    )?.contract_address,
+                contract_address: contracts.find((x) => x.chainId === chainId)?.address,
             },
             currency,
             dataProvider: DataProvider.COIN_MARKET_CAP,

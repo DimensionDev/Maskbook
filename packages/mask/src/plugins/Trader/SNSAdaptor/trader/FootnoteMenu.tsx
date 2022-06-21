@@ -1,6 +1,10 @@
-import { Typography, MenuItem, Link } from '@mui/material'
+import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenu } from '../../../../utils'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { useTheme } from '@mui/system'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -31,6 +35,7 @@ export interface FootnoteMenuProps {
 
 export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
+    const theme = useTheme()
 
     const { classes } = useStyles()
     const onSelect = (option: FootnoteMenuOption) => {
@@ -39,7 +44,16 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
     const [menu, openMenu] = useMenu(
         options.map((x, i) => (
             <MenuItem disabled={x.disabled} selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
-                {x.name}
+                <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
+                    <Stack flexGrow={1}>{x.name}</Stack>
+                    {selectedIndex === i ? (
+                        <CheckCircleIcon style={{ fontSize: 20, color: theme.palette.maskColor.primary }} />
+                    ) : (
+                        <RadioButtonUncheckedIcon
+                            style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
+                        />
+                    )}
+                </Stack>
             </MenuItem>
         )),
         false,
@@ -60,6 +74,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
+                    <ArrowDropDownIcon style={{ fontSize: 16, color: theme.palette.text.primary, cursor: 'pointer' }} />
                 </Typography>
                 {children}
             </Link>

@@ -46,9 +46,10 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
             ? {
                   minHeight: 303,
                   overflow: 'hidden',
-                  border: `solid 1px ${theme.palette.divider}`,
+                  // border: `solid 1px ${theme.palette.divider}`,
                   display: 'flex',
                   flexDirection: 'column',
+                  background: 'transparent',
               }
             : {
                   background: 'transparent',
@@ -61,24 +62,28 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
         content: props.isPopper
             ? {}
             : {
-                  padding: 0,
                   border: 'none',
               },
-        tab: {
-            height: props.isPopper ? 35 : 'auto',
-            minHeight: 'unset',
-            minWidth: 'unset',
-        },
         tradeViewRoot: props.isPopper
             ? {
                   maxWidth: 380,
               }
-            : {},
+            : {
+                  maxWidth: '100% !important',
+              },
         priceChartRoot: props.isPopper
             ? {
                   flex: 1,
               }
             : {},
+
+        cardHeader: props.isPopper
+            ? {
+                  marginBottom: '-36px',
+              }
+            : {
+                  marginBottom: '-44px',
+              },
     }
 })
 
@@ -256,6 +261,7 @@ export function TraderView(props: TraderViewProps) {
             classes={{
                 body: classes.body,
                 content: classes.content,
+                cardHeader: classes.cardHeader,
             }}
             stats={stats}
             coins={coins}
@@ -275,7 +281,7 @@ export function TraderView(props: TraderViewProps) {
                     <CoinMarketPanel dataProvider={dataProvider} trending={trending} />
                 ) : null}
                 {currentTab === ContentTabs.Price ? (
-                    <Box p={4}>
+                    <Box px={2} py={4}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}

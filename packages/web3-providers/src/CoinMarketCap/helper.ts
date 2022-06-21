@@ -38,6 +38,13 @@ const NETWORK_ID_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
+const NETWORK_NANE_MAP: { [key in string]: ChainId } = {
+    Ethereum: ChainId.Mainnet,
+    'BNB Smart Chain (BEP20)': ChainId.BSCT,
+    Polygon: ChainId.Matic,
+    'Avalanche C-Chain': ChainId.Avalanche,
+}
+
 export function resolveCoinAddress(chainId: ChainId, id: string, dataProvider: DataProvider) {
     return ID_ADDRESS_MAP[dataProvider][chainId]?.[id]
 }
@@ -50,6 +57,10 @@ export function resolveChainId(id: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return ChainId.Mainnet
     const chainIds = NETWORK_ID_MAP[dataProvider]
     return Object.entries(chainIds).find(([_, key]) => key === id)?.[0]
+}
+
+export function resolveChainIdByName(name: string, symbol: string) {
+    return NETWORK_NANE_MAP[name]
 }
 
 export function getCommunityLink(links: string[]): TrendingAPI.CommunityUrls {

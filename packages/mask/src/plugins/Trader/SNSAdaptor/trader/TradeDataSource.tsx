@@ -1,8 +1,7 @@
 import type { DataProvider } from '@masknet/public-api'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { Stack, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Box, useTheme } from '@mui/system'
 import type { FC } from 'react'
 import { useI18N } from '../../../../utils'
 import { resolveDataProviderName } from '../../pipes'
@@ -17,7 +16,7 @@ const useStyles = makeStyles()((theme) => {
         sourceNote: {
             color: theme.palette.text.secondary,
             fontSize: 14,
-            fontWeight: 'bolder',
+            fontWeight: 700,
         },
         sourceMenu: {
             color: theme.palette.text.secondary,
@@ -26,7 +25,8 @@ const useStyles = makeStyles()((theme) => {
         },
         sourceName: {
             fontSize: 14,
-            fontWeight: 'bolder',
+            fontWeight: 700,
+            color: theme.palette.text.primary,
         },
     }
 })
@@ -39,6 +39,7 @@ export interface TradeDataSourceProps extends withClasses<'source'> {
 }
 
 export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
+    const theme = useTheme()
     const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -65,7 +66,6 @@ export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
                         selectedIndex={typeof dataProvider !== 'undefined' ? dataProviders.indexOf(dataProvider) : -1}
                         onChange={onDataProviderChange}
                     />
-                    <ArrowDropDownIcon />
                 </Stack>
             ) : null}
         </Box>

@@ -1,12 +1,14 @@
 import { PopupCopyIcon } from '@masknet/icons'
-import { FormattedAddress, TokenIcon, useSnackbarCallback } from '@masknet/shared'
+import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { IconButton, Stack, Typography } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 
 export interface ContractSectionProps {
-    logoURL?: string
+    chainId: ChainId
     address: string
 }
 
@@ -21,9 +23,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ContractSection = ({ logoURL, address }: ContractSectionProps) => {
+export const ContractSection = ({ address, chainId }: ContractSectionProps) => {
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
+    const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const onCopyAddress = useSnackbarCallback(async () => {
         if (!address) return
@@ -32,13 +35,7 @@ export const ContractSection = ({ logoURL, address }: ContractSectionProps) => {
 
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
-            <TokenIcon
-                classes={{
-                    icon: classes.icon,
-                }}
-                logoURL={logoURL}
-                address={address}
-            />
+            {chainId ? <WalletIcon size={16} mainIcon={chain?.icon} /> : <Box width={16} />}
             <Typography variant="body2" component="span" fontWeight={700}>
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>

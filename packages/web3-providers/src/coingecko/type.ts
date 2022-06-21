@@ -84,3 +84,10 @@ export interface CoinInfo {
         target_coin_id?: string
     }>
 }
+
+export interface Platform {
+    id?: string
+    chain_identifier?: number
+    name: string
+    shortname: string
+}
