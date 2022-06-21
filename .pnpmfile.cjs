@@ -15,9 +15,9 @@ const approvedList = new Map([
     ],
     [
         'wyvern-js',
-        ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
+        ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.3.4', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
     ],
-    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1'],
+    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.14.0'],
     /* cspell:disable-next-line */
     ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
     // opensea-js (v1), (and more, run `pnpm -r why web3@0.20.7`) -> web3

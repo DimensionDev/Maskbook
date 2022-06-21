@@ -6,6 +6,7 @@ import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom'
 import { useState } from 'react'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ScamAlert = () => {
+const ReportButton = () => {
     const { classes } = useStyles()
     const [isSending, setSending] = useState(false)
     const links = usePostInfoDetails.mentionedLinks()
@@ -49,9 +50,7 @@ const ScamAlert = () => {
             twitterUsername: null,
             post: postDetail,
         })
-        await new Promise((resolve) => {
-            setTimeout(resolve, 1200)
-        })
+        await delay(1200)
         setSending(false)
     }
     return (
@@ -73,4 +72,4 @@ const ScamAlert = () => {
     )
 }
 
-export default ScamAlert
+export default ReportButton

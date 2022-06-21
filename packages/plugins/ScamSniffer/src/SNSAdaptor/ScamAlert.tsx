@@ -72,7 +72,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         if (autoReport) {
             PluginScamRPC.sendReportScam(result)
         }
-    }, [autoReport])
+    }, [autoReport, result])
 
     const handleClick = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
         setAutoReport(checked)
