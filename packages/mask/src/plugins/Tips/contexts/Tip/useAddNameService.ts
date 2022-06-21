@@ -17,7 +17,7 @@ export function useAddNameService(addressConfigs: AddressConfig[]) {
                 [address]: name,
             }))
         })
-    }, [addressConfigs, NameService])
+    }, [chainId, addressConfigs, NameService])
 
     return useMemo(() => {
         if (!Object.keys(map).length) return addressConfigs

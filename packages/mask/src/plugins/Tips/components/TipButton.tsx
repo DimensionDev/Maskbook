@@ -117,7 +117,10 @@ export const TipButton: FC<Props> = ({
             case NetworkPluginID.PLUGIN_SOLANA:
                 return socialAddressList
                     .filter((x) => x.networkSupporterPluginID === pluginId)
-                    .map((x) => ({ address: x.address }))
+                    .map((x) => ({
+                        address: x.address,
+                        name: x.type === SocialAddressType.SOL ? x.label : undefined,
+                    }))
         }
         return EMPTY_LIST
     }, [pluginId, publicWallets, addresses, socialAddressList])
