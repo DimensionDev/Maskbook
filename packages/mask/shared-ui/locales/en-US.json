@@ -393,6 +393,8 @@
     "plugin_savings_process_withdraw": "Processing Withdrawal",
     "plugin_trader_swap": "Swap",
     "plugin_trader_wrap": "Wrap",
+    "plugin_trader_swap_from": "You sell",
+    "plugin_trader_swap_receive": "You buy",
     "plugin_trader_unwrap": "Unwrap",
     "plugin_trader_buy": "Buy",
     "plugin_trader_no_data": "No Data",

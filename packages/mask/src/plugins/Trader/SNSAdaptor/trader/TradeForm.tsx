@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, Button, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -29,6 +29,7 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -39,11 +40,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.text.strong,
+            stroke: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
         },
         card: {
-            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
+            background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
+            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
             borderRadius: 12,
             padding: 12,
         },
@@ -121,13 +122,23 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         selectedTokenChip: {
             borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
+            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+            paddingRight: 8,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
                 paddingBottom: 10,
-                fontSize: 13,
                 lineHeight: '18px',
-                marginRight: 8,
+                fontSize: 14,
+                marginRight: 12,
+                fontWeight: 700,
+            },
+            ['&:hover']: {
+                backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+                // TODO: replace to theme pop-shadow prop
+                boxShadow:
+                    theme.palette.mode === 'dark'
+                        ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                        : '0px 4px 30px rgba(0, 0, 0, 0.1)',
             },
         },
         chipTokenIcon: {
@@ -144,14 +155,15 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         noToken: {
             borderRadius: '18px !important',
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+            ['&:hover']: {
+                backgroundColor: `${
+                    isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                }!important`,
+            },
             [`& .${chipClasses.label}`]: {
-                paddingTop: 9,
-                paddingBottom: 9,
-                fontSize: 10,
-                lineHeight: '18px',
-                color: theme.palette.primary.contrastText,
-                marginRight: 0,
+                color: theme.palette.common.white,
+                marginRight: 4,
             },
         },
         tooltip: {
@@ -173,6 +185,13 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             fontSize: 12,
             lineHeight: '16px',
             color: theme.palette.text.secondary,
+        },
+        title: {
+            fontSize: 14,
+            fontWeight: 700,
+            lineHeight: '18px',
+            color: theme.palette.maskColor?.second,
+            marginBottom: 12,
         },
     }
 })
@@ -239,6 +258,12 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region remote controlled swap settings dialog
         const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
             PluginTraderMessages.swapSettingsUpdated,
+        )
+        // #endregion
+
+        // #region change provider
+        const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+            WalletMessages.events.selectProviderDialogUpdated,
         )
         // #endregion
 
@@ -365,6 +390,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 </Box>
                 <Box className={classes.section} marginBottom={2.5}>
                     <Box className={classes.card}>
+                        <Typography className={classes.title}>{t('plugin_trader_swap_receive')}</Typography>
                         <SelectTokenChip
                             classes={{
                                 chip: classes.selectedTokenChip,
@@ -528,7 +554,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 />
                             </ChainBoundary>
                         </Box>
-                    ) : null}
+                    ) : (
+                        <Button fullWidth onClick={openSelectProviderDialog}>
+                            {t('plugin_wallet_connect_a_wallet')}
+                        </Button>
+                    )}
                 </Box>
             </Box>
         )

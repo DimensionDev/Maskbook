@@ -13,70 +13,97 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.input,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.background.input}`,
+        background: `${isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input}!important`,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         position: 'relative',
     },
     balance: {
         fontSize: 14,
-        lineHeight: '20px',
-        color: theme.palette.text.primary,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.second,
         wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
+        color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
     },
     input: {
         textAlign: 'right',
         fontWeight: 500,
         color: theme.palette.text.primary,
-        lineHeight: '30px',
-        fontSize: 24,
+        lineHeight: 1.2,
+        fontSize: 30,
+        height: '1.86em',
     },
     chip: {
         borderRadius: 6,
         marginLeft: 8,
         height: 20,
+        backgroundColor: !isDashboard ? theme.palette.maskColor?.primary : undefined,
     },
-    label: {
+    chipLabel: {
         fontSize: 12,
         lineHeight: '16px',
+        color: theme.palette.common.white,
         padding: '0 6px',
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor?.second,
     },
     price: {
         fontSize: 14,
         lineHeight: '20px',
         position: 'absolute',
-        top: 18,
+        bottom: 12,
         right: 12,
-        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
+    },
+    action: {
+        position: 'absolute',
+        top: 12,
+        right: 12,
+        display: 'flex',
+        alignItems: 'center',
     },
     selectedTokenChip: {
         borderRadius: '22px!important',
         height: 'auto',
-        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
+        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
+        paddingRight: 8,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,
-            fontSize: 13,
+            fontSize: 14,
+            fontWeight: 700,
+            marginRight: 12,
             lineHeight: '18px',
-            marginRight: 8,
+        },
+        ['&:hover']: {
+            backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+            // TODO: replace to theme pop-shadow prop
+            boxShadow:
+                theme.palette.mode === 'dark'
+                    ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                    : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         },
     },
     chipTokenIcon: {
-        width: '28px!important',
-        height: '28px!important',
+        width: '30px!important',
+        height: '30px!important',
     },
     noToken: {
         borderRadius: '18px !important',
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+        ['&:hover']: {
+            backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
+        },
         [`& .${chipClasses.label}`]: {
-            paddingTop: 9,
-            paddingBottom: 9,
-            fontSize: 10,
-            lineHeight: '18px',
-            color: theme.palette.primary.contrastText,
-            marginRight: 0,
+            color: theme.palette.common.white,
+            marginRight: 4,
         },
     },
 }))
@@ -144,6 +171,9 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                 justifyContent: 'center',
                                 alignItems: 'flex-start',
                             }}>
+                            <Box display="flex" justifyContent="flex-start" width="100%" style={{ marginBottom: 22 }}>
+                                <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
+                            </Box>
                             <SelectTokenChip
                                 token={token}
                                 chainId={chainId}
@@ -154,7 +184,11 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                 }}
                                 {...props.SelectTokenChip}
                             />
-                            <Box display="flex" mt={1} alignItems="center">
+                        </Box>
+                    ),
+                    endAdornment: (
+                        <>
+                            <Box className={classes.action}>
                                 <Typography className={classes.balance}>
                                     {t('plugin_ito_list_table_got')}:
                                     <Typography component="span" className={classes.amount} color="primary">
@@ -172,18 +206,16 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                     clickable
                                     color="primary"
                                     variant="filled"
-                                    classes={{ root: classes.chip, label: classes.label }}
+                                    classes={{ root: classes.chip, label: classes.chipLabel }}
                                     onClick={() => {
                                         onAmountChange(formatBalance(balance, token?.decimals, 6))
                                     }}
                                 />
                             </Box>
-                        </Box>
-                    ),
-                    endAdornment: (
-                        <Typography className={classes.price}>
-                            &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                        </Typography>
+                            <Typography className={classes.price}>
+                                &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                            </Typography>
+                        </>
                     ),
                 }}
                 inputProps={{ className: classes.input, autoComplete: 'off' }}

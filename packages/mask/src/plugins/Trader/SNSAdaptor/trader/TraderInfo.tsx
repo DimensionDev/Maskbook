@@ -9,7 +9,7 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
-import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
+import { BestTradeIcon, CircleWarningIcon } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
@@ -21,53 +21,51 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.background.paper}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
+        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
         borderRadius: 8,
+        alignItems: 'flex-start',
         cursor: 'pointer',
         position: 'relative',
-    },
-    warning: {
-        borderColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
+        minHeight: 82,
     },
     warningText: {
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: '22px',
+        fontSize: 14,
+        lineHeight: '18px',
         position: 'absolute',
-        top: 13.5,
+        bottom: 10,
         right: 10,
-        color: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
+        color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         display: 'flex',
         alignItems: 'center',
     },
     provider: {
-        color: theme.palette.text.primary,
-        fontSize: 19,
-        lineHeight: '27px',
-        fontWeight: 600,
+        color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
+        fontSize: 18,
+        lineHeight: '36px',
+        fontWeight: 700,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.maskColor?.second,
         fontSize: 14,
-        lineHeight: '20px',
-        marginTop: 12,
+        lineHeight: '18px',
+        marginTop: 8,
         display: 'flex',
         alignItems: 'center',
     },
     input: {
         textAlign: 'right',
-        fontWeight: 500,
+        fontWeight: 700,
         color: theme.palette.text.primary,
-        lineHeight: '30px',
-        fontSize: 24,
+        lineHeight: 1.2,
+        fontSize: 30,
         cursor: 'pointer',
-        padding: '25px 12px 8px 0',
+        padding: '0 10px 0 0',
         width: 'auto',
     },
     focus: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `2px solid ${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
     },
     best: {
         position: 'absolute',
@@ -130,11 +128,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             onClick={onClick}
             value={formatBalance(trade.value?.outputAmount ?? 0, trade.value?.outputToken?.decimals, 2)}
             InputProps={{
-                className: classnames(
-                    classes.trade,
-                    isFocus ? classes.focus : null,
-                    isGreatThanSlippageSetting ? classes.warning : null,
-                ),
+                className: classnames(classes.trade, isFocus ? classes.focus : null),
                 disableUnderline: true,
                 startAdornment: (
                     <Box
@@ -174,10 +168,10 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                         {isBest ? <BestTradeIcon className={classes.best} /> : null}
                         {isGreatThanSlippageSetting ? (
                             <Typography className={classes.warningText}>
+                                <CircleWarningIcon style={{ width: 18, height: 18 }} />
                                 {t('plugin_trader_price_image_value', {
                                     percent: formatPercentage(trade.value.priceImpact),
                                 })}
-                                <TriangleWarning style={{ width: 20, height: 20 }} />
                             </Typography>
                         ) : null}
                     </>

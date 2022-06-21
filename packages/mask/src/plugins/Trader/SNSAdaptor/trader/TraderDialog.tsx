@@ -3,10 +3,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { ChainId, useAccount, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
-import { Button, DialogContent, IconButton } from '@mui/material'
+import { DialogContent, IconButton } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
@@ -17,7 +14,6 @@ import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
-import { isDashboardPage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { GearIcon, RefreshIcon } from '@masknet/icons'
 
@@ -85,7 +81,6 @@ interface TraderDialogProps {
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const tradeRef = useRef<TraderRef>(null)
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const account = useAccount()
     const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
@@ -149,7 +144,6 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             classes={{ root: classes.tradeRoot }}
                             ref={tradeRef}
                         />
-                        {!account ? <Button fullWidth>{t('plugin_wallet_on_connect')}</Button> : null}
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
