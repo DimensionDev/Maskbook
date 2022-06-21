@@ -4,7 +4,7 @@ import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
 import type { TradeProvider } from '@masknet/public-api'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 function useTrade(

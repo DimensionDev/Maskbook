@@ -13,7 +13,7 @@ import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
