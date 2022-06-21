@@ -1,6 +1,6 @@
 import { LiveIcon } from '../icons/LiveIcon'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../locales'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -13,13 +13,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Live() {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     return (
         <Typography>
             <LiveIcon className={classes.icon} />
-            {t('plugin_azuro_live')}
+            {t.plugin_live()}
         </Typography>
     )
 }

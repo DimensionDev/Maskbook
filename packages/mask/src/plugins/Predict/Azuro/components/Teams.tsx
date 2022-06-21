@@ -40,7 +40,7 @@ export function Teams(props: TeamsProps) {
                 <img
                     className={classes.emblem}
                     src={new URL(participants[0].image, import.meta.url).toString()}
-                    alt={t.plugin_azuro_home_team()}
+                    alt={t.plugin_home_team()}
                 />
                 <Typography className={classes.name}>{participants[0].name}</Typography>
             </Grid>
@@ -51,7 +51,7 @@ export function Teams(props: TeamsProps) {
                 <img
                     className={classes.emblem}
                     src={new URL(participants[1].image, import.meta.url).toString()}
-                    alt={t.plugin_azuro_away_team()}
+                    alt={t.plugin_away_team()}
                 />
                 <Typography className={classes.name}>{participants[1].name}</Typography>
             </Grid>

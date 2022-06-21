@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Grid, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
 import { useFetchUserGames } from '../hooks'
 import { UserFilter } from '../types'
 import { Bets } from '../components/Bets'
@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function MyBetsView() {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const [filter, setFilter] = useState<UserFilter>(UserFilter.All)
@@ -31,13 +31,13 @@ export function MyBetsView() {
             <Grid container justifyContent="center" className={classes.container}>
                 <ToggleButtonGroup size="small" value={filter} exclusive onChange={handleFilter} aria-label="filter">
                     <ToggleButton value={UserFilter.All} aria-label="all">
-                        {t('plugin_azuro_filter_all')}
+                        {t.plugin_filter_all()}
                     </ToggleButton>
                     <ToggleButton value={UserFilter.Active} aria-label="active">
-                        {t('plugin_azuro_filter_active')}
+                        {t.plugin_filter_active()}
                     </ToggleButton>
                     <ToggleButton value={UserFilter.Ended} aria-label="ended">
-                        {t('plugin_azuro_filter_ended')}
+                        {t.plugin_filter_ended()}
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Grid>

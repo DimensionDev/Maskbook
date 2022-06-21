@@ -85,8 +85,8 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
         chainId === ChainId.Sokol ? contractAddresses[chainId as ChainId]?.token : '',
     )
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
-    const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
 
+    const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
     const rawAmount = rightShift(String(amount), USDT_DECIMALS)
     const deadline = Math.floor(Date.now() / 1000) + 2000
     const minRate = (1 + (((actualRate ?? 0) - 1) * (100 - slippage)) / 100).toFixed(8)
@@ -101,9 +101,9 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     )
 
     const validationMessage = useMemo(() => {
-        if (isZero(amount) || !amount) return t.plugin_azuro_enter_an_amount()
+        if (isZero(amount) || !amount) return t.plugin_enter_an_amount()
         if (isGreaterThan(rightShift(amount ?? 0, token?.decimals ?? 0), balance ?? 0))
-            return t.plugin_azuro_insufficient_amount()
+            return t.plugin_insufficient_amount()
 
         return ''
     }, [amount, balance, token?.decimals, t])
@@ -113,11 +113,11 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
         const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         return isOnTwitter || isOnFacebook
-            ? t.plugin_azuro_share({ account: isOnTwitter ? tr('twitter_account') : tr('facebook_account') })
-            : t.plugin_azuro_share_no_official_account()
+            ? t.plugin_share({ account: isOnTwitter ? tr('twitter_account') : tr('facebook_account') })
+            : t.plugin_share_no_official_account()
     }, [activatedSocialNetworkUI])
 
-    const successMessage = <Typography>{t.plugin_azuro_success_message()}</Typography>
+    const successMessage = <Typography>{t.plugin_success_message()}</Typography>
 
     const openShareTxDialog = useOpenShareTxDialog()
     const placeBet = useCallback(async () => {
@@ -135,11 +135,11 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>
-                <InjectedDialog open={open} title={t.plugin_azuro_place_bet()} onClose={onClose}>
+                <InjectedDialog open={open} title={t.plugin_place_bet()} onClose={onClose}>
                     <DialogContent>
                         <div className={classes.container}>
                             <TokenAmountPanel
-                                label={t.plugin_azuro_amount()}
+                                label={t.plugin_amount()}
                                 amount={amount}
                                 balance={balance ?? '0'}
                                 token={token}
@@ -149,7 +149,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Event:</Typography>
                                     <Typography>
-                                        {game.participants[0].name} {t.plugin_azuro_versus()}
+                                        {game.participants[0].name} {t.plugin_versus()}
                                         {game.participants[1].name}
                                     </Typography>
                                 </Grid>
@@ -216,7 +216,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                                 disabled={!!validationMessage}
                                                 onClick={placeBet}
                                                 fullWidth>
-                                                {validationMessage || t.plugin_azuro_place_bet()}
+                                                {validationMessage || t.plugin_place_bet()}
                                             </ActionButton>
                                         </EthereumERC20TokenApprovedBoundary>
                                     </ChainBoundary>
@@ -234,9 +234,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                             disabled={isPlacing || !!validationMessage}
                                             onClick={placeBet}
                                             fullWidth>
-                                            {isPlacing
-                                                ? tr('loading')
-                                                : validationMessage || t.plugin_azuro_place_bet()}
+                                            {isPlacing ? tr('loading') : validationMessage || t.plugin_place_bet()}
                                         </ActionButton>
                                     </ChainBoundary>
                                 ) : (

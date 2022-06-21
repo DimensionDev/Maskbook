@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../locales'
 import { marketRegistry } from '../helpers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -16,13 +16,13 @@ interface MarketProps {
 }
 
 export function Market(props: MarketProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { marketRegistryId } = props
     const { classes } = useStyles()
 
     return (
         <Typography className={classes.label}>
-            {t('plugin_azuro_market')}:&nbsp;
+            {t.plugin_market()}:&nbsp;
             <span className={classes.title}>{marketRegistry[marketRegistryId]}</span>
         </Typography>
     )

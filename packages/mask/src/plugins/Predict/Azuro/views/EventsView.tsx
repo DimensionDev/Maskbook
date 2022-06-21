@@ -92,7 +92,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={market.toString()}
-            label={t.plugin_azuro_market()}
+            label={t.plugin_market()}
             onChange={(event: SelectChangeEvent) => setMarket(Number(event.target.value))}>
             {markets?.map((market) => (
                 <MenuItem key={market.id} value={market.id}>
@@ -110,7 +110,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={league}
-            label={t.plugin_azuro_league()}
+            label={t.plugin_league()}
             onChange={(event: SelectChangeEvent) => setLeague(event.target.value)}>
             <MenuItem key={DEFAULT_LABEL} value={DEFAULT_LABEL}>
                 {DEFAULT_LABEL}
@@ -143,7 +143,7 @@ export function EventsView(): JSX.Element {
                 classes: { paper: classes.menuPaper },
             }}
             value={sort}
-            label={t.plugin_azuro_sort()}
+            label={t.plugin_sort()}
             onChange={(event: SelectChangeEvent) => setSort(event.target.value)}>
             {sorts?.map((sort) => (
                 <MenuItem key={sort} value={sort}>
@@ -159,20 +159,20 @@ export function EventsView(): JSX.Element {
                 <TextField
                     className={classes.searchField}
                     size="small"
-                    placeholder={t.plugin_azuro_search_events()}
+                    placeholder={t.plugin_search_events()}
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="market">{t.plugin_azuro_market()}</InputLabel>
+                    <InputLabel id="market">{t.plugin_market()}</InputLabel>
                     {marketSelect}
                 </FormControl>
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="league">{t.plugin_azuro_league()}</InputLabel>
+                    <InputLabel id="league">{t.plugin_league()}</InputLabel>
                     {leagueSelect}
                 </FormControl>
                 <FormControl className={classes.field} size="small">
-                    <InputLabel id="sort">{t.plugin_azuro_sort()}</InputLabel>
+                    <InputLabel id="sort">{t.plugin_sort()}</InputLabel>
                     {sortSelect}
                 </FormControl>
             </Grid>

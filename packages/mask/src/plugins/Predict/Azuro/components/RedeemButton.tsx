@@ -1,6 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../locales'
 import { ConditionStatus, UserBet } from '../types'
 import { useAsyncFn } from 'react-use'
 import { useAzuroContract } from '../hooks/useAzuroContract'
@@ -20,7 +20,7 @@ interface RedeemButtonProps {
 }
 
 export function RedeemButton(props: RedeemButtonProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { bet, retry } = props
     const { classes } = useStyles()
     const azuroContract = useAzuroContract()
@@ -60,7 +60,7 @@ export function RedeemButton(props: RedeemButtonProps) {
             size="small"
             loading={loading}
             disabled={bet.isRedeemed || loading}>
-            {bet.isRedeemed ? t('plugin_azuro_redeemed') : t('plugin_azuro_redeem')}
+            {bet.isRedeemed ? t.plugin_redeemed() : t.plugin_redeem()}
         </LoadingButton>
     ) : null
 }

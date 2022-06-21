@@ -3,7 +3,7 @@ import { DialogContent } from '@mui/material'
 import { ApplicationEntry, InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST, isDashboardPage } from '@masknet/shared-base'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useState } from 'react'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -63,7 +63,7 @@ export interface PredictDialogProps {
 }
 
 export function PredictDialog(props: PredictDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { open, onClose } = props
     const isDashboard = isDashboardPage()
     const { classes } = useStyles()
@@ -83,7 +83,7 @@ export function PredictDialog(props: PredictDialogProps) {
 
     return (
         <>
-            <InjectedDialog open={open} title={t('plugin_predict')} onClose={onClose}>
+            <InjectedDialog open={open} title={t.plugin_predict()} onClose={onClose}>
                 <DialogContent>
                     {!isDashboard ? (
                         <div className={classes.walletStatusBox}>
@@ -100,7 +100,7 @@ export function PredictDialog(props: PredictDialogProps) {
                     <div className={classes.applications}>
                         <ApplicationEntry
                             disabled={!protocols[chainId.valueOf()]?.supportedProtocols.includes(PLUGIN_AZURO_ID)}
-                            title={t('plugin_azuro_protocol')}
+                            title={t.plugin_azuro()}
                             icon={<AzuroIcon fill={classes.azuroIcon} />}
                             onClick={() => setOpenAzuro(true)}
                         />
