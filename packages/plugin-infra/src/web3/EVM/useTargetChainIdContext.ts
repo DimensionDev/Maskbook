@@ -5,7 +5,7 @@ import { createContainer } from 'unstated-next'
 import { useChainId } from '../useChainId'
 
 export function useTargetChainIdContext(_chainId?: ChainId) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
     const [targetChainId, setTargetChainId] = useState<ChainId>(_chainId ?? chainId)
 
     return {
