@@ -7,21 +7,21 @@ import { NFT_USAGE } from '../types'
 import { getNFTAvatarByUserId } from '../utils'
 import { useGetNFTAvatar } from './useGetNFTAvatar'
 
-export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS, flag?: NFT_USAGE) {
+export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS, nftUsage?: NFT_USAGE) {
     const [, getNFTAvatar] = useGetNFTAvatar()
     return useAsyncRetry(async () => {
-        const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, flag ?? NFT_USAGE.NFT_PFP)
+        const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, nftUsage ?? NFT_USAGE.NFT_PFP)
         if (avatarMetaFromPersona) return avatarMetaFromPersona
         const avatarMeta = await getNFTAvatar(
             userId,
             activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             snsKey,
-            flag ?? NFT_USAGE.NFT_PFP,
+            nftUsage ?? NFT_USAGE.NFT_PFP,
         )
         if (!avatarMeta) return
         if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
             return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }
         }
         return { imageUrl: '', nickname: '', ...avatarMeta }
-    }, [userId, getNFTAvatar, avatarId, snsKey, flag])
+    }, [userId, getNFTAvatar, avatarId, snsKey, nftUsage])
 }

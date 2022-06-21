@@ -12,7 +12,7 @@ export function useGetNFTAvatarFromRSS3() {
     const connection = useWeb3Connection<'all'>(NetworkPluginID.PLUGIN_EVM, { chainId: ChainId.Mainnet })
 
     return useAsyncFn(
-        async (userId: string, address: string, snsKey: RSS3_KEY_SNS, flag: NFT_USAGE) => {
+        async (userId: string, address: string, snsKey: RSS3_KEY_SNS, nftUsage: NFT_USAGE) => {
             const rss = RSS3API.createRSS3(address, async (message: string) => {
                 return connection?.signMessage(message, 'personalSign', { account: address }) ?? ''
             })
@@ -27,7 +27,7 @@ export function useGetNFTAvatarFromRSS3() {
 
             v = RSS3Cache.get(key)
             const result = await v?.[0]
-            return flag === NFT_USAGE.NFT_PFP ? result?.nft : result?.background
+            return nftUsage === NFT_USAGE.NFT_PFP ? result?.nft : result?.background
         },
         [connection],
     )

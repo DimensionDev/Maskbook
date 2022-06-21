@@ -19,12 +19,12 @@ function getKey(site: EnhanceableSite, userId: string) {
 export async function getAddress(
     site: EnhanceableSite,
     userId: string,
-    flag?: NFT_USAGE,
+    nftUsage?: NFT_USAGE,
     pluginID?: NetworkPluginID,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     let f = cache.get(getKey(site, userId))
     if (f) return f
-    f = _getAddress(site, userId, pluginID, flag)
+    f = _getAddress(site, userId, pluginID, nftUsage)
     cache.set(getKey(site, userId), f)
     return f
 }
@@ -33,7 +33,7 @@ async function _getAddress(
     site: EnhanceableSite,
     userId: string,
     pluginID?: NetworkPluginID,
-    flag?: NFT_USAGE,
+    nftUsage?: NFT_USAGE,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     if (userId === '$unknown') return
 
@@ -47,7 +47,7 @@ async function _getAddress(
         storageV2 = {} as AddressStorageV2
     }
 
-    if (flag === NFT_USAGE.NFT_BACKGROUND) return storageV2['#{userId}_background']
+    if (nftUsage === NFT_USAGE.NFT_BACKGROUND) return storageV2['#{userId}_background']
     if (!pluginID && storageV2[userId]) return storageV2[userId]
     if (storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM])
         return {
@@ -66,7 +66,7 @@ export async function setAddress(
     userId: string,
     pluginID: NetworkPluginID,
     address: string,
-    flag: NFT_USAGE,
+    nftUsage: NFT_USAGE,
 ) {
     if (userId === '$unknown') return
 
@@ -84,6 +84,6 @@ export async function setAddress(
     await createAddressDB(site).set(userId, {
         ...(storageV2 as AddressStorageV2),
         [pluginID]: address,
-        [flag !== NFT_USAGE.NFT_PFP ? `${userId}_background` : userId]: { address, networkPluginID: pluginID },
+        [nftUsage !== NFT_USAGE.NFT_PFP ? `${userId}_background` : userId]: { address, networkPluginID: pluginID },
     } as AddressStorageV2)
 }

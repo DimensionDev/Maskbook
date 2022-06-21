@@ -77,7 +77,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             setDisabled(true)
 
             let avatarData: AvatarInfo | undefined
-            if (tokenInfo.flag === NFT_USAGE.NFT_PFP) {
+            if (tokenInfo.nftUsage === NFT_USAGE.NFT_PFP) {
                 avatarData = await uploadAvatar(blob, proof.identity)
                 if (!avatarData) {
                     setDisabled(false)
@@ -97,7 +97,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
-                tokenInfo.flag,
+                tokenInfo.nftUsage,
             )
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })

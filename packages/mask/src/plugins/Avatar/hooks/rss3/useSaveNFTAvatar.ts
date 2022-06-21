@@ -15,17 +15,17 @@ export function useSaveNFTAvatar() {
             nft: AvatarMetaDB,
             network: EnhanceableSite,
             snsKey: RSS3_KEY_SNS,
-            flag: NFT_USAGE,
+            nftUsage: NFT_USAGE,
             networkPluginId?: NetworkPluginID,
             chainId?: number,
         ) => {
-            const avatar = await saveAvatarToRSS3(address, nft, '', snsKey, flag)
+            const avatar = await saveAvatarToRSS3(address, nft, '', snsKey, nftUsage)
             await PluginNFTAvatarRPC.setAddress(
                 network,
                 nft.userId,
                 networkPluginId ?? NetworkPluginID.PLUGIN_EVM,
                 address,
-                flag,
+                nftUsage,
             )
             return avatar
         },

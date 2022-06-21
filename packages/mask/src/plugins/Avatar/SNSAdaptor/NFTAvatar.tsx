@@ -112,7 +112,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             token: selectedToken,
             image: selectedToken.metadata?.imageURL ?? '',
             pluginId: pluginID,
-            flag: NFT_USAGE.NFT_PFP,
+            nftUsage: NFT_USAGE.NFT_PFP,
         })
         setSelectedToken(undefined)
     }, [onChange, selectedToken])

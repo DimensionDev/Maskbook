@@ -9,7 +9,7 @@ import { useGetNFTAvatar } from './useGetNFTAvatar'
 export function useNFTAvatar(
     userId: string | undefined,
     snsKey: RSS3_KEY_SNS,
-    flag?: NFT_USAGE,
+    nftUsage?: NFT_USAGE,
 ): AsyncState<AvatarMetaDB | undefined> {
     const [, getNFTAvatar] = useGetNFTAvatar()
 
@@ -18,7 +18,7 @@ export function useNFTAvatar(
             userId,
             activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             snsKey,
-            flag ?? NFT_USAGE.NFT_PFP,
+            nftUsage ?? NFT_USAGE.NFT_PFP,
         )
-    }, [userId, snsKey, getNFTAvatar, flag])
+    }, [userId, snsKey, getNFTAvatar, nftUsage])
 }

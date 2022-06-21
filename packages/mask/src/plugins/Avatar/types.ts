@@ -28,7 +28,7 @@ export interface SelectTokenInfo {
     token: AllChainsNonFungibleToken
     image: string
     pluginId: NetworkPluginID
-    flag: NFT_USAGE
+    nftUsage: NFT_USAGE
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {

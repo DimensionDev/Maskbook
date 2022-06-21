@@ -128,7 +128,7 @@ function NFTAvatarInTwitter() {
             } as AvatarMetaDB,
             identity.identifier.network as EnhanceableSite,
             RSS3_KEY_SNS.TWITTER,
-            NFTEvent.flag ?? NFT_USAGE.NFT_PFP,
+            NFTEvent.nftUsage ?? NFT_USAGE.NFT_PFP,
         ).catch((error) => {
             setNFTEvent(undefined)
             setAvatar(undefined)

@@ -124,7 +124,7 @@ function NFTAvatarInFacebook() {
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
-                    NFTEvent.flag ?? NFT_USAGE.NFT_PFP,
+                    NFTEvent.nftUsage ?? NFT_USAGE.NFT_PFP,
                 )
                 if (!avatarInfo) {
                     setNFTEvent(undefined)
@@ -157,7 +157,7 @@ function NFTAvatarInFacebook() {
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
-                    storages.flag.value,
+                    storages.nftUsage.value,
                 )
                 if (!avatarInfo) {
                     clearStorages()

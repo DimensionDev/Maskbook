@@ -11,15 +11,15 @@ export function useGetNFTAvatar() {
     const [, getNFTAvatarFromRSS] = useGetNFTAvatarFromRSS3()
 
     return useAsyncFn(
-        async (userId?: string, network?: EnhanceableSite, snsKey?: RSS3_KEY_SNS, flag?: NFT_USAGE) => {
+        async (userId?: string, network?: EnhanceableSite, snsKey?: RSS3_KEY_SNS, nftUsage?: NFT_USAGE) => {
             if (!userId || !network || !snsKey) return
-            const storage = await getAddress(network, userId, flag)
+            const storage = await getAddress(network, userId, nftUsage)
             if (!storage?.address) return
             if (storage?.networkPluginID && storage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
                 const result = await PluginNFTAvatarRPC.getAvatar(userId, network)
-                return flag !== NFT_USAGE.NFT_BACKGROUND ? (result as NextIDAvatarMeta) : result?.background
+                return nftUsage !== NFT_USAGE.NFT_BACKGROUND ? (result as NextIDAvatarMeta) : result?.background
             }
-            return getNFTAvatarFromRSS(userId, storage.address, snsKey, flag ?? NFT_USAGE.NFT_PFP)
+            return getNFTAvatarFromRSS(userId, storage.address, snsKey, nftUsage ?? NFT_USAGE.NFT_PFP)
         },
         [getNFTAvatarFromRSS],
     )

@@ -23,9 +23,9 @@ export async function saveAvatar(
     network: EnhanceableSite,
     avatar: AllNextIDAvatarMeta,
     sign: string,
-    flag: NFT_USAGE,
+    nftUsage: NFT_USAGE,
 ) {
-    await setAddress(network, avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, flag)
+    await setAddress(network, avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, nftUsage)
     await NFTAvatarStorage(network).set(avatar.userId, {
         ...avatar,
         sign,

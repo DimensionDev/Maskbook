@@ -16,7 +16,7 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
             account: string,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: NFT_USAGE,
+            nftUsage: NFT_USAGE,
         ) => {
             const _tokenInfo = await getAvatar(
                 info.userId,
@@ -24,7 +24,7 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
             )
 
             let tokenInfo: AllNextIDAvatarMeta
-            if (flag === NFT_USAGE.NFT_PFP) {
+            if (nftUsage === NFT_USAGE.NFT_PFP) {
                 tokenInfo = info
                 if (_tokenInfo?.background) {
                     tokenInfo = Object.assign(info, { background: _tokenInfo.background })
@@ -45,7 +45,7 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
                 activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
                 tokenInfo,
                 sign,
-                flag,
+                nftUsage,
             )
         },
         [connection],

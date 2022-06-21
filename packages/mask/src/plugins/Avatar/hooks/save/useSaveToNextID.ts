@@ -72,12 +72,12 @@ export function useSaveToNextID() {
             account: string,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: NFT_USAGE,
+            nftUsage: NFT_USAGE,
         ) => {
             if (!proof?.identity || !persona?.publicKeyAsHex) return
 
             let tokenInfo: AllNextIDAvatarMeta
-            if (flag === NFT_USAGE.NFT_PFP) {
+            if (nftUsage === NFT_USAGE.NFT_PFP) {
                 const backgroundNFTInfo = await getBackgroundNFTInfo(persona, proof)
                 tokenInfo = info
                 if (backgroundNFTInfo) {
@@ -102,7 +102,7 @@ export function useSaveToNextID() {
                 info.userId,
                 info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 account,
-                flag,
+                nftUsage,
             )
 
             return response.ok

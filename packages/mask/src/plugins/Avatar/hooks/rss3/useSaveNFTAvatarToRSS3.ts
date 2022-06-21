@@ -9,7 +9,7 @@ export function useSaveAvatarToRSS3() {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(
-        async (address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS, flag: NFT_USAGE) => {
+        async (address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS, nftUsage: NFT_USAGE) => {
             const rss = RSS3.createRSS3(address, async (message: string) => {
                 return connection.signMessage(message, 'personalSign', { account: address }) ?? ''
             })
@@ -18,15 +18,15 @@ export function useSaveAvatarToRSS3() {
                 _nfts = {
                     [nft.userId]: {
                         signature,
-                        nft: flag === NFT_USAGE.NFT_PFP ? nft : undefined,
-                        background: flag === NFT_USAGE.NFT_BACKGROUND ? nft : undefined,
+                        nft: nftUsage === NFT_USAGE.NFT_PFP ? nft : undefined,
+                        background: nftUsage === NFT_USAGE.NFT_BACKGROUND ? nft : undefined,
                     },
                 }
             } else {
                 _nfts[nft.userId] = {
                     signature,
-                    nft: flag === NFT_USAGE.NFT_PFP ? nft : _nfts[nft.userId].nft,
-                    background: flag === NFT_USAGE.NFT_BACKGROUND ? nft : _nfts[nft.userId].background,
+                    nft: nftUsage === NFT_USAGE.NFT_PFP ? nft : _nfts[nft.userId].nft,
+                    background: nftUsage === NFT_USAGE.NFT_BACKGROUND ? nft : _nfts[nft.userId].background,
                 }
             }
             await RSS3.setFileData(rss, address, snsKey, _nfts)

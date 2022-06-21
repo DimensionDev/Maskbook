@@ -9,13 +9,13 @@ export function useSaveToRSS3() {
     const [, saveNFTAvatar] = useSaveNFTAvatar()
 
     return useAsyncFn(
-        async (info: NextIDAvatarMeta, account: string, flag: NFT_USAGE) => {
+        async (info: NextIDAvatarMeta, account: string, nftUsage: NFT_USAGE) => {
             return saveNFTAvatar(
                 account,
                 info,
                 activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
                 RSS3_KEY_SNS.TWITTER,
-                flag,
+                nftUsage,
             )
         },
         [saveNFTAvatar],

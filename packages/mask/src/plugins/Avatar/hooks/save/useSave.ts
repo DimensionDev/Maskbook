@@ -23,7 +23,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             data: AvatarInfo,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: NFT_USAGE,
+            nftUsage: NFT_USAGE,
         ) => {
             if (!token.contract?.address || !token.tokenId) return
             const info: NextIDAvatarMeta = {
@@ -41,12 +41,12 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             switch (pluginId) {
                 case NetworkPluginID.PLUGIN_EVM: {
                     if (isBindAccount) {
-                        return saveToNextID(info, account, persona, proof, flag)
+                        return saveToNextID(info, account, persona, proof, nftUsage)
                     }
-                    return saveToRSS3(info, account, flag)
+                    return saveToRSS3(info, account, nftUsage)
                 }
                 default:
-                    return saveToKV(info, account, persona, proof, flag)
+                    return saveToKV(info, account, persona, proof, nftUsage)
             }
         },
         [saveToNextID, saveToRSS3, pluginId],

@@ -86,7 +86,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
 export async function getNFTAvatarByUserId(
     userId: string,
     avatarId: string,
-    flag: NFT_USAGE,
+    nftUsage: NFT_USAGE,
 ): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
