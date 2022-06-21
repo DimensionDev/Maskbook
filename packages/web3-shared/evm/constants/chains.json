@@ -322,7 +322,7 @@
     },
     {
         "chainId": 10,
-        "name": "Optimism Ethereum",
+        "name": "Optimism",
         "chain": "Optimism",
         "network": "mainnet",
         "features": [],
@@ -343,8 +343,8 @@
     },
     {
         "chainId": 69,
-        "name": "Optimism Ethereum Testnet Kovan",
-        "chain": "KOR",
+        "name": "Optimism Testnet Kovan",
+        "chain": "Optimism",
         "network": "testnet",
         "rpc": ["https://kovan.optimism.io/"],
         "faucets": [],
@@ -361,8 +361,8 @@
     },
     {
         "chainId": 420,
-        "name": "Optimism Ethereum Testnet Goerli",
-        "chain": "Goerli",
+        "name": "Optimism Testnet Goerli",
+        "chain": "Optimism",
         "network": "testnet",
         "rpc": ["https://goerli.optimism.io/"],
         "faucets": [],
@@ -926,7 +926,7 @@
     {
         "chainId": 69,
         "type": "Optimistic",
-        "name": "OPT",
+        "name": "Optimism",
         "network": "kovan",
         "shortName": "okov",
         "features": [],
@@ -1436,8 +1436,7 @@
     },
     {
         "chainId": 420,
-        "type": "Optimistic",
-        "name": "OPT",
+        "name": "Optimism",
         "network": "goerli",
         "shortName": "ogor",
         "features": [],

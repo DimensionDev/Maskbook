@@ -248,7 +248,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_total_amount({
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -328,7 +328,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         historyToken?.decimals,
                                         6,
                                     ),
-                                    symbol: historyToken?.symbol!,
+                                    symbol: historyToken?.symbol,
                                 }}
                             />
                         </Typography>
