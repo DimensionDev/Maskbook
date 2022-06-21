@@ -7,7 +7,7 @@ import { SearchIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { GoPlusLabs } from '@masknet/web3-providers'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,9 +43,9 @@ interface SearchBoxProps {
 const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
-    if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
-    if (chain.chainId === ChainId.BSC) return getChainDetailed(ChainId.BSC)?.shortName.toUpperCase() ?? chain.name
-    return getChainDetailed(chain.chainId)?.name ?? chain.name
+    if (!chain) return chainResolver.chainName(ChainId.Mainnet)
+    if (chain.chainId === ChainId.BSC) return chainResolver.chainName(ChainId.BSC) ?? chain.name
+    return chainResolver.chainName(chain.chainId) ?? chain.name
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {

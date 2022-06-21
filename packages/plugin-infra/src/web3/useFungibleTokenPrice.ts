@@ -14,6 +14,6 @@ export function useFungibleTokenPrice<T extends NetworkPluginID>(
 
     return useAsyncRetry(async () => {
         if (!chainId || !hub || !address) return 0
-        return hub.getFungibleTokenPrice?.(chainId, address ?? '')
+        return hub.getFungibleTokenPrice?.(chainId, address)
     }, [chainId, address, hub])
 }

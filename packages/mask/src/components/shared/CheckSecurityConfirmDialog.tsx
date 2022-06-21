@@ -36,33 +36,29 @@ function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {
     const { classes } = useStyles()
 
     return (
-        <>
-            <InjectedDialog open={open} onClose={onClose} classes={{ paper: classes.paper }}>
-                <DialogContent className={classes.content}>
-                    <Stack alignItems="center">
-                        <Typography style={{ fontSize: '14px', fontWeight: 500 }}>
-                            {t('close_check_security')}
-                        </Typography>
-                        <Typography className={classes.intro}>{t('check_security_intro')}</Typography>
-                        <Typography className={classes.intro}>{t('check_security_close_warning')}</Typography>
-                        <Typography className={classes.intro}>{t('check_security_close_advice')}</Typography>
-                    </Stack>
-                    <Stack marginTop="36px">
-                        <Button
-                            style={{ backgroundColor: '#ffb100', color: '#fff', borderRadius: '99px' }}
-                            onClick={() => {
-                                onConfirm()
-                                onClose()
-                            }}>
-                            {t('confirm')}
-                        </Button>
-                        <Button style={{ marginTop: '16px', borderRadius: '99px' }} onClick={onClose}>
-                            {t('cancel')}
-                        </Button>
-                    </Stack>
-                </DialogContent>
-            </InjectedDialog>
-        </>
+        <InjectedDialog open={open} onClose={onClose} classes={{ paper: classes.paper }}>
+            <DialogContent className={classes.content}>
+                <Stack alignItems="center">
+                    <Typography style={{ fontSize: '14px', fontWeight: 500 }}>{t('close_check_security')}</Typography>
+                    <Typography className={classes.intro}>{t('check_security_intro')}</Typography>
+                    <Typography className={classes.intro}>{t('check_security_close_warning')}</Typography>
+                    <Typography className={classes.intro}>{t('check_security_close_advice')}</Typography>
+                </Stack>
+                <Stack marginTop="36px">
+                    <Button
+                        style={{ backgroundColor: '#ffb100', color: '#fff', borderRadius: '99px' }}
+                        onClick={() => {
+                            onConfirm()
+                            onClose()
+                        }}>
+                        {t('confirm')}
+                    </Button>
+                    <Button style={{ marginTop: '16px', borderRadius: '99px' }} onClick={onClose}>
+                        {t('cancel')}
+                    </Button>
+                </Stack>
+            </DialogContent>
+        </InjectedDialog>
     )
 }
 export default CheckSecurityConfirmDialog
