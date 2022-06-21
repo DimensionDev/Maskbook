@@ -98,7 +98,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
         <NFTCardStyledAssetPlayer
             chainId={chainId}
             contractAddress={token.contract?.address}
-            url={token.metadata?.imageURL ?? token.metadata?.imageURL}
+            url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
             tokenId={token.tokenId}
             classes={{
                 loadingFailImage: classes.loadingFailImage,

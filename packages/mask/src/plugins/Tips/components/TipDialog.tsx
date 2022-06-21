@@ -5,12 +5,12 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
-    useNonFungibleToken,
+    useNonFungibleAsset,
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
+import { InjectedDialog, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -28,7 +28,8 @@ import { TipType } from '../types'
 import { AddDialog } from './AddDialog'
 import { ConfirmModal } from './common/ConfirmModal'
 import { TipForm } from './TipForm'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NFTItem } from './NFTSection'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -163,7 +164,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         recipientSnsId,
         recipient,
         nonFungibleTokenContract,
-        nonFungibleTokenId: erc721TokenId,
+        nonFungibleTokenId,
         setNonFungibleTokenAddress,
         setNonFungibleTokenId,
         reset,
@@ -189,39 +190,31 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const { value: erc721Token } = useNonFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
+    const { value: nonFungibleToken } = useNonFungibleAsset(
+        undefined,
         nonFungibleTokenContract?.address,
-        erc721TokenId ?? '',
+        nonFungibleTokenId ?? '',
     )
 
     const chainId = useChainId()
     const successMessage = useMemo(() => {
         if (isTokenTip) return t.send_tip_successfully()
-        if (erc721Token)
+        if (nonFungibleToken)
             return (
                 <div className={classes.nftMessage}>
                     <div className={classes.nftContainer}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={chainId}
-                            contractAddress={erc721Token.address}
-                            url={erc721Token.metadata?.mediaURL}
-                            tokenId={erc721Token.tokenId}
-                            classes={{
-                                loadingFailImage: classes.loadingFailImage,
-                            }}
-                        />
+                        <NFTItem token={nonFungibleToken} />
                     </div>
                     <Typography className={classes.nftMessageText}>
                         {t.send_specific_tip_successfully({
                             amount: '1',
-                            name: erc721Token.contract?.name || 'NFT',
+                            name: nonFungibleToken.contract?.name || 'NFT',
                         })}
                     </Typography>
                 </div>
             )
         return t.send_tip_successfully()
-    }, [t, isTokenTip, classes.nftMessage, erc721Token])
+    }, [t, chainId, isTokenTip, classes.nftMessage, nonFungibleToken])
 
     const handleConfirm = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)
@@ -247,7 +240,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return openSelectProviderDialog()
     }, [openSelectProviderDialog, hasNativeAPI])
 
-    const handleAddToken = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+    const handleAddToken = useCallback((token: NonFungibleAsset<ChainId, SchemaType>) => {
         setNonFungibleTokenAddress(token.address ?? '')
         setNonFungibleTokenId(token.tokenId)
         openAddTokenDialog(false)
