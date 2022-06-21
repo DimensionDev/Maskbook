@@ -9,16 +9,14 @@ export function useAddNameService(addressConfigs: AddressConfig[]) {
     const chainId = useChainId()
     useEffect(() => {
         if (!NameService?.reverse) return
-        addressConfigs
-            .map((x) => x.address)
-            .forEach(async (addr) => {
-                const name = await NameService.reverse!(chainId, addr)
-                if (!name) return
-                setMap((oldMap) => ({
-                    ...oldMap,
-                    [addr]: name,
-                }))
-            })
+        addressConfigs.forEach(async ({ address }) => {
+            const name = await NameService.reverse!(chainId, address)
+            if (!name) return
+            setMap((oldMap) => ({
+                ...oldMap,
+                [address]: name,
+            }))
+        })
     }, [addressConfigs, NameService])
 
     return useMemo(() => {

@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -119,7 +119,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
         if (isSending) return false
         if (chainId !== currentChainId) return false
         if (pluginId === NetworkPluginID.PLUGIN_EVM) {
-            return [EVM_ChainId.Mainnet, EVM_ChainId.BSC, EVM_ChainId.Matic].includes(currentChainId as EVM_ChainId)
+            return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId as ChainId)
         }
         return pluginId === NetworkPluginID.PLUGIN_SOLANA
     }, [chainId, currentChainId, pluginId])

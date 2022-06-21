@@ -107,7 +107,7 @@ export const TipButton: FC<Props> = ({
     const allAddresses = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
-                return uniqBy([...publicWallets, ...addresses], (v) => v.address)
+                return uniqBy([...publicWallets, ...addresses], (v) => v.address.toLowerCase())
             case NetworkPluginID.PLUGIN_SOLANA:
                 return socialAddressList
                     .filter((x) => x.networkSupporterPluginID === pluginId)
