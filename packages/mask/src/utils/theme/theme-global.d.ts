@@ -12,7 +12,7 @@ declare module '@mui/material/styles/createPalette.d' {
             bottom: string
             secondaryBottom: string
             input: string
-            modelTitleBg: string
+            modalTitleBg: string
             highlight: string
             line: string
             secondaryLine: string

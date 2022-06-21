@@ -144,7 +144,6 @@ function ApplicationBoardContent(props: Props) {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-    console.log({ applicationList })
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
