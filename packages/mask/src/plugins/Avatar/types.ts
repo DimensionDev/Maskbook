@@ -28,7 +28,7 @@ export interface SelectTokenInfo {
     token: AllChainsNonFungibleToken
     image: string
     pluginId: NetworkPluginID
-    flag: SET_NFT_FLAG
+    flag: NFT_USAGE
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {
@@ -54,7 +54,7 @@ export interface NFTInfo {
     permalink: string
 }
 
-export enum SET_NFT_FLAG {
+export enum NFT_USAGE {
     NFT_PFP = 0,
     NFT_BACKGROUND = 1,
 }

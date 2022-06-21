@@ -6,7 +6,7 @@ import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { AvatarMetaDB, SET_NFT_FLAG } from '../../../../plugins/Avatar/types'
+import { AvatarMetaDB, NFT_USAGE } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
 import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
@@ -124,7 +124,7 @@ function NFTAvatarInFacebook() {
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
-                    NFTEvent.flag ?? SET_NFT_FLAG.NFT_PFP,
+                    NFTEvent.flag ?? NFT_USAGE.NFT_PFP,
                 )
                 if (!avatarInfo) {
                     setNFTEvent(undefined)

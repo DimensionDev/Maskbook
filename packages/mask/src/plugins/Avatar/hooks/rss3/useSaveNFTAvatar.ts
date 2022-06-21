@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 import type { RSS3_KEY_SNS } from '../../constants'
 import { PluginNFTAvatarRPC } from '../../messages'
-import type { AvatarMetaDB, SET_NFT_FLAG } from '../../types'
+import type { AvatarMetaDB, NFT_USAGE } from '../../types'
 import { useSaveAvatarToRSS3 } from './useSaveNFTAvatarToRSS3'
 
 export function useSaveNFTAvatar() {
@@ -15,7 +15,7 @@ export function useSaveNFTAvatar() {
             nft: AvatarMetaDB,
             network: EnhanceableSite,
             snsKey: RSS3_KEY_SNS,
-            flag: SET_NFT_FLAG,
+            flag: NFT_USAGE,
             networkPluginId?: NetworkPluginID,
             chainId?: number,
         ) => {

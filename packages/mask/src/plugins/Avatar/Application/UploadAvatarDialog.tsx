@@ -12,7 +12,7 @@ import { context } from '../context'
 import { useSubscription } from 'use-subscription'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { AvatarInfo, useSave } from '../hooks/save/useSave'
-import { SelectTokenInfo, SET_NFT_FLAG } from '../types'
+import { NFT_USAGE, SelectTokenInfo } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -77,7 +77,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             setDisabled(true)
 
             let avatarData: AvatarInfo | undefined
-            if (tokenInfo.flag === SET_NFT_FLAG.NFT_PFP) {
+            if (tokenInfo.flag === NFT_USAGE.NFT_PFP) {
                 avatarData = await uploadAvatar(blob, proof.identity)
                 if (!avatarData) {
                     setDisabled(false)

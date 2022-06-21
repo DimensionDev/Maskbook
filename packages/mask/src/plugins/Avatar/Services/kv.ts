@@ -2,7 +2,7 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { KeyValue } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFT_AVATAR_DB_NAME } from '../constants'
-import { SET_NFT_FLAG } from '../types'
+import { NFT_USAGE } from '../types'
 
 type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
 type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>
@@ -19,7 +19,7 @@ function getKey(site: EnhanceableSite, userId: string) {
 export async function getAddress(
     site: EnhanceableSite,
     userId: string,
-    flag?: SET_NFT_FLAG,
+    flag?: NFT_USAGE,
     pluginID?: NetworkPluginID,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     let f = cache.get(getKey(site, userId))
@@ -33,7 +33,7 @@ async function _getAddress(
     site: EnhanceableSite,
     userId: string,
     pluginID?: NetworkPluginID,
-    flag?: SET_NFT_FLAG,
+    flag?: NFT_USAGE,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     if (userId === '$unknown') return
 
@@ -47,7 +47,7 @@ async function _getAddress(
         storageV2 = {} as AddressStorageV2
     }
 
-    if (flag === SET_NFT_FLAG.NFT_BACKGROUND) return storageV2['#{userId}_background']
+    if (flag === NFT_USAGE.NFT_BACKGROUND) return storageV2['#{userId}_background']
     if (!pluginID && storageV2[userId]) return storageV2[userId]
     if (storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM])
         return {
@@ -66,7 +66,7 @@ export async function setAddress(
     userId: string,
     pluginID: NetworkPluginID,
     address: string,
-    flag: SET_NFT_FLAG,
+    flag: NFT_USAGE,
 ) {
     if (userId === '$unknown') return
 
@@ -84,6 +84,6 @@ export async function setAddress(
     await createAddressDB(site).set(userId, {
         ...(storageV2 as AddressStorageV2),
         [pluginID]: address,
-        [flag !== SET_NFT_FLAG.NFT_PFP ? `${userId}_background` : userId]: { address, networkPluginID: pluginID },
+        [flag !== NFT_USAGE.NFT_PFP ? `${userId}_background` : userId]: { address, networkPluginID: pluginID },
     } as AddressStorageV2)
 }

@@ -6,7 +6,7 @@ import { useAsyncFn } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PluginNFTAvatarRPC } from '../../messages'
 import { getAvatar } from '../../Services'
-import { AllNextIDAvatarMeta, NextIDAvatarMeta, SET_NFT_FLAG } from '../../types'
+import { AllNextIDAvatarMeta, NextIDAvatarMeta, NFT_USAGE } from '../../types'
 
 export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
     const connection = useWeb3Connection<'all'>(pluginId)
@@ -16,7 +16,7 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
             account: string,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: SET_NFT_FLAG,
+            flag: NFT_USAGE,
         ) => {
             const _tokenInfo = await getAvatar(
                 info.userId,
@@ -24,7 +24,7 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
             )
 
             let tokenInfo: AllNextIDAvatarMeta
-            if (flag === SET_NFT_FLAG.NFT_PFP) {
+            if (flag === NFT_USAGE.NFT_PFP) {
                 tokenInfo = info
                 if (_tokenInfo?.background) {
                     tokenInfo = Object.assign(info, { background: _tokenInfo.background })

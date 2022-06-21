@@ -17,7 +17,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
-import { AvatarMetaDB, SET_NFT_FLAG } from '../../../../plugins/Avatar/types'
+import { AvatarMetaDB, NFT_USAGE } from '../../../../plugins/Avatar/types'
 import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui'
@@ -128,7 +128,7 @@ function NFTAvatarInTwitter() {
             } as AvatarMetaDB,
             identity.identifier.network as EnhanceableSite,
             RSS3_KEY_SNS.TWITTER,
-            NFTEvent.flag ?? SET_NFT_FLAG.NFT_PFP,
+            NFTEvent.flag ?? NFT_USAGE.NFT_PFP,
         ).catch((error) => {
             setNFTEvent(undefined)
             setAvatar(undefined)

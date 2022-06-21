@@ -7,7 +7,7 @@ import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PLUGIN_ID } from '../../constants'
 import { PluginNFTAvatarRPC } from '../../messages'
-import { AllNextIDAvatarMeta, NextIDAvatarMeta, SET_NFT_FLAG } from '../../types'
+import { AllNextIDAvatarMeta, NextIDAvatarMeta, NFT_USAGE } from '../../types'
 
 async function getBackgroundNFTInfo(persona: ECKeyIdentifier, proof: BindingProof) {
     const result = await NextIDStorage.getByIdentity<AllNextIDAvatarMeta>(
@@ -72,12 +72,12 @@ export function useSaveToNextID() {
             account: string,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: SET_NFT_FLAG,
+            flag: NFT_USAGE,
         ) => {
             if (!proof?.identity || !persona?.publicKeyAsHex) return
 
             let tokenInfo: AllNextIDAvatarMeta
-            if (flag === SET_NFT_FLAG.NFT_PFP) {
+            if (flag === NFT_USAGE.NFT_PFP) {
                 const backgroundNFTInfo = await getBackgroundNFTInfo(persona, proof)
                 tokenInfo = info
                 if (backgroundNFTInfo) {

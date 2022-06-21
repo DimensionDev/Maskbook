@@ -2,7 +2,7 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { KeyValue } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFT_AVATAR_METADATA_STORAGE } from '../constants'
-import type { AllNextIDAvatarMeta, SET_NFT_FLAG } from '../types'
+import type { AllNextIDAvatarMeta, NFT_USAGE } from '../types'
 import { setAddress } from './kv'
 
 function getKey(network: EnhanceableSite) {
@@ -23,7 +23,7 @@ export async function saveAvatar(
     network: EnhanceableSite,
     avatar: AllNextIDAvatarMeta,
     sign: string,
-    flag: SET_NFT_FLAG,
+    flag: NFT_USAGE,
 ) {
     await setAddress(network, avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, flag)
     await NFTAvatarStorage(network).set(avatar.userId, {

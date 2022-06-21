@@ -5,7 +5,7 @@ import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography 
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
-import { AllChainsNonFungibleToken, SelectTokenInfo, SET_NFT_FLAG } from '../types'
+import { AllChainsNonFungibleToken, NFT_USAGE, SelectTokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
@@ -174,7 +174,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const t = useI18N()
     const { classes } = useStyles({ networkPluginId: selectedPluginId })
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const [flag, setFlag] = useState(SET_NFT_FLAG.NFT_PFP)
+    const [flag, setFlag] = useState(NFT_USAGE.NFT_PFP)
     const {
         value: collectibles = EMPTY_LIST,
         done: loadFinish,
@@ -342,16 +342,16 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     ) : null}
 
                     <Box className={classes.radioGroup}>
-                        <Box className={classes.radio} onClick={() => setFlag(SET_NFT_FLAG.NFT_PFP)}>
-                            {flag === SET_NFT_FLAG.NFT_PFP ? (
+                        <Box className={classes.radio} onClick={() => setFlag(NFT_USAGE.NFT_PFP)}>
+                            {flag === NFT_USAGE.NFT_PFP ? (
                                 <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                             ) : (
                                 <UncheckIcon className={classes.icon} />
                             )}
                             <Typography variant="body1">{t.set_nft_pfp()}</Typography>
                         </Box>
-                        <Box className={classes.radio} onClick={() => setFlag(SET_NFT_FLAG.NFT_BACKGROUND)}>
-                            {flag === SET_NFT_FLAG.NFT_BACKGROUND ? (
+                        <Box className={classes.radio} onClick={() => setFlag(NFT_USAGE.NFT_BACKGROUND)}>
+                            {flag === NFT_USAGE.NFT_BACKGROUND ? (
                                 <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                             ) : (
                                 <UncheckIcon className={classes.icon} />

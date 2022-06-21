@@ -5,7 +5,7 @@ import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDAvatarMeta, SET_NFT_FLAG } from '../types'
+import type { NextIDAvatarMeta, NFT_USAGE } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -86,7 +86,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
 export async function getNFTAvatarByUserId(
     userId: string,
     avatarId: string,
-    flag: SET_NFT_FLAG,
+    flag: NFT_USAGE,
 ): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())

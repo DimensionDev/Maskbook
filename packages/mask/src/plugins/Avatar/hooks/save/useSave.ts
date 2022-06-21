@@ -3,7 +3,7 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta, SET_NFT_FLAG } from '../../types'
+import type { AllChainsNonFungibleToken, NextIDAvatarMeta, NFT_USAGE } from '../../types'
 import { useSaveKV } from './useSaveKV'
 import { useSaveToNextID } from './useSaveToNextID'
 import { useSaveToRSS3 } from './useSaveToRSS3'
@@ -23,7 +23,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             data: AvatarInfo,
             persona: ECKeyIdentifier,
             proof: BindingProof,
-            flag: SET_NFT_FLAG,
+            flag: NFT_USAGE,
         ) => {
             if (!token.contract?.address || !token.tokenId) return
             const info: NextIDAvatarMeta = {
