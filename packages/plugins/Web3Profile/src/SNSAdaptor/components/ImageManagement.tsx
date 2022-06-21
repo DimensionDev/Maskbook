@@ -76,6 +76,7 @@ export interface ImageManagementProps extends withClasses<never | 'root'> {
     accountId?: string
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
+    getBindingsRetry: () => void
 }
 const getAddressesByTitle = (title: string, accountList: accountType) => {
     if (title === 'Donations') return accountList?.walletList?.donations
@@ -96,6 +97,7 @@ export function ImageManagement(props: ImageManagementProps) {
         currentVisitingProfile,
         accountList,
         getWalletHiddenRetry,
+        getBindingsRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)
@@ -162,6 +164,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     onCancel={() => setAddWalletOpen(false)}
                     currentPersona={currentPersona!}
                     bindings={allWallets}
+                    getBindingsRetry={getBindingsRetry}
                 />
             </DialogContent>
             <DialogActions>

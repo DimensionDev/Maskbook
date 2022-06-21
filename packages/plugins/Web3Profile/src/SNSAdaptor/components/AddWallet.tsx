@@ -39,9 +39,10 @@ interface AddWalletDialogProps {
     bindings: WalletTypes[]
     onCancel: () => void
     open: boolean
+    getBindingsRetry: () => void
 }
 
-const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open }: AddWalletDialogProps) => {
+const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open, getBindingsRetry }: AddWalletDialogProps) => {
     const t = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
@@ -127,6 +128,7 @@ const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open }: AddW
         try {
             if (walletSignState) {
                 onCancel()
+                getBindingsRetry()
                 return SignSteps.SecondStepDone
             }
             if (!signature && !walletSignState) {
@@ -137,6 +139,7 @@ const AddWalletDialog = memo(({ currentPersona, bindings, onCancel, open }: AddW
                 return res ? SignSteps.SecondStepDone : SignSteps.FirstStepDone
             } else {
                 onCancel()
+                getBindingsRetry()
                 return SignSteps.SecondStepDone
             }
         } catch {

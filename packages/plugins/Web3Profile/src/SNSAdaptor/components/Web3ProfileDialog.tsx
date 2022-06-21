@@ -126,6 +126,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
 
     const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList)
 
+    console.log({ accounts, allPersona, currentVisitingProfile, accountList })
     return (
         <>
             <InjectedDialog
@@ -160,6 +161,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 currentVisitingProfile={currentVisitingProfile}
                 allWallets={wallets}
                 getWalletHiddenRetry={retryGetWalletHiddenList}
+                getBindingsRetry={retryQueryBinding}
             />
         </>
     )

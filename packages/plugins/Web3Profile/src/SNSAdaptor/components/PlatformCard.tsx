@@ -94,7 +94,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.footprints()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.footprints?.length}</span>{' '}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.footprints?.length ?? 0}</span>{' '}
                             {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>
                                 {account?.walletList?.footprints?.reduce(
@@ -102,7 +102,7 @@ export function PlatformCard(props: PlatformCardProps) {
                                         pre +
                                         (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
                                     0,
-                                )}
+                                ) ?? 0}
                             </span>{' '}
                             {t.footprints()}
                         </Typography>
@@ -113,7 +113,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.donations()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.donations?.length}</span>{' '}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.donations?.length ?? 0}</span>{' '}
                             {t.wallets()}{' '}
                             <span style={{ fontWeight: '700' }}>
                                 {account?.walletList?.donations?.reduce(
@@ -121,7 +121,7 @@ export function PlatformCard(props: PlatformCardProps) {
                                         pre +
                                         (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
                                     0,
-                                )}
+                                ) ?? 0}
                             </span>{' '}
                             {t.donations()}
                         </Typography>
