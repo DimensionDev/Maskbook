@@ -1,50 +1,9 @@
 import { useNetworkDescriptors, Web3Helper } from '@masknet/plugin-infra/web3'
-import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { isDashboardPage } from '@masknet/shared-base'
+import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
-
-interface StyleProps {
-    chainLength: number
-    isDashboard: boolean
-}
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    tab: {
-        backgroundColor: !props.isDashboard
-            ? `${theme.palette.background.default}!important`
-            : `${MaskColorVar.primaryBackground2}!important`,
-        marginRight: 1,
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    tabs: {
-        '& .MuiTabs-flexContainer': {
-            backgroundColor: theme.palette.background.paper,
-        },
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-        '& .MuiTabs-scroller': {
-            margin: '0 1px',
-        },
-        '& .MuiTabs-scrollButtons': {
-            width: 'unset',
-            backgroundColor: !props.isDashboard
-                ? `${theme.palette.background.default}!important`
-                : `${MaskColorVar.primaryBackground2}!important`,
-            '&.Mui-disabled': {
-                opacity: 1,
-                '& svg': {
-                    opacity: 0.3,
-                },
-            },
-        },
-    },
-}))
 
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
@@ -54,7 +13,6 @@ interface NetworkTabProps<T extends NetworkPluginID>
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
-    const isDashboard = isDashboardPage()
     const { chainId, setChainId, chains } = props
 
     const networks = useNetworkDescriptors()
