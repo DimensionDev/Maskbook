@@ -2,7 +2,7 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
 
@@ -72,10 +72,9 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    <FormattedCurrency
-                                        value={trending.market?.circulating_supply ?? 0}
-                                        formatter={formatCurrency}
-                                    />
+                                    {trending.market?.circulating_supply
+                                        ? formatSupply(trending.market?.circulating_supply)
+                                        : '--'}
                                 </TableCell>
                             </TableRow>
                         ) : null}
@@ -100,10 +99,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    <FormattedCurrency
-                                        value={trending.market?.total_supply ?? 0}
-                                        formatter={formatCurrency}
-                                    />
+                                    {trending.market?.total_supply ? formatSupply(trending.market?.total_supply) : '--'}
                                 </TableCell>
                             </TableRow>
                         ) : null}

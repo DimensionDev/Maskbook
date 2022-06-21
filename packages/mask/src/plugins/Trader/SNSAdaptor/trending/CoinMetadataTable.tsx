@@ -111,20 +111,24 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="flex-end"
-                                        style={{ position: 'relative', right: -5 }}>
-                                        <ContractSection
-                                            iconURL={contracts[0].iconURL}
-                                            chainId={contracts[0].chainId}
-                                            address={contracts[0].address}
-                                        />
-                                        <IconButton size="small" onClick={openMenu}>
-                                            <MoreHorizIcon style={{ fontSize: 16 }} />
-                                        </IconButton>
-                                        {menu}
-                                    </Stack>
+                                    {contracts[0].address ? (
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="flex-end"
+                                            style={{ position: 'relative', right: -5 }}>
+                                            <ContractSection
+                                                iconURL={contracts[0].iconURL}
+                                                chainId={contracts[0].chainId}
+                                                address={contracts[0].address}
+                                            />
+                                            <IconButton size="small" onClick={openMenu}>
+                                                <MoreHorizIcon style={{ fontSize: 16 }} />
+                                            </IconButton>
+                                            {menu}
+                                        </Stack>
+                                    ) : (
+                                        '--'
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ) : null}
