@@ -27,7 +27,6 @@ const approvedList = new Map([
     // @magic-works/i18n-codegen -> i18next-translation-parser
     /* cspell:disable-next-line */
     ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],
-    ['@scamsniffer/detector', 'link:/Users/fun/Documents/ios/adbug/blockchain/scam-sniffer-databse/detector/'],
 
     // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
     ['node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz'],
