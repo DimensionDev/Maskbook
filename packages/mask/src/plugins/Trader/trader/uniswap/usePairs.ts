@@ -8,9 +8,8 @@ import { getPairAddress } from '../../helpers'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
-import { useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 
 export enum PairState {
     NOT_EXISTS = 0,
