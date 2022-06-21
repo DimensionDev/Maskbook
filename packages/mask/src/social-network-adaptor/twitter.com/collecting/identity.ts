@@ -2,6 +2,7 @@ import { delay } from '@dimensiondev/kit'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Twitter } from '@masknet/web3-providers'
 import { ProfileIdentifier } from '@masknet/shared-base'
+import { first } from 'lodash-unified'
 import {
     searchAvatarSelector,
     searchAvatarMetaSelector,
@@ -54,7 +55,7 @@ function resolveLastRecognizedIdentityInner(
     cancel: AbortSignal,
 ) {
     const assign = async () => {
-        await delay(5000)
+        await delay(2000)
         const { collect } = recognizeDesktop()
         const dataFromScript = collect()
         const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
@@ -116,14 +117,26 @@ function resolveLastRecognizedIdentityMobileInner(
     window.addEventListener('locationchange', onLocationChange, { signal: cancel })
 }
 
+const getFirstSlug = () => {
+    const slugs = location.pathname.split('/').filter((x) => x)
+    return first(slugs)
+}
+
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
     const avatarSelector = searchAvatarSelector()
     const avatarMetaSelector = searchAvatarMetaSelector()
+    let firstSlug = getFirstSlug()
     const assign = async () => {
-        await delay(5000)
+        const newFirstSlug = getFirstSlug()
+        // reset to void wrong value
+        if (firstSlug !== newFirstSlug) {
+            ref.value = {}
+            firstSlug = newFirstSlug
+        }
+        await delay(2000)
         const bio = getBio()
         const nickname = getNickname()
         const handle = getTwitterId()
