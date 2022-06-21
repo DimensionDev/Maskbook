@@ -54,6 +54,9 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     // #region remote controlled dialog logic
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
+        (ev) => {
+            if (ev.open) setIsHidden(false)
+        },
     )
 
     const closeDialog = useCallback(() => {
