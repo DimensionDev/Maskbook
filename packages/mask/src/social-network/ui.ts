@@ -141,6 +141,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     return Services.Identity.generateSignResult
                 },
                 dialogUpdateMsg: WalletMessages.events.selectProviderDialogUpdated,
+                getPersonaAvatar: Services.Identity.getPersonaAvatar,
             }
         }),
     )
