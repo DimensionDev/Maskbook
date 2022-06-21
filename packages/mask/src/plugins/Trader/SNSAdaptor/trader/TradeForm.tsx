@@ -30,6 +30,7 @@ import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -217,6 +218,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
+        const [isWarningOpen, setIsWarningOpen] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
@@ -228,6 +230,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         )
 
         const isRisky = isHighRisk(tokenSecurityInfo)
+        console.log({ isTokenSecurityClosed, snsAdaptorMinimalPlugins })
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -525,7 +528,19 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </Box>
                                     }
                                     render={(disable: boolean) =>
-                                        isGreatThanSlippageSetting ? (
+                                        !isTokenSecurityClosed && isRisky ? (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                color="error"
+                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                onClick={() => setIsWarningOpen(true)}>
+                                                {t('plugin_trader_risk_warning', {
+                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                                })}
+                                            </ActionButton>
+                                        ) : isGreatThanSlippageSetting ? (
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
@@ -567,6 +582,17 @@ export const TradeForm = memo<AllTradeFormProps>(
                         </Box>
                     ) : null}
                 </Box>
+                {!isTokenSecurityClosed && tokenSecurityInfo && (
+                    <RiskWarningDialog
+                        open={isWarningOpen}
+                        onClose={() => setIsWarningOpen(false)}
+                        onConfirm={() => {
+                            onSwap()
+                            setIsWarningOpen(false)
+                        }}
+                        tokenInfo={tokenSecurityInfo}
+                    />
+                )}
             </Box>
         )
     },
