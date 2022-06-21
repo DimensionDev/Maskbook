@@ -40,10 +40,23 @@ interface NFTListProps {
     tokens?: AllChainsNonFungibleToken[]
     children?: React.ReactElement
     chainId: ChainId
+    nextPage(): void
+    loadFinish: boolean
+    loadError?: boolean
 }
 
 export function NFTList(props: NFTListProps) {
-    const { onSelect, tokenInfo, onChangeChain, tokens = [], children, chainId } = props
+    const {
+        onSelect,
+        tokenInfo,
+        onChangeChain,
+        tokens = [],
+        children,
+        chainId,
+        nextPage,
+        loadError,
+        loadFinish,
+    } = props
     const [currentTab, onChange, tabs, setTab] = useTabs(
         Application_NFT_LIST_PAGE.Application_nft_tab_eth_page,
         Application_NFT_LIST_PAGE.Application_nft_tab_polygon_page,
@@ -104,6 +117,9 @@ export function NFTList(props: NFTListProps) {
                         tokenInfo={tokenInfo}
                         onChange={onSelect}
                         children={children}
+                        nextPage={nextPage}
+                        loadError={!!loadError}
+                        loadFinish={loadFinish}
                     />
                 </TabPanel>
             ))}

@@ -6,15 +6,18 @@ import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { useWallet } from '@masknet/plugin-infra/web3'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
-import { useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
@@ -58,11 +61,20 @@ const clearStorages = () => {
 
 function NFTAvatarInFacebook() {
     const { classes } = useStyles()
-    const wallet = useWallet()
+
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
+    const account = useAccount()
+    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
+    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
+        storage?.address ?? account,
+        _avatar?.address ?? '',
+        _avatar?.tokenId ?? '',
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        _avatar?.chainId ?? ChainId.Mainnet,
+    )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const [, saveNFTAvatar] = useSaveNFTAvatar()
@@ -103,12 +115,12 @@ function NFTAvatarInFacebook() {
     useAsync(async () => {
         const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
-        if (!wallet) return
+        if (!account) return
         if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
                 const avatarInfo = await saveNFTAvatar(
-                    wallet.address,
+                    account,
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
@@ -132,12 +144,15 @@ function NFTAvatarInFacebook() {
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
             try {
                 const avatarInfo = await saveNFTAvatar(
-                    wallet.address,
+                    account,
                     {
                         userId: storages.userId.value,
                         tokenId: storages.tokenId.value,
                         address: storages.address.value,
                         avatarId: getAvatarId(identity.avatar ?? ''),
+                        chainId: storages.chainId.value,
+                        pluginId: storages.pluginId.value,
+                        schema: storages.schema.value,
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
@@ -173,10 +188,11 @@ function NFTAvatarInFacebook() {
     })
     // #endregion
 
-    if (!avatar || !size || !showAvatar) return null
+    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
 
     return (
         <NFTBadge
+            nftInfo={nftInfo}
             avatar={avatar}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}

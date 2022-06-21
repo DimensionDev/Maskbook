@@ -80,6 +80,7 @@ export interface RedPacketFormProps extends withClasses<never> {
     onClose: () => void
     origin?: RedPacketSettings
     onNext: () => void
+    setERC721DialogHeight?: (height: number) => void
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {

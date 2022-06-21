@@ -60,6 +60,7 @@ enum CreateRedPacketPageStep {
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
@@ -130,7 +131,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
+    // nft dialog height depends on the detailed step
+    const [ERC721DialogHeight, setERC721DialogHeight] = useState(350)
+
+    const dialogContentHeight =
+        state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : ERC721DialogHeight
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -143,6 +148,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         state={tokenState}
                         onClose={onClose}
                         onChange={onChange}
+                        setERC721DialogHeight={(height: number) => setERC721DialogHeight(height)}
                     />
                 ),
                 sx: { p: 0 },
@@ -177,9 +183,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     return (
         <InjectedDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             open={props.open}
             title={title}
             onClose={isCreateStep ? onClose : () => setStep(CreateRedPacketPageStep.NewRedPacketPage)}
+            isOnBack={step !== CreateRedPacketPageStep.NewRedPacketPage}
             disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (

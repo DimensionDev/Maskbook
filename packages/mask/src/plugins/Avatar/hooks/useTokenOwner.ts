@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { usePersonas } from './usePersonas'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginNFTAvatarRPC } from '../messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
 
@@ -14,12 +14,20 @@ export function useTokenOwner(
     chainId?: ChainId,
     account?: string,
 ) {
-    const connection = useWeb3Connection<'all'>(pluginId, { account, chainId })
+    const hub = useWeb3Hub<'all'>(pluginId, {
+        chainId,
+        account,
+    })
+
     return useAsyncRetry(async () => {
-        if (!address || !tokenId || !connection) return
-        const token = await connection.getNonFungibleToken(address, tokenId)
-        return { owner: token?.metadata?.owner, name: token?.contract?.name, symbol: token?.contract?.symbol }
-    }, [connection, tokenId, address])
+        if (!address || !tokenId || !hub?.getNonFungibleAsset) return
+        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId })
+        return {
+            owner: token?.owner?.address ?? token?.ownerId,
+            name: token?.contract?.name,
+            symbol: token?.contract?.symbol,
+        }
+    }, [hub, tokenId, address, account, chainId])
 }
 
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {

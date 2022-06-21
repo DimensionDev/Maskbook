@@ -20,7 +20,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isValidChainId,
             isValidAddress,
             getDefaultChainId: () => ChainId.Mainnet,
-            getDefaultProviderType: () => ProviderType.Blocto,
+            getDefaultProviderType: () => ProviderType.None,
             getDefaultNetworkType: () => NetworkType.Flow,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Flow,

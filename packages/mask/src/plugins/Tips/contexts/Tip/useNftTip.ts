@@ -17,6 +17,9 @@ export function useNftTip<T extends NetworkPluginID>(
     const connectionOptions = {
         account,
         ...options,
+        overrides: {
+            from: account,
+        },
     }
     const [{ loading: isTransferring }, sendTip] = useAsyncFn(async () => {
         const connection = await Connection?.getConnection?.()
@@ -27,9 +30,10 @@ export function useNftTip<T extends NetworkPluginID>(
             recipient,
             tokenId,
             '1',
+            undefined,
             connectionOptions,
         )
-        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, {
+        const tokenDetailed = await connection?.getNonFungibleToken(contractAddress ?? '', tokenId, undefined, {
             chainId,
             account,
         })

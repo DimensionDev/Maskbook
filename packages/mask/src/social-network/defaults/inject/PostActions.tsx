@@ -15,6 +15,10 @@ export function createPostActionsInjector() {
                 key: 'post-actions',
                 signal,
             })
+            if (current.actionsElement?.realCurrent?.parentNode) {
+                const actionsContainer = current.actionsElement.realCurrent.parentNode as HTMLDivElement
+                actionsContainer.style.maxWidth = '100%'
+            }
             root.render(jsx)
             return root.destroy
         }

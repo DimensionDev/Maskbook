@@ -29,7 +29,9 @@ export interface AlchemyNFT_EVM {
         name: string
         description: string
         image: string
+        image_url: string
         external_url: string
+        animation_url: string
         attributes: Array<{
             value: string
             trait_type: string
@@ -62,10 +64,11 @@ export interface AlchemyNFT_FLOW {
     }
     title: string
     description: string
-    media: {
+    externalDomainViewUrl: string
+    media: Array<{
         uri: string
         mimeType: string
-    }
+    }>
     metadata: {
         metadata: Array<{
             name: string
@@ -103,7 +106,7 @@ export interface AlchemyResponse_EVM_Metadata {
         }
         name: string
         description: string
-        attributes: Array<{
+        traits: Array<{
             value: string
             trait_type: string
         }>
@@ -144,10 +147,10 @@ export interface AlchemyResponse_FLOW_Metadata {
     title: string
     description: string
     externalDomainViewUrl: string
-    media: {
+    media: Array<{
         uri: string
         mimeType: string
-    }
+    }>
     metadata: {
         metadata: Array<{
             name: string

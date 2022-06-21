@@ -20,7 +20,7 @@ export interface SwapOrder {
     signature: string
 }
 
-export interface SwapPorportion {
+export interface SwapProportion {
     name: ZrxTradePool
     proportion: string
 }
@@ -63,7 +63,7 @@ export interface SwapQuoteResponse {
     minimumProtocolFee: string
     buyAmount: string
     sellAmount: string
-    sources: SwapPorportion[]
+    sources: SwapProportion[]
     buyTokenAddress: string
     sellTokenAddress: string
     orders: SwapOrder[]

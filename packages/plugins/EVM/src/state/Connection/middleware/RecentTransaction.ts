@@ -7,7 +7,8 @@ import { Web3StateSettings } from '../../../settings'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Transaction, TransactionWatcher } = Web3StateSettings.value
+        const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
+        const isSquashed = typeof context.result !== 'undefined'
 
         await next()
 
@@ -15,26 +16,32 @@ export class RecentTransaction implements Middleware<Context> {
             switch (context.method) {
                 case EthereumMethodType.ETH_SEND_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return
-                    else
-                        await Transaction?.addTransaction?.(
-                            context.chainId,
-                            context.account,
-                            context.result,
-                            context.config,
-                        )
-                    TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
+                    await Transaction?.addTransaction?.(
+                        context.chainId,
+                        context.account,
+                        context.result,
+                        context.config,
+                    )
+                    await TransactionWatcher?.watchTransaction(context.chainId, context.result, context.config)
                     break
                 case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                    if (isSquashed) return
+
                     const receipt = context.result as TransactionReceipt | null
                     const status = getReceiptStatus(receipt)
-                    if (receipt?.transactionHash && status !== TransactionStatusType.NOT_DEPEND) {
-                        await Transaction?.updateTransaction?.(
-                            context.chainId,
-                            context.account,
-                            receipt.transactionHash,
-                            status,
-                        )
-                    }
+                    if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return
+
+                    // update built-in notifier
+                    BalanceNotifier?.emitter.emit('update', {
+                        chainId: context.chainId,
+                        account: receipt.from,
+                    })
+                    // it could be a contract address, but it doesn't matter
+                    BalanceNotifier?.emitter.emit('update', {
+                        chainId: context.chainId,
+                        account: receipt.to,
+                    })
+                    BlockNumberNotifier?.emitter.emit('update', context.chainId)
                     break
                 case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                     if (!context.config || typeof context.result !== 'string') return

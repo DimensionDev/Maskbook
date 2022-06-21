@@ -14,6 +14,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 interface Props {
     onClose: () => void
     open: boolean
+    isOpenFromApplicationBoard?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -87,6 +88,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     }
     return (
         <MaskDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
             open={props.open}
             title={t.__display_name()}

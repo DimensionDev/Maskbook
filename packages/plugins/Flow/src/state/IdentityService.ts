@@ -8,7 +8,7 @@ export class IdentityService extends IdentityServiceState {
     }
 
     protected override async getFromRemote(identity: SocialIdentity) {
-        const addressMatched = identity.bio?.match(/0x\w{16}/) ?? null
+        const addressMatched = identity.bio?.match(/\b0x\w{16}\b/) ?? null
         const address = addressMatched?.[0]
 
         return [

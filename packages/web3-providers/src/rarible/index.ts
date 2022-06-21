@@ -1,27 +1,26 @@
 import urlcat from 'urlcat'
 import { compact, first } from 'lodash-unified'
+import getUnixTime from 'date-fns/getUnixTime'
 import {
     createLookupTableResolver,
     CurrencyType,
     HubOptions,
     FungibleToken,
     NonFungibleAsset,
-    NonFungibleToken,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
     TokenType,
     createPageable,
+    createNonFungibleTokenMetadata,
+    createNonFungibleTokenContract,
+    createNonFungibleTokenCollection,
+    createNonFungibleToken,
+    isSameAddress,
+    createIndicator,
+    createNextIndicator,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    resolveIPFSLinkFromURL,
-    createERC721Token,
-    createERC721Metadata,
-    createERC721Contract,
-    createERC721Collection,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import {
     Ownership,
     RaribleEventType,
@@ -33,7 +32,6 @@ import {
 import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { isProxyENV } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
-import getUnixTime from 'date-fns/getUnixTime'
 
 const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {
@@ -61,33 +59,35 @@ function getProfilesFromRarible(addresses: Array<string | undefined>) {
     })
 }
 
-function createERC721TokenFromAsset(
+function createERC721Token(
     tokenAddress: string,
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
-): NonFungibleToken<ChainId, SchemaType.ERC721> {
+): NonFungibleAsset<ChainId, SchemaType> {
     const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
-    return createERC721Token(
+    return createNonFungibleToken(
         ChainId.Mainnet,
         tokenAddress,
+        SchemaType.ERC721,
         tokenId,
-        createERC721Metadata(
+        first(asset?.owners),
+        createNonFungibleTokenMetadata(
             ChainId.Mainnet,
             asset?.meta?.name ?? '',
             '',
-            first(asset?.owners),
-            '',
+            asset?.meta?.description,
+            undefined,
             imageURL,
             imageURL,
         ),
-        createERC721Contract(ChainId.Mainnet, tokenAddress, asset?.meta?.name ?? '', ''),
-        createERC721Collection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
+        createNonFungibleTokenContract(ChainId.Mainnet, SchemaType.ERC721, tokenAddress, asset?.meta?.name ?? '', ''),
+        createNonFungibleTokenCollection(ChainId.Mainnet, asset?.meta?.name ?? '', '', '', ''),
     )
 }
 
-function createNFTAsset(
-    asset: RaribleNFTItemMapResponse,
+function createERC721Asset(
     chainId: ChainId,
+    asset: RaribleNFTItemMapResponse,
 ): NonFungibleAsset<ChainId, SchemaType.ERC721> {
     const owner = first(asset?.owners)
     const creator = first(asset?.creators)
@@ -159,19 +159,16 @@ function _getAsset(address: string, tokenId: string) {
     })
 }
 
-export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
+export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const asset = await _getAsset(address, tokenId)
         if (!asset) return
-        return createNFTAsset(asset, chainId)
+        return createERC721Asset(chainId, asset)
     }
 
-    async getToken(tokenAddress: string, tokenId: string) {
-        const asset = await _getAsset(tokenAddress, tokenId)
-        return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
-    }
+    async getAssets(from: string, { chainId, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+        if (chainId !== ChainId.Mainnet) return createPageable([], createIndicator(indicator, ''))
 
-    async getTokens(from: string, { indicator = '', size = 50 }: HubOptions<ChainId, string> = {}) {
         const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
             owner: from,
             size,
@@ -183,14 +180,18 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
 
         const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
-        if (!asset) return createPageable([], indicator)
+        if (!asset) return createPageable([], createIndicator(indicator, ''))
 
         const items =
             asset.items
-                .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
-                .filter((x) => x.metadata?.owner?.toLowerCase() === from.toLowerCase())
-                .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
-        return createPageable(items, indicator, asset.continuation)
+                .map((asset) => createERC721Asset(chainId, asset))
+                .filter((x) => isSameAddress(x.ownerId, from)) ?? []
+        return createPageable(items, createIndicator(indicator), createNextIndicator(indicator, asset.continuation))
+    }
+
+    async getToken(tokenAddress: string, tokenId: string) {
+        const asset = await _getAsset(tokenAddress, tokenId)
+        return createERC721Token(tokenAddress, tokenId, asset)
     }
 
     async getOffers(
@@ -210,7 +211,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             return {
                 id: order.tokenId,
                 chainId: ChainId.Mainnet,
-                asset_permalink: '',
+                assetPermalink: '',
                 createdAt: Number(order.updateDate),
                 price: {
                     usd: order.buyPrice.toString(),
@@ -246,7 +247,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             return {
                 id: asset.tokenId,
                 chainId: ChainId.Mainnet,
-                asset_permalink: '',
+                assetPermalink: '',
                 createdAt: Number(asset.date ?? 0),
                 price: {
                     usd: asset.price,
@@ -256,8 +257,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     id: asset.tokenId,
                     decimals: 0,
                     chainId: ChainId.Mainnet,
-                    // symbol: '1',
-                    // schema: SchemaType.ERC721,
                     address: tokenAddress,
                     type: TokenType.NonFungible,
                 } as FungibleToken<ChainId, SchemaType>,

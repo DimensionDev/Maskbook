@@ -129,7 +129,7 @@ export function Collectible(props: CollectibleProps) {
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     // #region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(SourceType)
+    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
 
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         setProvider(option.value as SourceType)
@@ -140,7 +140,7 @@ export function Collectible(props: CollectibleProps) {
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
 
-    if (!asset.value?.id || !token)
+    if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
@@ -284,7 +284,6 @@ export function Collectible(props: CollectibleProps) {
                                     </>
                                 ),
                                 value: x.value,
-                                disabled: !supportedProvider.includes(x.value),
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}

@@ -1,7 +1,7 @@
 import { useNonFungibleToken } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
-import { ChainId, NonFungibleAssetProvider, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { CircularProgress, Typography } from '@mui/material'
 import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
@@ -32,12 +32,7 @@ export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
 
     return tokenDetailed ? (
         <>
-            <CollectibleCard
-                readonly
-                provider={NonFungibleAssetProvider.OPENSEA}
-                token={tokenDetailed}
-                renderOrder={renderOrder}
-            />
+            <CollectibleCard readonly provider={SourceType.OpenSea} token={tokenDetailed} renderOrder={renderOrder} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.contract?.name ?? tokenId}

@@ -19,7 +19,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
@@ -180,7 +180,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         return Services.Identity.queryPersona(currentIdentity.linkedPersona)
     }, [currentIdentity?.linkedPersona])
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const lastRecognized = useLastRecognizedIdentity()
+    const senderName =
+        lastRecognized.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
     const tokenIdList = tokenList.map((value) => value.tokenId)
     const [createState, createCallback, resetCallback] = useCreateNftRedpacketCallback(
         duration,
@@ -253,7 +258,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
-                            ({wallet?.name}) {formatEthereumAddress(account, 4)}
+                            {formatEthereumAddress(account, 4)}
                             {isNativeTokenAddress(wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"

@@ -5,6 +5,9 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 export function useImageChecker(url: string | undefined): AsyncState<boolean> {
     return useAsync(async () => {
         if (!url) return false
+
+        if (url.startsWith('data:image')) return true
+
         const { pathname } = new URL(url)
         if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return true
         if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return false

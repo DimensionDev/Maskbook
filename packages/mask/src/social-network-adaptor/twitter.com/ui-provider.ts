@@ -57,6 +57,9 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
                 display: 'block !important',
                 margin: 12,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         dialogTitle: {
             display: 'grid',

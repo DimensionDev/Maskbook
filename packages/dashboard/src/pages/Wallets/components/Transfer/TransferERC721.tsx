@@ -10,7 +10,14 @@ import {
     multipliedBy,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { SchemaType, formatWeiToEther, NetworkType, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    formatWeiToEther,
+    NetworkType,
+    ChainId,
+    explorerResolver,
+    isValidAddress,
+} from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -38,6 +45,7 @@ import {
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
+    useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
 import { RightIcon } from '@masknet/icons'
 import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
@@ -60,10 +68,12 @@ export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const anchorEl = useRef<HTMLDivElement | null>(null)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const { state } = useLocation() as {
-        state: { erc721Token?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
+        state: { nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
     }
+
     const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<NonFungibleToken<ChainId, SchemaType> | null>(null)
     const navigate = useNavigate()
@@ -108,14 +118,13 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (!state) return
-        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
-        if (state.erc721Token.chainId !== chainId) return
-        if (!isSameAddress(contract?.address, state.erc721Token.address)) return
+        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
+        if (state.nonFungibleToken.chainId !== chainId) return
 
-        setContract(state.erc721Token.contract)
-        setValue('contract', state.erc721Token.contract?.name ?? '')
-        setValue('tokenId', state.erc721Token.tokenId)
-        setDefaultToken(state.erc721Token)
+        setContract(state.nonFungibleToken.contract)
+        setValue('contract', state.nonFungibleToken.contract?.name ?? '')
+        setValue('tokenId', state.nonFungibleToken.tokenId)
+        setDefaultToken(state.nonFungibleToken)
     }, [state])
 
     const allFormFields = watch()
@@ -130,25 +139,26 @@ export const TransferERC721 = memo(() => {
 
     // #region check contract address and account address
     useAsync(async () => {
-        // const recipient = allFormFields.recipient
-        // setRecipientError(null)
-        // if (!recipient && !registeredAddress) return
-        // if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
-        // clearErrors()
-        // if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
-        //     setRecipientError({
-        //         type: 'account',
-        //         message: t.wallets_transfer_error_same_address_with_current_account(),
-        //     })
-        // }
-        // const result = await EVM_RPC.getCode(recipient)
-        // if (result !== '0x') {
-        //     setRecipientError({
-        //         type: 'contractAddress',
-        //         message: t.wallets_transfer_error_is_contract_address(),
-        //     })
-        // }
-    }, [allFormFields.recipient, clearErrors, registeredAddress])
+        const recipient = allFormFields.recipient
+        setRecipientError(null)
+        if (!recipient && !registeredAddress) return
+        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
+        clearErrors()
+        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
+            setRecipientError({
+                type: 'account',
+                message: t.wallets_transfer_error_same_address_with_current_account(),
+            })
+        }
+        if (!connection) return
+        const result = await connection?.getCode(recipient)
+        if (result !== '0x') {
+            setRecipientError({
+                type: 'contractAddress',
+                message: t.wallets_transfer_error_is_contract_address(),
+            })
+        }
+    }, [allFormFields.recipient, clearErrors, registeredAddress, connection])
     // #endregion
 
     const erc721GasLimit = useGasLimit(
