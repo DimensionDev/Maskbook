@@ -4,7 +4,7 @@ import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniqBy } from 'lodash-unified'
@@ -107,7 +107,13 @@ export const TipButton: FC<Props> = ({
     const allAddresses = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
-                return uniqBy([...publicWallets, ...addresses], (v) => v.address.toLowerCase())
+                const evmAddresses = socialAddressList
+                    .filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+                    .map((x) => ({
+                        address: x.address,
+                        name: x.type === SocialAddressType.ENS ? x.label : undefined,
+                    }))
+                return uniqBy([...publicWallets, ...addresses, ...evmAddresses], (v) => v.address.toLowerCase())
             case NetworkPluginID.PLUGIN_SOLANA:
                 return socialAddressList
                     .filter((x) => x.networkSupporterPluginID === pluginId)
