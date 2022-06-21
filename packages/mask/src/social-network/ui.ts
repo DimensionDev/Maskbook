@@ -4,9 +4,16 @@ import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, EnhanceableSite, i18NextInstance, createSubscriptionFromValueRef } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    EnhanceableSite,
+    i18NextInstance,
+    createSubscriptionFromValueRef,
+    createSubscriptionFromAsync,
+    PersonaInformation,
+} from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost, createSharedContext } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
@@ -14,6 +21,7 @@ import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -116,10 +124,23 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
                 signal,
             )
+            const allPersonaSub = createSubscriptionFromAsync(
+                () => Services.Identity.queryOwnedPersonaInformation(true),
+                undefined as unknown as PersonaInformation[],
+                MaskMessages.events.currentPersonaIdentifier.on,
+                signal,
+            )
             return {
                 ...createSharedContext(pluginID, signal),
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
+                allPersona: allPersonaSub,
+                privileged_silentSign: () => {
+                    if (pluginID !== PluginId.Web3Profile)
+                        throw new TypeError("current plugin doesn't support silent sign function")
+                    return Services.Identity.generateSignResult
+                },
+                dialogUpdateMsg: WalletMessages.events.selectProviderDialogUpdated,
             }
         }),
     )

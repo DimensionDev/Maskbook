@@ -4,7 +4,14 @@ import type { Option, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
+import type {
+    ScopedStorage,
+    ProfileIdentifier,
+    PersonaIdentifier,
+    PopupRoutes,
+    PersonaInformation,
+    ECKeyIdentifier,
+} from '@masknet/shared-base'
 import type {
     ChainDescriptor,
     SocialAddress,
@@ -18,6 +25,7 @@ import type {
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -343,6 +351,33 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
+        allPersona?: Subscription<PersonaInformation[]>
+        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
+        dialogUpdateMsg: UnboundedRegistry<SelectProviderDialogEvent>
+    }
+
+    export type SelectProviderDialogEvent =
+        | {
+              open: true
+              pluginID?: NetworkPluginID
+          }
+        | {
+              open: false
+              address?: string
+          }
+    export interface PersonaSignResult {
+        /** The persona user selected to sign the message */
+        persona: PersonaIdentifier
+        signature: {
+            // type from ethereumjs-util
+            // raw: ECDSASignature
+            EIP2098: string
+            signature: string
+        }
+        /** Persona converted to a wallet address */
+        address: string
+        /** Message in hex */
+        messageHex: string
     }
     export interface Definition<
         ChainId = unknown,
@@ -556,6 +591,8 @@ export namespace Plugin.SNSAdaptor {
                 identity?: SocialIdentity
                 personaList?: string[]
                 socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                open?: boolean
+                setOpen?: (open: boolean) => void
             }>
         }
         Utils?: {
@@ -918,6 +955,7 @@ export enum PluginId {
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
+    Web3Profile = 'io.mask.web3-profile',
     // @masknet/scripts: insert-here
 }
 /**
