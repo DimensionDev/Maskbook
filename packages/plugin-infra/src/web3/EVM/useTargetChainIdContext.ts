@@ -6,7 +6,7 @@ import { useChainId } from '../useChainId'
 
 export function useTargetChainIdContext(_chainId?: ChainId) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
-    const [targetChainId, setTargetChainId] = useState<ChainId>(_chainId ?? chainId)
+    const [targetChainId, setTargetChainId] = useState<ChainId>(chainId)
 
     return {
         targetChainId,
