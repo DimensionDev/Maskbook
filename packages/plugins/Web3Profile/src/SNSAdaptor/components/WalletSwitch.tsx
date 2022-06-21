@@ -6,8 +6,7 @@ import { ExternalLink } from 'react-feather'
 import { useState } from 'react'
 import { formatAddress } from '../utils'
 import type { WalletTypes } from '../types'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -53,25 +52,27 @@ interface WalletSwitchProps {
     address: WalletTypes
     isPublic: boolean
     hiddenItems?: WalletTypes[]
+    setHiddenItems: (items: WalletTypes[]) => void
 }
 
-export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHiddenItems }: WalletSwitchProps) {
     const { classes } = useStyles()
     const t = useI18N()
     const [checked, setChecked] = useState(!!isPublic)
     const getWalletName = () => {
         return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
-    const { Utils } = useWeb3State() ?? {}
 
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         if (!v) {
-            hiddenItems.push(address)
+            // hiddenItems.push(address)
+            setHiddenItems([...hiddenItems, address])
         } else {
             const index = hiddenItems?.findIndex((item) => item?.address === address?.address)
             if (index !== -1) {
                 hiddenItems.splice(index, 1)
+                setHiddenItems([...hiddenItems])
             }
         }
         setChecked(v)
@@ -89,7 +90,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [] }: Wall
 
                     <Link
                         className={classes.link}
-                        href={Utils?.resolveAddressLink?.(ChainId.Mainnet, address.address) ?? ''}
+                        href={explorerResolver.addressLink(ChainId.Mainnet, address.address) ?? ''}
                         target="_blank"
                         title={t.plugin_wallet_view_on_explorer()}
                         rel="noopener noreferrer">

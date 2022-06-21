@@ -20,11 +20,13 @@ const useStyles = makeStyles()((theme) => ({
     paperRoot: {
         backgroundImage: 'none',
         '&>h2': {
-            height: 30,
             border: `1px solid ${theme.palette.divider}`,
             padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
             marginBottom: 24,
         },
+    },
+    title: {
+        height: '32px',
     },
     content: {
         width: 480,
@@ -126,11 +128,11 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
 
     const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList)
 
-    console.log({ accounts, allPersona, currentVisitingProfile, accountList })
+    console.log({ accounts, allPersona, currentVisitingProfile, accountList, hiddenObj })
     return (
         <>
             <InjectedDialog
-                classes={{ paper: classes.root }}
+                classes={{ paper: classes.root, dialogTitle: classes.title }}
                 title={title}
                 fullWidth={false}
                 open={open}
@@ -155,7 +157,10 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 currentPersona={currentPersona}
                 accountList={accountList?.find((x) => x?.identity === accountId)}
                 title={title}
-                onClose={() => setImageManageOpen(false)}
+                onClose={() => {
+                    setImageManageOpen(false)
+                    setTitle('Web3 Profile')
+                }}
                 open={imageManageOpen}
                 accountId={accountId}
                 currentVisitingProfile={currentVisitingProfile}

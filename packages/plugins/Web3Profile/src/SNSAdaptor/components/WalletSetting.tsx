@@ -3,7 +3,7 @@ import { context } from '../context'
 import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 import type { accountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
@@ -76,25 +76,29 @@ const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
         const chainId = useChainId()
-
-        const hiddenList = {
-            NFTs: wallets?.filter(
-                (x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1,
-            ),
-            footprints: wallets?.filter(
+        const [NFTs, setNFTs] = useState(
+            wallets?.filter((x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1),
+        )
+        const [footprints, setFootprints] = useState(
+            wallets?.filter(
                 (x) => accountList?.walletList?.footprints?.findIndex((y) => x.address === y.address) === -1,
             ),
-            donations: wallets?.filter(
+        )
+        const [donations, setDonations] = useState(
+            wallets?.filter(
                 (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
             ),
-        }
+        )
 
         const onConfirm = async () => {
             if (!currentPersona?.identifier.publicKeyAsHex) return
             const patch = {
-                hiddenAddresses: { ...hiddenList },
+                hiddenAddresses: {
+                    NFTs,
+                    footprints,
+                    donations,
+                },
             }
-            console.log({ patch })
             try {
                 const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
                 const signature = await context.privileged_silentSign()?.(
@@ -102,7 +106,7 @@ const WalletSetting = memo(
                     (payload?.val as NextIDStoragePayload)?.signPayload,
                 )
 
-                const res = await setKvPatchData(
+                await setKvPatchData(
                     payload?.val,
                     signature?.signature?.signature,
                     patch,
@@ -137,15 +141,17 @@ const WalletSetting = memo(
                 <DialogContent className={classes.content}>
                     <div>
                         <div className={classes.titleBox}>
-                            <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>NFT</Typography>
-                            <Typography>(0/{wallets?.length})</Typography>
+                            <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>NFTs</Typography>
+                            <Typography>
+                                ({NFTs && wallets ? wallets?.length - NFTs?.length : wallets?.length}/{wallets?.length})
+                            </Typography>
                         </div>
                         <div className={classes.walletSwitchBox}>
-                            {wallets?.map((x, idx) => {
+                            {wallets?.map((x) => {
                                 return (
-                                    <div key={idx} className={classes.switchContainer}>
+                                    <div key={x.address} className={classes.switchContainer}>
                                         <WalletSwitch
-                                            hiddenItems={hiddenList.NFTs}
+                                            hiddenItems={NFTs}
                                             type={0}
                                             address={x}
                                             isPublic={
@@ -153,6 +159,7 @@ const WalletSetting = memo(
                                                     (account) => account.address === x?.address,
                                                 ) !== -1
                                             }
+                                            setHiddenItems={setNFTs}
                                         />
                                     </div>
                                 )
@@ -160,14 +167,17 @@ const WalletSetting = memo(
                         </div>
                         <div className={classes.titleBox}>
                             <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>Footprints</Typography>
-                            <Typography>(0/4)</Typography>
+                            <Typography>
+                                ({footprints && wallets ? wallets?.length - footprints?.length : wallets?.length}/
+                                {wallets?.length})
+                            </Typography>
                         </div>
                         <div className={classes.walletSwitchBox}>
-                            {wallets?.map((x, idx) => {
+                            {wallets?.map((x) => {
                                 return (
-                                    <div key={idx} className={classes.switchContainer}>
+                                    <div key={x.address} className={classes.switchContainer}>
                                         <WalletSwitch
-                                            hiddenItems={hiddenList.footprints}
+                                            hiddenItems={footprints}
                                             type={0}
                                             address={x}
                                             isPublic={
@@ -175,6 +185,7 @@ const WalletSetting = memo(
                                                     (account) => account.address === x?.address,
                                                 ) !== -1
                                             }
+                                            setHiddenItems={setFootprints}
                                         />
                                     </div>
                                 )
@@ -182,14 +193,17 @@ const WalletSetting = memo(
                         </div>
                         <div className={classes.titleBox}>
                             <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>Donations</Typography>
-                            <Typography>(0/4)</Typography>
+                            <Typography>
+                                ({donations && wallets ? wallets?.length - donations?.length : wallets?.length}/
+                                {wallets?.length})
+                            </Typography>
                         </div>
                         <div className={classes.walletSwitchBox}>
-                            {wallets?.map((x, idx) => {
+                            {wallets?.map((x) => {
                                 return (
-                                    <div key={idx} className={classes.switchContainer}>
+                                    <div key={x.address} className={classes.switchContainer}>
                                         <WalletSwitch
-                                            hiddenItems={hiddenList.donations}
+                                            hiddenItems={donations}
                                             type={0}
                                             address={x}
                                             isPublic={
@@ -197,6 +211,7 @@ const WalletSetting = memo(
                                                     (account) => account.address === x?.address,
                                                 ) !== -1
                                             }
+                                            setHiddenItems={setDonations}
                                         />
                                     </div>
                                 )

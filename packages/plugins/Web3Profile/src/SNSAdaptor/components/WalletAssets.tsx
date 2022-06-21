@@ -3,9 +3,10 @@ import { LinkOutIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
-import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useReverseAddress } from '@masknet/plugin-infra/web3'
 import type { CollectionTypes } from '../types'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -65,8 +66,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
 
-    const { Utils } = useWeb3State()
-    const { value: domain } = useReverseAddress(address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
 
     return (
         <Card className={classes.wrapper}>
@@ -81,7 +81,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         <Typography className={classes.walletName}>{domain || address}</Typography>
                         <Link
                             className={classes.link}
-                            href={address ? Utils?.resolveAddressLink?.(chainId, address) ?? '' : ''}
+                            href={address ? explorerResolver.addressLink(chainId, address) ?? '' : ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LinkOutIcon className={classes.linkIcon} />
