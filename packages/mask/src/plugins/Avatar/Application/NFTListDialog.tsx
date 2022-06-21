@@ -21,7 +21,7 @@ import { WalletRPC } from '../../Wallet/messages'
 import { CheckedIcon, UncheckIcon } from '../assets/checked'
 import classNames from 'classnames'
 
-const useStyles = makeStyles<{ networkPluingId: NetworkPluginID }>()((theme, props) => ({
+const useStyles = makeStyles<{ networkPluginId: NetworkPluginID }>()((theme, props) => ({
     AddressNames: {
         position: 'absolute',
         top: 10,
@@ -144,7 +144,7 @@ const useStyles = makeStyles<{ networkPluingId: NetworkPluginID }>()((theme, pro
         zIndex: 100,
     },
     page: {
-        paddingTop: props.networkPluingId === NetworkPluginID.PLUGIN_EVM ? 89 : 54,
+        paddingTop: props.networkPluginId === NetworkPluginID.PLUGIN_EVM ? 89 : 54,
     },
 }))
 
@@ -172,7 +172,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
-    const { classes } = useStyles({ networkPluingId: selectedPluginId })
+    const { classes } = useStyles({ networkPluginId: selectedPluginId })
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const [flag, setFlag] = useState(SET_NFT_FLAG.NFT_PFP)
     const {
