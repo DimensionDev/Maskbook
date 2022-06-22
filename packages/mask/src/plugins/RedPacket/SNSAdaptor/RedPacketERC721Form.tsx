@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales'
 import classNames from 'classnames'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
@@ -21,6 +20,7 @@ import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { PluginWalletStatusBar } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -350,23 +350,22 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                     </>
                 ) : null}
-                <WalletConnectedBoundary>
-                    <EthereumERC721TokenApprovedBoundary
-                        validationMessage={validationMessage}
-                        owner={account}
-                        contractDetailed={contract}
-                        operator={RED_PACKET_NFT_ADDRESS}>
-                        <ActionButton
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            fullWidth
-                            onClick={() => setOpenConfirmDialog(true)}>
-                            {t.next()}
-                        </ActionButton>
-                    </EthereumERC721TokenApprovedBoundary>
-                </WalletConnectedBoundary>
             </Box>
+            <WalletConnectedBoundary>
+                <EthereumERC721TokenApprovedBoundary
+                    validationMessage={validationMessage}
+                    owner={account}
+                    contractDetailed={contract}
+                    operator={RED_PACKET_NFT_ADDRESS}>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            disabled: !!validationMessage,
+                            action: async () => setOpenConfirmDialog(true),
+                            title: t.next(),
+                        }}
+                    />
+                </EthereumERC721TokenApprovedBoundary>
+            </WalletConnectedBoundary>
             {open ? (
                 <SelectNftTokenDialog
                     open={open}

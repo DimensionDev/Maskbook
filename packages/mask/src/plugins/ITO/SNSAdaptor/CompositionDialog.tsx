@@ -1,15 +1,14 @@
-import { useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { PluginId, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useITOConstants } from '@masknet/web3-shared-evm'
+import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { omit, set } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
@@ -20,9 +19,11 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { CreateForm } from './CreateForm'
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
-import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
+import { HistoryIcon } from '@masknet/icons'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
 
 interface StyleProps {
     snsId: string
@@ -32,13 +33,33 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
         ...(snsId === EnhanceableSite.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
-        paddingTop: 50,
+        padding: 0,
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
+        overflowX: 'hidden',
     },
     tabs: {
         top: 0,
         left: 0,
         right: 0,
         position: 'absolute',
+    },
+    abstractTabWrapper: {
+        width: '100%',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+    },
+    tail: {
+        cursor: 'pointer',
     },
 }))
 
@@ -57,10 +78,14 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: currentChainId })
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
 
@@ -203,36 +228,24 @@ export function CompositionDialog(props: CompositionDialogProps) {
         props.onClose()
     }, [props, state, step])
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t('plugin_ito_create_new'),
-                children: (
-                    <CreateForm
-                        onNext={onNext}
-                        onClose={onClose}
-                        origin={poolSettings}
-                        onChangePoolSettings={setPoolSettings}
-                    />
-                ),
-                sx: { p: 0 },
-            },
-            {
-                label: t('plugin_ito_select_existing'),
-                children: <PoolList onSend={onCreateOrSelect} />,
-                sx: { p: 0 },
-            },
-        ],
-        state,
-    }
     // #endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
+    const [showHistory, setShowHistory] = useState(false)
+    const onShowHistory = () => {
+        setShowHistory((history) => !history)
+    }
+
     return (
         <InjectedDialog
+            titleTail={
+                step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
+                    <HistoryIcon onClick={onShowHistory} className={classes.tail} />
+                ) : null
+            }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             disableBackdropClick
             isOnBack={step === ITOCreateFormPageStep.ConfirmItoPage}
@@ -241,7 +254,27 @@ export function CompositionDialog(props: CompositionDialogProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
-                    <AbstractTab classes={{ tabs: classes.tabs }} height={540} {...tabProps} />
+                    !showHistory ? (
+                        <>
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    chainId={chainId}
+                                    setChainId={setChainId}
+                                    classes={classes}
+                                    chains={chainIdList}
+                                />
+                            </div>
+                            <CreateForm
+                                onNext={onNext}
+                                chainId={chainId}
+                                onClose={onClose}
+                                origin={poolSettings}
+                                onChangePoolSettings={setPoolSettings}
+                            />
+                        </>
+                    ) : (
+                        <PoolList onSend={onCreateOrSelect} />
+                    )
                 ) : null}
                 {step === ITOCreateFormPageStep.ConfirmItoPage ? (
                     <ConfirmDialog

@@ -15,9 +15,8 @@ import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
-import { useI18N as useBaseI18n } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -285,15 +284,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     amount={totalAmount.toFixed()}
                     token={token?.schema === SchemaType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                    <ActionButton
-                        variant="contained"
-                        size="large"
-                        className={classes.button}
-                        fullWidth
-                        disabled={!!validationMessage}
-                        onClick={onClick}>
-                        {validationMessage || t.next()}
-                    </ActionButton>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            title: validationMessage || t.next(),
+                            disabled: !!validationMessage,
+                            action: async () => onClick(),
+                        }}
+                    />
                 </EthereumERC20TokenApprovedBoundary>
             </WalletConnectedBoundary>
         </>

@@ -14,8 +14,7 @@ import {
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { sliceTextByUILength, useI18N } from '../../../utils'
+import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -26,7 +25,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
-import { useAccount, useFungibleTokenBalance, useChainId } from '@masknet/plugin-infra/web3'
+import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -116,14 +115,14 @@ export interface CreateFormProps extends withClasses<never> {
     onNext: () => void
     onClose: () => void
     origin?: PoolSettings
+    chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, onClose } = props
+    const { onChangePoolSettings, onNext, origin, onClose, chainId } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
@@ -472,21 +471,19 @@ export function CreateForm(props: CreateFormProps) {
                     ) : null}
                 </Box>
             ) : null}
-            <Box className={classes.line}>
+            <Box>
                 <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
                         token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            onClick={onNext}>
-                            {validationMessage || t('plugin_ito_next')}
-                        </ActionButton>
+                        <PluginWalletStatusBar
+                            actionProps={{
+                                disabled: !!validationMessage,
+                                title: validationMessage || t('plugin_ito_next'),
+                                action: async () => onNext(),
+                            }}
+                        />
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>
             </Box>

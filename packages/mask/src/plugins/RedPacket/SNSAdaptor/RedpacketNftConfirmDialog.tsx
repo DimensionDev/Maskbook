@@ -12,11 +12,10 @@ import {
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
-import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { useI18N as useBaseI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -327,39 +326,23 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} className={classes.buttonWrapper}>
-                    <Grid item xs={6}>
-                        <Button
-                            className={classNames(classes.button, classes.cancelButton)}
-                            fullWidth
-                            onClick={onBack}
-                            size="large"
-                            variant="contained">
-                            {i18n('cancel')}
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <WalletConnectedBoundary
-                            classes={{
-                                connectWallet: classNames(classes.button, classes.sendButton),
-                                unlockMetaMask: classNames(classes.button, classes.sendButton),
-                            }}>
-                            <ActionButton
-                                variant="contained"
-                                size="large"
-                                loading={isSending}
-                                disabled={isSending}
-                                onClick={onSendTx}
-                                className={classNames(classes.button, classes.sendButton)}
-                                fullWidth>
-                                {t.send_symbol({
-                                    amount: tokenList.length.toString(),
-                                    symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
-                                })}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
-                    </Grid>
-                </Grid>
+                <WalletConnectedBoundary
+                    classes={{
+                        connectWallet: classNames(classes.button, classes.sendButton),
+                        unlockMetaMask: classNames(classes.button, classes.sendButton),
+                    }}>
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            loading: isSending,
+                            disabled: isSending,
+                            action: onSendTx,
+                            title: t.send_symbol({
+                                amount: tokenList.length.toString(),
+                                symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
+                            }),
+                        }}
+                    />
+                </WalletConnectedBoundary>
             </DialogContent>
         </InjectedDialog>
     )
