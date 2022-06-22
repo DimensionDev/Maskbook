@@ -9,7 +9,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales'
 import { InjectedDialog } from '@masknet/shared'
-import { EmptySimpleIcon } from '@masknet/icons'
+import { EmptySimpleIcon, CircleLoadingIcon } from '@masknet/icons'
 
 export interface ApprovalDialogProps {
     open: boolean
@@ -70,25 +70,44 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
     },
-    approvalEmptyWrapper: {
+    approvalEmptyOrLoadingWrapper: {
         flexGrow: 1,
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    approvalEmptyContent: {
+    approvalEmptyOrLoadingContent: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        color: theme.palette.text.secondary,
         fontSize: 14,
+    },
+    emptyText: {
+        color: theme.palette.text.secondary,
     },
     emptyIcon: {
         width: 36,
         height: 36,
         marginBottom: 13,
+    },
+    loadingIcon: {
+        width: 36,
+        height: 36,
+        marginBottom: 13,
+        '@keyframes loadingAnimation': {
+            '0%': {
+                transform: 'rotate(0deg)',
+            },
+            '100%': {
+                transform: 'rotate(360deg)',
+            },
+        },
+        animation: 'loadingAnimation 1s linear infinite',
+    },
+    loadingText: {
+        color: theme.palette.text.primary,
     },
 }))
 
@@ -148,20 +167,34 @@ function ApprovalWrapper() {
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-            <ApprovalEmptyContent />
+            <ApprovalLoadingContent />
         </div>
     )
 }
 
 function ApprovalEmptyContent() {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const t = useI18N()
     return (
-        <div className={classes.approvalEmptyWrapper}>
-            <div className={classes.approvalEmptyContent}>
+        <div className={classes.approvalEmptyOrLoadingWrapper}>
+            <div className={cx(classes.approvalEmptyOrLoadingContent, classes.emptyText)}>
                 <EmptySimpleIcon className={classes.emptyIcon} />
                 <Typography>{t.no_approved_contract_records()}</Typography>
+            </div>
+        </div>
+    )
+}
+
+function ApprovalLoadingContent() {
+    const { classes, cx } = useStyles()
+
+    const t = useI18N()
+    return (
+        <div className={classes.approvalEmptyOrLoadingWrapper}>
+            <div className={cx(classes.approvalEmptyOrLoadingContent, classes.loadingText)}>
+                <CircleLoadingIcon className={classes.loadingIcon} />
+                <Typography>{t.loading()}</Typography>
             </div>
         </div>
     )
