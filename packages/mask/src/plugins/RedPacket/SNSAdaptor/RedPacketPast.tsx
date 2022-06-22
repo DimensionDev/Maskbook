@@ -1,7 +1,7 @@
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
 import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
@@ -12,6 +12,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { TabPanel } from '@mui/lab'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -54,11 +55,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
+    tabs: Record<'tokens' | 'collectibles', 'tokens' | 'collectibles'>
     onSelect: (payload: RedPacketJSONPayload) => void
     onClose?: () => void
 }
 
-export function RedPacketPast({ onSelect, onClose }: Props) {
+export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
@@ -119,7 +121,12 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     }
     return (
         <div className={classes.tabWrapper}>
-            <AbstractTab height={512} {...tabProps} />
+            <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
+                <RedPacketHistoryList onSelect={onSelect} />
+            </TabPanel>
+            <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
+                <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />
+            </TabPanel>
         </div>
     )
 }
