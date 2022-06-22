@@ -25,7 +25,7 @@ import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-scr
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
