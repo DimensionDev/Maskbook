@@ -61,7 +61,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
         if (!item || !item.fromNextID || !item.linkedPersona) return
 
-        Services.Identity.attactNextIDTuProfileDB(item)
+        Services.Identity.attachNextIDTuProfileDB(item)
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])

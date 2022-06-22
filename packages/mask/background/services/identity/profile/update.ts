@@ -97,7 +97,7 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
  * Set NextID profile to profileDB
  * */
 
-export async function attactNextIDTuProfileDB(item: ProfileInformationFromNextID) {
+export async function attachNextIDTuProfileDB(item: ProfileInformationFromNextID) {
     const personaRecord: PersonaRecord = {
         createdAt: item.createdAt!,
         updatedAt: item.updatedAt!,
