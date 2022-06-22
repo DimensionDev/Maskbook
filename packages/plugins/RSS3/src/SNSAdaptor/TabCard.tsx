@@ -1,10 +1,27 @@
-import { AddressViewer } from '@masknet/shared'
+import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { Box, Typography } from '@mui/material'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Button, MenuItem, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
+import { useState } from 'react'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        border: `1px solid ${theme.palette.text.primary} !important`,
+        color: `${theme.palette.text.primary} !important`,
+        borderRadius: 4,
+        background: 'transparent',
+        '&:hover': {
+            background: 'rgba(15, 20, 25, 0.1)',
+        },
+    },
+}))
 
 export enum TabCardType {
     Donation = 1,
@@ -18,14 +35,47 @@ export interface TabCardProps {
 
 export function TabCard({ type, socialAddressList }: TabCardProps) {
     const t = useI18N()
-    const addressName = socialAddressList?.find(
-        (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-    )
-    const userAddress = addressName?.address || ''
-    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
-    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
+    const { classes } = useStyles()
 
-    if (!addressName) return null
+    const [selectedAddress, setSelectedAddress] = useState(first(socialAddressList))
+
+    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
+        formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
+    )
+    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
+        formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
+    )
+    // const currentVisitingProfile = useCurrentVisitingProfile()
+    // const currentPersona = useCurrentPersona()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const onClose = () => setAnchorEl(null)
+    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
+        setSelectedAddress(option)
+        onClose()
+    }
+
+    // const { value: kvValue } = useAsyncRetry(async () => {
+    //     if (!currentPersona) return
+    //     return getKV(currentPersona?.publicKeyAsHex!)
+    // }, [currentPersona])
+    // const unHiddenDonations = useCollectionFilter(
+    //     (kvValue as kvType)?.proofs,
+    //     donations,
+    //     'Donations',
+    //     currentVisitingProfile,
+    //     selectedAddress,
+    // )
+    // const unHiddenFootprints = useCollectionFilter(
+    //     (kvValue as kvType)?.proofs,
+    //     footprints,
+    //     'Footprints',
+    //     currentVisitingProfile,
+    //     selectedAddress,
+    // )
+
+    if (!selectedAddress) return null
 
     const isDonation = type === TabCardType.Donation
 
@@ -41,18 +91,48 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
     return (
         <>
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-            <Box display="flex" alignItems="center" justifyContent="space-between">
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    position: 'relative',
+                }}>
                 <div>{summary}</div>
-                <AddressViewer identityAddress={addressName} />
-            </Box>
+                <div>
+                    <Button
+                        id="demo-positioned-button"
+                        variant="outlined"
+                        size="small"
+                        onClick={onOpen}
+                        className={classes.button}>
+                        <ReversedAddress address={selectedAddress.address} />
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                    <ShadowRootMenu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        PaperProps={{ style: { maxHeight: 192 } }}
+                        aria-labelledby="demo-positioned-button"
+                        onClose={() => setAnchorEl(null)}>
+                        {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                            return (
+                                <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
+                                    <ReversedAddress address={x.address} />
+                                </MenuItem>
+                            )
+                        })}
+                    </ShadowRootMenu>
+                </div>
+            </div>
             {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={addressName.label} />
+                <DonationPage donations={donations} loading={loadingDonations} addressLabel={selectedAddress.label} />
             ) : (
                 <FootprintPage
-                    address={userAddress}
+                    address={selectedAddress.address}
                     loading={loadingFootprints}
                     footprints={footprints}
-                    addressLabel={addressName.label}
+                    addressLabel={selectedAddress.label}
                 />
             )}
         </>

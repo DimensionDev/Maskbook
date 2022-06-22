@@ -17,8 +17,10 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
+import { useNextIDBoundByPlatform, usePersonaBoundPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -45,6 +47,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
+    const [addressList, setAddressList] = useState<Array<SocialAddress<NetworkPluginID>>>([])
+    const [profileOpen, setProfileOpen] = useState(false)
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -57,12 +61,33 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         identity.identifier?.userId,
     )
 
+    const { value: personaProof } = usePersonaBoundPlatform(
+        currentConnectedPersona?.identifier?.publicKeyAsHex || ZERO_ADDRESS,
+    )
+    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
+    const isOwn = currentIdentity?.identifier === identity?.identifier
+    useEffect(() => {
+        if (wallets?.length === 0 || !wallets || !isOwn) {
+            setAddressList(socialAddressList)
+        } else {
+            const addresses = wallets.map((proof) => {
+                return {
+                    networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                    type: SocialAddressType.ADDRESS,
+                    label: proof?.identity,
+                    address: proof?.identity,
+                }
+            })
+            setAddressList([...socialAddressList, ...addresses])
+        }
+    }, [socialAddressList, wallets?.length, isOwn])
+    console.log({ addressList, currentConnectedPersona, personaList, socialAddressList, identity })
+
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
     const displayPlugins = useMemo(() => {
-        return availablePlugins
-            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
+        return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+        // .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
     }, [identity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
 
     const tabs = displayPlugins
@@ -85,21 +110,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
             return a.priority - z.priority
         })
+        .filter((z) => z.pluginID !== PluginId.NextID && z.pluginID !== PluginId.Web3Profile)
         .map((x) => ({
             id: x.ID,
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
         }))
 
-    const currentAccountNotConnectPersona =
-        currentIdentity.identifier === identity.identifier &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.identifier.publicKeyAsHex) ===
-            -1
     const selectedTabId = selectedTab ?? first(tabs)?.id
     const componentTabId =
-        isTwitter(activatedSocialNetworkUI) && currentAccountNotConnectPersona
+        isTwitter(activatedSocialNetworkUI) && addressList?.length === 0 && isOwn
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
             : selectedTabId
 
+    const handleOpenDialog = () => {
+        setSelectedTab(`${PluginId.Web3Profile}_web3_profile`)
+        setProfileOpen(true)
+    }
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
         const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
@@ -108,10 +134,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             <Component
                 identity={identity}
                 personaList={personaList?.map((x) => x.persona)}
-                socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
+                socialAddressList={addressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
+                open={profileOpen}
+                setOpen={setProfileOpen}
             />
         )
     }, [
+        profileOpen,
         componentTabId,
         displayPlugins.map((x) => x.ID).join(),
         personaList.join(),
@@ -157,7 +186,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         <div className={classes.root}>
             <div>
                 {tabs.length ? (
-                    <ConcealableTabs<string> tabs={tabs} selectedId={selectedTabId} onChange={setSelectedTab} />
+                    <ConcealableTabs<string>
+                        tabs={tabs}
+                        selectedId={selectedTabId}
+                        onChange={setSelectedTab}
+                        openDialog={handleOpenDialog}
+                    />
                 ) : (
                     <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
                         {t('web3_tab_hint')}

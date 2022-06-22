@@ -1,8 +1,8 @@
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { NewLinkOutIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import type { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-unified'
+import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -13,17 +13,55 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { TAB_SELECTOR } from '../constants'
 import { useI18N } from '../locales'
 import { BindDialog } from './BindDialog'
-import { BindingItem } from './BindingItem'
-import { UnbindDialog } from './UnbindDialog'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.default,
+        // backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
         color: theme.palette.text.primary,
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    title: {
+        fontWeight: 700,
+        fontSize: '16px',
+        color: '#07101B',
+        display: 'flex',
+    },
+    longBar: {
+        width: '103px',
+        height: '8px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '8px',
+        marginBottom: '4px',
+        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
+    },
+    middleBar: {
+        width: '68px',
+        height: '8px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '8px',
+        marginBottom: '4px',
+        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
+    },
+    shortBar: {
+        width: '49px',
+        height: '8px',
+        background: 'rgba(255, 255, 255, 0.5)',
+        borderRadius: '8px',
+        marginBottom: '4px',
+        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
+    },
+    container: {
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF;',
+        borderRadius: '16px',
+        padding: '14px',
     },
     verifyIntro: {
         fontSize: '14px',
@@ -45,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(1),
         marginTop: 0,
         backgroundColor: theme.palette.background.default,
-        height: '48px',
+        height: '196px',
     },
 }))
 
@@ -62,10 +100,8 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
-    const tipable = !isOwn
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -105,10 +141,31 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
-    const ethereumProofs = useMemo(() => {
-        const proofs = bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
-        return proofs ? uniqBy(proofs, (v) => v.identity) : EMPTY_LIST
-    }, [bindings?.proofs])
+    const getButton = () => {
+        if (personaActionButton) {
+            return personaActionButton
+        }
+        if (!isAccountVerified) {
+            return (
+                <Button
+                    style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
+                    variant="contained"
+                    onClick={onVerify}>
+                    <VerifyIcon />
+                    {t.verify_Twitter_ID_button()}
+                </Button>
+            )
+        }
+        return (
+            <Button
+                style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
+                variant="contained"
+                onClick={() => toggleBindDialog(true)}>
+                <WalletUnderTabsIcon />
+                {t.verify_wallet_button()}
+            </Button>
+        )
+    }
 
     if (personaActionButton && isOwn) {
         return (
@@ -149,86 +206,49 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (ethereumProofs.length) {
-        return (
-            <>
-                <Box>
-                    <Box>
-                        {ethereumProofs.map((x) => (
-                            <BindingItem
-                                deletable={isOwn}
-                                tipable={tipable}
-                                key={x.identity}
-                                platform={x.platform}
-                                identity={x.identity}
-                                onUnBind={setUnBindAddress}
-                            />
-                        ))}
-                    </Box>
-                    {isOwn && (
-                        <Stack justifyContent="center" direction="row" mt="24px">
-                            <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                                {t.add_wallet_button()}
-                            </Button>
-                        </Stack>
-                    )}
-                </Box>
-                {openBindDialog && currentPersona && isOwn && (
-                    <BindDialog
-                        open={openBindDialog}
-                        onClose={() => toggleBindDialog(false)}
-                        persona={currentPersona}
-                        bounds={bindings?.proofs ?? EMPTY_LIST}
-                        onBound={retryQueryBinding}
-                    />
-                )}
-                {unbindAddress && currentPersona && isOwn && (
-                    <UnbindDialog
-                        unbindAddress={unbindAddress}
-                        onClose={() => setUnBindAddress(undefined)}
-                        persona={currentPersona}
-                        onUnBound={retryQueryBinding}
-                        bounds={bindings?.proofs ?? EMPTY_LIST}
-                    />
-                )}
-            </>
-        )
-    }
-
     return (
         <>
-            <Box>
-                {isOwn ? (
-                    <Box className={classes.tip}>
-                        <Typography className={classes.verifyIntro}>{t.verify_wallet_intro()}</Typography>
-                        <Typography className={classes.verifyDetail}>{t.verify_wallet()}</Typography>
-                    </Box>
-                ) : (
-                    <Box className={classes.tip}>
-                        <Typography className={classes.verifyIntro}>
-                            {t.connect_wallet__other_user_tip_intro()}
+            <Box className={classes.container}>
+                <Box className={classes.header}>
+                    <div className={classes.title}>
+                        <div style={{ marginRight: '6px' }}>
+                            <Web3ProfileIcon />
+                        </div>
+                        {t.web3_profile()}
+                    </div>
+                    <div style={{ display: 'flex' }}>
+                        <Typography sx={{ color: '#536471', fontSize: '14', fontWeight: 400 }}>Provided by</Typography>
+                        <Typography sx={{ color: '#07101B', fontSize: '14', fontWeight: 500, marginLeft: '2px' }}>
+                            {t.mask_network()}
                         </Typography>
-                        <Typography className={classes.verifyInstruction}>
-                            {t.connect_wallet_other_user_instruction()}
-                        </Typography>
-                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
-                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
-                    </Box>
-                )}
-                {isOwn && (
-                    <Stack justifyContent="center" direction="row" mt="24px">
-                        <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                            {t.verify_wallet_button()}
-                        </Button>
-                    </Stack>
-                )}
+                        <Link
+                            underline="none"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            color="textPrimary"
+                            href="https://mask.io/"
+                            width="22px"
+                            height="22px"
+                            style={{ alignSelf: 'center' }}>
+                            <NewLinkOutIcon />
+                        </Link>
+                    </div>
+                </Box>
+                <div style={{ marginTop: '24px' }}>
+                    <div className={classes.longBar} />
+                    <div className={classes.middleBar} />
+                    <div className={classes.shortBar} />
+                </div>
+                <Stack justifyContent="center" direction="row" mt="24px">
+                    {getButton()}
+                </Stack>
             </Box>
             {openBindDialog && currentPersona && isOwn && (
                 <BindDialog
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? EMPTY_LIST}
+                    bounds={bindings?.proofs ?? []}
                     onBound={retryQueryBinding}
                 />
             )}

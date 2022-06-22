@@ -593,7 +593,7 @@ export namespace Plugin.SNSAdaptor {
                 personaList?: string[]
                 socialAddressList?: Array<SocialAddress<NetworkPluginID>>
                 open?: boolean
-                setOpen?: (open: boolean) => void
+                setOpen: (open: boolean) => void
             }>
         }
         Utils?: {
