@@ -40,7 +40,7 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     linkIcon: {
         width: 14,
         height: 14,
-        fill: theme.palette.mode === 'dark' ? '#c4c7cd' : '#767f8d',
+        fill: theme.palette.maskColor?.second,
     },
     name: {
         display: 'flex',

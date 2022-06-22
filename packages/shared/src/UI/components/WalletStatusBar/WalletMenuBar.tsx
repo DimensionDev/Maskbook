@@ -40,13 +40,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     divider: {
-        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
+        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : theme.palette.maskColor?.line,
         marginLeft: 16,
         marginRight: 16,
     },
     paper: {
         width: 335,
-        backgroundColor: theme.palette.mode === 'dark' ? '#000000' : 'white',
+        backgroundColor: theme.palette.mode === 'dark' ? '#000000' : theme.palette.maskColor?.white,
     },
 }))
 

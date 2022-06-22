@@ -8,13 +8,14 @@ import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { range, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
-import { AddressNames } from './WalletList'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { NFTList } from './NFTList'
+import { PluginWalletStatusBar } from '../../../utils'
+import { useSubscription } from 'use-subscription'
+import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -32,12 +33,12 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1D9BF0',
     },
     actions: {
-        padding: theme.spacing(2),
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         position: 'absolute',
         left: 0,
         bottom: 0,
-        width: 'calc(100% - 32px)',
+        width: '100%',
+        padding: 0,
     },
     content: {
         height: 612,
@@ -112,6 +113,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
+    const lastRecognizedProfile = useSubscription(context.lastRecognizedProfile)
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -261,12 +263,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     return (
         <>
             <DialogContent className={classes.content}>
-                <AddressNames
-                    account={account!}
-                    wallets={wallets ?? []}
-                    classes={{ root: classes.AddressNames }}
-                    onChange={onChangeWallet}
-                />
                 {(account || Boolean(wallets?.length)) &&
                     (selectedPluginId !== NetworkPluginID.PLUGIN_EVM ? (
                         <NFTListPage
@@ -292,8 +288,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             loadFinish={loadFinish}
                         />
                     ))}
-            </DialogContent>
-            <DialogActions className={classes.actions}>
+
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
                         <Typography
@@ -305,21 +300,19 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
-
-                <ActionButtonPromise
-                    className={classes.button}
-                    disabled={disabled}
-                    init={!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                    waiting={t.downloading_image()}
-                    executor={onSave}
-                    completeIcon={null}
-                    failIcon={null}
-                    failed={t.set_avatar_title()}
-                    failedOnClick="use executor"
-                    data-testid="confirm_button"
-                    complete={t.set_avatar_title()}>
-                    {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                </ActionButtonPromise>
+            </DialogContent>
+            <DialogActions className={classes.actions}>
+                <PluginWalletStatusBar
+                    actionProps={{
+                        title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),
+                        waiting: t.downloading_image(),
+                        action: onSave,
+                        disabled,
+                    }}
+                    onChange={onChangeWallet}
+                    userId={lastRecognizedProfile?.identifier?.userId}
+                    haveMenu
+                />
             </DialogActions>
             <AddNFT
                 account={selectedAccount}

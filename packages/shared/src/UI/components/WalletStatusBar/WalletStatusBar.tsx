@@ -1,4 +1,4 @@
-import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import classNames from 'classnames'
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         textAlign: 'center',
         margin: 0,
-        backgroundColor: MaskColorVar.buttonPluginBackground,
+        backgroundColor: theme.palette.maskColor?.dark,
         lineHeight: '18px',
         fontSize: 14,
         height: 40,

@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 2,
     },
     progress: {
-        color: theme.palette.maskColor.warn,
+        color: theme.palette.maskColor?.warn,
     },
 }))
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
@@ -59,7 +59,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
                 <Typography fontSize={14} fontWeight={400} className={classes.pedding}>
                     {t('pending')}
                 </Typography>
-                <CircularProgress thickness={6} size={12} style={{ color: '#FFB100' }} />
+                <CircularProgress thickness={6} size={12} className={classes.progress} />
             </>
         )
     }
