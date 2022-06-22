@@ -1,6 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletButtonActionProps, WalletStatusBar } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -28,6 +30,9 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
         })
     }, [chainId])
     const classes = useStylesExtends(useStyles(), props)
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
 
     return (
         <WalletStatusBar
@@ -39,6 +44,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
                 openPopupsWindow,
                 userId,
                 haveMenu,
+                onConnectWallet: openSelectProviderDialog,
             }}
             buttonActionProps={actionProps}
             onChange={onChange}

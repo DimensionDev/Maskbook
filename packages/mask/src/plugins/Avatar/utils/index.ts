@@ -5,7 +5,7 @@ import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDAvatarMeta, NFT_USAGE } from '../types'
+import { NextIDAvatarMeta, NFT_USAGE } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -96,7 +96,7 @@ export async function getNFTAvatarByUserId(
             binding.persona,
             platform,
             userId.toLowerCase(),
-            PLUGIN_ID,
+            nftUsage === NFT_USAGE.NFT_BACKGROUND ? `${PLUGIN_ID}_background` : PLUGIN_ID,
         )
         if (!avatarId && response.ok) return response.val
         if (response.ok && response.val.avatarId === avatarId) return response.val

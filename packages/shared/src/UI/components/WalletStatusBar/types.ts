@@ -12,4 +12,5 @@ export interface WalletMenuActionProps {
     openPopupsWindow?: () => void
     userId?: string
     haveMenu?: boolean
+    onConnectWallet?: () => void
 }

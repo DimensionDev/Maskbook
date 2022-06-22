@@ -1,5 +1,5 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
@@ -67,7 +67,7 @@ const useStyles = makeStyles<{ networkPluginId: NetworkPluginID }>()((theme, pro
         objectFit: 'cover',
         borderRadius: '100%',
         boxSizing: 'border-box',
-        padding: 6,
+        padding: 11,
         margin: theme.spacing(0.5, 1),
     },
     skeletonBox: {
@@ -144,7 +144,7 @@ const useStyles = makeStyles<{ networkPluginId: NetworkPluginID }>()((theme, pro
         zIndex: 100,
     },
     page: {
-        paddingTop: props.networkPluginId === NetworkPluginID.PLUGIN_EVM ? 89 : 54,
+        paddingTop: props.networkPluginId === NetworkPluginID.PLUGIN_EVM ? 120 : 54,
     },
 }))
 
@@ -195,7 +195,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => networkResolver.networkChainId(network))
+        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
     const onChangeToken = (token: AllChainsNonFungibleToken) => {

@@ -65,7 +65,7 @@ export function WalletStatusBar(props: WalletStatusBarProps) {
             </Box>
             <ShadowRootTooltip title={tooltip ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
                 <Box sx={{ flex: 1, textAlign: 'center' }}>
-                    <WalletButton actionProps={buttonActionProps} />
+                    <WalletButton actionProps={buttonActionProps} onConnectWallet={menuActionProps?.onConnectWallet} />
                 </Box>
             </ShadowRootTooltip>
         </Box>

@@ -58,5 +58,3 @@ export enum NFT_USAGE {
     NFT_PFP = 0,
     NFT_BACKGROUND = 1,
 }
-
-export type AllNextIDAvatarMeta = NextIDAvatarMeta & { background?: NextIDAvatarMeta }

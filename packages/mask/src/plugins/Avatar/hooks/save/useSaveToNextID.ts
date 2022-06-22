@@ -7,42 +7,21 @@ import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PLUGIN_ID } from '../../constants'
 import { PluginNFTAvatarRPC } from '../../messages'
-import { AllNextIDAvatarMeta, NextIDAvatarMeta, NFT_USAGE } from '../../types'
-
-async function getBackgroundNFTInfo(persona: ECKeyIdentifier, proof: BindingProof) {
-    const result = await NextIDStorage.getByIdentity<AllNextIDAvatarMeta>(
-        persona.publicKeyAsHex,
-        proof.platform,
-        proof.identity,
-        PLUGIN_ID,
-    )
-    if (!result.ok) return
-    return result.val.background as NextIDAvatarMeta
-}
-
-async function getAvatarNFTInfo(persona: ECKeyIdentifier, proof: BindingProof) {
-    const result = await NextIDStorage.getByIdentity<AllNextIDAvatarMeta>(
-        persona.publicKeyAsHex,
-        proof.platform,
-        proof.identity,
-        PLUGIN_ID,
-    )
-    if (!result.ok) return
-    return result.val as NextIDAvatarMeta
-}
+import { NextIDAvatarMeta, NFT_USAGE } from '../../types'
 
 async function setAvatarInfo(
-    info: AllNextIDAvatarMeta,
+    info: NextIDAvatarMeta,
     account: string,
     persona: ECKeyIdentifier,
     proof: BindingProof,
+    nftUsage: NFT_USAGE,
 ) {
     const payload = await NextIDStorage.getPayload(
         persona.publicKeyAsHex,
         proof?.platform,
         proof?.identity,
         info,
-        PLUGIN_ID,
+        nftUsage === NFT_USAGE.NFT_BACKGROUND ? `${PLUGIN_ID}_background` : PLUGIN_ID,
     )
     if (!payload.ok) {
         return payload
@@ -57,7 +36,7 @@ async function setAvatarInfo(
             proof.identity,
             payload.val.createdAt,
             info,
-            PLUGIN_ID,
+            nftUsage === NFT_USAGE.NFT_BACKGROUND ? `${PLUGIN_ID}_background` : PLUGIN_ID,
         )
         return response
     } catch (error) {
@@ -76,23 +55,7 @@ export function useSaveToNextID() {
         ) => {
             if (!proof?.identity || !persona?.publicKeyAsHex) return
 
-            let tokenInfo: AllNextIDAvatarMeta
-            if (nftUsage === NFT_USAGE.NFT_PFP) {
-                const backgroundNFTInfo = await getBackgroundNFTInfo(persona, proof)
-                tokenInfo = info
-                if (backgroundNFTInfo) {
-                    tokenInfo = Object.assign(info, { background: backgroundNFTInfo })
-                }
-            } else {
-                const nftInfo = await getAvatarNFTInfo(persona, proof)
-                if (nftInfo) {
-                    tokenInfo = Object.assign(nftInfo, { background: info })
-                } else {
-                    tokenInfo = Object.assign({ ...info, avatarId: '', address: '', tokenId: '' }, { background: info })
-                }
-            }
-
-            const response = await setAvatarInfo(tokenInfo, account, persona, proof)
+            const response = await setAvatarInfo(info, account, persona, proof, nftUsage)
             if (!response?.ok) {
                 return
             }

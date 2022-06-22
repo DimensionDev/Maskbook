@@ -1,4 +1,4 @@
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress } from '@mui/material'
 import classNames from 'classnames'
@@ -8,6 +8,7 @@ import type { WalletButtonActionProps } from './types'
 
 interface WalletButtonProps extends withClasses<'root'> {
     actionProps?: WalletButtonActionProps
+    onConnectWallet?: () => void
 }
 
 const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
@@ -32,13 +33,11 @@ const useStyles = makeStyles<{ color?: 'warning' }>()((theme, props) => ({
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 
 export function WalletButton(props: WalletButtonProps) {
-    const { actionProps } = props
+    const { actionProps, onConnectWallet } = props
     const classes = useStylesExtends(useStyles({ color: actionProps?.color }), props)
     const t = useSharedI18N()
     const [state, setState] = useState<ActionButtonPromiseState>('init')
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const expectedConnection = useWeb3Connection(currentPluginId)
-    const chainId = useChainId(currentPluginId)
 
     const run = () => {
         setState('wait')
@@ -54,11 +53,7 @@ export function WalletButton(props: WalletButtonProps) {
     }
     if (!actionProps)
         return (
-            <Button
-                variant="contained"
-                className={classes.button}
-                fullWidth
-                onClick={() => expectedConnection.connect({ chainId })}>
+            <Button variant="contained" className={classes.button} fullWidth onClick={() => onConnectWallet?.()}>
                 {t.change()}
             </Button>
         )

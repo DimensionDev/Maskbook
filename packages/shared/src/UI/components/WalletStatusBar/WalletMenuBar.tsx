@@ -4,7 +4,6 @@ import {
     useCurrentWeb3NetworkPluginID,
     useRecentTransactions,
     useWallet,
-    useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -80,7 +79,6 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     const [selectedWallet, setSelectedWallet] = useState(account || wallets[0]?.identity || '')
     const chainId = useChainId(currentPluginId)
     const theme = useTheme()
-    const expectedConnection = useWeb3Connection(currentPluginId)
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
@@ -106,11 +104,6 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
         if (!account && !wallets.length) return
         setSelectedWallet((account || wallets[0].identity) ?? '')
     }, [account, wallets])
-
-    const onConnectWallet = useCallback(async () => {
-        await expectedConnection.connect({ chainId })
-        console.log('----------------')
-    }, [expectedConnection])
 
     const walletItem = (
         walletName: string,
@@ -151,7 +144,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     return (
         <Stack className={classes.root}>
             <Stack
-                onClick={actionProps?.haveMenu ? onOpen : onConnectWallet}
+                onClick={actionProps?.haveMenu ? onOpen : actionProps?.onConnectWallet}
                 direction="row"
                 alignItems="center"
                 className={classes.wrapper}>
@@ -187,13 +180,13 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                             wallets.some((x) => isSameAddress(x.identity, account)),
                             wallets.some((x) => isSameAddress(x.identity, account)) ||
                                 currentPluginId === NetworkPluginID.PLUGIN_EVM,
-                            onConnectWallet,
+                            actionProps?.onConnectWallet,
                         )
                     ) : (
                         <MenuItem key="Wallet Connect">
                             <Button
                                 fullWidth
-                                onClick={onConnectWallet}
+                                onClick={actionProps?.onConnectWallet}
                                 sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
                                 {t.connect_your_wallet()}
                             </Button>
