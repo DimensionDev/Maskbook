@@ -128,7 +128,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
 
     const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList)
 
-    console.log({ accounts, allPersona, currentVisitingProfile, accountList, hiddenObj })
+    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList })
     return (
         <>
             <InjectedDialog

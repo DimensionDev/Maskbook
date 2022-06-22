@@ -46,6 +46,9 @@ export interface Proof {
 }
 export interface CollectionTypes {
     platform: string
+    address: string
+    key: string // address + tokenId as unique key of NFT, address + imageURL as unique key of poap
+    tokenId?: string
     iconURL?: string
     hidden?: boolean
 }

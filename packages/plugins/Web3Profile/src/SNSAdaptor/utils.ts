@@ -19,7 +19,7 @@ const addHiddenToArray = (listA?: CollectionTypes[], listB?: string[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.map((x) => {
-        if (listB?.findIndex((y) => y === x.iconURL) !== -1) {
+        if (listB?.findIndex((y) => y === x.key) !== -1) {
             return {
                 ...x,
                 hidden: true,

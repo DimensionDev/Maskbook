@@ -11,7 +11,6 @@ export function getDonations(address: string) {
         personaID: address,
         type: AssetType.GitcoinDonation,
     })
-
     return fetchJSON<Response>(url)
 }
 

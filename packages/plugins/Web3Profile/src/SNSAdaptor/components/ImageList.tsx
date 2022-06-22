@@ -99,24 +99,24 @@ export function ImageListDialog(props: ImageListDialogProps) {
         setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
     }, [collectionList, open])
 
-    const unList = (url: string | undefined) => {
-        if (!url) return
-        const unListingCollection = listedCollections?.find((collection) => collection?.iconURL === url)
+    const unList = (key: string | undefined) => {
+        if (!key) return
+        const unListingCollection = listedCollections?.find((collection) => collection?.key === key)
         if (unListingCollection) {
             setUnListedCollections((pre) => [...pre, unListingCollection])
         }
-        const unListingIndex = listedCollections?.findIndex((collection) => collection?.iconURL === url)
+        const unListingIndex = listedCollections?.findIndex((collection) => collection?.key === key)
         const currentListed = listedCollections
         currentListed?.splice(unListingIndex!, 1)
         setListedCollections([...currentListed])
     }
-    const list = (url: string | undefined) => {
-        if (!url) return
-        const listingCollection = unListedCollections?.find((collection) => collection?.iconURL === url)
+    const list = (key: string | undefined) => {
+        if (!key) return
+        const listingCollection = unListedCollections?.find((collection) => collection?.key === key)
         if (listingCollection) {
             setListedCollections((pre) => [...pre, listingCollection])
         }
-        const listingIndex = unListedCollections?.findIndex((collection) => collection?.iconURL === url)
+        const listingIndex = unListedCollections?.findIndex((collection) => collection?.key === key)
         const currentUnListed = unListedCollections
         currentUnListed?.splice(listingIndex!, 1)
         setUnListedCollections([...currentUnListed])
@@ -127,7 +127,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         const patch = {
             unListedCollections: {
                 [address]: {
-                    [title]: unListedCollections?.map((x) => x?.iconURL),
+                    [title]: unListedCollections?.map((x) => x?.key),
                 },
             },
         }
@@ -167,7 +167,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             <div
                                 key={collection?.iconURL}
                                 className={classes.collectionWrap}
-                                onClick={() => unList(collection?.iconURL)}>
+                                onClick={() => unList(collection.key)}>
                                 <ImageIcon size={49} borderRadius="12px" icon={collection?.iconURL} />
                             </div>
                         ))}
@@ -178,7 +178,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             <div
                                 key={collection?.iconURL}
                                 className={classes.collectionWrap}
-                                onClick={() => list(collection?.iconURL)}>
+                                onClick={() => list(collection.key)}>
                                 <ImageIcon size={49} borderRadius="12px" icon={collection?.iconURL} />
                             </div>
                         ))}

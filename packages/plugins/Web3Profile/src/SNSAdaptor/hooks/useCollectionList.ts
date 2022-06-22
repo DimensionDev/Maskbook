@@ -9,6 +9,7 @@ export const getDonationList = async (walletList: string[]) => {
                 resNodeIdParams.push({
                     address,
                     collections: result?.assets?.map((asset) => ({
+                        key: `${address}+${asset?.info?.image_preview_url}`,
                         address,
                         platform: asset?.platform,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
@@ -33,6 +34,7 @@ export const getFootprintList = async (walletList: string[]) => {
                 resNodeIdParams.push({
                     address,
                     collections: result?.assets?.map((asset) => ({
+                        key: `${address}+${asset?.info?.image_preview_url}`,
                         address,
                         platform: asset?.platform,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
