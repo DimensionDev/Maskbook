@@ -31,6 +31,7 @@ import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { RiskWarningDialog } from './RiskWarningDialog'
+import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -221,7 +222,9 @@ export const TradeForm = memo<AllTradeFormProps>(
         const [isWarningOpen, setIsWarningOpen] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-        const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+        const isDashboardClosed = useIsMinimalModeDashBoard(PluginId.GoPlusSecurity)
+        const isTokenSecurityClosed = isSNSClosed || isDashboardClosed
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
             chainId,
@@ -230,7 +233,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         )
 
         const isRisky = isHighRisk(tokenSecurityInfo)
-        console.log({ isTokenSecurityClosed, snsAdaptorMinimalPlugins })
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
