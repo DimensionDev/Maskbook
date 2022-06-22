@@ -3,9 +3,9 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
@@ -23,6 +23,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { HistoryIcon } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
+import { IconURLs } from './IconURL'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -51,6 +52,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     flexContainer: {
         justifyContent: 'space-around',
+    },
+    labelWrapper: {
+        display: 'flex',
+    },
+    img: {
+        width: 20,
+        marginRight: 4,
     },
 }))
 
@@ -178,6 +186,30 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 title={title}
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={onShowHistory} /> : null
+                }
+                titleTabs={
+                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                            <Tab
+                                label={
+                                    <div className={classes.labelWrapper}>
+                                        <img className={classes.img} src={IconURLs.erc20Token} />
+                                        <span>{t.erc20_tab_title()}</span>
+                                    </div>
+                                }
+                                value={tabs.tokens}
+                            />
+                            <Tab
+                                label={
+                                    <div className={classes.labelWrapper}>
+                                        <img className={classes.img} src={IconURLs.erc721Token} />
+                                        <span>{t.erc721_tab_title()}</span>
+                                    </div>
+                                }
+                                value={tabs.collectibles}
+                            />
+                        </MaskTabList>
+                    ) : null
                 }
                 onClose={onClose}
                 isOnBack={step !== CreateRedPacketPageStep.NewRedPacketPage}
