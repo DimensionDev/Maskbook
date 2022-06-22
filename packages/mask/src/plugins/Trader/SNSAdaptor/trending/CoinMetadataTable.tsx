@@ -156,7 +156,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                 </TableRow>
                             )
                         })}
-                        {trending.coin.community_urls?.length && (
+                        {!!trending.coin.community_urls?.length && (
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
