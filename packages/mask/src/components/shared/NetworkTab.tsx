@@ -42,7 +42,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                                         variant="body2"
                                         fontSize={14}
                                         fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
-                                        {x.name}
+                                        {x.shortName ?? x.name}
                                     </Typography>
                                 </Stack>
                             }

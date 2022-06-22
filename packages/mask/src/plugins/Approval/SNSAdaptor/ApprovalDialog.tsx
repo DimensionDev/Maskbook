@@ -1,8 +1,7 @@
-import { DialogContent } from '@mui/material'
-import { isDashboardPage } from '@masknet/shared-base'
+import { DialogContent, Typography } from '@mui/material'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState, useMemo } from 'react'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -10,15 +9,29 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales'
 import { InjectedDialog } from '@masknet/shared'
+import { EmptySimpleIcon } from '@masknet/icons'
 
 export interface ApprovalDialogProps {
     open: boolean
     onClose?: () => void
 }
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
-    paper: {
+const useStyles = makeStyles()((theme) => ({
+    dialogRoot: {
         background: theme.palette.background.paper,
+        width: 600,
+        height: 620,
+        overflowX: 'hidden',
+    },
+    dialogContent: {
+        width: 568,
+        padding: '12px 16px',
+        margin: 'auto',
+    },
+    dialogTitle: {
+        '& > p': {
+            overflow: 'visible',
+        },
     },
     abstractTabWrapper: {
         width: '100%',
@@ -28,7 +41,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     tab: {
         height: 36,
         minHeight: 36,
-        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',
@@ -37,6 +49,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         width: 535,
         height: 36,
         minHeight: 36,
+        padding: 0,
+        maxWidth: '100%',
         margin: '0 auto',
         borderRadius: 4,
         '& .Mui-selected': {
@@ -48,14 +62,39 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         display: 'none',
     },
     tabPanel: {
-        marginTop: theme.spacing(3),
+        marginTop: 12,
+    },
+    approvalWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+    },
+    approvalEmptyWrapper: {
+        flexGrow: 1,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    approvalEmptyContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: theme.palette.text.secondary,
+        fontSize: 14,
+    },
+    emptyIcon: {
+        width: 36,
+        height: 36,
+        marginBottom: 13,
     },
 }))
 
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
-    const isDashboard = isDashboardPage()
-    const { classes } = useStyles({ isDashboard })
+    const { classes } = useStyles()
     enum Tabs {
         Tokens = 0,
         Collectibles = 1,
@@ -78,8 +117,13 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     )
     return (
         <TargetChainIdContext.Provider>
-            <InjectedDialog open={open} title={t.plugin_name()} onClose={onClose} classes={classes} titleTabs={tabs}>
-                <DialogContent className={classes.paper}>
+            <InjectedDialog
+                open={open}
+                title={t.plugin_name()}
+                onClose={onClose}
+                classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
+                titleTabs={tabs}>
+                <DialogContent className={classes.dialogContent}>
                     <ApprovalWrapper />
                 </DialogContent>
             </InjectedDialog>
@@ -89,14 +133,13 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
 
 function ApprovalWrapper() {
     const { targetChainId: chainId, setTargetChainId } = TargetChainIdContext.useContainer()
-    const isDashboard = isDashboardPage()
     const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = approvalDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
-    const { classes } = useStyles({ isDashboard })
+    const { classes } = useStyles()
 
     return (
-        <>
+        <div className={classes.approvalWrapper}>
             <div className={classes.abstractTabWrapper}>
                 <NetworkTab
                     chainId={chainId}
@@ -105,6 +148,21 @@ function ApprovalWrapper() {
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-        </>
+            <ApprovalEmptyContent />
+        </div>
+    )
+}
+
+function ApprovalEmptyContent() {
+    const { classes } = useStyles()
+
+    const t = useI18N()
+    return (
+        <div className={classes.approvalEmptyWrapper}>
+            <div className={classes.approvalEmptyContent}>
+                <EmptySimpleIcon className={classes.emptyIcon} />
+                <Typography>{t.no_approved_contract_records()}</Typography>
+            </div>
+        </div>
     )
 }

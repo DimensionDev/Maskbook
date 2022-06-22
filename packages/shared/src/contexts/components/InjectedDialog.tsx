@@ -34,6 +34,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogTitleWithTabs: {
         paddingBottom: '0px !important',
+        rowGap: 16,
     },
     dialogTitleEndingContent: {
         display: 'flex',
@@ -64,7 +65,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     tabs: {
         display: 'flex',
         gridColumn: '3 span',
-        marginTop: theme.spacing(2),
     },
     tab: {
         width: '50%',

@@ -166,6 +166,8 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     iconColor: Color
     /** The network name */
     name: string
+    /** The network short name */
+    shortName?: string
     /** Is a mainnet network */
     isMainnet: boolean
 }
