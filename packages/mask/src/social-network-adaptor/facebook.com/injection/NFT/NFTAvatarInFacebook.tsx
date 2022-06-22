@@ -6,7 +6,7 @@ import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { AvatarMetaDB, NFT_USAGE } from '../../../../plugins/Avatar/types'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { getAvatarId } from '../../utils/user'
 import { useNFT, useNFTAvatar, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
@@ -124,7 +124,6 @@ function NFTAvatarInFacebook() {
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
-                    NFTEvent.nftUsage ?? NFT_USAGE.NFT_PFP,
                 )
                 if (!avatarInfo) {
                     setNFTEvent(undefined)
@@ -157,7 +156,6 @@ function NFTAvatarInFacebook() {
                     } as AvatarMetaDB,
                     identity.identifier.network as EnhanceableSite,
                     RSS3_KEY_SNS.FACEBOOK,
-                    storages.nftUsage.value,
                 )
                 if (!avatarInfo) {
                     clearStorages()

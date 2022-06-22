@@ -79,7 +79,6 @@ function NFTAvatarInFacebookFirstStep() {
                 pluginId: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
                 chainId: info.token.chainId ?? ChainId.Mainnet,
                 schema: info.token.schema ?? SchemaType.ERC721,
-                nftUsage: info.nftUsage,
             })
         },
         [identity],
@@ -160,7 +159,6 @@ function NFTAvatarListInFaceBookMobile() {
             InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginId.setValue(
                 info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
             )
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.nftUsage.setValue(info.nftUsage)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
             InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
         },

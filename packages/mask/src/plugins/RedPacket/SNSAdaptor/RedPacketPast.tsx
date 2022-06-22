@@ -1,7 +1,7 @@
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import type { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
 import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'

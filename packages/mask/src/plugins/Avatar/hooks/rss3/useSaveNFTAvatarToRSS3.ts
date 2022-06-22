@@ -3,30 +3,25 @@ import { RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 import type { RSS3_KEY_SNS } from '../../constants'
-import { AvatarMetaDB, NFTRSSNode, NFT_USAGE, RSS3Cache } from '../../types'
+import type { AvatarMetaDB } from '../../types'
+import { NFTRSSNode, RSS3Cache } from '../../types'
 
 export function useSaveAvatarToRSS3() {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-
     return useAsyncFn(
-        async (address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS, nftUsage: NFT_USAGE) => {
+        async (address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS) => {
             const rss = RSS3.createRSS3(address, async (message: string) => {
                 return connection.signMessage(message, 'personalSign', { account: address }) ?? ''
             })
             let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
             if (!_nfts) {
                 _nfts = {
-                    [nft.userId]: {
-                        signature,
-                        nft: nftUsage === NFT_USAGE.NFT_PFP ? nft : undefined,
-                        background: nftUsage === NFT_USAGE.NFT_BACKGROUND ? nft : undefined,
-                    },
+                    [nft.userId]: { signature, nft },
                 }
             } else {
                 _nfts[nft.userId] = {
                     signature,
-                    nft: nftUsage === NFT_USAGE.NFT_PFP ? nft : _nfts[nft.userId].nft,
-                    background: nftUsage === NFT_USAGE.NFT_BACKGROUND ? nft : _nfts[nft.userId].background,
+                    nft,
                 }
             }
             await RSS3.setFileData(rss, address, snsKey, _nfts)

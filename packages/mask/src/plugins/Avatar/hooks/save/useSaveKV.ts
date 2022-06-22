@@ -5,18 +5,12 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PluginNFTAvatarRPC } from '../../messages'
-import type { NextIDAvatarMeta, NFT_USAGE } from '../../types'
+import type { NextIDAvatarMeta } from '../../types'
 
 export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
     const connection = useWeb3Connection<'all'>(pluginId)
     return useAsyncFn(
-        async (
-            info: NextIDAvatarMeta,
-            account: string,
-            persona: ECKeyIdentifier,
-            proof: BindingProof,
-            nftUsage: NFT_USAGE,
-        ) => {
+        async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
             const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
                 account,
             })
@@ -25,7 +19,6 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
                 activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
                 info,
                 sign,
-                nftUsage,
             )
         },
         [connection],

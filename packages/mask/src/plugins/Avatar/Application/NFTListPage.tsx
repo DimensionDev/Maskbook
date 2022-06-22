@@ -23,7 +23,15 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
 
         '::-webkit-scrollbar': {
-            display: 'none',
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
         },
     },
     skeleton: {

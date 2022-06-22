@@ -5,7 +5,7 @@ import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
-import { NextIDAvatarMeta, NFT_USAGE } from '../types'
+import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -83,11 +83,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
     return 1
 }
 
-export async function getNFTAvatarByUserId(
-    userId: string,
-    avatarId: string,
-    nftUsage: NFT_USAGE,
-): Promise<NextIDAvatarMeta | undefined> {
+export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
 
@@ -96,7 +92,7 @@ export async function getNFTAvatarByUserId(
             binding.persona,
             platform,
             userId.toLowerCase(),
-            nftUsage === NFT_USAGE.NFT_BACKGROUND ? `${PLUGIN_ID}_background` : PLUGIN_ID,
+            PLUGIN_ID,
         )
         if (!avatarId && response.ok) return response.val
         if (response.ok && response.val.avatarId === avatarId) return response.val

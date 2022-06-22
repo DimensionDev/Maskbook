@@ -10,7 +10,7 @@ import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAs
 import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { AllChainsNonFungibleToken, SelectTokenInfo, NFT_USAGE } from '../types'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -112,7 +112,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
             token: selectedToken,
             image: selectedToken.metadata?.imageURL ?? '',
             pluginId: pluginID,
-            nftUsage: NFT_USAGE.NFT_PFP,
         })
         setSelectedToken(undefined)
     }, [onChange, selectedToken])

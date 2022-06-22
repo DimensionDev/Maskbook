@@ -28,7 +28,6 @@ export interface SelectTokenInfo {
     token: AllChainsNonFungibleToken
     image: string
     pluginId: NetworkPluginID
-    nftUsage: NFT_USAGE
 }
 
 export interface NextIDAvatarMeta extends AvatarMetaDB {
@@ -38,8 +37,7 @@ export interface NextIDAvatarMeta extends AvatarMetaDB {
 
 export interface NFTRSSNode {
     signature: string
-    nft?: AvatarMetaDB
-    background?: AvatarMetaDB
+    nft: AvatarMetaDB
 }
 
 export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
@@ -52,9 +50,4 @@ export interface NFTInfo {
     owner: string
     slug: string
     permalink: string
-}
-
-export enum NFT_USAGE {
-    NFT_PFP = 0,
-    NFT_BACKGROUND = 1,
 }

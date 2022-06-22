@@ -2,7 +2,6 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { KeyValue } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFT_AVATAR_DB_NAME } from '../constants'
-import { NFT_USAGE } from '../types'
 
 type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
 type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>
@@ -19,12 +18,11 @@ function getKey(site: EnhanceableSite, userId: string) {
 export async function getAddress(
     site: EnhanceableSite,
     userId: string,
-    nftUsage?: NFT_USAGE,
     pluginID?: NetworkPluginID,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     let f = cache.get(getKey(site, userId))
     if (f) return f
-    f = _getAddress(site, userId, pluginID, nftUsage)
+    f = _getAddress(site, userId, pluginID)
     cache.set(getKey(site, userId), f)
     return f
 }
@@ -33,7 +31,6 @@ async function _getAddress(
     site: EnhanceableSite,
     userId: string,
     pluginID?: NetworkPluginID,
-    nftUsage?: NFT_USAGE,
 ): Promise<{ address: string; networkPluginID: NetworkPluginID } | undefined> {
     if (userId === '$unknown') return
 
@@ -47,7 +44,6 @@ async function _getAddress(
         storageV2 = {} as AddressStorageV2
     }
 
-    if (nftUsage === NFT_USAGE.NFT_BACKGROUND) return storageV2['#{userId}_background']
     if (!pluginID && storageV2[userId]) return storageV2[userId]
     if (storageV2[pluginID ?? NetworkPluginID.PLUGIN_EVM])
         return {
@@ -61,13 +57,7 @@ async function _getAddress(
     return
 }
 
-export async function setAddress(
-    site: EnhanceableSite,
-    userId: string,
-    pluginID: NetworkPluginID,
-    address: string,
-    nftUsage: NFT_USAGE,
-) {
+export async function setAddress(site: EnhanceableSite, userId: string, pluginID: NetworkPluginID, address: string) {
     if (userId === '$unknown') return
 
     let storageV2
@@ -84,6 +74,6 @@ export async function setAddress(
     await createAddressDB(site).set(userId, {
         ...(storageV2 as AddressStorageV2),
         [pluginID]: address,
-        [nftUsage !== NFT_USAGE.NFT_PFP ? `${userId}_background` : userId]: { address, networkPluginID: pluginID },
+        [userId]: { address, networkPluginID: pluginID },
     } as AddressStorageV2)
 }

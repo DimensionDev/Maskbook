@@ -30,6 +30,7 @@ const useStyles = makeStyles<{ currentTab: Application_NFT_LIST_PAGE }>()((theme
     tabPanel: {
         padding: theme.spacing(1),
         paddingTop: 50,
+        paddingBottom: 80,
     },
 }))
 interface NFTListProps {
