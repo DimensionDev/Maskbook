@@ -82,7 +82,7 @@ export const RecipientSelect: FC = () => {
                         <LinkOutIcon className={classes.actionIcon} />
                     </Link>
                     {addressConfig.verified ? <VerifiedIcon className={cx(classes.actionIcon, classes.icon)} /> : null}
-                    {addressConfig.address === recipient ? (
+                    {Others?.isSameAddress(addressConfig.address, recipient) ? (
                         <CheckIcon className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}
                 </MenuItem>
