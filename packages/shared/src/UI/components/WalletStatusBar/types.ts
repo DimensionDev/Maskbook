@@ -1,3 +1,5 @@
+import type { BindingProof } from '@masknet/shared-base'
+
 export interface WalletButtonActionProps {
     startIcon?: React.ReactNode
     endIcon?: React.ReactNode
@@ -10,7 +12,8 @@ export interface WalletButtonActionProps {
 }
 export interface WalletMenuActionProps {
     openPopupsWindow?: () => void
-    userId?: string
     haveMenu?: boolean
     onConnectWallet?: () => void
+    nextIDWallets?: BindingProof[]
+    pending?: string | React.ReactElement | React.ReactNode
 }

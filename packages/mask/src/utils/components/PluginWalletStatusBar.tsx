@@ -1,13 +1,17 @@
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID, useRecentTransactions } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletButtonActionProps, WalletStatusBar } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
+import { NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { CircularProgress, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { useNextIDWallets } from '../hooks'
+import { useI18N } from '../i18n-next-ui'
 
 interface WalletStatusBarProps extends withClasses<'button' | 'disabled'> {
     className?: string
@@ -18,8 +22,17 @@ interface WalletStatusBarProps extends withClasses<'button' | 'disabled'> {
     haveMenu?: boolean
 }
 
-const useStyles = makeStyles()((theme) => ({}))
+const useStyles = makeStyles()((theme) => ({
+    pedding: {
+        color: theme.palette.maskColor?.warn,
+        marginRight: 2,
+    },
+    progress: {
+        color: theme.palette.maskColor.warn,
+    },
+}))
 export function PluginWalletStatusBar(props: WalletStatusBarProps) {
+    const { t } = useI18N()
     const { actionProps, haveMenu = false, className, onChange, tooltip, userId } = props
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId(currentPluginId)
@@ -33,6 +46,23 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+    const { value: wallets = [] } = useNextIDWallets(
+        userId,
+        activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform,
+    )
+    const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
+
+    function renderButtonText() {
+        if (pendingTransactions.length <= 0) return
+        return (
+            <>
+                <Typography fontSize={14} fontWeight={400} className={classes.pedding}>
+                    {t('pending')}
+                </Typography>
+                <CircularProgress thickness={6} size={12} style={{ color: '#FFB100' }} />
+            </>
+        )
+    }
 
     return (
         <WalletStatusBar
@@ -42,9 +72,10 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
             badgeSize={12}
             menuActionProps={{
                 openPopupsWindow,
-                userId,
+                nextIDWallets: wallets,
                 haveMenu,
                 onConnectWallet: openSelectProviderDialog,
+                pending: renderButtonText(),
             }}
             buttonActionProps={actionProps}
             onChange={onChange}

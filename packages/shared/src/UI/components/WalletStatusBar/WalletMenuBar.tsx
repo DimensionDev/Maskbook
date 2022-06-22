@@ -1,22 +1,14 @@
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useRecentTransactions,
-    useWallet,
-} from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWallet } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar, ShadowRootMenu, useStylesExtends } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, CircularProgress, Divider, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
-import classNames from 'classnames'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { Button, Divider, ListItemIcon, MenuItem, Stack, Typography, useTheme } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { useSharedI18N } from '../../../locales'
-import { CheckedIcon, UncheckIcon } from '../../assets/Check'
 import { WalletSettingIcon } from '../../assets/setting'
 import { Verify2Icon } from '../../assets/Verify2'
-import { useNextIDWallets } from '../../hooks'
 import type { WalletMenuActionProps } from './types'
+import { WalletItem } from './WalletItem'
 import { WalletUI } from './WalletUI'
 
 const useStyles = makeStyles()((theme) => ({
@@ -75,24 +67,9 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const wallet = useWallet(currentPluginId)
     const account = useAccount(currentPluginId)
-    const { value: wallets = [], loading } = useNextIDWallets(actionProps?.userId)
-    const [selectedWallet, setSelectedWallet] = useState(account || wallets[0]?.identity || '')
+    const [selectedWallet, setSelectedWallet] = useState(account || (actionProps?.nextIDWallets?.[0]?.identity ?? ''))
     const chainId = useChainId(currentPluginId)
     const theme = useTheme()
-
-    const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
-
-    function renderButtonText() {
-        if (pendingTransactions.length <= 0) return
-        return (
-            <>
-                <Typography fontSize={14} fontWeight={400} style={{ color: '#FFB100', marginRight: 2 }}>
-                    {t.pending()}
-                </Typography>
-                <CircularProgress thickness={6} size={12} style={{ color: '#FFB100' }} />
-            </>
-        )
-    }
 
     const onClick = useCallback((address: string, pluginId: NetworkPluginID, chainId: ChainId) => {
         onChange?.(address, pluginId, chainId)
@@ -101,45 +78,9 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
     }, [])
 
     useEffect(() => {
-        if (!account && !wallets.length) return
-        setSelectedWallet((account || wallets[0].identity) ?? '')
-    }, [account, wallets])
-
-    const walletItem = (
-        walletName: string,
-        selectedWallet: string,
-        wallet: string,
-        enableChange: boolean,
-        verify?: boolean,
-        isETH?: boolean,
-        onChange?: () => void,
-    ) => (
-        <MenuItem
-            value={wallet}
-            onClick={() =>
-                onClick(
-                    wallet,
-                    isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId,
-                    wallets?.some((x) => isSameAddress(x.identity, wallet)) ? ChainId.Mainnet : (chainId as ChainId),
-                )
-            }>
-            <ListItemIcon>
-                {selectedWallet === wallet ? (
-                    <>
-                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
-                    </>
-                ) : (
-                    <UncheckIcon className={classes.icon} />
-                )}
-            </ListItemIcon>
-            <WalletUI name={walletName} address={wallet} verify={verify} isETH={isETH} />
-            {enableChange && (
-                <Button size="small" className={classes.change} onClick={onChange}>
-                    {t.change()}
-                </Button>
-            )}
-        </MenuItem>
-    )
+        if (!account && !actionProps?.nextIDWallets?.length) return
+        setSelectedWallet((account || actionProps?.nextIDWallets?.[0]?.identity) ?? '')
+    }, [account, actionProps?.nextIDWallets])
 
     return (
         <Stack className={classes.root}>
@@ -154,11 +95,11 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                     badgeSize={badgeSize}
                     address={selectedWallet}
                     isETH={
-                        wallets?.some((x) => isSameAddress(x.identity, selectedWallet)) ||
+                        actionProps?.nextIDWallets?.some((x) => isSameAddress(x.identity, selectedWallet)) ||
                         currentPluginId === NetworkPluginID.PLUGIN_EVM
                     }
                     showMenuDrop
-                    pending={renderButtonText()}
+                    pending={actionProps?.pending}
                     showWalletIcon
                 />
             </Stack>
@@ -172,16 +113,15 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                         style: { backgroundColor: theme.palette.mode === 'dark' ? '#000000' : 'white', width: 335 },
                     }}>
                     {account ? (
-                        walletItem(
-                            wallet?.name ?? '',
-                            selectedWallet,
-                            account,
-                            Boolean(account),
-                            wallets.some((x) => isSameAddress(x.identity, account)),
-                            wallets.some((x) => isSameAddress(x.identity, account)) ||
-                                currentPluginId === NetworkPluginID.PLUGIN_EVM,
-                            actionProps?.onConnectWallet,
-                        )
+                        <WalletItem
+                            walletName={wallet?.name ?? ''}
+                            selectedWallet={selectedWallet}
+                            wallet={account}
+                            nextIDWallets={actionProps.nextIDWallets}
+                            chainId={chainId as ChainId}
+                            onConnectWallet={actionProps.onConnectWallet}
+                            onSelectedWallet={onClick}
+                        />
                     ) : (
                         <MenuItem key="Wallet Connect">
                             <Button
@@ -193,12 +133,21 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                         </MenuItem>
                     )}
                     <Divider className={classes.divider} />
-                    {wallets
-                        .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+                    {actionProps.nextIDWallets
+                        ?.sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
                         ?.filter((x) => !isSameAddress(x.identity, wallet?.address))
-                        .map((x) => (
+                        .map((x, i) => (
                             <>
-                                {walletItem(wallet?.name ?? '', selectedWallet, x.identity, false, true, true)}
+                                <WalletItem
+                                    key={i}
+                                    walletName=""
+                                    selectedWallet={selectedWallet}
+                                    wallet={x.identity}
+                                    nextIDWallets={actionProps.nextIDWallets ?? []}
+                                    chainId={chainId as ChainId}
+                                    onSelectedWallet={onClick}
+                                />
+
                                 <Divider className={classes.divider} />
                             </>
                         ))}

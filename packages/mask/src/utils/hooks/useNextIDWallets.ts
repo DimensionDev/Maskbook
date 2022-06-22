@@ -1,11 +1,9 @@
 import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
-import { sharedNextIDPlatform } from '../../contexts'
-import { first } from 'lodash-unified'
 import { NextIDProof } from '@masknet/web3-providers'
+import { first } from 'lodash-unified'
 
-export function useNextIDWallets(userId?: string) {
-    const platform = sharedNextIDPlatform.value
+export function useNextIDWallets(userId?: string, platform?: NextIDPlatform) {
     return useAsyncRetry(async () => {
         if (!userId) return
         const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
