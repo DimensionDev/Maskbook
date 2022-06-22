@@ -105,7 +105,6 @@ export interface NFTAvatarEvent {
     schema?: number
     chainId?: number
     pluginId?: string
-    nftUsage?: number
 }
 
 /** This is a subset of browser.permissions.Permission */

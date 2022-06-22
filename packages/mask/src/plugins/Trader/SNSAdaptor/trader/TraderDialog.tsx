@@ -12,7 +12,6 @@ import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -25,8 +24,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     abstractTabWrapper: {
         width: '100%',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
     },
     tab: {
         height: 36,
@@ -49,14 +46,13 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
     },
     content: {
-        paddingTop: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        padding: 0,
     },
     tradeRoot: {
-        width: 535,
-        margin: 'auto',
+        padding: 0,
     },
 }))
 
@@ -106,11 +102,6 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     }}
                     title={t('plugin_trader_swap')}>
                     <DialogContent className={classes.content}>
-                        {!isDashboard ? (
-                            <div className={classes.walletStatusBox}>
-                                <WalletStatusBox />
-                            </div>
-                        ) : null}
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chainId={chainId}

@@ -4,9 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -19,6 +18,7 @@ import type { Coin } from '../../Trader/types'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { PluginWalletStatusBar } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -179,35 +179,35 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
+                </DialogContent>
+                <DialogActions style={{ padding: 0 }}>
                     <WalletConnectedBoundary>
                         {isZero(tokenBalance) ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                onClick={openSwap}
-                                variant="contained"
-                                disabled={isInvesting}
-                                loading={loadingTokenBalance || isInvesting}>
-                                {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
-                            </ActionButton>
+                            <PluginWalletStatusBar
+                                actionProps={{
+                                    action: async () => openSwap(),
+                                    disabled: isInvesting,
+                                    loading: loadingTokenBalance || isInvesting,
+                                    title: t('plugin_dhedge_buy_token', { symbol: token?.symbol }),
+                                }}
+                            />
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
                                 token={token?.schema === SchemaType.ERC20 ? token : undefined}>
-                                <ActionButton
-                                    className={classes.button}
-                                    fullWidth
-                                    disabled={!!validationMessage || isInvesting}
-                                    onClick={invest}
-                                    variant="contained"
-                                    loading={loadingTokenBalance || isInvesting}>
-                                    {validationMessage || t('plugin_dhedge_invest')}
-                                </ActionButton>
+                                <PluginWalletStatusBar
+                                    actionProps={{
+                                        title: validationMessage || t('plugin_dhedge_invest'),
+                                        action: async () => invest(),
+                                        disabled: !!validationMessage || isInvesting,
+                                        loading: loadingTokenBalance || isInvesting,
+                                    }}
+                                />
                             </EthereumERC20TokenApprovedBoundary>
                         )}
                     </WalletConnectedBoundary>
-                </DialogContent>
+                </DialogActions>
             </InjectedDialog>
         </div>
     )

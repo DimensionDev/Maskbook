@@ -113,6 +113,7 @@ export function WalletUI(props: WalletUIProps) {
                     badgeSize={badgeSize}
                     mainIcon={providerDescriptor?.icon}
                     badgeIcon={networkDescriptor?.icon}
+                    iconFilterColor={providerDescriptor.iconFilterColor}
                 />
             ) : (
                 <ImageIcon size={30} icon={networkDescriptor?.icon} />
@@ -121,7 +122,7 @@ export function WalletUI(props: WalletUIProps) {
                 <Box className={classes.name}>
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {providerType === ProviderType.MaskWallet
-                            ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            ? name ?? domain ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}

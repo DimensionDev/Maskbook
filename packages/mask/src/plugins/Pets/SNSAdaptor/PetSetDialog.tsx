@@ -15,28 +15,32 @@ import {
     FormControlLabel,
     Checkbox,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs, useNFTsExtra } from '../hooks'
-import { useI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
+import { RSS3Icon } from '../assets/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: theme.spacing(3),
+        justifyContent: 'flex-end',
+        margin: theme.spacing(2, 0),
+        alignItems: 'center',
+    },
+    poweredBy: {
+        marginRight: theme.spacing(1),
+        color: '#767F8D',
     },
     des: {
-        color: '#7b8192',
-        fontSize: '12px',
+        marginRight: theme.spacing(1),
     },
     input: {
         margin: theme.spacing(2, 0, 0),
@@ -92,6 +96,11 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
         marginBottom: 10,
         boxShadow: theme.palette.mode === 'dark' ? '0 0 5px #FFFFFF' : '0 0 5px #CCCCCC',
+    },
+    icon: {
+        margin: theme.spacing(0, 1),
+        width: 21,
+        height: 15,
     },
 }))
 
@@ -281,7 +290,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     return (
         <>
-            <Box>
+            <Box style={{ padding: '16px 16px 0 16px' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
                         <PreviewBox message={metaData.word} imageUrl={imageChose} tokenInfo={tokenInfoSelect} />
@@ -311,32 +320,43 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     label={t('plugin_pets_dialog_check_title')}
                     sx={{ marginTop: '4px' }}
                 />
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={ChainId.Mainnet}
-                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        size: 'large',
-                        fullWidth: true,
-                    }}>
-                    <LoadingButton
-                        loading={loading}
-                        color="inherit"
-                        size="large"
-                        fullWidth
-                        variant="contained"
-                        className={classes.btn}
-                        onClick={saveHandle}
-                        disabled={!collection.name || !metaData.image}>
-                        {t('plugin_pets_dialog_btn')}
-                    </LoadingButton>
-                </ChainBoundary>
                 <Box className={classes.desBox}>
-                    <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
-                    <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>
+                    <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
+                        {t('plugin_pets_dialog_created')}
+                    </Typography>
+                    <Typography color="textPrimary" fontSize={14} fontWeight={700}>
+                        MintTeam
+                    </Typography>
+                    <img className={classes.icon} src={new URL('../assets/pets.png', import.meta.url).toString()} />
+                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                        &
+                    </Typography>
+                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                        RSS3
+                    </Typography>
+                    <RSS3Icon style={{ fontSize: 24 }} />
                 </Box>
             </Box>
+
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={ChainId.Mainnet}
+                predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
+                noSwitchNetworkTip
+                ActionButtonPromiseProps={{
+                    size: 'large',
+                    fullWidth: true,
+                }}>
+                <PluginWalletStatusBar
+                    actionProps={{
+                        loading,
+                        action: saveHandle,
+                        title: t('plugin_pets_dialog_btn'),
+                        disabled: !collection.name || !metaData.image,
+                    }}
+                />
+            </ChainBoundary>
+
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipVisible}

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import {
@@ -11,9 +11,8 @@ import {
     ZERO_ADDRESS,
     networkResolver,
 } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -31,6 +30,7 @@ import type { AbiItem } from 'web3-utils'
 import { flatten, compact, chunk } from 'lodash-unified'
 import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
@@ -113,12 +113,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         }
                     }}>
                     <DialogContent>
-                        {!isDashboard ? (
-                            <div className={classes.walletStatusBox}>
-                                <WalletStatusBox />
-                            </div>
-                        ) : null}
-
                         {selectedProtocol ? (
                             <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
                         ) : (
@@ -156,6 +150,11 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             </>
                         )}
                     </DialogContent>
+                    <DialogActions style={{ padding: 0 }}>
+                        <ChainBoundary expectedChainId={chainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                            <PluginWalletStatusBar />
+                        </ChainBoundary>
+                    </DialogActions>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
         </TargetChainIdContext.Provider>

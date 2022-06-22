@@ -21,7 +21,6 @@ export const InMemoryStorages = {
         schema: 1,
         chainId: 1,
         pluginId: '',
-        nftUsage: 0,
     }),
 }
 

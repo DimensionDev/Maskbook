@@ -1,5 +1,5 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
@@ -12,10 +12,12 @@ import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAs
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
-import { NFTList } from './NFTList'
 import { PluginWalletStatusBar } from '../../../utils'
 import { useSubscription } from 'use-subscription'
 import { context } from '../context'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { useAsync } from 'react-use'
+import { WalletRPC } from '../../Wallet/messages'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -46,15 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         marginBottom: 72,
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
+            display: 'none',
         },
     },
     error: {
@@ -86,6 +80,40 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+
+    abstractTabWrapper: {
+        width: '100%',
+        flex: 1,
+        flexShrink: 0,
+        position: 'absolute',
+    },
+    tableTabWrapper: {
+        padding: theme.spacing(2),
+    },
+    tab: {
+        height: 36,
+        minHeight: 36,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
+    },
+    tabs: {
+        height: 36,
+        minHeight: 36,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderRadius: 4,
+        '& .Mui-selected': {
+            color: '#ffffff',
+            backgroundColor: `${theme.palette.primary.main}!important`,
+        },
+    },
+    indicator: {
+        display: 'none',
+    },
+    tabPanel: {
+        marginTop: theme.spacing(3),
+    },
 }))
 
 function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNonFungibleToken) {
@@ -114,6 +142,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const lastRecognizedProfile = useSubscription(context.lastRecognizedProfile)
+
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
+        const networks = await WalletRPC.getSupportedNetworks()
+        return networks.map((network) => networkResolver.networkChainId(network))
+    }, [])
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -263,8 +296,19 @@ export function NFTListDialog(props: NFTListDialogProps) {
     return (
         <>
             <DialogContent className={classes.content}>
-                {(account || Boolean(wallets?.length)) &&
-                    (selectedPluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                {account || Boolean(wallets?.length) ? (
+                    <>
+                        {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    chains={chains.filter(Boolean) as ChainId[]}
+                                    chainId={chainId}
+                                    setChainId={setChainId}
+                                    classes={classes}
+                                />
+                            </div>
+                        ) : null}
+
                         <NFTListPage
                             pluginId={selectedPluginId}
                             tokens={tokensInList}
@@ -275,19 +319,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             loadError={!!loadError}
                             loadFinish={loadFinish}
                         />
-                    ) : (
-                        <NFTList
-                            chainId={chainId}
-                            onSelect={onChangeToken}
-                            tokens={tokensInList}
-                            tokenInfo={selectedToken}
-                            children={NoNFTList()}
-                            onChangeChain={onChangeChain}
-                            nextPage={nextPage}
-                            loadError={!!loadError}
-                            loadFinish={loadFinish}
-                        />
-                    ))}
+                    </>
+                ) : null}
 
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>

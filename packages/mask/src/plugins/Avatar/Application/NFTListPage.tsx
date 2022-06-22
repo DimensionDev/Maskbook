@@ -7,7 +7,9 @@ import { NFTImage } from '../SNSAdaptor/NFTImage'
 import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    root: {
+        paddingTop: 60,
+    },
 
     button: {
         textAlign: 'center',
