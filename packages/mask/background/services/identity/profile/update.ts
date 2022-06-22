@@ -1,14 +1,16 @@
-import { NextIDAction, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDAction, PersonaIdentifier, ProfileIdentifier, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { storeAvatar } from '../../../database/avatar-cache/avatar'
 import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
+    createPersonaDB,
     createProfileDB,
     deleteProfileDB,
     detachProfileDB,
     LinkedProfileDetails,
+    PersonaRecord,
     ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
@@ -89,4 +91,38 @@ export async function attachProfile(
 }
 export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
     return detachProfileDB(identifier)
+}
+
+/**
+ * Set NextID profile to profileDB
+ * */
+
+export async function attactNextIDTuProfileDB(item: ProfileInformationFromNextID) {
+    const personaRecord: PersonaRecord = {
+        createdAt: item.createdAt!,
+        updatedAt: item.updatedAt!,
+        identifier: item.linkedPersona!,
+        linkedProfiles: new Map(),
+        publicKey: undefined as any,
+        publicHexKey: item.linkedPersona?.publicKeyAsHex,
+        nickname: item.nickname,
+        hasLogout: false,
+        uninitialized: false,
+    }
+    const profileRecord: ProfileRecord = {
+        identifier: item.identifier,
+        nickname: item.nickname!,
+        linkedPersona: item.linkedPersona,
+        createdAt: item.createdAt!,
+        updatedAt: item.updatedAt!,
+    }
+    try {
+        await consistentPersonaDBWriteAccess(async (t) => {
+            await createPersonaDB(personaRecord, t)
+            await createProfileDB(profileRecord, t)
+            await attachProfileDB(item.identifier, item.linkedPersona!, { connectionConfirmState: 'confirmed' }, t)
+        })
+    } catch {
+        // already exist
+    }
 }

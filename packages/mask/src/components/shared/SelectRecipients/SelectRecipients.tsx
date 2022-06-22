@@ -60,8 +60,8 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         onSetSelected([...selected, item])
 
         if (!item || !item.fromNextID || !item.linkedPersona) return
-        await Services.Identity.updateProfileInfo(item.identifier, { avatarURL: item.avatar, nickname: item.nickname })
-        await Services.Identity.createNewRelation(item.identifier, item.linkedPersona)
+
+        Services.Identity.attactNextIDTuProfileDB(item)
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])
