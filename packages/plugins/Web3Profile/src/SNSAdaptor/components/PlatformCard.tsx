@@ -80,12 +80,21 @@ export function PlatformCard(props: PlatformCardProps) {
                         </div>
                     </div>
                 </div>
-                <div className={classes.flexItem} onClick={() => openImageSetting('NFTS')}>
+                <div className={classes.flexItem} onClick={() => openImageSetting('NFTs')}>
                     <div>
                         <Typography style={{ fontWeight: '700' }}>{t.NFTs()}</Typography>
                         <Typography>
-                            <span style={{ fontWeight: '700' }}>{0}</span> {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>{0}</span> {t.NFTs()}
+                            <span style={{ fontWeight: '700' }}>{account?.walletList?.NFTs?.length ?? 0}</span>{' '}
+                            {t.wallets()}{' '}
+                            <span style={{ fontWeight: '700' }}>
+                                {account?.walletList?.NFTs?.reduce(
+                                    (pre, cur) =>
+                                        pre +
+                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
+                                    0,
+                                ) ?? 0}
+                            </span>{' '}
+                            {t.NFTs()}
                         </Typography>
                     </div>
                     <ArrowForwardIosIcon className={classes.arrowIcon} />

@@ -46,6 +46,7 @@ export const getWalletList = (
                       {
                           Donations: string[]
                           Footprints: string[]
+                          NFTs: string[]
                       }
                   >
               >
@@ -53,6 +54,7 @@ export const getWalletList = (
         | undefined,
     footprints?: Collection[],
     donations?: Collection[],
+    NFTs?: Collection[],
 ) => {
     if (accounts?.length === 0) return
     let allLinkedProfiles: ProfileInformation[] = []
@@ -75,7 +77,13 @@ export const getWalletList = (
     return detailedAccounts?.map((key) => ({
         ...key,
         walletList: {
-            NFTs: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.NFTs),
+            NFTs: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.NFTs)?.map((wallet) => ({
+                ...wallet,
+                collections: addHiddenToArray(
+                    NFTs?.find((NFT) => NFT?.address === wallet?.address)?.collections,
+                    hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.NFTs,
+                ),
+            })),
             donations: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
                 ...wallet,
                 collections: addHiddenToArray(

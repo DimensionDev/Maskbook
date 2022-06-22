@@ -10,7 +10,7 @@ import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import { getDonationList, getFootprintList } from '../hooks/useCollectionList'
+import { getDonationList, getFootprintList, getNFTList } from '../hooks/useCollectionList'
 import { getWalletList } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 const useStyles = makeStyles()((theme) => ({
@@ -111,6 +111,11 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
 
+    const { value: NFTList } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getNFTList(wallets?.map((wallet) => wallet?.address))
+    }, [wallets?.length])
+
     const { value: donationList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getDonationList(wallets?.map((wallet) => wallet?.address))
@@ -126,9 +131,9 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         return getWalletHiddenList(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
 
-    const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList)
+    const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
 
-    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList })
+    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList })
     return (
         <>
             <InjectedDialog

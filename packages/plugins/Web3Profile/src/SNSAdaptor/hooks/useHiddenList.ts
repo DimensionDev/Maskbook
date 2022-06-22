@@ -15,6 +15,7 @@ export const getWalletHiddenList = async (publicKey: string) => {
                       {
                           Donations: string[]
                           Footprints: string[]
+                          NFTs: string[]
                       }
                   >
               >

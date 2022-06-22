@@ -33,7 +33,7 @@ export interface Patch {
     unListedCollections: Record<
         string,
         {
-            NFTS: string[]
+            NFTs: string[]
             Donations: string[]
             Footprints: string[]
         }
@@ -46,8 +46,8 @@ export interface Proof {
 }
 export interface CollectionTypes {
     platform: string
-    address: string
-    key: string // address + tokenId as unique key of NFT, address + imageURL as unique key of poap
+    address: string // take id as address if collection is a poap
+    key: string // address + tokenId as unique key of NFT, id as unique key of poap
     tokenId?: string
     iconURL?: string
     hidden?: boolean
@@ -85,4 +85,46 @@ export interface accountType extends BindingProof {
 
 export interface personaInfo {
     accountList: accountType[]
+}
+
+export interface AlchemyResponse_EVM {
+    ownedNfts: AlchemyNFT_EVM[]
+    pageKey?: string
+}
+
+export interface AlchemyNFT_EVM {
+    contract: {
+        address: string
+    }
+    id: {
+        tokenId: string
+        tokenMetadata: {
+            tokenType: 'ERC721' | 'ERC1155'
+        }
+    }
+    title: string
+    description: string
+    tokenUri: {
+        raw: string
+        gateway: string
+    }
+    media: [
+        {
+            raw: string
+            gateway: string
+        },
+    ]
+    metadata: {
+        name: string
+        description: string
+        image: string
+        image_url: string
+        external_url: string
+        animation_url: string
+        attributes: Array<{
+            value: string
+            trait_type: string
+        }>
+    }
+    timeLastUpdated: string
 }
