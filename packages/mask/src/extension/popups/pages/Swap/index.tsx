@@ -10,7 +10,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
 import { useChainId, useReverseAddress, useRecentTransactions, useWallet } from '@masknet/plugin-infra/web3'
-import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles()((theme) => {
