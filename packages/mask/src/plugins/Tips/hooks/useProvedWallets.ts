@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
 import { head } from 'lodash-unified'
@@ -24,7 +24,7 @@ export function useProvedWallets() {
         )
         if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
         const { proofs } = (await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex))!
-        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+        return proofs
     }, [currentPersonaIdentifier, personas])
 
     return res
