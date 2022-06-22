@@ -8,7 +8,7 @@ import {
 import { PluginTraderRPC } from '../../messages'
 import { SwapBancorRequest, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

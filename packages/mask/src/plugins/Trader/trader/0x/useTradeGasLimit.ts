@@ -1,6 +1,6 @@
 import type { TradeComputed, SwapQuoteResponse } from '../../types'
 import { useMemo } from 'react'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
 import { pick } from 'lodash-unified'
 import { useAsync } from 'react-use'

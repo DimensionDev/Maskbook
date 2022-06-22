@@ -2,7 +2,7 @@ import { useAvailableDataProviders } from '../../trending/useAvailableDataProvid
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
 import { TraderView } from './TraderView'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export interface SearchResultInspectorProps {}
 

@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 
