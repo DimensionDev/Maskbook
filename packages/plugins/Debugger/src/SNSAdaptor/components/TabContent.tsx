@@ -38,6 +38,7 @@ import {
     Typography,
 } from '@mui/material'
 import { FormEvent, useCallback } from 'react'
+import { usePickToken } from '@masknet/shared'
 
 export interface TabContentProps {
     identity?: SocialIdentity
@@ -196,6 +197,8 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
         },
         [connection],
     )
+
+    const onPickToken = usePickToken()
 
     return (
         <section className={classes.container}>
@@ -486,6 +489,36 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                             </FormControl>
                         </TableCell>
                     </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Token List
+                            </Typography>
+                        </TableCell>
+                        <Button
+                            size="small"
+                            onClick={async () => {
+                                const token = await onPickToken({})
+                                console.log(token)
+                            }}>
+                            Pick Token
+                        </Button>
+                    </TableRow>
+                    {/* <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Gas settings
+                            </Typography>
+                        </TableCell>
+                        <Button
+                                size="small"
+                                onClick={async () => {
+                                    const gasSettings = await onPickGasSettings({})
+                                    console.log(gasSettings)
+                                }}>
+                                Gas Settings
+                        </Button>
+                    </TableRow> */}
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
