@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { Response, AssetType, AlchemyResponse_EVM } from './types'
 
+// cspell:disable-next-line
 const Alchemy_API_Key = '3TJz6QYDHCj0ZhCdGvc5IC6EtMMMTKG1'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
