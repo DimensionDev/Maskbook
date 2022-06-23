@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         display: 'flex',
         margin: theme.spacing(1, 0),
+        padding: '0 16px',
     },
     line: {
         display: 'flex',

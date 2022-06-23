@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
+            padding: '0 16px',
         },
         line: {
             display: 'flex',
