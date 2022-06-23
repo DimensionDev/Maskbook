@@ -114,3 +114,10 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
     const detail = encodeEvent(event, args)
     apply(dispatchEvent, document, [new no_xray_CustomEvent(CustomEventId, { detail })])
 }
+
+const { includes } = String.prototype
+
+export function isTwitter() {
+    const url = new URL(window.location.href)
+    return apply(includes, url.origin, ['twitter.com'])
+}
