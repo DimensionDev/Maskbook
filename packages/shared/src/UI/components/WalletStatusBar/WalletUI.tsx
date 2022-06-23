@@ -123,7 +123,7 @@ export function WalletUI(props: WalletUIProps) {
                 <Box className={classes.name}>
                     <Typography className={classes.walletName}>
                         {providerType === ProviderType.MaskWallet
-                            ? name ?? domain ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 14, height: 14, marginLeft: 4 }} /> : null}

@@ -36,6 +36,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             flexDirection: 'column',
             alignItems: 'center',
             padding: 16,
+            overflowY: 'auto',
+            height: 420,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -449,24 +454,24 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 </Box>
 
-                <Box className={classes.section}>
-                    <Box className={classes.controller}>
-                        <Box className={classes.section}>
-                            <div className={classes.status}>
-                                <Typography className={classes.label} color="textSecondary" variant="body2">
-                                    {t('plugin_trader_slippage_tolerance')}{' '}
-                                </Typography>
-                                <Typography className={classes.slippageValue}>
-                                    {formatPercentage(toBips(currentSlippageSettings.value))}
-                                </Typography>
-                                <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
-                                    <TuneIcon fontSize="small" />
-                                </IconButton>
-                            </div>
+                <Box className={classes.stateBar}>
+                    <Box className={classes.section}>
+                        <Box className={classes.controller}>
+                            <Box className={classes.section}>
+                                <div className={classes.status}>
+                                    <Typography className={classes.label} color="textSecondary" variant="body2">
+                                        {t('plugin_trader_slippage_tolerance')}{' '}
+                                    </Typography>
+                                    <Typography className={classes.slippageValue}>
+                                        {formatPercentage(toBips(currentSlippageSettings.value))}
+                                    </Typography>
+                                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                                        <TuneIcon fontSize="small" />
+                                    </IconButton>
+                                </div>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-                <Box className={classes.stateBar}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}

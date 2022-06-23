@@ -20,6 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(0, 0, 1.5, 1.5),
         alignItems: 'center',
         lineHeight: '18px',
+        backdropFilter: 'blur(16px)',
     },
     button: {
         borderRadius: 8,
