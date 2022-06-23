@@ -3,7 +3,7 @@ import { context } from '../context'
 import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 import type { accountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
@@ -75,6 +75,9 @@ interface WalletSettingProp {
 const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
+
+        const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
+
         const chainId = useChainId()
         const [NFTs, setNFTs] = useState(
             wallets?.filter((x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1),
@@ -89,6 +92,14 @@ const WalletSetting = memo(
                 (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
             ),
         )
+
+        useEffect(() => {
+            if (confirmButtonDisabled) setConfirmButtonDisabled(false)
+        }, [NFTs?.length, footprints?.length, donations?.length])
+
+        useEffect(() => {
+            setConfirmButtonDisabled(true)
+        }, [open])
 
         const onConfirm = async () => {
             if (!currentPersona?.identifier.publicKeyAsHex) return
@@ -224,7 +235,7 @@ const WalletSetting = memo(
                         <Button className={classes.cancelButton} onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button className={classes.button} onClick={onConfirm}>
+                        <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
                             Confirm
                         </Button>
                     </div>

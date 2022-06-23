@@ -93,14 +93,17 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
     const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
+    const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
 
     useEffect(() => {
         setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
         setUnListedCollections(collectionList?.filter((collection) => collection?.hidden) || [])
+        setConfirmButtonDisabled(true)
     }, [collectionList, open])
 
     const unList = (key: string | undefined) => {
         if (!key) return
+        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
         const unListingCollection = listedCollections?.find((collection) => collection?.key === key)
         if (unListingCollection) {
             setUnListedCollections((pre) => [...pre, unListingCollection])
@@ -112,6 +115,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }
     const list = (key: string | undefined) => {
         if (!key) return
+        if (confirmButtonDisabled) setConfirmButtonDisabled(false)
         const listingCollection = unListedCollections?.find((collection) => collection?.key === key)
         if (listingCollection) {
             setListedCollections((pre) => [...pre, listingCollection])
@@ -190,7 +194,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     <Button className={classes.cancelButton} onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button className={classes.button} onClick={onConfirm}>
+                    <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
                         Confirm
                     </Button>
                 </div>
