@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@7.1.1",
+  "packageManager": "pnpm@7.4.0-0",
   "engines": {
     "node": ">=17.0.0",
     "pnpm": ">=7.0.0",
@@ -20,7 +20,7 @@
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
-    "postinstall": "patch-package && gulp fix-lockfile",
+    "postinstall": "gulp fix-lockfile",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:debug": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
@@ -60,7 +60,6 @@
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^28.1.1",
     "@magic-works/i18n-codegen": "^0.2.0",
     "@masknet/cli": "workspace:*",
