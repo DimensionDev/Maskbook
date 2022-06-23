@@ -1032,7 +1032,7 @@ importers:
       '@masknet/typed-message': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      '@scamsniffer/detector': 0.0.9
+      '@scamsniffer/detector': 0.0.10
       react-use: ^17.3.2
       ts-results: ^3.3.0
       urlcat: 2.0.4
@@ -1045,7 +1045,7 @@ importers:
       '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      '@scamsniffer/detector': 0.0.9
+      '@scamsniffer/detector': 0.0.10
       react-use: 17.3.2
       ts-results: 3.3.0
       urlcat: 2.0.4
@@ -4579,6 +4579,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.2-20220516081411-2649814_eslint@8.17.0:
     resolution: {integrity: sha512-cEEKTD1ku7ScTuifqrZHAXpc8a1hwew12MLee/jvFEdOkoQSDxYiqAh7V35wQLGappUUyqJiLc6vgk6qlpzQeA==, tarball: download/@dimensiondev/eslint-plugin/0.0.2-20220516081411-2649814/f8750f35c321553cee686b564cea6d4c5dffe62eaab4af3ab64a6392d8e4743b}
+    engines: {node: '>= 16'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -6816,8 +6817,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@scamsniffer/detector/0.0.9:
-    resolution: {integrity: sha512-j6OBssDPcW08c3FqtZNllG0JO9r8hCgeCosEOsPiS4iVWo5Ys6uGnJhhMxPzqMujsncUnj8HLt7EbHxMlgh+Uw==}
+  /@scamsniffer/detector/0.0.10:
+    resolution: {integrity: sha512-/ReTaF3LpW5Tu3S8xwhKf8vbiF6EWpsMrx7+95p5XzdwdCxeug5KQagTIWmeZSAp1xZtLDdu0vZwSS6MIvwXeQ==}
     engines: {node: '>=16.6'}
     dependencies:
       '@types/isomorphic-fetch': 0.0.36
@@ -18808,7 +18809,7 @@ packages:
       has-tostringtag: 1.0.0
 
   /is-arrayish/0.2.1:
-    resolution: {integrity: sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=}
+    resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
 
   /is-arrayish/0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
@@ -19195,7 +19196,7 @@ packages:
       has-tostringtag: 1.0.0
 
   /is-typedarray/1.0.0:
-    resolution: {integrity: sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=}
+    resolution: {integrity: sha512-cyA56iCMHAh5CdzjJIa4aohJyeO1YbwLi3Jc35MmRU6poroFjIGZzUzupGiRPOjgHg9TLu43xbpwXk523fMxKA==}
 
   /is-unc-path/1.0.0:
     resolution: {integrity: sha512-mrGpVd0fs7WWLfVsStvgF6iEJnbjDFZh9/emhRDcGWTduTfNHd9CHeUwH3gYIjdbwo4On6hunkztwOaAw0yllQ==}
@@ -24233,7 +24234,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /repeat-string/1.6.1:
-    resolution: {integrity: sha1-jcrkcOHIirwtYA//Sndihtp15jc=}
+    resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
     engines: {node: '>=0.10'}
 
   /repeating/2.0.1:
@@ -26460,7 +26461,7 @@ packages:
     dev: false
 
   /tr46/0.0.3:
-    resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
+    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
   /tr46/3.0.0:
     resolution: {integrity: sha512-l7FvfAHlcmulp8kr+flpQZmVwtu7nfRV7NZujtN0OqES8EL4O4e0qqzL0DC5gAvx/ZC/9lk6rhcUwYvkBnBnYA==}
@@ -28025,7 +28026,7 @@ packages:
     dev: false
 
   /webidl-conversions/3.0.1:
-    resolution: {integrity: sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=}
+    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
   /webidl-conversions/7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -28526,7 +28527,7 @@ packages:
     dev: false
 
   /whatwg-url/5.0.0:
-    resolution: {integrity: sha1-lmRU6HZUYuN2RNNib2dCzotwll0=}
+    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
