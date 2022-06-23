@@ -46,6 +46,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 nextIdRequired: true,
                 category: 'dapp',
                 recommendFeature,
+                description: {
+                    i18nKey: '__plugin_description',
+                    fallback: 'Choose and showcase your Web3 footprints on Twitter.',
+                },
             }
         })(),
     ],

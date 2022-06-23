@@ -21,7 +21,6 @@ import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { WalletMessages } from '@masknet/plugin-wallet'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -140,7 +139,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                         throw new TypeError("current plugin doesn't support silent sign function")
                     return Services.Identity.generateSignResult
                 },
-                dialogUpdateMsg: WalletMessages.events.selectProviderDialogUpdated,
                 getPersonaAvatar: Services.Identity.getPersonaAvatar,
             }
         }),

@@ -2,7 +2,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 // import { Copy } from 'react-feather'
 import { WalletAssetsCard } from './WalletAssets'
-import type { PersonaInformation } from '@masknet/shared-base'
+import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
@@ -11,8 +11,8 @@ import { PersonaAction } from './PersonaAction'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { accountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
-import AddWalletDialog from './AddWallet'
 import { Empty } from './Empty'
+import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -102,9 +102,11 @@ export function ImageManagement(props: ImageManagementProps) {
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
-    const [addWalletOpen, setAddWalletOpen] = useState(false)
     const addresses = getAddressesByTitle(title, accountList!)
 
+    const openPopupsWindow = async () => {
+        await context.openPopupWindow(PopupRoutes.ConnectWallet)
+    }
     return (
         <InjectedDialog
             classes={{ paper: classes.root, dialogContent: classes.content, dialogActions: classes.actions }}
@@ -115,7 +117,7 @@ export function ImageManagement(props: ImageManagementProps) {
                 <Button
                     size="small"
                     onClick={() =>
-                        allWallets && allWallets?.length > 0 ? setWalletSettingOpen(true) : setAddWalletOpen(true)
+                        allWallets && allWallets?.length > 0 ? setWalletSettingOpen(true) : openPopupsWindow()
                     }
                     className={classes.titleTailButton}>
                     {allWallets && allWallets?.length > 0 ? 'Settings' : 'Add wallet'}
@@ -158,14 +160,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     onClose={() => setWalletSettingOpen(false)}
                     currentPersona={currentPersona}
                     retryData={getWalletHiddenRetry}
-                />
-                <AddWalletDialog
-                    open={addWalletOpen}
-                    onCancel={() => setAddWalletOpen(false)}
-                    currentPersona={currentPersona!}
-                    bindings={allWallets}
-                    getBindingsRetry={getBindingsRetry}
-                />
+                />{' '}
             </DialogContent>
             <DialogActions>
                 <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />

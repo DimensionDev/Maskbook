@@ -25,7 +25,6 @@ import type {
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -353,7 +352,6 @@ export namespace Plugin.SNSAdaptor {
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersona?: Subscription<PersonaInformation[]>
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
-        dialogUpdateMsg: UnboundedRegistry<SelectProviderDialogEvent>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
     }
 
