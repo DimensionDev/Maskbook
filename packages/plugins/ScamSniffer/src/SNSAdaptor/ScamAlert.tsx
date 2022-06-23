@@ -5,7 +5,6 @@ import LinkIcon from '@mui/icons-material/Link'
 import Checkbox from '@mui/material/Checkbox'
 import DescriptionIcon from '@mui/icons-material/Description'
 import type { ScamResult } from '@scamsniffer/detector'
-import CrisisAlertIcon from '@mui/icons-material/CrisisAlert'
 import { PluginScamRPC } from '../messages'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
@@ -22,6 +21,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
     },
     icon: {
+        color: MaskColorVar.redMain,
+        width: '24px',
+        height: '24px',
         verticalAlign: '-6px',
         marginRight: '12px',
     },
@@ -40,6 +42,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     report: {
         '& span': { fontSize: 13, color: '#888', lineHeight: 1.75 },
+    },
+    listIcon: {
+        width: '24px',
+        height: '24px',
     },
     desc: {
         margin: '15px 0 7px',
@@ -96,19 +102,18 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         <div className={classes.root}>
             <div className={classes.scam}>
                 <Typography variant="body2" className={classes.title}>
-                    <CrisisAlertIcon className={classes.icon} />
                     {t.alertTitle()}
                 </Typography>
                 <List className={classes.list}>
                     <ListItemButton>
-                        <ListItemIcon>
+                        <ListItemIcon className={classes.listIcon}>
                             <DescriptionIcon className={classes.highlight} />
                         </ListItemIcon>
                         <ListItemText className={classes.highlight} primary={result.name} />
                     </ListItemButton>
                     {result.twitterUsername ? (
                         <ListItemButton onClick={() => openTwitter()}>
-                            <ListItemIcon>
+                            <ListItemIcon className={classes.listIcon}>
                                 <TwitterIcon className={classes.highlight} />
                             </ListItemIcon>
                             <ListItemText className={classes.highlight} primary={result.twitterUsername} />
@@ -116,7 +121,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
                     ) : null}
                     {result.externalUrl ? (
                         <ListItemButton onClick={() => openSite()}>
-                            <ListItemIcon>
+                            <ListItemIcon className={classes.listIcon}>
                                 <LinkIcon className={classes.highlight} />
                             </ListItemIcon>
                             <ListItemText className={classes.highlight} primary={result.externalUrl} />
