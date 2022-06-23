@@ -5,6 +5,7 @@ import {
     createInjectHooksRenderer,
     PluginId,
     useActivatedPluginsSNSAdaptor,
+    useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
@@ -81,14 +82,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             setAddressList([...socialAddressList, ...addresses])
         }
     }, [socialAddressList, wallets?.length, isOwn])
-    console.log({ addressList, currentConnectedPersona, personaList, socialAddressList, identity })
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
     const displayPlugins = useMemo(() => {
         return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
         // .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
     }, [identity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
+    console.log({
+        addressList,
+        currentConnectedPersona,
+        personaList,
+        socialAddressList,
+        identity,
+        activatedPlugins,
+        isWeb3ProfileDisable,
+    })
 
     const tabs = displayPlugins
         .sort((a, z) => {
@@ -118,7 +128,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
     const componentTabId =
-        isTwitter(activatedSocialNetworkUI) && addressList?.length === 0 && isOwn
+        isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
             : selectedTabId
 

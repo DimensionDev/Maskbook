@@ -1,4 +1,5 @@
-import { NewLinkOutIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import { NewLinkOutIcon, PluginIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import type { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -125,6 +126,8 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         return NextIDProof.queryIsBound(publicKeyAsHex, platform, visitingPersonaIdentifier.identifier.userId)
     }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+
     const {
         value: bindings,
         loading: loadingBindings,
@@ -141,8 +144,23 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
+    const onEnablePlugin = async () => {
+        await Services.Settings.setPluginMinimalModeEnabled(PluginId.Web3Profile, false)
+    }
+
     const getButton = () => {
-        if (personaActionButton) {
+        if (isWeb3ProfileDisable) {
+            return (
+                <Button
+                    style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
+                    variant="contained"
+                    onClick={onEnablePlugin}>
+                    <PluginIcon fontSize="small" />
+                    <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
+                </Button>
+            )
+        }
+        if (personaActionButton && isOwn) {
             return personaActionButton
         }
         if (!isAccountVerified) {
@@ -164,14 +182,6 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                 <WalletUnderTabsIcon />
                 {t.verify_wallet_button()}
             </Button>
-        )
-    }
-
-    if (personaActionButton && isOwn) {
-        return (
-            <Stack justifyContent="center" direction="row" mt="24px">
-                {personaActionButton}
-            </Stack>
         )
     }
 
