@@ -10,6 +10,7 @@ import {
     getAaveConstants,
     ZERO_ADDRESS,
     networkResolver,
+    NetworkType,
 } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
@@ -50,7 +51,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => networkResolver.networkChainId(network))
+        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
@@ -112,49 +113,60 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             setSelectedProtocol(null)
                         }
                     }}>
-                    <DialogContent>
+                    <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
                         {selectedProtocol ? (
-                            <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
+                            <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                                <SavingsForm
+                                    tab={tab}
+                                    chainId={chainId}
+                                    protocol={selectedProtocol}
+                                    onClose={onClose}
+                                />
+                            </DialogContent>
                         ) : (
                             <>
-                                <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab
-                                        chainId={chainId}
-                                        setChainId={setChainId}
-                                        classes={classes}
-                                        chains={chains.filter(Boolean) as ChainId[]}
-                                    />
-                                </div>
-                                <div className={classes.tableTabWrapper}>
-                                    <FolderTabs>
-                                        <FolderTabPanel label="Deposit">
-                                            <SavingsTable
-                                                chainId={chainId}
-                                                tab={TabType.Deposit}
-                                                protocols={protocols}
-                                                setTab={setTab}
-                                                setSelectedProtocol={setSelectedProtocol}
-                                            />
-                                        </FolderTabPanel>
-                                        <FolderTabPanel label="Withdraw">
-                                            <SavingsTable
-                                                chainId={chainId}
-                                                tab={TabType.Withdraw}
-                                                protocols={protocols}
-                                                setTab={setTab}
-                                                setSelectedProtocol={setSelectedProtocol}
-                                            />
-                                        </FolderTabPanel>
-                                    </FolderTabs>
-                                </div>
+                                <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>
+                                    <div className={classes.abstractTabWrapper}>
+                                        <NetworkTab
+                                            chainId={chainId}
+                                            setChainId={setChainId}
+                                            classes={classes}
+                                            chains={chains.filter(Boolean) as ChainId[]}
+                                        />
+                                    </div>
+                                    <div className={classes.tableTabWrapper}>
+                                        <FolderTabs>
+                                            <FolderTabPanel label="Deposit">
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Deposit}
+                                                    protocols={protocols}
+                                                    setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                />
+                                            </FolderTabPanel>
+                                            <FolderTabPanel label="Withdraw">
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Withdraw}
+                                                    protocols={protocols}
+                                                    setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                />
+                                            </FolderTabPanel>
+                                        </FolderTabs>
+                                    </div>
+                                </DialogContent>
+                                <DialogActions style={{ padding: 0 }}>
+                                    <ChainBoundary
+                                        expectedChainId={chainId}
+                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
+                                        <PluginWalletStatusBar />
+                                    </ChainBoundary>
+                                </DialogActions>
                             </>
                         )}
                     </DialogContent>
-                    <DialogActions style={{ padding: 0 }}>
-                        <ChainBoundary expectedChainId={chainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                            <PluginWalletStatusBar />
-                        </ChainBoundary>
-                    </DialogActions>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
         </TargetChainIdContext.Provider>

@@ -27,10 +27,9 @@ import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon, useOp
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
@@ -229,21 +228,15 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                             amount={approvalData?.approveAmount.toFixed() ?? ''}
                             token={approvalData?.approveToken}
                             spender={approvalData?.approveAddress}>
-                            <ActionButtonPromise
-                                fullWidth
-                                color="primary"
-                                size="large"
-                                variant="contained"
-                                init={
-                                    validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
-                                }
-                                waiting={t('plugin_savings_process_deposit')}
-                                failed={t('failed')}
-                                failedOnClick="use executor"
-                                complete={t('done')}
-                                disabled={validationMessage !== '' && !needsSwap}
-                                noUpdateEffect
-                                executor={executor}
+                            <PluginWalletStatusBar
+                                actionProps={{
+                                    disabled: validationMessage !== '' && !needsSwap,
+                                    title:
+                                        validationMessage ||
+                                        t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol,
+                                    waiting: t('plugin_savings_process_deposit'),
+                                    action: async () => executor(),
+                                }}
                             />
                         </EthereumERC20TokenApprovedBoundary>
                     </WalletConnectedBoundary>
@@ -264,23 +257,15 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                 <WalletConnectedBoundary
                     ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    <ActionButtonPromise
-                        fullWidth
-                        color="primary"
-                        size="large"
-                        variant="contained"
-                        init={
-                            needsSwap
+                    <PluginWalletStatusBar
+                        actionProps={{
+                            title: needsSwap
                                 ? 'Swap ' + protocol.bareToken.symbol
-                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol
-                        }
-                        waiting={t('plugin_savings_process_withdraw')}
-                        failed={t('failed')}
-                        failedOnClick="use executor"
-                        complete={t('done')}
-                        disabled={validationMessage !== ''}
-                        noUpdateEffect
-                        executor={executor}
+                                : validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol,
+                            waiting: t('plugin_savings_process_withdraw'),
+                            disabled: validationMessage !== '',
+                            action: async () => executor(),
+                        }}
                     />
                 </WalletConnectedBoundary>
             </ChainBoundary>
@@ -289,47 +274,49 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     return (
         <div className={classes.containerWrap}>
-            {needsSwap ? null : (
-                <>
-                    <div className={classes.inputWrap}>
-                        <TokenAmountPanel
-                            amount={inputAmount}
-                            maxAmount={balanceAsBN.minus(estimatedGas).toString()}
-                            balance={balanceAsBN.toString()}
-                            label={t('plugin_savings_amount')}
-                            token={protocol.bareToken}
-                            onAmountChange={setInputAmount}
-                            InputProps={{ classes: { root: classes.inputTextField } }}
-                            MaxChipProps={{ classes: { root: classes.maxChip } }}
-                            SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
-                        />
-                    </div>
+            <div style={{ padding: '0 15px' }}>
+                {needsSwap ? null : (
+                    <>
+                        <div className={classes.inputWrap}>
+                            <TokenAmountPanel
+                                amount={inputAmount}
+                                maxAmount={balanceAsBN.minus(estimatedGas).toString()}
+                                balance={balanceAsBN.toString()}
+                                label={t('plugin_savings_amount')}
+                                token={protocol.bareToken}
+                                onAmountChange={setInputAmount}
+                                InputProps={{ classes: { root: classes.inputTextField } }}
+                                MaxChipProps={{ classes: { root: classes.maxChip } }}
+                                SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
+                            />
+                        </div>
 
-                    {loading ? (
-                        <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                            <LoadingAnimation width={16} height={16} />
-                        </Typography>
-                    ) : (
-                        <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                            &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                            {estimatedGas > 0 ? (
-                                <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
-                            ) : (
-                                <span />
-                            )}
-                        </Typography>
-                    )}
-                </>
-            )}
+                        {loading ? (
+                            <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                                <LoadingAnimation width={16} height={16} />
+                            </Typography>
+                        ) : (
+                            <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                                &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
+                                {estimatedGas > 0 ? (
+                                    <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
+                                ) : (
+                                    <span />
+                                )}
+                            </Typography>
+                        )}
+                    </>
+                )}
 
-            <div className={classes.infoRow}>
-                <Typography variant="body2" className={classes.infoRowLeft}>
-                    <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
-                    {protocol.bareToken.name} {t('plugin_savings_apr')}%
-                </Typography>
-                <Typography variant="body2" className={classes.infoRowRight}>
-                    {protocol.apr}%
-                </Typography>
+                <div className={classes.infoRow}>
+                    <Typography variant="body2" className={classes.infoRowLeft}>
+                        <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                        {protocol.bareToken.name} {t('plugin_savings_apr')}%
+                    </Typography>
+                    <Typography variant="body2" className={classes.infoRowRight}>
+                        {protocol.apr}%
+                    </Typography>
+                </div>
             </div>
             {buttonDom}
         </div>

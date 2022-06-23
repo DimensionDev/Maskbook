@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
-        padding: '0 15px',
+        padding: 0,
         fontFamily: theme.typography.fontFamily,
     },
     inputWrap: {
