@@ -29,6 +29,7 @@ import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
+import { PriceImpactDialog } from './PriceImpactDialog'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -235,7 +236,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         setIsSwapping(isTrading)
     }, [isTrading])
+
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+    const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
@@ -378,18 +381,27 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 onSwitch={onSwitchToken}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
-                <ConfirmDialog
-                    account={account}
-                    wallet={wallet}
-                    open={openConfirmDialog}
-                    trade={focusedTrade.value}
-                    gas={focusedTrade.gas.value}
-                    gasPrice={gasPrice}
-                    inputToken={inputToken}
-                    outputToken={outputToken}
-                    onConfirm={onConfirmDialogConfirm}
-                    onClose={onConfirmDialogClose}
-                />
+                <>
+                    <ConfirmDialog
+                        account={account}
+                        wallet={wallet}
+                        open={openConfirmDialog}
+                        trade={focusedTrade.value}
+                        gas={focusedTrade.gas.value}
+                        gasPrice={gasPrice}
+                        inputToken={inputToken}
+                        outputToken={outputToken}
+                        onConfirm={onConfirmDialogConfirm}
+                        onClose={onConfirmDialogClose}
+                        openPriceImpact={() => setPriceImpactDialogOpen(true)}
+                    />
+                    <PriceImpactDialog
+                        open={priceImpactDialogOpen}
+                        onClose={() => setPriceImpactDialogOpen(false)}
+                        trade={focusedTrade.value}
+                        onConfirm={() => {}}
+                    />
+                </>
             ) : null}
             <SettingsDialog />
         </div>

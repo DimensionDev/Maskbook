@@ -131,6 +131,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
                 fontSize: 14,
                 marginRight: 12,
                 fontWeight: 700,
+                color: !isDashboard ? theme.palette.maskColor?.main : undefined,
             },
             ['&:hover']: {
                 backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
@@ -385,7 +386,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 />
                 <Box className={classes.reverseWrapper}>
                     <Box className={classes.reverse}>
-                        <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
+                        <ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
                     </Box>
                 </Box>
                 <Box className={classes.section} marginBottom={2.5}>

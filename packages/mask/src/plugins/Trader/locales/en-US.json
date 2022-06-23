@@ -3,5 +3,10 @@
     "account_promote$default": "",
     "account_promote$twitter": "Follow @$t(mask:twitter_account) to swap cryptocurrencies on Twitter",
     "account_promote$facebook": "Follow @$t(mask:facebook_account) to swap cryptocurrencies on Facebook",
-    "share_text": "I just swapped {{input_amount}} {{input_symbol}} for {{output_amount}} {{output_symbol}}. {{account_promote}}\n$t(mask:hash_tag)"
+    "share_text": "I just swapped {{input_amount}} {{input_symbol}} for {{output_amount}} {{output_symbol}}. {{account_promote}}\n$t(mask:hash_tag)",
+    "impact_warning": "Price Impact Warning",
+    "risk_warning": "Risk Warning",
+    "risk_warning_description": "The amount you want to trade will cause the price to drop by <span>{{impact}}</span> comparing to the current market price. As a result, you might lose <span>{{lostSymbol}}</span>  or <span>{{lostValue}}</span>.",
+    "adjust_order": "Adjust order",
+    "make_trade_anyway": "Make Trade Anyway"
 }

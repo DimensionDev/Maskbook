@@ -81,6 +81,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             fontWeight: 700,
             marginRight: 12,
             lineHeight: '18px',
+            color: !isDashboard ? theme.palette.maskColor?.main : undefined,
         },
         ['&:hover']: {
             backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
