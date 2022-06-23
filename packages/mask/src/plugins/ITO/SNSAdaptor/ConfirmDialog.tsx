@@ -130,7 +130,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     return (
         <>
-            <Card elevation={0}>
+            <Card elevation={0} style={{ padding: '0 16px' }}>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
                         <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
