@@ -9,14 +9,13 @@ import {
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { ImageIcon, WalletIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, parseColor } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
-import Color from 'color'
 import { useState } from 'react'
+import { LinkOutIcon } from '@masknet/icons'
 import { DownIcon } from '../../assets/Down'
-import { LinkIcon } from '../../assets/Link'
 import { LockWalletIcon } from '../../assets/Lock'
 import { VerifyIcon } from '../../assets/verify'
 
@@ -31,16 +30,19 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
         alignItems: 'center',
     },
     domain: {
-        marginLeft: 9.53,
+        marginLeft: 4,
     },
     link: {
         lineHeight: 0,
-        marginLeft: 4,
+        marginLeft: 2,
     },
     linkIcon: {
         width: 14,
         height: 14,
+        fontSize: 14,
         fill: theme.palette.maskColor?.second,
+        cursor: 'pointer',
+        marginLeft: 4,
     },
     name: {
         display: 'flex',
@@ -49,18 +51,17 @@ const useStyles = makeStyles<{ filterColor: string }>()((theme, props) => ({
     pending: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 177, 0, 0.1)',
+        backgroundColor: parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
         padding: 2,
         marginLeft: 4,
     },
-    icon: {
-        filter: `drop-shadow(0px 6px 12px ${new Color(props.filterColor).alpha(0.4).toString()})`,
-    },
     walletName: {
-        color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#0F1419',
+        color: theme.palette.maskColor?.main,
+        fontWeight: 700,
+        fontSize: 14,
     },
     walletAddress: {
-        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+        color: theme.palette.maskColor?.second,
     },
 }))
 
@@ -120,7 +121,7 @@ export function WalletUI(props: WalletUIProps) {
             )}
             <Box className={classes.domain}>
                 <Box className={classes.name}>
-                    <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
+                    <Typography className={classes.walletName}>
                         {providerType === ProviderType.MaskWallet
                             ? name ?? domain ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
@@ -138,7 +139,7 @@ export function WalletUI(props: WalletUIProps) {
                         target="_blank"
                         title="View on Explorer"
                         rel="noopener noreferrer">
-                        <LinkIcon className={classes.linkIcon} />
+                        <LinkOutIcon className={classes.linkIcon} />
                     </Link>
                     {lock ? <LockWalletIcon className={classes.linkIcon} /> : null}
                     {pending ? <Box className={classes.pending}>{pending}</Box> : null}
