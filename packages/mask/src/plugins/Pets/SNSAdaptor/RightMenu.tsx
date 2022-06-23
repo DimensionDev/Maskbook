@@ -115,11 +115,8 @@ function RightMenu(props: Props) {
     const [isLeft, setIsLeft] = useState(false)
     const [isTop, setIsTop] = useState(false)
 
-    const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
-    const { setDialog: openGameDialog } = useRemoteControlledDialog(
-        PluginGameMessages.events.gameDialogUpdated,
-        () => {},
-    )
+    const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    const { setDialog: openGameDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
 
     function addEvents() {
         document.body.addEventListener('click', props.onClose, false)

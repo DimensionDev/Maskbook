@@ -2,11 +2,11 @@ import { mediaViewerUrl } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { ImageType } from './types'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
-export const NFTS_BLOCK_ADDRESS = '0x8ed6DC7228Ec0A6aEFb4F4d55fB7f8b3A4F5D384'
 export const DEFAULT_SET_WORD =
     'Click the wallet icon on the left side of the page and set up your Non-Fungible Friend in "NFTs" tab!'
 export const DEFAULT_PUNK_MASK_WORD =
@@ -27,7 +27,7 @@ export const initCollection = {
     name: '',
     contract: '',
     icon: '',
-    tokens: [],
+    tokens: EMPTY_LIST,
     chainId: undefined,
 }
 

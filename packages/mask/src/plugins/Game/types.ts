@@ -1,3 +1,5 @@
+import type { Constant } from '@masknet/web3-shared-base'
+
 export interface GameDialogEvent {
     open: boolean
     tokenProps?: GameNFT
@@ -6,7 +8,7 @@ export interface GameDialogEvent {
 export interface GameRSSNode {
     address: string
     signature: string
-    games: Record<string, any>
+    games: Record<string, Constant>
 }
 
 export interface GameInfo {

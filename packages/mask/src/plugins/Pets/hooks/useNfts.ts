@@ -21,7 +21,7 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                         name: NFT.metadata?.name ?? '',
                         contract: NFT.address,
                         icon: NFT.metadata?.imageURL ?? '',
-                        tokens: [],
+                        tokens: EMPTY_LIST,
                         chainId: NFT.metadata?.chainId,
                     }
                     tempNFTs.push(sameNFT)

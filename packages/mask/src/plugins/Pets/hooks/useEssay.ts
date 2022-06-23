@@ -14,7 +14,7 @@ export function useEssay(user: User, refresh?: number) {
         if (!user.address) return null
         const metaData = await PluginPetRPC.getCustomEssayFromRSS(user.address, connection)
         return metaData?.userId === user.userId ? metaData : null
-    }, [user, refresh]).value
+    }, [user, refresh, connection]).value
 }
 
 export function useDefaultEssay(user: User) {

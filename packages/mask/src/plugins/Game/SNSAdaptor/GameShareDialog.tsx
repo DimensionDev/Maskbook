@@ -38,7 +38,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
     const onShareClick = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)
         onClose()
-    }, [onClose])
+    }, [shareText, onClose])
 
     return (
         <Box className={classes.root}>
