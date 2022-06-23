@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
+            padding: theme.spacing(2),
         },
         receiverRow: {
             display: 'flex',
@@ -196,36 +197,24 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                     <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
                 )}
             </div>
-            {account ? (
-                <ChainBoundary
-                    expectedPluginID={pluginId}
-                    expectedChainId={chainId}
-                    noSwitchNetworkTip
-                    ActionButtonPromiseProps={{
-                        fullWidth: true,
-                        classes: { root: classes.button, disabled: classes.disabledButton },
-                        color: 'primary',
-                    }}>
-                    <ActionButton
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}
-                        fullWidth
-                        disabled={!isValid || isSending}
-                        onClick={send}>
-                        {buttonLabel}
-                    </ActionButton>
-                </ChainBoundary>
-            ) : (
-                <ActionButton
-                    variant="contained"
-                    size="large"
-                    className={classes.actionButton}
-                    fullWidth
-                    onClick={openSelectProviderDialog}>
-                    {t.tip_connect_wallet()}
-                </ActionButton>
-            )}
+
+            <ChainBoundary
+                expectedPluginID={pluginId}
+                expectedChainId={chainId}
+                noSwitchNetworkTip
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                    classes: { root: classes.button, disabled: classes.disabledButton },
+                    color: 'primary',
+                }}>
+                <PluginWalletStatusBar
+                    actionProps={{
+                        title: buttonLabel,
+                        disabled: !isValid || isSending,
+                        action: async () => send(),
+                    }}
+                />
+            </ChainBoundary>
         </Box>
     )
 })

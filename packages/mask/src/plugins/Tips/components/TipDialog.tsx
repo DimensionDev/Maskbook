@@ -44,10 +44,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flexBasis: '100%',
-        paddingTop: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        padding: 0,
     },
     abstractTabWrapper: {
         width: '100%',
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     tipForm: {
-        paddingTop: theme.spacing(1),
+        padding: 0,
         flexGrow: 1,
         overflow: 'auto',
     },
@@ -290,8 +290,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 open={open}
                 onClose={onClose}
                 classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialog }}
-                title={t.tips()}
-                titleTail={walletChip}>
+                title={t.tips()}>
                 <DialogContent className={classes.content}>
                     {chainIdList.length ? (
                         <div className={classes.abstractTabWrapper}>
