@@ -83,9 +83,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
     const [showHistory, setShowHistory] = useState(false)
-    const onShowHistory = () => {
-        setShowHistory((history) => !history)
-    }
 
     const onClose = useCallback(() => {
         if (showHistory) {
@@ -185,7 +182,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 open={props.open}
                 title={title}
                 titleTail={
-                    step === CreateRedPacketPageStep.NewRedPacketPage ? <HistoryIcon onClick={onShowHistory} /> : null
+                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        <HistoryIcon onClick={() => setShowHistory((history) => !history)} />
+                    ) : null
                 }
                 titleTabs={
                     step === CreateRedPacketPageStep.NewRedPacketPage ? (

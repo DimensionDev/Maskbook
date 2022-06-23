@@ -1,9 +1,7 @@
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import type { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
-import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
 import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
@@ -92,33 +90,6 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
         [senderName, onClose],
     )
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: (
-                    <div className={classes.labelWrapper}>
-                        <img className={classes.img} src={IconURLs.erc20Token} />
-                        <span>{t.erc20_tab_title()}</span>
-                    </div>
-                ),
-                children: <RedPacketHistoryList onSelect={onSelect} />,
-                sx: { p: 0 },
-            },
-            {
-                label: (
-                    <div className={classes.labelWrapper}>
-                        <img className={classes.img} src={IconURLs.erc721Token} />
-                        <span>{t.erc721_tab_title()}</span>
-                    </div>
-                ),
-                children: <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />,
-                sx: { p: 0 },
-                disabled: ![ChainId.Mainnet, ChainId.Matic].includes(chainId),
-            },
-        ],
-        state,
-        classes,
-    }
     return (
         <div className={classes.tabWrapper}>
             <TabPanel value={tabs.tokens} style={{ padding: 0 }}>

@@ -235,15 +235,12 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
     const [showHistory, setShowHistory] = useState(false)
-    const onShowHistory = () => {
-        setShowHistory((history) => !history)
-    }
 
     return (
         <InjectedDialog
             titleTail={
                 step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
-                    <HistoryIcon onClick={onShowHistory} className={classes.tail} />
+                    <HistoryIcon onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
                 ) : null
             }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
