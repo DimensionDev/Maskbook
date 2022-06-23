@@ -1,14 +1,15 @@
 import { ElementAnchor, RetryHint, useImageChecker } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Skeleton, Stack } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Box, List, ListItem, Skeleton, Stack } from '@mui/material'
+import { range } from 'lodash-unified'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
 import type { AllChainsNonFungibleToken } from '../types'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     root: {
-        paddingTop: 60,
+        paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
     },
 
     button: {
@@ -19,30 +20,30 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         color: '#1D9BF0',
     },
-    gallery: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        overflowY: 'auto',
+    list: {
+        gridGap: 13,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        padding: '0 16px',
+    },
 
-        '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
-        },
+    nftItem: {
+        position: 'relative',
+        cursor: 'pointer',
+        display: 'flex',
+        overflow: 'hidden',
+        padding: 0,
+        flexDirection: 'column',
+        borderRadius: 12,
+        userSelect: 'none',
+        justifyContent: 'center',
+        lineHeight: 0,
     },
     skeleton: {
-        width: 97,
-        height: 97,
+        width: 100,
+        height: 100,
         objectFit: 'cover',
-        borderRadius: '100%',
         boxSizing: 'border-box',
-        padding: 4,
     },
     skeletonBox: {
         marginLeft: 'auto',
@@ -62,8 +63,8 @@ interface NFTListPageProps {
 }
 
 export function NFTListPage(props: NFTListPageProps) {
-    const { classes } = useStyles()
     const { onChange, tokenInfo, tokens, children, pluginId, nextPage, loadError, loadFinish } = props
+    const { classes } = useStyles({ networkPluginID: pluginId })
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
 
     const _onChange = (token: AllChainsNonFungibleToken) => {
@@ -72,12 +73,25 @@ export function NFTListPage(props: NFTListPageProps) {
         onChange?.(token)
     }
 
-    return (
-        <>
+    if (!loadError && !loadFinish && !tokens.length)
+        return (
             <Box className={classes.root}>
-                <Box className={classes.gallery}>
-                    {children ??
-                        tokens.map((token: AllChainsNonFungibleToken, i) => (
+                <List className={classes.list}>
+                    {range(8).map((i) => (
+                        <ListItem key={i} className={classes.nftItem}>
+                            <Skeleton key={i} animation="wave" variant="rectangular" className={classes.skeleton} />
+                        </ListItem>
+                    ))}
+                </List>
+            </Box>
+        )
+    if (children) return <>{children}</>
+    return (
+        <Box className={classes.root}>
+            <List className={classes.list}>
+                {children ??
+                    tokens.map((token: AllChainsNonFungibleToken, i) => (
+                        <ListItem key={i} className={classes.nftItem}>
                             <NFTImageCollectibleAvatar
                                 pluginId={pluginId}
                                 key={i}
@@ -85,21 +99,21 @@ export function NFTListPage(props: NFTListPageProps) {
                                 selectedToken={selectedToken}
                                 onChange={(token) => _onChange(token)}
                             />
-                        ))}
-                </Box>
-                {loadError && !loadFinish && tokens.length && (
-                    <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                        <RetryHint hint={false} retry={nextPage} />
-                    </Stack>
-                )}
-                <ElementAnchor
-                    callback={() => {
-                        if (nextPage) nextPage()
-                    }}>
-                    {!loadFinish && tokens.length !== 0 && <LoadingBase />}
-                </ElementAnchor>
-            </Box>
-        </>
+                        </ListItem>
+                    ))}
+            </List>
+            {loadError && !loadFinish && tokens.length && (
+                <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
+                    <RetryHint hint={false} retry={nextPage} />
+                </Stack>
+            )}
+            <ElementAnchor
+                callback={() => {
+                    if (nextPage) nextPage()
+                }}>
+                {!loadFinish && tokens.length !== 0 && <LoadingBase />}
+            </ElementAnchor>
+        </Box>
     )
 }
 
@@ -116,7 +130,7 @@ export function NFTImageCollectibleAvatar({
     selectedToken,
     pluginId,
 }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ networkPluginID: pluginId })
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
 
     if (loading)

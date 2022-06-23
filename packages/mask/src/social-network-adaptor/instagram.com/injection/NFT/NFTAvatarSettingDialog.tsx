@@ -19,10 +19,7 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
-    root: {
-        padding: '8px 0',
-        margin: '0 16px',
-    },
+    root: {},
 }))
 
 export function NFTAvatarSettingDialog() {
@@ -94,7 +91,7 @@ export function NFTAvatarSettingDialog() {
     return (
         <DialogStackingProvider>
             <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
-                <DialogContent>
+                <DialogContent style={{ padding: 16 }}>
                     <NFTAvatar onChange={onChange} classes={classes} />
                 </DialogContent>
             </InjectedDialog>

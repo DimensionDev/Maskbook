@@ -1,12 +1,12 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
-import { range, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         bottom: 0,
         width: '100%',
         padding: 0,
+        display: 'block',
     },
     content: {
         height: 612,
@@ -145,7 +146,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => networkResolver.networkChainId(network))
+        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
     const {
@@ -250,14 +251,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         </Box>
     )
 
-    const LoadStatus = (
-        <div className={classes.gallery}>
-            {range(8).map((i) => (
-                <Skeleton key={i} animation="wave" variant="rectangular" className={classes.skeleton} />
-            ))}
-        </div>
-    )
-
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
@@ -275,9 +268,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     ).filter((x) => x.chainId === chainId)
 
     const NoNFTList = () => {
-        if (!collectibles.length && !loadFinish && !loadError) {
-            return LoadStatus
-        }
         if (chainId === ChainId.Matic && tokensInList.length) return
         if (tokensInList.length === 0) return AddCollectible
         if (loadError && !loadFinish && !collectibles.length) {
@@ -334,7 +324,19 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Stack>
                 ) : null}
             </DialogContent>
+
             <DialogActions className={classes.actions}>
+                {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
+                        <Typography
+                            variant="body1"
+                            color="#1D9BF0"
+                            sx={{ cursor: 'pointer', paddingLeft: 0.5 }}
+                            onClick={onClick}>
+                            {t.add_collectible()}
+                        </Typography>
+                    </Stack>
+                ) : null}
                 <PluginWalletStatusBar
                     actionProps={{
                         title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),
