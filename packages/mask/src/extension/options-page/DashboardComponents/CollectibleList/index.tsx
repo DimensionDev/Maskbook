@@ -260,7 +260,7 @@ export function CollectionList({
         if (!persona) return
         return getKV(persona?.publicKeyAsHex!)
     }, [persona])
-    const unHiddenCollectiables = useCollectionFilter(
+    const unHiddenCollectibles = useCollectionFilter(
         (kvValue as kvType)?.proofs,
         collectibles,
         'NFTs',
@@ -270,7 +270,7 @@ export function CollectionList({
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...unHiddenCollectiables,
+        ...unHiddenCollectibles,
     ]
 
     const renderCollectibles = useMemo(() => {
