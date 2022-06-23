@@ -201,6 +201,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
                         openDialog={handleOpenDialog}
+                        isOwn={isOwn}
                     />
                 ) : (
                     <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>

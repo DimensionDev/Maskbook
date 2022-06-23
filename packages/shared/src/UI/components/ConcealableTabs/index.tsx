@@ -111,6 +111,7 @@ export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>,
     onChange?(id: T): void
     tail?: ReactNode
     openDialog?: () => void
+    isOwn?: boolean
 }
 
 export function ConcealableTabs<T extends number | string>({
@@ -120,6 +121,7 @@ export function ConcealableTabs<T extends number | string>({
     tail,
     onChange,
     openDialog,
+    isOwn,
     ...rest
 }: ConcealableTabsProps<T>) {
     const { classes } = useStyles()
@@ -204,13 +206,15 @@ export function ConcealableTabs<T extends number | string>({
                                 }}>
                                 <RightArrowIcon color="inherit" />
                             </Button>
-                            <Button
-                                disableRipple
-                                disabled={reachedRightEdge}
-                                onClick={openDialog}
-                                className={classnames(classes.normal, classes.controller)}>
-                                <GearSettingsIcon />
-                            </Button>
+                            {isOwn && (
+                                <Button
+                                    disableRipple
+                                    disabled={reachedRightEdge}
+                                    onClick={openDialog}
+                                    className={classnames(classes.normal, classes.controller)}>
+                                    <GearSettingsIcon />
+                                </Button>
+                            )}
                         </>
                     ) : null}
                     {tail}
