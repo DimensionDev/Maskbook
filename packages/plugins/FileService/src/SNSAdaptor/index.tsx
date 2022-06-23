@@ -35,7 +35,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="fileService" />
+            const icon = <Icon size={36} type="fileService" />
             const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {

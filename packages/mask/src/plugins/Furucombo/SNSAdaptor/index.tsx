@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="furucombo" />
+            const icon = <Icon type="furucombo" size={36} />
             const name = <Trans i18nKey="plugin_furucombo_dapp_name" />
             return {
                 ApplicationEntryID: base.ID,

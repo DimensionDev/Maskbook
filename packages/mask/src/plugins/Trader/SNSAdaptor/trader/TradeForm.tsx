@@ -96,11 +96,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             zIndex: 1,
         },
         chevron: {
-            fill: 'none',
-            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
-            color: theme.palette.text.primary,
         },
         reverseChevron: {
             transform: 'rotate(-180deg)',

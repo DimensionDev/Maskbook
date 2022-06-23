@@ -145,7 +145,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                     <div className={classes.container}>
                         {address ? (
                             <>
-                                <Icon type="success" className={classes.successIcon} />
+                                <Icon type="success" size={54} className={classes.successIcon} />
                                 <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
                                 <Box style={{ width: '100%' }}>
                                     <Typography className={classes.addressTitle}>

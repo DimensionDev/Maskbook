@@ -5,7 +5,6 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import { Icon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
-import { ExternalLink } from 'react-feather'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../locales'
@@ -84,7 +83,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                         target="_blank"
                         title={t.view_on_explorer()}
                         rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
+                        <Icon type="link" size={14} className={classes.linkIcon} />
                     </Link>
                 </Stack>
                 <Box>

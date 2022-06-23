@@ -42,7 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition<
     enhanceTag,
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="swapColorful" />
+            const icon = <Icon type="swapColorful" size={36} />
             const name = <Trans i18nKey="plugin_trader_swap" />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {

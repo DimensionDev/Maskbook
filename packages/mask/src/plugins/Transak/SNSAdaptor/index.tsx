@@ -15,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="transak" />
+            const icon = <Icon type="transak" size={36} />
             const name = <Trans i18nKey="plugin_transak_name" />
             const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {

@@ -72,7 +72,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
             name: <Trans i18nKey="plugin_snapshot_info_snapshot" />,
             marketListSortingPriority: 8,
-            icon: <Icon type="snapshot" />,
+            icon: <Icon type="snapshot" size={36} />,
         },
     ],
     wrapperProps: {

@@ -300,24 +300,7 @@ export const closeIcon = new URL('./general/Close.svg', import.meta.url).href
 export const cloudBackupIcon = new URL('./general/CloudBackup.svg', import.meta.url).href
 export const cloudLinkIcon = new URL('./general/CloudLink.svg', import.meta.url).href
 export const collectibleIcon = new URL('./general/Collectible.svg', import.meta.url).href
-export const copyIcon = (
-    <svg viewBox="0 0 16 17" xmlns="http://www.w3.org/2000/svg">
-        <g>
-            <path
-                stroke="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.736 12.538c-.898 0-1.68-.267-2.244-.793-.566-.53-.858-1.273-.858-2.117V4.882c0-.84.29-1.58.852-2.109.558-.525 1.335-.795 2.226-.8h.003l4.383-.001c.898 0 1.68.267 2.244.793.566.53.858 1.273.858 2.117v4.746c0 .84-.29 1.58-.852 2.109-.558.525-1.335.794-2.226.8h-.003l-4.383.001v-.533.533Zm0-1.066c-.689 0-1.19-.203-1.516-.507-.32-.3-.52-.745-.52-1.337V4.882c0-.588.198-1.032.516-1.332.322-.303.82-.506 1.5-.51h.002l4.38-.002c.689 0 1.19.203 1.515.507.321.3.52.745.52 1.337v4.746c0 .588-.197 1.032-.516 1.332-.321.302-.818.506-1.5.51l-4.381.002Z"
-            />
-            <path
-                stroke="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M5.41 14.615c-.898 0-1.68-.267-2.243-.793-.567-.53-.86-1.273-.86-2.117V6.959c0-1.084.484-1.986 1.37-2.489a.533.533 0 1 1 .526.928c-.514.292-.828.816-.828 1.561v4.746c0 .592.199 1.037.52 1.337.325.304.826.507 1.515.507l4.382-.002c.763-.005 1.295-.259 1.612-.628a.533.533 0 1 1 .81.695c-.563.654-1.418.994-2.418 1h-.003l-4.383.001v-.533.533Z"
-            />
-        </g>
-    </svg>
-)
+export const copyIcon = new URL('./general/Copy.svg', import.meta.url).href
 export const cramIcon = new URL('./general/Cram.svg', import.meta.url).href
 export const cryptoArtIcon = new URL('./general/CryptoArt.png', import.meta.url).href
 export const dashboardIcon = new URL('./general/Dashboard.svg', import.meta.url).href
@@ -407,26 +390,7 @@ export const leftArrowIcon = (
         </g>
     </svg>
 )
-export const linkIcon = (
-    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <g>
-            <path
-                d="M16 19.25C16.5368 19.9676 17.2217 20.5614 18.0082 20.9911C18.7947 21.4208 19.6644 21.6764 20.5583 21.7404C21.4522 21.8044 22.3495 21.6754 23.1892 21.3622C24.0289 21.049 24.7914 20.5588 25.425 19.925L29.175 16.175C30.3135 14.9962 30.9435 13.4174 30.9292 11.7787C30.915 10.14 30.2577 8.57239 29.0989 7.41359C27.9401 6.25479 26.3725 5.59748 24.7338 5.58324C23.095 5.569 21.5163 6.19897 20.3375 7.33746L18.1875 9.47496"
-                strokeWidth="1.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                stroke="currentColor"
-            />
-            <path
-                d="M20.9988 16.7498C20.462 16.0321 19.7771 15.4383 18.9906 15.0086C18.2041 14.5789 17.3344 14.3234 16.4405 14.2594C15.5465 14.1954 14.6493 14.3243 13.8096 14.6376C12.9699 14.9508 12.2074 15.441 11.5738 16.0748L7.82379 19.8248C6.6853 21.0036 6.05533 22.5823 6.06957 24.2211C6.08381 25.8598 6.74112 27.4274 7.89992 28.5862C9.05872 29.745 10.6263 30.4023 12.265 30.4165C13.9038 30.4307 15.4825 29.8008 16.6613 28.6623L18.7988 26.5248"
-                strokeWidth="1.25"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                stroke="currentColor"
-            />
-        </g>
-    </svg>
-)
+export const linkIcon = new URL('./general/Link.svg', import.meta.url).href
 export const linkOutDarkIcon = new URL('./general/LinkOut.dark.svg', import.meta.url).href
 export const linkOutLightIcon = new URL('./general/LinkOut.light.svg', import.meta.url).href
 export const linkOutIcon = new URL('./general/LinkOut.svg', import.meta.url).href
@@ -723,12 +687,10 @@ export const settingsSyncIcon = new URL('./settings/SettingsSync.svg', import.me
 export const iconsWithDynamicColor = [
     'check',
     'chevronUp',
-    'copy',
     'drop2',
     'info.dark',
     'info',
     'leftArrow',
-    'link',
     'loading',
     'refresh',
     'rightArrow',

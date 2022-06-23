@@ -34,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="maskBox" />
+            const icon = <Icon type="maskBox" size={36} />
             const name = <Trans i18nKey="plugin_mask_box_name" />
             const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {

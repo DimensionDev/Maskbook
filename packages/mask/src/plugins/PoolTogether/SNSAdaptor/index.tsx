@@ -41,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_pooltogether_name" />,
             marketListSortingPriority: 14,
             tutorialLink: 'https://realmasknetwork.notion.site/377597e14aff441ab645ecba5ea690f1',
-            icon: <Icon type="poolTogether" />,
+            icon: <Icon type="poolTogether" size={36} />,
         },
     ],
     wrapperProps: {

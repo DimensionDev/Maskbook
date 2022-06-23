@@ -76,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_collectibles_description" />,
             name: <Trans i18nKey="plugin_collectibles_name" />,
-            icon: <Icon type="collectibles" />,
+            icon: <Icon type="collectibles" size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },

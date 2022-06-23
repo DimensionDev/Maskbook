@@ -90,7 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icon type="findTruman" />
+            const icon = <Icon type="findTruman" size={36} />
             const name = <Trans i18nKey="plugin_find_truman_name" />
             const iconFilterColor = 'rgba(251, 49, 32, 0.3)'
             return {
