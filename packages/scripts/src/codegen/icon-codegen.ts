@@ -17,7 +17,7 @@ function svg2jsx(code: string) {
     return (
         code
             .trim()
-            // set both height and width to 100%, let svg's container, aka <Icon />, decide the size
+            // set both height and width to 100%, let svg's container, aka <Icon />, decide the size.
             // We don't use g flag here, because we only want to change the first attribute of each
             .replace(/\b(height)=('|")\d+\2/, '')
             .replace(/\b(width)=('|")\d+\2/, '')
@@ -28,9 +28,23 @@ function svg2jsx(code: string) {
 }
 
 const responseExtRe = /\.(light|dim|dark)$/
-const responseNameRe = /(.*)\.(light|dim|dark)$/
+const responsiveNameRe = /(.*)\.(light|dim|dark)$/
+function getIconName(fileName: string) {
+    const name = fileName.match(responsiveNameRe)
+        ? fileName.replace(responsiveNameRe, (_, m1, m2) => {
+              if (m2 === 'light') return camelCase(m1)
+              return `${camelCase(m1)}.${m2}`
+          })
+        : camelCase(fileName)
+    return name
+}
+function getVarName(fileName: string) {
+    const matched = fileName.match(responsiveNameRe)
+    const name = matched ? camelCase(matched[0]) : ''
+    return name
+}
+
 export async function generateIcons() {
-    const nameMap: Record<string, string> = {}
     const iconsWithDynamicColor: string[] = []
     const lines: string[] = []
     const indexNames = new Set<string>()
@@ -40,23 +54,15 @@ export async function generateIcons() {
     const filePaths = await glob.promise(pattern, { cwd: ROOT_PATH, nodir: true })
     filePaths.forEach((filePath) => {
         const parsed = path.parse(filePath)
-        const fileName = parsed.base
-        let varName = ''
-        const name = parsed.name.match(responseNameRe)
-            ? parsed.name.replace(responseNameRe, (matchedName, m1, m2) => {
-                  varName = camelCase(matchedName)
-                  if (m2 === 'light') return camelCase(m1)
-                  return `${camelCase(m1)}.${m2}`
-              })
-            : camelCase(parsed.name)
+        const name = getIconName(parsed.name)
+        const varName = getVarName(parsed.name) || camelCase(name)
         indexNames.add(name)
-        iconVarNames.set(name, `${varName || camelCase(name)}Icon`)
+        iconVarNames.set(name, `${varName}Icon`)
         if (name.match(responseExtRe)) {
             typeNames.add(name.replace(responseExtRe, ''))
         } else {
             typeNames.add(name)
         }
-        nameMap[name] = fileName
         const isSvg = parsed.ext.toLowerCase() === '.svg'
         const code = isSvg ? fs.readFileSync(filePath, 'utf8') : ''
         if (isSvg && hasCurrentColor(code)) {
@@ -64,18 +70,13 @@ export async function generateIcons() {
             lines.push(`export const ${iconVarNames.get(name)} = ${svg2jsx(code)}`)
         } else {
             const importPath = path.relative(iconRoot, path.join(ROOT_PATH, filePath))
-            // console.log('from', iconRoot)
-            // console.log('to', path.join(ROOT_PATH, filePath))
-            // console.log('importPath', importPath)
             lines.push(`export const ${iconVarNames.get(name)} = new URL("./${importPath}", import.meta.url).href`)
         }
     })
 
     const declareType = `export type IconType = ${Array.from(typeNames, (v) => JSON.stringify(v)).join(' | ')}`
     const defaultExport = `const icons = {
-    ${Array.from(indexNames)
-        .map((name) => `${JSON.stringify(name)}:${iconVarNames.get(name)}`)
-        .join(',')}
+    ${Array.from(indexNames, (name) => `${JSON.stringify(name)}:${iconVarNames.get(name)}`).join(',')}
   }
   export default icons`
 

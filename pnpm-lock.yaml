@@ -75,7 +75,6 @@ importers:
       eslint-plugin-react-hooks: ^4.6.0
       eslint-plugin-unicorn: ^42.0.0
       eslint-plugin-unused-imports: ^2.0.0
-      glob-promise: ^4.2.2
       gulp: ^4.0.2
       husky: ^8.0.1
       i18next: ^21.8.2
@@ -110,7 +109,6 @@ importers:
       '@types/react': 18.0.9
       '@types/react-dom': 18.0.5
       '@types/web': 0.0.68
-      glob-promise: 4.2.2
       i18next: 21.8.2
       immer: 9.0.12
       lodash: 4.17.21
@@ -18025,15 +18023,6 @@ packages:
       '@types/glob': 7.2.0
       glob: 7.2.3
     dev: true
-
-  /glob-promise/4.2.2:
-    resolution: {integrity: sha512-xcUzJ8NWN5bktoTIX7eOclO1Npxd/dyVqUJxlLIDasT4C7KZyqlPIwkdJ0Ypiy3p2ZKahTjK4M9uC3sNSfNMzw==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      glob: ^7.1.6
-    dependencies:
-      '@types/glob': 7.2.0
-    dev: false
 
   /glob-promise/4.2.2_glob@7.2.0:
     resolution: {integrity: sha512-xcUzJ8NWN5bktoTIX7eOclO1Npxd/dyVqUJxlLIDasT4C7KZyqlPIwkdJ0Ypiy3p2ZKahTjK4M9uC3sNSfNMzw==}
