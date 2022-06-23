@@ -9,7 +9,7 @@ import { buildGun } from '../projects/gun.js'
 import { parallel, series, TaskFunction } from 'gulp'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
-const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
+const otherFlags = ['e2e', 'beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
 export function buildWebpackFlag(name: string, args: ExtensionBuildArgs | undefined) {
     const f = () => awaitChildProcess(webpack('build', args))
@@ -46,6 +46,7 @@ function parseArgs() {
 export type ExtensionBuildArgs = {
     mv3?: boolean
     android?: boolean
+    e2e?: boolean
     iOS?: boolean
     firefox?: boolean
     insider?: boolean
@@ -86,6 +87,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
 
     if (args.insider) flags.channel = 'insider'
     else if (args.beta) flags.channel = 'beta'
+    else if (args.e2e) flags.channel = 'e2e'
 
     if (args.iOS) {
         flags.runtime.engine = 'safari'
@@ -110,7 +112,7 @@ export interface Runtime {
     manifest: 2 | 3
 }
 export interface BuildFlags {
-    channel: 'stable' | 'beta' | 'insider'
+    channel: 'e2e' | 'stable' | 'beta' | 'insider'
     runtime: Runtime
     mode: 'development' | 'production'
     /** @default false */

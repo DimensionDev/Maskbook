@@ -3,7 +3,7 @@ declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production'
         readonly engine: 'chromium' | 'firefox' | 'safari'
-        readonly channel: 'stable' | 'beta' | 'insider'
+        readonly channel: 'e2e' | 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
         readonly manifest: '2' | '3'
 

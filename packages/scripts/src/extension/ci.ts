@@ -30,7 +30,16 @@ export const ciBuild: TaskFunction = series(
             { chromium: true, mv3: true, 'output-path': 'build-mv3' },
             'MaskNetwork.chromium-mv3.zip',
         ),
-    ),
+        buildTarget('Firefox-e2e',
+            { firefox: true, e2e: true, 'output-path': 'build-firefox-e2e' },
+            'MaskNetwork.firefox-e2e.zip',
+        ),
+        buildTarget(
+            'Chromium-e2e',
+            { chromium: true, e2e: true, 'output-path': 'build-chromium-e2e' },
+            'MaskNetwork.chromium-e2e.zip',
+        ),
+    )
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string) {
