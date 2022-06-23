@@ -167,7 +167,7 @@ function resolveCurrentVisitingIdentityInner(
         const handle = user.legacy.screen_name
         console.assert(handle === firstSlug, 'Screen name is not the same as user name slug')
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
-        const homepage = user.legacy.entities.url.urls[0]?.expanded_url ?? ''
+        const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
