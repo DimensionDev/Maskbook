@@ -175,7 +175,7 @@ export async function send(
  */
 export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
     if (hasNativeAPI) {
-        return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
+        return nativeAPI?.api.send(payload) as unknown as JsonRpcResponse
     } else {
         return new Promise<JsonRpcResponse>(async (resolve, reject) => {
             const callback = (error: Error | null, response?: JsonRpcResponse) => {
