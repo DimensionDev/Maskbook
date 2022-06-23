@@ -1,6 +1,6 @@
 import { memo, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -34,6 +34,8 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         root: {
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center',
+            padding: 16,
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -166,13 +168,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             lineHeight: '16px',
             color: theme.palette.text.secondary,
         },
-        content: {
-            padding: 16,
-            overflowY: 'auto',
-            height: 420,
-            '::-webkit-scrollbar': {
-                display: 'none',
-            },
+        stateBar: {
+            backgroundColor: parseColor(theme.palette.maskColor?.bottom).setAlpha(0.8).toRgbString(),
+            position: 'sticky',
+            bottom: 0,
+            backdropFilter: 'blur(16px)',
         },
     }
 })
@@ -338,8 +338,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isGreatThanSlippageSetting = useGreatThanSlippageSetting(focusedTrade?.value?.priceImpact)
 
         return (
-            <Box className={classes.root}>
-                <Box className={classes.content}>
+            <>
+                <Box className={classes.root}>
                     <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
                         <Typography fontSize={14} lineHeight="20px">
                             {t('plugin_trader_swap_from')}
@@ -459,6 +459,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </div>
                         </Box>
                     </Box>
+                </Box>
+                <Box className={classes.stateBar}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={chainId}
@@ -547,7 +549,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         />
                     </ChainBoundary>
                 </Box>
-            </Box>
+            </>
         )
     },
 )
