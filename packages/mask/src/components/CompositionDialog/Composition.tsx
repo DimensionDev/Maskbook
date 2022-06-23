@@ -10,6 +10,7 @@ import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './Com
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
@@ -52,6 +53,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [])
 
     useEffect(() => {
+        if (hasNativeAPI) {
+            nativeAPI?.api.notify_composition_requested({reason, open})
+        }
         if (openOnInitAnswered) return
         openOnInitAnswered = true
         Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {

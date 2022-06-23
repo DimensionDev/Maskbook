@@ -37,6 +37,10 @@ export async function consistentPersonaDBWriteAccess(action: () => Promise<void>
     await action()
 }
 
+export async function createRelationsTransaction() {
+    return
+}
+
 export async function createPersonaDB(record: PersonaRecord): Promise<void> {
     await nativeAPI?.api.create_persona({
         persona: personaRecordToDB(record),
@@ -54,7 +58,6 @@ export async function queryPersonaByProfileDB(
     })
 
     if (!x) return null
-
     return personaRecordOutDB(x)
 }
 
@@ -293,10 +296,25 @@ export async function createRelationDB(
 }
 
 export async function queryRelations(
-    query: (record: RelationRecord) => boolean,
+    personaIdentifier?: PersonaIdentifier,
+    profileIdentifier?: ProfileIdentifier,
     t?: RelationTransaction<'readonly'>,
 ): Promise<RelationRecord[]> {
-    const results = await nativeAPI?.api.query_relations({})
+    const results: NativeRelationRecord[] = []
+    if (personaIdentifier && profileIdentifier) {
+        const relations = await nativeAPI?.api.query_relation({
+            personaIdentifier: personaIdentifier.toText(),
+            profileIdentifier: profileIdentifier.toText(),
+        })
+        if (relations) {
+            results.push(...relations)
+        }
+    } else {
+        const relations = await nativeAPI?.api.query_relation({})
+        if (relations) {
+            results.push(...relations)
+        }
+    }
 
     if (!results?.length) return []
     return results.map((x) => relationRecordOutDB(x))
@@ -385,6 +403,7 @@ function partialPersonaRecordToDB(
     x: Readonly<Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>>,
 ): Partial<NativePersonaRecord> {
     return {
+        ...x,
         publicKey: x.publicKey as JsonWebKey as unknown as Native_EC_Public_JsonWebKey,
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
@@ -399,6 +418,7 @@ function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
     const identifier = ECKeyIdentifier.from(x.identifier).unwrap()
 
     return {
+        ...x,
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
         publicHexKey: identifier.publicKeyAsHex,
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
@@ -423,6 +443,7 @@ function profileRecordToDB(x: ProfileRecord): NativeProfileRecord {
 
 function profileRecordOutDB(x: NativeProfileRecord): ProfileRecord {
     return {
+        nickname: x.nickname,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier: ProfileIdentifier.from(x.identifier).unwrap(),
         linkedPersona: ECKeyIdentifier.from(x.linkedPersona).unwrapOr(undefined),

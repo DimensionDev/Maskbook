@@ -18,6 +18,7 @@ import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -85,6 +86,22 @@ export function RedPacket(props: RedPacketProps) {
     )
 
     const openShareTxDialog = useOpenShareTxDialog()
+
+    const onClaimOrRefundOnNative = useCallback(async () => {
+        if (!availability) return
+        await nativeAPI?.api.claimOrRefundRedpacket({
+            redpacketPayload: payload,
+            availability: {
+                token_address: availability.token_address,
+                balance: availability.balance,
+                total: availability.total,
+                claimed: availability.claimed,
+                expired: availability.expired,
+                claimed_amount: (availability as RedPacketAvailability).claimed_amount,
+            },
+            postLink: postLink.toString(),
+        })
+    }, [availability, JSON.stringify(payload), postLink])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
@@ -187,7 +204,7 @@ export function RedPacket(props: RedPacketProps) {
                     isClaiming={isClaiming}
                     isRefunding={isRefunding}
                     onShare={handleShare}
-                    onClaimOrRefund={onClaimOrRefund}
+                    onClaimOrRefund={hasNativeAPI ? onClaimOrRefundOnNative : onClaimOrRefund}
                 />
             )}
         </>

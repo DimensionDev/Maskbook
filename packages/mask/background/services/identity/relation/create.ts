@@ -1,6 +1,6 @@
 import { RelationFavor } from '@masknet/public-api'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
-import { createRelationsTransaction, createRelationDB } from '../../../database/persona/db'
+import { createRelationsTransaction, createRelationDB, queryRelations } from '../../../database/persona/db'
 
 export async function createNewRelation(
     profile: ProfileIdentifier,
@@ -8,8 +8,8 @@ export async function createNewRelation(
     favor = RelationFavor.UNCOLLECTED,
 ): Promise<void> {
     const t = await createRelationsTransaction()
-    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
-    if (relationInDB) return
+    const relationsInDB = await queryRelations(linked, profile, t)
+    if (relationsInDB.length > 0) return
 
     await createRelationDB({ profile, linked, favor }, t)
 }

@@ -411,7 +411,7 @@ export async function queryProfilesDB(
             if (query.hasLinkedPersona && !out.linkedPersona) return
             result.push(out)
         })
-    } else if (query.identifiers?.length) {
+    } else if (query.identifiers) {
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
             if (query.hasLinkedPersona && !out.linkedPersona) continue
@@ -553,13 +553,27 @@ export async function createRelationDB(
 }
 
 /** @internal */
-export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
+export async function queryRelations(
+    personaIdentifier?: PersonaIdentifier,
+    profileIdentifier?: ProfileIdentifier,
+    t?: RelationTransaction<'readonly'>,
+) {
     t = t || createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
 
-    for await (const each of t.objectStore('relations')) {
-        const out = relationRecordOutDB(each.value)
-        if (query(out)) records.push(out)
+    if (personaIdentifier && profileIdentifier) {
+        const relationInDB = await t
+            .objectStore('relations')
+            .get([personaIdentifier.toText(), profileIdentifier.toText()])
+        if (relationInDB) {
+            const out = relationRecordOutDB(relationInDB)
+            records.push(out)
+        }
+    } else {
+        for await (const each of t.objectStore('relations')) {
+            const out = relationRecordOutDB(each.value)
+            records.push(out)
+        }
     }
 
     return records

@@ -7,6 +7,7 @@ import type {
     LinkedProfileDetails,
     RelationRecord,
     MobilePostRecord,
+    RedPacketAvailability
 } from './types/index.js'
 import type { ProfileIdentifier_string } from './web.js'
 
@@ -90,6 +91,7 @@ export interface SharedNativeAPIs {
     }): Promise<void>
     detach_profile(params: { identifier: string }): Promise<void>
     create_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord | undefined>
+    query_relation(params: { personaIdentifier?: string; profileIdentifier?: string }): Promise<RelationRecord[]>
     query_relations(params: {
         options?: {
             personaIdentifier?: string
@@ -112,7 +114,25 @@ export interface SharedNativeAPIs {
         pageOption?: PageOption
     }): Promise<MobilePostRecord[]>
     update_post(params: { post: Partial<MobilePostRecord>; options: { mode: 0 | 1 } }): Promise<MobilePostRecord[]>
+    /**
+     * Mask Plugins
+     */
+     notifyRedpacket(params: {
+        redpacketPayload: any
+        availability: RedPacketAvailability
+        postLink: string
+    }): Promise<void>
+
+    claimOrRefundRedpacket(params: {
+        redpacketPayload: any
+        availability: RedPacketAvailability
+        postLink: string
+    }): Promise<void>
     notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
+    notify_composition_requested(params: {
+        reason: string
+        open: boolean
+    }): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network
@@ -121,6 +141,4 @@ export interface iOSNativeAPIs extends SharedNativeAPIs {}
 /**
  * APIs that only implemented by Android Mask Network
  */
-export interface AndroidNativeAPIs extends SharedNativeAPIs {
-    sendJsonString(payload: string): Promise<string>
-}
+export interface AndroidNativeAPIs extends SharedNativeAPIs {}

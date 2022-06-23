@@ -131,7 +131,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
     }
 
     async function backupAllRelations() {
-        const data = await queryRelations(() => true)
+        const data = await queryRelations()
         for (const relation of data) {
             relations.push({
                 favor: relation.favor,
