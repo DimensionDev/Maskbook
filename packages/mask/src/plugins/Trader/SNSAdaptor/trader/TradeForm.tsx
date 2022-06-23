@@ -9,7 +9,7 @@ import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift }
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, TokenIcon } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -149,11 +149,12 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             },
         },
         tooltip: {
-            padding: 16,
+            padding: 8,
             textAlign: 'left',
-            fontSize: 16,
-            lineHeight: '22px',
+            fontSize: 12,
+            lineHeight: '18px',
             fontWeight: 500,
+            marginBottom: '20px !important',
         },
         dropIcon: {
             width: 20,
@@ -173,6 +174,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             position: 'sticky',
             bottom: 0,
             backdropFilter: 'blur(16px)',
+        },
+        tokenIcon: {
+            width: 18,
+            height: 18,
+            marginRight: '8px !important',
         },
     }
 })
@@ -483,38 +489,43 @@ export const TradeForm = memo<AllTradeFormProps>(
                             }
                             spender={approveAddress}
                             onlyInfiniteUnlock
-                            withChildren
                             ActionButtonProps={{
                                 color: 'primary',
                                 style: { borderRadius: isDashboard ? 8 : 24 },
                             }}
                             infiniteUnlockContent={
-                                <Box component="span" display="flex" alignItems="center">
-                                    <Typography fontSize={18} fontWeight={600} lineHeight="18px">
-                                        {t('plugin_trader_unlock_symbol', {
-                                            symbol: approveToken?.symbol,
-                                        })}
-                                    </Typography>
-                                    <Tooltip
-                                        classes={{
-                                            tooltip: classes.tooltip,
-                                        }}
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        title={t('plugin_trader_unlock_tips', {
-                                            provider: focusedTrade?.provider
-                                                ? resolveTradeProviderName(focusedTrade.provider)
-                                                : '',
-                                            symbol: approveToken?.symbol,
-                                        })}
-                                        placement="top"
-                                        arrow
-                                        disableFocusListener
-                                        disableTouchListener>
-                                        <HelpOutline style={{ marginLeft: 10, height: 22 }} />
-                                    </Tooltip>
-                                </Box>
+                                <Tooltip
+                                    classes={{
+                                        tooltip: classes.tooltip,
+                                    }}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={t('plugin_trader_unlock_tips', {
+                                        provider: focusedTrade?.provider
+                                            ? resolveTradeProviderName(focusedTrade.provider)
+                                            : '',
+                                        symbol: approveToken?.symbol,
+                                    })}
+                                    placement="top"
+                                    arrow
+                                    disableFocusListener
+                                    disableTouchListener>
+                                    <Box component="span" display="flex" alignItems="center">
+                                        <TokenIcon
+                                            classes={{ icon: classes.tokenIcon }}
+                                            address={approveToken?.address ?? ''}
+                                            logoURL={approveToken?.logoURL}
+                                        />
+                                        <Typography fontSize={14} fontWeight={600} lineHeight="18px">
+                                            {t('plugin_trader_unlock_symbol', {
+                                                symbol: approveToken?.symbol,
+                                            })}
+                                        </Typography>
+
+                                        <HelpOutline style={{ marginLeft: 10, height: 18 }} />
+                                    </Box>
+                                </Tooltip>
                             }
                             render={(disable: boolean) =>
                                 isGreatThanSlippageSetting ? (

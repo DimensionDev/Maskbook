@@ -264,7 +264,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',
                     }),
-                    action: async () => createRedpacket(),
+                    action: createRedpacket,
                 }}
             />
         </>

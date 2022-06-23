@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Grid, Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -76,7 +76,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     )
 
     // not a valid erc20 token, please given token as undefined
-    if (!token) return <Grid container>{render ? (render(false) as any) : children}</Grid>
+    if (!token) return <>{render ? (render(false) as any) : children}</>
 
     if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
         return (
@@ -173,6 +173,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 ) : null}
             </Box>
         )
+
     if (approveStateType === ApproveStateType.APPROVED)
         return <>{render ? render(false) : typeof children === 'function' ? children(allowance) : children}</>
 
