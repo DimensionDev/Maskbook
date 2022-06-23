@@ -103,7 +103,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
     },
     linkIcon: {
-        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',

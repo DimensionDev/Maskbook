@@ -135,7 +135,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     linkIcon: {
-        fill: 'none',
+        fill: theme.palette.maskColor?.second,
         width: 12,
         height: 12,
         marginLeft: theme.spacing(0.5),
