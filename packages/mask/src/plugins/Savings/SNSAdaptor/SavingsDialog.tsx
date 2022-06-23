@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogActions, DialogContent } from '@mui/material'
+import { DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
-import { FolderTabPanel, FolderTabs } from '@masknet/theme'
+import { MaskTabList, useTabs } from '@masknet/theme'
 import {
     createContract,
     ChainId,
@@ -32,6 +32,7 @@ import { flatten, compact, chunk } from 'lodash-unified'
 import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { TabContext, TabPanel } from '@mui/lab'
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
@@ -99,6 +100,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         setChainId(currentChainId)
     }, [currentChainId])
 
+    const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
+
     return (
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
@@ -135,8 +138,19 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         />
                                     </div>
                                     <div className={classes.tableTabWrapper}>
-                                        <FolderTabs>
-                                            <FolderTabPanel label="Deposit">
+                                        <TabContext value={currentTab}>
+                                            <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                                                <Tab
+                                                    label={<Typography>{tabs.Deposit}</Typography>}
+                                                    value={tabs.Deposit}
+                                                />
+                                                <Tab
+                                                    label={<Typography>{tabs.Withdraw}</Typography>}
+                                                    value={tabs.Withdraw}
+                                                />
+                                            </MaskTabList>
+
+                                            <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Deposit}>
                                                 <SavingsTable
                                                     chainId={chainId}
                                                     tab={TabType.Deposit}
@@ -144,8 +158,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                                     setTab={setTab}
                                                     setSelectedProtocol={setSelectedProtocol}
                                                 />
-                                            </FolderTabPanel>
-                                            <FolderTabPanel label="Withdraw">
+                                            </TabPanel>
+                                            <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.Withdraw}>
                                                 <SavingsTable
                                                     chainId={chainId}
                                                     tab={TabType.Withdraw}
@@ -153,8 +167,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                                     setTab={setTab}
                                                     setSelectedProtocol={setSelectedProtocol}
                                                 />
-                                            </FolderTabPanel>
-                                        </FolderTabs>
+                                            </TabPanel>
+                                        </TabContext>
                                     </div>
                                 </DialogContent>
                                 <DialogActions style={{ padding: 0 }}>
