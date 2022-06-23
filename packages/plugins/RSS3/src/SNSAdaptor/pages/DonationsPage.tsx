@@ -48,12 +48,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations: GeneralAsset[]
+    donations?: GeneralAsset[]
     loading?: boolean
     addressLabel: string
 }
 
-export function DonationPage({ donations, loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ donations = [], loading, addressLabel }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 

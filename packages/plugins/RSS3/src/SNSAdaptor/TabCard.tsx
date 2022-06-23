@@ -7,9 +7,13 @@ import { Button, MenuItem, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useState } from 'react'
 import { useI18N } from '../locales'
-import { useDonations, useFootprints } from './hooks'
+import { useCollectionFilter, useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { useCurrentPersona, useCurrentVisitingProfile } from './hooks/useContext'
+import { useAsyncRetry } from 'react-use'
+import type { kvType } from '../types'
+import { getKV } from './hooks/useKV'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -45,8 +49,8 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
         formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
     )
-    // const currentVisitingProfile = useCurrentVisitingProfile()
-    // const currentPersona = useCurrentPersona()
+    const currentVisitingProfile = useCurrentVisitingProfile()
+    const currentPersona = useCurrentPersona()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
@@ -56,24 +60,24 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
         onClose()
     }
 
-    // const { value: kvValue } = useAsyncRetry(async () => {
-    //     if (!currentPersona) return
-    //     return getKV(currentPersona?.publicKeyAsHex!)
-    // }, [currentPersona])
-    // const unHiddenDonations = useCollectionFilter(
-    //     (kvValue as kvType)?.proofs,
-    //     donations,
-    //     'Donations',
-    //     currentVisitingProfile,
-    //     selectedAddress,
-    // )
-    // const unHiddenFootprints = useCollectionFilter(
-    //     (kvValue as kvType)?.proofs,
-    //     footprints,
-    //     'Footprints',
-    //     currentVisitingProfile,
-    //     selectedAddress,
-    // )
+    const { value: kvValue } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getKV(currentPersona?.publicKeyAsHex!)
+    }, [currentPersona])
+    const unHiddenDonations = useCollectionFilter(
+        (kvValue as kvType)?.proofs,
+        donations,
+        'Donations',
+        currentVisitingProfile,
+        selectedAddress,
+    )
+    const unHiddenFootprints = useCollectionFilter(
+        (kvValue as kvType)?.proofs,
+        footprints,
+        'Footprints',
+        currentVisitingProfile,
+        selectedAddress,
+    )
 
     if (!selectedAddress) return null
 
@@ -126,12 +130,16 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
                 </div>
             </div>
             {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={selectedAddress.label} />
+                <DonationPage
+                    donations={unHiddenDonations}
+                    loading={loadingDonations}
+                    addressLabel={selectedAddress.label}
+                />
             ) : (
                 <FootprintPage
                     address={selectedAddress.address}
                     loading={loadingFootprints}
-                    footprints={footprints}
+                    footprints={unHiddenFootprints}
                     addressLabel={selectedAddress.label}
                 />
             )}

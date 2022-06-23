@@ -28,13 +28,13 @@ const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
 }
 
 export interface FootprintPageProps {
-    footprints: GeneralAsset[]
+    footprints?: GeneralAsset[]
     loading?: boolean
     addressLabel: string
     address?: string
 }
 
-export function FootprintPage({ footprints, address, loading, addressLabel }: FootprintPageProps) {
+export function FootprintPage({ footprints = [], address, loading, addressLabel }: FootprintPageProps) {
     const { classes } = useStyles()
     const { value: profile } = useRss3Profile(address || '')
     const username = profile?.name

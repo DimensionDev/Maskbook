@@ -6,6 +6,7 @@ import { MenuItem } from '@mui/material'
 import { SocialAddress, NetworkPluginID, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useCurrentPersona, useCurrentVisitingProfile } from '../hooks/useContext'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -59,6 +60,8 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
         setSelectedAddress(option)
         onClose()
     }
+    const currentVisitingProfile = useCurrentVisitingProfile()
+    const currentPersona = useCurrentPersona()
 
     if (!selectedAddress) return null
 
@@ -81,7 +84,12 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
                     )
                 })}
             </ShadowRootMenu>
-            <CollectionList addressName={selectedAddress} onSelectAddress={onOpen} />
+            <CollectionList
+                addressName={selectedAddress}
+                onSelectAddress={onOpen}
+                persona={currentPersona}
+                visitingProfile={currentVisitingProfile}
+            />
         </div>
     )
 }

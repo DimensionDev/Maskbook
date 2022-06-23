@@ -2,6 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
+import { setupContext } from './context'
 import { TabCard, TabCardType } from './TabCard'
 
 function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
@@ -13,14 +14,18 @@ function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPlugi
 function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
     return (
         addressNames?.some(
-            (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+            (x) =>
+                x.type === (SocialAddressType.RSS3 || SocialAddressType.ADDRESS) &&
+                x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
         ) ?? false
     )
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_donations`,

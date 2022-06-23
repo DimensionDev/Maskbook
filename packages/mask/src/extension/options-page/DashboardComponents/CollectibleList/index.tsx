@@ -17,9 +17,14 @@ import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAsyncRetry } from 'react-use'
+import { getKV } from '../../hooks/useKV'
+import { useCollectionFilter } from '../../hooks/useCollectionFilter'
+import type { kvType } from '../../types'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -219,9 +224,13 @@ export function CollectibleList(props: CollectibleListProps) {
 export function CollectionList({
     addressName,
     onSelectAddress,
+    persona,
+    visitingProfile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
+    persona?: ECKeyIdentifier
+    visitingProfile?: IdentityResolved
 }) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -247,9 +256,21 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
+    const { value: kvValue } = useAsyncRetry(async () => {
+        if (!persona) return
+        return getKV(persona?.publicKeyAsHex!)
+    }, [persona])
+    const unHiddenCollectiables = useCollectionFilter(
+        (kvValue as kvType)?.proofs,
+        collectibles,
+        'NFTs',
+        visitingProfile,
+        account,
+    )
+
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...collectibles,
+        ...unHiddenCollectiables,
     ]
 
     const renderCollectibles = useMemo(() => {
