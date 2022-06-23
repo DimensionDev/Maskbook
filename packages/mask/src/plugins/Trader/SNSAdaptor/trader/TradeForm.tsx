@@ -79,7 +79,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 20,
+            padding: '0 16px',
         },
         label: {
             flex: 1,
@@ -129,7 +129,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         controller: {
             width: '100%',
-            paddingBottom: 16,
             // Just for design
             backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
@@ -442,6 +441,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                             ) : null}
                         </Box>
                     </Box>
+                </Box>
+
+                <Box className={classes.section}>
                     <Box className={classes.controller}>
                         <Box className={classes.section}>
                             <div className={classes.status}>
@@ -457,101 +459,94 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </div>
                         </Box>
                     </Box>
-                </Box>
-                {account ? (
-                    <Box className={classes.section}>
-                        <ChainBoundary
-                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={chainId}
-                            noSwitchNetworkTip
-                            className={classes.chainBoundary}
-                            ActionButtonPromiseProps={{
-                                fullWidth: true,
-                                classes: { root: classes.button, disabled: classes.disabledButton },
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        noSwitchNetworkTip
+                        className={classes.chainBoundary}
+                        ActionButtonPromiseProps={{
+                            fullWidth: true,
+                            classes: { root: classes.button, disabled: classes.disabledButton },
+                            color: 'primary',
+                            style: { padding: '13px 0', marginTop: 0 },
+                        }}>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={approveAmount.toFixed()}
+                            token={
+                                !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                approveToken?.schema === SchemaType.ERC20 &&
+                                !!approveAmount.toNumber()
+                                    ? approveToken
+                                    : undefined
+                            }
+                            spender={approveAddress}
+                            onlyInfiniteUnlock
+                            withChildren
+                            ActionButtonProps={{
                                 color: 'primary',
-                                style: { padding: '13px 0', marginTop: 0 },
-                            }}>
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={approveAmount.toFixed()}
-                                token={
-                                    !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                    approveToken?.schema === SchemaType.ERC20 &&
-                                    !!approveAmount.toNumber()
-                                        ? approveToken
-                                        : undefined
-                                }
-                                spender={approveAddress}
-                                onlyInfiniteUnlock
-                                withChildren
-                                ActionButtonProps={{
-                                    color: 'primary',
-                                    style: { borderRadius: isDashboard ? 8 : 24 },
-                                }}
-                                infiniteUnlockContent={
-                                    <Box component="span" display="flex" alignItems="center">
-                                        <Typography fontSize={18} fontWeight={600} lineHeight="18px">
-                                            {t('plugin_trader_unlock_symbol', {
-                                                symbol: approveToken?.symbol,
-                                            })}
-                                        </Typography>
-                                        <Tooltip
-                                            classes={{
-                                                tooltip: classes.tooltip,
-                                            }}
-                                            PopperProps={{
-                                                disablePortal: true,
-                                            }}
-                                            title={t('plugin_trader_unlock_tips', {
-                                                provider: focusedTrade?.provider
-                                                    ? resolveTradeProviderName(focusedTrade.provider)
-                                                    : '',
-                                                symbol: approveToken?.symbol,
-                                            })}
-                                            placement="top"
-                                            arrow
-                                            disableFocusListener
-                                            disableTouchListener>
-                                            <HelpOutline style={{ marginLeft: 10, height: 22 }} />
-                                        </Tooltip>
-                                    </Box>
-                                }
-                                render={(disable: boolean) =>
-                                    isGreatThanSlippageSetting ? (
-                                        <PluginWalletStatusBar
-                                            actionProps={{
-                                                color: 'warning',
-                                                disabled:
-                                                    focusedTrade?.loading ||
-                                                    !focusedTrade?.value ||
-                                                    disable ||
-                                                    isSwapping,
-                                                loading: isSwapping,
-                                                action: async () => onSwap(),
-                                                title: t('plugin_trader_confirm_price_impact', {
-                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                                }),
-                                            }}
-                                        />
-                                    ) : (
-                                        <PluginWalletStatusBar
-                                            actionProps={{
-                                                loading: isSwapping,
-                                                disabled:
-                                                    focusedTrade?.loading ||
-                                                    !focusedTrade?.value ||
-                                                    !!validationMessage ||
-                                                    disable ||
-                                                    isSwapping,
-                                                title: validationMessage || nativeWrapMessage,
-                                                action: async () => onSwap(),
-                                            }}
-                                        />
-                                    )
-                                }
-                            />
-                        </ChainBoundary>
-                    </Box>
-                ) : null}
+                                style: { borderRadius: isDashboard ? 8 : 24 },
+                            }}
+                            infiniteUnlockContent={
+                                <Box component="span" display="flex" alignItems="center">
+                                    <Typography fontSize={18} fontWeight={600} lineHeight="18px">
+                                        {t('plugin_trader_unlock_symbol', {
+                                            symbol: approveToken?.symbol,
+                                        })}
+                                    </Typography>
+                                    <Tooltip
+                                        classes={{
+                                            tooltip: classes.tooltip,
+                                        }}
+                                        PopperProps={{
+                                            disablePortal: true,
+                                        }}
+                                        title={t('plugin_trader_unlock_tips', {
+                                            provider: focusedTrade?.provider
+                                                ? resolveTradeProviderName(focusedTrade.provider)
+                                                : '',
+                                            symbol: approveToken?.symbol,
+                                        })}
+                                        placement="top"
+                                        arrow
+                                        disableFocusListener
+                                        disableTouchListener>
+                                        <HelpOutline style={{ marginLeft: 10, height: 22 }} />
+                                    </Tooltip>
+                                </Box>
+                            }
+                            render={(disable: boolean) =>
+                                isGreatThanSlippageSetting ? (
+                                    <PluginWalletStatusBar
+                                        actionProps={{
+                                            color: 'warning',
+                                            disabled:
+                                                focusedTrade?.loading || !focusedTrade?.value || disable || isSwapping,
+                                            loading: isSwapping,
+                                            action: async () => onSwap(),
+                                            title: t('plugin_trader_confirm_price_impact', {
+                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                            }),
+                                        }}
+                                    />
+                                ) : (
+                                    <PluginWalletStatusBar
+                                        actionProps={{
+                                            loading: isSwapping,
+                                            disabled:
+                                                focusedTrade?.loading ||
+                                                !focusedTrade?.value ||
+                                                !!validationMessage ||
+                                                disable ||
+                                                isSwapping,
+                                            title: validationMessage || nativeWrapMessage,
+                                            action: async () => onSwap(),
+                                        }}
+                                    />
+                                )
+                            }
+                        />
+                    </ChainBoundary>
+                </Box>
             </Box>
         )
     },
