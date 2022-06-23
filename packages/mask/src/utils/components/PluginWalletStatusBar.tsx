@@ -23,7 +23,7 @@ interface WalletStatusBarProps extends withClasses<'button' | 'disabled'> {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    pedding: {
+    pending: {
         color: theme.palette.maskColor?.warn,
         marginRight: 2,
     },
@@ -56,7 +56,7 @@ export function PluginWalletStatusBar(props: WalletStatusBarProps) {
         if (pendingTransactions.length <= 0) return
         return (
             <>
-                <Typography fontSize={14} fontWeight={400} className={classes.pedding}>
+                <Typography fontSize={14} fontWeight={400} className={classes.pending}>
                     {t('pending')}
                 </Typography>
                 <CircularProgress thickness={6} size={12} className={classes.progress} />
