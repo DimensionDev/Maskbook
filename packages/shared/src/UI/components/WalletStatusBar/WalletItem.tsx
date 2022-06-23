@@ -30,20 +30,29 @@ interface WalletItemProps {
     walletName: string
     selectedWallet: string
     wallet: string
+    haveChangeWallet?: boolean
     nextIDWallets?: BindingProof[]
     chainId: ChainId
     onConnectWallet?: () => void
     onSelectedWallet?: (address: string, pluginId: NetworkPluginID, chainId: ChainId) => void
 }
 export function WalletItem(props: WalletItemProps) {
-    const { walletName, selectedWallet, wallet, onSelectedWallet, onConnectWallet, nextIDWallets = [], chainId } = props
+    const {
+        haveChangeWallet = false,
+        walletName,
+        selectedWallet,
+        wallet,
+        onSelectedWallet,
+        onConnectWallet,
+        nextIDWallets = [],
+        chainId,
+    } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     const verify = nextIDWallets.some((x) => isSameAddress(x.identity, wallet))
     const isETH = verify || currentPluginId === NetworkPluginID.PLUGIN_EVM
-    const enableChange = Boolean(wallet)
 
     return (
         <MenuItem
@@ -67,7 +76,7 @@ export function WalletItem(props: WalletItemProps) {
                 )}
             </ListItemIcon>
             <WalletUI name={walletName} address={wallet} verify={verify} isETH={isETH} />
-            {enableChange && (
+            {haveChangeWallet && (
                 <Button size="small" className={classes.change} onClick={onConnectWallet}>
                     {t.change()}
                 </Button>

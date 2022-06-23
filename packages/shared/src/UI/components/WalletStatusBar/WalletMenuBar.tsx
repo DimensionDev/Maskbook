@@ -121,6 +121,7 @@ export function WalletMenuBar(props: WalletMenuBarProps) {
                             chainId={chainId as ChainId}
                             onConnectWallet={actionProps.onConnectWallet}
                             onSelectedWallet={onClick}
+                            haveChangeWallet={Boolean(account)}
                         />
                     ) : (
                         <MenuItem key="Wallet Connect">
