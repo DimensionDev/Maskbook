@@ -11,7 +11,7 @@ import {
     isRiskMethod,
 } from '@masknet/web3-shared-evm'
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
-import { nativeAPI } from '../../../../shared/native-rpc'
+import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
 import { isNil } from 'lodash-unified'
 
@@ -174,12 +174,8 @@ export async function send(
  * The entrance of all RPC requests to MaskWallet.
  */
 export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
-    if (nativeAPI?.type === 'iOS') {
+    if (hasNativeAPI) {
         return nativeAPI.api.send(payload) as unknown as JsonRpcResponse
-    } else if (nativeAPI?.type === 'Android') {
-        const response = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
-        if (!response) throw new Error('Failed to send request to native APP.')
-        return JSON.parse(response) as JsonRpcResponse
     } else {
         return new Promise<JsonRpcResponse>(async (resolve, reject) => {
             const callback = (error: Error | null, response?: JsonRpcResponse) => {

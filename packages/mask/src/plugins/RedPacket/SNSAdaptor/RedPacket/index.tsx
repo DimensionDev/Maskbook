@@ -9,7 +9,7 @@ import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
-import type { RedPacketJSONPayload } from '../../types'
+import type { RedPacketAvailability, RedPacketJSONPayload } from '../../types'
 import { RedPacketStatus } from '../../types'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed'
 import { useClaimCallback } from '../hooks/useClaimCallback'
