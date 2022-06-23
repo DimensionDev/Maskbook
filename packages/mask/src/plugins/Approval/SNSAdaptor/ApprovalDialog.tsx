@@ -1,15 +1,19 @@
-import { DialogContent } from '@mui/material'
+import { DialogContent, ListItem, List } from '@mui/material'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState, useMemo } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useAccount, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales'
 import { InjectedDialog } from '@masknet/shared'
 import { useStyles } from './useStyles'
 import { useTokenApproved } from './hooks/useTokenApproved'
+import { ApprovalLoadingContent } from './ApprovalLoadingContent'
+import { ApprovalEmptyContent } from './ApprovalEmptyContent'
+import type { Spender } from './types'
 
 export interface ApprovalDialogProps {
     open: boolean
@@ -57,11 +61,12 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
 
 function ApprovalWrapper() {
     const { targetChainId: chainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = approvalDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const { classes } = useStyles()
-
+    const { value: spenders, loading } = useTokenApproved(account, chainId)
     return (
         <div className={classes.approvalWrapper}>
             <div className={classes.abstractTabWrapper}>
@@ -72,15 +77,36 @@ function ApprovalWrapper() {
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-            <ApprovalTokenContent />
+            {loading ? (
+                <ApprovalLoadingContent />
+            ) : !spenders || spenders.length === 0 ? (
+                <ApprovalEmptyContent />
+            ) : (
+                <ApprovalTokenContent spenders={spenders} />
+            )}
         </div>
     )
 }
 
-function ApprovalTokenContent() {
-    const { classes } = useStyles()
-    const { targetChainId } = TargetChainIdContext.useContainer()
-    const { value } = useTokenApproved('0x790116d0685eb197b886dacad9c247f785987a4a', targetChainId)
-    console.log({ value })
-    return <div className={classes.approvalContentWrapper}>123</div>
+interface ApprovalTokenContentProps {
+    spenders: Spender[]
+}
+
+function ApprovalTokenContent(props: ApprovalTokenContentProps) {
+    const { spenders } = props
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
+    console.log({ spenders })
+    const { classes } = useStyles({
+        listItemBackground: networkDescriptor.backgroundGradient,
+        listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
+    })
+    return (
+        <List className={classes.approvalContentWrapper}>
+            {spenders.map((spender, i) => (
+                <ListItem key={i} className={classes.listItem}>
+                    123
+                </ListItem>
+            ))}
+        </List>
+    )
 }

@@ -47,7 +47,7 @@
     "application_tooltip_hint_create_persona": "Please create your persona and use it",
     "application_tooltip_hint_connect_persona": "Please connect your persona",
     "application_tooltip_hint_connect_wallet": "Please connect your wallet",
-    "application_tooltip_hint_switch_to_evm_wallet": "Please switch to EVM wallets",
+    "application_tooltip_hint_switch_to_evm_wallet": "Only EVM chains are supported, other chains will be supported later.",
     "application_settings_tab_app_list": "APP list",
     "application_settings_tab_plug_in_switch": "Plug-in switch",
     "application_settings_tab_plug_app-list-unlisted": "Unlisted",

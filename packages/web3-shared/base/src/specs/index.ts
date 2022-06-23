@@ -164,6 +164,8 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The background gradient color for relative network bar */
+    backgroundGradient?: string
     /** The network name */
     name: string
     /** The network short name */
