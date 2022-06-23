@@ -27,6 +27,7 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
 import { RSS3Icon } from '../assets/rss3'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -338,24 +339,29 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 </Box>
             </Box>
 
-            <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={ChainId.Mainnet}
-                predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
-                noSwitchNetworkTip
-                ActionButtonPromiseProps={{
-                    size: 'large',
-                    fullWidth: true,
-                }}>
-                <PluginWalletStatusBar
-                    actionProps={{
-                        loading,
-                        action: saveHandle,
-                        title: t('plugin_pets_dialog_btn'),
-                        disabled: !collection.name || !metaData.image,
-                    }}
-                />
-            </ChainBoundary>
+            <PluginWalletStatusBar>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={ChainId.Mainnet}
+                    predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
+                    noSwitchNetworkTip
+                    ActionButtonPromiseProps={{
+                        size: 'large',
+                        fullWidth: true,
+                    }}>
+                    <LoadingButton
+                        loading={loading}
+                        color="inherit"
+                        size="large"
+                        fullWidth
+                        variant="contained"
+                        className={classes.btn}
+                        onClick={saveHandle}
+                        disabled={!collection.name || !metaData.image}>
+                        {t('plugin_pets_dialog_btn')}
+                    </LoadingButton>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
 
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

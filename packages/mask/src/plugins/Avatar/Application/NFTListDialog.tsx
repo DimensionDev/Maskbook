@@ -12,7 +12,6 @@ import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAs
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
-import { PluginWalletStatusBar } from '../../../utils'
 import { useSubscription } from 'use-subscription'
 import { context } from '../context'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -337,17 +336,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
-                <PluginWalletStatusBar
-                    actionProps={{
-                        title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),
-                        waiting: t.downloading_image(),
-                        action: onSave,
-                        disabled,
-                    }}
-                    onChange={onChangeWallet}
-                    userId={lastRecognizedProfile?.identifier?.userId}
-                    haveMenu
-                />
+                {/* TODO: Next Id Wallets action */}
+                {/* <PluginWalletStatusBar*/}
+                {/*    actionProps={{*/}
+                {/*        title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),*/}
+                {/*        waiting: t.downloading_image(),*/}
+                {/*        action: onSave,*/}
+                {/*        disabled,*/}
+                {/*    }}*/}
+                {/*    onChange={onChangeWallet}*/}
+                {/*    userId={lastRecognizedProfile?.identifier?.userId}*/}
+                {/*    haveMenu*/}
+                {/* />*/}
             </DialogActions>
             <AddNFT
                 account={selectedAccount}

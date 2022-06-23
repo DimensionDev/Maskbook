@@ -18,6 +18,7 @@ import {
 } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
@@ -52,12 +53,6 @@ const useStyles = makeStyles()((theme) => {
             height: 48,
             flexGrow: 1,
             marginLeft: theme.spacing(1),
-        },
-        actionButton: {
-            marginTop: theme.spacing(1.5),
-            paddingTop: 12,
-            paddingBottom: 12,
-            fontSize: 16,
         },
         button: {
             width: '100%',
@@ -198,23 +193,26 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                 )}
             </div>
 
-            <ChainBoundary
-                expectedPluginID={pluginId}
-                expectedChainId={chainId}
-                noSwitchNetworkTip
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                    color: 'primary',
-                }}>
-                <PluginWalletStatusBar
-                    actionProps={{
-                        title: buttonLabel,
-                        disabled: !isValid || isSending,
-                        action: async () => send(),
-                    }}
-                />
-            </ChainBoundary>
+            <PluginWalletStatusBar>
+                <ChainBoundary
+                    expectedPluginID={pluginId}
+                    expectedChainId={chainId}
+                    noSwitchNetworkTip
+                    ActionButtonPromiseProps={{
+                        fullWidth: true,
+                        classes: { root: classes.button, disabled: classes.disabledButton },
+                        color: 'primary',
+                    }}>
+                    <ActionButton
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        disabled={!isValid || isSending}
+                        onClick={send}>
+                        {buttonLabel}
+                    </ActionButton>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
         </Box>
     )
 })

@@ -14,6 +14,7 @@ import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSe
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
 import { PluginWalletStatusBar } from '../../../../utils'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -256,21 +257,25 @@ export function DrawDialog(props: DrawDialogProps) {
                 </Box>
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
-                <WalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
-                        spender={MASK_BOX_CONTRACT_ADDRESS}
-                        token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
-                        ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
-                        <PluginWalletStatusBar
-                            actionProps={{
-                                disabled: isBalanceInsufficient || drawing,
-                                title: isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw',
-                                action: async () => onSubmit(),
-                            }}
-                        />
-                    </EthereumERC20TokenApprovedBoundary>
-                </WalletConnectedBoundary>
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
+                            spender={MASK_BOX_CONTRACT_ADDRESS}
+                            token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
+                            ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
+                            <ActionButton
+                                size="medium"
+                                fullWidth
+                                variant="contained"
+                                sx={{ marginTop: 2 }}
+                                disabled={isBalanceInsufficient || drawing}
+                                onClick={onSubmit}>
+                                {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </DialogActions>
         </InjectedDialog>
     )

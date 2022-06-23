@@ -26,6 +26,7 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -59,13 +60,6 @@ const useStyles = makeStyles()((theme) => {
         tip: {
             fontSize: 12,
             color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-            [smallQuery]: {
-                lineHeight: 1.2,
-                marginTop: theme.spacing(0),
-            },
         },
         date: {
             margin: theme.spacing(1),
@@ -472,20 +466,25 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box>
-                <WalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={inputTokenAmount}
-                        spender={ITO2_CONTRACT_ADDRESS}
-                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
-                        <PluginWalletStatusBar
-                            actionProps={{
-                                disabled: !!validationMessage,
-                                title: validationMessage || t('plugin_ito_next'),
-                                action: async () => onNext(),
-                            }}
-                        />
-                    </EthereumERC20TokenApprovedBoundary>
-                </WalletConnectedBoundary>
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={inputTokenAmount}
+                            spender={ITO2_CONTRACT_ADDRESS}
+                            token={
+                                tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined
+                            }>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={!!validationMessage}
+                                onClick={onNext}>
+                                {validationMessage || t('plugin_ito_next')}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </Box>
         </>
     )

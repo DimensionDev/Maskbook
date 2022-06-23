@@ -172,11 +172,12 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     </div>
                                 </DialogContent>
                                 <DialogActions style={{ padding: 0 }}>
-                                    <ChainBoundary
-                                        expectedChainId={chainId}
-                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                                        <PluginWalletStatusBar />
-                                    </ChainBoundary>
+                                    <PluginWalletStatusBar>
+                                        <ChainBoundary
+                                            expectedChainId={chainId}
+                                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                        />
+                                    </PluginWalletStatusBar>
                                 </DialogActions>
                             </>
                         )}

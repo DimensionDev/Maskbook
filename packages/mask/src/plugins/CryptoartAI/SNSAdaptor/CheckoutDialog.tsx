@@ -14,6 +14,7 @@ import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -38,7 +39,6 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
         container: {
             padding: theme.spacing(1),
@@ -173,16 +173,19 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <WalletConnectedBoundary>
-                            <PluginWalletStatusBar
-                                actionProps={{
-                                    title: validationMessage || t('plugin_cryptoartai_buy_now'),
-                                    loading: isPurchasing,
-                                    disabled: !!validationMessage || isPurchasing,
-                                    action: async () => purchase(),
-                                }}
-                            />
-                        </WalletConnectedBoundary>
+                        <PluginWalletStatusBar>
+                            <WalletConnectedBoundary>
+                                <ActionButton
+                                    loading={isPurchasing}
+                                    className={classes.button}
+                                    fullWidth
+                                    variant="contained"
+                                    disabled={!!validationMessage || isPurchasing}
+                                    onClick={purchase}>
+                                    {validationMessage || t('plugin_cryptoartai_buy_now')}
+                                </ActionButton>
+                            </WalletConnectedBoundary>
+                        </PluginWalletStatusBar>
                     </CardActions>
                 </Card>
             </DialogContent>

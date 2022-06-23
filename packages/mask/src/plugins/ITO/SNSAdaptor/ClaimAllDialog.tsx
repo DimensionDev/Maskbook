@@ -22,6 +22,7 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -41,8 +42,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             margin: '0 auto',
             minHeight: 'auto',
             width: '100%',
-            fontSize: 18,
-            fontWeight: 400,
         },
         footer: {
             marginTop: theme.spacing(2),
@@ -152,7 +151,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             marginTop: 'auto',
             bottom: 0,
             zIndex: 2,
-            backgroundColor: theme.palette.background.paper,
         },
         emptyContentWrapper: {
             display: 'flex',
@@ -198,13 +196,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         },
         walletStatusBox: {
             margin: theme.spacing(3, 'auto'),
-        },
-        claimAllButton: {
-            height: 48,
-            borderRadius: 999,
-            [smallQuery]: {
-                fontSize: 14,
-            },
         },
     }
 })
@@ -292,26 +283,27 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     </div>
                 </DialogContent>
                 <DialogActions style={{ padding: 0 }}>
-                    <div className={classes.actionButtonWrapper}>
+                    <PluginWalletStatusBar className={classes.actionButtonWrapper}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             noSwitchNetworkTip>
-                            <WalletConnectedBoundary
-                                classes={{
-                                    connectWallet: classes.claimAllButton,
-                                }}>
-                                <PluginWalletStatusBar
-                                    actionProps={{
-                                        loading: isClaiming,
-                                        disabled: claimablePids!.length === 0 || isClaiming,
-                                        action: claim,
-                                        title: t('plugin_ito_claim_all'),
-                                    }}
-                                />
-                            </WalletConnectedBoundary>
+                            {swappedTokens?.length ? (
+                                <WalletConnectedBoundary>
+                                    <ActionButton
+                                        variant="contained"
+                                        loading={isClaiming}
+                                        disabled={claimablePids!.length === 0 || isClaiming}
+                                        size="small"
+                                        onClick={claim}>
+                                        {t('plugin_ito_claim_all')}
+                                    </ActionButton>
+                                </WalletConnectedBoundary>
+                            ) : (
+                                <div />
+                            )}
                         </ChainBoundary>
-                    </div>
+                    </PluginWalletStatusBar>
                 </DialogActions>
             </InjectedDialog>
         </SnackbarProvider>
