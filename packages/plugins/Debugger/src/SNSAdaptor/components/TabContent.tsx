@@ -38,7 +38,7 @@ import {
     Typography,
 } from '@mui/material'
 import { FormEvent, useCallback } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 
 export interface TabContentProps {
     identity?: SocialIdentity
@@ -198,7 +198,7 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
         [connection],
     )
 
-    const onPickToken = usePickToken()
+    const onPickToken = useSelectFungibleToken()
 
     return (
         <section className={classes.container}>

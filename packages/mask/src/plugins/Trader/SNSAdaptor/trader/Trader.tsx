@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
-import { useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
@@ -13,7 +13,14 @@ import {
     UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useChainIdValid,
+    useFungibleTokenBalance,
+    useWallet,
+    useAccount,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -190,10 +197,10 @@ export function Trader(props: TraderProps) {
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
 
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken()
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
-            const picked = await pickToken({
+            const picked = await selectFungibleToken({
                 chainId,
                 disableNativeToken: false,
                 selectedTokens: excludeTokens,
@@ -204,7 +211,7 @@ export function Trader(props: TraderProps) {
                         panelType === TokenPanelType.Input
                             ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: picked,
+                    token: picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
                 })
             }
         },
