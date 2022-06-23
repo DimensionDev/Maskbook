@@ -7,6 +7,7 @@ import { isMobileFacebook } from '../../utils/isMobile'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { Flags } from '../../../../../shared'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -70,7 +71,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
 
                 if (!info) return
 
-                const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+                const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.shadowRootMode } })
                 proxy.realCurrent = info.element
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })

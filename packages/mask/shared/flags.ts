@@ -54,6 +54,9 @@ export const Flags = {
     // we still need to handle image encoding
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
+
+    // shadow root
+    shadowRootMode: process.env.channel === 'beta' ? 'open' : 'closed',
 } as const
 
 if (process.env.NODE_ENV === 'development') {

@@ -7,6 +7,7 @@ import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '@dimensiondev/kit'
 import { startWatch } from '../../../utils/watcher'
+import { Flags } from '../../../../shared'
 
 function Icon(props: { size: number }) {
     return (
@@ -69,7 +70,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         if (signal?.aborted) return
         const node = ls.evaluate()
         if (!node) return
-        const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
+        const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.shadowRootMode } })
         proxy.realCurrent = node
         const root = createReactRootShadowed(proxy.afterShadow, { signal })
         root.render(<Icon size={24} />)

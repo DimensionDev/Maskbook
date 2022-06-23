@@ -2,11 +2,12 @@ import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
+import { Flags } from '../../../../shared'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
     if (map.has(node)) return map.get(node)!
-    const dom = node.attachShadow({ mode: 'closed' })
+    const dom = node.attachShadow({ mode: Flags.shadowRootMode })
     map.set(node, dom)
     return dom
 }
