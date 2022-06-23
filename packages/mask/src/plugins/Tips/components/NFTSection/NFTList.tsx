@@ -155,11 +155,13 @@ export const NFTList: FC<Props> = ({
                           token.tokenId,
                       )
                     : undefined
+                const name = token.collection?.name || token.contract?.name
+                const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
                 return (
                     <ShadowRootTooltip
                         classes={{ tooltip: classes.tooltip }}
                         key={`${token.address}/${token.tokenId + token.id}`}
-                        title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
+                        title={title}
                         placement="top"
                         arrow>
                         <ListItem
