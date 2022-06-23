@@ -11,7 +11,7 @@ import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract
 import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract'
 import { useTransactionDeadline } from './useTransactionDeadline'
 import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { TradeProvider } from '@masknet/public-api'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)

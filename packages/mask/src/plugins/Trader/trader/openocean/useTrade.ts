@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import type { SwapOOData, TradeStrategy } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'

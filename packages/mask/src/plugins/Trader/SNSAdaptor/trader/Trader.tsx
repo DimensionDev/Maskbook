@@ -12,7 +12,7 @@ import {
     useTokenConstants,
     UST,
 } from '@masknet/web3-shared-evm'
-import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
+import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
@@ -21,7 +21,6 @@ import { useI18N } from '../../locales'
 import { isNativeTokenWrapper } from '../../helpers'
 import { PluginTraderMessages } from '../../messages'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
