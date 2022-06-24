@@ -215,19 +215,14 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={targetChainId}
-                    renderInTimeline>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={targetChainId}>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}
-                        renderInTimeline>
+                        classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
                             fullWidth
-                            variant="contained"
                             sx={{
                                 backgroundColor: theme.palette.maskColor.dark,
                                 color: 'white',

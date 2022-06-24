@@ -56,7 +56,6 @@ export function ActionBar(props: ActionBarProps) {
                     className={classes.button}
                     color="primary"
                     fullWidth
-                    variant="contained"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -70,7 +69,6 @@ export function ActionBar(props: ActionBarProps) {
                 <ActionButton
                     className={classes.button}
                     color="primary"
-                    variant="contained"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -82,11 +80,7 @@ export function ActionBar(props: ActionBarProps) {
             !assetSource?.is24Auction &&
             assetSource?.priceInEth < 100000 &&
             assetSource?.trade?.isCanBuy ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
+                <ActionButton className={classes.button} color="primary" onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}

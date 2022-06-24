@@ -123,7 +123,6 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         {!connected && error ? (
                             <ActionButton
                                 color="primary"
-                                variant="contained"
                                 onClick={retry}
                                 disabled={loading}
                                 className={classes.retryButton}>

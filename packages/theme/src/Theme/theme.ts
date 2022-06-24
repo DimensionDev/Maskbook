@@ -26,7 +26,7 @@ function MaskTheme(mode: PaletteMode) {
     const maskColors = MaskColors[mode]
 
     const theme = merge(
-        { palette: { ...color(mode, colors), ...maskColors } } as ThemeOptions,
+        { palette: { ...color(mode, colors), maskColor: maskColors.maskColor } } as ThemeOptions,
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )

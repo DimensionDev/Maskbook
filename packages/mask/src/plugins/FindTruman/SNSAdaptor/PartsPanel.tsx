@@ -313,13 +313,7 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
                     )}
                 </Box>
             ) : (
-                <LoadingButton
-                    loading={loading}
-                    size="small"
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                    onClick={handleOpenBox}>
+                <LoadingButton loading={loading} size="small" color="primary" fullWidth onClick={handleOpenBox}>
                     {t('plugin_find_truman_dialog_open')}
                 </LoadingButton>
             )}

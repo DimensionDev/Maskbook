@@ -177,7 +177,6 @@ export function RemindDialog(props: RemindDialogProps) {
                 />
             </section>
             <ActionButton
-                variant="contained"
                 color="primary"
                 className={classes.button}
                 onClick={() => setStatus(SwapStatus.Swap)}

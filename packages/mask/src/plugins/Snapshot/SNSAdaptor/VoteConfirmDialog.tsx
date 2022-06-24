@@ -106,7 +106,6 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"
-                        variant="contained"
                         fullWidth
                         disabled={loading}
                         onClick={onVoteConfirm}>

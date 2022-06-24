@@ -191,10 +191,8 @@ export function PreviewCard(props: PreviewCardProps) {
                         predicate={(pluginID, chainId) =>
                             pluginID === NetworkPluginID.PLUGIN_EVM &&
                             [ChainId.Mainnet, ChainId.Matic].includes(chainId)
-                        }
-                        renderInTimeline>
+                        }>
                         <Button
-                            variant="contained"
                             fullWidth
                             sx={{
                                 backgroundColor: theme.palette.maskColor.dark,

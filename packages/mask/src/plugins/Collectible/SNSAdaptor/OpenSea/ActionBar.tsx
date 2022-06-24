@@ -55,45 +55,25 @@ export function ActionBar(props: ActionBarProps) {
     const isOwner = isSameAddress(asset.value.owner?.address, account)
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={ChainId.Mainnet}
-                renderInTimeline>
+            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Mainnet}>
                 {!isOwner && asset.value.auction ? (
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        variant="contained"
-                        onClick={onOpenCheckoutDialog}>
+                    <ActionButton className={classes.button} color="primary" onClick={onOpenCheckoutDialog}>
                         {t('plugin_collectible_buy_now')}
                     </ActionButton>
                 ) : null}
                 {!isOwner && asset.value.auction ? (
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        fullWidth
-                        variant="contained"
-                        onClick={onOpenOfferDialog}>
+                    <ActionButton className={classes.button} color="primary" fullWidth onClick={onOpenOfferDialog}>
                         {t('plugin_collectible_place_bid')}
                     </ActionButton>
                 ) : null}
 
                 {!isOwner && !asset.value.auction ? (
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        variant="contained"
-                        onClick={onOpenOfferDialog}>
+                    <ActionButton className={classes.button} color="primary" onClick={onOpenOfferDialog}>
                         {t('plugin_collectible_make_offer')}
                     </ActionButton>
                 ) : null}
                 {isOwner ? (
-                    <ActionButton
-                        className={classes.button}
-                        color="primary"
-                        variant="contained"
-                        onClick={onOpenListingDialog}>
+                    <ActionButton className={classes.button} color="primary" onClick={onOpenListingDialog}>
                         {t('plugin_collectible_sell')}
                     </ActionButton>
                 ) : null}

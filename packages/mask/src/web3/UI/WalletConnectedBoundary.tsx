@@ -69,7 +69,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 startIcon={props.startIcon}
                 className={buttonClass}
                 fullWidth
-                variant="contained"
                 onClick={openSelectProviderDialog}
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_connect_a_wallet')}

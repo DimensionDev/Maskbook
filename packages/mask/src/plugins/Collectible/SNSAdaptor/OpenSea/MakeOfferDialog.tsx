@@ -246,7 +246,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButtonPromise
                                     className={classes.button}
-                                    variant="contained"
                                     disabled={!!validationMessage}
                                     size="large"
                                     init={
@@ -263,11 +262,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     failedOnClick="use executor"
                                 />
                                 {insufficientBalance ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConvertClick}>
+                                    <ActionButton className={classes.button} size="large" onClick={onConvertClick}>
                                         {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
                                     </ActionButton>
                                 ) : null}

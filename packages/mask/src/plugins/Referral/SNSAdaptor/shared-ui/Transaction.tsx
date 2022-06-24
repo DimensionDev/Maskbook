@@ -79,7 +79,7 @@ export function Transaction(props: TransactionProps) {
                     </Grid>
 
                     <Grid item xs={12} marginTop={2}>
-                        <ActionButton fullWidth variant="contained" size="medium" onClick={props.actionButton.onClick}>
+                        <ActionButton fullWidth size="medium" onClick={props.actionButton.onClick}>
                             {props.actionButton.label}
                         </ActionButton>
                     </Grid>

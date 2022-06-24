@@ -50,7 +50,6 @@ export function ActionBar(props: ActionBarProps) {
                 className={classes.button}
                 fullWidth
                 color="primary"
-                variant="contained"
                 onClick={onOpenMintDialog}
                 disabled={project.complete || project.paused || !project.active}>
                 {status}
