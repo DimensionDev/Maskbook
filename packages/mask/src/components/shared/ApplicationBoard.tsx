@@ -189,16 +189,13 @@ function RenderEntryComponent({ application }: { application: Application }) {
     // #region entry disabled
     const disabled = useMemo(() => {
         if (!application.enabled) return true
+        if (!ApplicationEntryStatus.isSNSConnectToCurrentPersona) return false
 
         if (application.entry.nextIdRequired) {
-            return Boolean(
-                ApplicationEntryStatus.isLoading ||
-                    ApplicationEntryStatus.isNextIDVerify === undefined ||
-                    (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
-            )
-        } else {
-            return false
+            if (ApplicationEntryStatus.isLoading) return true
+            if (ApplicationEntryStatus.isNextIDVerify === undefined) return true
         }
+        return false
     }, [application, ApplicationEntryStatus])
     // #endregion
 
@@ -218,7 +215,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
             return (walletConnectedCallback?: () => void) =>
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
+        if (
+            ApplicationEntryStatus.isSNSConnectToCurrentPersona === false ||
+            ApplicationEntryStatus.isPersonaCreated === false
+        )
             return createOrConnectPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
