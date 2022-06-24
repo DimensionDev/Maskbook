@@ -47,7 +47,7 @@ export function execute(path: string, id: number, ...args: unknown[]) {
 export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
     if (hasListened[event]) return
     hasListened[event] = true
-    read(path).on(
+    read(path)?.on(
         event,
         clone_into((...args: any[]) => {
             // TODO: type unsound
