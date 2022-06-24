@@ -37,7 +37,9 @@ import {
 } from '@mui/material'
 import { useSelectFungibleToken, useSelectGasSettings } from '@masknet/shared'
 
-export interface ConsoleContentProps {}
+export interface ConsoleContentProps {
+    onClose?: () => void
+}
 
 const useStyles = makeStyles()({
     container: {
@@ -46,8 +48,8 @@ const useStyles = makeStyles()({
 })
 
 export function ConsoleContent(props: ConsoleContentProps) {
+    const { onClose } = props
     const { classes } = useStyles()
-
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
@@ -359,6 +361,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button
                                 size="small"
                                 onClick={async () => {
+                                    onClose?.()
                                     const gasSettings = await onSelectGasSettings({})
                                     console.log(gasSettings)
                                 }}>

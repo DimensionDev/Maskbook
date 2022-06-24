@@ -8,17 +8,17 @@ import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base'
 import { InjectedDialog } from '../components'
 import { useRowSize } from './useRowSize'
+import { SettingsBoard } from '../../UI/components/SettingsBoard'
 
 interface StyleProps {
     compact: boolean
-    disablePaddingTop: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(3),
-        paddingTop: disablePaddingTop ? 0 : theme.spacing(2.8),
+        paddingTop: 0,
     },
     list: {
         scrollbarWidth: 'none',
@@ -73,7 +73,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
-    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
+    const { classes } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
@@ -85,26 +85,9 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
-            title={title ?? t.select_token()}>
+            title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
-                <FungibleTokenList
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    pluginID={pluginId}
-                    chainId={chainId}
-                    tokens={tokens ?? []}
-                    whitelist={whitelist}
-                    blacklist={
-                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
-                    }
-                    disableSearch={disableSearchBar}
-                    selectedTokens={selectedTokens}
-                    onSelect={onSubmit}
-                    FixedSizeListProps={{
-                        itemSize: rowSize,
-                        height: isMdScreen ? 300 : 503,
-                    }}
-                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
-                />
+                <SettingsBoard />
             </DialogContent>
         </InjectedDialog>
     )
