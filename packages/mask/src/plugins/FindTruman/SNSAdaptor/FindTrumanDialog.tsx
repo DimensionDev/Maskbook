@@ -1,4 +1,4 @@
-import { Box, DialogActions, DialogContent, Tab } from '@mui/material'
+import { Box, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
@@ -15,7 +15,17 @@ import { PluginWalletStatusBar } from '../../../utils'
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
         paddingBottom: '0 !important',
-        paddingTop: '0 !important',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     walletStatusBox: {
         width: 535,
@@ -39,9 +49,20 @@ const useStyles = makeStyles()((theme, props) => ({
         margin: '0 auto',
         padding: 0,
     },
-
+    power: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        padding: 16,
+    },
+    icon: {
+        width: 22,
+        height: 22,
+        paddingLeft: 12,
+    },
     actions: {
         padding: 0,
+        display: 'block',
     },
 }))
 
@@ -91,6 +112,23 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                         )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
+                        <Box className={classes.power}>
+                            <Typography
+                                sx={{ marginRight: 1 }}
+                                variant="body1"
+                                color="textSecondary"
+                                fontSize={14}
+                                fontWeight={700}>
+                                Powered by
+                            </Typography>
+                            <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
+                                FindTruman
+                            </Typography>
+                            <img
+                                className={classes.icon}
+                                src={new URL('../assets/findtruman.png', import.meta.url).toString()}
+                            />
+                        </Box>
                         <PluginWalletStatusBar />
                     </DialogActions>
                 </InjectedDialog>
