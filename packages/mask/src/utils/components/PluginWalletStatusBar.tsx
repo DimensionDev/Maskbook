@@ -147,7 +147,8 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
                                     href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
                                     target="_blank"
                                     title="View on Explorer"
-                                    rel="noopener noreferrer">
+                                    rel="noopener noreferrer"
+                                    className={classes.linkIcon}>
                                     <LinkOutIcon className={classes.linkIcon} />
                                 </Link>
                                 {pendingTransactions.length ? (
