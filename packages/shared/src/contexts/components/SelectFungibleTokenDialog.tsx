@@ -1,12 +1,12 @@
+import type { FC } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import type { FC } from 'react'
-import { useBaseUIRuntime } from '../../base'
-import { InjectedDialog } from '../../components'
+import { useBaseUIRuntime } from '../base'
+import { InjectedDialog } from '../components'
 import { useRowSize } from './useRowSize'
 
 interface StyleProps {
@@ -38,27 +38,26 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
     },
 }))
 
-export interface PickTokenOptions {
-    disableNativeToken?: boolean
-    chainId?: Web3Helper.ChainIdAll
-    disableSearchBar?: boolean
+export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+    open: boolean
+    pluginID?: T
+    chainId?: Web3Helper.Definition[T]['ChainId']
     keyword?: string
     whitelist?: string[]
     title?: string
     blacklist?: string[]
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
+    disableSearchBar?: boolean
+    disableNativeToken?: boolean
     selectedTokens?: string[]
     onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
-}
-
-export interface SelectTokenDialogProps extends PickTokenOptions {
-    open: boolean
     onClose?(): void
 }
 
 const isDashboard = isDashboardPage()
-export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
+export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     open,
+    pluginID,
     chainId,
     disableSearchBar,
     disableNativeToken,
@@ -73,7 +72,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
     const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
@@ -90,15 +89,16 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    onSelect={onSubmit}
+                    pluginID={pluginId}
+                    chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
-                    chainId={chainId}
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
+                    onSelect={onSubmit}
                     FixedSizeListProps={{
                         itemSize: rowSize,
                         height: isMdScreen ? 300 : 503,

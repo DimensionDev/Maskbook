@@ -38,6 +38,7 @@ import {
     Typography,
 } from '@mui/material'
 import { FormEvent, useCallback } from 'react'
+import { useSelectFungibleToken } from '@masknet/shared'
 
 export interface TabContentProps {
     identity?: SocialIdentity
@@ -196,6 +197,8 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
         },
         [connection],
     )
+
+    const onPickToken = useSelectFungibleToken()
 
     return (
         <section className={classes.container}>
@@ -377,6 +380,23 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                                     }
                                 }}>
                                 Disconnect
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Token List
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    const token = await onPickToken({})
+                                    console.log(token)
+                                }}>
+                                Pick Token
                             </Button>
                         </TableCell>
                     </TableRow>
