@@ -30,7 +30,7 @@ export type TokenInfo = Omit<RawTokenInfo, 'spenders'>
 export type Spender = Omit<RawSpender, 'protocol'> & {
     tokenInfo: TokenInfo
     name: string | undefined
-    logo: string | React.ReactNode | undefined
+    logo: React.ReactNode | undefined
     isMaskDapp: boolean
 }
 
