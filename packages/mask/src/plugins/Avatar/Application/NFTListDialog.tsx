@@ -311,27 +311,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         />
                     </>
                 ) : null}
-
-                {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
-                        <Typography
-                            variant="body1"
-                            color="#1D9BF0"
-                            sx={{ cursor: 'pointer', paddingLeft: 0.5 }}
-                            onClick={onClick}>
-                            {t.add_collectible()}
-                        </Typography>
-                    </Stack>
-                ) : null}
             </DialogContent>
 
             <DialogActions className={classes.actions}>
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', padding: 2 }}>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"
-                            sx={{ cursor: 'pointer', paddingLeft: 0.5 }}
+                            sx={{ cursor: 'pointer' }}
+                            fontWeight={700}
+                            fontSize={14}
+                            lineHeight="18px"
                             onClick={onClick}>
                             {t.add_collectible()}
                         </Typography>
