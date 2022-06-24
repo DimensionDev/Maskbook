@@ -80,7 +80,7 @@ class Connection implements BaseConnection {
     getGasPrice(initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getSchemaType(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
+    getTokenSchema(address: string, initial?: FlowConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
@@ -184,8 +184,8 @@ class Connection implements BaseConnection {
     }
     getNonFungibleTokenOwnership(
         address: string,
-        owner: string,
         tokenId: string,
+        owner: string,
         schema?: SchemaType | undefined,
         initial?: FlowConnectionOptions,
     ): Promise<boolean> {
@@ -256,9 +256,9 @@ class Connection implements BaseConnection {
         const key = first(account.keys)
         return key?.sequenceNumber ?? 0
     }
-    async switchChain(initial?: FlowConnectionOptions): Promise<void> {
+    async switchChain(chainId: ChainId, initial?: FlowConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(options.chainId)
+        await Providers[options.providerType].switchChain(chainId)
     }
     async signMessage(dataToSign: string, signType?: string, initial?: FlowConnectionOptions) {
         const options = this.getOptions(initial)
@@ -306,10 +306,10 @@ class Connection implements BaseConnection {
     sendSignedTransaction(signature: never, initial?: FlowConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    replaceRequest(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
+    requestTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelRequest(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
+    cancelTransaction(hash: string, config: MutateOptions, initial?: FlowConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

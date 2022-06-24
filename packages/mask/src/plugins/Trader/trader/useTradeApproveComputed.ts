@@ -4,7 +4,7 @@ import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types'
 import { useGetTradeContext } from './useGetTradeContext'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,

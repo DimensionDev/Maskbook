@@ -5,7 +5,7 @@ import { pick } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import type { TransactionConfig } from 'web3-core'
 import type { SwapOOData, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

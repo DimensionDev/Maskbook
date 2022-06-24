@@ -13,7 +13,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
@@ -95,19 +95,19 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // #region select token
     const { value: nativeTokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, undefined, { chainId })
-    const [token = nativeTokenDetailed, setToken] = useState<
-        FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20> | undefined
-    >(origin?.token)
+    const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
+        origin?.token,
+    )
 
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
             chainId,
         })
-        if (picked) setToken(picked as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
-    }, [pickToken, token?.address, chainId])
+        if (picked) setToken(picked)
+    }, [selectFungibleToken, token?.address, chainId])
     // #endregion
 
     // #region packet settings

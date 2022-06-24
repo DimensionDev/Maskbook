@@ -372,7 +372,7 @@
     "plugin_trader_what_is_lbp": "What's LBP?",
     "plugin_trader_lbp_intro": "Solid blue line illustrates the historical price of {{symbol}} on the {{symbol}}'s LBP. The price could continue to go down if no one buys. Please make your investment decision wisely.",
     "plugin_trader_no_pools_found": "No pools found.",
-    "plugin_trader_safety_agree": "i understand",
+    "plugin_trader_safety_agree": "I understand",
     "plugin_trader_view_on_etherscan": "View on Etherscan",
     "plugin_trader_safety_alert_title": "Token Safety Alert",
     "plugin_trader_safety_alert": "Anyone can create and name any ERC20 token on Ethereum, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token. Similar to Etherscan, this site automatically tracks analytics for all ERC20 tokens independent of token integrity. Please do your own research before interacting with any ERC20 token.",

@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx prettier@2.6.2 --check .
+      - run: npx prettier@2.7.1 --check .
   markdownlint:
     runs-on: ubuntu-20.04
     steps:
