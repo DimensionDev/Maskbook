@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { LoadingIcon } from '@masknet/icons'
+import { CircleLoadingIcon } from '@masknet/icons'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { LoadingAnimation, TokenIcon, useSharedI18N } from '@masknet/shared'
@@ -134,7 +134,7 @@ export const getFungibleTokenItem =
                     size="small"
                     className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
+                    loadingIndicator={<CircleLoadingIcon sx={{ fontSize: 14 }} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )

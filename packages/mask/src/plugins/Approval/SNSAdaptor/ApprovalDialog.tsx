@@ -1,5 +1,5 @@
 import { DialogContent, ListItem, List, Typography, Link, Button } from '@mui/material'
-import { ApproveStateType, TargetChainIdContext, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
+import { TargetChainIdContext, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import BigNumber from 'bignumber.js'
 import { useState, useMemo } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -124,6 +124,7 @@ interface ApprovalTokenItemProps {
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { networkDescriptor, spender } = props
+    const [approved, setApproved] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor.backgroundGradient,
@@ -131,13 +132,14 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
+    const [_, transactionState, approveCallback] = useERC20TokenApproveCallback(
         spender.tokenInfo.id,
         '0',
         spender.id,
+        () => setApproved(true),
     )
 
-    return approveStateType === ApproveStateType.NOT_APPROVED ? null : (
+    return approved ? null : (
         <ListItem className={classes.listItem}>
             <div className={classes.listItemInfo}>
                 <div>

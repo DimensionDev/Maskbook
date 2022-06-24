@@ -17,7 +17,7 @@ import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import DoneIcon from '@mui/icons-material/Done'
-import { LoadingIcon, RiskIcon } from '@masknet/icons'
+import { CircleLoadingIcon, RiskIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 
@@ -186,7 +186,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
     const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
-    const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
+    const loadingIcon = <CircleLoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
     let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>

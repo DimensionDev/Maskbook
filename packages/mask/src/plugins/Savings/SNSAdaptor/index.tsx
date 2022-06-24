@@ -32,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         : clickHandler
                                 }
                             />
-                            <SavingsDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <SavingsDialog open={open} onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },

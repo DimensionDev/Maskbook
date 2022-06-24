@@ -14,6 +14,14 @@ export class ERC20Descriptor implements TransactionDescriptor {
 
         switch (context.name) {
             case 'approve':
+                if (context.parameters?.value === '0') {
+                    return {
+                        chainId: context.chainId,
+                        title: 'Cancel Unlock',
+                        description: 'Revoke the approval for the token.',
+                    }
+                }
+
                 return {
                     chainId: context.chainId,
                     title: 'Approve',

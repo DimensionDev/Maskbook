@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { LoadingIcon } from '@masknet/icons'
+import { CircleLoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -56,7 +56,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         justifyContent="center"
                         sx={{ px: 2, color: '#ffb915', backgroundColor: 'rgba(255, 185, 21, 0.1)' }}
                         className={classes.bar}>
-                        <LoadingIcon
+                        <CircleLoadingIcon
                             sx={{ fontSize: 12, mr: 0.8, color: '#ffb915', backgroundColor: 'rgba(255, 185, 21, 0.1)' }}
                         />
                         <Typography component="span" fontSize={12} display="inline-block">

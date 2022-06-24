@@ -21,7 +21,7 @@ export enum ApproveStateType {
     FAILED = 5,
 }
 
-export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
+export function useERC20TokenApproveCallback(address: string, amount: string, spender: string, callback?: () => void) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const erc20Contract = useERC20TokenContract(chainId, address)
@@ -90,6 +90,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                     .send(config as NonPayableTx)
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         resolve(receipt.transactionHash)
+                        callback?.()
                         revalidate()
                     })
                     .on(TransactionEventType.ERROR, (error) => {

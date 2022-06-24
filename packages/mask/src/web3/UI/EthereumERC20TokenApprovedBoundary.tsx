@@ -66,7 +66,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '')
 
     const onApprove = useCallback(
         async (useExact = false) => {
