@@ -13,14 +13,7 @@ import {
     UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import {
-    useChainId,
-    useChainIdValid,
-    useFungibleTokenBalance,
-    useWallet,
-    useAccount,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'

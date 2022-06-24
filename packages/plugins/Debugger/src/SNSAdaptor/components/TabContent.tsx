@@ -386,6 +386,23 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
+                                Token List
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    const token = await onPickToken({})
+                                    console.log(token)
+                                }}>
+                                Pick Token
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
                                 Non-Fungible Token
                             </Typography>
                         </TableCell>
@@ -489,36 +506,6 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
                             </FormControl>
                         </TableCell>
                     </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Token List
-                            </Typography>
-                        </TableCell>
-                        <Button
-                            size="small"
-                            onClick={async () => {
-                                const token = await onPickToken({})
-                                console.log(token)
-                            }}>
-                            Pick Token
-                        </Button>
-                    </TableRow>
-                    {/* <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Gas settings
-                            </Typography>
-                        </TableCell>
-                        <Button
-                                size="small"
-                                onClick={async () => {
-                                    const gasSettings = await onPickGasSettings({})
-                                    console.log(gasSettings)
-                                }}>
-                                Gas Settings
-                        </Button>
-                    </TableRow> */}
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
