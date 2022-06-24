@@ -13,6 +13,7 @@ import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
 import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -257,16 +258,19 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     </Paper>
                 </Grid>
             </Grid>
-            <PluginWalletStatusBar
-                actionProps={{
-                    loading: isCreating,
-                    title: t.send_symbol({
+            <PluginWalletStatusBar>
+                <ActionButton
+                    loading={isCreating}
+                    variant="contained"
+                    size="medium"
+                    fullWidth
+                    onClick={createRedpacket}>
+                    {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',
-                    }),
-                    action: createRedpacket,
-                }}
-            />
+                    })}
+                </ActionButton>
+            </PluginWalletStatusBar>
         </>
     )
 }

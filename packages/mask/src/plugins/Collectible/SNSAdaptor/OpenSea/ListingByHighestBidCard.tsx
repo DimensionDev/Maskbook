@@ -14,6 +14,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { isWyvernSchemaName } from '../../utils'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { useOpenSea } from '../../hooks/useOpenSea'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     label: {},
-    button: {
+    stateBar: {
         marginTop: theme.spacing(1.5),
     },
 }))
@@ -143,20 +144,22 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 />
             </CardContent>
             <CardActions className={classes.footer}>
-                <WalletConnectedBoundary>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            disabled: !!validationMessage,
-                            title: validationMessage || t('plugin_collectible_post_listing'),
-                            waiting: t('plugin_collectible_post_listing'),
-                            action: async () => {
-                                onPostListing()
-                                onClose()
-                            },
-                        }}
-                        classes={{ button: classes.button }}
-                    />
-                </WalletConnectedBoundary>
+                <PluginWalletStatusBar className={classes.stateBar}>
+                    <WalletConnectedBoundary>
+                        <ActionButtonPromise
+                            variant="contained"
+                            disabled={!!validationMessage}
+                            fullWidth
+                            init={validationMessage || t('plugin_collectible_post_listing')}
+                            waiting={t('plugin_collectible_post_listing')}
+                            complete={t('plugin_collectible_done')}
+                            failed={t('plugin_collectible_retry')}
+                            executor={onPostListing}
+                            completeOnClick={onClose}
+                            failedOnClick="use executor"
+                        />
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </CardActions>
         </Card>
     )

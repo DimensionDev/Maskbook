@@ -21,6 +21,7 @@ import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -352,21 +353,24 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     </>
                 ) : null}
             </Box>
-            <WalletConnectedBoundary>
-                <EthereumERC721TokenApprovedBoundary
-                    validationMessage={validationMessage}
-                    owner={account}
-                    contractDetailed={contract}
-                    operator={RED_PACKET_NFT_ADDRESS}>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            disabled: !!validationMessage,
-                            action: async () => setOpenConfirmDialog(true),
-                            title: t.next(),
-                        }}
-                    />
-                </EthereumERC721TokenApprovedBoundary>
-            </WalletConnectedBoundary>
+            <PluginWalletStatusBar>
+                <WalletConnectedBoundary>
+                    <EthereumERC721TokenApprovedBoundary
+                        validationMessage={validationMessage}
+                        owner={account}
+                        contractDetailed={contract}
+                        operator={RED_PACKET_NFT_ADDRESS}>
+                        <ActionButton
+                            variant="contained"
+                            size="medium"
+                            disabled={!!validationMessage}
+                            fullWidth
+                            onClick={() => setOpenConfirmDialog(true)}>
+                            {t.next()}
+                        </ActionButton>
+                    </EthereumERC721TokenApprovedBoundary>
+                </WalletConnectedBoundary>
+            </PluginWalletStatusBar>
             {open ? (
                 <SelectNftTokenDialog
                     open={open}

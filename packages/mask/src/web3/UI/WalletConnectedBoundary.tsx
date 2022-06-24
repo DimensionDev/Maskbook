@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { PluginWalletStatusBar, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useAccount,
@@ -77,7 +77,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         )
 
     if (!approved && !hideRiskWarningConfirmed)
-        return renderInTimeline ? (
+        return (
             <ActionButton
                 className={buttonClass}
                 fullWidth
@@ -92,23 +92,10 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_confirm_risk_warning')}
             </ActionButton>
-        ) : (
-            <PluginWalletStatusBar
-                className={buttonClass}
-                actionProps={{
-                    title: t('plugin_wallet_confirm_risk_warning'),
-                    action: async () =>
-                        setRiskWarningDialog({
-                            open: true,
-                            account,
-                            pluginID,
-                        }),
-                }}
-            />
         )
 
     if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
-        return renderInTimeline ? (
+        return (
             <ActionButton
                 className={buttonClass}
                 disabled={!nativeTokenBalance.error}
@@ -118,30 +105,13 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 {...props.ActionButtonProps}>
                 {t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee')}
             </ActionButton>
-        ) : (
-            <PluginWalletStatusBar
-                className={buttonClass}
-                actionProps={{
-                    disabled: !nativeTokenBalance.error,
-                    action: async () => nativeTokenBalance.retry(),
-                    title: t(nativeTokenBalance.loading ? 'plugin_wallet_update_gas_fee' : 'plugin_wallet_no_gas_fee'),
-                }}
-            />
         )
 
     if (!chainIdValid && !offChain)
-        return renderInTimeline ? (
+        return (
             <ActionButton className={buttonClass} disabled fullWidth variant="contained" {...props.ActionButtonProps}>
                 {t('plugin_wallet_invalid_network')}
             </ActionButton>
-        ) : (
-            <PluginWalletStatusBar
-                className={buttonClass}
-                actionProps={{
-                    title: t('plugin_wallet_invalid_network'),
-                    disabled: true,
-                }}
-            />
         )
 
     return <>{children}</>

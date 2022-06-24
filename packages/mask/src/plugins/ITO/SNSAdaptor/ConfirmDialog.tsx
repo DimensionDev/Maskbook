@@ -18,6 +18,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
 import { useChainId } from '@masknet/plugin-infra/web3'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -308,17 +309,14 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </Grid>
                 </Grid>
             </Card>
-            <PluginWalletStatusBar
-                actionProps={{
-                    loading,
-                    disabled: loading,
-                    title: t('plugin_ito_send_text', {
+            <PluginWalletStatusBar>
+                <ActionButton loading={loading} disabled={loading} fullWidth variant="contained" onClick={onDone}>
+                    {t('plugin_ito_send_text', {
                         total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                         symbol: poolSettings?.token?.symbol,
-                    }),
-                    action: async () => onDone(),
-                }}
-            />
+                    })}
+                </ActionButton>
+            </PluginWalletStatusBar>
         </>
     )
 }

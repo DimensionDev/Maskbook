@@ -1,9 +1,9 @@
 import { explorerResolver, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import { PluginWalletStatusBar, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
-import type { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -92,61 +92,76 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
 
     if (approveState.loading) {
         return (
-            <PluginWalletStatusBar
-                actionProps={{
-                    loading,
-                    disabled: true,
-                    title: t('plugin_wallet_nft_approving_all', {
-                        symbol: contractDetailed?.symbol
-                            ? contractDetailed.symbol.toLowerCase() === 'unknown'
-                                ? 'All'
-                                : contractDetailed?.symbol
-                            : 'All',
-                    }),
-                }}
-            />
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                loading
+                disabled
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_nft_approving_all', {
+                    symbol: contractDetailed?.symbol
+                        ? contractDetailed.symbol.toLowerCase() === 'unknown'
+                            ? 'All'
+                            : contractDetailed?.symbol
+                        : 'All',
+                })}
+            </ActionButton>
         )
     } else if (validationMessage) {
         return (
-            <PluginWalletStatusBar
-                actionProps={{
-                    disabled: true,
-                    title: validationMessage,
-                }}
-            />
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                disabled
+                {...props.ActionButtonProps}>
+                {validationMessage}
+            </ActionButton>
         )
     } else if (loading) {
         return (
-            <PluginWalletStatusBar
-                actionProps={{
-                    loading,
-                    disabled: true,
-                }}
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                loading
+                disabled
+                {...props.ActionButtonProps}
             />
         )
     } else if (value === false) {
         return (
-            <PluginWalletStatusBar
-                actionProps={{
-                    action: approve,
-                    title: t('plugin_wallet_approve_all_nft', {
-                        symbol: contractDetailed?.symbol
-                            ? contractDetailed?.symbol.toLowerCase() === 'unknown'
-                                ? 'All'
-                                : contractDetailed?.symbol
-                            : 'All',
-                    }),
-                }}
-            />
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={approve}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_approve_all_nft', {
+                    symbol: contractDetailed?.symbol
+                        ? contractDetailed?.symbol.toLowerCase() === 'unknown'
+                            ? 'All'
+                            : contractDetailed?.symbol
+                        : 'All',
+                })}
+            </ActionButton>
         )
     } else if (value === undefined) {
         return (
-            <PluginWalletStatusBar
-                actionProps={{
-                    action: async () => retry(),
-                    title: t('plugin_wallet_fail_to_load_nft_contract'),
-                }}
-            />
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={retry}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_fail_to_load_nft_contract')}
+            </ActionButton>
         )
     }
 

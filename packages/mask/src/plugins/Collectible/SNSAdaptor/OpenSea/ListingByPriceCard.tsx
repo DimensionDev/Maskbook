@@ -15,6 +15,7 @@ import { first } from 'lodash-unified'
 import { isWyvernSchemaName } from '../../utils'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { useOpenSea } from '../../hooks/useOpenSea'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -278,20 +279,23 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 </Box>
             </CardContent>
             <CardActions className={classes.footer}>
-                <WalletConnectedBoundary>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            disabled: !!validationMessage,
-                            title: validationMessage || t('plugin_collectible_post_listing'),
-                            waiting: t('plugin_collectible_post_listing'),
-                            action: async () => {
-                                onPostListing()
-                                onClose()
-                            },
-                        }}
-                        classes={{ button: classes.button }}
-                    />
-                </WalletConnectedBoundary>
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary>
+                        <ActionButtonPromise
+                            variant="contained"
+                            disabled={!!validationMessage}
+                            fullWidth
+                            size="large"
+                            init={validationMessage || t('plugin_collectible_post_listing')}
+                            waiting={t('plugin_collectible_post_listing')}
+                            complete={t('plugin_collectible_done')}
+                            failed={t('plugin_collectible_retry')}
+                            executor={onPostListing}
+                            completeOnClick={onClose}
+                            failedOnClick="use executor"
+                        />
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </CardActions>
         </Card>
     )

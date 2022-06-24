@@ -27,6 +27,7 @@ import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infr
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -326,23 +327,27 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Typography>
                     </Grid>
                 </Grid>
-                <WalletConnectedBoundary
-                    classes={{
-                        connectWallet: classNames(classes.button, classes.sendButton),
-                        unlockMetaMask: classNames(classes.button, classes.sendButton),
-                    }}>
-                    <PluginWalletStatusBar
-                        actionProps={{
-                            loading: isSending,
-                            disabled: isSending,
-                            action: onSendTx,
-                            title: t.send_symbol({
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary
+                        classes={{
+                            connectWallet: classNames(classes.button, classes.sendButton),
+                            unlockMetaMask: classNames(classes.button, classes.sendButton),
+                        }}>
+                        <ActionButton
+                            variant="contained"
+                            size="medium"
+                            loading={isSending}
+                            disabled={isSending}
+                            onClick={onSendTx}
+                            className={classNames(classes.button, classes.sendButton)}
+                            fullWidth>
+                            {t.send_symbol({
                                 amount: tokenList.length.toString(),
                                 symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
-                            }),
-                        }}
-                    />
-                </WalletConnectedBoundary>
+                            })}
+                        </ActionButton>
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </DialogContent>
         </InjectedDialog>
     )

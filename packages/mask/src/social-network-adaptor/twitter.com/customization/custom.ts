@@ -97,6 +97,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             borderRadius: 6,
                             fontSize: 12,
                             lineHeight: '16px',
+                            alignItems: 'center',
                         },
                     },
                     {
@@ -108,6 +109,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             borderRadius: 8,
                             fontSize: 14,
                             lineHeight: '18px',
+                            alignItems: 'center',
                         },
                     },
                     {
@@ -119,6 +121,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             borderRadius: 10,
                             fontSize: 16,
                             lineHeight: '20px',
+                            alignItems: 'center',
                         },
                     },
                     {
