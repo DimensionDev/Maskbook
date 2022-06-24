@@ -74,10 +74,10 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         width: '100%',
     },
@@ -120,9 +120,9 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Typography color="textPrimary">{tr('go_wrong')}</Typography>
                 <Button
                     sx={{
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                         '&:hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                         width: 254,
                         color: 'white',
@@ -197,9 +197,9 @@ export function PreviewCard(props: PreviewCardProps) {
                             variant="contained"
                             fullWidth
                             sx={{
-                                backgroundColor: theme.palette.maskColor?.dark,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 '&:hover': {
-                                    backgroundColor: theme.palette.maskColor?.dark,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                 },
                                 color: 'white',
                             }}

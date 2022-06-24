@@ -16,10 +16,10 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
+                backgroundColor: theme.palette.maskColor.dark,
             },
         },
     }

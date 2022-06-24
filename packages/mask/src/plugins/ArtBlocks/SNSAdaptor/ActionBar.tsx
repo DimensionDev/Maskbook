@@ -15,10 +15,10 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(0),
         },
         button: {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
+                backgroundColor: theme.palette.maskColor.dark,
             },
         },
     }

@@ -65,11 +65,11 @@ export function OperationFooter({
         return (
             <ActionButton
                 sx={{
-                    backgroundColor: theme.palette.maskColor?.dark,
+                    backgroundColor: theme.palette.maskColor.dark,
                     width: '100%',
                     color: 'white',
                     '&:hover': {
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                     },
                 }}
                 fullWidth
@@ -99,10 +99,10 @@ export function OperationFooter({
                         {canRefund ? null : (
                             <ActionButton
                                 sx={{
-                                    backgroundColor: theme.palette.maskColor?.dark,
-                                    color: theme.palette.maskColor?.white,
+                                    backgroundColor: theme.palette.maskColor.dark,
+                                    color: theme.palette.maskColor.white,
                                     '&:hover': {
-                                        backgroundColor: theme.palette.maskColor?.dark,
+                                        backgroundColor: theme.palette.maskColor.dark,
                                     },
                                     padding: 1.125,
                                 }}

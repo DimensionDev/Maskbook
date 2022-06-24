@@ -35,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
     },
     reload: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         color: 'white',
         width: 254,

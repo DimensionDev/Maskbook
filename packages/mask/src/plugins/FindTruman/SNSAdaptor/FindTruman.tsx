@@ -103,13 +103,13 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         button: {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             fontSize: 14,
             fontWeight: 700,
             width: '100%',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
+                backgroundColor: theme.palette.maskColor.dark,
             },
             margin: '0 !important',
         },

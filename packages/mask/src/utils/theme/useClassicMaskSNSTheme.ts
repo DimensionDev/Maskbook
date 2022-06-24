@@ -35,6 +35,7 @@ export function useClassicMaskSNSTheme() {
     return usePostTheme(theme)
 }
 
+// TODO: remove this
 export function useClassicMaskSNSPluginTheme() {
     const theme = useClassicMaskSNSTheme()
     return unstable_createMuiStrictModeTheme(

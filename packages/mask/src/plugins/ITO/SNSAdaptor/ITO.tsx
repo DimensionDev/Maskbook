@@ -159,7 +159,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         fontSize: 14,
         paddingTop: 10,
@@ -168,7 +168,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         paddingBottom: 10,
         lineHeight: '20px',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
     textProviderErr: {

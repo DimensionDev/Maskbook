@@ -4,7 +4,11 @@ import * as Components from './component-changes'
 import { merge } from 'lodash-unified'
 import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from '../CSSVariables'
+import { MaskColors } from './colors'
 
+/**
+ * TODO: Remove this and css color var after the dashboard be removed.
+ */
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,
     primary: { main: color.primary, contrastText: color.primaryContrastText },
@@ -19,8 +23,10 @@ const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
 
 function MaskTheme(mode: PaletteMode) {
     const colors = mode === 'dark' ? DarkColor : LightColor
+    const maskColors = MaskColors[mode]
+
     const theme = merge(
-        { palette: color(mode, colors) } as ThemeOptions,
+        { palette: { ...color(mode, colors), ...maskColors } } as ThemeOptions,
         ...Object.values(Changes).map(applyColors),
         ...Object.values(Components).map(applyColors),
     )

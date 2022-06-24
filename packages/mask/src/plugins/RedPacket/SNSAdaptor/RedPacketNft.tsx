@@ -77,10 +77,10 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         margin: '0 !important',
     },
