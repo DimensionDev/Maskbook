@@ -19,13 +19,12 @@ import ActionButton, {
     ActionButtonPromise,
     ActionButtonPromiseProps,
 } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { PluginWalletStatusBar, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { WalletIcon } from '@masknet/shared'
 import { PluginWalletConnectIcon } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -183,7 +182,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         </span>
                     </Typography>
                 ) : null}
-                {expectedChainAllowed && props.renderInTimeline ? (
+                {expectedChainAllowed ? (
                     <ActionButtonPromise
                         fullWidth
                         className={classes.switchButton}
@@ -214,31 +213,9 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         failedOnClick="use executor"
                         {...buttonProps}
                     />
-                ) : (
-                    <PluginWalletStatusBar
-                        tooltip={
-                            actualProviderType === ProviderType.WalletConnect ? (
-                                <Trans i18nKey="plugin_wallet_connect_tips" />
-                            ) : (
-                                ''
-                            )
-                        }
-                        actionProps={{
-                            startIcon: (
-                                <WalletIcon
-                                    mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                                    size={18}
-                                />
-                            ),
-                            title: t('plugin_wallet_connect_network', {
-                                network: 'EVM',
-                            }),
-                            disabled: !expectedChainAllowed,
-                            action: onSwitchChain,
-                        }}
-                    />
-                )}
+                ) : null}
             </>,
+            actualProviderType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
         )
     }
 
@@ -253,7 +230,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     </span>
                 </Typography>
             ) : null}
-            {expectedChainAllowed && props.renderInTimeline ? (
+            {expectedChainAllowed ? (
                 <ActionButtonPromise
                     startIcon={
                         <WalletIcon
@@ -274,35 +251,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     failedOnClick="use executor"
                     {...buttonProps}
                 />
-            ) : (
-                <PluginWalletStatusBar
-                    tooltip={
-                        actualProviderType === ProviderType.WalletConnect ? (
-                            <Trans i18nKey="plugin_wallet_connect_tips" />
-                        ) : (
-                            ''
-                        )
-                    }
-                    actionProps={{
-                        disabled: actualProviderType === ProviderType.WalletConnect || !expectedChainAllowed,
-                        startIcon: (
-                            <WalletIcon
-                                mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                                size={18}
-                            />
-                        ),
-                        title:
-                            actualProviderType === ProviderType.WalletConnect
-                                ? t('plugin_wallet_change_network', { network: expectedChainName })
-                                : t('plugin_wallet_switch_network', { network: expectedChainName }),
-                        waiting: t('plugin_wallet_switch_network_under_going', { network: expectedChainName }),
-                        action: onSwitchChain,
-                    }}
-                />
-            )}
+            ) : null}
         </>,
-        expectedChainAllowed && props.renderInTimeline && actualProviderType === ProviderType.WalletConnect
-            ? t('plugin_wallet_connect_tips')
-            : '',
+        actualProviderType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
     )
 }
