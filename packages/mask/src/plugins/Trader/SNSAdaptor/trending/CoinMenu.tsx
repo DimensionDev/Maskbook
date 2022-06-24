@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import type { TrendingCoinType } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { MenuItem, Stack, Typography } from '@mui/material'
@@ -24,7 +25,7 @@ export interface CoinMenuOption {
 interface TokenMenuListProps {
     options: CoinMenuOption[]
     value?: CoinMenuOption['value']
-    onSelect(value: CoinMenuOption['value']): void
+    onSelect(type: TrendingCoinType, value: CoinMenuOption['value']): void
 }
 
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, value, onSelect }) => {
@@ -33,9 +34,14 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, value, onSelect }) => 
     return (
         <>
             {options.map((x) => (
-                <MenuItem selected={value === x.value} key={x.value} onClick={() => onSelect(x.value)}>
+                <MenuItem
+                    selected={value === x.value}
+                    key={`${x.coin.type}/${x.value}`}
+                    onClick={() => onSelect(x.coin.type, x.value)}>
                     {x.coin.address ? (
                         <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address={x.coin.address} />
+                    ) : x.coin.image_url ? (
+                        <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address="" logoURL={x.coin.image_url} />
                     ) : null}
                     <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                     <Typography className={classes.symbol}>({x.coin.symbol})</Typography>
@@ -62,7 +68,7 @@ export interface CoinMenuProps {
     options: CoinMenuOption[]
     groups?: Array<{ name: string; options: CoinMenuOption[] }>
     value?: CoinMenuOption['value']
-    onChange?: (value: CoinMenuOption['value']) => void
+    onChange?: (type: TrendingCoinType, value: CoinMenuOption['value']) => void
 }
 
 export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({ options, groups, value, children, onChange }) => {
@@ -71,8 +77,8 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({ options, groups
     const onOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
     const onClose = useCallback(() => setAnchorEl(null), [])
     const onSelect = useCallback(
-        (value: CoinMenuOption['value']) => {
-            onChange?.(value)
+        (type: TrendingCoinType, value: CoinMenuOption['value']) => {
+            onChange?.(type, value)
             onClose()
         },
         [onChange],

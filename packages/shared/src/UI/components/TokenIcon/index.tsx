@@ -34,7 +34,7 @@ export function TokenIcon(props: TokenIconProps) {
     const { value } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
         return {
-            key: `${address}_${chainId}`,
+            key: [chainId, address, logoURL].join('/'),
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
     }, [chainId, address, logoURL, hub])

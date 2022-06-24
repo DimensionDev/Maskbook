@@ -6,7 +6,7 @@ import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap, UniSwap } from '@masknet/web3-providers'
+import { CoinGecko, CoinMarketCap, NFTScan, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -20,12 +20,14 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
             return CoinMarketCap.getCurrencies()
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCurrencies()
+        case DataProvider.NFTSCAN:
+            throw new Error('Not implemented yet.')
         default:
             unreachable(dataProvider)
     }
 }
 
-export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
+export async function getCoins(dataProvider: DataProvider, keyword?: string): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
             return CoinGecko.getCoins()
@@ -33,6 +35,8 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
             return CoinMarketCap.getCoins()
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoins()
+        case DataProvider.NFTSCAN:
+            return keyword ? NFTScan.getCoins(keyword) : []
         default:
             unreachable(dataProvider)
     }
@@ -75,7 +79,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
         }
 
         // other providers fetch all of supported coins
-        const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
+        const coins = (await getCoins(dataProvider, keyword)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
         coinNamespace.set(dataProvider, {
             supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
@@ -110,13 +114,17 @@ export async function checkAvailabilityOnDataProvider(
     dataProvider: DataProvider,
 ) {
     if (isBlockedKeyword(type, keyword)) return false
-    // for uniswap we check availability by fetching token info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(chainId, dataProvider, keyword)
+    // for uniswap, and NFTScan, we need to check availability by fetching token info dynamically
+    if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN)
+        await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
-    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider)
+    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider, keyword)
     // data fetched before update in non-blocking way
-    else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider)
+    else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider, keyword)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
+    if (dataProvider === DataProvider.NFTSCAN) {
+        console.log('checkAvailabilityOnDataProvider', dataProvider, symbols)
+    }
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
 }
 
@@ -124,6 +132,7 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
     const networkType = chainResolver.chainNetworkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
     if (!isMainnet) return []
+    console.log('pairs', getEnumAsArray(DataProvider), type, keyword)
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UNISWAP_INFO))
@@ -172,6 +181,8 @@ async function getCoinTrending(
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoinTrending(chainId, id, currency)
+        case DataProvider.NFTSCAN:
+            return NFTScan.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -201,12 +212,8 @@ export async function getCoinTrendingByKeyword(
     const coin = coins.find((x) => x.contract_address) ?? first(coins)
     if (!coin) return null
 
-    return getCoinTrendingById(
-        chainId,
-        resolveCoinId(chainId, resolveAlias(chainId, keyword, dataProvider), dataProvider) ?? coin.id,
-        currency,
-        dataProvider,
-    )
+    const coinId = resolveCoinId(chainId, resolveAlias(chainId, keyword, dataProvider), dataProvider) ?? coin.id
+    return getCoinTrendingById(chainId, coinId, currency, dataProvider)
 }
 // #endregion
 
@@ -225,6 +232,8 @@ export async function getPriceStats(
             return CoinMarketCap.getPriceStats(chainId, id, currency, days)
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getPriceStats(chainId, id, currency, days)
+        case DataProvider.NFTSCAN:
+            return NFTScan.getPriceStats(chainId, id, currency, days)
         default:
             return []
     }

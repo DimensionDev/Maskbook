@@ -532,7 +532,7 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            throw new Error('Not implemented')
+            throw new Error('Not implemented yet.')
         }
 
         // ERC721

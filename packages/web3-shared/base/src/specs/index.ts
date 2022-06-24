@@ -861,6 +861,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>>
+    /** Get non-fungible tokens by collection with pagination supported. */
+    getNonFungibleTokensByCollection?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get price of an non-fungible token */

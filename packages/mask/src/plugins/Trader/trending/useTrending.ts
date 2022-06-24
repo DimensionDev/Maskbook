@@ -50,6 +50,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
+        console.log('getCoinTrendingById', id)
         return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, id])
 

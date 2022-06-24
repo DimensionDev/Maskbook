@@ -20,7 +20,7 @@ import {
     NonFungibleAsset,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types'
+import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -426,5 +426,9 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             collections.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+        throw new Error('Not implemented yet.')
     }
 }

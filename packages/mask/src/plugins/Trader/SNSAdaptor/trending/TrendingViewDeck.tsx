@@ -1,33 +1,33 @@
-import { useCallback } from 'react'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N } from '../../../../utils'
-import type { Coin, Currency, Stat } from '../../types'
-import { DataProvider } from '@masknet/public-api'
-import { PriceChanged } from './PriceChanged'
-import { Linking } from './Linking'
-import { TrendingCard, TrendingCardProps } from './TrendingCard'
-import { PluginTransakMessages } from '../../../Transak/messages'
-import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
-import { TradeDataSource } from '../trader/TradeDataSource'
-import { getCurrentPreferredCoinIdSettings } from '../../settings'
-import { CoinMenu } from './CoinMenu'
-import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { CoinSafetyAlert } from './CoinSafetyAlert'
+import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
-import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
-import { setStorage } from '../../storage'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
-import { PluginHeader } from './PluginHeader'
-import { Box } from '@mui/system'
-import type { TrendingAPI } from '@masknet/web3-providers'
+import { DataProvider } from '@masknet/public-api'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { TrendingAPI, TrendingCoinType } from '@masknet/web3-providers'
+import { ethFormatter, formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
+import { Box } from '@mui/system'
+import stringify from 'json-stable-stringify'
+import { first, last } from 'lodash-unified'
+import { useCallback } from 'react'
+import { useI18N } from '../../../../utils'
+import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
+import { PluginTransakMessages } from '../../../Transak/messages'
+import { getCurrentPreferredCoinIdSettings } from '../../settings'
+import { setStorage } from '../../storage'
+import type { Coin, Currency, Stat } from '../../types'
+import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
+import { TradeDataSource } from '../trader/TradeDataSource'
+import { CoinMenu } from './CoinMenu'
+import { CoinSafetyAlert } from './CoinSafetyAlert'
+import { Linking } from './Linking'
+import { PluginHeader } from './PluginHeader'
+import { PriceChanged } from './PriceChanged'
+import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -161,6 +161,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, trending?.coin?.symbol])
     // #endregion
 
+    const isNFT = dataProvider === DataProvider.NFTSCAN
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         setStorage(option.value as DataProvider)
@@ -170,9 +171,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
-        (value: string) => {
+        (type: TrendingCoinType, value: string) => {
             const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
-            const coin = coins.find((x) => x.id === value)
+            const coin = coins.find((x) => x.id === value && x.type === type)
             if (!coin) return
             settings[coin.symbol.toLowerCase()] = value
             getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
@@ -248,7 +249,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
-                                                formatter={formatCurrency}
+                                                formatter={isNFT ? ethFormatter : formatCurrency}
                                             />
                                         </Typography>
                                     ) : (

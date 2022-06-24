@@ -2,7 +2,7 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
+import { ethFormatter, formatCurrency, formatSupply } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
 
@@ -34,7 +34,7 @@ export interface CoinMarketTableProps {
     trending: Trending
 }
 
-export function CoinMarketTable(props: CoinMarketTableProps) {
+export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { trending, dataProvider } = props
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -43,13 +43,13 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t('plugin_trader_usdc_price_statistic')}
+                    {t('plugin_trader_market_statistic')}
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                        {DataProvider.UNISWAP_INFO === dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head}>
                                     <Typography color="textSecondary" variant="body2">
@@ -64,7 +64,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                             </TableRow>
                         ) : null}
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                        {DataProvider.UNISWAP_INFO === dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head}>
                                     <Typography color="textSecondary" variant="body2">
@@ -108,4 +108,77 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
             </TableContainer>
         </Stack>
     )
+}
+
+export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
+    const { trending } = props
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
+    return (
+        <Stack>
+            <Stack>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t('plugin_trader_usdc_price_statistic')}
+                </Typography>
+            </Stack>
+            <TableContainer className={classes.container} component={Paper} elevation={0}>
+                <Table size="small">
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className={classes.head}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {t('plugin_trader_floor_price')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                <FormattedCurrency
+                                    value={trending.market?.floor_price ?? 0}
+                                    sign="&#x039E;"
+                                    formatter={ethFormatter}
+                                />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.head}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {t('plugin_trader_volume_24')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                <FormattedCurrency
+                                    value={trending.market?.total_24h ?? 0}
+                                    sign="&#x039E;"
+                                    formatter={ethFormatter}
+                                />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.head}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {t('plugin_trader_owners_count')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>{trending.market?.owners_count ?? '--'}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className={classes.head}>
+                                <Typography color="textSecondary" variant="body2">
+                                    {t('plugin_trader_total_assets')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell className={classes.cell}>
+                                {trending.market?.total_supply ? formatSupply(trending.market?.total_supply) : '--'}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Stack>
+    )
+}
+
+export function CoinMarketTable(props: CoinMarketTableProps) {
+    const isNFT = props.dataProvider === DataProvider.NFTSCAN
+    return isNFT ? <NonFungibleCoinMarketTable {...props} /> : <FungibleCoinMarketTable {...props} />
 }

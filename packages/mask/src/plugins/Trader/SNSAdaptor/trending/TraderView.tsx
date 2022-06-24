@@ -9,7 +9,7 @@ import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrendin
 import { TickersTable } from './TickersTable'
 import { PriceChart } from './PriceChart'
 import { usePriceStats } from '../../trending/usePriceStats'
-import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
+import { Days, DEFAULT_RANGE_OPTONS, NFT_RANGE_OPTONS, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
@@ -19,13 +19,21 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
-import { useChainIdValid, useFungibleToken, useNetworkType } from '@masknet/plugin-infra/web3'
+import {
+    useChainIdValid,
+    useFungibleToken,
+    useNetworkType,
+    useNonFungibleAssetsByCollection,
+} from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { Box } from '@mui/system'
 import { TabContext } from '@mui/lab'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { NFTList } from '@masknet/shared'
+import { TrendingCoinType } from '@masknet/web3-providers'
+import { compact } from 'lodash-unified'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -80,6 +88,11 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
             : {
                   marginBottom: '-44px',
               },
+        nftItems: {
+            height: 518,
+            boxSizing: 'border-box',
+            overflow: 'auto',
+        },
     }
 })
 
@@ -96,6 +109,7 @@ enum ContentTabs {
     Price = 'price',
     Exchange = 'exchange',
     Swap = 'swap',
+    NFTItems = 'nft-items',
 }
 
 export function TraderView(props: TraderViewProps) {
@@ -113,7 +127,6 @@ export function TraderView(props: TraderViewProps) {
 
     // #region multiple coins share the same symbol
     const { value: coins = EMPTY_LIST } = useAvailableCoins(tagType, name, dataProvider)
-    console.log('coins', coins)
     // #endregion
 
     // #region merge trending
@@ -150,8 +163,9 @@ export function TraderView(props: TraderViewProps) {
     })
     // #endregion
 
+    const isNFT = dataProvider === DataProvider.NFTSCAN
     // #region if the coin is a native token or contract address exists
-    const isSwappable = (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
+    const isSwappable = !isNFT && (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
     // #endregion
 
     // #region tabs
@@ -163,7 +177,7 @@ export function TraderView(props: TraderViewProps) {
     ]
     const [currentTab, , , setTab] = useTabs<ContentTabs>(tabs[0], ...tabs)
     const tabComponents = useMemo(() => {
-        const config = [
+        const configs = [
             {
                 key: ContentTabs.Market,
                 label: t('plugin_trader_tab_market'),
@@ -182,9 +196,15 @@ export function TraderView(props: TraderViewProps) {
                       label: t('plugin_trader_tab_swap'),
                   }
                 : undefined,
+            isNFT
+                ? {
+                      key: ContentTabs.NFTItems,
+                      label: t('plugin_trader_nft_items'),
+                  }
+                : undefined,
         ]
-        return config.filter(Boolean).map((x) => <Tab value={x!.key} key={x!.key} label={x!.label} />)
-    }, [isSwappable])
+        return compact(configs).map((x) => <Tab value={x.key} key={x!.key} label={x.label} />)
+    }, [isSwappable, isNFT])
     // #endregion
 
     // // #region current data provider switcher
@@ -208,6 +228,14 @@ export function TraderView(props: TraderViewProps) {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
     // #endregion
+    const collectionAddress =
+        trending?.coin.type === TrendingCoinType.NonFungible ? trending.coin.contract_address : undefined
+    const {
+        value: fetchedTokens = EMPTY_LIST,
+        done,
+        next,
+        error: loadError,
+    } = useNonFungibleAssetsByCollection(collectionAddress, NetworkPluginID.PLUGIN_EVM)
 
     // #region no available providers
     if (dataProviders.length === 0) return null
@@ -265,7 +293,7 @@ export function TraderView(props: TraderViewProps) {
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
-                <MaskTabList variant="base" onChange={(e, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
+                <MaskTabList variant="base" onChange={(_, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
                     {tabComponents}
                 </MaskTabList>
             </TabContext>
@@ -282,7 +310,11 @@ export function TraderView(props: TraderViewProps) {
                             stats={stats}
                             retry={retryStats}
                             loading={loadingStats}>
-                            <PriceChartDaysControl days={days} onDaysChange={setDays} />
+                            <PriceChartDaysControl
+                                rangeOptions={isNFT ? NFT_RANGE_OPTONS : DEFAULT_RANGE_OPTONS}
+                                days={days}
+                                onDaysChange={setDays}
+                            />
                         </PriceChart>
                     </Box>
                 ) : null}
@@ -299,6 +331,11 @@ export function TraderView(props: TraderViewProps) {
                             tokenDetailed,
                         }}
                     />
+                ) : null}
+                {currentTab === ContentTabs.NFTItems && isNFT ? (
+                    <Box className={classes.nftItems}>
+                        <NFTList tokens={fetchedTokens} onNextPage={next} finished={done} hasError={!!loadError} />
+                    </Box>
                 ) : null}
             </Stack>
         </TrendingViewDeck>

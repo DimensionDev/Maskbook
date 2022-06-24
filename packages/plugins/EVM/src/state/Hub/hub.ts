@@ -5,8 +5,8 @@ import {
     DeBank,
     EthereumWeb3,
     MetaSwap,
-    OpenSea,
     NFTScan,
+    OpenSea,
     Rarible,
     TokenList,
     Zerion,
@@ -173,7 +173,7 @@ class Hub implements EVM_Hub {
     async getNonFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
@@ -191,6 +191,12 @@ class Hub implements EVM_Hub {
             filteredProviders.map((x) => () => x.getAssets(options.account, options)),
             createPageable([], createIndicator(options.indicator)),
         )
+    }
+    async getNonFungibleTokensByCollection(
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
+        return NFTScan.getAssetsByCollection(address, initial)
     }
     getNonFungibleCollections(
         account: string,

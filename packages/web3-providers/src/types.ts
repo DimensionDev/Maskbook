@@ -43,6 +43,32 @@ export namespace ExplorerAPI {
     export interface Provider {
         getLatestTransactions(account: string, url: string, pageInfo?: PageInfo): Promise<Transaction[]>
     }
+
+    export interface TokenInfo {
+        contractAddress: string
+        tokenName: string
+        symbol: string
+        divisor: string
+        tokenType: string
+        totalSupply: string
+        blueCheckmark: string
+        description: string
+        website: string
+        email: string
+        blog: string
+        reddit: string
+        slack: string
+        facebook: string
+        twitter: string
+        bitcointalk: string
+        github: string
+        telegram: string
+        wechat: string
+        linkedin: string
+        discord: string
+        whitepaper: string
+        tokenPriceUSD: string
+    }
 }
 export namespace RSS3BaseAPI {
     export interface GeneralAsset {
@@ -657,6 +683,22 @@ export namespace TrendingAPI {
         price_change_percentage_30d_in_currency?: number
         price_change_percentage_60d_in_currency?: number
         price_change_percentage_200d_in_currency?: number
+        /** NFT only */
+        floor_price?: number
+        /** NFT only */
+        highest_price?: number
+        /** NFT only */
+        owners_count?: number
+        /** NFT only */
+        royalty?: string
+        /** NFT only */
+        total_24h?: number
+        /** NFT only */
+        volume_24h?: number
+        /** NFT only */
+        average_volume_24h?: number
+        /** NFT only */
+        volume_all?: number
     }
 
     export interface Ticker {
@@ -712,7 +754,7 @@ export namespace TrendingAPI {
         getCoinTrending(chainId: ChainId, id: string, currency: Currency): Promise<Trending>
 
         // #region get all coins
-        getCoins(): Promise<Coin[]>
+        getCoins(keyword?: string): Promise<Coin[]>
         // #endregion
 
         // #region get all currency

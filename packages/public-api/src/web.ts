@@ -175,6 +175,7 @@ export enum DataProvider {
     COIN_GECKO = 0,
     COIN_MARKET_CAP = 1,
     UNISWAP_INFO = 2,
+    NFTSCAN = 3,
 }
 
 export enum TradeProvider {
