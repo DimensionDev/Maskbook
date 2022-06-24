@@ -32,10 +32,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
     const isLight = theme.palette.mode === 'light'
     return {
         wrapper: {
-            padding: theme.spacing(0, 4),
+            padding: 0,
             [smallQuery]: {
                 padding: theme.spacing(0, 1),
             },
+            overflowX: 'hidden',
         },
         actionButton: {
             margin: '0 auto',
@@ -145,6 +146,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             display: 'flex',
             flexDirection: 'column',
             height: props.shortITOwrapper ? 450 : 650,
+            padding: '0 16px',
         },
         actionButtonWrapper: {
             position: 'sticky',
