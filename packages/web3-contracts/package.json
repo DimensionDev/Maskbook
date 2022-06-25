@@ -6,7 +6,8 @@
   },
   "dependencies": {
     "@typechain/web3-v1": "^3.0.0",
-    "typechain": "^5.0.0"
+    "typechain": "^5.0.0",
+    "web3-core": "1.7.4"
   },
   "devDependencies": {
     "bn.js": "^4.12.0",
