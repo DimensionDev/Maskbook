@@ -1,5 +1,3 @@
-import type { RequestArguments } from 'web3-core'
-
 export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
@@ -40,6 +38,11 @@ export interface InternalEvents {
     rejectPromise: [req_id: number, error: unknown]
 }
 
+export interface RequestArguments {
+    method: string
+    params?: any
+    [key: string]: any
+}
 export interface EthereumProvider {
     /** Wait for ethereum object appears. */
     untilAvailable(): Promise<true>
