@@ -32,6 +32,7 @@
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
     "web3": "1.7.4",
+    "web3-core": "1.7.4",
     "web3-eth": "1.7.4"
   },
   "devDependencies": {
