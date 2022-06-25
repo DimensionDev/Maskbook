@@ -52,9 +52,7 @@
     "react-dom": "18.1.0",
     "react-i18next": "^11.16.9",
     "ses": "0.15.16",
-    "ts-results": "3.3.0",
-    "web3-core": "1.7.3",
-    "web3-core-method": "1.7.3"
+    "ts-results": "3.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
