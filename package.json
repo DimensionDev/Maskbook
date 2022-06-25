@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@7.1.1",
+  "packageManager": "pnpm@7.4.0-1",
   "engines": {
     "node": ">=17.0.0",
     "pnpm": ">=7.0.0",
@@ -20,7 +20,7 @@
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
-    "postinstall": "patch-package && gulp fix-lockfile",
+    "postinstall": "gulp fix-lockfile",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:debug": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
@@ -38,13 +38,11 @@
     "@mui/lab": "5.0.0-alpha.82",
     "@mui/material": "5.8.0",
     "@mui/system": "5.8.0",
-    "@solana/web3.js": "1.39.1",
     "@types/masknet__global-types": "workspace:*",
     "@types/react": "18.0.14",
     "@types/react-dom": "^18.0.5",
     "@types/web": "^0.0.68",
     "i18next": "^21.8.2",
-    "immer": "9.0.12",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.2",
@@ -52,15 +50,12 @@
     "react-dom": "18.1.0",
     "react-i18next": "^11.16.9",
     "ses": "0.15.16",
-    "ts-results": "3.3.0",
-    "web3-core": "1.7.3",
-    "web3-core-method": "1.7.3"
+    "ts-results": "3.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^28.1.1",
     "@magic-works/i18n-codegen": "^0.2.0",
     "@masknet/cli": "workspace:*",
@@ -90,8 +85,7 @@
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.34",
-      "@types/react": "18.0.9",
-      "@solana/web3.js": "1.39.1"
+      "@types/react": "18.0.9"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
@@ -109,6 +103,10 @@
         "react": "18",
         "react-dom": "18"
       }
+    },
+    "patchedDependencies": {
+      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch",
+      "immer@9.0.15": "patches/immer@9.0.15.patch"
     }
   }
 }
