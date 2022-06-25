@@ -5,7 +5,6 @@ onlyBuiltDependencies: []
 overrides:
   '@types/node': ^17.0.34
   '@types/react': 18.0.9
-  '@solana/web3.js': 1.39.1
 
 patchedDependencies:
   ts-results@3.3.0:
@@ -37,7 +36,6 @@ importers:
       '@mui/material': 5.8.0
       '@mui/system': 5.8.0
       '@nice-labs/git-rev': ^3.5.0
-      '@solana/web3.js': 1.39.1
       '@swc/core': ^1.2.177
       '@types/lodash-es': ^4.17.6
       '@types/masknet__global-types': workspace:*
@@ -82,7 +80,6 @@ importers:
       '@mui/lab': 5.0.0-alpha.82_ygk7qgdlnpugkmqdrmzyce476m
       '@mui/material': 5.8.0_4xriuibr7qayay6mzcpq5f43me
       '@mui/system': 5.8.0_2f7y4c3dlygqpuszd3d43oslwi
-      '@solana/web3.js': 1.39.1
       '@types/masknet__global-types': link:packages/polyfills/types
       '@types/react': 18.0.9
       '@types/react-dom': 18.0.5
@@ -1046,7 +1043,7 @@ importers:
       '@solana/spl-name-service': ^0.1.3
       '@solana/spl-token': ^0.1.8
       '@solana/spl-token-registry': ^0.2.1301
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': ^1.44.2
       '@toruslabs/solana-embed': ^0.1.6
       '@types/bn.js': ^4.11.6
       '@types/bs58': ^4.0.1
@@ -1071,13 +1068,13 @@ importers:
       '@masknet/web3-shared-solana': link:../../web3-shared/solana
       '@metaplex-foundation/mpl-token-metadata': 1.1.0
       '@metaplex/js': 4.11.7
-      '@project-serum/sol-wallet-adapter': 0.2.6_@solana+web3.js@1.39.1
+      '@project-serum/sol-wallet-adapter': 0.2.6_@solana+web3.js@1.44.2
       '@servie/events': 3.0.0
       '@solana/buffer-layout': 4.0.0
       '@solana/spl-name-service': 0.1.3
       '@solana/spl-token': 0.1.8
       '@solana/spl-token-registry': 0.2.1301
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       '@toruslabs/solana-embed': 0.1.6
       bignumber.js: 9.0.2
       bn.js: 4.12.0
@@ -1590,7 +1587,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-shared-base': workspace:*
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': ^1.44.2
       '@toruslabs/solana-embed': ^0.1.6
       '@types/bs58': ^4.0.1
       bignumber.js: 9.0.2
@@ -1602,7 +1599,7 @@ importers:
       '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-shared-base': link:../base
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       '@toruslabs/solana-embed': 0.1.6
       '@types/bs58': 4.0.1
       bignumber.js: 9.0.2
@@ -3906,12 +3903,13 @@ packages:
     dependencies:
       '@bonfida/spl-name-service': 0.1.27
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bn.js: 5.2.0
       borsh: 0.6.0
       bs58: 4.0.1
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
       - webpack
@@ -3921,10 +3919,10 @@ packages:
   /@bonfida/spl-name-service/0.1.27:
     resolution: {integrity: sha512-CH53CjPkCLB+6j9Dl+4i1LEWUBDFZIXgBVlUsGxZQeN5ztH73i05jiZ1B50v23YDiIm88SO8+gUw7SQS98WsNg==}
     dependencies:
-      '@project-serum/sol-wallet-adapter': 0.1.8_@solana+web3.js@1.39.1
+      '@project-serum/sol-wallet-adapter': 0.1.8_@solana+web3.js@1.44.2
       '@solana/buffer-layout': 4.0.0
       '@solana/spl-token': 0.2.0
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bip32: 2.0.6
       bn.js: 5.2.0
       borsh: 0.6.0
@@ -3936,6 +3934,7 @@ packages:
       webpack-dev-server: 3.11.3
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
       - webpack
@@ -6080,19 +6079,21 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
   /@metaplex-foundation/mpl-core/0.0.2:
     resolution: {integrity: sha512-UUJ4BlYiWdDegAWmjsNQiNehwYU3QfSFWs3sv4VX0J6/ZrQ28zqosGhQ+I2ZCTEy216finJ82sZWNjuwSWCYyQ==}
     dependencies:
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bs58: 4.0.1
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6104,9 +6105,10 @@ packages:
       '@metaplex-foundation/mpl-token-metadata': 0.0.2
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6115,9 +6117,10 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6126,9 +6129,10 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6137,9 +6141,10 @@ packages:
     dependencies:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6152,7 +6157,7 @@ packages:
       '@metaplex-foundation/mpl-token-metadata': 0.0.2
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       '@types/bs58': 4.0.1
       axios: 0.25.0
       bn.js: 5.2.0
@@ -6164,6 +6169,7 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - debug
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6705,24 +6711,24 @@ packages:
       - google-protobuf
     dev: false
 
-  /@project-serum/sol-wallet-adapter/0.1.8_@solana+web3.js@1.39.1:
+  /@project-serum/sol-wallet-adapter/0.1.8_@solana+web3.js@1.44.2:
     resolution: {integrity: sha512-lKMgp7bsKpkrtBtIaEjtGuUMke0GUqFUL39Z7cjqsQpTVhkU5Ez4zHyjhXqAEORRGLFbwx/+H6HLpwppxpUDMQ==}
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^0.70.3
     dependencies:
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bs58: 4.0.1
       eventemitter3: 4.0.7
     dev: false
 
-  /@project-serum/sol-wallet-adapter/0.2.6_@solana+web3.js@1.39.1:
+  /@project-serum/sol-wallet-adapter/0.2.6_@solana+web3.js@1.44.2:
     resolution: {integrity: sha512-cpIb13aWPW8y4KzkZAPDgw+Kb+DXjCC6rZoH74MGm3I/6e/zKyGnfAuW5olb2zxonFqsYgnv7ev8MQnvSgJ3/g==}
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^1.5.0
     dependencies:
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bs58: 4.0.1
       eventemitter3: 4.0.7
     dev: false
@@ -6962,11 +6968,12 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@solana/buffer-layout': 4.0.0
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bigint-buffer: 1.1.5
       bignumber.js: 9.0.2
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -6981,7 +6988,7 @@ packages:
     resolution: {integrity: sha512-NIsa5xU8Fx9nIofM/mmrNI3s472kDBtNdqI6TbhIaVeP/DTYc9m5dkjvG32T1tZdNMv0kvFIpqZ0iAJvvZ/ABg==}
     dependencies:
       '@solana/spl-token': 0.1.6
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bip32: 2.0.6
       bn.js: 5.2.0
       borsh: 0.4.0
@@ -6997,6 +7004,7 @@ packages:
       - '@angular/common'
       - '@angular/core'
       - bufferutil
+      - encoding
       - utf-8-validate
       - webpack
       - webpack-cli
@@ -7014,13 +7022,14 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@babel/runtime': 7.17.2
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bn.js: 5.2.0
       buffer: 6.0.3
       buffer-layout: 1.2.2
       dotenv: 10.0.0
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -7029,13 +7038,14 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@babel/runtime': 7.16.5
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       bn.js: 5.2.0
       buffer: 6.0.3
       buffer-layout: 1.2.2
       dotenv: 10.0.0
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -7045,34 +7055,38 @@ packages:
     dependencies:
       '@solana/buffer-layout': 4.0.0
       '@solana/buffer-layout-utils': 0.2.0
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       start-server-and-test: 1.14.0
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
     dev: false
 
-  /@solana/web3.js/1.39.1:
-    resolution: {integrity: sha512-Q7XnWTAiU7n7GcoINDAAMLO7CJHpm5kPK46HKwJi2x0cusHQ3WFa7QEp6aPzH7tuf7yl/Kw1lYitcwTVOvqARA==}
+  /@solana/web3.js/1.44.2:
+    resolution: {integrity: sha512-DvrJMoKonLuaX0/KyyJXcP/+w+9q8mve4gN3hC2Ptg51K/Gi1/cx6oQN2lbRZb4wYPBd2s2GDAJAJUAwZGsEug==}
     engines: {node: '>=12.20.0'}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@ethersproject/sha2': 5.5.0
       '@solana/buffer-layout': 4.0.0
-      bn.js: 5.2.0
+      bigint-buffer: 1.1.5
+      bn.js: 5.2.1
       borsh: 0.7.0
       bs58: 4.0.1
       buffer: 6.0.1
-      cross-fetch: 3.1.4
+      fast-stable-stringify: 1.0.0
       jayson: 3.6.5
       js-sha3: 0.8.0
+      node-fetch: 2.6.7
       rpc-websockets: 7.4.16
       secp256k1: 4.0.2
       superstruct: 0.14.2
       tweetnacl: 1.0.3
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - utf-8-validate
     dev: false
 
@@ -9085,9 +9099,9 @@ packages:
   /@toruslabs/broadcast-channel/4.13.0:
     resolution: {integrity: sha512-qPpVzLtqjiLRNW5C5xnCNwzWNBcGLSx/rC8C7UTP08Z9HnTIP3JxR+NbdtjR7/AjA2VemdcLQq3n+trJf9gUKQ==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@toruslabs/eccrypto': 1.1.8
-      '@toruslabs/metadata-helpers': 2.5.0_@babel+runtime@7.17.9
+      '@toruslabs/metadata-helpers': 2.5.0_@babel+runtime@7.18.3
       bowser: 2.11.0
       detect-node: 2.1.0
       keccak: 3.0.2
@@ -9137,13 +9151,13 @@ packages:
       loglevel: 1.8.0
     dev: false
 
-  /@toruslabs/http-helpers/2.2.0_@babel+runtime@7.17.9:
+  /@toruslabs/http-helpers/2.2.0_@babel+runtime@7.18.3:
     resolution: {integrity: sha512-xkzZZuE+DmWmJBTYneCrMJY24izNQCOdoJMpsXKQx20Va/rTQvNPbdkpx9LBf/pisk8jOwETNAfFQ8YTBc/bZw==}
     engines: {node: '>=14.17.0', npm: '>=6.x'}
     peerDependencies:
       '@babel/runtime': 7.x
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       lodash.merge: 4.6.2
       loglevel: 1.8.0
     dev: false
@@ -9158,15 +9172,15 @@ packages:
       loglevel: 1.8.0
     dev: false
 
-  /@toruslabs/metadata-helpers/2.5.0_@babel+runtime@7.17.9:
+  /@toruslabs/metadata-helpers/2.5.0_@babel+runtime@7.18.3:
     resolution: {integrity: sha512-zhAAGhPcy5Fz68Zg3FXXmYKHHsFBCWsxXurSbdPMFldDrq9GwKChbAbvKBF0sz+juhEOO5gX1BbVah580YVobg==}
     engines: {node: '>=14.17.0', npm: '>=6.x'}
     peerDependencies:
       '@babel/runtime': 7.x
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@toruslabs/eccrypto': 1.1.8
-      '@toruslabs/http-helpers': 2.2.0_@babel+runtime@7.17.9
+      '@toruslabs/http-helpers': 2.2.0_@babel+runtime@7.18.3
       elliptic: 6.5.4
       json-stable-stringify: 1.0.1
       keccak: 3.0.2
@@ -9228,7 +9242,7 @@ packages:
     peerDependencies:
       '@babel/runtime': 7.x
     dependencies:
-      '@solana/web3.js': 1.39.1
+      '@solana/web3.js': 1.44.2
       '@toruslabs/base-controllers': 1.6.18
       '@toruslabs/http-helpers': 2.2.0
       '@toruslabs/openlogin-jrpc': 1.7.3
@@ -9240,6 +9254,7 @@ packages:
       pump: 3.0.0
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
     dev: false
@@ -12759,7 +12774,7 @@ packages:
   /borsh/0.7.0:
     resolution: {integrity: sha512-CLCsZGIBCFnPtkNnieW/a8wmreDmfUtjU2m9yHrzPXIlNbqVs0AQrSatSG6vdNYUqdc83tkQi2eHfF98ubzQLA==}
     dependencies:
-      bn.js: 5.2.0
+      bn.js: 5.2.1
       bs58: 4.0.1
       text-encoding-utf-8: 1.0.2
     dev: false
@@ -17137,6 +17152,10 @@ packages:
 
   /fast-shallow-equal/1.0.0:
     resolution: {integrity: sha512-HPtaa38cPgWvaCFmRNhlc6NG7pv6NUHqjPgVAkWGoB9mQMwYB27/K0CvOM5Czy+qpT3e8XJ6Q4aPAnzpNpzNaw==}
+    dev: false
+
+  /fast-stable-stringify/1.0.0:
+    resolution: {integrity: sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==}
     dev: false
 
   /fastest-levenshtein/1.0.12:
@@ -25076,7 +25095,7 @@ packages:
   /rpc-websockets/7.4.16:
     resolution: {integrity: sha512-0b7OVhutzwRIaYAtJo5tqtaQTWKfwAsKnaThOSOy+VkhVdleNUgb8eZnWSdWITRZZEigV5uPEIDr5KZe4DBrdQ==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       circular-json: 0.5.9
       eventemitter3: 4.0.7
       uuid: 8.3.2
@@ -26881,7 +26900,7 @@ packages:
     dev: false
 
   /through/2.3.8:
-    resolution: {integrity: sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=}
+    resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
 
   /through2-filter/3.0.0:
     resolution: {integrity: sha512-jaRjI2WxN3W1V8/FMZ9HKIBXixtiqs3SQSX4/YGIiP3gL6djW48VoZq9tDqeCWs3MT8YY5wb/zli8VW8snY1CA==}
@@ -27881,7 +27900,7 @@ packages:
   /unload/2.3.1:
     resolution: {integrity: sha512-MUZEiDqvAN9AIDRbbBnVYVvfcR6DrjCqeU2YQMmliFZl9uaBUjTkhuDQkBiyAy8ad5bx1TXVbqZ3gg7namsWjA==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       detect-node: 2.1.0
     dev: false
 
