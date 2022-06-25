@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@7.4.0-0",
+  "packageManager": "pnpm@7.4.0-1",
   "engines": {
     "node": ">=17.0.0",
     "pnpm": ">=7.0.0",
@@ -108,6 +108,9 @@
         "react": "18",
         "react-dom": "18"
       }
+    },
+    "patchedDependencies": {
+      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch"
     }
   }
 }

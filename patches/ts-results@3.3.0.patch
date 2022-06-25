@@ -1,0 +1,97 @@
+diff --git a/esm/index.js b/esm/index.js
+index 5b8900db2c625fe1973490b8c6c6d077fa44e8b5..a11b026ce8ebcb4d40bdacf1f9c2207cfbad16b4 100644
+--- a/esm/index.js
++++ b/esm/index.js
+@@ -1,3 +1,3 @@
+-export * from './result';
+-export * from './option';
++export * from './result.js';
++export * from './option.js';
+ //# sourceMappingURL=index.js.map
+diff --git a/esm/option.js b/esm/option.js
+index c1cb8ec52e1726caae055c5c1637eb5bc6452caa..79ab5d779120652ccdd57d645cffd60c00670aec 100644
+--- a/esm/option.js
++++ b/esm/option.js
+@@ -1,5 +1,5 @@
+-import { toString } from './utils';
+-import { Ok, Err } from './result';
++import { toString } from './utils.js';
++import { Ok, Err } from './result.js';
+ /**
+  * Contains the None value
+  */
+diff --git a/esm/result.js b/esm/result.js
+index 5a79d2a74d11d3a28771ab077fedb03adcac5cc2..78267e6cd12c5b1f3426c4e9c69e10817f2a1063 100644
+--- a/esm/result.js
++++ b/esm/result.js
+@@ -1,5 +1,5 @@
+-import { toString } from './utils';
+-import { None, Some } from './option';
++import { toString } from './utils.js';
++import { None, Some } from './option.js';
+ /**
+  * Contains the error value
+  */
+diff --git a/index.d.ts b/index.d.ts
+index 3dca8ed724b811b8a7bef0ef7803d0f31a721f44..468500379d39054a4b98c4947ad52445f3dbad09 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -1,3 +1,3 @@
+-export * from './result';
+-export * from './option';
++export * from './result.js';
++export * from './option.js';
+ //# sourceMappingURL=index.d.ts.map
+diff --git a/option.d.ts b/option.d.ts
+index 7fcb9a8d481faef5fd1df43febc70e07c68da3b3..7daa9bdff279e26844c65a05e420a43848fe5bd1 100644
+--- a/option.d.ts
++++ b/option.d.ts
+@@ -1,4 +1,4 @@
+-import { Result, Ok, Err } from './result';
++import { Result, Ok, Err } from './result.js';
+ interface BaseOption<T> extends Iterable<T extends Iterable<infer U> ? U : never> {
+     /** `true` when the Option is Some */ readonly some: boolean;
+     /** `true` when the Option is None */ readonly none: boolean;
+diff --git a/package.json b/package.json
+index 6f35cbe24098c60422fd4e9f71a500e1153c934c..66c63cd3c7e1c53bd328221a6fa90e992b22bf28 100644
+--- a/package.json
++++ b/package.json
+@@ -2,9 +2,16 @@
+   "name": "ts-results",
+   "version": "3.3.0",
+   "description": "A typescript implementation of Rust's Result and Option objects.",
+-  "main": "index.js",
++  "type": "module",
++  "main": "./esm/index.js",
+   "module": "./esm/index.js",
+   "types": "index.d.ts",
++  "exports": {
++      ".": {
++        "types": "./index.d.ts",
++        "default": "./esm/index.js"
++      }
++  },
+   "keywords": [
+     "Rust",
+     "Result",
+diff --git a/result.d.ts b/result.d.ts
+index d2a98158fee3425063dc6811188d834b8b5ae003..6ffa649a937a13d29478642bcf7399af0f1755e5 100644
+--- a/result.d.ts
++++ b/result.d.ts
+@@ -1,4 +1,4 @@
+-import { Option } from './option';
++import { Option } from './option.js';
+ interface BaseResult<T, E> extends Iterable<T extends Iterable<infer U> ? U : never> {
+     /** `true` when the result is Ok */ readonly ok: boolean;
+     /** `true` when the result is Err */ readonly err: boolean;
+diff --git a/rxjs-operators/index.d.ts b/rxjs-operators/index.d.ts
+index 206f50bc0f9cfbdaffc462d251dee533dbada393..f6f288ea1f7c6fd7b762acd068da199c3ed3ac77 100644
+--- a/rxjs-operators/index.d.ts
++++ b/rxjs-operators/index.d.ts
+@@ -1,5 +1,5 @@
+ import { MonoTypeOperatorFunction, ObservableInput, OperatorFunction } from 'rxjs';
+-import { Result } from '../index';
++import { Result } from '../index.js';
+ export declare function resultMap<T, T2, E>(mapper: (val: T) => T2): OperatorFunction<Result<T, E>, Result<T2, E>>;
+ export declare function resultMapErr<T, E, E2>(mapper: (val: E) => E2): OperatorFunction<Result<T, E>, Result<T, E2>>;
+ export declare function resultMapTo<T, T2, E>(value: T2): OperatorFunction<Result<T, E>, Result<T2, E>>;
