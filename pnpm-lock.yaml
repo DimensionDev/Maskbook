@@ -11,6 +11,9 @@ patchedDependencies:
   ts-results@3.3.0:
     hash: g2bdan7o336xxsymnx5nlozu2m
     path: patches/ts-results@3.3.0.patch
+  immer@9.0.15:
+    hash: 6jcdg7ah6q6tk4odwno72n5llq
+    path: patches/immer@9.0.15.patch
 
 importers:
 
@@ -54,7 +57,6 @@ importers:
       gulp: ^4.0.2
       husky: ^8.0.1
       i18next: ^21.8.2
-      immer: 9.0.12
       jest: ^28.1.1
       lint-staged: ^13.0.2
       lodash: ^4.17.21
@@ -86,7 +88,6 @@ importers:
       '@types/react-dom': 18.0.5
       '@types/web': 0.0.68
       i18next: 21.8.2
-      immer: 9.0.12
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_3ib2ivapxullxkx3xftsimdk7u
@@ -433,6 +434,7 @@ importers:
       https-browserify: ^1.0.0
       idb: ^7.0.1
       iframe-resizer-react: ^1.1.0
+      immer: 9.0.15
       isomorphic-dompurify: ^0.18.0
       jsbi: 3.1.4
       json-stable-stringify: ^1.0.1
@@ -575,6 +577,7 @@ importers:
       https-browserify: 1.0.0
       idb: 7.0.1
       iframe-resizer-react: 1.1.0
+      immer: 9.0.15_6jcdg7ah6q6tk4odwno72n5llq
       isomorphic-dompurify: 0.18.0
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
@@ -1386,11 +1389,13 @@ importers:
       '@msgpack/msgpack': ^2.7.2
       '@mui/material': link:..\empty
       anchorme: ^2.1.2
+      immer: 9.0.15
       z-schema: ^5.0.3
     dependencies:
       '@msgpack/msgpack': 2.7.2
       '@mui/material': link:../empty
       anchorme: 2.1.2
+      immer: 9.0.15_6jcdg7ah6q6tk4odwno72n5llq
       z-schema: 5.0.3
 
   packages/web3-constants:
@@ -18969,9 +18974,10 @@ packages:
     resolution: {integrity: sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==}
     dev: false
 
-  /immer/9.0.12:
-    resolution: {integrity: sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==}
+  /immer/9.0.15_6jcdg7ah6q6tk4odwno72n5llq:
+    resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
     dev: false
+    patched: true
 
   /immutable/3.8.1:
     resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}

@@ -44,7 +44,6 @@
     "@types/react-dom": "^18.0.5",
     "@types/web": "^0.0.68",
     "i18next": "^21.8.2",
-    "immer": "9.0.12",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.2",
@@ -108,7 +107,8 @@
       }
     },
     "patchedDependencies": {
-      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch"
+      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch",
+      "immer@9.0.15": "patches/immer@9.0.15.patch"
     }
   }
 }
