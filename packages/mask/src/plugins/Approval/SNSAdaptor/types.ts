@@ -1,4 +1,4 @@
-export interface RawSpender {
+interface RawTokenSpender {
     id: string
     value: number
     exposure_usd: number
@@ -22,16 +22,24 @@ export interface RawTokenInfo {
     chain: string
     price: number
     balance: number
-    spenders: RawSpender[]
+    spenders: RawTokenSpender[]
 }
 
 export type TokenInfo = Omit<RawTokenInfo, 'spenders'>
 
-export type Spender = Omit<RawSpender, 'protocol'> & {
+export type TokenSpender = Omit<RawTokenSpender, 'protocol'> & {
     tokenInfo: TokenInfo
     name: string | undefined
     logo: React.ReactNode | undefined
     isMaskDapp: boolean
 }
 
-export type ResponseData = RawTokenInfo[]
+export interface NFTInfo {
+    chain: string
+    amount: string
+    contract_name: string
+    is_erc721?: boolean
+    contract_id: string
+    isMaskDapp?: boolean
+    spender: Omit<TokenSpender, 'tokenInfo'>
+}

@@ -6,6 +6,7 @@
     "contract": "Contract",
     "loading": "Loading",
     "approved_amount": "Approved Amount",
+    "collection_approved": "Approved Amount",
     "collection_approval": "Collection Approval",
     "infinite": "Infinite",
     "revoke": "Revoke",

@@ -3,13 +3,13 @@ import urlcat from 'urlcat'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
 import { queryNetworkMappings } from '../constants'
-import type { Spender, RawTokenInfo } from '../types'
+import type { TokenSpender, RawTokenInfo } from '../types'
 import { useAllMaskDappContractInfo } from './useAllMaskDappContractInfo'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
 const API_URL = 'https://api.rabby.io/v1/user/token_authorized_list'
 
-export function useTokenApproved(account: string, chainId: ChainId) {
+export function useApprovedTokenList(account: string, chainId: ChainId) {
     const maskDappContractInfoList = useAllMaskDappContractInfo(chainId, 'token')
     return useAsyncRetry(async () => {
         const networkType = chainResolver.chainNetworkType(chainId)
@@ -18,7 +18,7 @@ export function useTokenApproved(account: string, chainId: ChainId) {
         const rawData: RawTokenInfo[] = await response.json()
 
         return rawData
-            .reduce<Spender[]>((acc, cur) => {
+            .reduce<TokenSpender[]>((acc, cur) => {
                 const tokenInfo = omit(cur, ['spenders'])
                 return acc.concat(
                     cur.spenders.map((rawSpender) => {

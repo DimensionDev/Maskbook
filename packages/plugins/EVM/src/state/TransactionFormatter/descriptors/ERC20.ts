@@ -26,7 +26,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Approve',
                     description: `Approve spend ${getTokenAmountDescription(
-                        context.parameters?.value,
+                        context.parameters?.value as string,
                         await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
@@ -38,7 +38,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
-                        context.parameters?.value,
+                        context.parameters?.value as string,
                         await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),

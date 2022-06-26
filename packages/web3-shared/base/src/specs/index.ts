@@ -395,7 +395,7 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     _tx: Transaction
 }
 
-export interface TransactionContext<ChainId, Parameter = string | undefined> {
+export interface TransactionContext<ChainId, Parameter = string | boolean | undefined> {
     /** the descriptor type */
     type: TransactionDescriptorType
     /** chain id */

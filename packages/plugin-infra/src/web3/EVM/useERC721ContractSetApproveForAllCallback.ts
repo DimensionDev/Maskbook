@@ -15,6 +15,7 @@ export function useERC721ContractSetApproveForAllCallback(
     contractAddress: string | undefined,
     operator: string | undefined,
     approved: boolean,
+    callback?: () => void,
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -24,7 +25,6 @@ export function useERC721ContractSetApproveForAllCallback(
         if (!erc721TokenContract || !contractAddress || !operator) {
             return
         }
-
         const config = {
             from: account,
             gas: await erc721TokenContract.methods
@@ -40,6 +40,7 @@ export function useERC721ContractSetApproveForAllCallback(
                 .setApprovalForAll(operator, approved)
                 .send(config as NonPayableTx)
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    callback?.()
                     resolve(receipt.transactionHash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {

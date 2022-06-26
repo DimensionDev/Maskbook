@@ -15,9 +15,9 @@ export class SwapDescriptor implements TransactionDescriptor {
 
         switch (context.name) {
             case 'swapExactETHForTokens':
-                const outputToken = await connection?.getFungibleToken(last(context.parameters!.path) ?? '')
+                const outputToken = await connection?.getFungibleToken(last(context.parameters!.path as string) ?? '')
                 const inputAmount = formatBalance(context.value, nativeToken?.decimals, 2)
-                const outputAmount = formatBalance(context.parameters!.amountOutMin, outputToken?.decimals, 2)
+                const outputAmount = formatBalance(context.parameters!.amountOutMin as string, outputToken?.decimals, 2)
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -26,9 +26,9 @@ export class SwapDescriptor implements TransactionDescriptor {
                     }`,
                 }
             case 'swapExactTokensForETH':
-                const inToken = await connection?.getFungibleToken(first(context.parameters!.path) ?? '')
-                const inAmount = formatBalance(context.parameters!.amountIn, inToken?.decimals, 2)
-                const outAmount = formatBalance(context.parameters!.amountOutMin, nativeToken?.decimals, 2)
+                const inToken = await connection?.getFungibleToken(first(context.parameters!.path as string) ?? '')
+                const inAmount = formatBalance(context.parameters!.amountIn as string, inToken?.decimals, 2)
+                const outAmount = formatBalance(context.parameters!.amountOutMin as string, nativeToken?.decimals, 2)
 
                 return {
                     chainId: context.chainId,
@@ -38,11 +38,11 @@ export class SwapDescriptor implements TransactionDescriptor {
                     }`,
                 }
             case 'swapExactTokensForTokens':
-                const tokenIn = await connection?.getFungibleToken(first(context.parameters!.path) ?? '')
-                const tokenOut = await connection?.getFungibleToken(last(context.parameters!.path) ?? '')
+                const tokenIn = await connection?.getFungibleToken(first(context.parameters!.path as string) ?? '')
+                const tokenOut = await connection?.getFungibleToken(last(context.parameters!.path as string) ?? '')
 
-                const amountIn = formatBalance(context.parameters!.amountIn, tokenIn?.decimals, 2)
-                const amountOut = formatBalance(context.parameters!.amountOutMin, tokenOut?.decimals, 2)
+                const amountIn = formatBalance(context.parameters!.amountIn as string, tokenIn?.decimals, 2)
+                const amountOut = formatBalance(context.parameters!.amountOutMin as string, tokenOut?.decimals, 2)
 
                 return {
                     chainId: context.chainId,
