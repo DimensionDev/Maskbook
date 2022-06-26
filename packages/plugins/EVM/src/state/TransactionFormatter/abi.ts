@@ -55,7 +55,6 @@ class ABI {
                             type: y.type,
                         })) ?? [],
                 })
-                console.log({ abis: this.abis })
             } catch (error) {
                 console.log('Failed to encode function signature from below ABI:')
                 console.log(x)

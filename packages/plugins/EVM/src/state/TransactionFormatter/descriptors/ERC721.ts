@@ -5,7 +5,7 @@ import type { TransactionDescriptor } from '../types'
 export class ERC721Descriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
         if (!context.name) return
-        console.log({ context })
+
         switch (context.name) {
             case 'setApprovalForAll':
                 return {
