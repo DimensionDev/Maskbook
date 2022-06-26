@@ -38,6 +38,7 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             disableTouchListener>
             <Icon
                 type="popupCopy"
+                size={16}
                 aria-hidden="false"
                 aria-role="button"
                 onClick={onCopy}

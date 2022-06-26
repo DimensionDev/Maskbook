@@ -45,11 +45,6 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: '96px',
         },
     },
-    accountIcon: {
-        '&>svg': {
-            fontSize: '18px',
-        },
-    },
     avatar: {
         marginRight: theme.spacing(6),
         [theme.breakpoints.down('md')]: {
@@ -176,8 +171,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                     }}>
-                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }} className={classes.accountIcon}>
-                        <Icon type="publicKey" />
+                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }}>
+                        <Icon type="publicKey" size={18} />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
                         {identifier.rawPublicKey}

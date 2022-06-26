@@ -20,13 +20,6 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     const { classes } = useStyles()
     const avatar = usePersonaAvatar()
     const commonProps = {
-        sx: {
-            width: size,
-            height: size,
-            display: 'inline-block',
-            background: MaskColorVar.lightBackground,
-            borderRadius: '50%',
-        },
         onClick,
         className: classes.author,
     }
@@ -34,7 +27,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     if (!avatar) {
         return (
             <Stack justifyContent="center" width="100%" height={size} flexDirection="row">
-                <Icon type="menuPersonasActive" {...commonProps} />
+                <Icon type="menuPersonasActive" size={size} {...commonProps} />
             </Stack>
         )
     }

@@ -3,11 +3,11 @@ import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import type { ReactNode } from 'react'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <Icon type="twitterColored" />,
-    [EnhanceableSite.Facebook]: <Icon type="facebookColored" />,
-    [EnhanceableSite.Minds]: <Icon type="minds" />,
-    [EnhanceableSite.Instagram]: <Icon type="instagramColored" />,
-    [EnhanceableSite.OpenSea]: <Icon type="openSeaColoredIcon" />,
+    [EnhanceableSite.Twitter]: <Icon type="twitterColored" size={18} />,
+    [EnhanceableSite.Facebook]: <Icon type="facebookColored" size={18} />,
+    [EnhanceableSite.Minds]: <Icon type="minds" size={18} />,
+    [EnhanceableSite.Instagram]: <Icon type="instagramColored" size={18} />,
+    [EnhanceableSite.OpenSea]: <Icon type="openSeaColoredIcon" size={18} />,
     [EnhanceableSite.Localhost]: null,
 }
 

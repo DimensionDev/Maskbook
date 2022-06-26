@@ -34,7 +34,7 @@ export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, style, color, ..
             ? null
             : {
                   backgroundImage: `url(${iconUrl ?? icons[iconType!]})`,
-                  backgroundSize: `${iconSize}px`,
+                  backgroundSize: 'contain',
               }
         return {
             display: 'inline-block',

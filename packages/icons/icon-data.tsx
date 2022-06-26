@@ -303,7 +303,16 @@ export const collectibleIcon = new URL('./general/Collectible.svg', import.meta.
 export const copyIcon = new URL('./general/Copy.svg', import.meta.url).href
 export const cramIcon = new URL('./general/Cram.svg', import.meta.url).href
 export const cryptoArtIcon = new URL('./general/CryptoArt.png', import.meta.url).href
-export const dashboardIcon = new URL('./general/Dashboard.svg', import.meta.url).href
+export const dashboardIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24">
+        <g>
+            <path
+                fill="currentColor"
+                d="M3.66666 13H11.6667V3H3.66666V13ZM3.66666 21H11.6667V15H3.66666V21ZM13.6667 21H21.6667V11H13.6667V21ZM13.6667 3V9H21.6667V3H13.6667Z"
+            />
+        </g>
+    </svg>
+)
 export const defaultTokenIconDarkIcon = new URL('./general/DefaultTokenIcon.dark.svg', import.meta.url).href
 export const defaultTokenIconDimIcon = new URL('./general/DefaultTokenIcon.dim.svg', import.meta.url).href
 export const defaultTokenIconIcon = new URL('./general/DefaultTokenIcon.svg', import.meta.url).href
@@ -311,7 +320,19 @@ export const deleteIcon = new URL('./general/Delete.svg', import.meta.url).href
 export const directIcon = new URL('./general/Direct.svg', import.meta.url).href
 export const discordRoundIcon = new URL('./general/DiscordRound.svg', import.meta.url).href
 export const documentIcon = new URL('./general/Document.svg', import.meta.url).href
-export const downloadIcon = new URL('./general/Download.svg', import.meta.url).href
+export const downloadIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+        <g>
+            <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.25"
+                d="M14 10v2.667A1.334 1.334 0 0112.667 14H3.333A1.334 1.334 0 012 12.667V10M4.667 6.667L8 10l3.333-3.333M8 10V2"
+            />
+        </g>
+    </svg>
+)
 export const dropIcon = new URL('./general/Drop.svg', import.meta.url).href
 export const drop2Icon = (
     <svg viewBox="0 0 20 24" xmlns="http://www.w3.org/2000/svg">
@@ -466,7 +487,18 @@ export const nftLinkIcon = new URL('./general/NFTLink.svg', import.meta.url).hre
 export const nftRedPacketIcon = new URL('./general/NFTRedPacket.svg', import.meta.url).href
 export const nftSelectedIcon = new URL('./general/NFTSelected.svg', import.meta.url).href
 export const openSeaColoredIconIcon = new URL('./general/OpenSeaColoredIcon.svg', import.meta.url).href
-export const personasIcon = new URL('./general/Personas.svg', import.meta.url).href
+export const personasIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24">
+        <g>
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M17.6273 7.29105C17.6273 10.2281 15.2724 12.5831 12.3333 12.5831C9.39524 12.5831 7.03936 10.2281 7.03936 7.29105C7.03936 4.35402 9.39524 2 12.3333 2C15.2724 2 17.6273 4.35402 17.6273 7.29105ZM12.3333 21.9999C7.99572 21.9999 4.33334 21.2949 4.33334 18.5749C4.33334 15.8538 8.01873 15.1738 12.3333 15.1738C16.672 15.1738 20.3333 15.8788 20.3333 18.5989C20.3333 21.3199 16.648 21.9999 12.3333 21.9999Z"
+                clipRule="evenodd"
+            />
+        </g>
+    </svg>
+)
 export const pinIcon = new URL('./general/Pin.svg', import.meta.url).href
 export const pluginIcon = new URL('./general/Plugin.svg', import.meta.url).href
 export const pollIcon = new URL('./general/Poll.svg', import.meta.url).href
@@ -535,14 +567,32 @@ export const securityRiskIcon = new URL('./general/SecurityRisk.svg', import.met
 export const securityWarningIcon = new URL('./general/SecurityWarning.svg', import.meta.url).href
 export const selectedDarkIcon = new URL('./general/Selected.dark.svg', import.meta.url).href
 export const selectedIcon = new URL('./general/Selected.svg', import.meta.url).href
-export const sendIcon = new URL('./general/Send.svg', import.meta.url).href
+export const sendIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+        <svg viewBox="0 0 18 18">
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M16.3449 3.38244L2.42483 7.92639L5.82181 9.95786C6.04825 10.0933 6.18688 10.3377 6.18688 10.6015V12.8779L8.48652 11.9452C8.69775 11.8595 8.93648 11.8746 9.13529 11.9861L14.3428 14.9067L16.3449 3.38244ZM16.6836 2.00958C17.221 1.83413 17.752 2.29389 17.6552 2.85093L15.4163 15.7386C15.3277 16.2484 14.7618 16.5175 14.3105 16.2644L8.73702 13.1385L6.01877 14.241C5.52564 14.441 4.98688 14.0782 4.98688 13.546V10.8568L0.960663 8.449C0.40841 8.11874 0.501143 7.29202 1.11286 7.09234L16.6836 2.00958ZM14.1798 5.65582C14.3971 5.90598 14.3705 6.28494 14.1203 6.50226L9.88582 10.1807C9.63565 10.398 9.25669 10.3714 9.03938 10.1213C8.82206 9.87109 8.84869 9.49213 9.09886 9.27482L13.3334 5.59634C13.5835 5.37902 13.9625 5.40565 14.1798 5.65582Z"
+                clipRule="evenodd"
+            />
+        </svg>
+    </svg>
+)
 export const settingIcon = new URL('./general/Setting.svg', import.meta.url).href
 export const settingsIcon = new URL('./general/Settings.svg', import.meta.url).href
 export const signInAccountIcon = new URL('./general/SignInAccount.svg', import.meta.url).href
 export const signUpAccountIcon = new URL('./general/SignUpAccount.svg', import.meta.url).href
 export const sliderIcon = new URL('./general/Slider.svg', import.meta.url).href
 export const squareBackIcon = new URL('./general/SquareBack.svg', import.meta.url).href
-export const starIcon = new URL('./general/Star.svg', import.meta.url).href
+export const starIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path
+            fill="currentColor"
+            d="M11.742 17.426a.5.5 0 01.516 0l4.908 2.962a.5.5 0 00.745-.542l-1.302-5.582a.5.5 0 01.16-.492l4.337-3.758a.5.5 0 00-.284-.876l-5.712-.492a.5.5 0 01-.418-.303L12.46 3.084a.5.5 0 00-.92 0l-2.232 5.26a.5.5 0 01-.418.302l-5.713.493a.5.5 0 00-.285.875l4.33 3.759a.5.5 0 01.16.49l-1.295 5.585a.5.5 0 00.746.54l4.909-2.962z"
+        />
+    </svg>
+)
 export const successIcon = new URL('./general/Success.svg', import.meta.url).href
 export const successForSnackBarIcon = new URL('./general/SuccessForSnackBar.svg', import.meta.url).href
 export const swapIcon = new URL('./general/Swap.svg', import.meta.url).href
@@ -563,7 +613,24 @@ export const uploadIcon = new URL('./general/Upload.svg', import.meta.url).href
 export const userIcon = new URL('./general/User.svg', import.meta.url).href
 export const verifiedIcon = new URL('./general/Verified.svg', import.meta.url).href
 export const walletIcon = new URL('./general/Wallet.svg', import.meta.url).href
-export const walletNavIcon = new URL('./general/WalletNav.svg', import.meta.url).href
+export const walletNavIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g>
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M17.7691 9.87305H21.2536C21.6659 9.87305 22.0002 10.199 22.0002 10.601V13.1316C21.9954 13.5317 21.6639 13.8549 21.2536 13.8596H17.8491C16.855 13.8726 15.9857 13.209 15.7602 12.265C15.6473 11.6789 15.8058 11.0742 16.1933 10.6129C16.5808 10.1515 17.1576 9.88071 17.7691 9.87305ZM17.9207 12.5336H18.2496C18.6718 12.5336 19.014 12.1999 19.014 11.7883C19.014 11.3767 18.6718 11.043 18.2496 11.043H17.9207C17.7188 11.0407 17.5243 11.1173 17.3807 11.2557C17.2371 11.3941 17.1562 11.5828 17.1562 11.7797C17.1562 12.1927 17.4971 12.5289 17.9207 12.5336Z"
+                clipRule="evenodd"
+            />
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M22 8.3818H17.7689V8.41647C15.8052 8.41647 14.2133 9.96849 14.2133 11.883C14.2133 13.7975 15.8052 15.3495 17.7689 15.3495H22V15.6615C22 19.0154 19.9644 21 16.5156 21H7.48444C4.03556 21 2 19.0154 2 15.6615V8.33847C2 4.98459 4.03556 3 7.48444 3H16.5156C19.9644 3 22 4.98459 22 8.3818ZM6.73808 8.38124H12.3825C12.8047 8.38124 13.147 8.04755 13.147 7.63593C13.147 7.22431 12.8047 6.89062 12.3825 6.89062H6.73808C6.31933 6.8906 5.9785 7.21903 5.97363 7.62726C5.9736 8.04031 6.31445 8.37649 6.73808 8.38124Z"
+                clipRule="evenodd"
+            />
+        </g>
+    </svg>
+)
 export const warningIcon = new URL('./general/Warning.svg', import.meta.url).href
 export const warningTriangleIcon = new URL('./general/WarningTriangle.svg', import.meta.url).href
 export const menuLabsIcon = new URL('./menus/MenuLabs.svg', import.meta.url).href
@@ -687,14 +754,20 @@ export const settingsSyncIcon = new URL('./settings/SettingsSync.svg', import.me
 export const iconsWithDynamicColor = [
     'check',
     'chevronUp',
+    'dashboard',
+    'download',
     'drop2',
     'info.dark',
     'info',
     'leftArrow',
     'loading',
+    'personas',
     'refresh',
     'rightArrow',
     'search',
+    'send',
+    'star',
+    'walletNav',
     'currency',
 ]
 

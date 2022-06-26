@@ -1,6 +1,6 @@
 import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme, useMediaQuery, Theme } from '@mui/material'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icon } from '@masknet/icons'
 import { Services } from '../../../../API'
@@ -23,8 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     maskIcon: {
         position: 'absolute',
-        width: 16,
-        height: 16,
         right: 0,
         bottom: 0,
     },
@@ -113,7 +111,6 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
-        const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
         return (
             <TableRow className={classes.tableRow}>
@@ -124,15 +121,8 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                             {contact.fingerprint ? (
                                 <Icon
                                     type="star"
-                                    color={
-                                        isXs
-                                            ? contact.favorite
-                                                ? MaskColorVar.warning
-                                                : MaskColorVar.iconLight
-                                            : undefined
-                                    }
+                                    color={contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight}
                                     aria-hidden="false"
-                                    aria-role="button"
                                     onClick={handleClickStar}
                                 />
                             ) : null}
@@ -152,7 +142,9 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                     last?.codePointAt(0) ?? SPACE_POINT,
                                 )}
                             </Avatar>
-                            {contact.fingerprint ? <Icon type="maskBlue" className={classes.maskIcon} /> : null}
+                            {contact.fingerprint ? (
+                                <Icon type="maskBlue" size={16} className={classes.maskIcon} />
+                            ) : null}
                         </Box>
                         <Box className={classes.info}>
                             <Typography>{contact.name}</Typography>
