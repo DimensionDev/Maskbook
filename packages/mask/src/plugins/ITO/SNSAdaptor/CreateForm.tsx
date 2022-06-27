@@ -481,7 +481,6 @@ export function CreateForm(props: CreateFormProps) {
                         <ActionButton
                             className={classes.button}
                             fullWidth
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage}
                             onClick={onNext}>

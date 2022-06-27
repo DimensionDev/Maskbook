@@ -180,8 +180,7 @@ export function DonateDialog(props: DonateDialogProps) {
                                 fullWidth
                                 size="large"
                                 disabled={!!validationMessage || loading}
-                                onClick={donate}
-                                variant="contained">
+                                onClick={donate}>
                                 {validationMessage || t.donate()}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>

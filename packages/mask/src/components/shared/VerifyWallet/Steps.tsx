@@ -202,7 +202,7 @@ export function Steps(props: StepsProps) {
             <div className={classes.actionBox}>
                 <ActionButton
                     className={notInPop ? '' : classes.cancelBtn}
-                    variant="roundedFlat"
+                    variant="roundedOutlined"
                     fullWidth
                     color="secondary"
                     onClick={onCustomCancel}>
