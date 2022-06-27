@@ -119,6 +119,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     let total = isNativeToken
         ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
         : (settings?.total as string)
+    const isWaitGasBeMinus = !estimateGasFee && isNativeToken
     const isBalanceInsufficient = new BigNumber(total).isLessThanOrEqualTo(0)
     total = isBalanceInsufficient ? '0' : total
 
@@ -307,7 +308,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket} disabled={isBalanceInsufficient}>
+                <ActionButton
+                    loading={isCreating || isWaitGasBeMinus}
+                    fullWidth
+                    onClick={createRedpacket}
+                    disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
                     {!isBalanceInsufficient
                         ? t.send_symbol({
                               amount: formatTotal,

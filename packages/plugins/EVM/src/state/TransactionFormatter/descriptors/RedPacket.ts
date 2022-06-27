@@ -1,5 +1,10 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    getNftRedPacketConstants,
+    getRedPacketConstants,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
@@ -20,7 +25,12 @@ export class RedPacketDescriptor implements TransactionDescriptor {
             })
 
             const token = await connection?.getFungibleToken(context.parameters?._token_addr ?? '')
-            const amount = formatBalance(context.parameters?._total_tokens, token?.decimals)
+
+            const amount = formatBalance(
+                context.parameters?._total_tokens,
+                token?.decimals,
+                isNativeTokenAddress(context.parameters?._token_addr) ? 6 : 0,
+            )
 
             return {
                 chainId: context.chainId,
