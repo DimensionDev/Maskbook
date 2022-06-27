@@ -66,7 +66,6 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
                         startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                         size="medium"
                         fullWidth
-                        variant="contained"
                         onClick={onShare}>
                         Share
                     </ActionButton>

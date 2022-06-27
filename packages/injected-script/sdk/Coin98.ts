@@ -1,4 +1,4 @@
-import type { RequestArguments } from 'web3-core'
+import type { RequestArguments } from '../shared'
 import { InjectedProvider } from './Base'
 
 export enum Coin98ProviderType {

@@ -274,7 +274,6 @@ export function SwapDialog(props: SwapDialogProps) {
                             loading={isSwapping}
                             className={classes.button}
                             fullWidth
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
