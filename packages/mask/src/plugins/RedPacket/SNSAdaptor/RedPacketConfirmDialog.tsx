@@ -16,8 +16,8 @@ import {
     useWeb3,
     useNativeToken,
     useNativeTokenAddress,
-    useGasConfig,
 } from '@masknet/plugin-infra/web3'
+import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
