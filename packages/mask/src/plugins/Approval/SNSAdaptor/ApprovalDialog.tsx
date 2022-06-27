@@ -28,7 +28,7 @@ enum Tabs {
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const [currentTab, setCurrentTab] = useState(Tabs.Collectibles)
+    const [currentTab, setCurrentTab] = useState(Tabs.Tokens)
     const tabs = useMemo(
         () => [
             {
