@@ -9,8 +9,8 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             overflowX: 'hidden',
         },
         dialogContent: {
-            width: 568,
-            padding: '12px 16px',
+            width: 600,
+            padding: '12px 0px 0px',
             margin: 'auto',
         },
         dialogTitle: {
@@ -57,7 +57,8 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         },
         approvalContentWrapper: {
             flexGrow: 1,
-            width: '100%',
+            width: 568,
+            margin: 'auto',
             display: 'flex',
             flexDirection: 'column',
         },
@@ -177,6 +178,11 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             fontWeight: 400,
             marginRight: 4,
             color: theme.palette.text.secondary,
+        },
+        footer: {
+            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            position: 'sticky',
+            bottom: 0,
         },
     }),
 )

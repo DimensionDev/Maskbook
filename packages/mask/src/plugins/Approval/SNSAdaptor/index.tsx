@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { ApplicationEntry } from '@masknet/shared'
 import { ApprovalIcon } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
@@ -32,7 +33,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         : clickHandler
                                 }
                             />
-                            {open ? <ApprovalDialog open={open} onClose={() => setOpen(false)} /> : null}
+                            {open ? (
+                                <TargetChainIdContext.Provider>
+                                    <ApprovalDialog open={open} onClose={() => setOpen(false)} />{' '}
+                                </TargetChainIdContext.Provider>
+                            ) : null}
                         </>
                     )
                 },

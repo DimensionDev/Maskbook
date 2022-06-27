@@ -2,7 +2,10 @@ import { DialogContent } from '@mui/material'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState, useMemo } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -42,18 +45,16 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
         [currentTab],
     )
     return (
-        <TargetChainIdContext.Provider>
-            <InjectedDialog
-                open={open}
-                title={t.plugin_name()}
-                onClose={onClose}
-                classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
-                titleTabs={tabs}>
-                <DialogContent className={classes.dialogContent}>
-                    <ApprovalWrapper tab={currentTab} />
-                </DialogContent>
-            </InjectedDialog>
-        </TargetChainIdContext.Provider>
+        <InjectedDialog
+            open={open}
+            title={t.plugin_name()}
+            onClose={onClose}
+            classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
+            titleTabs={tabs}>
+            <DialogContent className={classes.dialogContent}>
+                <ApprovalWrapper tab={currentTab} />
+            </DialogContent>
+        </InjectedDialog>
     )
 }
 
@@ -80,6 +81,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 />
             </div>
             {tab === Tabs.Tokens ? <ApprovalTokenContent /> : <ApprovalNFTContent />}
+            <PluginWalletStatusBar className={classes.footer}>
+                <ChainBoundary expectedChainId={chainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM} />
+            </PluginWalletStatusBar>
         </div>
     )
 }
