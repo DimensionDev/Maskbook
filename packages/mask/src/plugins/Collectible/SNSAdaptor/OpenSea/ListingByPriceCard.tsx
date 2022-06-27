@@ -282,7 +282,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                 <PluginWalletStatusBar>
                     <WalletConnectedBoundary>
                         <ActionButtonPromise
-                            variant="contained"
+                            className={classes.button}
                             disabled={!!validationMessage}
                             fullWidth
                             size="large"

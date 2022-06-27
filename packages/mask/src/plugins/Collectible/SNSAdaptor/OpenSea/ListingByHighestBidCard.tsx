@@ -147,7 +147,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <PluginWalletStatusBar className={classes.stateBar}>
                     <WalletConnectedBoundary>
                         <ActionButtonPromise
-                            variant="contained"
+                            className={classes.button}
                             disabled={!!validationMessage}
                             fullWidth
                             init={validationMessage || t('plugin_collectible_post_listing')}

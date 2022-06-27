@@ -334,7 +334,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             unlockMetaMask: classNames(classes.button, classes.sendButton),
                         }}>
                         <ActionButton
-                            variant="contained"
                             size="medium"
                             loading={isSending}
                             disabled={isSending}

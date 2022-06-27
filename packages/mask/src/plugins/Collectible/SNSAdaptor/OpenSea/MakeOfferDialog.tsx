@@ -250,7 +250,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     justifyContent="center">
                                     <ActionButtonPromise
                                         className={classes.button}
-                                        variant="contained"
                                         disabled={!!validationMessage}
                                         size="large"
                                         init={

@@ -259,12 +259,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
             </Grid>
             <PluginWalletStatusBar>
-                <ActionButton
-                    loading={isCreating}
-                    variant="contained"
-                    size="medium"
-                    fullWidth
-                    onClick={createRedpacket}>
+                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
                     {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',

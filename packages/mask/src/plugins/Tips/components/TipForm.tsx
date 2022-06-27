@@ -203,12 +203,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                         classes: { root: classes.button, disabled: classes.disabledButton },
                         color: 'primary',
                     }}>
-                    <ActionButton
-                        variant="contained"
-                        size="large"
-                        fullWidth
-                        disabled={!isValid || isSending}
-                        onClick={send}>
+                    <ActionButton size="large" fullWidth disabled={!isValid || isSending} onClick={send}>
                         {buttonLabel}
                     </ActionButton>
                 </ChainBoundary>

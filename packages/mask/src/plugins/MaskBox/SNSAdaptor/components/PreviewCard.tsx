@@ -40,13 +40,13 @@ const useTabsStyles = makeStyles()((theme) => ({
         marginTop: `${theme.spacing(2)} !important`,
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         margin: '0 !important',
     },
@@ -139,10 +139,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -159,10 +159,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -215,25 +215,20 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={targetChainId}
-                    renderInTimeline>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={targetChainId}>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}
-                        renderInTimeline>
+                        classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
                             fullWidth
-                            variant="contained"
                             sx={{
-                                backgroundColor: theme.palette.maskColor?.dark,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 color: 'white',
                                 width: '100%',
                                 '&:hover': {
-                                    background: theme.palette.maskColor?.dark,
+                                    background: theme.palette.maskColor.dark,
                                 },
                             }}
                             disabled={boxState !== BoxState.READY || isOpening}

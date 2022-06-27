@@ -477,11 +477,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     onChange={(e) => setTokenId(e.target.value)}
                                 />
                             </Paper>
-                            <Button
-                                disabled={!tokenId}
-                                className={classes.searchButton}
-                                variant="contained"
-                                onClick={onSearch}>
+                            <Button disabled={!tokenId} className={classes.searchButton} onClick={onSearch}>
                                 {t.search()}
                             </Button>
                         </div>
@@ -539,7 +535,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Button
                         disabled={loadingToken || !tokenDetailed || !isOwner || isAdded || isSelectSharesExceed}
                         className={classes.confirmButton}
-                        variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
                             ? t.nft_invalid_owner()
@@ -568,7 +563,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <Button
                                 disabled={tokenDetailedOwnerList.length === 0 ? !tokenId : !tokenIdListInput}
                                 className={classes.searchButton}
-                                variant="contained"
                                 onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
                                 {t.search()}
                             </Button>
@@ -698,7 +692,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             isSelectSharesExceed
                         }
                         className={classes.confirmButton}
-                        variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
                             ? t.nft_invalid_owner()

@@ -231,7 +231,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 <ActionButton
                                     loading={isPlacingBid}
                                     className={classes.button}
-                                    variant="contained"
                                     disabled={!!validationMessage || isPlacingBid}
                                     fullWidth
                                     onClick={onMakeOffer}>
