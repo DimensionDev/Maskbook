@@ -62,11 +62,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         identity.identifier?.userId,
     )
 
-    const { value: personaProof } = usePersonaBoundPlatform(
-        currentConnectedPersona?.identifier?.publicKeyAsHex || ZERO_ADDRESS,
-    )
-    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
     const isOwn = currentIdentity?.identifier === identity?.identifier
+
+    const personaPublicKey = isOwn ? currentConnectedPersona?.identifier?.publicKeyAsHex : personaList?.[0]?.persona
+
+    const { value: personaProof } = usePersonaBoundPlatform(personaPublicKey || ZERO_ADDRESS)
+    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
     useEffect(() => {
         if (wallets?.length === 0 || !wallets || !isOwn) {
             setAddressList(socialAddressList)
