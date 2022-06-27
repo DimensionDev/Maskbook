@@ -27,6 +27,7 @@ import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -100,6 +101,10 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             padding: theme.spacing(1),
             marginTop: theme.spacing(1),
+        },
+        controller: {
+            position: 'sticky',
+            bottom: 0,
         },
     }
 })
@@ -465,10 +470,13 @@ export function CreateForm(props: CreateFormProps) {
                     ) : null}
                 </Box>
             ) : null}
-            <Box>
-                <PluginWalletStatusBar>
+
+            <PluginWalletStatusBar className={classes.controller}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
+                            onlyInfiniteUnlock
+                            withTokenIcon
                             amount={inputTokenAmount}
                             spender={ITO2_CONTRACT_ADDRESS}
                             token={
@@ -484,8 +492,8 @@ export function CreateForm(props: CreateFormProps) {
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
                     </WalletConnectedBoundary>
-                </PluginWalletStatusBar>
-            </Box>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
         </>
     )
 }

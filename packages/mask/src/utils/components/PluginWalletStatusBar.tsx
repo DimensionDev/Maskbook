@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '0 0 12px 12px',
         alignItems: 'center',
         justifyContent: 'space-between',
+        flex: 1,
     },
     wallet: {
         display: 'flex',

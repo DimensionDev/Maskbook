@@ -29,6 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     label: {},
+    button: {
+        marginTop: theme.spacing(1.5),
+    },
     stateBar: {
         marginTop: theme.spacing(1.5),
     },

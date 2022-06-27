@@ -11,7 +11,7 @@ import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
+import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
@@ -23,6 +23,7 @@ import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundar
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Flags } from '../../../../shared'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -144,7 +145,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         contentWrapper: {
             display: 'flex',
             flexDirection: 'column',
-            height: props.shortITOwrapper ? 450 : 650,
             padding: '0 16px',
         },
         actionButtonWrapper: {
@@ -282,45 +282,35 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         )}
-                        {(swappedTokens && swappedTokens.length > 0) ||
-                        (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
-                            <PluginWalletStatusBar className={classes.actionButtonWrapper}>
-                                <ChainBoundary
-                                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                    expectedChainId={chainId}
-                                    classes={{ switchButton: classes.claimAllButton }}
-                                    noSwitchNetworkTip
-                                    ActionButtonPromiseProps={{
-                                        size: 'large',
-                                        sx: {
-                                            minHeight: 'auto',
-                                            width: '100%',
-                                            fontSize: 18,
-                                            fontWeight: 400,
-                                        },
-                                    }}>
-                                    {swappedTokens?.length ? (
-                                        <WalletConnectedBoundary
-                                            classes={{
-                                                connectWallet: classes.claimAllButton,
-                                            }}>
-                                            <ActionButton
-                                                className={classNames(classes.actionButton, classes.claimAllButton)}
-                                                loading={isClaiming}
-                                                disabled={claimablePids!.length === 0 || isClaiming}
-                                                size="small"
-                                                onClick={claim}>
-                                                {t('plugin_ito_claim_all')}
-                                            </ActionButton>
-                                        </WalletConnectedBoundary>
-                                    ) : (
-                                        <div />
-                                    )}
-                                </ChainBoundary>
-                            </PluginWalletStatusBar>
-                        ) : null}
                     </div>
                 </DialogContent>
+                <DialogActions style={{ padding: 0 }}>
+                    {(swappedTokens && swappedTokens.length > 0) ||
+                    (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
+                        <PluginWalletStatusBar className={classes.actionButtonWrapper}>
+                            <ChainBoundary
+                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                expectedChainId={chainId}
+                                noSwitchNetworkTip>
+                                {swappedTokens?.length ? (
+                                    <WalletConnectedBoundary>
+                                        <ActionButton
+                                            fullWidth
+                                            className={classNames(classes.actionButton)}
+                                            loading={isClaiming}
+                                            disabled={claimablePids!.length === 0 || isClaiming}
+                                            size="small"
+                                            onClick={claim}>
+                                            {t('plugin_ito_claim_all')}
+                                        </ActionButton>
+                                    </WalletConnectedBoundary>
+                                ) : (
+                                    <div />
+                                )}
+                            </ChainBoundary>
+                        </PluginWalletStatusBar>
+                    ) : null}
+                </DialogActions>
             </InjectedDialog>
         </SnackbarProvider>
     )

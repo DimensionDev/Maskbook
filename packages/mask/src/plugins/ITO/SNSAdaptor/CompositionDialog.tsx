@@ -57,6 +57,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         width: '100%',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+        position: 'sticky',
+        top: 0,
+        zIndex: 2,
+        background: theme.palette.maskColor.bottom,
     },
     tail: {
         cursor: 'pointer',

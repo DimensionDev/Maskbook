@@ -7,10 +7,12 @@ import ParticipatePanel from './ParticipatePanel'
 import { useContext } from 'react'
 import type { FindTrumanI18nFunction } from '../types'
 import { FindTrumanContext } from '../context'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
 import { PluginWalletStatusBar } from '../../../utils'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -64,6 +66,9 @@ const useStyles = makeStyles()((theme, props) => ({
         padding: 0,
         display: 'block',
     },
+    statusBar: {
+        margin: 0,
+    },
 }))
 
 interface FindTrumanDialogProps {
@@ -75,6 +80,7 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const { open, onClose } = props
     const { classes } = useStyles()
     const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { consts, t } = useConst()
 
     const [currentTab, onChange, tabs] = useTabs(
@@ -129,7 +135,9 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                 src={new URL('../assets/findtruman.png', import.meta.url).toString()}
                             />
                         </Box>
-                        <PluginWalletStatusBar />
+                        <PluginWalletStatusBar className={classes.statusBar}>
+                            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} />
+                        </PluginWalletStatusBar>
                     </DialogActions>
                 </InjectedDialog>
             </TabContext>
