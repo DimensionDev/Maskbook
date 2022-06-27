@@ -17,7 +17,6 @@ export function useTipsWalletsList(
     )
     if (kv && kv.proofs.length > 0 && proofs.length > 0) {
         const kvCache = kv.proofs.find((x) => x.identity === identity)
-        if (!kvCache) return EMPTY_LIST
         const result = proofs.map((x) => {
             x.isDefault = 0
             x.isPublic = 1
