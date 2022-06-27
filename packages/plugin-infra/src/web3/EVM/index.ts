@@ -25,3 +25,5 @@ export * from './useERC721TokenContracts'
 export * from './useERC1155TokenContract'
 export * from './useWrappedEtherContract'
 export * from './useNonFungibleOwnerTokens'
+
+export * from './useTargetChainIdContext'

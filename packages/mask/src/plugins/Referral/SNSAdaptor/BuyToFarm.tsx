@@ -203,12 +203,7 @@ export function BuyToFarm(props: PageInterface) {
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
                         <WalletConnectedBoundary offChain>
-                            <ActionButton
-                                fullWidth
-                                variant="contained"
-                                size="medium"
-                                disabled={!token}
-                                onClick={onClickBuyToFarm}>
+                            <ActionButton fullWidth size="medium" disabled={!token} onClick={onClickBuyToFarm}>
                                 {t.buy_to_farm()}
                             </ActionButton>
                         </WalletConnectedBoundary>

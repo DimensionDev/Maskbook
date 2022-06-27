@@ -188,7 +188,6 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                 </Grid>
                                 <Grid item xs={3} className={classes.tableCell}>
                                     <Button
-                                        variant="contained"
                                         color="primary"
                                         disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                         onClick={() => {

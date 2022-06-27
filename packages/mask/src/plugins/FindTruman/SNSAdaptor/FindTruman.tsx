@@ -103,13 +103,13 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         button: {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             fontSize: 14,
             fontWeight: 700,
             width: '100%',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
+                backgroundColor: theme.palette.maskColor.dark,
             },
             margin: '0 !important',
         },
@@ -272,10 +272,9 @@ export function FindTruman(props: FindTrumanProps) {
             </Card>
 
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <WalletConnectedBoundary
                         classes={{ button: classes.button }}
-                        renderInTimeline
                         startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     />
                 </ChainBoundary>

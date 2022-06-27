@@ -20,7 +20,7 @@ import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
 import { useI18N } from '../../../../utils'
 import { FungibleToken, isZero, multipliedBy, NetworkPluginID, formatBalance, Wallet } from '@masknet/web3-shared-base'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 import { ONE_BIPS } from '../../constants'
@@ -373,7 +373,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             severity="error"
                             icon={<CramIcon className={classes.alertIcon} />}
                             action={
-                                <Button variant="contained" color="error" className={classes.accept} onClick={onAccept}>
+                                <Button color="error" className={classes.accept} onClick={onAccept}>
                                     {t('plugin_trader_accept')}
                                 </Button>
                             }>
@@ -390,7 +390,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 classes={{ root: classes.button }}
                                 color="error"
                                 size="large"
-                                variant="contained"
                                 fullWidth
                                 disabled={staled}
                                 onClick={onConfirmPriceImpact}>
@@ -403,7 +402,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 classes={{ root: classes.button }}
                                 color="primary"
                                 size="large"
-                                variant="contained"
                                 fullWidth
                                 disabled={staled}
                                 onClick={onConfirm}>

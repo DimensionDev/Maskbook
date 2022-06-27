@@ -25,7 +25,7 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
@@ -511,7 +511,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="contained"
                                                 color="error"
                                                 disabled={
                                                     focusedTrade?.loading ||
@@ -529,7 +528,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="contained"
                                                 disabled={
                                                     focusedTrade?.loading ||
                                                     !focusedTrade?.value ||
