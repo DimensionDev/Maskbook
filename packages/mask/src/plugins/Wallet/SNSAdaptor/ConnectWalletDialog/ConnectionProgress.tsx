@@ -21,9 +21,9 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
         display: 'flex',
         flexWrap: 'nowrap',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 12,
         backgroundColor: MaskColorVar.warningBackground,
-        padding: '14.5px 14.5px 16px 14.5px',
+        padding: '13px 12px',
         borderRadius: 8,
     },
     tipContentText: {
@@ -37,12 +37,16 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor.dark,
         fontWeight: 700,
     },
     error: {
         fontSize: 14,
         paddingRight: theme.spacing(1),
+    },
+    progressIcon: {
+        fontSize: 14,
+        color: theme.palette.common.white,
     },
     progress: {
         fontSize: 14,
@@ -50,6 +54,9 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     warningTriangleIcon: {
         fontSize: 20,
+    },
+    retryButton: {
+        fontSize: 12,
     },
 }))
 
@@ -68,7 +75,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     const { Others } = useWeb3State(pluginID)
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
-    const networkDescriptor = useNetworkDescriptor(pluginID, providerType)
+    const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
     const classes = useStylesExtends(useStyles({ contentBackground: providerDescriptor?.backgroundGradient }), props)
     if (!Others) return null
 
@@ -92,7 +99,11 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
-                                    <CircularProgress className={classes.progress} size={14} sx={{ marginRight: 1 }} />
+                                    <CircularProgress
+                                        className={classes.progressIcon}
+                                        size={14}
+                                        sx={{ marginRight: 1 }}
+                                    />
                                     <Typography variant="body2" className={classes.progress}>
                                         {t('initializing')}
                                     </Typography>
@@ -110,7 +121,11 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             ) : null}
                         </Box>
                         {!connected && error ? (
-                            <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
+                            <ActionButton
+                                color="primary"
+                                onClick={retry}
+                                disabled={loading}
+                                className={classes.retryButton}>
                                 {t('plugin_wallet_connect_with_retry')}
                             </ActionButton>
                         ) : null}

@@ -147,7 +147,6 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 <WalletConnectedBoundary>
                     <ActionButtonPromise
                         className={classes.button}
-                        variant="contained"
                         disabled={!!validationMessage}
                         fullWidth
                         size="large"

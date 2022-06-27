@@ -207,7 +207,6 @@ export default function OptionsCard(props: OptionsViewProps) {
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
                 <ActionButtonPromise
                     color={selected ? 'success' : 'primary'}
-                    variant="contained"
                     disabled={selected || isClosed || choice === -1}
                     init={t(
                         selected

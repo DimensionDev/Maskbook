@@ -546,7 +546,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="contained"
                                                 color="error"
                                                 disabled={
                                                     focusedTrade?.loading ||
@@ -564,7 +563,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <ActionButton
                                                 fullWidth
                                                 loading={isSwapping}
-                                                variant="contained"
                                                 disabled={
                                                     focusedTrade?.loading ||
                                                     !focusedTrade?.value ||

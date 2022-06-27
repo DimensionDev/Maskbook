@@ -202,7 +202,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 {t('nft_button_add_collectible')}
                             </Button>
 
-                            <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
+                            <Button size="small" onClick={onClick} disabled={!selectedToken}>
                                 {t('nft_button_set_avatar')}
                             </Button>
                         </Box>

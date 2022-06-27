@@ -65,7 +65,6 @@ export function GameActionDialog(props: GameActionDialogProps) {
             <Button
                 classes={{ root: classes.button }}
                 color="primary"
-                variant="contained"
                 fullWidth
                 disabled={needsApprove && !hasSufficientBalance}
                 onClick={onAction}>
@@ -87,12 +86,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
     if (needsApprove) {
         if (errorTokenBalance) {
             action = (
-                <Button
-                    classes={{ root: classes.button }}
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                    onClick={retryLoadTokenBalance}>
+                <Button classes={{ root: classes.button }} color="primary" fullWidth onClick={retryLoadTokenBalance}>
                     {t('plugin_good_ghosting_balance_error')}
                 </Button>
             )
