@@ -205,6 +205,7 @@
     "transfer": "Transfer",
     "export": "Export",
     "wallet_load_retry": "Failed to load {{symbol}}. Click to retry.",
+    "wallet_status_bar_pending": "Pending",
     "wallet_name": "Wallet Name",
     "wallet_rename": "Rename Wallet",
     "wallet_loading_nft_contract": "Loading NFT contract...",
