@@ -5,7 +5,7 @@ import * as coinGeckoAPI from '../coingecko'
 import * as coinMarketCapAPI from '../coinmarketcap'
 import * as uniswapAPI from '../uniswap'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT, SCAM_ADDRESS_MAP } from '../../constants'
+import { BTC_FIRST_LEGER_DATE, CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import {
     isBlockedId,
     isBlockedKeyword,
@@ -14,10 +14,10 @@ import {
     resolveChainId,
     resolveCoinAddress,
     resolveCoinId,
+    isBlockedAddress,
 } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 /**
  * Get supported currencies of specific data provider
@@ -178,12 +178,7 @@ export async function getAvailableCoins(chainId: ChainId, keyword: string, type:
     return (
         ids
             ?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase())
-            ?.filter(
-                (x) =>
-                    !SCAM_ADDRESS_MAP[chainId]?.find((scamAddress) =>
-                        isSameAddress(scamAddress, x.address || x.contract_address),
-                    ),
-            ) ?? []
+            ?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
     )
 }
 // #endregion
