@@ -3,6 +3,8 @@ import { Response, AssetType, AlchemyResponse_EVM } from './types'
 
 // cspell:disable-next-line
 const Alchemy_API_Key = '3TJz6QYDHCj0ZhCdGvc5IC6EtMMMTKG1'
+// cspell:disable-next-line
+const Alchemy_API_Polygon = 'PsJ3gMn6JrSE9FCzShjsjD91irkybmh_'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
     const res = await globalThis.fetch(url)
@@ -28,6 +30,13 @@ export function getFootprints(address: string): Promise<Response> {
 
 export function getNFTs(address: string): Promise<AlchemyResponse_EVM> {
     const url = urlcat(`https://eth-mainnet.alchemyapi.io/v2/${Alchemy_API_Key}/getNFTs/`, {
+        owner: address,
+    })
+    return fetchJSON<AlchemyResponse_EVM>(url)
+}
+
+export function getPolygonNFTs(address: string): Promise<AlchemyResponse_EVM> {
+    const url = urlcat(`https://polygon-mainnet.g.alchemy.com/v2/${Alchemy_API_Polygon}/getNFTs/`, {
         owner: address,
     })
     return fetchJSON<AlchemyResponse_EVM>(url)

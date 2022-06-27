@@ -5,6 +5,17 @@ export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
 }
 
+export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
+    if (!listA || listA?.length === 0) return
+    if (!listB || listB?.length === 0) return [...listA]
+    return listA?.map((item, index) => {
+        return {
+            ...item,
+            collections: [...(item?.collections ?? []), ...(listB[index].collections ?? [])],
+        }
+    })
+}
+
 export const formatAddress = (address: string, size = 4) => {
     return `${address?.slice(0, size)}...${address?.slice(-size)}`
 }

@@ -10,8 +10,8 @@ import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import { getDonationList, getFootprintList, getNFTList } from '../hooks/useCollectionList'
-import { getWalletList } from '../utils'
+import { getDonationList, getFootprintList, getNFTList, getNFTList_Polygon } from '../hooks/useCollectionList'
+import { getWalletList, mergeList } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -111,10 +111,17 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
 
-    const { value: NFTList } = useAsyncRetry(async () => {
+    const { value: MainnetNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return getNFTList(wallets?.map((wallet) => wallet?.address))
     }, [wallets?.length])
+
+    const { value: PolygonNFTList } = useAsyncRetry(async () => {
+        if (!currentPersona) return
+        return getNFTList_Polygon(wallets?.map((wallet) => wallet?.address))
+    }, [wallets?.length])
+
+    const NFTList = mergeList(MainnetNFTList, PolygonNFTList)
 
     const { value: donationList } = useAsyncRetry(async () => {
         if (!currentPersona) return
