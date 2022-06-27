@@ -186,7 +186,6 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 </form>
                 <LoadingButton
                     loading={getGasOptionsLoading}
-                    variant="contained"
                     fullWidth
                     className={classes.button}
                     disabled={!isEmpty(errors)}

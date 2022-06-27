@@ -80,11 +80,11 @@ export function FarmPost(props: FarmPostProps) {
     )
 
     const openComposeBox = useCallback(
-        (message: string, selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
+        (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
             CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
-                content: makeTypedMessageText(message, selectedReferralData),
+                content: makeTypedMessageText('', selectedReferralData),
             }),
         [],
     )
@@ -110,7 +110,7 @@ export function FarmPost(props: FarmPostProps) {
                 sender: senderName,
             })
 
-            openComposeBox(t.buy_refer_earn_yield({ token: payload.referral_token_symbol }), metadata)
+            openComposeBox(metadata)
         } catch (error: any) {
             onError(error?.message)
         }
@@ -195,12 +195,12 @@ export function FarmPost(props: FarmPostProps) {
                 <ChainBoundary expectedChainId={SWAP_CHAIN_ID} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
                     <WalletConnectedBoundary offChain>
                         <Grid item xs={6} display="flex" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickBuyToFarm}>
+                            <Button size="medium" onClick={onClickBuyToFarm}>
                                 {t.buy_to_farm()}
                             </Button>
                         </Grid>
                         <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button variant="contained" size="medium" onClick={onClickReferToFarm}>
+                            <Button size="medium" onClick={onClickReferToFarm}>
                                 {t.refer_to_farm()}
                             </Button>
                         </Grid>

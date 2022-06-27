@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -40,9 +40,9 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     // #region select token
     const [token, setToken] = useState<FungibleToken<ChainId, SchemaType.ERC20>>(tokens[0])
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: true,
             disableSearchBar: true,
             selectedTokens: token?.address ? [token.address] : [],
@@ -101,7 +101,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                     spender={ITO2_CONTRACT_ADDRESS}
                     token={token}>
                     {(allowance: string) => (
-                        <ActionButton className={classes.button} size="large" fullWidth disabled variant="contained">
+                        <ActionButton className={classes.button} size="large" fullWidth disabled>
                             {isMoreThanMillion(allowance, token.decimals)
                                 ? t('plugin_ito_amount_unlocked_infinity', {
                                       symbol: token.symbol ?? 'Token',

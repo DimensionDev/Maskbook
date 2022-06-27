@@ -10,10 +10,11 @@ import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import { useI18N } from '../../../../utils'
 import { pluginIDSettings } from '../../../../settings/settings'
+import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2.5),
+        padding: theme.spacing(2),
     },
 }))
 
@@ -56,8 +57,12 @@ export function ConnectWalletDialog() {
 
         await connection.connect()
 
-        if (pluginID) {
-            pluginIDSettings.value = pluginID
+        const site = getSiteType()
+        if (pluginID && site) {
+            pluginIDSettings.value = {
+                ...pluginIDSettings.value,
+                [site]: pluginID,
+            }
         }
 
         setConnectWalletDialog({

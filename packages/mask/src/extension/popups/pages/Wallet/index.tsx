@@ -1,15 +1,15 @@
+import urlcat from 'urlcat'
+import { lazy, Suspense, useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { WalletStartUp } from './components/StartUp'
 import { WalletAssets } from './components/WalletAssets'
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
-import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import urlcat from 'urlcat'
 import { WalletHeader } from './components/WalletHeader'
 import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
@@ -35,6 +35,8 @@ const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 const ConnectWallet = lazy(() => import('./ConnectWallet'))
+
+const exclusionDetectLocked = [PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
@@ -87,7 +89,7 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId])
 
     useEffect(() => {
-        if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
+        if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
         navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
     }, [isLocked, location.pathname, getLockStatusLoading])
 

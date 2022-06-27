@@ -1,14 +1,19 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchInstagramAvatarListSelector } from '../../utils/selector'
+import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N, useLocationChange } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useLocation } from 'react-use'
+import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarListSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarButtonInDialog />)
+
+    const dialogWatcher = new MutationObserverWatcher(searchInstagramAvatarEditPageSettingDialog())
+    startWatch(dialogWatcher, signal)
+    createReactRootShadowed(dialogWatcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarSettingDialog />)
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({

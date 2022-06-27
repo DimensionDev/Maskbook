@@ -2,19 +2,18 @@ import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { NextIDStorage, Twitter, TwitterBaseAPI } from '@masknet/web3-providers'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import { Twitter } from '@masknet/web3-providers'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { BindingProof, fromHex, PersonaIdentifier, ProfileIdentifier, toBase64 } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types'
+import type { BindingProof } from '@masknet/shared-base'
 import { useI18N } from '../locales/i18n_generated'
 import { context } from '../context'
-import { PluginNFTAvatarRPC } from '../messages'
-import { PLUGIN_ID, RSS3_KEY_SNS } from '../constants'
 import { useSubscription } from 'use-subscription'
-import Services from '../../../extension/service'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { AvatarInfo, useSave } from '../hooks/save/useSave'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -34,80 +33,11 @@ interface UploadAvatarDialogProps {
     account?: string
     isBindAccount?: boolean
     image?: string | File
-    token?: NonFungibleToken<ChainId, SchemaType>
+    token?: AllChainsNonFungibleToken
     proof?: BindingProof
+    pluginId?: NetworkPluginID
     onBack: () => void
     onClose: () => void
-}
-
-type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
-
-async function saveToRSS3(info: NextIDAvatarMeta, account: string, identifier: ProfileIdentifier) {
-    const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
-        account,
-        info,
-        identifier.network,
-        RSS3_KEY_SNS.TWITTER,
-    ).catch((error) => {
-        console.log(error)
-        return
-    })
-    return avatar
-}
-
-async function saveToNextID(info: NextIDAvatarMeta, persona?: PersonaIdentifier, proof?: BindingProof) {
-    if (!proof?.identity || !persona?.publicKeyAsHex) return
-    const payload = await NextIDStorage.getPayload(
-        persona.publicKeyAsHex,
-        proof?.platform,
-        proof?.identity,
-        info,
-        PLUGIN_ID,
-    )
-    if (!payload.ok) {
-        return
-    }
-    const result = await Services.Identity.generateSignResult(persona, payload.val.signPayload)
-    if (!result) return
-    const response = await NextIDStorage.set(
-        payload.val.uuid,
-        persona.publicKeyAsHex,
-        toBase64(fromHex(result.signature.signature)),
-        proof.platform,
-        proof.identity,
-        payload.val.createdAt,
-        info,
-        PLUGIN_ID,
-    )
-    return response.ok
-}
-
-async function Save(
-    account: string,
-    isBindAccount: boolean,
-    token: NonFungibleToken<ChainId, SchemaType>,
-    data: AvatarInfo,
-    persona: PersonaIdentifier,
-    proof: BindingProof,
-    identifier: ProfileIdentifier,
-) {
-    if (!data || !token.contract?.address) return false
-
-    const info: NextIDAvatarMeta = {
-        nickname: data.nickname,
-        userId: data.userId,
-        imageUrl: data.imageUrl,
-        avatarId: data.avatarId,
-        address: token.contract?.address,
-        tokenId: token.tokenId,
-        chainId: token.contract?.chainId ?? ChainId.Mainnet,
-        schema: token.contract?.schema ?? SchemaType.ERC20,
-    }
-
-    if (isBindAccount) {
-        return saveToNextID(info, persona, proof)
-    }
-    return saveToRSS3(info, account, identifier)
 }
 
 async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | undefined> {
@@ -123,8 +53,10 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
         return
     }
 }
+
 export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
-    const { image, account, token, onClose, onBack, proof, isBindAccount = false } = props
+    const { image, account, token, onClose, onBack, proof, isBindAccount = false, pluginId } = props
+    const currentPluginId = useCurrentWeb3NetworkPluginID(pluginId)
     const { classes } = useStyles()
     const identifier = useSubscription(context.currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
@@ -134,28 +66,26 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const t = useI18N()
 
-    const onSave = useCallback(() => {
-        if (!editor) return
-        editor.getImage().toBlob(async (blob) => {
-            if (!blob || !account || !token || !currentConnectedPersona?.linkedProfiles[0].identifier || !proof) return
-            setDisabled(true)
+    const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
-            const avatarData = await uploadAvatar(blob, currentConnectedPersona?.linkedProfiles[0].identifier.userId)
+    const onSave = useCallback(async () => {
+        if (!editor || !account || !token || !currentConnectedPersona?.identifier || !proof) return
+        editor.getImage().toBlob(async (blob) => {
+            if (!blob) return
+            setDisabled(true)
+            const avatarData = await uploadAvatar(blob, proof.identity)
             if (!avatarData) {
                 setDisabled(false)
                 return
             }
-
-            const response = await Save(
+            const response = await saveAvatar(
                 account,
                 isBindAccount,
                 token,
                 avatarData,
                 currentConnectedPersona.identifier,
                 proof,
-                currentConnectedPersona.linkedProfiles[0].identifier,
             )
-
             if (!response) {
                 showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
                 setDisabled(false)
@@ -165,8 +95,8 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             location.reload()
             onClose()
             setDisabled(false)
-        })
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount])
+        }, 'image/png')
+    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
 
@@ -176,13 +106,14 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    border={50}
                     style={{ width: '100%', height: '100%' }}
                     scale={scale ?? 1}
                     rotate={0}
+                    border={50}
                     borderRadius={300}
                 />
                 <Slider
+                    disabled={disabled}
                     max={2}
                     min={0.5}
                     step={0.1}
@@ -192,10 +123,10 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
+                <Button disabled={disabled} className={classes.cancel} fullWidth variant="outlined" onClick={onBack}>
                     {t.cancel()}
                 </Button>
-                <Button disabled={disabled} fullWidth variant="contained" onClick={onSave}>
+                <Button fullWidth onClick={onSave} disabled={disabled}>
                     {t.save()}
                 </Button>
             </DialogActions>

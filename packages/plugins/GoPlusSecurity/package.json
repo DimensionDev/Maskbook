@@ -19,7 +19,7 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "react-feather": "^2.0.9",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "urlcat": "^2.0.4"
   }
 }

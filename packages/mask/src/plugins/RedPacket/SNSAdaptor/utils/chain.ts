@@ -6,7 +6,6 @@ import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } f
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import { checkAvailability } from './checkAvailability'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 
 const interFace = new Interface(REDPACKET_ABI)
@@ -87,11 +86,9 @@ export async function getRedPacketHistory(
                     name: decodedInputParam._name,
                     message: decodedInputParam._message,
                 },
-                // #region Retrieve at step 3
+                // #region Retrieve at RedPacketInHistoryList component
                 rpid: '',
                 creation_time: 0,
-                // #endregion
-                // #region Retrieve at step 4
                 total_remaining: '',
                 claimers: [],
                 // #endregion
@@ -105,52 +102,5 @@ export async function getRedPacketHistory(
         }
     })
     // #endregion
-
-    // #region
-    // 3. Decode CreationSuccess event log to retrieve `rpid` and `creation_time` for payload
-    type CreationSuccessEventParams = {
-        id: string
-        creation_time: BigNumber
-    }
-
-    const eventLogResponse = await Promise.allSettled(
-        payloadList.map(async (payload) => {
-            const result = await connection.getTransactionReceipt(payload.txid)
-            if (!result) return null
-
-            const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
-            if (!log) return null
-            const eventParams = interFace.decodeEventLog(
-                'CreationSuccess',
-                log.data,
-                log.topics,
-            ) as unknown as CreationSuccessEventParams
-
-            payload.rpid = eventParams.id
-            payload.creation_time = eventParams.creation_time.toNumber() * 1000
-
-            // 4. retrieve `claimers` and `total_remaining`
-            // const r = await redPacketContract.methods.check_availability(payload.rpid).call({
-            //     from: payload.sender.address,
-            // })
-
-            const data = await checkAvailability(
-                payload.rpid,
-                payload.sender.address,
-                payload.contract_address,
-                chainId,
-                connection,
-            )
-
-            payload.claimers = Array.from({ length: data.claimed }).map(() => ({ address: '', name: '' }))
-            payload.total_remaining = data.balance
-
-            return payload
-        }),
-    )
-    // #endregion
-
-    return eventLogResponse
-        .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
-        .filter((v) => Boolean(v)) as RedPacketJSONPayloadFromChain[]
+    return payloadList
 }

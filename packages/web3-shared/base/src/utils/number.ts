@@ -81,6 +81,11 @@ export function dividedBy(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).dividedBy(b)
 }
 
+/** new BigNumber(n).toNumber() */
+export function toNumber(value?: BigNumber.Value, fallback = 0) {
+    return new BigNumber(value ?? fallback).toNumber()
+}
+
 export function toFixed(value: BigNumber.Value | undefined): string
 export function toFixed(value: BigNumber.Value | undefined, decimalPlaces: number): string
 export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {

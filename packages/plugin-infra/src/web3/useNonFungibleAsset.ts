@@ -11,10 +11,13 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
     const account = useAccount(pluginID, options?.account)
-    const hub = useWeb3Hub(pluginID, options)
+    const hub = useWeb3Hub(pluginID, {
+        account,
+        ...options,
+    })
 
     return useAsyncRetry<Web3Helper.NonFungibleAssetScope<S, T> | undefined>(async () => {
         if (!address || !id || !hub) return
-        return hub.getNonFungibleAsset?.(address, id, options)
-    }, [address, account, id, hub])
+        return hub.getNonFungibleAsset?.(address, id)
+    }, [address, id, hub])
 }

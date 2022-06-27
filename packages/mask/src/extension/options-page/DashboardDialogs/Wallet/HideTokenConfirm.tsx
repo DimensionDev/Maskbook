@@ -5,10 +5,9 @@ import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import type { Wallet } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken, NonFungibleToken, Wallet } from '@masknet/web3-shared-base'
 
 export function DashboardWalletHideTokenConfirmDialog(
     props: WrappedDialogProps<{

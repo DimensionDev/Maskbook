@@ -13,7 +13,7 @@ import {
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography } from '@mui/material'
@@ -48,14 +48,14 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor.dark,
         fontWeight: 700,
         fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor.dark,
         fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
@@ -67,11 +67,11 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
     actionButton: {
         fontSize: 12,
         color: 'white',
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         marginLeft: theme.spacing(1),
         padding: theme.spacing(1, 2),
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
     address: {
@@ -100,10 +100,10 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     statusBox: {
         position: 'relative',
@@ -112,6 +112,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
 interface WalletStatusBox {
     disableChange?: boolean
     showPendingTransaction?: boolean
+    closeDialog?: () => void
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
@@ -120,12 +121,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
     })
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection()
     const chainId = useChainId()
     const account = useAccount()
     const wallet = useWallet()
-    const { value: balance = '0' } = useBalance()
-    const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
+    const { value: balance = '0', loading: loadingBalance } = useBalance()
+    const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(undefined, account)
@@ -200,30 +201,30 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             <LinkOutIcon className={classNames(classes.icon, classes.linkIcon)} />
                         </Link>
                     </div>
-                    {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.balance}>
-                                {formatBalance(balance, nativeToken?.decimals, 3)} {nativeToken?.symbol}
-                            </Typography>
-                        </div>
-                    ) : null}
+
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.balance}>
+                            {loadingNativeToken || loadingBalance
+                                ? '-'
+                                : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                        </Typography>
+                    </div>
                 </div>
 
                 {!props.disableChange && (
                     <section>
-                        {networkDescriptor?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM ? (
-                            <Button
-                                className={classNames(classes.actionButton)}
-                                variant="contained"
-                                size="small"
-                                onClick={async () => {
-                                    await connection.disconnect()
-                                    closeWalletStatusDialog()
-                                    openSelectProviderDialog()
-                                }}>
-                                {t('plugin_wallet_disconnect')}
-                            </Button>
-                        ) : null}
+                        <Button
+                            className={classNames(classes.actionButton)}
+                            variant="contained"
+                            size="small"
+                            onClick={async () => {
+                                props.closeDialog?.()
+                                closeWalletStatusDialog()
+                                await connection.disconnect()
+                                openSelectProviderDialog()
+                            }}>
+                            {t('plugin_wallet_disconnect')}
+                        </Button>
                         <Button
                             className={classNames(classes.actionButton)}
                             variant="contained"

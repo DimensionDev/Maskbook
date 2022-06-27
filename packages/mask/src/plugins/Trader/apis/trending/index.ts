@@ -138,7 +138,7 @@ export async function checkAvailabilityOnDataProvider(
     if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
     else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider)
-    // data fetched before update in nonblocking way
+    // data fetched before update in non-blocking way
     else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
@@ -146,10 +146,11 @@ export async function checkAvailabilityOnDataProvider(
 
 export async function getAvailableDataProviders(chainId: ChainId, type?: TagType, keyword?: string) {
     const networkType = chainResolver.chainNetworkType(chainId)
-    if (!networkType) return []
+    const isMainnet = chainResolver.isMainnet(chainId)
+    if (!isMainnet) return []
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
-            .filter((x) => (networkType === NetworkType.Ethereum ? true : x.value !== DataProvider.UNISWAP_INFO))
+            .filter((x) => (isMainnet ? true : x.value !== DataProvider.UNISWAP_INFO))
             .map((y) => y.value)
     const checked = await Promise.all(
         getEnumAsArray(DataProvider)
@@ -233,7 +234,7 @@ async function getCoinTrending(
                         resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
                         info.platforms[
                             Object.keys(info.platforms).find(
-                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === chainId,
+                                (x) => resolveChainId(x, DataProvider.COIN_GECKO) === String(chainId),
                             ) ?? ''
                         ],
                 },

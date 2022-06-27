@@ -233,7 +233,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                                 fullWidth
                                 color="primary"
                                 size="large"
-                                variant="contained"
                                 init={
                                     validationMessage || t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
                                 }
@@ -268,7 +267,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         fullWidth
                         color="primary"
                         size="large"
-                        variant="contained"
                         init={
                             needsSwap
                                 ? 'Swap ' + protocol.bareToken.symbol

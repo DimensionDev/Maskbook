@@ -12,7 +12,7 @@
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "use-subscription": "1.6.0"
   }
 }

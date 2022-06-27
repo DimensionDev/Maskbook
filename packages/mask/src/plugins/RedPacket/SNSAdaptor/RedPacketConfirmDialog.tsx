@@ -131,7 +131,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // #endregion
     const openShareTxDialog = useOpenShareTxDialog()
     const createRedpacket = useCallback(async () => {
-        const receipt = await createCallback()
+        const result = await createCallback()
+
+        const { hash, receipt, events } = result ?? {}
+        if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
         await openShareTxDialog({
             hash: receipt.transactionHash,
@@ -140,7 +143,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         // the settings is not available
         if (!settings?.token) return
 
-        const CreationSuccess = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
+        const CreationSuccess = (events?.CreationSuccess.returnValues ?? {}) as {
             creation_time: string
             creator: string
             id: string
@@ -282,7 +285,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
             <Grid item xs={6}>
                 <Typography variant="body1" color="textSecondary">
-                    {t.amount_total()}
+                    {t.total_amount()}
                 </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -299,21 +302,15 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
 
             <Grid item xs={6}>
-                <ActionButton disabled={isCreating} variant="contained" size="large" fullWidth onClick={onBack}>
+                <ActionButton disabled={isCreating} fullWidth onClick={onBack}>
                     {t.back()}
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton
-                    loading={isCreating}
-                    variant="contained"
-                    size="large"
-                    fullWidth
-                    onClick={createRedpacket}
-                    disabled={isBalanceInsufficient}>
+                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket} disabled={isBalanceInsufficient}>
                     {!isBalanceInsufficient
                         ? t.send_symbol({
-                              amount: formatTotal,
+                              amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                               symbol: settings?.token?.symbol ?? '-',
                           })
                         : t.insufficient_balance()}

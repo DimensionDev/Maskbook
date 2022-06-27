@@ -16,6 +16,9 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
+    "@react-hookz/web": "^14.2.2",
     "@types/qrcode": "^1.4.2",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
@@ -24,7 +27,7 @@
     "lodash-es": "^4.17.21",
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
     "use-subscription": "1.6.0"
   },

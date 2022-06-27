@@ -162,7 +162,9 @@ export function Steps(props: StepsProps) {
     return (
         <div className={classes.container}>
             <CurrentWalletBox notInPop={notInPop} walletName={walletName} wallet={wallet} changeWallet={changeWallet} />
-            {notEvm && <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>}
+            {notEvm && wallet.account && (
+                <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>
+            )}
             {isBound && <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>}
             {notConnected && (
                 <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
@@ -200,7 +202,7 @@ export function Steps(props: StepsProps) {
             <div className={classes.actionBox}>
                 <ActionButton
                     className={notInPop ? '' : classes.cancelBtn}
-                    variant="roundedFlat"
+                    variant="roundedOutlined"
                     fullWidth
                     color="secondary"
                     onClick={onCustomCancel}>

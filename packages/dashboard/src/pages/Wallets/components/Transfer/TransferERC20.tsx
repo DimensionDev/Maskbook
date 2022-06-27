@@ -10,7 +10,7 @@ import {
     useNativeToken,
     useNativeTokenPrice,
 } from '@masknet/plugin-infra/web3'
-import { FormattedAddress, TokenAmountPanel, usePickToken } from '@masknet/shared'
+import { FormattedAddress, TokenAmountPanel, useSelectFungibleToken } from '@masknet/shared'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import {
     TokenType,
@@ -62,7 +62,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { value: defaultGasPrice = '0' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
 
     const [selectedToken, setSelectedToken] = useState(token)
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
@@ -280,7 +280,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             loading: false,
                             ChipProps: {
                                 onClick: async () => {
-                                    const pickedToken = await pickToken({
+                                    const pickedToken = await selectFungibleToken({
                                         disableNativeToken: false,
                                     })
                                     if (pickedToken) setSelectedToken(pickedToken)

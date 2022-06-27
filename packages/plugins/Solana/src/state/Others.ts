@@ -14,7 +14,10 @@ import {
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    formatTokenId,
+    explorerResolver,
 } from '@masknet/web3-shared-solana'
+import { getNativeTokenAddress } from '../utils'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     constructor(context: Plugin.Shared.SharedContext) {
@@ -33,4 +36,8 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
 
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName
+    override formatTokenId = formatTokenId
+    override explorerResolver = explorerResolver
+    override getMaskTokenAddress = () => ''
+    override getNativeTokenAddress = getNativeTokenAddress
 }

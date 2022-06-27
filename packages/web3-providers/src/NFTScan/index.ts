@@ -1,5 +1,13 @@
 import urlcat from 'urlcat'
-import { createPageable, CurrencyType, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    CurrencyType,
+    HubOptions,
+    NonFungibleAsset,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
@@ -41,7 +49,7 @@ async function fetchAsset<T>(path: string, body?: unknown) {
     return response.json() as Promise<{ data: T }>
 }
 
-function createERC721TokenAsset(asset: NFTScanAsset) {
+function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<ChainId, SchemaType> {
     const payload: {
         name?: string
         description?: string
@@ -75,7 +83,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         },
         traits: [],
         price: {
-            [CurrencyType.NATIVE]: asset.last_price,
+            [CurrencyType.USD]: asset.last_price,
         },
 
         metadata: {
@@ -106,7 +114,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
 }
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getToken(address: string, tokenId: string) {
+    async getAsset(address: string, tokenId: string) {
         const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
             nft_address: address,
             token_id: tokenId,
@@ -115,7 +123,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, indicator = 0, size = 50 }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number
@@ -123,15 +131,16 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: indicator + 1,
+            page_index: (indicator?.index ?? 0) + 1,
             user_address: from,
         })
-        if (!response?.data) return createPageable([], 0)
+        if (!response?.data) return createPageable([], createIndicator(indicator))
         const total = response.data.total
+        const rest = total - ((indicator?.index ?? 0) + 1) * size
         return createPageable(
             response.data.content.map(createERC721TokenAsset) ?? [],
-            indicator,
-            total - (indicator + 1) * size > 0 ? indicator + 1 : undefined,
+            createIndicator(indicator),
+            rest > 0 ? createNextIndicator(indicator) : undefined,
         )
     }
 }

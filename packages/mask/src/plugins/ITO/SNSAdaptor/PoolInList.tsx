@@ -214,7 +214,6 @@ export function PoolInList(props: PoolInListProps) {
                         disabled={destructing}
                         fullWidth
                         size="small"
-                        variant="contained"
                         onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
@@ -222,7 +221,6 @@ export function PoolInList(props: PoolInListProps) {
                     <ActionButton
                         fullWidth
                         size="small"
-                        variant="contained"
                         onClick={() =>
                             onSend?.(
                                 omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
@@ -234,7 +232,7 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled>
+                    <ActionButton fullWidth size="small" disabled>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}

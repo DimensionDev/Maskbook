@@ -149,31 +149,21 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
         setPropsData(props)
     }, [propsData])
 
-    const onHandleClose = useCallback(async () => {
-        const { page } = currentPage
-        if (page === PagesType.LANDING) {
-            onClose?.()
-        } else {
-            const previousPage = previousPages[previousPages.length - 1]
-            setCurrentPage(previousPage)
-
-            const { title } = previousPage
-            setCurrentTitle(title)
-
-            const temp = [...previousPages]
-            temp.splice(temp.length - 1, 1)
-            setPreviousPages(temp)
-
-            if (page === PagesType.DEPOSIT && previousPage.page === PagesType.ADJUST_REWARDS) {
-                onBackToAdjustRewardsDialog()
-            }
-        }
-    }, [currentPage, onClose, onBackToAdjustRewardsDialog])
+    const onHandleClose = useCallback(() => {
+        onClose?.()
+        setCurrentPage({
+            page: PagesType.LANDING,
+            title: t.__plugin_name(),
+        })
+        setCurrentTitle(t.__plugin_name())
+    }, [])
 
     return (
         <InjectedDialog
             open={open}
+            isOnBack={currentPage.page !== PagesType.LANDING}
             onClose={onHandleClose}
+            titleBarIconStyle="close"
             title={
                 propsData?.hideAttrLogo ? (
                     currentTitle

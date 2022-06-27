@@ -12,7 +12,7 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../utils'
@@ -78,10 +78,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const desktopOrder = first(asset?.orders)
     const leastPrice = desktopOrder ? new BigNumber(desktopOrder.price?.[CurrencyType.USD] ?? '0') : ZERO
 
-    const paymentTokens = uniqBy(
-        [...(asset?.auction?.offerTokens ?? []), ...(asset?.auction?.orderTokens ?? [])],
-        (x) => x.address,
-    )
+    const paymentTokens = asset?.payment_tokens
 
     const selectedPaymentToken = first(paymentTokens)
 
@@ -107,6 +104,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!token?.value) return
         if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
         const schemaName = asset.contract?.schema
+
         await opensea?.createBuyOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
@@ -248,7 +246,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                                 <ActionButtonPromise
                                     className={classes.button}
-                                    variant="contained"
                                     disabled={!!validationMessage}
                                     size="large"
                                     init={
@@ -265,11 +262,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     failedOnClick="use executor"
                                 />
                                 {insufficientBalance ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConvertClick}>
+                                    <ActionButton className={classes.button} size="large" onClick={onConvertClick}>
                                         {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
                                     </ActionButton>
                                 ) : null}

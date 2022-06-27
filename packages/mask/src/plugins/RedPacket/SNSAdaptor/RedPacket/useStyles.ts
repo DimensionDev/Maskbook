@@ -19,7 +19,7 @@ to {
             height: 335,
             boxSizing: 'border-box',
             backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
@@ -167,13 +167,13 @@ to {
             marginTop: 210,
         },
         walletButton: {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
             color: 'white',
             fontSize: 14,
             fontWeight: 700,
             width: '100%',
             '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
+                backgroundColor: theme.palette.maskColor.dark,
             },
         },
     }

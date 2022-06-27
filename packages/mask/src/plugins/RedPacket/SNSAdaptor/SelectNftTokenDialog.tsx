@@ -402,11 +402,16 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     // #region fetch token detail
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
-        const _tokenDetailed = (await connection?.getNonFungibleToken(contract?.address ?? '', tokenId, {
-            account,
-            chainId,
-        })) as NonFungibleToken<ChainId, SchemaType.ERC721>
-        setTokenDetailed(_tokenDetailed?.metadata?.owner ? { ..._tokenDetailed, index: 0 } : undefined)
+        const _tokenDetailed = (await connection?.getNonFungibleToken(
+            contract?.address ?? '',
+            tokenId,
+            SchemaType.ERC721,
+            {
+                account,
+                chainId,
+            },
+        )) as NonFungibleToken<ChainId, SchemaType.ERC721>
+        setTokenDetailed(_tokenDetailed?.ownerId ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
     }, [connection, contract, tokenId, chainId, account])
@@ -420,7 +425,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
     }, [tokenDetailedOwnerList.length])
 
-    const isOwner = isSameAddress(account, tokenDetailed?.metadata?.owner) || tokenDetailedSelectedList.length > 0
+    const isOwner = isSameAddress(account, tokenDetailed?.ownerId) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
     // #endregion
 
@@ -472,11 +477,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     onChange={(e) => setTokenId(e.target.value)}
                                 />
                             </Paper>
-                            <Button
-                                disabled={!tokenId}
-                                className={classes.searchButton}
-                                variant="contained"
-                                onClick={onSearch}>
+                            <Button disabled={!tokenId} className={classes.searchButton} onClick={onSearch}>
                                 {t.search()}
                             </Button>
                         </div>
@@ -534,7 +535,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Button
                         disabled={loadingToken || !tokenDetailed || !isOwner || isAdded || isSelectSharesExceed}
                         className={classes.confirmButton}
-                        variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
                             ? t.nft_invalid_owner()
@@ -563,7 +563,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <Button
                                 disabled={tokenDetailedOwnerList.length === 0 ? !tokenId : !tokenIdListInput}
                                 className={classes.searchButton}
-                                variant="contained"
                                 onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
                                 {t.search()}
                             </Button>
@@ -693,7 +692,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             isSelectSharesExceed
                         }
                         className={classes.confirmButton}
-                        variant="contained"
                         onClick={onSubmit}>
                         {tokenDetailed && !isOwner
                             ? t.nft_invalid_owner()

@@ -17,6 +17,7 @@ export enum NetworkType {
 }
 
 export enum ProviderType {
+    None = 'None',
     Phantom = 'Phantom',
     Solflare = 'Solflare',
     Sollet = 'Sollet',

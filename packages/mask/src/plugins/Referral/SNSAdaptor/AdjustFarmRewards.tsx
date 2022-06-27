@@ -4,7 +4,7 @@ import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleTokenDetailed } from '../types'
 import { useI18N } from '../locales'
@@ -96,8 +96,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
     }, [props?.onChangePage, farm, rewardToken, referredToken])
 
     const onErrorDeposit = useCallback(
-        (error?: string) => {
-            error && showSnackbar(error, { variant: 'error' })
+        (message?: string) => {
+            message && showSnackbar(message, { variant: 'error' })
             onChangePageToAdjustRewards()
         },
         [props?.onChangePage, showSnackbar, onChangePageToAdjustRewards],
@@ -143,6 +143,7 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
         })
     }, [props, totalFarmReward, dailyFarmReward, attraceFee])
 
+    const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onAdjustFarmReward = useCallback(async () => {
         if (!referredToken || !rewardToken) {
             return onErrorDeposit(t.go_wrong())
@@ -150,20 +151,25 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
         const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 
-        adjustFarmRewards(
-            onConfirmAdjustFarm,
-            onErrorDeposit,
-            onConfirmedAdjustFarm,
-            web3,
-            account,
-            chainId,
-            rewardToken,
-            referredToken,
-            depositValue,
-            Number.parseFloat(dailyFarmReward),
-        )
+        try {
+            await adjustFarmRewards(
+                onConfirmAdjustFarm,
+                onConfirmedAdjustFarm,
+                web3,
+                connection,
+                account,
+                chainId,
+                rewardToken,
+                referredToken,
+                depositValue,
+                Number.parseFloat(dailyFarmReward),
+            )
+        } catch (err: any) {
+            onErrorDeposit(err.message)
+        }
     }, [
         web3,
+        connection,
         account,
         chainId,
         referredToken,
@@ -337,7 +343,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                         <WalletConnectedBoundary>
                             <ActionButton
                                 fullWidth
-                                variant="contained"
                                 size="medium"
                                 disabled={adjustRewardsBtnDisabled}
                                 onClick={onClickAdjustRewards}>

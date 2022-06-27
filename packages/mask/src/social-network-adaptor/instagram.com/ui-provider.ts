@@ -3,7 +3,11 @@ import { instagramShared } from './shared'
 import { instagramBase } from './base'
 import { IdentityProviderInstagram } from './collecting/identity-provider'
 import { PostProviderInstagram } from './collecting/posts'
-import { createTaskStartSetupGuideDefault, InitAutonomousStateProfiles } from '../../social-network/defaults'
+import {
+    createTaskStartSetupGuideDefault,
+    InitAutonomousStateProfiles,
+    injectPageInspectorDefault,
+} from '../../social-network/defaults'
 import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
@@ -45,6 +49,7 @@ const define: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInInstagram,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         userAvatar: injectUserNFTAvatarAtInstagram,
+        pageInspector: injectPageInspectorDefault(),
         profileTab: injectProfileTabAtInstagram,
         profileTabContent: injectProfileTabContentAtInstagram,
         openNFTAvatarSettingDialog,

@@ -1,6 +1,6 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { FC, PropsWithChildren } from 'react'
-import { TargetChainIdContext } from './TargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 interface Props {
     chainId: ChainId

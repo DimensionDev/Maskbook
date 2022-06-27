@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -68,14 +68,14 @@ export function InvestDialog() {
     // #endregion
 
     // #region select token
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: true,
             whitelist: allowedTokens,
         })
         if (picked) setToken(picked)
-    }, [pickToken, token?.address, allowedTokens])
+    }, [selectFungibleToken, token?.address, allowedTokens])
     // #endregion
 
     // #region amount
@@ -92,17 +92,17 @@ export function InvestDialog() {
     const [{ loading: isInvesting }, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
     const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
+        ? t('plugin_dhedge_share_text', {
+              amount: formatBalance(amount, token.decimals),
+              symbol: `${cashTag}${token.symbol}`,
+              pool: pool?.name,
+              account_promote: t('plugin_dhedge_account_promote', {
+                  context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+              }),
+          })
         : ''
     const invest = useCallback(async () => {
         const hash = await investCallback()
@@ -185,7 +185,6 @@ export function InvestDialog() {
                                 className={classes.button}
                                 fullWidth
                                 onClick={openSwap}
-                                variant="contained"
                                 disabled={isInvesting}
                                 loading={loadingTokenBalance || isInvesting}>
                                 {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
@@ -200,7 +199,6 @@ export function InvestDialog() {
                                     fullWidth
                                     disabled={!!validationMessage || isInvesting}
                                     onClick={invest}
-                                    variant="contained"
                                     loading={loadingTokenBalance || isInvesting}>
                                     {validationMessage || t('plugin_dhedge_invest')}
                                 </ActionButton>

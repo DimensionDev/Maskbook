@@ -195,7 +195,7 @@ export interface MagicEdenNFT {
     price: number
     owner: string
     collectionName: string
-    collectionTittle: string
+    collectionTitle: string
     img: string
     title: string
     content: string

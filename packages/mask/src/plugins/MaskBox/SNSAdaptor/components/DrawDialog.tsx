@@ -264,7 +264,6 @@ export function DrawDialog(props: DrawDialogProps) {
                         <ActionButton
                             size="medium"
                             fullWidth
-                            variant="contained"
                             sx={{ marginTop: 2 }}
                             disabled={isBalanceInsufficient || drawing}
                             onClick={onSubmit}>

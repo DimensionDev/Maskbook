@@ -5,13 +5,17 @@ import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useNFT, useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { getAvatarId } from '../../utils/user'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { max } from 'lodash-unified'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
@@ -46,8 +50,18 @@ function NFTAvatarInInstagram() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.INSTAGRAM)
-    const windowSize = useWindowSize()
 
+    const account = useAccount()
+    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
+    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
+        storage?.address ?? account,
+        _avatar?.address ?? '',
+        _avatar?.tokenId ?? '',
+        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        _avatar?.chainId ?? ChainId.Mainnet,
+    )
+
+    const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
         if (location.pathname?.includes('/edit')) return false
         return getAvatarId(identity.avatar ?? '') === avatar?.avatarId
@@ -100,10 +114,11 @@ function NFTAvatarInInstagram() {
 
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 
-    if (!avatar || !size || !showAvatar) return null
+    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
 
     return (
         <NFTBadge
+            nftInfo={nftInfo}
             hasRainbow={false}
             avatar={avatar}
             size={size}

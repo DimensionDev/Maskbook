@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { usePickToken, useOpenShareTxDialog } from '@masknet/shared'
+import { useSelectFungibleToken, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     leftShift,
@@ -134,9 +134,9 @@ export function SwapDialog(props: SwapDialogProps) {
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
     // #region select token
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: !exchangeTokens.some(isNativeTokenAddress),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
@@ -152,7 +152,7 @@ export function SwapDialog(props: SwapDialogProps) {
     }, [
         initAmount,
         payload,
-        pickToken,
+        selectFungibleToken,
         exchangeTokens
             .map((x) => x.address)
             .sort((a, b) => a.localeCompare(b, 'en-US'))
@@ -274,7 +274,6 @@ export function SwapDialog(props: SwapDialogProps) {
                             loading={isSwapping}
                             className={classes.button}
                             fullWidth
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>

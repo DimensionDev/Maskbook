@@ -83,7 +83,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                             variant="contained"
                             onClick={() => onClick(x)}
                             sx={{
-                                backgroundColor: theme.palette.maskColor?.dark,
+                                backgroundColor: theme.palette.maskColor.dark,
                                 color: 'white',
                                 width: '254px',
                                 height: '36px',
@@ -93,7 +93,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                                 paddingBottom: 1.125,
                                 lineHeight: 1.5,
                                 '&:hover': {
-                                    backgroundColor: theme.palette.maskColor?.dark,
+                                    backgroundColor: theme.palette.maskColor.dark,
                                 },
                             }}>
                             {t('plugin_enables')}

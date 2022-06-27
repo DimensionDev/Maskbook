@@ -129,21 +129,20 @@ export async function harvestRewards(
 
         const estimatedGas = await farms?.methods.harvestRewardsNoGapcheck(requests, proofs).estimateGas(config)
 
-        await farms?.methods
-            .harvestRewardsNoGapcheck(requests, proofs)
-            .send({
-                ...config,
-                gas: estimatedGas,
-            })
-            .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                // show Confirm dialog only at the first time
-                if (no === 1) {
-                    onConfirm(receipt.transactionHash)
-                }
-            })
-            .on(TransactionEventType.ERROR, (error: Error) => {
-                throw error
-            })
+        return new Promise(async (resolve, reject) => {
+            farms?.methods
+                .harvestRewardsNoGapcheck(requests, proofs)
+                .send({
+                    ...config,
+                    gas: estimatedGas,
+                })
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    resolve(receipt.transactionHash)
+                })
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    reject(error)
+                })
+        })
     } catch (error: any) {
         onError(error?.message)
     }

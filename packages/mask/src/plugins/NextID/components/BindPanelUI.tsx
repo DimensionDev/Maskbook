@@ -130,7 +130,6 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 disabled={!isCurrentAccount || isBound || !!isWalletSigned || !isSupported}
                                 className={isWalletSigned ? classes.done : ''}
                                 loading={signature.wallet.loading}
-                                variant="contained"
                                 onClick={onWalletSign}
                                 endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingAnimation />}>
@@ -176,7 +175,6 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loadingPosition="end"
                                 className={isPersonaSigned ? classes.done : ''}
                                 loading={signature.persona.loading}
-                                variant="contained"
                                 onClick={onPersonaSign}
                                 endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingAnimation />}>
