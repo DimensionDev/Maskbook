@@ -286,7 +286,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     token={token?.schema === SchemaType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                     <ActionButton
-                        variant="contained"
                         size="large"
                         className={classes.button}
                         fullWidth

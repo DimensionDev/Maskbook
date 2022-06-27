@@ -333,8 +333,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             className={classNames(classes.button, classes.cancelButton)}
                             fullWidth
                             onClick={onBack}
-                            size="large"
-                            variant="contained">
+                            size="large">
                             {i18n('cancel')}
                         </Button>
                     </Grid>
@@ -345,7 +344,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 unlockMetaMask: classNames(classes.button, classes.sendButton),
                             }}>
                             <ActionButton
-                                variant="contained"
                                 size="large"
                                 loading={isSending}
                                 disabled={isSending}

@@ -190,7 +190,6 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
             <div className={classes.line} style={{ justifyContent: 'flex-end' }}>
                 <Button
                     color="primary"
-                    variant="contained"
                     startIcon={loading ? <CircularProgress classes={{ root: classes.whiteColor }} size={24} /> : null}
                     style={{ color: '#fff' }}
                     onClick={sendPoll}>

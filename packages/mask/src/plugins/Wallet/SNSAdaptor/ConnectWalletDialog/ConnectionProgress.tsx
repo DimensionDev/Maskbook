@@ -37,7 +37,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? '#07101B' : theme.palette.maskColor.dark,
         fontWeight: 700,
     },
     error: {
@@ -123,7 +123,6 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         {!connected && error ? (
                             <ActionButton
                                 color="primary"
-                                variant="contained"
                                 onClick={retry}
                                 disabled={loading}
                                 className={classes.retryButton}>

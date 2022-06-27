@@ -5,9 +5,7 @@ import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
 import { NetworkPluginID, isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { ThemeProvider } from '@mui/material'
 import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
-import { useClassicMaskSNSPluginTheme } from '../../../utils'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -73,33 +71,27 @@ export function PostInspector(props: PostInspectorProps) {
 
     const loadingToken = _loadingToken || loadingExchangeTokensDetailed
 
-    const renderITO = () => {
-        if (isCompactPayload_) {
-            if (loading) return <ITO_Loading />
-            if (error) return <ITO_Error retryPoolPayload={retry} />
-        }
-        if ((loadingToken && typeof token === 'string') || tokenDetailed?.symbol?.toUpperCase() === 'UNKNOWN')
-            return <ITO_Loading />
-        if (!tokenDetailed && typeof token === 'string') return <ITO_Error retryPoolPayload={retry} />
-        return (
-            <ITO
-                pid={pid}
-                payload={
-                    typeof token === 'string'
-                        ? {
-                              ..._payload,
-                              token: tokenDetailed! as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
-                              exchange_tokens: exchangeTokensDetailed! as Array<
-                                  FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
-                              >,
-                          }
-                        : _payload
-                }
-            />
-        )
+    if (isCompactPayload_) {
+        if (loading) return <ITO_Loading />
+        if (error) return <ITO_Error retryPoolPayload={retry} />
     }
-
-    const theme = useClassicMaskSNSPluginTheme()
-
-    return <ThemeProvider theme={theme}>{renderITO()}</ThemeProvider>
+    if ((loadingToken && typeof token === 'string') || tokenDetailed?.symbol?.toUpperCase() === 'UNKNOWN')
+        return <ITO_Loading />
+    if (!tokenDetailed && typeof token === 'string') return <ITO_Error retryPoolPayload={retry} />
+    return (
+        <ITO
+            pid={pid}
+            payload={
+                typeof token === 'string'
+                    ? {
+                          ..._payload,
+                          token: tokenDetailed! as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                          exchange_tokens: exchangeTokensDetailed! as Array<
+                              FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
+                          >,
+                      }
+                    : _payload
+            }
+        />
+    )
 }

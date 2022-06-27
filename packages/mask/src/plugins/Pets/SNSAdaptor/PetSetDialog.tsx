@@ -325,7 +325,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         color="inherit"
                         size="large"
                         fullWidth
-                        variant="contained"
                         className={classes.btn}
                         onClick={saveHandle}
                         disabled={!collection.name || !metaData.image}>
