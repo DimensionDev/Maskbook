@@ -311,7 +311,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         classes.actionButton,
                                         canSend && !isPasswordValid ? classes.disabledButton : '',
                                     )}
-                                    variant="contained"
                                     size="large">
                                     {canSend
                                         ? t.send()

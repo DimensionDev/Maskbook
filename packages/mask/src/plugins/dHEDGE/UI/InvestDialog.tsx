@@ -185,7 +185,6 @@ export function InvestDialog() {
                                 className={classes.button}
                                 fullWidth
                                 onClick={openSwap}
-                                variant="contained"
                                 disabled={isInvesting}
                                 loading={loadingTokenBalance || isInvesting}>
                                 {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
@@ -200,7 +199,6 @@ export function InvestDialog() {
                                     fullWidth
                                     disabled={!!validationMessage || isInvesting}
                                     onClick={invest}
-                                    variant="contained"
                                     loading={loadingTokenBalance || isInvesting}>
                                     {validationMessage || t('plugin_dhedge_invest')}
                                 </ActionButton>

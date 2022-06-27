@@ -373,7 +373,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             severity="error"
                             icon={<CramIcon className={classes.alertIcon} />}
                             action={
-                                <Button variant="contained" color="error" className={classes.accept} onClick={onAccept}>
+                                <Button color="error" className={classes.accept} onClick={onAccept}>
                                     {t('plugin_trader_accept')}
                                 </Button>
                             }>
@@ -390,7 +390,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 classes={{ root: classes.button }}
                                 color="error"
                                 size="large"
-                                variant="contained"
                                 fullWidth
                                 disabled={staled}
                                 onClick={onConfirmPriceImpact}>
@@ -403,7 +402,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 classes={{ root: classes.button }}
                                 color="primary"
                                 size="large"
-                                variant="contained"
                                 fullWidth
                                 disabled={staled}
                                 onClick={onConfirm}>

@@ -241,7 +241,6 @@ export function DepositDialog() {
                                 className={classes.button}
                                 fullWidth
                                 onClick={openSwap}
-                                variant="contained"
                                 disabled={isDepositing}
                                 loading={loadingTokenBalance || isDepositing}>
                                 {t('plugin_pooltogether_buy', { symbol: token.symbol })}
@@ -256,7 +255,6 @@ export function DepositDialog() {
                                     fullWidth
                                     disabled={!!validationMessage || isDepositing}
                                     onClick={deposit}
-                                    variant="contained"
                                     loading={loadingTokenBalance || isDepositing}>
                                     {validationMessage || t('plugin_pooltogether_deposit_msg')}
                                 </ActionButton>
