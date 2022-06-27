@@ -20,16 +20,19 @@
     "@masknet/web3-shared-solana": "workspace:*",
     "@react-hookz/web": "^14.2.2",
     "@types/qrcode": "^1.4.2",
+    "@solana/web3.js": "^1.30.2",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
+    "date-fns": "2.28.0",
     "iframe-resizer-react": "^1.1.0",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "1.6.0"
+    "use-subscription": "1.6.0",
+    "unstated-next": "^1.1.0"
   },
   "devDependencies": {
     "@types/qrcode": "^1.4.2"

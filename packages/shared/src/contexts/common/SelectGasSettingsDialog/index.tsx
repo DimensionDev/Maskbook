@@ -5,7 +5,10 @@ import { SelectGasSettingsDialogProps, SelectGasSettingsDialog } from '../../com
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const { TaskManagerContext, TaskManagerProvider: SelectGasSettingsProvider } = createUITaskManager<
-    Web3Helper.FungibleTokenScope<'all'> | null,
+    {
+        slippageTolerance?: number
+        option?: Web3Helper.GasOptionAll
+    } | null,
     SelectGasSettingsDialogProps,
     Omit<SelectGasSettingsDialogProps, 'open' | 'onClose'>
 >(SelectGasSettingsDialog)

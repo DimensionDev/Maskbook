@@ -36,6 +36,8 @@
     "gas_settings_gas_option_type_slow": "Medium",
     "gas_settings_gas_option_type_normal": "High",
     "gas_settings_gas_option_type_fast": "Instant",
+    "gas_settings_gas_option_estimate_seconds": "{{seconds}} sec",
+    "gas_settings_gas_option_amount_in_gwei": "up to {{amount}} Gwei",
     "gas_settings_section_title_gas_price": "Gas Price",
     "gas_settings_section_title_slippage_tolerance": "Slippage Tolerance",
     "gas_settings_custom": "Custom",
@@ -51,5 +53,5 @@
     "gas_settings_error_low_gas_limit": "Gas limit too low will cause the transaction to fail.",
     "gas_settings_error_lower_than_max_priority_fee": "Max fee cannot be lower than max priority fee.",
     "gas_settings_alert_low_slippage_tolerance": "Transaction with extremely low slippage tolerance might be reverted because of very small market movement.",
-    "gas_settings_alert_high_slippage_tolerance": "You may receive {{percentage}}% less received with this level of slippage tolerance."
+    "gas_settings_alert_high_slippage_tolerance": "You may have {{percentage}}% less received with this level of slippage tolerance."
 }

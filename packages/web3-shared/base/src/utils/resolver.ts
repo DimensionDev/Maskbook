@@ -1,5 +1,12 @@
 import urlcat from 'urlcat'
-import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs'
+import {
+    ChainDescriptor,
+    CurrencyType,
+    GasOptionType,
+    NetworkDescriptor,
+    ProviderDescriptor,
+    SourceType,
+} from '../specs'
 
 export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
     function resolveFallback(key: K) {

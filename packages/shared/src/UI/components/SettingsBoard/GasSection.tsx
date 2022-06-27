@@ -1,36 +1,21 @@
+import { useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { makeStyles, MaskAlert, MaskColorVar, MaskTabList, MaskTextField } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
+import { TabContext } from '@mui/lab'
 import { Grid, Tab, Typography } from '@mui/material'
-import { Section } from './Section'
 import { InfoIcon, WarningIcon } from '@masknet/icons'
 import { GasOptionSelector } from './GasOptionSelector'
-import type { GasOption } from './GasOption'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { TabContext } from '@mui/lab'
-import { useState } from 'react'
+import { Section } from './Section'
+import { SettingsContext } from './Context'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainIdSupport } from '@masknet/plugin-infra/src/web3'
+import { chainResolver } from '@masknet/web3-shared-evm'
 
 enum GasSettingsType {
     Basic = 'Basic',
     Advanced = 'Advanced',
 }
-
-const GAS_OPTIONS: GasOption[] = [
-    {
-        type: GasOptionType.SLOW,
-        estimatedSeconds: 20,
-        suggestedMaxFeePerGas: '30000000',
-    },
-    {
-        type: GasOptionType.NORMAL,
-        estimatedSeconds: 30,
-        suggestedMaxFeePerGas: '40000000',
-    },
-    {
-        type: GasOptionType.FAST,
-        estimatedSeconds: 40,
-        suggestedMaxFeePerGas: '50000000',
-    },
-]
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -80,17 +65,31 @@ export function GasSection(props: GasSectionProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
     const [activeTab, setActiveTab] = useState(GasSettingsType.Basic)
+    const { pluginID, chainId, gasOptions, gasOptionType, maxFee, GAS_OPTION_NAMES } = SettingsContext.useContainer()
+
+    // only EVM is supported
+    if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
+
+    const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
 
     return (
         <div className={classes.root}>
             <Section
-                title={t.gas_settings_info_gas_fee({
-                    fee: '2.5',
-                })}
+                title={t.gas_settings_label_gas_price()}
                 additions={
                     <Typography className={classes.additions} component="span">
-                        <span className={classes.label}>{t.gas_settings_custom()}</span>
-                        <span className={classes.price}> 199.00 Gwei</span>
+                        <span className={classes.label}>
+                            {activeTab === GasSettingsType.Basic
+                                ? GAS_OPTION_NAMES[gasOptionType]
+                                : t.gas_settings_custom()}
+                        </span>
+                        <span className={classes.price}>
+                            {' '}
+                            {activeTab === GasSettingsType.Basic
+                                ? new BigNumber(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0).toFixed(2)
+                                : new BigNumber(maxFee).toFixed(2)}{' '}
+                            Gwei
+                        </span>
                     </Typography>
                 }>
                 <TabContext value={activeTab}>
@@ -104,14 +103,14 @@ export function GasSection(props: GasSectionProps) {
                     </MaskTabList>
                 </TabContext>
                 {activeTab === GasSettingsType.Basic ? (
-                    <GasOptionSelector options={GAS_OPTIONS} />
+                    <GasOptionSelector options={gasOptions} />
                 ) : (
                     <>
                         <MaskAlert icon={<InfoIcon />} severity="info">
                             {t.gas_settings_error_low_gas_limit()}
                         </MaskAlert>
                         <Grid container direction="row" spacing={2}>
-                            <Grid item xs={12}>
+                            <Grid item xs={isEIP1559 ? 12 : 6}>
                                 <MaskTextField
                                     className={classes.textfield}
                                     InputProps={{
@@ -124,37 +123,56 @@ export function GasSection(props: GasSectionProps) {
                                     }
                                 />
                             </Grid>
+                            {isEIP1559 ? null : (
+                                <Grid item xs={6}>
+                                    <MaskTextField
+                                        className={classes.textfield}
+                                        InputProps={{
+                                            type: 'number',
+                                        }}
+                                        label={
+                                            <Typography className={classes.caption}>
+                                                {t.gas_settings_label_gas_price()}
+                                            </Typography>
+                                        }
+                                    />
+                                </Grid>
+                            )}
                         </Grid>
-                        <Grid container direction="row" spacing={2}>
-                            <Grid item xs={6}>
-                                <MaskTextField
-                                    className={classes.textfield}
-                                    InputProps={{
-                                        type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                    }}
-                                    label={
-                                        <Typography className={classes.caption}>
-                                            {t.gas_settings_label_max_priority_fee()}
-                                        </Typography>
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <MaskTextField
-                                    className={classes.textfield}
-                                    InputProps={{
-                                        type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                    }}
-                                    label={
-                                        <Typography className={classes.caption}>
-                                            {t.gas_settings_label_max_fee()}
-                                        </Typography>
-                                    }
-                                />
-                            </Grid>
-                        </Grid>
+                        {isEIP1559 ? (
+                            <>
+                                <Grid container direction="row" spacing={2}>
+                                    <Grid item xs={6}>
+                                        <MaskTextField
+                                            className={classes.textfield}
+                                            InputProps={{
+                                                type: 'number',
+                                                endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
+                                            }}
+                                            label={
+                                                <Typography className={classes.caption}>
+                                                    {t.gas_settings_label_max_priority_fee()}
+                                                </Typography>
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <MaskTextField
+                                            className={classes.textfield}
+                                            InputProps={{
+                                                type: 'number',
+                                                endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
+                                            }}
+                                            label={
+                                                <Typography className={classes.caption}>
+                                                    {t.gas_settings_label_max_fee()}
+                                                </Typography>
+                                            }
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </>
+                        ) : null}
                         <MaskAlert icon={<WarningIcon />} severity="error">
                             {t.gas_settings_error_low_gas_limit()}
                         </MaskAlert>

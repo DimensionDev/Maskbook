@@ -4,8 +4,6 @@ import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { RadioChip } from './RadioChip'
 
-const DEFAULT_SLIPPAGE_TOLERANCES = [0.5, 1, 2, 5]
-
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
@@ -35,10 +33,12 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SlippageToleranceSelectorProps {
+    slippageTolerances: number[]
     onChange?: (tolerance: number) => void
 }
 
 export function SlippageToleranceSelector(props: SlippageToleranceSelectorProps) {
+    const { slippageTolerances, onChange } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
 
@@ -48,7 +48,7 @@ export function SlippageToleranceSelector(props: SlippageToleranceSelectorProps)
 
     return (
         <Paper className={classes.root}>
-            {DEFAULT_SLIPPAGE_TOLERANCES.map((x) => (
+            {slippageTolerances.map((x) => (
                 <RadioChip
                     key={x}
                     label={`${x}%`}
@@ -57,7 +57,7 @@ export function SlippageToleranceSelector(props: SlippageToleranceSelectorProps)
                         setTolerance(x)
                         setCustomTolerance(0)
                         if (ref.current) ref.current.value = ''
-                        props.onChange?.(x)
+                        onChange?.(x)
                     }}
                 />
             ))}
@@ -75,7 +75,7 @@ export function SlippageToleranceSelector(props: SlippageToleranceSelectorProps)
                         const v = Number.parseFloat(ev.target.value)
                         const tolerance = isNaN(v) ? 0 : v
                         setCustomTolerance(tolerance)
-                        props.onChange?.(tolerance)
+                        onChange?.(tolerance)
                     }}
                 />
             </Box>

@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider } from '@mui/material'
-import { useSharedI18N } from '@masknet/shared'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasOption, GasOptionItem } from './GasOption'
+import type { GasOptionType } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { GasOption } from './GasOption'
+import { SettingsContext } from './Context'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -22,32 +23,37 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface GasOptionSelectorProps {
-    options: Array<GasOption>
-    onChange?: (option: GasOption) => void
+    options?: Record<GasOptionType, Web3Helper.GasOptionAll>
+    onChange?: (type: GasOptionType, option: Web3Helper.GasOptionAll) => void
 }
 
 export function GasOptionSelector(props: GasOptionSelectorProps) {
     const { options, onChange } = props
     const { classes } = useStyles()
-    const t = useSharedI18N()
-    const [selectedOptionType, setSelectedOptionType] = useState(GasOptionType.NORMAL)
+    const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
+
+    if (!options) return null
 
     return (
         <Box className={classes.root}>
             <div className={classes.content}>
-                {options.map((x, i) => (
-                    <>
-                        {i === 0 ? null : <Divider />}
-                        <GasOptionItem
-                            {...x}
-                            checked={x.type === selectedOptionType}
-                            onClick={() => {
-                                setSelectedOptionType(x.type)
-                                onChange?.(x)
-                            }}
-                        />
-                    </>
-                ))}
+                {Object.entries(options).map(([type, option], i) => {
+                    const type_ = type as GasOptionType
+                    return (
+                        <React.Fragment key={type}>
+                            {i === 0 ? null : <Divider />}
+                            <GasOption
+                                type={type_}
+                                option={option}
+                                checked={type_ === gasOptionType}
+                                onClick={() => {
+                                    setGasOptionType(type_)
+                                    onChange?.(type_, option)
+                                }}
+                            />
+                        </React.Fragment>
+                    )
+                })}
             </div>
         </Box>
     )
