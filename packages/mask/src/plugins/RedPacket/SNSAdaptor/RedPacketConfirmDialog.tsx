@@ -310,7 +310,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 <ActionButton loading={isCreating} fullWidth onClick={createRedpacket} disabled={isBalanceInsufficient}>
                     {!isBalanceInsufficient
                         ? t.send_symbol({
-                              amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
+                              amount: formatTotal,
                               symbol: settings?.token?.symbol ?? '-',
                           })
                         : t.insufficient_balance()}
