@@ -1,4 +1,5 @@
 import { ONE } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 
 export const BIPS_BASE = new BigNumber(10000)
@@ -20,3 +21,7 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN = 1000 // 10%
 export const PRICE_IMPACT_NON_EXPERT_BLOCKED = 1500 // 15%
 
 export const MINIMUM_AMOUNT = new BigNumber('1e-6')
+
+export const SCAM_ADDRESS_MAP: { [key in ChainId]?: string[] } = {
+    [ChainId.Mainnet]: ['0xc89f3672d1178c83470a53edf67c4f5521e8d400'],
+}
