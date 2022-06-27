@@ -179,7 +179,6 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                 loading={isPurchasing}
                                 className={classes.button}
                                 fullWidth
-                                variant="contained"
                                 disabled={!!validationMessage || isPurchasing}
                                 onClick={purchase}>
                                 {validationMessage || t('plugin_cryptoartai_buy_now')}

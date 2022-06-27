@@ -137,7 +137,6 @@ export function Rewards({
                                 </Typography>
                                 <Button
                                     disabled={claimable <= 0}
-                                    variant="contained"
                                     size="medium"
                                     onClick={() =>
                                         onHarvestRewards(

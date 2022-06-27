@@ -119,7 +119,6 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                 />
                 <Button
                     style={{ marginLeft: 'auto' }}
-                    variant="contained"
                     disabled={!(!!currentUnlockTarget.length && !!currentUnlockPost)}
                     onClick={onInsert}>
                     {t('plugin_unlockprotocol_submit_post')}

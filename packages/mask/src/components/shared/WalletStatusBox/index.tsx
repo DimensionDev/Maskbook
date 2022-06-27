@@ -48,14 +48,14 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor.dark,
         fontWeight: 700,
         fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor.dark,
         fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
@@ -67,11 +67,11 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
     actionButton: {
         fontSize: 12,
         color: 'white',
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         marginLeft: theme.spacing(1),
         padding: theme.spacing(1, 2),
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
     address: {
@@ -100,10 +100,10 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        stroke: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     statusBox: {
         position: 'relative',
@@ -112,6 +112,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
 interface WalletStatusBox {
     disableChange?: boolean
     showPendingTransaction?: boolean
+    closeDialog?: () => void
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
@@ -217,8 +218,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={async () => {
-                                await connection.disconnect()
+                                props.closeDialog?.()
                                 closeWalletStatusDialog()
+                                await connection.disconnect()
                                 openSelectProviderDialog()
                             }}>
                             {t('plugin_wallet_disconnect')}

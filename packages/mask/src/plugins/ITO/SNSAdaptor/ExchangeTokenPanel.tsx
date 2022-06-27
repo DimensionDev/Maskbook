@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -81,9 +81,9 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: isSell,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],

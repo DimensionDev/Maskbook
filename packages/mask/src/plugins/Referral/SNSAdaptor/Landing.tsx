@@ -114,9 +114,7 @@ export function Landing(props: PageInterface) {
                     )
                 })}
                 <Grid item xs={12} textAlign="right">
-                    <Button onClick={onClickContinue} variant="contained">
-                        {t.continue()}
-                    </Button>
+                    <Button onClick={onClickContinue}>{t.continue()}</Button>
                 </Grid>
             </Grid>
         </div>

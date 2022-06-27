@@ -257,12 +257,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
 
             <Grid item xs={6}>
-                <ActionButton disabled={isCreating} variant="contained" size="large" fullWidth onClick={onBack}>
+                <ActionButton disabled={isCreating} fullWidth onClick={onBack}>
                     {t.back()}
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton loading={isCreating} variant="contained" size="large" fullWidth onClick={createRedpacket}>
+                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
                     {t.send_symbol({
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol ?? '-',

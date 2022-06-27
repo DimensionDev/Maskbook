@@ -67,15 +67,15 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const t = useSharedI18N()
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T
-    const account = useAccount()
+    const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, props.chainId)
-    const { Token, Others } = useWeb3State<'all'>()
+    const { Token, Others } = useWeb3State<'all'>(pluginID)
     const { value: fungibleTokens = EMPTY_LIST, loading: loadingFungibleTokens } = useFungibleTokensFromTokenList(
-        props.pluginID,
+        pluginID,
         { chainId },
     )
-    const trustedFungibleTokens = useTrustedFungibleTokens(undefined, undefined, chainId)
-    const blockedFungibleTokens = useBlockedFungibleTokens()
+    const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
+    const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
     const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {

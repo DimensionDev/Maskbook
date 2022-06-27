@@ -188,7 +188,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                <Button fullWidth variant="roundedOutlined" disabled={props.submitDisabled} onClick={props.onSubmit}>
                     {t('back')}
                 </Button>
                 <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>

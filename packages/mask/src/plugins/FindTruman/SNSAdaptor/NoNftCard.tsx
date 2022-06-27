@@ -59,7 +59,6 @@ export default function NoNftCard(props: NoNftCardProps) {
                             }}
                             component="a"
                             href={url}
-                            variant="contained"
                             target="_blank"
                             size="small">
                             {t('plugin_find_truman_buy')}
