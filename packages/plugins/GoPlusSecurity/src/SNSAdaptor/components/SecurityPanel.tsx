@@ -67,12 +67,12 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
-    const { riskyFactors, attentionFactors } = useMemo(() => {
+    const { riskyFactors, attentionFactors, makeMessageList } = useMemo(() => {
         const makeMessageList = getMessageList(tokenSecurity)
 
         const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
         const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-        return { riskyFactors, attentionFactors }
+        return { riskyFactors, attentionFactors, makeMessageList }
     }, [tokenSecurity])
 
     const securityMessageLevel = useMemo(() => {
