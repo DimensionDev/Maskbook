@@ -18,7 +18,7 @@ export type TokenSecurity = SecurityAPI.ContractSecurity &
 
 export const isHighRisk = (tokenSecurity?: TokenSecurity) => {
     if (!tokenSecurity) return false
-    return tokenSecurity.is_whitelisted === '1'
+    return tokenSecurity.trust_list === '1'
         ? false
         : SecurityMessages.filter(
               (x) =>

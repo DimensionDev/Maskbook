@@ -44,7 +44,6 @@ const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     if (!chain) return chainResolver.chainName(ChainId.Mainnet)
-    if (chain.chainId === ChainId.BSC) return chainResolver.chainName(ChainId.BSC) ?? chain.name
     return chainResolver.chainName(chain.chainId) ?? chain.name
 }
 
