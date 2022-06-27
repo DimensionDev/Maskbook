@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createContainer } from 'unstated-next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
 import { PluginGameMessages } from '../messages'
@@ -13,11 +14,24 @@ import { WalletMessages } from '../../Wallet/messages'
 import type { GameInfo, GameNFT } from '../types'
 import { useI18N } from '../../../utils'
 
-const WalletConnectDialog = () => {
-    const { t } = useI18N()
+export const ConnectContext = createContainer(() => {
     const [isGameShow, setGameShow] = useState(false)
     const [tokenProps, setTokenProps] = useState<GameNFT>()
     const [gameInfo, setGameInfo] = useState<GameInfo>()
+
+    return {
+        isGameShow,
+        setGameShow,
+        tokenProps,
+        setTokenProps,
+        gameInfo,
+        setGameInfo,
+    }
+})
+
+const WalletConnectDialog = () => {
+    const { t } = useI18N()
+    const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
         if (ev?.tokenProps) setTokenProps(ev.tokenProps)
@@ -45,6 +59,8 @@ const WalletConnectDialog = () => {
     const [isShareShow, setShareShow] = useState(false)
     const handleGameShare = () => setShareShow(true)
     const closeGameShare = () => setShareShow(false)
+
+    if (!open) return null
 
     return (
         <>

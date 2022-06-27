@@ -43,7 +43,6 @@ export interface User {
 }
 
 export interface OwnerERC721TokenInfo extends NonFungibleAsset<ChainId, SchemaType> {
-    tokenId: string
     glbSupport: boolean
 }
 
@@ -53,6 +52,13 @@ export interface FilterContract {
     icon: string
     tokens: OwnerERC721TokenInfo[]
     chainId: ChainId | undefined
+}
+export interface NonFungibleContract {
+    name: string
+    contract: string
+    icon: string
+    chainId: ChainId | undefined
+    tokens: Record<string, OwnerERC721TokenInfo>
 }
 
 export enum MenuType {
