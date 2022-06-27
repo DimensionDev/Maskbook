@@ -6,6 +6,7 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
+const emptySelector = querySelector<E>('')
 
 const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
@@ -97,29 +98,33 @@ export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] a[aria-selected="false"]')
+    location.pathname.startsWith('/profile.php')
+        ? querySelector<E>('[role="main"] a[aria-selected="false"]')
+        : emptySelector
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] [aria-selected="true"]')
+    location.pathname.startsWith('/profile.php')
+        ? querySelector<E>('[role="main"] a[aria-selected="true"]')
+        : emptySelector
 
 // for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)')
+    location.pathname.startsWith('/profile.php') ? querySelector<E>('[role="main"] a:nth-child(7)') : emptySelector
 
 // for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
+    location.pathname.startsWith('/profile.php')
+        ? querySelector<HTMLSpanElement>('[role="main"] a:nth-child(7)+span')
+        : emptySelector
 
 // for inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]')
-        .closest(1)
-        .querySelector('div:first-of-type')
+    querySelector<E>('[role="main"] > div:last-child > div')
 
 // for getting profile section style
 export const profileSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
+    querySelector<E>('[role="main"]').querySelector('[style]')
 
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
