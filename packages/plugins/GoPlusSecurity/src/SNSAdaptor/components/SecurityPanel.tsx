@@ -4,13 +4,12 @@ import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
-import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
-import { TokenIcon } from '@masknet/shared'
+import { getMessageList, TokenIcon } from '@masknet/shared'
 import type { TokenAPI } from '@masknet/web3-providers'
 import { DefaultTokenIcon } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -68,18 +67,13 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
-    const makeMessageList =
-        tokenSecurity.trust_list === '1'
-            ? []
-            : SecurityMessages.filter(
-                  (x) =>
-                      x.condition(tokenSecurity) &&
-                      x.level !== SecurityMessageLevel.Safe &&
-                      !x.shouldHide(tokenSecurity),
-              ).sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
+    const { riskyFactors, attentionFactors } = useMemo(() => {
+        const makeMessageList = getMessageList(tokenSecurity)
 
-    const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
-    const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+        const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
+        const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+        return { riskyFactors, attentionFactors }
+    }, [tokenSecurity])
 
     const securityMessageLevel = useMemo(() => {
         if (riskyFactors) return SecurityMessageLevel.High

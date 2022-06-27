@@ -1,12 +1,12 @@
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel } from './Common'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
-import { SecurityMessages } from './rules'
 import { RightArrowIcon } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { getMessageList, isHighRisk } from './utils'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -16,34 +16,22 @@ export type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
     SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
 
-export const isHighRisk = (tokenSecurity?: TokenSecurity) => {
-    if (!tokenSecurity) return false
-    return tokenSecurity.trust_list === '1'
-        ? false
-        : SecurityMessages.filter(
-              (x) =>
-                  x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-          )
-              .sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
-              .filter((x) => x.level === SecurityMessageLevel.High).length > 0
-}
+export { getMessageList, isHighRisk }
 
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const t = useSharedI18N()
     const [open, setOpen] = useState(false)
 
-    const makeMessageList =
-        tokenSecurity.trust_list === '1'
-            ? []
-            : SecurityMessages.filter(
-                  (x) =>
-                      x.condition(tokenSecurity) &&
-                      x.level !== SecurityMessageLevel.Safe &&
-                      !x.shouldHide(tokenSecurity),
-              ).sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
+    const { riskyFactors, attentionFactors } = useMemo(() => {
+        const makeMessageList = getMessageList(tokenSecurity)
 
-    const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
-    const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+        const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
+        const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+        return {
+            riskyFactors,
+            attentionFactors,
+        }
+    }, [tokenSecurity])
 
     return (
         <Stack direction="row" alignItems="center" spacing={1.5}>
