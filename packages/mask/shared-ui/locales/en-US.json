@@ -534,7 +534,7 @@
     "plugin_ito_error_allocation_absence": "Enter swap limit",
     "plugin_ito_error_allocation_invalid": "Invalid amount",
     "plugin_ito_error_exchange_time": "start time cannot be later than end time",
-    "plugin_ito_error_unlock_time": "end time cannot be later than unlock time",
+    "plugin_ito_error_unlock_time": "End time cannot be later than unlock time",
     "plugin_ito_error_balance": "Insufficient {{symbol}} balance",
     "plugin_ito_list_start_date": "Start Time {{date}}",
     "plugin_ito_list_end_date": "End Time {{date}}",

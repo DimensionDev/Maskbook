@@ -100,6 +100,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
+    const changeButtonRef = useRef<HTMLButtonElement>(null)
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
@@ -122,12 +123,9 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
     useEffect(() => {
-        if (ref.current?.innerHTML) {
-            setEmptyChildren(false)
-            return
-        }
-        setEmptyChildren(true)
+        setEmptyChildren(!ref.current?.innerHTML || ref.current.innerHTML === changeButtonRef.current?.outerHTML)
     }, [children])
+
     return (
         <Box className={cx(classes.root, className)}>
             {account ? (
@@ -173,7 +171,7 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
                     </Box>
                     <Box className={classes.action} ref={ref}>
                         {emptyChildren ? (
-                            <Button fullWidth onClick={openSelectProviderDialog}>
+                            <Button ref={changeButtonRef} fullWidth onClick={openSelectProviderDialog}>
                                 {t('wallet_status_button_change')}
                             </Button>
                         ) : (
