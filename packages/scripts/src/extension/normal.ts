@@ -5,6 +5,7 @@ import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
 import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
 import { parallel, series, TaskFunction } from 'gulp'
+import { buildSentry } from '../projects/sentry'
 import { BuildFlagsExtended, getPreset, Preset } from './flags.js'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
@@ -26,7 +27,9 @@ export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', {
 })
 
 export async function extensionWatch(f: Function | BuildFlagsExtended) {
+    buildSentry
     buildPolyfill()
+    buildSentry()
     buildGun()
     watchInjectedScript()
     watchMaskSDK()

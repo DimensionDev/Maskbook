@@ -24,7 +24,7 @@ export async function setupSite(network: string, newTab: boolean) {
     // request permission from all sites supported.
     if (!(await requestSiteAdaptorsPermission([...definedSiteAdaptors.values()]))) return
 
-    userGuideStatus[network].value = '1'
+    userGuideStatus[network].value = '1'®
     await delay(100)
     if (!home) return
     if (!newTab) return home
