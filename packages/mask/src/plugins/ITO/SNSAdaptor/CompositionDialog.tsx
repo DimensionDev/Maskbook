@@ -86,9 +86,18 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const [showHistory, setShowHistory] = useState(false)
-
+    const state = useState<DialogTabs>(DialogTabs.create)
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
+
+    const onClose = useCallback(() => {
+        const [, setValue] = state
+        setStep(ITOCreateFormPageStep.NewItoPage)
+        if (step === ITOCreateFormPageStep.ConfirmItoPage) return
+        setPoolSettings(undefined)
+        setValue(DialogTabs.create)
+        props.onClose()
+    }, [props, state, step])
 
     const onNext = useCallback(() => {
         if (step === ITOCreateFormPageStep.NewItoPage) setStep(ITOCreateFormPageStep.ConfirmItoPage)
@@ -96,11 +105,8 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [step])
 
     const onBack = useCallback(() => {
-        if (showHistory) {
-            setShowHistory(false)
-            return
-        }
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
+        if (step === ITOCreateFormPageStep.NewItoPage) onClose()
     }, [step])
     // #endregion
 
@@ -159,7 +165,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
         setPoolSettings(undefined)
         onCreateOrSelect(payload)
-        onBack()
+        onClose()
     }, [ITO2_CONTRACT_ADDRESS, fillCallback, openShareTxDialog])
     // #endregion
 
@@ -168,7 +174,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
     )
 
     // #region tabs
-    const state = useState<DialogTabs>(DialogTabs.create)
 
     const currentIdentity = useCurrentIdentity()
 
@@ -222,15 +227,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
         [account, chainId, props.onConfirm, state],
     )
 
-    const onClose = useCallback(() => {
-        const [, setValue] = state
-        setStep(ITOCreateFormPageStep.NewItoPage)
-        if (step === ITOCreateFormPageStep.ConfirmItoPage) return
-        setPoolSettings(undefined)
-        setValue(DialogTabs.create)
-        props.onClose()
-    }, [props, state, step])
-
     // #endregion
 
     useEffect(() => {
@@ -249,7 +245,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}
-            onClose={() => (showHistory ? setShowHistory(false) : onClose())}>
+            onClose={() => (showHistory ? setShowHistory(false) : onBack())}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
                     !showHistory ? (

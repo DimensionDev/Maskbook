@@ -97,11 +97,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const onClose = useCallback(() => {
-        if (step === CreateRedPacketPageStep.ConfirmPage) {
-            setStep(CreateRedPacketPageStep.NewRedPacketPage)
-            return
-        }
-
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
         const [, setValue] = state
@@ -147,6 +142,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
+        if (step === CreateRedPacketPageStep.NewRedPacketPage) onClose()
     }, [step])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
@@ -202,7 +198,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </MaskTabList>
                     ) : null
                 }
-                onClose={() => (showHistory ? setShowHistory(false) : onClose())}
+                onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
                 <DialogContent className={classes.dialogContent}>
