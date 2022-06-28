@@ -13,11 +13,13 @@ import {
 } from '../../utils/selector'
 import { useCallback, useEffect } from 'react'
 import { toPNG } from '../../../../plugins/Avatar/utils'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -61,9 +63,9 @@ function NFTAvatarInFacebookFirstStep() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
+        async (info: SelectTokenInfo) => {
+            if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+            const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
             if (!identity.identifier) return
 
@@ -72,8 +74,11 @@ function NFTAvatarInFacebookFirstStep() {
             MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                 userId: identity.identifier.userId,
                 avatarId: '',
-                address: token.contractDetailed.address,
-                tokenId: token.tokenId,
+                address: info.token.contract.address,
+                tokenId: info.token.tokenId,
+                pluginId: info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                chainId: info.token.chainId ?? ChainId.Mainnet,
+                schema: info.token.schema ?? SchemaType.ERC721,
             })
         },
         [identity],
@@ -140,17 +145,22 @@ function NFTAvatarListInFaceBookMobile() {
     const identity = useCurrentVisitingIdentity()
 
     const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
+        async (info: SelectTokenInfo) => {
+            if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+            const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
 
             await changeImageToActiveElementsOnMobile(image)
 
             identity.identifier &&
                 InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginId.setValue(
+                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+            )
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
         },
         [identity],
     )

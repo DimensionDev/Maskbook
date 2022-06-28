@@ -1,17 +1,16 @@
-import { Box, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { BackUpIcon, CloudLinkIcon, MaskWalletIcon, TrashIcon } from '@masknet/icons'
+import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { FormattedAddress } from '@masknet/shared'
-import { CopyIconButton } from '../../../components/CopyIconButton'
+import { explorerResolver } from '@masknet/web3-shared-evm'
+import { useChainId, useWallet } from '@masknet/plugin-infra/web3'
 import { WalletContext } from '../hooks/useWalletContext'
 import { Navigator } from '../../../components/Navigator'
 import { useTitle } from '../../../hook/useTitle'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -69,16 +68,13 @@ const useStyles = makeStyles()((theme) => ({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const currentWallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { selectedWallet } = WalletContext.useContainer()
-    const currentWallet = useWallet()
 
     const wallet = selectedWallet ?? currentWallet
 
     const { classes } = useStyles()
-
-    const { value: domain } = useReverseAddress(wallet?.address ?? '', NetworkPluginID.PLUGIN_EVM)
-    const { Utils } = useWeb3State()
 
     useTitle(t('popups_wallet_setting'))
 
@@ -86,23 +82,6 @@ const WalletSettings = memo(() => {
 
     return (
         <>
-            <div className={classes.header}>
-                <MaskWalletIcon style={{ marginRight: 4 }} />
-                <div>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography className={classes.name}>{wallet.name}</Typography>
-                        {domain && Utils?.formatDomainName ? (
-                            <Typography className={classes.name} style={{ marginLeft: 4 }}>
-                                ({Utils?.formatDomainName(domain)})
-                            </Typography>
-                        ) : null}
-                    </Box>
-                    <Typography className={classes.address}>
-                        <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />
-                        <CopyIconButton text={wallet.address} className={classes.copy} />
-                    </Typography>
-                </div>
-            </div>
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
@@ -116,7 +95,7 @@ const WalletSettings = memo(() => {
                         </ListItem>
                     ) : null}
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
+                        href={explorerResolver.addressLink(chainId, wallet?.address ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>

@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
-import { createERC20Token, EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-base'
+import { ChainId, createERC20Token, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types'
 import { useGetTradeContext } from './useGetTradeContext'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useTradeApproveComputed(
     trade: TradeComputed<unknown> | null,
     provider?: TradeProvider,
-    token?: FungibleTokenDetailed,
+    token?: FungibleToken<ChainId, SchemaType>,
 ) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const context = useGetTradeContext(provider)
@@ -17,8 +17,8 @@ export function useTradeApproveComputed(
     return useMemo(() => {
         return {
             approveToken:
-                token?.type === EthereumTokenType.ERC20
-                    ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
+                token?.schema === SchemaType.ERC20
+                    ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
                     : null,
             approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {

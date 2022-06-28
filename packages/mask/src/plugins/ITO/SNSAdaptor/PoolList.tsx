@@ -1,11 +1,12 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useRef } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
-import { useRef } from 'react'
 import { useI18N } from '../../../utils'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -31,7 +32,7 @@ export interface PoolListProps {
 export function PoolList(props: PoolListProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account)
     const { pools } = value
     const containerRef = useRef<HTMLDivElement>(null)

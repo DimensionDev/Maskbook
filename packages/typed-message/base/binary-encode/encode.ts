@@ -10,7 +10,8 @@ import { TypedMessageBinaryEncodingTypeEnum } from './type.js'
 
 const HEAD = '[@masknet/typed-message] '
 export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {
-    const doc = [0, encodeTypedMessage(tm)]
+    if (isTypedMessageText(tm)) return encode([0, tm.content, encodeMeta(tm)])
+    const doc = [1, ...encodeTypedMessage(tm)]
     return encode(doc)
 }
 function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
@@ -70,8 +71,7 @@ function collectValue(val: any): any {
         }
 
         const result: Record<string, any> = {}
-        for (const key in val) {
-            if (typeof key !== 'string') throw new TypeError(`${HEAD}Unsupported type symbol.`)
+        for (const key of Object.keys(val)) {
             const v = val[key]
             result[key] = collectValue(v)
         }

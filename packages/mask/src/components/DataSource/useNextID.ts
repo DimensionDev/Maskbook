@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
@@ -31,11 +31,11 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
     })
 }
 
-export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity?: string) => {
-    const res = useAsyncRetry(() => {
-        if (!identity) return Promise.resolve([])
-        return NextIDProof.queryExistedBindingByPlatform(platform, identity)
-    }, [platform, identity])
+export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
+    const res = useAsyncRetry(async () => {
+        if (!platform || !userId) return EMPTY_LIST
+        return NextIDProof.queryExistedBindingByPlatform(platform, userId)
+    }, [platform, userId])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
 }
@@ -65,9 +65,12 @@ export function useNextIDConnectStatus() {
     const personaConnectStatus = usePersonaConnectStatus()
     const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
-    const [username] = useState(lastState.username || lastRecognized.identifier?.userId || '')
-
-    const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
+    const username = lastRecognized.identifier?.userId || lastState.username || ''
+    const {
+        value: VerificationStatus = NextIDVerificationStatus.Other,
+        retry,
+        loading,
+    } = useAsyncRetry(async () => {
         // Whether in connect to {platform} process
         if (lastState.status === SetupGuideStep.FindUsername) return NextIDVerificationStatus.WaitingLocalConnect
 
@@ -113,11 +116,12 @@ export function useNextIDConnectStatus() {
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, isOpenedVerifyDialog, currentPersonaIdentifier.value])
+    }, [username, enableNextID, isOpenedVerifyDialog, personaConnectStatus, currentPersonaIdentifier.value])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
         status: VerificationStatus,
+        loading,
         reset: () => {
             isOpenedVerifyDialog = false
             isOpenedFromButton = true

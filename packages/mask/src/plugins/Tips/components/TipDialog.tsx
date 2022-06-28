@@ -1,8 +1,11 @@
 import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
+    useAccount,
+    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
+    useNonFungibleToken,
     useProviderDescriptor,
     useReverseAddress,
     useWeb3State,
@@ -11,26 +14,21 @@ import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/s
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import {
-    ERC721TokenDetailed,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useERC721TokenDetailed,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { WalletMessages } from '../../Wallet/messages'
-import { TargetChainIdContext, useTip } from '../contexts'
+import { TargetRuntimeContext, useTip } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
-import { ConfirmModal } from './common/ConfirmModal'
 import { AddDialog } from './AddDialog'
+import { ConfirmModal } from './common/ConfirmModal'
 import { TipForm } from './TipForm'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -39,6 +37,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogTitle: {
         height: 60,
+        paddingTop: '0 !important',
+        paddingBottom: '0 !important',
     },
     content: {
         display: 'flex',
@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
         paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
+        paddingBottom: theme.spacing(1),
         flexShrink: 0,
     },
     tab: {
@@ -69,6 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     tipForm: {
+        paddingTop: theme.spacing(1),
         flexGrow: 1,
         overflow: 'auto',
     },
@@ -141,8 +142,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TipDialogProps {
-    open?: boolean
+export interface TipDialogProps {
+    open: boolean
     onClose?: () => void
 }
 
@@ -155,18 +156,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
-    const { targetChainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const { targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
     const {
         tipType,
         amount,
         token,
         recipientSnsId,
         recipient,
-        sendState,
-        erc721Contract,
-        erc721TokenId,
-        setErc721Address,
-        setErc721TokenId,
+        nonFungibleTokenContract,
+        nonFungibleTokenId: erc721TokenId,
+        setNonFungibleTokenAddress,
+        setNonFungibleTokenId,
         reset,
     } = useTip()
 
@@ -182,15 +182,19 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                   promote,
               })
             : t.tip_nft_share_post({
-                  name: erc721Contract?.name || 'NFT',
+                  name: nonFungibleTokenContract?.name || 'NFT',
                   recipientSnsId,
                   recipient,
                   promote,
               })
         return message
-    }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
 
-    const { tokenDetailed: erc721Token } = useERC721TokenDetailed(erc721Contract, erc721TokenId)
+    const { value: erc721Token } = useNonFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
+        nonFungibleTokenContract?.address,
+        erc721TokenId ?? '',
+    )
 
     const chainId = useChainId()
     const successMessage = useMemo(() => {
@@ -201,8 +205,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <div className={classes.nftContainer}>
                         <NFTCardStyledAssetPlayer
                             chainId={chainId}
-                            contractAddress={erc721Token.contractDetailed.address}
-                            url={erc721Token.info.mediaUrl}
+                            contractAddress={erc721Token.address}
+                            url={erc721Token.metadata?.mediaURL}
                             tokenId={erc721Token.tokenId}
                             classes={{
                                 loadingFailImage: classes.loadingFailImage,
@@ -212,18 +216,13 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     <Typography className={classes.nftMessageText}>
                         {t.send_specific_tip_successfully({
                             amount: '1',
-                            name: erc721Token.info.name || 'NFT',
+                            name: erc721Token.contract?.name || 'NFT',
                         })}
                     </Typography>
                 </div>
             )
         return t.send_tip_successfully()
     }, [t, isTokenTip, classes.nftMessage, erc721Token])
-
-    useEffect(() => {
-        if (sendState.type !== TransactionStateType.CONFIRMED) return
-        openConfirmModal(true)
-    }, [sendState.type])
 
     const handleConfirm = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)
@@ -233,11 +232,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
-    const { Utils } = useWeb3State()
+    const { Others } = useWeb3State()
     const account = useAccount()
-    const { value: domain } = useReverseAddress(account)
+    const { value: domain } = useReverseAddress(pluginID, account)
     const walletTitle =
-        Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || providerDescriptor?.name
+        Others?.formatDomainName?.(domain) || Others?.formatAddress?.(account, 4) || providerDescriptor?.name
 
     // #region change provider
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -249,9 +248,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         return openSelectProviderDialog()
     }, [openSelectProviderDialog, hasNativeAPI])
 
-    const handleAddToken = useCallback((token: ERC721TokenDetailed) => {
-        setErc721Address(token.contractDetailed.address ?? '')
-        setErc721TokenId(token.tokenId)
+    const handleAddToken = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+        setNonFungibleTokenAddress(token.address ?? '')
+        setNonFungibleTokenId(token.tokenId)
         openAddTokenDialog(false)
     }, [])
 
@@ -260,8 +259,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             <WalletIcon
                 size={30}
                 badgeSize={12}
-                networkIcon={providerDescriptor?.icon}
-                providerIcon={networkDescriptor?.icon}
+                mainIcon={providerDescriptor?.icon}
+                badgeIcon={networkDescriptor?.icon}
             />
             <div className={classes.wallet}>
                 <Typography ml={1} className={classes.walletTitle}>
@@ -269,10 +268,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 </Typography>
 
                 <Typography ml={1} className={classes.walletAddress}>
-                    {Utils?.formatAddress?.(account, 4)}
+                    {Others?.formatAddress?.(account, 4)}
                     <Link
                         className={classes.link}
-                        href={account ? Utils?.resolveAddressLink?.(chainId, account) ?? '' : ''}
+                        href={account ? Others?.explorerResolver.addressLink(chainId, account) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />
@@ -294,15 +293,23 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tips()}
                 titleTail={walletChip}>
                 <DialogContent className={classes.content}>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            classes={classes}
-                            chainId={targetChainId}
-                            setChainId={setTargetChainId}
-                            chains={chainIdList}
-                        />
-                    </div>
-                    <TipForm className={classes.tipForm} onAddToken={() => openAddTokenDialog(true)} />
+                    {chainIdList.length ? (
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab
+                                classes={classes}
+                                chainId={targetChainId}
+                                setChainId={setTargetChainId}
+                                chains={chainIdList}
+                            />
+                        </div>
+                    ) : null}
+                    <TipForm
+                        className={classes.tipForm}
+                        onAddToken={() => openAddTokenDialog(true)}
+                        onSent={() => {
+                            openConfirmModal(true)
+                        }}
+                    />
                 </DialogContent>
             </InjectedDialog>
             <ConfirmModal

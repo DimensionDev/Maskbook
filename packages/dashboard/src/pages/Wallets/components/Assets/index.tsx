@@ -1,9 +1,10 @@
-import { type Web3Plugin, NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { memo, useEffect, useState } from 'react'
+import { useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
-import { memo, useEffect, useState } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { useDashboardI18N } from '../../../../locales'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
@@ -23,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tab: {
         flex: 1,
-        padding: '0px',
+        padding: 0,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -38,7 +39,7 @@ export enum AssetTab {
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
 interface TokenAssetsProps {
-    network: Web3Plugin.NetworkDescriptor | null
+    network: Web3Helper.NetworkDescriptorAll | null
 }
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {
@@ -60,7 +61,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     }, [pluginId])
 
     const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken()
 
     return (
         <>
@@ -74,17 +75,17 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                     <Tab key={key} value={key} label={assetTabsLabel[key]} />
                                 ))}
                         </TabList>
-                        {pluginId === NetworkPluginID.PLUGIN_EVM && (
+                        {pluginId === NetworkPluginID.PLUGIN_EVM && network && (
                             <Button
                                 size="small"
                                 color="secondary"
                                 className={classes.addCustomTokenButton}
                                 onClick={async () => {
                                     if (currentTab === AssetTab.Token) {
-                                        // TODO handle result
-                                        await pickToken({
+                                        await selectFungibleToken({
                                             whitelist: [],
                                             title: t.wallets_add_token(),
+                                            chainId: network?.chainId,
                                         })
                                     } else {
                                         setAddCollectibleOpen(true)
@@ -98,17 +99,19 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                         )}
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <FungibleTokenTable selectedChainId={network?.chainId ?? null} />
+                        <FungibleTokenTable selectedChainId={network?.chainId} />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <CollectibleList selectedNetwork={network} />
+                        <CollectibleList selectedChain={network} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            {addCollectibleOpen && <AddCollectibleDialog open onClose={() => setAddCollectibleOpen(false)} />}
+            {addCollectibleOpen && network && (
+                <AddCollectibleDialog selectedNetwork={network} open onClose={() => setAddCollectibleOpen(false)} />
+            )}
         </>
     )
 })

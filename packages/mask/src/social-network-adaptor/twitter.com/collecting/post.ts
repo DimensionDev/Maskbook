@@ -74,12 +74,12 @@ function registerPostCollectorInner(
                 avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
-                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
+                Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona)
             }
         },
         (info: PostInfo) => info.author.getCurrentValue(),
     )
-    const watcher = new IntervalWatcher(postsContentSelector())
+    new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
@@ -93,10 +93,7 @@ function registerPostCollectorInner(
                 const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
                     actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
                 }
-                proxy.on('currentChanged', handleChanged)
-                unwatchPostNodeChange = () => {
-                    proxy.off('currentChanged', handleChanged)
-                }
+                unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
             }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
@@ -112,9 +109,9 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.containingMaskPayload.subscribe(() => {
-                    const payload = info.containingMaskPayload.getCurrentValue()
-                    if (payload.err && refs.postMetadataImages.size === 0) return
+                info.hasMaskPayload.subscribe(() => {
+                    const payload = info.hasMaskPayload.getCurrentValue()
+                    if (!payload && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),
             )
@@ -137,8 +134,7 @@ function registerPostCollectorInner(
             const tweetId = postIdParser(tweetNode)
             return `${parentTweetId}/${tweetId}`
         })
-    watcher.startWatch(250)
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+        .startWatch(250, cancel)
 }
 
 export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {

@@ -1,17 +1,13 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import { SchemaType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
 import {
-    EthereumTokenType,
+    isZero,
     formatBalance,
-    FungibleTokenInitial,
-    getChainDetailed,
+    NetworkPluginID,
     isSameAddress,
-    TransactionStateType,
-    useAccount,
-    useFungibleTokenDetailed,
-    useFungibleTokensDetailed,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+    FungibleToken,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -35,10 +31,11 @@ import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
-import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-unified'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../../shared'
+import { useAccount, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -143,8 +140,8 @@ export function PoolInList(props: PoolInListProps) {
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
-    const { value: _tokenDetailed } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+    const { value: _tokenDetailed } = useFungibleToken(
+        NetworkPluginID.PLUGIN_EVM,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )
     const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
@@ -154,12 +151,19 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-                  } as Pick<FungibleTokenInitial, 'address' | 'type'>),
+                      schema: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                      type: TokenType.Fungible,
+                  } as Pick<
+                      FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
+                      'address' | 'type' | 'schema'
+                  >),
           )
         : []
 
-    const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
+    const { value: _exchangeTokens } = useFungibleTokens(
+        NetworkPluginID.PLUGIN_EVM,
+        _poolTokens.map((x) => x.address),
+    )
     const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
     // #endregion
 
@@ -175,14 +179,17 @@ export function PoolInList(props: PoolInListProps) {
     // #endregion
 
     // #region withdraw
-    const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
-    useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
-        onRetry()
-        resetDestructCallback()
-    })
+    const [{ loading: destructing }, destructCallback] = useDestructCallback(pool.contract_address)
+    const destruct = useCallback(
+        async (pid: string) => {
+            await destructCallback(pid)
+            onRetry()
+        },
+        [destructCallback, onRetry],
+    )
     // #endregion
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
     const { value: tradeInfo, loading: loadingTradeInfo } = usePoolTradeInfo(pool.pid, account)
     const title = pool.message.split(MSG_DELIMITER)[1] ?? pool.message
@@ -202,14 +209,18 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton
+                        loading={destructing}
+                        disabled={destructing}
+                        fullWidth
+                        size="small"
+                        onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
                     <ActionButton
                         fullWidth
                         size="small"
-                        variant="contained"
                         onClick={() =>
                             onSend?.(
                                 omit({ ...pool, token: poolToken, exchange_tokens: exchangeTokens }, [
@@ -221,7 +232,7 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled>
+                    <ActionButton fullWidth size="small" disabled>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}
@@ -236,8 +247,8 @@ export function PoolInList(props: PoolInListProps) {
                     <TokenIcon
                         classes={{ icon: classes.icon }}
                         address={poolToken.address}
-                        logoURI={poolToken.logoURI}
                         name={poolToken.symbol}
+                        logoURL={poolToken.logoURL}
                     />
                 </Box>
                 <Box className={classes.content}>
@@ -325,7 +336,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -339,7 +350,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     6,
                                                 )}{' '}
                                                 {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
-                                                    ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
+                                                    ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}
                                             </TableCell>

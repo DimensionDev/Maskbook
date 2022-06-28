@@ -2,7 +2,6 @@ import { difference } from 'lodash-unified'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, DialogContent } from '@mui/material'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import type { BoxInfo } from '../../type'
 import { TokenCard } from './TokenCard'
 import { InjectedDialog } from '@masknet/shared'
@@ -10,9 +9,12 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { Context } from '../../hooks/useContext'
+import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SharedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    main: {},
+    main: { padding: 8 },
     list: {
         height: 360,
         overflow: 'auto',
@@ -21,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         flexWrap: 'wrap',
         gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         gridGap: theme.spacing(1),
+        padding: 8,
     },
     token: {},
 }))
@@ -29,7 +32,7 @@ export interface DrawResultDialogProps {
     open: boolean
     onClose: () => void
     boxInfo: BoxInfo
-    contractDetailed?: ERC721ContractDetailed
+    contractDetailed?: NonFungibleTokenContract<ChainId, SchemaType>
 }
 
 export function DrawResultDialog(props: DrawResultDialogProps) {
@@ -59,7 +62,11 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
                             </Box>
                         ))}
                     </Box>
-                    <ActionButton size="medium" fullWidth variant="contained" onClick={onShare}>
+                    <ActionButton
+                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
+                        size="medium"
+                        fullWidth
+                        onClick={onShare}>
                         Share
                     </ActionButton>
                 </Box>

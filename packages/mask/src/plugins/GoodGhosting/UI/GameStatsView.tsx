@@ -1,4 +1,3 @@
-import { formatBalance } from '@masknet/web3-shared-evm'
 import { Grid, Typography, Box, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -7,7 +6,7 @@ import { CircularDataDisplay } from './CircularDataDisplay'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 import { useI18N } from '../../../utils'
 import { getGameFinancialData, getPlayerStandings, getReadableInterval } from '../utils'
-import { toFixed } from '@masknet/web3-shared-base'
+import { formatBalance, toFixed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {

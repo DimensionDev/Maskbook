@@ -13,11 +13,10 @@ import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 
-const stringToPersonaIdentifier = (str: string) => ECKeyIdentifier.from(str).unwrap()
-const stringToProfileIdentifier = (str: string) => ProfileIdentifier.from(str).unwrap()
+const stringToPersonaIdentifier = (input: string) => ECKeyIdentifier.from(input).unwrap()
+const stringToProfileIdentifier = (input: string) => ProfileIdentifier.from(input).unwrap()
 
 function profileRelationFormatter(
     p: MobileProfile,
@@ -44,8 +43,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
     app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
-    settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
-    settings_setTrendingDataSource: ({ provider }) => Services.Settings.setTrendingDataSource(provider),
     settings_getLaunchPageSettings: async () => launchPageSettings.value,
     settings_getTheme: () => Services.Settings.getTheme(),
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
@@ -164,16 +161,16 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         })
     },
     wallet_updateEthereumAccount: async ({ account }) => {
-        await WalletRPC.updateAccount({
-            account,
-            providerType: ProviderType.MaskWallet,
-        })
+        // await WalletRPC.updateAccount({
+        //     account,
+        //     providerType: ProviderType.MaskWallet,
+        // })
         WalletMessages.events.walletsUpdated.sendToAll()
     },
     wallet_updateEthereumChainId: async ({ chainId }) => {
-        await WalletRPC.updateAccount({
-            chainId,
-        })
+        // await WalletRPC.updateAccount({
+        //     chainId,
+        // })
     },
     wallet_getLegacyWalletInfo: async () => {
         const wallets = await WalletRPC.getLegacyWalletRecords()
@@ -232,14 +229,14 @@ function wrapWithAssert(env: Environment, f: Function) {
 }
 
 try {
-    for (const _key in MaskNetworkAPI) {
-        const key = _key as keyof MaskNetworkAPIs
-        const f: Function = MaskNetworkAPI[key]
-
+    for (const key of Object.keys(MaskNetworkAPI) as Array<keyof MaskNetworkAPIs>) {
+        const fn: Function = MaskNetworkAPI[key]
         if (key.startsWith('SNSAdaptor_')) {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ContentScript, fn)
         } else {
-            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, f)
+            MaskNetworkAPI[key] = wrapWithAssert(Environment.ManifestBackground, fn)
         }
     }
-} catch {}
+} catch {
+    // ignore
+}

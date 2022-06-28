@@ -25,7 +25,7 @@ export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 
     return false
 }
 
-export function normalizeBackupVersion2(item: BackupJSONFileVersion2): NormalizedBackup.Data {
+export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Promise<NormalizedBackup.Data> {
     const backup = createEmptyNormalizedBackup()
 
     backup.meta.version = 2
@@ -38,7 +38,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
     for (const persona of personas) {
         const { publicKey } = persona
         if (!isEC_Public_JsonWebKey(publicKey)) continue
-        const identifier = ECKeyIdentifierFromJsonWebKey(publicKey)
+        const identifier = await ECKeyIdentifierFromJsonWebKey(publicKey)
         const normalizedPersona: NormalizedBackup.PersonaBackup = {
             identifier,
             linkedProfiles: new Map(),
@@ -178,10 +178,11 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
 }
 
 export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONFileVersion2 {
+    const now = new Date()
     const result: BackupJSONFileVersion2 = {
         _meta_: {
             maskbookVersion: item.meta.maskVersion.unwrapOr('>=2.5.0'),
-            createdAt: Number(item.meta.createdAt),
+            createdAt: Number(item.meta.createdAt.unwrapOr(now)),
             type: 'maskbook-backup',
             version: 2,
         },
@@ -197,8 +198,8 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     for (const [id, data] of item.personas) {
         result.personas.push({
             identifier: id.toText(),
-            createdAt: Number(data.createdAt),
-            updatedAt: Number(data.updatedAt),
+            createdAt: Number(data.createdAt.unwrapOr(now)),
+            updatedAt: Number(data.updatedAt.unwrapOr(now)),
             nickname: data.nickname.unwrapOr(undefined),
             linkedProfiles: [...data.linkedProfiles.keys()].map((id) => [
                 id.toText(),
@@ -219,8 +220,8 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     for (const [id, data] of item.profiles) {
         result.profiles.push({
             identifier: id.toText(),
-            createdAt: Number(data.createdAt),
-            updatedAt: Number(data.updatedAt),
+            createdAt: Number(data.createdAt.unwrapOr(now)),
+            updatedAt: Number(data.updatedAt.unwrapOr(now)),
             nickname: data.nickname.unwrapOr(undefined),
             linkedPersona: data.linkedPersona.unwrapOr(undefined)?.toText(),
             localKey: data.localKey.unwrapOr(undefined),
@@ -322,7 +323,7 @@ interface BackupJSONFileVersion2 {
         privateKey?: JsonWebKey
         localKey?: JsonWebKey
         nickname?: string
-        linkedProfiles: [/** ProfileIdentifier.toText() */ string, LinkedProfileDetails][]
+        linkedProfiles: Array<[/** ProfileIdentifier.toText() */ string, LinkedProfileDetails]>
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
@@ -345,7 +346,7 @@ interface BackupJSONFileVersion2 {
         postBy: string // ProfileIdentifier.toText()
         identifier: string // PostIVIdentifier.toText()
         postCryptoKey?: JsonWebKey
-        recipients: 'everyone' | [/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }][]
+        recipients: 'everyone' | Array<[/** ProfileIdentifier.toText() */ string, { reason: RecipientReasonJSON[] }]>
         /** @deprecated */
         recipientGroups: never[]
         foundAt: number // Unix timestamp

@@ -3,7 +3,7 @@ import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
 import { useV3SwapPools } from './useV3SwapPools'
 import { useSingleHopOnly } from './useSingleHopOnly'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 function computeAllRoutes(
     currencyIn: Currency,
@@ -11,10 +11,10 @@ function computeAllRoutes(
     pools: Pool[],
     chainId: number,
     currentPath: Pool[] = [],
-    allPaths: Route<Currency, Currency>[] = [],
+    allPaths: Array<Route<Currency, Currency>> = [],
     startCurrencyIn: Currency = currencyIn,
     maxHops = 2,
-): Route<Currency, Currency>[] {
+): Array<Route<Currency, Currency>> {
     const tokenIn = currencyIn?.wrapped
     const tokenOut = currencyOut?.wrapped
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
@@ -54,7 +54,7 @@ function computeAllRoutes(
 export function useAllV3Routes(
     currencyIn?: Currency,
     currencyOut?: Currency,
-): { loading: boolean; routes: Route<Currency, Currency>[] } {
+): { loading: boolean; routes: Array<Route<Currency, Currency>> } {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut)
     const singleHopOnly = useSingleHopOnly()

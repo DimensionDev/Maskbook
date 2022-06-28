@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { CircularProgress, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -8,6 +8,7 @@ import { COMMUNITY_URL } from '../constants'
 import { useAccountBalance } from '../hooks/useAccountBalances'
 import type { Pool } from '../types'
 import { AccountPool } from './AccountPool'
+import { sumBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -76,17 +77,13 @@ export function Account(props: AccountProps) {
     }
 
     const noZeroBalances = balances.filter((balance) => Number.parseInt(balance.account.ticketBalance, 10) !== 0)
-    const totalUsdBalance = noZeroBalances
-        .map((balance) => {
-            const ticketBalance = Number.parseFloat(
-                formatBalance(balance.account.ticketBalance, Number.parseInt(balance.pool.tokens.ticket.decimals, 10)),
-            )
-            const ticketUsdRate = balance.pool.tokens.ticket.usd
-            if (!ticketUsdRate) return 0
-            return ticketBalance * ticketUsdRate
-        })
-        .reduce((x, y) => x + y, 0)
-        .toLocaleString()
+    const totalUsdBalance = sumBy(noZeroBalances, (balance) => {
+        const decimals = Number.parseInt(balance.pool.tokens.ticket.decimals, 10)
+        const ticketBalance = Number.parseFloat(formatBalance(balance.account.ticketBalance, decimals))
+        const ticketUsdRate = balance.pool.tokens.ticket.usd
+        if (!ticketUsdRate) return 0
+        return ticketBalance * ticketUsdRate
+    })
 
     return (
         <Grid container direction="column" className={classes.root}>

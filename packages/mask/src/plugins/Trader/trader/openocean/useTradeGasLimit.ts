@@ -1,18 +1,19 @@
-import type { SwapOOData, TradeComputed } from '../../types'
 import { useMemo } from 'react'
-import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { pick } from 'lodash-unified'
-import type { TransactionConfig } from 'web3-core'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import { pick } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
+import type { TransactionConfig } from 'web3-core'
+import type { SwapOOData, TradeComputed } from '../../types'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
 
-    const web3 = useWeb3({ chainId: targetChainId })
-    const account = useAccount()
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
         return {
@@ -23,7 +24,7 @@ export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null
 
     return useAsync(async () => {
         if (tradeComputed?.trade_?.estimatedGas) return new BigNumber(tradeComputed.trade_.estimatedGas).toNumber()
-        if (!config) return 0
+        if (!config || !web3) return 0
         return web3.eth.estimateGas(config)
     }, [config, web3, tradeComputed?.trade_?.estimatedGas])
 }

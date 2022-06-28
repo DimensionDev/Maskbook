@@ -19,6 +19,8 @@
         "Aurora": "aurora",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "evmos",
+        "Harmony": "hmy",
+        "Harmony_Test": ""
     }
 }

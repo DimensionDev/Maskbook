@@ -1,13 +1,12 @@
 import { useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { TableListPagination } from '../Pagination'
-import { LoadingAnimation } from '@masknet/shared'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { SourceType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,23 +41,24 @@ export interface HistoryTabProps {}
 export function HistoryTab(props: HistoryTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
+    const { asset, provider } = CollectibleState.useContainer()
+
+    const events = asset.value?.events ?? EMPTY_LIST
 
     // #region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
-        if (provider === NonFungibleAssetProvider.OPENSEA)
-            return events.value?.data.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
+        if (provider === SourceType.OpenSea) return events.some((item) => item.paymentToken?.symbol !== 'ETH')
         else return false
-    }, [events.value, provider])
+    }, [events, provider])
     // #endregion
 
-    if (events.loading)
+    if (asset.loading)
         return (
             <div className={classes.empty}>
-                <LoadingAnimation />
+                <LoadingBase />
             </div>
         )
-    if (!events.value || events.error || !events.value?.data.length)
+    if (events.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -70,7 +70,7 @@ export function HistoryTab(props: HistoryTabProps) {
                                     marginTop: 1,
                                 }}
                                 variant="text"
-                                onClick={() => events.retry()}>
+                                onClick={() => asset.retry()}>
                                 {t('plugin_collectible_retry')}
                             </Button>
                         </TableCell>
@@ -99,20 +99,10 @@ export function HistoryTab(props: HistoryTabProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {events.value.data.map((order) => (
-                        <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
+                    {events.map((event) => (
+                        <Row key={event.id} event={event} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === NonFungibleAssetProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
-                    <TableListPagination
-                        handlePrevClick={() => setEventPage((prev) => prev - 1)}
-                        handleNextClick={() => setEventPage((prev) => prev + 1)}
-                        prevDisabled={eventPage === 0}
-                        nextDisabled={!events.value.hasNextPage}
-                        page={eventPage}
-                        pageCount={10}
-                    />
-                ) : null}
             </Table>
         </CollectibleTab>
     )

@@ -1,5 +1,6 @@
-import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
+import { omit } from 'lodash-unified'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
@@ -10,11 +11,12 @@ import {
     DialogProps,
     DialogTitle,
     IconButton,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement } from 'react'
+import { Children, cloneElement, useCallback } from 'react'
 import { useSharedI18N } from '../../locales'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
@@ -25,8 +27,14 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
-        padding: theme.spacing(1, 2),
         whiteSpace: 'nowrap',
+        display: 'flex',
+        gridTemplateColumns: '50px auto 50px',
+    },
+    dialogTitleEndingContent: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     },
     dialogContent: {
         overscrollBehavior: 'contain',
@@ -35,9 +43,18 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         flex: 1,
         textAlign: 'center',
         verticalAlign: 'middle',
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 700,
     },
     dialogCloseButton: {
         color: theme.palette.text.primary,
+        padding: 0,
+        width: 24,
+        height: 24,
+        '& > svg': {
+            fontSize: 24,
+        },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
@@ -45,6 +62,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
 export type InjectedDialogClassKey =
     | DialogClassKey
     | 'dialogTitle'
+    | 'dialogTitleEndingContent'
     | 'dialogContent'
     | 'dialogActions'
     | 'dialogTitleTypography'
@@ -58,6 +76,8 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     titleTail?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
+    isOpenFromApplicationBoard?: boolean
+    isOnBack?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -71,6 +91,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogCloseButton,
         dialogContent,
         dialogTitle,
+        dialogTitleEndingContent,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -89,11 +110,20 @@ export function InjectedDialog(props: InjectedDialogProps) {
         title,
         titleTail = null,
         disableTitleBorder,
+        isOpenFromApplicationBoard,
         ...rest
     } = props
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+
+    const closeBothCompositionDialog = useCallback(() => {
+        if (isOpenFromApplicationBoard) {
+            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+        }
+
+        onClose?.()
+    }, [isOpenFromApplicationBoard])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
@@ -116,7 +146,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                         root: dialogBackdropRoot,
                     },
                 }}
-                {...rest}
+                {...omit(rest, 'isOnBack')}
                 {...extraProps}>
                 <ErrorBoundary>
                     {title ? (
@@ -129,17 +159,22 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             }}>
                             <IconButton
                                 size="large"
+                                disableRipple
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t.dialog_dismiss()}
-                                onClick={onClose}>
+                                onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
-                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
+                                    style={
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack && !isDashboard
+                                            ? 'back'
+                                            : titleBarIconStyle
+                                    }
                                 />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
                             </Typography>
-                            {titleTail}
+                            <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
                         </DialogTitle>
                     ) : null}
 

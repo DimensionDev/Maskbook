@@ -1,11 +1,10 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { useBalance, useBlockNumber } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
-import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
+import type { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 
 export interface TabContentProps {
-    identity?: Plugin.SNSAdaptor.ProfileIdentity
-    addressNames?: Plugin.SNSAdaptor.ProfileAddress[]
+    identity?: SocialIdentity
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
 const useStyles = makeStyles()({
@@ -14,11 +13,12 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TabContent({ identity, addressNames }: TabContentProps) {
+export function TabContent({ identity, socialAddressList }: TabContentProps) {
     const { classes } = useStyles()
+
     const renderIdentity = () => {
         return (
-            <List>
+            <List dense>
                 <ListItem>
                     <ListItemText
                         primary={<Typography color="textPrimary">Nickname</Typography>}
@@ -40,11 +40,8 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                 <ListItem sx={{ display: 'block' }}>
                     <ListItemText
                         primary={<Typography color="textPrimary">Avatar</Typography>}
-                        secondary={identity?.avatar}
+                        secondary={<img src={identity?.avatar} style={{ maxWidth: 100 }} />}
                     />
-                    <Box sx={{ mt: 1 }}>
-                        <img src={identity?.avatar} />
-                    </Box>
                 </ListItem>
             </List>
         )
@@ -52,16 +49,12 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
 
     const renderAddressNames = () => {
         return (
-            <List>
-                {addressNames?.map((x) => (
-                    <ListItem key={x.type}>
+            <List dense>
+                {socialAddressList?.map((x) => (
+                    <ListItem key={`${x.type}_${x.address}`}>
                         <ListItemText
-                            primary={
-                                <Typography color="textPrimary">
-                                    {x.type}: {x.label}
-                                </Typography>
-                            }
-                            secondary={x.resolvedAddress}
+                            primary={<Typography color="textPrimary">{x.type}</Typography>}
+                            secondary={x.address}
                         />
                     </ListItem>
                 ))}
@@ -69,25 +62,28 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
         )
     }
 
-    const { value: balance = '0' } = useBalance()
-    const { value: blockNumber = 0 } = useBlockNumber()
-
     return (
         <section className={classes.container}>
-            <Typography color="textPrimary" variant="h6">
-                Balance {balance} <br />
-                BlockNumber {blockNumber} <br />
-            </Typography>
-
-            <Typography color="textPrimary" variant="h6">
-                Identity
-            </Typography>
-            {renderIdentity()}
-
-            <Typography color="textPrimary" variant="h6">
-                Address Names
-            </Typography>
-            {renderAddressNames()}
+            <Table size="small">
+                <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Profile Data
+                            </Typography>
+                        </TableCell>
+                        <TableCell>{renderIdentity()}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Found Address Names
+                            </Typography>
+                        </TableCell>
+                        <TableCell>{renderAddressNames()}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
         </section>
     )
 }

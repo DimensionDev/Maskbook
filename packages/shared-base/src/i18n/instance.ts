@@ -15,6 +15,7 @@ if (!i18n.isInitialized) {
     i18n.use(Detector).init({
         keySeparator: false,
         interpolation: { escapeValue: false },
+        contextSeparator: '$',
         fallbackLng: {
             'zh-CN': ['zh-TW', 'en'],
             'zh-TW': ['zh-CN', 'en'],

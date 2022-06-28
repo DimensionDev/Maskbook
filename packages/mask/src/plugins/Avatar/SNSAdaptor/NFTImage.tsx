@@ -1,11 +1,13 @@
-import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
+import { makeStyles } from '@masknet/theme'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { SelectedIcon } from '../assets/selected'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     imgBackground: {
         position: 'relative',
-        margin: theme.spacing(0.5, 1),
+        padding: 6,
         borderRadius: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -13,10 +15,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         position: 'absolute',
-        top: 5,
-        right: 5,
-        width: 24,
-        height: 24,
+        top: 8,
+        right: 13,
+        width: 20,
+        height: 20,
+        color: theme.palette.primary.main,
     },
     image: {
         width: 97,
@@ -25,39 +28,43 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '100%',
         boxSizing: 'border-box',
         '&:hover': {
-            border: `4px solid ${theme.palette.primary.main}`,
+            border: `1px solid ${theme.palette.primary.main}`,
         },
     },
     selected: {
-        border: `4px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme.palette.primary.main}`,
     },
 }))
 
 interface NFTImageProps {
-    token: ERC721TokenDetailed
-    selectedToken?: ERC721TokenDetailed
-    onChange: (token: ERC721TokenDetailed) => void
+    pluginId: NetworkPluginID
+    showBadge?: boolean
+    token: AllChainsNonFungibleToken
+    selectedToken?: AllChainsNonFungibleToken
+    onChange: (token: AllChainsNonFungibleToken) => void
 }
 
-function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
-    return (
-        isSameAddress(a.contractDetailed.address, b?.contractDetailed.address) &&
-        a.contractDetailed.chainId === b?.contractDetailed.chainId &&
-        a.tokenId === b?.tokenId
-    )
+function isSameNFT(pluginId: NetworkPluginID, a: AllChainsNonFungibleToken, b?: AllChainsNonFungibleToken) {
+    return pluginId !== NetworkPluginID.PLUGIN_SOLANA
+        ? isSameAddress(a.contract?.address, b?.contract?.address) &&
+              a.contract?.chainId &&
+              a.contract?.chainId === b?.contract?.chainId &&
+              a.tokenId === b?.tokenId
+        : a.tokenId === b?.tokenId
 }
 
 export function NFTImage(props: NFTImageProps) {
-    const { token, onChange, selectedToken } = props
+    const { token, onChange, selectedToken, showBadge = false, pluginId } = props
     const { classes } = useStyles()
 
     return (
         <div className={classes.imgBackground}>
             <img
                 onClick={() => onChange(token)}
-                src={token.info.imageURL}
-                className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
+                src={token.metadata?.imageURL}
+                className={classNames(classes.image, isSameNFT(pluginId, token, selectedToken) ? classes.selected : '')}
             />
+            {showBadge && isSameNFT(pluginId, token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
         </div>
     )
 }

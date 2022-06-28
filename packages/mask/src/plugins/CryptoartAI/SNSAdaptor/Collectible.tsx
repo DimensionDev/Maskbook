@@ -15,13 +15,14 @@ import { TabState, TransactionType } from '../types'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
         },
         content: {
@@ -76,8 +77,8 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
-    const { asset, events, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { asset, events, tabIndex, setTabIndex, chainId: expectChainId } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {
         if (!asset.value || asset.error) return
@@ -135,7 +136,7 @@ export function Collectible(props: CollectibleProps) {
                             target="_blank"
                             rel="noopener noreferrer">
                             <Avatar
-                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
+                                src={assetSource?.owner[0]?.ownerAvatar ?? assetSource?.creator?.avatarPath ?? ''}
                             />
                         </Link>
                     }
@@ -265,7 +266,11 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
             </CollectibleCard>
-            <ActionBar />
+            <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={expectChainId ?? chainId}>
+                    <ActionBar />
+                </ChainBoundary>
+            </Box>
         </>
     )
 }

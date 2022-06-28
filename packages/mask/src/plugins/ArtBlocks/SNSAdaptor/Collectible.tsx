@@ -1,14 +1,17 @@
-import { useI18N } from '../../../utils'
-import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar } from '@mui/material'
 import { useState } from 'react'
+import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils'
 import { CollectionView } from './CollectionView'
 import { DetailsView } from './DetailsView'
-import { formatWeiToEther, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -53,20 +56,21 @@ const useStyles = makeStyles()((theme) => {
 
 interface CollectibleProps {
     projectId: string
+    chainId?: ChainId
 }
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, props?.chainId)
     const [tabIndex, setTabIndex] = useState(0)
 
-    const { value, loading, error } = useFetchProject(props.projectId)
+    const { value, loading, error } = useFetchProject(props.projectId, chainId)
     const project = value?.projects[0]
 
     if (loading) return <Typography align="center">{t('loading')}</Typography>
 
-    if (error || !value)
+    if (error || !project)
         return (
             <Typography align="center" color="textPrimary">
                 {t('plugin_artblocks_smt_wrong')}
@@ -129,7 +133,11 @@ export function Collectible(props: CollectibleProps) {
                     <Paper>{pages[tabIndex]}</Paper>
                 </CardContent>
             </Card>
-            <ActionBar project={project} />
+            <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ActionBar chainId={chainId} project={project} />
+                </ChainBoundary>
+            </Box>
         </>
     )
 }

@@ -18,7 +18,7 @@ const useStyles = makeStyles()(() => ({
     },
     connect: {
         backgroundColor: '#ffffff',
-        padding: '11px 20px',
+        padding: '11px 16px',
         borderRadius: 99,
         fontWeight: 700,
         fontSize: 14,
@@ -79,8 +79,9 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                             <div key={key} className={classes.item} onClick={() => onEnterDetail(account)}>
                                 <AccountAvatar avatar={avatar} network={identifier.network} isValid={is_valid} />
                                 <Typography className={classes.name}>
+                                    @
                                     {identifier.userId.length > 14
-                                        ? `${identifier.userId.substring(0, 14)}...`
+                                        ? `${identifier.userId.slice(0, 14)}...`
                                         : identifier.userId}
                                 </Typography>
                             </div>

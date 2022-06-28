@@ -35,8 +35,8 @@ Those features are not easy to polyfill.
   - DataView.prototype.getBigInt64 (requires Safari 15)
   - DataView.prototype.getBigUint64 (requires Safari 15)
 - ES2022:
-  - ⭐ C l a s s ⭐ F i e l d s ⭐ (requires Safari 15)
-  - Class initialization block (Safari not supported, Firefox 93+)
+  - ⭐ C l a s s ⭐ F i e l d s ⭐ (requires Safari 14.5)
+  - Class initialization block (Safari not supported)
 
 ## Web APIs and Intl APIs
 

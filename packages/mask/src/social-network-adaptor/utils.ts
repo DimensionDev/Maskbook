@@ -19,7 +19,7 @@ export function getCurrentSNSNetwork(current: SocialNetwork.Base['networkIdentif
 export function getCurrentIdentifier():
     | {
           identifier: ProfileIdentifier
-          linkedPersona?: { identifier: PersonaIdentifier }
+          linkedPersona?: PersonaIdentifier
       }
     | undefined {
     const current = activatedSocialNetworkUI.collecting.identityProvider?.recognized.value

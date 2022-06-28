@@ -1,103 +1,93 @@
-import { LoadingAnimation } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useAim } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
-import { Button, Typography } from '@mui/material'
-import classnames from 'classnames'
-import { useEffect, useRef, useState } from 'react'
 import {
-    useClearRecentTransactions,
+    useClearTransactionsCallback,
+    useRemoveTransactionCallback,
     useRecentTransactions,
-    useRemoveRecentTransaction,
-} from '../../../plugins/Wallet/hooks'
-import type { RecentTransaction } from '../../../plugins/Wallet/services'
+} from '@masknet/plugin-infra/web3'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { Typography } from '@mui/material'
+import classnames from 'classnames'
+import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { TransactionList } from './TransactionList'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
-        display: 'inline-block',
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: theme.spacing(1, 1),
     },
     pendingSummary: {
-        backgroundColor: 'rgba(255, 185, 21, 0.1)',
-        height: 24,
-        lineHeight: '22px',
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: 4,
-        padding: theme.spacing(0.5),
-        boxSizing: 'border-box',
-        color: theme.palette.warning.main,
+        cursor: 'default',
+        color: theme.palette.maskColor.warn,
         fontSize: 14,
+    },
+    noPendingTransactions: {
+        padding: theme.spacing(1, 0),
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 700,
+    },
+    clearAll: {
+        fontSize: 14,
+        cursor: 'pointer',
+        color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
     },
     hide: {
         display: 'none',
-    },
-    transactionList: {
-        boxShadow: '0 0 16px rgba(101, 119, 134, 0.2)',
     },
 }))
 
 export function usePendingTransactions() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const pendingSummaryRef = useRef<HTMLDivElement>(null)
-    const transactionsListRef = useRef<HTMLDivElement>(null)
-    const showRecentTransactions = useAim(pendingSummaryRef, transactionsListRef)
 
     // #region recent pending transactions
-    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
+
     // frozenTxes would not be reactive to pendingTransactions,
     // it would be recreated then the list shows up.
-    const frozenTxes = useRef<RecentTransaction[]>([])
     const [meltedTxHashes, setMeltedTxHashes] = useState<string[]>([])
-    useEffect(() => {
-        frozenTxes.current = pendingTransactions.slice(0, 5)
-        setMeltedTxHashes([])
-    }, [showRecentTransactions])
-    const clearRecentTxes = useClearRecentTransactions()
-    const removeRecentTx = useRemoveRecentTransaction()
 
-    const transactions = frozenTxes.current.filter((tx) => !meltedTxHashes.includes(tx.hash))
+    const clearRecentTxes = useClearTransactionsCallback()
+    const removeRecentTx = useRemoveTransactionCallback()
+
+    const transactions = pendingTransactions.slice(0, 5).filter((tx) => !meltedTxHashes.includes(tx.id))
     // #endregion
-
-    const summary = (
-        <>
-            <div
-                ref={pendingSummaryRef}
-                className={classnames(classes.summaryWrapper, pendingTransactions.length ? '' : classes.hide)}>
+    const summary = pendingTransactions.length ? (
+        <section className={classes.summaryWrapper}>
+            <div className={classnames(pendingTransactions.length ? '' : classes.hide)}>
                 {pendingTransactions.length ? (
-                    <Typography className={classes.pendingSummary} variant="body2" mr={1}>
-                        {pendingTransactions.length} {t('wallet_status_pending')}
-                        <LoadingAnimation sx={{ fontSize: 16, ml: 0.5 }} />
+                    <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
+                        {pendingTransactions.length}{' '}
+                        {t('wallet_status_pending', {
+                            plural: pendingTransactions.length > 1 ? 's' : '',
+                        })}
                     </Typography>
                 ) : null}
             </div>
             {pendingTransactions.length ? (
-                <Button variant="text" size="small" onClick={clearRecentTxes}>
+                <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
                     {t('wallet_status_pending_clear_all')}
-                </Button>
+                </Typography>
             ) : null}
-        </>
-    )
+        </section>
+    ) : null
 
-    const transactionList = (
-        <div ref={transactionsListRef} className={showRecentTransactions ? '' : classes.hide}>
-            {showRecentTransactions && transactions.length ? (
-                <TransactionList
-                    className={classes.transactionList}
-                    transactions={transactions}
-                    onClear={(tx) => {
-                        setMeltedTxHashes((list) => [...list, tx.hash])
-                        removeRecentTx(tx.hash)
-                    }}
-                />
-            ) : null}
-        </div>
-    )
+    const transactionList =
+        transactions.length > 0 ? (
+            <TransactionList
+                transactions={transactions}
+                onClear={(tx) => {
+                    setMeltedTxHashes((list) => [...list, tx.id])
+                    removeRecentTx(tx.id)
+                }}
+            />
+        ) : (
+            <Typography className={classes.noPendingTransactions}>
+                {t('wallet_status_no_pending_transactions')}
+            </Typography>
+        )
 
     return { summary, transactionList }
 }

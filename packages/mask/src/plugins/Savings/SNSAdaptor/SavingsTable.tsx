@@ -2,12 +2,13 @@ import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
-import { ChainId, formatBalance, isSameAddress, useAccount, useAssets, useWeb3 } from '@masknet/web3-shared-evm'
+import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
+import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { SavingsProtocol, TabType } from '../types'
-import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
+import { useAccount, useWeb3, useFungibleAssets } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(1),
 
         '&:last-child': {
-            marginBottom: '0',
+            marginBottom: 0,
         },
     },
     tableItem: {
@@ -103,25 +104,20 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const web3 = useWeb3({ chainId })
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
-    const account = useAccount()
-
-    const { value: assets, loading: getAssetsLoading } = useAssets(
-        protocols.map((x) => x.bareToken),
-        chainId,
-    )
+    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
 
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
         await Promise.all(
             protocols.map(async (protocol) => {
-                protocol.updateApr(chainId, web3)
-                protocol.updateBalance(chainId, web3, account)
+                await protocol.updateApr(chainId, web3 as Web3)
+                await protocol.updateBalance(chainId, web3 as Web3, account)
             }),
         )
     }, [chainId, web3, account, protocols])
-
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
@@ -178,8 +174,8 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                         <FormattedBalance
                                             value={
                                                 tab === TabType.Deposit
-                                                    ? assets.find((x) =>
-                                                          isSameAddress(x.token.address, protocol.bareToken.address),
+                                                    ? assets!.find((x) =>
+                                                          isSameAddress(x.address, protocol.bareToken.address),
                                                       )?.balance
                                                     : protocol.balance
                                             }
@@ -192,7 +188,6 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                 </Grid>
                                 <Grid item xs={3} className={classes.tableCell}>
                                     <Button
-                                        variant="contained"
                                         color="primary"
                                         disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                         onClick={() => {

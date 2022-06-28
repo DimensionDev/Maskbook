@@ -1,4 +1,3 @@
-import { formatBalance, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
 import { useI18N, useMenu } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
@@ -6,15 +5,8 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
-
-export interface SelectTokenPanelProps {
-    amount: string
-    balance: string
-    token?: FungibleTokenDetailed
-    onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleTokenDetailed) => void
-    tokens?: FungibleTokenDetailed[]
-}
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -33,7 +25,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 24,
     },
     input: {},
-
     check: {
         flex: 1,
         display: 'flex',
@@ -41,19 +32,27 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
+
+export interface SelectTokenPanelProps {
+    amount: string
+    balance: string
+    token?: FungibleToken<ChainId, SchemaType>
+    onAmountChange: (amount: string) => void
+    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
+    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+}
+
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
-    const { t } = useI18N()
     const { amount, balance, token, onAmountChange, onTokenChange, tokens = [] } = props
+
+    const { t } = useI18N()
     const ref = useRef<HTMLElement>(null)
-
     const { classes } = useStyles()
-
     const [haveMenu, setHaveMenu] = useState(true)
 
     const width = useMemo(() => {
         if (!ref.current) return
-        const style = window.getComputedStyle(ref.current)
-        return style.width
+        return window.getComputedStyle(ref.current).width
     }, [ref.current])
 
     useEffect(() => {
@@ -73,7 +72,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                             classes={{ icon: classes.icon }}
                             address={x.address}
                             name={x.name}
-                            logoURI={x.logoURI}
+                            logoURL={x.logoURL}
                         />
                     </ListItemIcon>
                     <Typography variant="inherit">{x.symbol}</Typography>
@@ -129,14 +128,14 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                     {t('plugin_collectible_price')}
                 </Typography>
                 <Typography variant="body1" color="colorPrimary">
-                    {t('wallet_balance')}:
+                    <span style={{ marginRight: 4 }}>{t('wallet_balance')}:</span>
                     <FormattedBalance
                         value={balance}
                         decimals={token?.decimals}
                         significant={6}
                         formatter={formatBalance}
                     />
-                    {token?.symbol}
+                    <span style={{ marginLeft: 4 }}>{token?.symbol}</span>
                 </Typography>
             </div>
             <FormControl className={classes.input} variant="outlined" fullWidth>
@@ -168,7 +167,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                         classes={{ icon: classes.icon }}
                                         address={token?.address}
                                         name={token?.name}
-                                        logoURI={token?.logoURI}
+                                        logoURL={token?.logoURL}
                                     />
                                     <Typography
                                         variant="inherit"

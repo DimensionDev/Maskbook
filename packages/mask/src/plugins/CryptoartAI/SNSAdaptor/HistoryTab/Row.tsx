@@ -59,7 +59,7 @@ export function Row({ event, chainId }: Props) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    <Avatar src={event.avatorPath} className={classes.avatar} />
+                    <Avatar src={event.avatarPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
                         <Account
                             username={truncate(event.operatorName, {
@@ -84,7 +84,7 @@ export function Row({ event, chainId }: Props) {
             </TableCell>
             <TableCell>
                 <Typography className={classes.content} variant="body2">
-                    {event.createTime.substr(0, event.createTime.length - 3)}
+                    {event.createTime.slice(0, Math.max(0, event.createTime.length - 3))}
                 </Typography>
             </TableCell>
             <TableCell>

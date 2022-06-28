@@ -2,16 +2,16 @@ import { useMemo } from 'react'
 import { flatMap } from 'lodash-unified'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
-import { isChainIdValid } from '@masknet/web3-shared-evm'
 import { toUniswapToken } from '../../helpers'
 import { PairState, usePairs } from './usePairs'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { chainResolver } from '@masknet/web3-shared-evm'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const chainIdValid = isChainIdValid(chainId)
+    const chainIdValid = chainResolver.isValid(chainId)
     const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
@@ -24,8 +24,8 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
         return [...common, ...additionalA, ...additionalB].map((x) => toUniswapToken(chainId, x))
     }, [chainId, chainIdValid, tokenA?.address, tokenB?.address])
 
-    const basePairs: [Token, Token][] = useMemo(
-        () => flatMap(bases, (base): [Token, Token][] => bases.map((otherBase) => [base, otherBase])),
+    const basePairs: Array<[Token, Token]> = useMemo(
+        () => flatMap(bases, (base): Array<[Token, Token]> => bases.map((otherBase) => [base, otherBase])),
         [bases],
     )
 
@@ -71,22 +71,19 @@ export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Curr
     const { value: allPairs, ...asyncResult } = usePairs(tradeProvider, allCurrencyCombinations)
 
     // only pass along valid pairs, non-duplicated pairs
-    const allPairs_ = useMemo(
-        () =>
-            Object.values(
-                allPairs
-                    // filter out invalid pairs
-                    .filter((result): result is [PairState.EXISTS, Pair] =>
-                        Boolean(result[0] === PairState.EXISTS && result[1]),
-                    )
-                    // filter out duplicated pairs
-                    .reduce<Record<string, Pair>>((memo, [, current]) => {
-                        memo[current.liquidityToken.address] = memo[current.liquidityToken.address] ?? current
-                        return memo
-                    }, {}),
-            ),
-        [allPairs],
-    )
+    const allPairs_ = useMemo(() => {
+        const filtered = new Map<string, Pair>()
+        for (const [state, pair] of allPairs as Array<[PairState.EXISTS, Pair]>) {
+            // filter out invalid pairs
+            if (state !== PairState.EXISTS) continue
+            if (!pair) continue
+            // filter out duplicated pairs
+            const { address } = pair.liquidityToken
+            if (filtered.has(address)) continue
+            filtered.set(pair.liquidityToken.address, pair)
+        }
+        return [...filtered.values()]
+    }, [allPairs])
 
     return {
         ...asyncResult,

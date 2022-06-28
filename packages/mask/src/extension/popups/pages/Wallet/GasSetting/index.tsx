@@ -1,10 +1,12 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
+import { chainResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()(() => ({
@@ -29,7 +31,7 @@ const useStyles = makeStyles()(() => ({
 const GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     useTitle(t('popups_gas_fee_settings'))
     return (
         <main className={classes.container}>
@@ -37,7 +39,7 @@ const GasSetting = memo(() => {
                 {t('popups_wallet_gas_fee_settings')}
             </Typography>
             <Typography className={classes.description}>{t('popups_wallet_gas_fee_settings_description')}</Typography>
-            {isEIP1559Supported(chainId) ? <GasSetting1559 /> : <Prior1559GasSetting />}
+            {chainResolver.isSupport(chainId, 'EIP1559') ? <GasSetting1559 /> : <Prior1559GasSetting />}
         </main>
     )
 })

@@ -3,11 +3,10 @@ import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import { Tab } from '@mui/material'
 import { useState } from 'react'
-import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src/Components/ButtonGroupTab'
+import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src'
 
 const defaultTabs = ['One', 'Two', 'Three']
 const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & ButtonGroupTabListProps) {
-    if (tabs.length === 0) tabs = tabs
     const [state, setState] = useState(tabs[0])
     return (
         <TabContext value={tabs.includes(state) ? state : tabs[0]}>

@@ -44,13 +44,13 @@ export interface NetworkSelectorMinProps {
         ID: string
         chainId: number
     } | null
-    networks: {
+    networks: Array<{
         ID: string
         isMainnet: boolean
         chainId: number
         icon: URL
         iconColor: string
-    }[]
+    }>
     onSelect(network: { chainId: number } | null): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
@@ -108,7 +108,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                         : ''
                                 }>
                                 {network.isMainnet ? (
-                                    <WalletIcon networkIcon={network.icon} size={size} />
+                                    <WalletIcon mainIcon={network.icon} size={size} />
                                 ) : (
                                     <ChainIcon color={network.iconColor} size={size} />
                                 )}

@@ -3,6 +3,7 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
+import { ImageLoader } from './ImageLoader'
 import ModelView from './ModelView'
 
 export const useStyles = makeStyles()((theme) => ({
@@ -48,7 +49,7 @@ export const useStyles = makeStyles()((theme) => ({
 
         '@keyframes word-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
                 transform: 'scale3d(1, 1, 1)',
             },
             '30%': {
@@ -83,11 +84,11 @@ export const useStyles = makeStyles()((theme) => ({
     image: {
         borderRadius: '4px',
         width: '100%',
-        opacity: '0',
+        opacity: 0,
         transition: 'all 200ms',
         '@keyframes image-show': {
             '0%': {
-                opacity: '0',
+                opacity: 0,
             },
             '100%': {
                 opacity: '1',
@@ -140,7 +141,7 @@ export function PreviewBox(props: Props) {
                         <ModelView className={classes.glbView} source={props.imageUrl} />
                     </div>
                 ) : (
-                    <img className={classes.image} src={props.imageUrl} />
+                    <ImageLoader className={classes.image} src={props.imageUrl} />
                 ))}
             {!(props.message || props.imageUrl) && (
                 <div className={classes.noData}>

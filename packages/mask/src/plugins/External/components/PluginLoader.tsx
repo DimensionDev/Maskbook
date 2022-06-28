@@ -19,10 +19,8 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { Result } from 'ts-results'
-import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import Services from '../../../extension/service'
+// import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest } from '../loader'
-import { createThirdPartyPopupContext } from '../sns-context'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
 import { useI18N } from '../../../utils'
 import { Trans } from 'react-i18next'
@@ -76,7 +74,7 @@ export function PluginLoader() {
                 )}
             />
             <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                <Button variant="contained" disabled={invalidURL} onClick={() => setURL(input)}>
+                <Button disabled={invalidURL} onClick={() => setURL(input)}>
                     {t('plugin_external_loader_search_button')}
                 </Button>
             </Box>
@@ -131,10 +129,10 @@ function Loader(props: { url: string }) {
                     <ListItemText primary="Description" secondary={loading ? skeleton : value?.description ?? ''} />
                 </ListItem>
             </List>
-            <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+            {/* <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 {contribution ? (
                     <Button
-                        variant="contained"
+
                         onClick={() => {
                             Services.ThirdPartyPlugin.openPluginPopup(
                                 PermissionAwareRedirectOf(
@@ -146,7 +144,7 @@ function Loader(props: { url: string }) {
                         {t('plugin_external_get_started')}
                     </Button>
                 ) : null}
-            </Box>
+            </Box> */}
         </Box>
     )
 }

@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     decrypt,
     parsePayload,
@@ -101,7 +101,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     }
     const id = new PostIVIdentifier(
         SocialNetworkEnumToProfileDomain(currentSocialNetwork),
-        encodeArrayBuffer(iv.buffer),
+        encodeArrayBuffer(new Uint8Array(iv.buffer)),
     )
     // #endregion
 
@@ -158,7 +158,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -38,
                     iv,
                     author,
-                    getNetworkHint(context.currentSocialNetwork),
+                    context.currentSocialNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -170,7 +170,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                     -39,
                     iv,
                     author,
-                    getNetworkHint(context.currentSocialNetwork),
+                    context.currentSocialNetwork,
                     signal || new AbortController().signal,
                 )
             },
@@ -183,16 +183,6 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
 
     yield* progress
     return null
-}
-
-function getNetworkHint(x: SocialNetworkEnum) {
-    if (x === SocialNetworkEnum.Facebook) return ''
-    if (x === SocialNetworkEnum.Twitter) return 'twitter-'
-    if (x === SocialNetworkEnum.Minds) return 'minds-'
-    if (x === SocialNetworkEnum.Instagram) return 'instagram-'
-    if (x === SocialNetworkEnum.Unknown)
-        throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
-    unreachable(x)
 }
 
 /** @internal */
@@ -226,7 +216,7 @@ async function storeAuthorPublicKey(
     if (persona?.privateKey) return
 
     const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
-    const otherPersona = await queryPersonaDB(ECKeyIdentifierFromJsonWebKey(key))
+    const otherPersona = await queryPersonaDB(await ECKeyIdentifierFromJsonWebKey(key))
     if (otherPersona?.privateKey) return
 
     return createProfileWithPersona(

@@ -1,13 +1,13 @@
-import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
-import { useAsync } from 'react-use'
 import { memo, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { makeStyles, MaskColorVar, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { SearchIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { GoPlusLabs } from '@masknet/web3-providers'
-import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         fontWeight: 400,
         borderColor: theme.palette.divider,
+        color: theme.palette.text.primary,
     },
     searchButton: {
         borderRadius: 8,
@@ -41,16 +42,17 @@ interface SearchBoxProps {
 
 const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
-function getChainName(chain?: SecurityAPI.SupportedChain) {
-    if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
-    if (chain.id === ChainId.BSC) return getChainDetailed(ChainId.BSC)?.shortName.toUpperCase() ?? chain.name
-    return getChainDetailed(chain.id)?.chain ?? chain.name
+function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
+    if (!chain) return chainResolver.chainName(ChainId.Mainnet)
+    if (chain.chainId === ChainId.BSC) return chainResolver.chainShortName(ChainId.BSC)?.toUpperCase()
+    if (chain.chainId === (66 as ChainId)) return chain.name
+    return chainResolver.chainName(chain.chainId)
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const [selectedChain, setSelectedChain] = useState<SecurityAPI.SupportedChain>()
+    const [selectedChain, setSelectedChain] = useState<SecurityAPI.SupportedChain<ChainId>>()
     const [searchContent, setSearchSearchContent] = useState<string>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -66,7 +68,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
             supportedChains.map((chain) => {
                 return (
                     <MenuItem
-                        key={chain.id}
+                        key={chain.chainId}
                         onClick={() => {
                             setSelectedChain(chain)
                             onClose()
@@ -94,9 +96,9 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         placeholder={t.search_input_placeholder()}
                         autoFocus
                         fullWidth
-                        onKeyPress={(e: React.KeyboardEvent) => {
-                            if (e.key !== 'Enter') return
-                            onSearch(selectedChain?.id ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
+                        onKeyPress={(event: React.KeyboardEvent) => {
+                            if (event.key !== 'Enter') return
+                            onSearch(selectedChain?.chainId ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}
                         InputProps={{
@@ -112,7 +114,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                 <Button
                     className={classes.searchButton}
                     disabled={!searchContent}
-                    onClick={() => onSearch(selectedChain?.id ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')}
+                    onClick={() => onSearch(selectedChain?.chainId ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')}
                     variant="contained">
                     {t.search()}
                 </Button>

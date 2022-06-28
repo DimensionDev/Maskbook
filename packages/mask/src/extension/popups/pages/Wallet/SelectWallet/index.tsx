@@ -1,26 +1,24 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import {
-    ChainId,
-    getNetworkName,
-    getNetworkTypeFromChainId,
-    isSameAddress,
-    ProviderType,
-    useAccount,
-    useChainIdValid,
-    useWallets,
-} from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { WalletItem } from './WalletItem'
+import {
+    useAccount,
+    useChainIdValid,
+    useWallets,
+    getRegisteredWeb3Networks,
+    Web3Helper,
+    useChainId,
+} from '@masknet/plugin-infra/web3'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
-import { getRegisteredWeb3Networks } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     content: {
@@ -64,8 +62,9 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#F7F9FA',
         padding: 0,
-        height: 'calc(100vh - 168px)',
+        height: 'calc(100vh - 132px)',
         overflow: 'auto',
+        paddingBottom: 70,
     },
     controller: {
         display: 'grid',
@@ -85,9 +84,9 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
-    colorChainICon: {
+    colorChainIcon: {
         borderRadius: '999px!important',
-        margin: '0px !important',
+        margin: '0 !important',
     },
 })
 
@@ -96,35 +95,33 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const navigate = useNavigate()
-    const wallet = useAccount()
-    const wallets = useWallets(ProviderType.MaskWallet)
 
-    const [selected, setSelected] = useState(wallet)
+    const networks = getRegisteredWeb3Networks().filter(
+        (x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+    ) as Array<Web3Helper.Web3NetworkDescriptor<NetworkPluginID.PLUGIN_EVM>>
 
     const search = new URLSearchParams(location.search)
-
-    const chainIdSearched = search.get('chainId')
     // The previous page is popup page
     const isPopup = search.get('popup')
-    // Swap page also uses SelectWallet, but changing wallet in Swap page
-    // should not affect other pages, for example, dashboard.
-    // So we make Swap page 'internal' for popups
-    const isInternal = search.get('internal')
-
-    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : ChainId.Mainnet
-    const chainIdValid = useChainIdValid()
-
-    const networks = getRegisteredWeb3Networks()
-    const currentNetwork = useMemo(
-        () => networks.find((x) => x.chainId === chainId) ?? networks[0],
-        [networks, chainId],
+    // The opener need to switch to specific chain
+    const chainIdSearched = search.get('chainId')
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(
+        NetworkPluginID.PLUGIN_EVM,
+        chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined,
     )
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM, chainId)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+
+    const [selected, setSelected] = useState(account)
+
+    const currentNetwork = networks.find((x) => x.chainId === chainId)
 
     const handleCancel = useCallback(async () => {
         if (isPopup) {
             navigate(-1)
         } else {
-            await WalletRPC.selectAccount([], ChainId.Mainnet)
+            await WalletRPC.resolveMaskAccount([])
             await Services.Helper.removePopupWindow()
         }
     }, [isPopup])
@@ -135,7 +132,6 @@ const SelectWallet = memo(() => {
                 state: {
                     chainId,
                     account: selected,
-                    networkType: getNetworkTypeFromChainId(chainId),
                     providerType: ProviderType.MaskWallet,
                 },
             })
@@ -146,16 +142,11 @@ const SelectWallet = memo(() => {
             chainId,
             account: selected,
         })
-        if (currentProviderSettings.value === ProviderType.MaskWallet || !isInternal) {
-            await WalletRPC.updateAccount({
-                chainId,
-                account: selected,
-                providerType: ProviderType.MaskWallet,
-            })
+        if (chainId) {
+            await WalletRPC.resolveMaskAccount([selected])
         }
-        await WalletRPC.selectAccount([selected], chainId)
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected, isPopup, isInternal])
+    }, [chainId, selected, isPopup])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
@@ -164,22 +155,24 @@ const SelectWallet = memo(() => {
     return chainIdValid ? (
         <>
             <div className={classes.content}>
-                <div className={classes.header}>
-                    <div className={classes.network}>
-                        <div className={classes.iconWrapper}>
-                            {currentNetwork.isMainnet ? (
-                                <WalletIcon networkIcon={currentNetwork.icon} size={20} />
-                            ) : (
-                                <ChainIcon
-                                    color={currentNetwork.iconColor}
-                                    size={20}
-                                    classes={{ point: classes.colorChainICon }}
-                                />
-                            )}
+                {currentNetwork ? (
+                    <div className={classes.header}>
+                        <div className={classes.network}>
+                            <div className={classes.iconWrapper}>
+                                {currentNetwork.icon ? (
+                                    <WalletIcon mainIcon={currentNetwork.icon} size={20} />
+                                ) : (
+                                    <ChainIcon
+                                        color={currentNetwork.iconColor}
+                                        size={20}
+                                        classes={{ point: classes.colorChainIcon }}
+                                    />
+                                )}
+                            </div>
+                            <Typography className={classes.title}>{currentNetwork.name}</Typography>
                         </div>
-                        <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
                     </div>
-                </div>
+                ) : null}
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (
                         <WalletItem

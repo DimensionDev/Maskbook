@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { FIND_TRUMAN_PLUGIN_ID, FIND_TRUMAN_PLUGIN_NAME } from './constants'
 
@@ -16,18 +16,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [
-                    ChainId.Mainnet,
-                    ChainId.BSC,
-                    ChainId.Matic,
-                    ChainId.Arbitrum,
-                    ChainId.xDai,
-                    ChainId.Fantom,
-                    ChainId.Avalanche,
-                    ChainId.Aurora,
-                    ChainId.Conflux,
-                    ChainId.Evmos,
-                ],
+                supportedChainIds: [ChainId.Mainnet],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
             [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },

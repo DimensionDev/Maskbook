@@ -1,6 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
 import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
@@ -26,13 +25,14 @@ import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTr
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { TradeComputed } from '../types'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export function useAllTradeComputed(
     inputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): TradeInfo[] {
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -199,6 +199,27 @@ export function useAllTradeComputed(
         traderEstimateGas: wannaSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
+    // Venom Swap
+    const {
+        trader_: venomswap_,
+        trader: venomswap,
+        traderEstimateGas: venomswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.VENOMSWAP, inputAmount_, inputToken, outputToken)
+
+    // Open Swap
+    const {
+        trader_: openswap_,
+        trader: openswap,
+        traderEstimateGas: openswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.OPENSWAP, inputAmount_, inputToken, outputToken)
+
+    // Defi Kingdoms
+    const {
+        trader_: defikingdoms_,
+        trader: defikingdoms,
+        traderEstimateGas: defikingdomsEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.DEFIKINGDOMS, inputAmount_, inputToken, outputToken)
+
     // Mdex
     const {
         trader_: mdex_,
@@ -243,6 +264,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.VENOMSWAP, ...venomswap_, value: venomswap, gas: venomswapEstimateGas },
+        { provider: TradeProvider.OPENSWAP, ...openswap_, value: openswap, gas: openswapEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
         { provider: TradeProvider.DIFFUSION, ...diffusion_, value: diffusion, gas: diffusionEstimateGas },
         { provider: TradeProvider.CRONUS, ...cronus_, value: cronus, gas: cronusEstimateGas },

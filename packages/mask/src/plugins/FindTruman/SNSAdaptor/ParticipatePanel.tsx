@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
@@ -62,8 +62,8 @@ const useStyles = makeStyles()((theme, props) => ({
         padding: 0,
     },
     dialogWrapper: {
-        paddingBottom: '0px !important',
-        paddingTop: '0px !important',
+        paddingBottom: '0 !important',
+        paddingTop: '0 !important',
     },
 }))
 
@@ -93,7 +93,6 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
                         <Button
                             fullWidth
                             color="primary"
-                            variant="contained"
                             onClick={() => {
                                 onDialogOpen()
                             }}>

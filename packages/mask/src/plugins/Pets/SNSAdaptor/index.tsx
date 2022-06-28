@@ -22,12 +22,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <img src={new URL('../assets/pets.png', import.meta.url).toString()} />
             const name = <Trans i18nKey="plugin_pets_name" />
+            const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={name}
+                            icon={icon}
+                            iconFilterColor={iconFilterColor}
+                            onClick={
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
+                            }
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 12,
@@ -35,6 +48,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: <Trans i18nKey="plugin_pets_description" />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
+                iconFilterColor,
                 category: 'dapp',
             }
         })(),

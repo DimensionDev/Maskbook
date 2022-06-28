@@ -1,33 +1,14 @@
 import { memo } from 'react'
-import {
-    ChainId,
-    currySameAddress,
-    formatEthereumAddress,
-    getChainDetailed,
-    getTokenConstants,
-    isSameAddress,
-    useChainId,
-    useTokenAssetBaseURLConstants,
-} from '@masknet/web3-shared-evm'
+import { useAsyncRetry } from 'react-use'
+import { first } from 'lodash-unified'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useImageFailOver } from '../../hooks'
-import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import NO_IMAGE_COLOR from './constants'
+import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { useImageBase64 } from '../../../hooks/useImageBase64'
 
-function getFallbackIcons(address: string, baseURIs: string[]) {
-    const checkSummedAddress = formatEthereumAddress(address)
-
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
-        return baseURIs.map((x) => `${x}/info/logo.png`)
-    }
-
-    const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
-    if (specialIcon) return [specialIcon.logo_url]
-
-    // load from remote
-    return baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
-}
 const useStyles = makeStyles()((theme) => ({
     icon: {
         backgroundColor: theme.palette.common.white,
@@ -36,41 +17,31 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenIconProps extends withClasses<'icon'> {
-    name?: string
-    logoURI?: string | string[]
-    chainId?: ChainId
+    chainId?: Web3Helper.ChainIdAll
+    pluginID?: NetworkPluginID
     address: string
+    name?: string
+    logoURL?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const currentChainId = useChainId()
-    const { address, logoURI, name, chainId = currentChainId, AvatarProps, classes } = props
-    let _logoURI = logoURI
+    const { address, logoURL, name, AvatarProps, classes } = props
 
-    if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
-        const nativeToken = getChainDetailed(chainId)
-        _logoURI = nativeToken?.nativeCurrency.logoURI
-    }
+    const chainId = useChainId(props.pluginID, props.chainId)
+    const hub = useWeb3Hub(props.pluginID)
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
-    const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
+    const { value } = useAsyncRetry(async () => {
+        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
+        return {
+            key: `${address}_${chainId}`,
+            urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
+        }
+    }, [chainId, address, logoURL, hub])
+    const { urls = EMPTY_LIST, key } = value ?? {}
+    const base64 = useImageBase64(key, first(urls))
 
-    const images = _logoURI
-        ? Array.isArray(_logoURI)
-            ? [..._logoURI, ...fallbackLogos]
-            : [_logoURI, ...fallbackLogos]
-        : fallbackLogos
-    const { value: trustedLogoURI, loading } = useImageFailOver(images, '')
-
-    return (
-        <TokenIconUI
-            logoURL={loading ? undefined : trustedLogoURI}
-            AvatarProps={AvatarProps}
-            classes={classes}
-            name={name}
-        />
-    )
+    return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {
@@ -95,7 +66,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
             src={logoURL}
             style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
             {...AvatarProps}>
-            {name?.substr(0, 1).toUpperCase()}
+            {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
 })

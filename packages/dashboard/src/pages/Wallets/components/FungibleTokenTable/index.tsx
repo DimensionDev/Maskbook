@@ -1,25 +1,23 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { useWeb3State } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginMessages } from '../../../../API'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
+import { CurrencyType, formatBalance, FungibleAsset, minus, NetworkPluginID, toZero } from '@masknet/web3-shared-base'
 import {
-    useNetworkDescriptor,
-    useWeb3State as useWeb3PluginState,
-    Web3Plugin,
-    useAccount,
-    NetworkPluginID,
     useCurrentWeb3NetworkPluginID,
+    useFungibleAssets,
+    useNativeToken,
+    useWeb3State,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import { PluginMessages } from '../../../../API'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -64,58 +62,87 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TokenTableProps {
-    selectedChainId: number | null
+    selectedChainId?: Web3Helper.ChainIdAll
 }
 
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
-    const account = useAccount()
-    const { Asset } = useWeb3PluginState()
-    const { portfolioProvider } = useWeb3State()
-    const network = useNetworkDescriptor()
-    const [tokenUpdateCount, setTokenUpdateCount] = useState(0)
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+        chainId: selectedChainId,
+    })
+    const {
+        value: fungibleAssets = EMPTY_LIST,
+        loading: fungibleAssetsLoading,
+        error: fungibleAssetsError,
+    } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId: selectedChainId,
+    })
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const {
-        error: detailedTokensError,
-        loading: detailedTokensLoading,
-        value: detailedTokens,
-    } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, tokenUpdateCount],
-    )
-
-    useEffect(() => {
-        PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
-            setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
-        )
-    }, [])
-
-    const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                defaultInputCoin: {
-                    id: token.id,
-                    name: token.name || '',
-                    symbol: token.symbol || '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
+    const onSwap = useCallback(
+        (
+            token: FungibleAsset<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => {
+            openSwapDialog({
+                open: true,
+                traderProps: {
+                    defaultInputCoin: {
+                        id: token.id,
+                        name: token.name || '',
+                        symbol: token.symbol || '',
+                        contract_address: token.address,
+                        decimals: token.decimals,
+                    },
                 },
-            },
-        })
-    }, [])
-
-    const onSend = useCallback(
-        (token: Web3Plugin.FungibleToken) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+            })
+        },
         [],
     )
 
+    const onSend = useCallback(
+        (
+            token: FungibleAsset<
+                Web3Helper.Definition[NetworkPluginID]['ChainId'],
+                Web3Helper.Definition[NetworkPluginID]['SchemaType']
+            >,
+        ) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
+        [],
+    )
+
+    const dataSource = useMemo(() => {
+        const results = fungibleAssets.filter((x) => !selectedChainId || x.chainId === selectedChainId)
+
+        if (!selectedChainId)
+            return results.sort((a, z) => {
+                const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
+                const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')
+
+                // token value
+                if (!aUSD.isEqualTo(zUSD)) return minus(zUSD, aUSD).isPositive() ? 1 : -1
+
+                return 0
+            })
+
+        if (!results.length && nativeToken) {
+            return [
+                {
+                    ...nativeToken,
+                    balance: '0',
+                },
+            ]
+        }
+
+        return results
+    }, [nativeToken, fungibleAssets, selectedChainId])
+
     return (
         <TokenTableUI
-            isLoading={detailedTokensLoading}
-            isEmpty={!detailedTokensLoading && (!!detailedTokensError || !detailedTokens?.length)}
-            dataSource={(detailedTokens ?? []).filter((x) => !selectedChainId || x.chainId === selectedChainId)}
+            isLoading={fungibleAssetsLoading}
+            isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+            dataSource={dataSource}
             onSwap={onSwap}
             onSend={onSend}
         />
@@ -125,16 +152,31 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
-    onSwap(token: Web3Plugin.FungibleToken): void
-    onSend(token: Web3Plugin.FungibleToken): void
+    dataSource: Array<
+        FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >
+    >
+    onSwap(
+        token: FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
+    onSend(
+        token: FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >,
+    ): void
 }
 
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const { Utils } = useWeb3PluginState()
+    const { Others } = useWeb3State()
 
     return (
         <TableContainer className={classes.container}>
@@ -171,23 +213,21 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                         <TableBody>
                             {dataSource
                                 .sort((first, second) => {
-                                    const firstValue = new BigNumber(
-                                        Utils?.formatBalance?.(first.balance, first.token.decimals) ?? '',
-                                    )
+                                    const firstValue = new BigNumber(formatBalance(first.balance, first.decimals) ?? '')
                                     const secondValue = new BigNumber(
-                                        Utils?.formatBalance?.(second.balance, second.token.decimals) ?? '',
+                                        formatBalance(second.balance, second.decimals) ?? '',
                                     )
 
                                     if (firstValue.isEqualTo(secondValue)) return 0
 
                                     return Number(firstValue.lt(secondValue))
                                 })
-                                .map((asset, index) => (
+                                .map((asset) => (
                                     <FungibleTokenTableRow
-                                        onSend={() => onSend(asset.token)}
-                                        onSwap={() => onSwap(asset.token)}
+                                        onSend={() => onSend(asset)}
+                                        onSwap={() => onSwap(asset)}
                                         asset={asset}
-                                        key={index}
+                                        key={`${asset.address}_${asset.chainId}`}
                                     />
                                 ))}
                         </TableBody>

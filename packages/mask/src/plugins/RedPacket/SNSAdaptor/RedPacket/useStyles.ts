@@ -19,11 +19,12 @@ to {
             height: 335,
             boxSizing: 'border-box',
             backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
             },
+            width: '100%',
         },
         header: {
             display: 'flex',
@@ -44,7 +45,6 @@ to {
             flexWrap: 'wrap',
         },
         footer: {
-            paddingTop: theme.spacing(2),
             width: '100%',
             display: 'flex',
             gap: theme.spacing(2),
@@ -165,6 +165,16 @@ to {
             textAlign: 'center',
             fontSize: 24,
             marginTop: 210,
+        },
+        walletButton: {
+            backgroundColor: theme.palette.maskColor.dark,
+            color: 'white',
+            fontSize: 14,
+            fontWeight: 700,
+            width: '100%',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
         },
     }
 })

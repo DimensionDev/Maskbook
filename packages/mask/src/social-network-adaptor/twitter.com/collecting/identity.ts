@@ -8,6 +8,8 @@ import {
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchSelfAvatarSelector,
+    searchWatcherAvatarSelector,
+    selfInfoSelectors,
 } from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
@@ -15,14 +17,50 @@ import { twitterBase } from '../base'
 import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { isMobileTwitter } from '../utils/isMobile'
 
+function recognizeDesktop() {
+    const collect = () => {
+        const handle = selfInfoSelectors().handle.evaluate()
+        const nickname = selfInfoSelectors().name.evaluate()
+        const avatar = selfInfoSelectors().userAvatar.evaluate()
+
+        return { handle, nickname, avatar }
+    }
+
+    const watcher = new MutationObserverWatcher(selfInfoSelectors().handle)
+
+    return { watcher, collect }
+}
+
+function _getNickname(nickname?: string) {
+    const nicknameNode = searchSelfNicknameSelector().closest<HTMLDivElement>(1).evaluate()
+    let _nickname = ''
+    if (!nicknameNode?.childNodes.length) return nickname
+
+    for (const child of nicknameNode.childNodes) {
+        const ele = child as HTMLDivElement
+        if (ele.tagName === 'IMG') {
+            _nickname += ele.getAttribute('alt') ?? ''
+        }
+        if (ele.tagName === 'SPAN') {
+            _nickname += ele.textContent?.trim()
+        }
+    }
+
+    return _nickname ?? nickname
+}
+
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const assign = () => {
-        const avatar = searchSelfAvatarSelector().evaluate()?.getAttribute('src') ?? ''
-        const handle = searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '')
-        const nickname = searchSelfNicknameSelector().evaluate()?.textContent?.trim() ?? ''
+    const assign = async () => {
+        await delay(5000)
+        const { collect } = recognizeDesktop()
+        const dataFromScript = collect()
+        const avatar = (searchSelfAvatarSelector().evaluate()?.getAttribute('src') || dataFromScript.avatar) ?? ''
+        const handle =
+            searchSelfHandleSelector().evaluate()?.textContent?.trim()?.replace(/^@/, '') || dataFromScript.handle
+        const nickname = _getNickname(dataFromScript.nickname) ?? ''
 
         if (handle) {
             ref.value = {
@@ -32,14 +70,28 @@ function resolveLastRecognizedIdentityInner(
             }
         }
     }
-    const watcher = new MutationObserverWatcher(searchSelfHandleSelector())
-        .addListener('onAdd', () => assign())
-        .addListener('onChange', () => assign())
-        .startWatch({
-            childList: true,
-            subtree: true,
-        })
-    cancel.addEventListener('abort', () => watcher.stopWatch())
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src'],
+                },
+                cancel,
+            )
+
+        window.addEventListener('locationchange', assign, { signal: cancel })
+    }
+
+    assign()
+
+    createWatcher(searchSelfHandleSelector())
+    createWatcher(searchWatcherAvatarSelector())
 }
 
 function resolveLastRecognizedIdentityMobileInner(
@@ -71,43 +123,36 @@ function resolveCurrentVisitingIdentityInner(
     const avatarSelector = searchAvatarSelector()
     const avatarMetaSelector = searchAvatarMetaSelector()
     const assign = async () => {
-        await delay(500)
+        await delay(5000)
         const bio = getBio()
-        const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
+        const homepage = await Services.Helper.resolveTCOLink(getPersonalHomepage())
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
+            homepage: homepage ?? '',
         }
-        Services.Helper.resolveTCOLink(homepage).then((link) => {
-            if (cancel?.aborted || !link) return
-            ref.value = {
-                ...ref.value,
-                homepage: link,
-            }
-        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        const watcher = new MutationObserverWatcher(selector)
+        new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())
-            .startWatch({
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['src', 'content'],
-            })
+            .startWatch(
+                {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['src', 'content'],
+                },
+                cancel,
+            )
 
-        window.addEventListener('locationchange', assign)
-        cancel.addEventListener('abort', () => {
-            window.removeEventListener('locationchange', assign)
-            watcher.stopWatch()
-        })
+        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()

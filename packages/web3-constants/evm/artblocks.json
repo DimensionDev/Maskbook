@@ -1,7 +1,7 @@
 {
     "GEN_ART_721_MINTER": {
-        "Mainnet": "0x47e312d99C09Ce61A866c83cBbbbED5A4b9d33E7",
-        "Ropsten": "0x58727f5Fc3705C30C9aDC2bcCC787AB2BA24c441",
+        "Mainnet": "0x1DEC9E52f1320F7Deb29cBCd7B7d67f3dF785142",
+        "Ropsten": "0xfd50294f1ddeccdf6ea55bc57a15916328177653",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
@@ -19,6 +19,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Evmos": ""
+        "Evmos": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

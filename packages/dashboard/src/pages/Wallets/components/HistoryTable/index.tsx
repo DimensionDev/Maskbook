@@ -1,5 +1,4 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { ChainId, Transaction, useAccount, useTransactions } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
@@ -8,6 +7,10 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-unified'
+import { useAccount, useTransactions, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, Transaction } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,19 +46,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface HistoryTableProps {
-    selectedChainId: ChainId
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const account = useAccount()
-    const {
-        value = { transactions: [], hasNextPage: false },
-        loading: transactionLoading,
-        error: transactionError,
-    } = useTransactions(account, page, 50, selectedChainId)
-
-    const { transactions = [], hasNextPage } = value
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { value, loading } = useTransactions(NetworkPluginID.PLUGIN_EVM, { chainId: selectedChainId })
 
     useUpdateEffect(() => {
         setPage(0)
@@ -65,10 +62,10 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
         <HistoryTableUI
             page={page}
             onPageChange={setPage}
-            hasNextPage={hasNextPage}
-            isLoading={transactionLoading}
-            isEmpty={!!transactionError || !transactions.length}
-            dataSource={transactions}
+            hasNextPage={false}
+            isLoading={loading}
+            isEmpty={!value?.length}
+            dataSource={(value ?? EMPTY_LIST) as Array<Transaction<ChainId, SchemaType>>}
             selectedChainId={selectedChainId}
         />
     )
@@ -80,8 +77,8 @@ export interface HistoryTableUIProps {
     hasNextPage: boolean
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Transaction[]
-    selectedChainId: ChainId
+    dataSource: Array<Transaction<ChainId, SchemaType>>
+    selectedChainId: Web3Helper.ChainIdAll
 }
 
 export const HistoryTableUI = memo<HistoryTableUIProps>(
@@ -94,7 +91,9 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                     {isLoading || isEmpty ? (
                         <Box flex={1}>
                             {isLoading ? <LoadingPlaceholder /> : null}
-                            {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_history_tips()} /> : null}
+                            {isEmpty && !isLoading ? (
+                                <EmptyPlaceholder children={t.wallets_empty_history_tips()} />
+                            ) : null}
                         </Box>
                     ) : (
                         <Table stickyHeader sx={{ padding: '0 44px' }}>

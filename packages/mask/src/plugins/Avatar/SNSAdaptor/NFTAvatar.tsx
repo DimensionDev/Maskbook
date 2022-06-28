@@ -2,22 +2,18 @@ import { useCallback, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    ChainId,
-    SocketState,
-    ERC721TokenDetailed,
-    useChainId,
-    useCollectibles,
-    useImageChecker,
-} from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
-import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
-import { ReversedAddress } from '@masknet/shared'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { ElementAnchor, ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
+import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -88,31 +84,41 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: ERC721TokenDetailed) => void
+    onChange: (token: SelectTokenInfo) => void
     hideWallet?: boolean
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
-    const account = useAccount()
-    const chainId = useChainId()
-    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount(pluginID)
+    const chainId = useChainId(pluginID)
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
-    const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
+    const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])
     const { t } = useI18N()
-    const { Utils } = useWeb3State()
-    const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
+    const {
+        value: collectibles = EMPTY_LIST,
+        done: loadFinish,
+        next: nextPage,
+        error: loadError,
+    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
-        onChange(selectedToken)
+        onChange({
+            account,
+            token: selectedToken,
+            image: selectedToken.metadata?.imageURL ?? '',
+            pluginId: pluginID,
+        })
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token: ERC721TokenDetailed) => {
+    const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)
-        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contractDetailed.address && x.tokenId))
+        setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
@@ -129,11 +135,16 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-            <Button className={classes.button} variant="text" onClick={retry}>
+            <Button className={classes.button} variant="text" onClick={nextPage}>
                 {t('plugin_collectible_retry')}
             </Button>
         </Box>
     )
+
+    const _onChange = (token: AllChainsNonFungibleToken) => {
+        if (!token) return
+        setSelectedToken(token)
+    }
     return (
         <>
             <Box className={classes.root}>
@@ -156,55 +167,55 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </Typography>
                     ) : null}
                 </Box>
-                <EthereumChainBoundary hiddenConnectButton chainId={chainId}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {state !== SocketState.done && collectibles.length === 0
-                                ? LoadStatus
-                                : error || (collectibles.length === 0 && collectibles_.length === 0)
-                                ? Retry
-                                : uniqBy(
-                                      [...collectibles_, ...collectibles],
-                                      (x) => x.contractDetailed.address && x.tokenId,
-                                  ).map((token: ERC721TokenDetailed, i) => (
-                                      <NFTImageCollectibleAvatar
-                                          key={i}
-                                          token={token}
-                                          selectedToken={selectedToken}
-                                          setSelectedToken={setSelectedToken}
-                                      />
-                                  ))}
+                            {!loadFinish && !loadError && !collectibles?.length ? (
+                                LoadStatus
+                            ) : loadError || (!collectibles?.length && !collectibles_.length) ? (
+                                Retry
+                            ) : (
+                                <Stack direction="row" flexWrap="wrap">
+                                    {uniqBy(
+                                        [...collectibles_, ...(collectibles ?? [])],
+                                        (x) => x.contract?.address && x.tokenId,
+                                    ).map((token: AllChainsNonFungibleToken, i) => (
+                                        <NFTImageCollectibleAvatar
+                                            key={i}
+                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            token={token}
+                                            selectedToken={selectedToken}
+                                            onChange={(token) => _onChange(token)}
+                                        />
+                                    ))}
+                                    <ElementAnchor
+                                        callback={() => {
+                                            if (nextPage) nextPage()
+                                        }}>
+                                        {!loadFinish && <LoadingBase />}
+                                    </ElementAnchor>
+                                </Stack>
+                            )}
                         </Box>
                         <Box className={classes.buttons}>
                             <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
                                 {t('nft_button_add_collectible')}
                             </Button>
 
-                            <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
+                            <Button size="small" onClick={onClick} disabled={!selectedToken}>
                                 {t('nft_button_set_avatar')}
                             </Button>
                         </Box>
                     </Box>
-                </EthereumChainBoundary>
+                </ChainBoundary>
             </Box>
-            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT
+                chainId={chainId as ChainId}
+                expectedPluginID={pluginID}
+                open={open_}
+                onClose={() => setOpen_(false)}
+                onAddClick={onAddClick}
+            />
         </>
     )
-}
-interface NFTImageCollectibleAvatarProps {
-    token: ERC721TokenDetailed
-    setSelectedToken: React.Dispatch<React.SetStateAction<ERC721TokenDetailed | undefined>>
-    selectedToken?: ERC721TokenDetailed
-}
-
-function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles()
-    const { value: isImageToken, loading } = useImageChecker(token.info?.imageURL)
-    if (loading)
-        return (
-            <div className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        )
-    return isImageToken ? <NFTImage token={token} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
 }

@@ -5,6 +5,7 @@ export function useMaskBoxInfo(id: string | number) {
     const maskBoxContract = useMaskBoxContract()
     return useAsyncRetry(async () => {
         if (!maskBoxContract) return null
-        return maskBoxContract.methods.getBoxInfo(id).call()
+        const info = await maskBoxContract.methods.getBoxInfo(id).call()
+        return info
     }, [id, maskBoxContract])
 }

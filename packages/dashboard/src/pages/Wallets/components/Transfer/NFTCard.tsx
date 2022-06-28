@@ -1,9 +1,10 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     card: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles()({
         height: '186px !important',
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,
@@ -60,7 +61,7 @@ const useStyles = makeStyles()({
 })
 
 export interface NFTCardProps {
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<ChainId, SchemaType>
     selectedTokenId: string
     onSelect(tokenId: string): void
     renderOrder: number
@@ -103,8 +104,8 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
             }}
             className={isDisabled ? classes.disabled : ''}>
             <NFTCardStyledAssetPlayer
-                contractAddress={token.contractDetailed.address}
-                chainId={token.contractDetailed.chainId}
+                contractAddress={token.address}
+                chainId={token.chainId}
                 tokenId={token.tokenId}
                 setERC721TokenName={setName}
                 renderOrder={renderOrder}

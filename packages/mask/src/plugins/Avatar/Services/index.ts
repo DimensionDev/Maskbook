@@ -1,71 +1,20 @@
-import type { NetworkPluginID } from '@masknet/plugin-infra/web3'
-import type { AvatarMetaDB } from '../types'
-import { getNFTAvatarFromJSON } from './db'
-import { getUserAddress, setUserAddress } from './bind'
-import { deleteTargetCache, getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 import type { RSS3_KEY_SNS } from '../constants'
+import { RSS3Cache } from '../types'
+import type { EnhanceableSite } from '@masknet/shared-base'
+import { getAddress } from './kv'
 
-export async function getNFTAvatar(
-    userId: string,
-    network: string,
-    snsKey: RSS3_KEY_SNS,
-    networkPluginId?: NetworkPluginID,
-    chainId?: number,
-) {
-    const address = await getUserAddress(userId, network, networkPluginId, chainId)
-
-    if (address) {
-        return getNFTAvatarFromRSS(userId, address, snsKey)
-    }
-    return getNFTAvatarFromJSON(userId)
+function deleteTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
+    const key = `${address}, ${userId}, ${snsKey}`
+    RSS3Cache.delete(key)
 }
 
-export async function clearCache(
-    userId: string,
-    network: string,
-    snsKey: RSS3_KEY_SNS,
-    networkPluginId?: NetworkPluginID,
-    chainId?: number,
-) {
-    const address = await getUserAddress(userId, network, networkPluginId, chainId)
+export async function clearCache(userId: string, network: EnhanceableSite, snsKey: RSS3_KEY_SNS) {
+    const storage = await getAddress(network, userId)
 
-    if (address) {
-        deleteTargetCache(userId, address, snsKey)
+    if (storage?.address) {
+        deleteTargetCache(userId, storage.address, snsKey)
     }
 }
 
-export async function saveNFTAvatar(
-    address: string,
-    nft: AvatarMetaDB,
-    network: string,
-    snsKey: RSS3_KEY_SNS,
-    networkPluginId?: NetworkPluginID,
-    chainId?: number,
-) {
-    try {
-        const avatar = await saveNFTAvatarToRSS(address, nft, '', snsKey)
-        await setUserAddress(nft.userId, address, network, networkPluginId, chainId)
-        return avatar
-    } catch (error) {
-        throw error
-    }
-}
-
-export async function getAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    if (!userId) return ''
-    const address = await getUserAddress(userId, network, networkPluginId, chainId)
-    return (address ?? '') as string
-}
-
-export async function getImage(image: string): Promise<string> {
-    const response = await globalThis.fetch(image)
-    return (await blobToBase64(await response.blob())) as string
-}
-
-function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(blob)
-    })
-}
+export * from './storage'
+export * from './kv'

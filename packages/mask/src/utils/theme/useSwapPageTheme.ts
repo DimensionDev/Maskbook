@@ -23,9 +23,10 @@ export function useSwapPageTheme() {
 
         colors.forEach((color) => {
             if (typeof theme.palette[color] === 'object') {
-                Object.assign(theme.palette[color], colorSchema[color])
+                Object.assign(theme.palette[color] ?? {}, colorSchema[color])
             }
         })
+        theme.palette.maskColor = colorSchema.maskColor
         theme.palette.divider = colorSchema.divider
         theme.palette.secondaryDivider = colorSchema.secondaryDivider
         theme.components = theme.components || {}
@@ -189,7 +190,7 @@ export function useSwapPageTheme() {
         theme.components.MuiSnackbar = {
             styleOverrides: {
                 root: {
-                    filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                    filter: `drop-shadow(0 0 16px ${theme.palette.background.messageShadow});`,
                 },
             },
         }

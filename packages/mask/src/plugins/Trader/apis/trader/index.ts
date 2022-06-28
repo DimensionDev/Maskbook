@@ -1,9 +1,9 @@
 import { safeUnreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 
 export async function getAvailableTraderProviders(chainId: ChainId) {
-    const networkType = getNetworkTypeFromChainId(chainId)
+    const networkType = chainResolver.chainNetworkType(chainId)
     if (!networkType) return []
     switch (networkType) {
         case NetworkType.Ethereum:
@@ -54,6 +54,13 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Evmos:
             return [TradeProvider.EVMOSWAP, TradeProvider.DIFFUSION, TradeProvider.CRONUS]
+        case NetworkType.Harmony:
+            return [
+                TradeProvider.SUSHISWAP,
+                TradeProvider.VENOMSWAP,
+                TradeProvider.OPENSWAP,
+                TradeProvider.DEFIKINGDOMS,
+            ]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:

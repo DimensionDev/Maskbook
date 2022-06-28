@@ -1,20 +1,19 @@
-import { useCallback, useMemo, useState } from 'react'
-import stringify from 'json-stable-stringify'
+import { useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { pick } from 'lodash-unified'
+import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
-    const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-
-    const web3 = useWeb3({ chainId })
-    const [tradeState, setTradeState] = useState<TransactionState>({
-        type: TransactionStateType.UNKNOWN,
-    })
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // compose transaction config
     const config = useMemo(() => {
@@ -24,21 +23,13 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
             ...gasConfig,
         } as TransactionConfig
-    }, [account, tradeComputed])
+    }, [account, tradeComputed, gasConfig])
 
-    const tradeCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         // validate config
-        if (!account || !config || !tradeComputed) {
-            setTradeState({
-                type: TransactionStateType.UNKNOWN,
-            })
+        if (!web3 || !account || !config || !tradeComputed) {
             return
         }
-
-        // start waiting for provider to confirm tx
-        setTradeState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         const config_ = {
             ...config,
@@ -47,40 +38,17 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                     from: account,
                     ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
                 })
-                .catch((error) => {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    return 0
-                }),
+                .catch(() => 0),
         }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config_, (error, hash) => {
-                if (error) {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                } else {
-                    setTradeState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                }
-            })
+            web3.eth
+                .sendTransaction(config_)
+                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
+                })
+                .on(TransactionEventType.ERROR, reject)
         })
     }, [web3, account, chainId, stringify(config), gasConfig])
-
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [tradeState, tradeCallback, resetCallback] as const
 }

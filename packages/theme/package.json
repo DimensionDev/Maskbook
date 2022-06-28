@@ -15,6 +15,7 @@
       "default": "./dist/src/entry-base.js"
     }
   },
+  "types": "./dist/src/entry.d.ts",
   "typesVersions": {
     "*": {
       "base": [
@@ -22,7 +23,6 @@
       ]
     }
   },
-  "types": "./dist/src/entry.d.ts",
   "scripts": {
     "build-storybook": "build -- build-storybook",
     "start": "dev -- start-storybook -p 6006"
@@ -34,22 +34,24 @@
     "@types/qrcode": "^1.4.2",
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
-    "fuse.js": "^6.5.3",
-    "notistack": "2.0.4",
+    "fuse.js": "^6.6.2",
+    "notistack": "2.0.5",
+    "react-use": "^17.4.0",
     "react-window": "^1.8.7",
     "tinycolor2": "^1.4.2",
     "tss-react": "^3.6.2",
     "unstated-next": "^1.1.0",
-    "use-subscription": "^1.6.0"
+    "use-subscription": "1.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.9",
-    "@storybook/addon-actions": "^6.4.22",
-    "@storybook/addon-essentials": "^6.4.22",
-    "@storybook/addon-links": "^6.4.22",
-    "@storybook/builder-webpack5": "^6.4.22",
-    "@storybook/manager-webpack5": "^6.4.22",
-    "@storybook/react": "^6.4.22",
+    "@babel/core": "^7.18.5",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack5": "^6.5.9",
+    "@storybook/manager-webpack5": "^6.5.9",
+    "@storybook/react": "^6.5.9",
+    "@types/react-window": "^1.8.4",
     "babel-loader": "^8.2.5"
   }
 }

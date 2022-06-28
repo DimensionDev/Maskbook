@@ -1,6 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { isZero } from '@masknet/web3-shared-base'
-import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         backgroundAttachment: 'local',
-        backgroundPosition: '0',
+        backgroundPosition: 0,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         width: 475,
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ShareDialogProps extends withClasses<'root'> {
     shareSuccessText: string | undefined
-    token: FungibleTokenDetailed
+    token: FungibleToken<ChainId, SchemaType>
     actualSwapAmount: BigNumber.Value
     poolName: string
     onClose: () => void
@@ -89,11 +89,7 @@ export function ShareDialog(props: ShareDialogProps) {
                     {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                 </Typography>
                 {shareSuccessText ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        color="primary"
-                        className={classes.shareButton}>
+                    <ActionButton onClick={onShareSuccess} color="primary" className={classes.shareButton}>
                         {t('plugin_ito_dialog_swap_share_title')}
                     </ActionButton>
                 ) : null}

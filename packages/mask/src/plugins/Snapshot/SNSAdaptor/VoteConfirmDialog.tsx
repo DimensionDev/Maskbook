@@ -12,11 +12,11 @@ import {
 import { makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
-import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { InfoField } from './InformationCard'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -87,7 +87,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                                     className={classes.link}
                                     target="_blank"
                                     rel="noopener"
-                                    href={resolveBlockLinkOnExplorer(ChainId.Mainnet, snapshot)}>
+                                    href={explorerResolver.blockLink(ChainId.Mainnet, Number.parseInt(snapshot, 10))}>
                                     {snapshot}
                                     <OpenInNew fontSize="small" />
                                 </Link>
@@ -100,13 +100,12 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 </Card>
             </DialogContent>
             <DialogActions>
-                <EthereumWalletConnectedBoundary
+                <WalletConnectedBoundary
                     offChain
                     classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}>
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"
-                        variant="contained"
                         fullWidth
                         disabled={loading}
                         onClick={onVoteConfirm}>
@@ -116,7 +115,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                             t('plugin_snapshot_vote')
                         )}
                     </Button>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>
     )

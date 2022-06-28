@@ -40,6 +40,8 @@
         "no-unmodified-loop-condition": "error",
         "no-unneeded-ternary": "error",
         "no-useless-concat": "error",
+        "no-useless-rename": "error",
+        "no-useless-catch": "error",
         "no-loss-of-precision": "error",
         "prefer-regex-literals": "error",
         "react/jsx-boolean-value": "error",
@@ -65,10 +67,12 @@
         "unicorn/prefer-number-properties": "error",
         "unicorn/relative-url-style": ["error", "always"],
         "unicorn/throw-new-error": "error",
+        "unicorn/prefer-string-slice": "error",
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
         "@dimensiondev/jsx/no-class-component": "error",
         "@dimensiondev/jsx/no-template-literal": "error",
+        "@dimensiondev/no-for-in": "error",
         "@dimensiondev/no-number-constructor": "off",
         "@dimensiondev/prefer-early-return": "error",
         "@dimensiondev/string/no-interpolation": "off",
@@ -78,9 +82,9 @@
         "@dimensiondev/type/no-instanceof-wrapper": "error",
         "@dimensiondev/type/no-wrapper-type-reference": "error",
         "@dimensiondev/unicode/specific-set": "error",
+        "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-base-to-string": "off",
-        "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-implied-eval": "error",
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-invalid-this": "error",
@@ -102,7 +106,8 @@
         {
             "files": ["./plugins/**/*"],
             "rules": {
-                "@typescript-eslint/no-explicit-any": "error"
+                "@typescript-eslint/no-explicit-any": "error",
+                "no-nested-ternary": "error"
             }
         }
     ]

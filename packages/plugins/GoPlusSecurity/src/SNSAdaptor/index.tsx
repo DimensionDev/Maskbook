@@ -13,18 +13,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SecurityCheckerIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
+            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
 
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={disabled}
+                                {...EntryComponentProps}
+                                iconFilterColor={iconFilterColor}
                                 icon={icon}
-                                onClick={() => setOpen(true)}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
                             {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
                         </>
@@ -32,6 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
+                iconFilterColor,
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 16,
             }

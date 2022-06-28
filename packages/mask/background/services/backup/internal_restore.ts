@@ -1,5 +1,6 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { MaskMessages } from '../../../shared/messages'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
@@ -11,6 +12,7 @@ import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePos
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
 
 // Well, this is a bit of a hack, because we have not move those two parts into this project yet.
+// TODO: MV3 support
 let restorePlugins: (backup: NormalizedBackup.Data['plugins']) => Promise<void>
 let restoreWallets: (backup: NormalizedBackup.WalletBackup[]) => Promise<void>
 export function delegateWalletRestore(f: typeof restoreWallets) {
@@ -23,9 +25,15 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
 
     await restorePersonas(backup)
-    await restoreWallets(wallets)
     await restorePosts(posts.values())
-    await restorePlugins(plugins)
+    if (process.env.manifest === '2') {
+        if (wallets.length) {
+            await restoreWallets(wallets)
+        }
+        await restorePlugins(plugins)
+    }
+
+    if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {

@@ -4,12 +4,13 @@ import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Trans } from 'react-i18next'
 import { parseURL } from '@masknet/shared-base'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskBoxIcon } from '@masknet/icons'
+import { RootContext } from '../contexts'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -26,7 +27,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails.mentionedLinks().find(isMaskBox)
+        const links = usePostInfoDetails.mentionedLinks()
+        const link = links.find(isMaskBox)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -34,6 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <MaskBoxIcon />
             const name = <Trans i18nKey="plugin_mask_box_name" />
+            const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -41,6 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title={name}
                             disabled={disabled}
+                            iconFilterColor={iconFilterColor}
                             icon={icon}
                             onClick={() => openWindow('https://box.mask.io/#/')}
                         />
@@ -49,10 +53,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 6,
                 marketListSortingPriority: 4,
                 icon,
-                tutorialLink:
-                    'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
+                tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: <Trans i18nKey="plugin_mask_box_description" />,
                 category: 'dapp',
+                iconFilterColor,
                 name,
             }
         })(),
@@ -62,19 +66,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const [, chainId] = props.url.match(/chain=(\d+)/i) ?? []
+    const [, matchedChainId] = props.url.match(/chain=(\d+)/i) ?? []
     const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
     const [, hashRoot] = props.url.match(/rootHash=([\dA-Za-z]+)/) ?? []
 
-    const shouldNotRender = !chainId || !boxId
+    const shouldNotRender = !matchedChainId || !boxId
     usePluginWrapper(!shouldNotRender)
     if (shouldNotRender) return null
 
     return (
-        <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+        <RootContext chainId={Number.parseInt(matchedChainId, 10) as ChainId.Mainnet}>
             <Context.Provider initialState={{ boxId, hashRoot }}>
                 <PreviewCard />
             </Context.Provider>
-        </EthereumChainBoundary>
+        </RootContext>
     )
 }

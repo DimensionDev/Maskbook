@@ -1,4 +1,5 @@
-import { useAccount, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils'
 import { useAsyncRetry } from 'react-use'
@@ -312,13 +313,7 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
                     )}
                 </Box>
             ) : (
-                <LoadingButton
-                    loading={loading}
-                    size="small"
-                    color="primary"
-                    variant="contained"
-                    fullWidth
-                    onClick={handleOpenBox}>
+                <LoadingButton loading={loading} size="small" color="primary" fullWidth onClick={handleOpenBox}>
                     {t('plugin_find_truman_dialog_open')}
                 </LoadingButton>
             )}
@@ -338,7 +333,7 @@ function QuestDialog(props: QuestDialogProps) {
     const { t, const: consts } = useContext(FindTrumanContext)
 
     const poapIds = useMemo(() => {
-        return quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', ')
+        return quest.poaps.map((e) => formatTokenId(e.tokenId.toString(), 2)).join(', ')
     }, [quest])
 
     const availablePoap = useMemo(() => {

@@ -1,13 +1,8 @@
-import { useCallback } from 'react'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -23,72 +18,29 @@ export function useDepositCallback(
     amount: string,
     controlledToken: string,
     referrer: string,
-    token?: FungibleTokenDetailed,
+    token?: FungibleToken<ChainId, SchemaType>,
 ) {
-    const poolContract = usePoolTogetherPoolContract(address)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const poolContract = usePoolTogetherPoolContract(chainId, address)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
-    const account = useAccount()
-    const [depositState, setDepositState] = useTransactionState()
-
-    const depositCallback = useCallback(async () => {
+    return useAsyncFn(async () => {
         if (!token || !poolContract) {
-            setDepositState({
-                type: TransactionStateType.UNKNOWN,
-            })
             return
         }
-
-        // pre-step: start waiting for provider to confirm tx
-        setDepositState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(token.schema === SchemaType.Native ? amount : 0).toFixed(),
         }
-        const estimatedGas = await poolContract.methods
-            .depositTo(account, amount, controlledToken, referrer)
-            .estimateGas(config)
-            .catch((error) => {
-                setDepositState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                throw error
-            })
 
-        // step 2: blocking
-        return new Promise<string>((resolve, reject) => {
-            poolContract.methods
-                .depositTo(account, amount, controlledToken, referrer)
-                .send({
-                    ...config,
-                    gas: estimatedGas,
-                })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setDepositState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setDepositState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
-        })
+        const tx = await encodeContractTransaction(
+            poolContract,
+            poolContract.methods.depositTo(account, amount, controlledToken, referrer),
+            config,
+        )
+        return connection.sendTransaction(tx)
     }, [address, account, amount, token, referrer, controlledToken])
-
-    const resetCallback = useCallback(() => {
-        setDepositState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [depositState, depositCallback, resetCallback] as const
 }

@@ -4,12 +4,15 @@ import {
     registeredPlugins,
     usePostInfoDetails,
     Plugin,
-    usePluginI18NField,
+    PluginI18NFieldRender,
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import { Switch } from '@mui/material'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
+import { HTMLProps, useCallback } from 'react'
+import { Button, Skeleton, useTheme } from '@mui/material'
+import { PluginIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
@@ -52,25 +55,71 @@ export function PossiblePluginSuggestionPostInspector() {
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
-    const { t } = useI18N()
-    const t2 = usePluginI18NField()
     const { plugins } = props
+    const { t } = useI18N()
+    const theme = useTheme()
+    const onClick = useCallback((x: Plugin.DeferredDefinition) => {
+        Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
+    }, [])
+    const _plugins = useActivatedPluginsSNSAdaptor('any')
     if (!plugins.length) return null
+
     return (
         <>
             {plugins.map((x) => (
                 <MaskPostExtraInfoWrapper
                     open
                     key={x.ID}
-                    title={t('plugin_not_enabled', { plugin: t2(x.ID, x.name) })}
-                    action={
-                        <Switch
-                            sx={{ marginRight: '-12px' }}
-                            onChange={() => Services.Settings.setPluginMinimalModeEnabled(x.ID, false)}
-                        />
+                    title={<PluginI18NFieldRender field={x.name} pluginID={x.ID} />}
+                    publisher={
+                        x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
                     }
+                    publisherLink={x.publisher?.link}
+                    wrapperProps={_plugins.find((y) => y.ID === x.ID)?.wrapperProps}
+                    action={
+                        <Button
+                            size="small"
+                            startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
+                            variant="contained"
+                            onClick={() => onClick(x)}
+                            sx={{
+                                backgroundColor: theme.palette.maskColor.dark,
+                                color: 'white',
+                                width: '254px',
+                                height: '36px',
+                                fontSize: 14,
+                                fontWeight: 700,
+                                paddingTop: 1,
+                                paddingBottom: 1.125,
+                                lineHeight: 1.5,
+                                '&:hover': {
+                                    backgroundColor: theme.palette.maskColor.dark,
+                                },
+                            }}>
+                            {t('plugin_enables')}
+                        </Button>
+                    }
+                    content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
                 />
             ))}
         </>
+    )
+}
+
+const useRectangleStyles = makeStyles()(() => ({
+    rectangle: {
+        background: 'rgba(255, 255, 255, 0.5)',
+    },
+}))
+interface RectangleProps extends HTMLProps<HTMLDivElement> {}
+
+export function Rectangle(props: RectangleProps) {
+    const { classes } = useRectangleStyles()
+    return (
+        <div {...props}>
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={103} height={16} />
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={68} height={16} />
+            <Skeleton className={classes.rectangle} variant="text" animation={false} width={48} height={16} />
+        </div>
     )
 }

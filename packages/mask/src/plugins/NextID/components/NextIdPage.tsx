@@ -1,7 +1,8 @@
-import { NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
+import { uniqBy } from 'lodash-unified'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -68,39 +69,30 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
-
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        return (
-            <Button variant="contained" onClick={personaConnectStatus.action}>
-                {button}
-            </Button>
-        )
+        return <Button onClick={personaConnectStatus.action}>{button}</Button>
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
+    const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!currentPersona?.identifier.publicKeyAsHex) return
-        if (!currentPersona.identifier) return
+        if (!publicKeyAsHex) return
         if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
-            currentPersona.identifier.publicKeyAsHex,
-            platform,
-            visitingPersonaIdentifier.identifier.userId,
-        )
-    }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
+        return NextIDProof.queryIsBound(publicKeyAsHex, platform, visitingPersonaIdentifier.identifier.userId)
+    }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
     const {
         value: bindings,
-        loading,
+        loading: loadingBindings,
         retry: retryQueryBinding,
     } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-    }, [currentPersona, isOwn])
+        if (!publicKeyAsHex) return
+        return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
+    }, [publicKeyAsHex])
 
     const onVerify = async () => {
         reset()
@@ -109,7 +101,12 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         firstTab.click()
     }
 
-    if (personaActionButton) {
+    const ethereumProofs = useMemo(() => {
+        const proofs = bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
+        return proofs ? uniqBy(proofs, (v) => v.identity) : EMPTY_LIST
+    }, [bindings?.proofs])
+
+    if (personaActionButton && isOwn) {
         return (
             <Stack justifyContent="center" direction="row" mt="24px">
                 {personaActionButton}
@@ -117,7 +114,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
         )
     }
 
-    if (loading || loadingPersona || loadingVerifyInfo) {
+    if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
@@ -140,20 +137,18 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                 </Box>
 
                 <Stack justifyContent="center" direction="row" mt="24px">
-                    <Button variant="contained" onClick={onVerify}>
-                        {t.verify_Twitter_ID_button()}
-                    </Button>
+                    <Button onClick={onVerify}>{t.verify_Twitter_ID_button()}</Button>
                 </Stack>
             </Box>
         )
     }
 
-    if (bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum).length) {
+    if (ethereumProofs.length) {
         return (
             <>
                 <Box>
                     <Box>
-                        {bindings.proofs.map((x) => (
+                        {ethereumProofs.map((x) => (
                             <BindingItem
                                 deletable={isOwn}
                                 tipable={tipable}
@@ -166,9 +161,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                     </Box>
                     {isOwn && (
                         <Stack justifyContent="center" direction="row" mt="24px">
-                            <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                                {t.add_wallet_button()}
-                            </Button>
+                            <Button onClick={() => toggleBindDialog(true)}>{t.add_wallet_button()}</Button>
                         </Stack>
                     )}
                 </Box>
@@ -177,7 +170,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         open={openBindDialog}
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                         onBound={retryQueryBinding}
                     />
                 )}
@@ -187,7 +180,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
                         onUnBound={retryQueryBinding}
-                        bounds={bindings?.proofs ?? []}
+                        bounds={bindings?.proofs ?? EMPTY_LIST}
                     />
                 )}
             </>
@@ -216,9 +209,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                 )}
                 {isOwn && (
                     <Stack justifyContent="center" direction="row" mt="24px">
-                        <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                            {t.verify_wallet_button()}
-                        </Button>
+                        <Button onClick={() => toggleBindDialog(true)}>{t.verify_wallet_button()}</Button>
                     </Stack>
                 )}
             </Box>
@@ -227,7 +218,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? []}
+                    bounds={bindings?.proofs ?? EMPTY_LIST}
                     onBound={retryQueryBinding}
                 />
             )}

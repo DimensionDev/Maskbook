@@ -1,4 +1,8 @@
 import io from 'socket.io-client'
+import { unionWith, values } from 'lodash-unified'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { FungibleAsset, Transaction, HubOptions, createPageable, createIndicator } from '@masknet/web3-shared-base'
+import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
     SocketNameSpace,
@@ -7,12 +11,10 @@ import type {
     ZerionAssetResponseBody,
     ZerionAddressAsset,
     ZerionAddressCovalentAsset,
-    SocketRequestAssetScope,
 } from './type'
-import { values } from 'lodash-unified'
-import { getChainIdFromNetworkType, getZerionConstants, NetworkType } from '@masknet/web3-shared-evm'
-import { formatAssets } from './format'
-import type { Web3Plugin } from '@masknet/plugin-infra/web3'
+import { formatAssets, formatTransactions } from './format'
+import type { FungibleTokenAPI, HistoryAPI } from '../types'
+import { getAllEVMNativeAssets } from '../helpers'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
@@ -20,8 +22,8 @@ const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 let socket: SocketIOClient.Socket | null = null
 
-export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+export function resolveZerionAssetsScopeName(chainId: ChainId) {
+    return getZerionConstants(chainId).ASSETS_SCOPE_NAME ?? ''
 }
 
 function createSocket() {
@@ -62,7 +64,23 @@ function subscribeFromZerion(socketNamespace: SocketNameSpace, requestBody: Sock
     })
 }
 
-export async function getTransactionListFromZerion(address: string, scope: string, page?: number, size = 30) {
+async function getAssetsList(address: string, scope: string) {
+    return (await subscribeFromZerion(
+        {
+            namespace: 'address',
+            socket: createSocket(),
+        },
+        {
+            scope: [scope],
+            payload: {
+                address,
+                currency: 'usd',
+            },
+        },
+    )) as ZerionAssetResponseBody
+}
+
+async function getTransactionList(address: string, scope: string, page?: number, size = 30) {
     return (await subscribeFromZerion(
         {
             namespace: 'address',
@@ -81,47 +99,62 @@ export async function getTransactionListFromZerion(address: string, scope: strin
     )) as ZerionTransactionResponseBody
 }
 
-export async function getAssetsList(address: string, scope: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: 'address',
-            socket: createSocket(),
-        },
-        {
-            scope: [scope],
-            payload: {
-                address,
-                currency: 'usd',
-            },
-        },
-    )) as ZerionAssetResponseBody
-}
-
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
-type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
+export class ZerionAPI
+    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
+{
+    async getAssets(address: string, options?: HubOptions<ChainId>) {
+        let result: Array<FungibleAsset<ChainId, SchemaType>> = []
+        const pairs = getEnumAsArray(ChainId).map(
+            (x) => [x.value, getZerionConstants(x.value).ASSETS_SCOPE_NAME] as const,
+        )
+        for (const [chainId, scope] of pairs) {
+            if (!scope) continue
 
-export async function getAssetListByZerion(address: string) {
-    let result: Asset[] = []
-    const scopes = ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
-    for (const scope of scopes) {
-        const { meta, payload } = await getAssetsList(address, scope)
-        if (meta.status !== 'ok') throw new Error('Fail to load assets.')
+            const { meta, payload } = await getAssetsList(address, scope)
+            if (meta.status !== 'ok') throw new Error('Fail to load assets.')
 
-        const assets = Object.entries(payload).map(([key, value]) => {
-            if (key === 'assets') {
-                const assetsList = (values(value) as ZerionAddressAsset[]).filter(
-                    ({ asset }) =>
-                        asset.is_displayable && !filterAssetType.some((type) => type === asset.type) && asset.icon_url,
-                )
-                return formatAssets(assetsList, key)
-            }
+            const assets = Object.entries(payload).map(([key, value]) => {
+                if (key === 'assets') {
+                    const assetsList = (values(value) as ZerionAddressAsset[]).filter(
+                        ({ asset }) =>
+                            asset.is_displayable &&
+                            !filterAssetType.some((type) => type === asset.type) &&
+                            asset.icon_url,
+                    )
+                    return formatAssets(chainId, assetsList)
+                }
+                return formatAssets(chainId, values(value) as ZerionAddressCovalentAsset[])
+            })
 
-            return formatAssets(values(value) as ZerionAddressCovalentAsset[], key as SocketRequestAssetScope)
-        })
+            result = [...result, ...assets.flat()]
+        }
 
-        result = [...result, ...assets.flat()]
+        return createPageable(
+            unionWith(result, getAllEVMNativeAssets(), (a, z) => a.symbol === z.symbol),
+            createIndicator(options?.indicator),
+        )
     }
 
-    return result
+    async getTransactions(
+        address: string,
+        options?: HubOptions<ChainId>,
+    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        let result: Array<Transaction<ChainId, SchemaType>> = []
+        // xdai-assets is not support
+        const pairs = getEnumAsArray(ChainId).map(
+            (x) => [x.value, getZerionConstants(x.value).TRANSACTIONS_SCOPE_NAME] as const,
+        )
+        for (const [chainId, scope] of pairs) {
+            if (!scope) continue
+
+            const { meta, payload } = await getTransactionList(address, scope)
+            if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
+
+            result = [...result, ...formatTransactions(chainId, payload.transactions)]
+        }
+
+        return result
+    }
 }

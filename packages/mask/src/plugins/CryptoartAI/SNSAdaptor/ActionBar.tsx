@@ -11,12 +11,16 @@ import { CheckoutDialog } from './CheckoutDialog'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            marginLeft: theme.spacing(-0.5),
-            marginRight: theme.spacing(-0.5),
+            flex: 1,
+            gap: 8,
         },
         button: {
             flex: 1,
-            margin: `0 ${theme.spacing(0.5)}`,
+            backgroundColor: theme.palette.maskColor.dark,
+            color: 'white',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
         },
     }
 })
@@ -43,7 +47,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
 
     return (
-        <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
+        <Box className={classes.root} display="flex" justifyContent="center">
             {!assetSource?.isSoldOut &&
             !assetSource?.is_owner &&
             assetSource?.is24Auction &&
@@ -52,7 +56,6 @@ export function ActionBar(props: ActionBarProps) {
                     className={classes.button}
                     color="primary"
                     fullWidth
-                    variant="contained"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -62,11 +65,10 @@ export function ActionBar(props: ActionBarProps) {
             {!assetSource?.isSoldOut &&
             !assetSource?.is24Auction &&
             (!assetSource?.trade?.latestBid || assetSource?.trade?.latestBid < assetSource?.priceInEth) &&
-            assetSource?.trade?.isCanAuction ? (
+            assetSource?.trade?.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
-                    variant="contained"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -78,11 +80,7 @@ export function ActionBar(props: ActionBarProps) {
             !assetSource?.is24Auction &&
             assetSource?.priceInEth < 100000 &&
             assetSource?.trade?.isCanBuy ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
+                <ActionButton className={classes.button} color="primary" onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}

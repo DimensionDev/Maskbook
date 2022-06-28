@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,14 +46,10 @@ export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
                         color="primary"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={resolveTokenLinkOnExplorer({
-                            type: EthereumTokenType.Native,
-                            address: coin.contract_address,
-                            chainId: ChainId.Mainnet,
-                        })}>
+                        href={explorerResolver.fungibleTokenLink(ChainId.Mainnet, coin.contract_address)}>
                         {t('plugin_trader_view_on_etherscan')}
                     </Link>
-                    <Button variant="contained" className={classes.approve} onClick={onApprove}>
+                    <Button className={classes.approve} onClick={onApprove}>
                         {t('plugin_trader_safety_agree')}
                     </Button>
                 </Box>

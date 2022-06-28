@@ -1,18 +1,18 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, isZero } from '@masknet/web3-shared-base'
 import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
 import type { TradeProvider } from '@masknet/public-api'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
@@ -44,8 +44,8 @@ export function useV2Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
     const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
         strategy,
@@ -84,8 +84,8 @@ export function useV3Trade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
-    inputToken?: FungibleTokenDetailed,
-    outputToken?: FungibleTokenDetailed,
+    inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
+    outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
 ) {
     const { isNotAvailable, isExactIn, tradeAmount, inputCurrency, outputCurrency } = useTrade(
         strategy,

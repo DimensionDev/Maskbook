@@ -7,7 +7,8 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
-import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { formatPersonaFingerprint, PersonaInformation } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -129,7 +130,6 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 disabled={!isCurrentAccount || isBound || !!isWalletSigned || !isSupported}
                                 className={isWalletSigned ? classes.done : ''}
                                 loading={signature.wallet.loading}
-                                variant="contained"
                                 onClick={onWalletSign}
                                 endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingAnimation />}>
@@ -175,7 +175,6 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loadingPosition="end"
                                 className={isPersonaSigned ? classes.done : ''}
                                 loading={signature.persona.loading}
-                                variant="contained"
                                 onClick={onPersonaSign}
                                 endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingAnimation />}>

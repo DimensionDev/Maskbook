@@ -19,7 +19,9 @@
         "Aurora": [],
         "Aurora_Testnet": [],
         "Conflux": [],
-        "Evmos": []
+        "Evmos": [],
+        "Harmony": [],
+        "Harmony_Test": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -41,6 +43,8 @@
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
         "Conflux": "https://evmapi.confluxscan.net/api",
-        "Evmos": ""
+        "Evmos": "",
+        "Harmony": "https://explorer.harmony.one",
+        "Harmony_Test": ""
     }
 }

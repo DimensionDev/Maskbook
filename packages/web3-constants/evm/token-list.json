@@ -1,10 +1,10 @@
 {
-    "ERC20": {
+    "FUNGIBLE_TOKEN_LISTS": {
         "Mainnet": ["https://tokens.r2d2.to/latest/1/tokens.json"],
         "Ropsten": ["https://tokens.r2d2.to/latest/3/tokens.json"],
         "Rinkeby": ["https://tokens.r2d2.to/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
-        "Gorli": [],
+        "Gorli": ["https://tokens.r2d2.to/latest/5/tokens.json"],
         "BSC": ["https://tokens.r2d2.to/latest/56/tokens.json"],
         "BSCT": ["https://tokens.r2d2.to/latest/97/tokens.json"],
         "Matic": ["https://tokens.r2d2.to/latest/137/tokens.json"],
@@ -19,6 +19,32 @@
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
         "Aurora_Testnet": [],
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
-        "Evmos": ["https://tokens.r2d2.to/latest/9001/tokens.json"]
+        "Evmos": ["https://tokens.r2d2.to/latest/9001/tokens.json"],
+        "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
+        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"]
+    },
+    "NON_FUNGIBLE_TOKEN_LISTS": {
+        "Mainnet": ["https://tokens.r2d2.to/latest/1/non-fungible-tokens.json"],
+        "Ropsten": [],
+        "Rinkeby": [],
+        "Kovan": [],
+        "Gorli": [],
+        "BSC": [],
+        "BSCT": [],
+        "Matic": [],
+        "Mumbai": [],
+        "Arbitrum": [],
+        "Arbitrum_Rinkeby": [],
+        "xDai": [],
+        "Avalanche": [],
+        "Avalanche_Fuji": [],
+        "Celo": [],
+        "Fantom": [],
+        "Aurora": [],
+        "Aurora_Testnet": [],
+        "Conflux": [],
+        "Harmony": [],
+        "Harmony_Test": [],
+        "Evmos": []
     }
 }

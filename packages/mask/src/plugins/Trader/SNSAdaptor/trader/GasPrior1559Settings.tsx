@@ -1,24 +1,17 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../Wallet/messages'
-import {
-    formatGweiToWei,
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOptionConfig,
-    useChainId,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { useUpdateEffect } from 'react-use'
+import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import classnames from 'classnames'
-import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -117,7 +110,8 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
     ({ onCancel, onSave: onSave_, gasConfig, onSaveSlippage }) => {
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const { value: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
         const { t } = useI18N()
@@ -125,44 +119,43 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const [customGasPrice, setCustomGasPrice] = useState('0')
 
         // #region Get gas options from debank
-        const { value: gasOptions } = useAsync(async () => {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (!response) return { slow: 0, standard: 0, fast: 0 }
-
+        const gasOptions = useMemo(() => {
             return {
-                slow: response.data.slow.price,
-                standard: response.data.normal.price,
-                fast: response.data.fast.price,
+                slow: gasOptions_?.[GasOptionType.SLOW].suggestedMaxFeePerGas ?? 0,
+                standard: gasOptions_?.[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0,
+                fast: gasOptions_?.[GasOptionType.FAST].suggestedMaxFeePerGas ?? 0,
             }
-        }, [chainId])
+        }, [chainId, gasOptions_])
         // #endregion
 
         const options = useMemo(
             () => [
                 {
                     title: t('plugin_trader_gas_setting_standard'),
-                    gasPrice: gasOptions?.standard ?? 0,
+                    gasPrice: gasOptions?.standard,
                 },
                 {
                     title: t('plugin_trader_gas_setting_fast'),
-                    gasPrice: gasOptions?.fast ?? 0,
+                    gasPrice: gasOptions?.fast,
                 },
                 {
                     title: t('plugin_trader_gas_setting_custom'),
                     isCustom: true,
-                    gasPrice: customGasPrice ? formatGweiToWei(customGasPrice) : 0,
+                    gasPrice: customGasPrice ? customGasPrice : 0,
                 },
             ],
             [gasOptions, customGasPrice],
         )
 
-        const { value: nativeToken } = useNativeTokenDetailed()
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const { value: nativeToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
+        const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+            chainId: nativeToken?.chainId,
+        })
 
         // #region Confirm function
         const handleConfirm = useCallback(() => {
             onSave_({
-                gasPrice: toHex(new BigNumber(options[selected].gasPrice).toString()),
+                gasPrice: toHex(formatGweiToWei(options[selected].gasPrice).toString()),
             })
         }, [selected, options])
         // #endregion
@@ -178,6 +171,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             }
         }, [gasConfig, gasOptions])
 
+        useUpdateEffect(() => {
+            setCustomGasPrice('0')
+        }, [chainId])
+
         return (
             <>
                 <Accordion className={classes.accordion} elevation={0} defaultExpanded>
@@ -186,7 +183,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                         <Typography className={classes.accordingTitle}>
                             {t('plugin_trader_gas_option', {
                                 option: options[selected].title,
-                                value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
+                                value: new BigNumber(options[selected].gasPrice ?? 0).toString(),
                             })}
                         </Typography>
                     </AccordionSummary>
@@ -228,14 +225,14 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                                                     InputProps={{ classes: { root: classes.textFieldInput } }}
                                                 />
                                             ) : (
-                                                formatWeiToGwei(option.gasPrice ?? 0).toString()
+                                                new BigNumber(option.gasPrice ?? 0).toString()
                                             )}
                                         </Typography>
                                         {t('wallet_transfer_gwei')}
                                     </Typography>
                                     <Typography className={classes.cost} marginTop={option.isCustom ? 4 : 6}>
                                         {t('popups_wallet_gas_fee_settings_usd', {
-                                            usd: formatWeiToEther(option.gasPrice)
+                                            usd: formatGweiToEther(option.gasPrice)
                                                 .times(nativeTokenPrice)
                                                 .times(21000)
                                                 .toPrecision(3),
@@ -249,14 +246,12 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                 <Box className={classes.controller}>
                     <ActionButton
                         color="secondary"
-                        variant="contained"
                         className={classnames(classes.button, classes.cancelButton)}
                         onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton
                         color="primary"
-                        variant="contained"
                         className={classes.button}
                         onClick={() => {
                             handleConfirm()

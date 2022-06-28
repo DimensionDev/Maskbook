@@ -1,13 +1,15 @@
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,8 +45,8 @@ export interface ExchangeTokenPanelProps {
 
     disableBalance: boolean
     isSell: boolean
-    exchangeToken: FungibleTokenDetailed | undefined
-    onExchangeTokenChange: (token: FungibleTokenDetailed, key: string) => void
+    exchangeToken: FungibleToken<ChainId, SchemaType> | undefined
+    onExchangeTokenChange: (token: FungibleToken<ChainId, SchemaType>, key: string) => void
 
     onAdd: () => void
     onRemove: () => void
@@ -79,9 +81,9 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     // #region select token dialog
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: isSell,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
@@ -91,16 +93,14 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         isSell,
         dataIndex,
         exchangeToken?.address,
-        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
-        excludeTokensAddress.sort().join(),
-        // eslint-disable-next-line @dimensiondev/array/no-implicit-sort
-        selectedTokensAddress.sort().join(),
+        excludeTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
+        selectedTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
     ])
     // #endregion
 
     // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        exchangeToken?.type ?? EthereumTokenType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         exchangeToken?.address ?? '',
     )
     // #endregion

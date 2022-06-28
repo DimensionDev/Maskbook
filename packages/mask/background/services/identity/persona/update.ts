@@ -71,7 +71,7 @@ export async function setupPersona(id: PersonaIdentifier) {
 export async function loginExistPersonaByPrivateKey(privateKeyString: string): Promise<PersonaIdentifier | null> {
     const privateKey = decode(decodeArrayBuffer(privateKeyString))
     if (!isEC_Private_JsonWebKey(privateKey)) throw new TypeError('Invalid private key')
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey)
+    const identifier = await ECKeyIdentifierFromJsonWebKey(privateKey)
 
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
@@ -86,7 +86,7 @@ export async function loginExistPersonaByPrivateKey(privateKeyString: string): P
 export async function mobile_queryPersonaByPrivateKey(privateKeyString: string): Promise<MobilePersona | null> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey)
+    const identifier = await ECKeyIdentifierFromJsonWebKey(privateKey)
 
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
@@ -112,7 +112,7 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: ''): Pr
     }
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
-    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey)
+    const identifier = await ECKeyIdentifierFromJsonWebKey(key.privateKey)
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)

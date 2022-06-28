@@ -4,7 +4,7 @@ import { Button, styled, Tab, tabClasses, Tabs, tabsClasses, Typography } from '
 import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { File as FileIcon } from '@masknet/icons'
-import { useWallet } from '@masknet/web3-shared-evm'
+import { useWallet } from '@masknet/plugin-infra/web3'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
@@ -99,7 +99,7 @@ const StyledTab = styled(Tab)`
         min-width: 165px;
         padding: 7px 0;
         background-color: #f7f9fa;
-        border-radius: 4px 4px 0px 0px;
+        border-radius: 4px 4px 0 0;
         color: #15181b;
     }
     &.${tabClasses.selected} {
@@ -175,7 +175,7 @@ const BackupWallet = memo(() => {
                         <TabPanel
                             value={BackupTabs.JsonFile}
                             className={classes.tabPanel}
-                            style={{ flex: currentTab === BackupTabs.JsonFile ? '1' : '0' }}>
+                            style={{ flex: currentTab === BackupTabs.JsonFile ? 1 : 0 }}>
                             <div className={classes.placeholder}>
                                 <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
                             </div>
@@ -188,7 +188,7 @@ const BackupWallet = memo(() => {
                         <TabPanel
                             value={BackupTabs.PrivateKey}
                             className={classes.tabPanel}
-                            style={{ flex: currentTab === BackupTabs.PrivateKey ? '1' : '0' }}>
+                            style={{ flex: currentTab === BackupTabs.PrivateKey ? 1 : 0 }}>
                             <Typography className={classes.privateKey}>{privateKey ?? ''}</Typography>
                             <Typography className={classes.tip}>{t('popups_wallet_backup_private_key_tip')}</Typography>
                         </TabPanel>

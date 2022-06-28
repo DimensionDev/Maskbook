@@ -1,15 +1,17 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { useI18N, useMatchXS } from '../../../../utils'
-import { WalletMessages, WalletRPC } from '../../messages'
+import { WalletMessages } from '../../messages'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -22,15 +24,12 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3),
     },
     button: {
-        borderRadius: 9999,
+        borderRadius: isDashboardPage() ? 9999 : undefined,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             marginBottom: theme.spacing(2),
         },
     },
-    cancel: {
-        backgroundColor: theme.palette.background.default,
-        border: 'none',
-    },
+    cancel: {},
     title: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -59,15 +58,26 @@ const useStyles = makeStyles()((theme) => ({
 export function WalletRiskWarningDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
-    const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
+
+    const [account, setAccount] = useState('')
+    const [pluginID, setPluginID] = useState<NetworkPluginID>()
+
+    const { RiskWarning, Others } = useWeb3State(pluginID)
+
+    const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletRiskWarningDialogUpdated,
+        (ev) => {
+            if (!ev.open) return
+            setAccount(ev.account)
+            setPluginID(ev.pluginID)
+        },
+    )
 
     const onClose = useCallback(async () => {
-        setDialog({ open: false, type: 'cancel' })
-        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
-    }, [setDialog])
+        setRiskWarningDialog({ open: false })
+    }, [setRiskWarningDialog])
 
     const onConfirm = useCallback(async () => {
         if (!account) {
@@ -77,9 +87,9 @@ export function WalletRiskWarningDialog() {
             })
             return
         }
-        await WalletRPC.confirmRiskWarning(account)
-        setDialog({ open: false, type: 'confirm' })
-    }, [showSnackbar, account, setDialog])
+        await RiskWarning?.approve?.(account)
+        setRiskWarningDialog({ open: false })
+    }, [showSnackbar, account, setRiskWarningDialog])
 
     return (
         <InjectedDialog
@@ -108,7 +118,7 @@ export function WalletRiskWarningDialog() {
                             {t('nft_wallet_label')}
                         </Typography>
                         <Typography variant="body1" color="textPrimary" className={classes.texts}>
-                            {isMobile ? formatEthereumAddress(account, 5) : account}
+                            {isMobile ? Others?.formatAddress(account, 5) : account}
                         </Typography>
                     </Paper>
                 </Paper>
@@ -117,14 +127,12 @@ export function WalletRiskWarningDialog() {
                 <Button
                     className={classnames(classes.button, classes.cancel, 'dashboard-style')}
                     fullWidth
-                    variant="outlined"
                     onClick={onClose}
                     size="large">
                     {t('cancel')}
                 </Button>
                 <ActionButtonPromise
                     className={classes.button}
-                    variant="contained"
                     fullWidth
                     disabled={!account}
                     size="large"

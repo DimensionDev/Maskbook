@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
-import { Alert, Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
 import type {
     CompletionQuestionAnswer,
     PollResult,
@@ -18,6 +18,11 @@ import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
+import { PluginWalletConnectIcon } from '@masknet/icons'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,7 +31,6 @@ const useStyles = makeStyles()((theme) => {
             '--tabHeight': '35px',
 
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
             position: 'relative',
         },
@@ -98,6 +102,17 @@ const useStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.primary.main,
             },
         },
+        button: {
+            backgroundColor: theme.palette.maskColor.dark,
+            color: 'white',
+            fontSize: 14,
+            fontWeight: 700,
+            width: '100%',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
+            margin: '0 !important',
+        },
     }
 })
 
@@ -137,6 +152,7 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         postType,
         clueId,
@@ -182,74 +198,87 @@ export function FindTruman(props: FindTrumanProps) {
     }
 
     return (
-        <Card className={classes.root} elevation={0}>
-            {postType !== PostType.Encryption ? (
-                <>
-                    <CardMedia
-                        onLoad={() => {
-                            setLoadImg(false)
-                        }}
-                        alt=""
-                        component="img"
-                        height={140}
-                        sx={{
-                            visibility: loadImg ? 'hidden' : 'unset',
-                        }}
-                        image={storyInfo?.img}
-                    />
-                    {loadImg && (
-                        <Box sx={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%' }}>
-                            <Skeleton animation="wave" variant="rectangular" height={140} width="100%" />
-                        </Box>
-                    )}
-                    <CardHeader
-                        title={
-                            storyInfo && (
-                                <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between">
-                                    <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
-                                        {storyInfo.name}
-                                    </Typography>
-                                    <Box display="flex" columnGap={1}>
-                                        <Tooltip
-                                            PopperProps={{
-                                                disablePortal: true,
-                                            }}
-                                            arrow
-                                            placement="top"
-                                            title={
-                                                isCritical
-                                                    ? t('plugin_find_truman_status_critical')
-                                                    : isNoncritical
-                                                    ? t('plugin_find_truman_status_noncritical')
-                                                    : ''
-                                            }>
-                                            <Box>
-                                                {isCritical && <Avatar className={classes.critical}>C</Avatar>}
-                                                {isNoncritical && <Avatar className={classes.nonCritical}>N</Avatar>}
-                                            </Box>
-                                        </Tooltip>
-                                        <Chip
-                                            className={classes.chip}
-                                            color="primary"
-                                            size="small"
-                                            label={getPostTypeTitle(t, postType)}
-                                        />
+        <>
+            <Card className={classes.root} elevation={0}>
+                {postType !== PostType.Encryption ? (
+                    <>
+                        <CardMedia
+                            onLoad={() => {
+                                setLoadImg(false)
+                            }}
+                            alt=""
+                            component="img"
+                            height={140}
+                            sx={{
+                                visibility: loadImg ? 'hidden' : 'unset',
+                            }}
+                            image={storyInfo?.img}
+                        />
+                        {loadImg && (
+                            <Box sx={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%' }}>
+                                <Skeleton animation="wave" variant="rectangular" height={140} width="100%" />
+                            </Box>
+                        )}
+                        <CardHeader
+                            title={
+                                storyInfo && (
+                                    <Box
+                                        display="flex"
+                                        flexWrap="wrap"
+                                        alignItems="center"
+                                        justifyContent="space-between">
+                                        <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
+                                            {storyInfo.name}
+                                        </Typography>
+                                        <Box display="flex" columnGap={1}>
+                                            <Tooltip
+                                                PopperProps={{
+                                                    disablePortal: true,
+                                                }}
+                                                arrow
+                                                placement="top"
+                                                title={
+                                                    isCritical
+                                                        ? t('plugin_find_truman_status_critical')
+                                                        : isNoncritical
+                                                        ? t('plugin_find_truman_status_noncritical')
+                                                        : ''
+                                                }>
+                                                <Box>
+                                                    {isCritical && <Avatar className={classes.critical}>C</Avatar>}
+                                                    {isNoncritical && (
+                                                        <Avatar className={classes.nonCritical}>N</Avatar>
+                                                    )}
+                                                </Box>
+                                            </Tooltip>
+                                            <Chip
+                                                className={classes.chip}
+                                                color="primary"
+                                                size="small"
+                                                label={getPostTypeTitle(t, postType)}
+                                            />
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )
-                        }
+                                )
+                            }
+                        />
+                        {renderCard()}
+                    </>
+                ) : (
+                    <EncryptionCard clueId={clueId} />
+                )}
+
+                <Footer />
+            </Card>
+
+            <Box style={{ padding: 12 }}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <WalletConnectedBoundary
+                        classes={{ button: classes.button }}
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                     />
-                    {renderCard()}
-                </>
-            ) : (
-                <EncryptionCard clueId={clueId} />
-            )}
-            {!address && (
-                <Box sx={{ padding: '0 16px' }}>
-                    <Alert severity="info">{t('plugin_find_truman_connect_wallet_tip')}</Alert>
-                </Box>
-            )}
-            <Footer />
-        </Card>
+                </ChainBoundary>
+            </Box>
+        </>
     )
 }

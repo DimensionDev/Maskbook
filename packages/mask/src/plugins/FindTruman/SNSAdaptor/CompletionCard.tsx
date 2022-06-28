@@ -63,8 +63,6 @@ export default function CompletionCard(props: CompletionCardProps) {
                     answer: e.answer || '',
                 })),
             )
-        } catch (error) {
-            throw error
         } finally {
             setSubmitting(false)
         }
@@ -161,7 +159,6 @@ export default function CompletionCard(props: CompletionCardProps) {
                             {submitted ? (
                                 <Button
                                     className={completionStatus.correct ? classes.successButton : classes.errorButton}
-                                    variant="contained"
                                     startIcon={completionStatus.correct ? <CheckRounded /> : <ClearRounded />}
                                     color={completionStatus.correct ? 'success' : 'error'}>
                                     {completionStatus.correct
@@ -171,7 +168,6 @@ export default function CompletionCard(props: CompletionCardProps) {
                             ) : (
                                 <ActionButtonPromise
                                     color="primary"
-                                    variant="contained"
                                     disabled={!enabled}
                                     init={t(
                                         isClosed

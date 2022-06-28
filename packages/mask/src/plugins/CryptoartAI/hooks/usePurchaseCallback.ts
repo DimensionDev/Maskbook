@@ -1,88 +1,27 @@
-import { useCallback } from 'react'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    TransactionEventType,
-    TransactionStateType,
-    useTransactionState,
-    useAccount,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
-import { toFixed } from '@masknet/web3-shared-base'
 
 export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract()
-    const [purchaseState, setPurchaseState] = useTransactionState()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract(chainId)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
-    const purchaseCallback = useCallback(async () => {
-        if (!knownOriginDigitalAssetV2_contract) {
-            setPurchaseState({
-                type: TransactionStateType.UNKNOWN,
-            })
-            return
-        }
+    return useAsyncFn(async () => {
+        if (!knownOriginDigitalAssetV2_contract) return
 
-        // start waiting for provider to confirm tx
-        setPurchaseState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
-
-        // estimate gas and compose transaction
         const config = {
             from: account,
             value: toFixed(priceInWei),
-            gas: await knownOriginDigitalAssetV2_contract.methods
-                .purchase(editionNumber)
-                .estimateGas({
-                    from: account,
-                    value: toFixed(priceInWei),
-                })
-                .catch((error) => {
-                    setPurchaseState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    throw error
-                }),
         }
-
-        // send transaction and wait for hash
-        return new Promise<void>(async (resolve, reject) => {
-            knownOriginDigitalAssetV2_contract.methods
-                .purchase(editionNumber)
-                .send(config as NonPayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    setPurchaseState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setPurchaseState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    setPurchaseState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
-        })
-    }, [account, chainId, knownOriginDigitalAssetV2_contract])
-
-    const resetCallback = useCallback(() => {
-        setPurchaseState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
-
-    return [purchaseState, purchaseCallback, resetCallback] as const
+        const tx = await encodeContractTransaction(
+            knownOriginDigitalAssetV2_contract,
+            knownOriginDigitalAssetV2_contract.methods.purchase(editionNumber),
+            config,
+        )
+        return connection.sendTransaction(tx)
+    }, [account, chainId, knownOriginDigitalAssetV2_contract, connection])
 }

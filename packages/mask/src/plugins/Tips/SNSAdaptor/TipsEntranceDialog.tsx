@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
 import {
@@ -11,33 +10,34 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import { Button, ButtonProps, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { cloneDeep } from 'lodash-unified'
+import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
-import { useSupportedNetworks } from '../hooks/useSupportedNetworks'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+
 export interface TipsEntranceDialogProps {
     open: boolean
     onClose: () => void
 }
 const useStyles = makeStyles()((theme) => ({
     walletBtn: {
-        fontSize: '14px',
+        fontSize: 14,
     },
     alertBox: {
         marginBottom: '20px',
@@ -52,14 +52,15 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     dialogContent: {
+        minHeight: 600,
         height: 600,
         position: 'relative',
         boxSizing: 'border-box',
     },
     btnContainer: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row-reverse',
+        position: 'absolute',
+        right: 16,
+        maxWidth: '30%',
     },
     loading: {
         position: 'absolute',
@@ -85,7 +86,7 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
     if (step === BodyViewStep.AddWallet) return null
     return (
         <div className={classes.btnContainer}>
-            <Button onClick={onClick} className={classes.walletBtn} variant="contained" size="small">
+            <Button onClick={onClick} className={classes.walletBtn} size="small">
                 {step === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets}
             </Button>
         </div>
@@ -93,18 +94,17 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
 }
 
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const [showAlert, setShowAlert] = useState(true)
     const [bodyViewStep, setBodyViewStep] = useState<BodyViewStep>(BodyViewStep.Main)
     const [hasChanged, setHasChanged] = useState(false)
     const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
     const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
-    const supportedNetworks = useSupportedNetworks([NetworkPluginID.PLUGIN_EVM])
-
+    const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
     const { showSnackbar } = useCustomSnackbar()
-    const account = useAccount()
-    const nowTime = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
 
     const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
         setShowAlert(true)
@@ -123,7 +123,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
         currentPersonaIdentifier?.publicKeyAsHex,
     )
-    const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)
@@ -144,14 +144,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const setAsDefault = (idx: number) => {
         const changed = cloneDeep(rawPatchData)
-        changed.forEach((x: any) => (x.isDefault = 0))
+        changed.forEach((x) => (x.isDefault = 0))
         changed[idx].isDefault = 1
-        const defaultItem = changed[idx]
-        changed.splice(idx, 1)
-        changed.sort((a, b) => Number.parseInt(b.last_checked_at, 10) - Number.parseInt(a.last_checked_at, 10))
-        changed.unshift(defaultItem)
+        setHasChanged(!isEqual(changed, rawWalletList))
         setRawPatchData(changed)
-        setHasChanged(true)
     }
 
     const onSwitchChange = (idx: number, v: boolean) => {
@@ -171,14 +167,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             )
             if (!signResult) throw new Error('sign error')
             await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar(t('plugin_tips_persona_sign_success'), {
+            showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
             })
             retryKv()
             return true
         } catch (error) {
-            showSnackbar(t('plugin_tips_persona_sign_error'), {
+            showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
                 message: nowTime,
             })
@@ -194,7 +190,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         } else {
             setDialog({
                 open: true,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
             })
         }
     }, [account])
@@ -233,12 +228,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-                showSnackbar(t('plugin_tips_persona_sign_success'), {
+                showSnackbar(t.tip_persona_sign_success(), {
                     variant: 'success',
                     message: nowTime,
                 })
             } catch (error) {
-                showSnackbar(t('plugin_tips_persona_sign_error'), {
+                showSnackbar(t.tip_persona_sign_error(), {
                     variant: 'error',
                     message: nowTime,
                 })
@@ -253,9 +248,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         <InjectedDialog
             open={open}
             onClose={clickBack}
+            isOnBack={bodyViewStep !== BodyViewStep.Main}
             title={bodyViewStep}
             titleTail={
                 <WalletButton
+                    className={classes.walletBtn}
                     step={bodyViewStep}
                     onClick={() => {
                         setBodyViewStep(
@@ -280,13 +277,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
                     {bodyViewStep === BodyViewStep.Main && rawPatchData.length > 0 ? (
                         <div>
-                            {supportedNetworks?.map((x, idx) => {
+                            {supportedNetworkIds?.map((x, idx) => {
                                 return (
                                     <WalletsByNetwork
                                         wallets={rawPatchData}
                                         toSetting={() => setBodyViewStep(BodyViewStep.Setting)}
                                         key={idx}
-                                        network={x}
+                                        networkId={x}
                                         setAsDefault={setAsDefault}
                                     />
                                 )
@@ -315,21 +312,19 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <div className={classes.actions}>
                             <ActionButton
                                 fullWidth
-                                variant="outlined"
+                                variant="roundedOutlined"
                                 color="secondary"
                                 disabled={!hasChanged}
                                 onClick={onCancel}>
-                                {t('cancel')}
+                                {t.cancel()}
                             </ActionButton>
                             <LoadingButton
-                                color="primary"
-                                variant="contained"
-                                size="large"
+                                variant="roundedContained"
                                 loading={kvFetchState.loading}
                                 fullWidth
                                 disabled={!hasChanged}
                                 onClick={onConfirm}>
-                                {t('confirm')}
+                                {t.confirm()}
                             </LoadingButton>
                         </div>
                     )}

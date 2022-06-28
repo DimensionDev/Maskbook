@@ -3,7 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, languageSettings, userGuideStatus, userPinExtension } from '../../settings/settings'
+import {
+    currentSetupGuideStatus,
+    languageSettings,
+    userGuideStatus,
+    userGuideVersion,
+    userPinExtension,
+} from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
@@ -15,12 +21,12 @@ import {
     NextIDAction,
     EnhanceableSite,
     CrossIsolationMessages,
+    EncryptionTargetType,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import type { NextIDPayload } from '@masknet/shared-base'
 import { SetupGuideStep } from './SetupGuide/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
@@ -32,12 +38,6 @@ import type { IdentityResolved } from '@masknet/plugin-infra'
 interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
-}
-
-interface SignInfo {
-    payload: NextIDPayload
-    personaSign: string
-    twitterPost: string
 }
 
 function SetupGuideUI(props: SetupGuideUIProps) {
@@ -77,11 +77,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const handler = (val: IdentityResolved) => {
             if (username === '' && val.identifier) setUsername(val.identifier.userId)
         }
-        ui.collecting.identityProvider?.recognized.addListener(handler)
-
-        return () => {
-            ui.collecting.identityProvider?.recognized.removeListener(handler)
-        }
+        return ui.collecting.identityProvider?.recognized.addListener(handler)
     }, [username])
 
     useEffect(() => {
@@ -224,7 +220,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onDone = async () => {
         const network = ui.networkIdentifier
-        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== 'completed') {
+        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()
@@ -240,7 +236,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
 
         ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: 'Everyone',
+            target: EncryptionTargetType.Public,
         })
     }
 

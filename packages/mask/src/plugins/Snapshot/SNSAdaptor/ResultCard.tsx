@@ -125,11 +125,15 @@ function Content() {
                                 }}
                                 title={
                                     <Typography className={classes.ellipsisText}>
-                                        {result.powerDetail.reduce((sum, cur, i) => {
-                                            const name =
-                                                millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name
-                                            return `${sum} ${i === 0 ? '' : '+'} ${name}`
-                                        }, '')}
+                                        {result.powerDetail
+                                            .flatMap((detail, index) => {
+                                                const name = millify(detail.power, {
+                                                    precision: 2,
+                                                    lowercase: true,
+                                                })
+                                                return [index === 0 ? '' : '+', name, detail.name]
+                                            })
+                                            .join(' ')}
                                     </Typography>
                                 }
                                 placement="top"
@@ -151,7 +155,6 @@ function Content() {
             {proposal.isEnd ? (
                 <Button
                     color="primary"
-                    variant="outlined"
                     className={classes.resultButton}
                     onClick={() => {
                         const csv = parse(dataForCsv)

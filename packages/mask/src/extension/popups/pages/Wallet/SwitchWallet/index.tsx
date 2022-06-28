@@ -1,15 +1,15 @@
 import { memo, useCallback } from 'react'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
+import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({
     header: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#F7F9FA',
+        backgroundColor: '#ffffff',
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
@@ -43,7 +43,7 @@ const useStyles = makeStyles()({
     },
     copy: {
         fontSize: 12,
-        fill: '#1C68F3',
+        stroke: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -75,19 +75,17 @@ const useStyles = makeStyles()({
     secondaryButton: {
         backgroundColor: '#F7F9FA',
         color: '#1C68F3',
-        '&: hover': {
-            backgroundColor: '#dee0e1',
-        },
     },
 })
 
 const SwitchWallet = memo(() => {
     const { t } = useI18N()
-    const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
+
     const navigate = useNavigate()
-    const wallet = useWallet()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
+    const walletPrimary = useWalletPrimary(NetworkPluginID.PLUGIN_EVM)
 
     const handleClickCreate = useCallback(() => {
         if (!walletPrimary) {
@@ -98,18 +96,18 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [walletPrimary])
+    }, [walletPrimary, history])
 
-    const handleSelect = useCallback(async (address: string) => {
-        await WalletRPC.updateMaskAccount({
-            account: address,
-        })
+    const handleSelect = useCallback(
+        async (address: string | undefined) => {
+            await WalletRPC.updateMaskAccount({
+                account: address,
+            })
 
-        if (currentProviderSettings.value === ProviderType.MaskWallet)
-            await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
-
-        navigate(PopupRoutes.Wallet, { replace: true })
-    }, [])
+            navigate(PopupRoutes.Wallet, { replace: true })
+        },
+        [history],
+    )
 
     return (
         <>

@@ -1,25 +1,25 @@
 import urlcat from 'urlcat'
-import type { TransactionReceipt } from 'web3-core'
 import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
 import {
-    ChainId,
-    EthereumRpcType,
-    isNativeTokenAddress,
     isSameAddress,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+    NetworkPluginID,
+    RecentTransactionComputed,
+    TransactionDescriptor,
+    TransactionDescriptorType,
+} from '@masknet/web3-shared-base'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
-import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
-import type { ComputedPayload } from '../../../../../background-script/EthereumService'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useAsync } from 'react-use'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     list: {
@@ -100,32 +100,53 @@ export interface ActivityListProps {
 
 export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { transactions } = useContainer(WalletContext)
+    const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const dataSource =
-        transactions?.filter((transaction) => {
+    const { value: dataSource } = useAsync(async () => {
+        if (!TransactionFormatter) return []
+        const formattedTransactions = await Promise.all(
+            transactions.map(async (transaction) => {
+                const formatterTransaction = await TransactionFormatter.formatTransaction(chainId, transaction._tx)
+
+                return {
+                    formatterTransaction,
+                    transaction,
+                }
+            }),
+        )
+
+        return formattedTransactions.filter(({ transaction, formatterTransaction }) => {
             if (!tokenAddress) return true
             else if (isNativeTokenAddress(tokenAddress))
-                return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
-            else if (
-                transaction.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
-                (transaction.computedPayload?.name === 'transfer' ||
-                    transaction.computedPayload?.name === 'transferFrom')
-            ) {
-                return isSameAddress(transaction.computedPayload?._tx?.to, tokenAddress)
+                return formatterTransaction.type === TransactionDescriptorType.TRANSFER
+            else if (formatterTransaction.type === TransactionDescriptorType.INTERACTION) {
+                return isSameAddress(transaction._tx.to, tokenAddress)
             }
-            return false
-        }) ?? []
 
-    const chainId = useChainId()
-    return <ActivityListUI dataSource={dataSource} chainId={chainId} />
+            return false
+        })
+    }, [tokenAddress, transactions, chainId])
+
+    return (
+        <ActivityListUI
+            dataSource={dataSource ?? []}
+            chainId={chainId}
+            formatterTransactionLink={Others?.explorerResolver.transactionLink}
+        />
+    )
 })
 
 export interface ActivityListUIProps {
-    dataSource: RecentTransaction[]
+    dataSource: Array<{
+        transaction: RecentTransactionComputed<ChainId, Transaction>
+        formatterTransaction: TransactionDescriptor<ChainId, Transaction>
+    }>
     chainId: ChainId
+    formatterTransactionLink?: (chainId: ChainId, id: string) => string
 }
 
-export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }) => {
+export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId, formatterTransactionLink }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [isExpand, setExpand] = useState(!(dataSource.length > 3))
@@ -137,21 +158,18 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     return (
         <>
             <List dense className={classes.list}>
-                {dataSource.slice(0, !isExpand ? 3 : undefined).map((transaction, index) => {
-                    const toAddress = getToAddress(transaction.receipt, transaction.computedPayload)
+                {dataSource.slice(0, !isExpand ? 3 : undefined).map(({ transaction, formatterTransaction }, index) => {
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(
-                                chainId,
-                                transaction.receipt?.transactionHash ?? transaction.hash,
-                            )}
+                            href={formatterTransactionLink?.(chainId, transaction.indexId)}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
                             style={{ textDecoration: 'none' }}>
                             <ActivityListItem
                                 transaction={transaction}
-                                toAddress={toAddress}
+                                formatterTransaction={formatterTransaction}
+                                toAddress={transaction._tx.to}
                                 onSpeedUpClick={(e) => {
                                     e.preventDefault()
                                     setTransaction(transaction)
@@ -185,26 +203,3 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
         </>
     )
 })
-
-function getToAddress(receipt?: TransactionReceipt | null, computedPayload?: ComputedPayload | null) {
-    if (!computedPayload) return undefined
-    const type = computedPayload.type
-    switch (type) {
-        case EthereumRpcType.SEND_ETHER:
-            return receipt?.to
-        case EthereumRpcType.CONTRACT_INTERACTION:
-            switch (computedPayload.name) {
-                case 'transfer':
-                case 'transferFrom':
-                    return computedPayload.parameters?.to
-                case 'approve':
-                default:
-                    return receipt?.to
-            }
-        case EthereumRpcType.CONTRACT_DEPLOYMENT:
-            return receipt?.to
-        case EthereumRpcType.CANCEL:
-        default:
-            return undefined
-    }
-}

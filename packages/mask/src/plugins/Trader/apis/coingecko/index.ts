@@ -3,7 +3,9 @@ import { Flags } from '../../../../../shared'
 
 // #region get currency
 export async function getAllCurrencies() {
-    const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
+    const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, {
+        cache: 'force-cache',
+    })
     return response.json() as Promise<string[]>
 }
 // #endregion
@@ -74,7 +76,7 @@ export interface CoinInfo {
     platforms: Record<string, string>
     name: string
     symbol: string
-    tickers: {
+    tickers: Array<{
         base: string
         target: string
         market: {
@@ -105,7 +107,7 @@ export interface CoinInfo {
         trade_url: string
         coin_id: string
         target_coin_id?: string
-    }[]
+    }>
 }
 
 export async function getCoinInfo(coinId: string) {

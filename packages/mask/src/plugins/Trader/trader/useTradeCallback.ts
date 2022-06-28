@@ -22,15 +22,17 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
 import { useGetTradeContext } from './useGetTradeContext'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import { noop } from 'lodash-unified'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 
 export function useTradeCallback(
     provider?: TradeProvider,
     tradeComputed?: TradeComputed<unknown> | null,
     gasConfig?: GasOptionConfig,
     allowedSlippage?: number,
-) {
+): AsyncFnReturn<() => Promise<string | undefined>> {
     // trade context
     const context = useGetTradeContext(provider)
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -100,6 +102,10 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.TRISOLARIS:
             return uniswapV2Like
+        case TradeProvider.VENOMSWAP:
+            return uniswapV2Like
+        case TradeProvider.OPENSWAP:
+            return uniswapV2Like
         case TradeProvider.MDEX:
             return uniswapV2Like
         case TradeProvider.DIFFUSION:
@@ -107,6 +113,7 @@ export function useTradeCallback(
         case TradeProvider.EVMOSWAP:
             return uniswapV2Like
         case TradeProvider.CRONUS:
+        case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
@@ -124,6 +131,8 @@ export function useTradeCallback(
             return openocean
         default:
             if (provider) unreachable(provider)
-            return []
+            return [{ loading: false }, noop as () => Promise<undefined>] as AsyncFnReturn<
+                () => Promise<string | undefined>
+            >
     }
 }

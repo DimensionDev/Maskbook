@@ -14,6 +14,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 interface Props {
     onClose: () => void
     open: boolean
+    isOpenFromApplicationBoard?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,8 +48,8 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
     const { attachMetadata, dropMetadata } = useCompositionContext()
-    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
+    const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
     )
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
@@ -59,7 +60,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         } else {
             dropMetadata(META_KEY_2)
         }
-        closeWalletStatusDialog()
+        closeApplicationBoardDialog()
         props.onClose()
     }
 
@@ -87,6 +88,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     }
     return (
         <MaskDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
             open={props.open}
             title={t.__display_name()}

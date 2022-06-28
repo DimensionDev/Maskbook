@@ -17,12 +17,25 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <TransakIcon />
             const name = <Trans i18nKey="plugin_transak_name" />
+            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent(EntryComponentProps) {
                     const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-                    return <ApplicationEntry title={name} icon={icon} disabled={disabled} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            title={name}
+                            icon={icon}
+                            iconFilterColor={iconFilterColor}
+                            {...EntryComponentProps}
+                            onClick={
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
+                            }
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 10,
                 marketListSortingPriority: 6,
@@ -31,6 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 description: <Trans i18nKey="plugin_transak_description" />,
                 name,
                 category: 'dapp',
+                iconFilterColor,
             }
         })(),
     ],

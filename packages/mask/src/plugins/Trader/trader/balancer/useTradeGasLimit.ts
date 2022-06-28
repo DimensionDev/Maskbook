@@ -2,15 +2,17 @@ import type { SwapResponse, TradeComputed } from '../../types'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { TradeStrategy } from '../../types'
-import { EthereumTokenType, useAccount, useTraderConstants } from '@masknet/web3-shared-evm'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { SchemaType, useTraderConstants } from '@masknet/web3-shared-evm'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import { useTradeAmount } from './useTradeAmount'
 import { SLIPPAGE_DEFAULT } from '../../constants'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount } from '@masknet/plugin-infra/web3'
 
 export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId } = TargetChainIdContext.useContainer()
     const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(targetChainId)
@@ -40,15 +42,15 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
         )
 
         const inputTokenAddress =
-            trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
+            trade.inputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
-            trade.outputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+            trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
         const tx =

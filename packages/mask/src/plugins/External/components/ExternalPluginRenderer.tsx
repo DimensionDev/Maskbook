@@ -1,9 +1,6 @@
 import type { ExternalPluginLoadDetails } from '../types'
-import { Card, CardHeader, CardContent, Typography, Link, Button } from '@mui/material'
-import Services from '../../../extension/service'
-import { MaskExternalPluginPreviewRenderer, RenderContext } from '@masknet/external-plugin-previewer'
-import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import { createThirdPartyPopupContext } from '../sns-context'
+import { Card, CardHeader, Typography, Link, Button } from '@mui/material'
+// import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
 import { useI18N } from '../../../utils'
 
@@ -13,7 +10,6 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (
         <Button
-            variant="contained"
             size="small"
             sx={{ float: 'right' }}
             onClick={() => {
@@ -47,7 +43,7 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
                     </>
                 }
             />
-            <CardContent>
+            {/* <CardContent>
                 <RenderContext.Provider
                     value={{
                         permissionAwareOpen(url: string) {
@@ -68,7 +64,7 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
                         template={template.value}
                     />
                 </RenderContext.Provider>
-            </CardContent>
+            </CardContent> */}
         </Card>
     )
 }

@@ -1,13 +1,5 @@
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatAmount,
-    formatBalance,
-    useAccount,
-    useITOConstants,
-    useFungibleTokenBalance,
-} from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isGreaterThan, isZero, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -17,12 +9,16 @@ import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate'
 import type { PoolSettings } from './hooks/useFill'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
@@ -30,6 +26,7 @@ import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from
 import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
+import { useAccount, useFungibleTokenBalance, useChainId } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -126,11 +123,20 @@ export function CreateForm(props: CreateFormProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
-    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()
-    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
+
+    const { value: linkedPersona } = useCurrentLinkedPersona()
+
+    const senderName =
+        lastRecognizedIdentity.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
@@ -177,7 +183,7 @@ export function CreateForm(props: CreateFormProps) {
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
+        NetworkPluginID.PLUGIN_EVM,
         tokenAndAmount?.token?.address ?? '',
     )
 
@@ -239,10 +245,12 @@ export function CreateForm(props: CreateFormProps) {
             name: senderName,
             title: message,
             limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),
-            token: first?.token as ERC20TokenDetailed,
+            token: first?.token as FungibleToken<ChainId, SchemaType.ERC20>,
             total: formatAmount(first?.amount || '0', first?.token?.decimals),
             exchangeAmounts: rest.map((item) => formatAmount(item.amount || '0', item?.token?.decimals)),
-            exchangeTokens: rest.map((item) => item.token!),
+            exchangeTokens: rest.map((item) => item.token!) as Array<
+                FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>
+            >,
             qualificationAddress: qualificationAddress_,
             startTime,
             endTime,
@@ -465,24 +473,21 @@ export function CreateForm(props: CreateFormProps) {
                 </Box>
             ) : null}
             <Box className={classes.line}>
-                <EthereumWalletConnectedBoundary>
+                <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
-                        token={
-                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
-                        }>
+                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage}
                             onClick={onNext}>
                             {validationMessage || t('plugin_ito_next')}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
+                </WalletConnectedBoundary>
             </Box>
         </>
     )

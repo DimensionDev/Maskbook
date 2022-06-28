@@ -38,9 +38,9 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         wordBreak: 'break-word',
         marginTop: '20px',
-        color: MaskColorVar.textPrimary,
+        color: 'black',
     },
-    address: { marginTop: '20px', opacity: 0.6, color: MaskColorVar.textPrimary },
+    address: { marginTop: '20px', opacity: 0.6, color: 'black' },
     socialMedia: {
         width: '100%',
         display: 'flex',
@@ -93,6 +93,7 @@ const Profile = ({ url }: { url: string }) => {
                 </Typography>
             )}
 
+            {/* eslint-disable-next-line no-nested-ternary */}
             {!loading ? (
                 identity ? (
                     <ConnectButton address={identity?.address} refreshFollowList={retry} />

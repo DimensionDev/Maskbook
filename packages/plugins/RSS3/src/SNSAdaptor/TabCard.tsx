@@ -1,6 +1,6 @@
 import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
@@ -13,13 +13,15 @@ export enum TabCardType {
 
 export interface TabCardProps {
     type: TabCardType
-    addressNames: AddressName[]
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function TabCard({ type, addressNames }: TabCardProps) {
+export function TabCard({ type, socialAddressList }: TabCardProps) {
     const t = useI18N()
-    const addressName = addressNames.find((x) => x.type === AddressNameType.RSS3)
-    const userAddress = addressName?.resolvedAddress || ''
+    const addressName = socialAddressList?.find(
+        (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+    )
+    const userAddress = addressName?.address || ''
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
     const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
 
@@ -41,7 +43,7 @@ export function TabCard({ type, addressNames }: TabCardProps) {
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
             <Box display="flex" alignItems="center" justifyContent="space-between">
                 <div>{summary}</div>
-                <AddressViewer addressName={addressName} />
+                <AddressViewer identityAddress={addressName} />
             </Box>
             {isDonation ? (
                 <DonationPage donations={donations} loading={loadingDonations} addressLabel={addressName.label} />

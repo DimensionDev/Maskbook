@@ -1,8 +1,9 @@
-import { Card, Link, useTheme } from '@mui/material'
+import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
+import type { NonFungibleToken, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.1,
     },
     loadingFailImage: {
-        minHeight: '0px !important',
+        minHeight: '0 !important',
         maxWidth: 'none',
         width: 64,
         height: 64,
@@ -54,32 +55,28 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    provider: NonFungibleAssetProvider
+    provider: SourceType
     wallet?: Wallet
-    token: ERC721TokenDetailed
+    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, provider, readonly, renderOrder } = props
+    const { wallet, token, readonly, renderOrder } = props
     const { classes } = useStyles()
-    const theme = useTheme()
+
     return (
-        <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.linkWrapper}
-            href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+        <Link target="_blank" rel="noopener noreferrer" className={classes.linkWrapper}>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
                 <NFTCardStyledAssetPlayer
-                    contractAddress={token.contractDetailed.address}
-                    chainId={token.contractDetailed.chainId}
-                    url={token.info.mediaUrl}
+                    contractAddress={token.address}
+                    chainId={token.chainId}
+                    url={token.metadata?.mediaURL || token.metadata?.imageURL}
                     renderOrder={renderOrder}
                     tokenId={token.tokenId}
                     classes={{

@@ -1,6 +1,9 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextID'
+import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
+import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
@@ -17,6 +20,8 @@ interface StyleProps {
     minHeight: number
     fontSize: number
     marginBottom: number
+    border: string
+    color: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
@@ -24,7 +29,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontSize: props.fontSize,
         marginBottom: props.marginBottom,
         marginTop: 1,
-        marginRight: theme.spacing(0.5),
+        marginRight: theme.spacing(2),
+        border: props.border,
+    },
+    text: {
+        color: props.color,
     },
 }))
 
@@ -34,16 +43,45 @@ export function openNFTAvatarSettingDialog() {
 }
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const [style, setStyle] = useState<StyleProps>({ minHeight: 32, fontSize: 14, marginBottom: 11 })
+    const [style, setStyle] = useState<StyleProps>({
+        minHeight: 32,
+        fontSize: 14,
+        marginBottom: 11,
+        border: 'none',
+        color: '',
+    })
+    const [open, setOpen] = useState(false)
+
+    const personaConnectStatus = usePersonaConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus()
+
+    const createOrConnectPersona = useCallback(() => {
+        personaConnectStatus.action?.()
+    }, [personaConnectStatus])
+
+    const verifyPersona = useCallback(() => {
+        nextIDConnectStatus.reset()
+    }, [nextIDConnectStatus])
+
+    const clickHandler = () => {
+        if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected) return createOrConnectPersona()
+        if (!nextIDConnectStatus.isVerified) return verifyPersona()
+        setOpen(true)
+        return
+    }
 
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
         if (!editDom) return
+
         const css = window.getComputedStyle(editDom)
+        const spanCss = window.getComputedStyle(editDom.querySelector('span')!)
         setStyle({
             minHeight: Number(css.minHeight.replace('px', '')),
             fontSize: Number(css.fontSize.replace('px', '')),
             marginBottom: Number(css.marginBottom.replace('px', '')),
+            border: css.border,
+            color: spanCss.color,
         })
     }
 
@@ -52,5 +90,10 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useLocationChange(() => setStyleFromEditProfileSelector())
 
     const { classes } = useStyles(style)
-    return <NFTAvatarButton classes={{ root: classes.root }} onClick={openNFTAvatarSettingDialog} />
+    return (
+        <>
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
+            <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
+        </>
+    )
 }

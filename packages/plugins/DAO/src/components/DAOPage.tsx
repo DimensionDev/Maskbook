@@ -3,7 +3,7 @@ import IframeResizer from 'iframe-resizer-react'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIconPaletteContext } from '@masknet/icons'
 
-interface DAOPageProps {
+export interface DAOPageProps {
     identifier?: ProfileIdentifier
 }
 
