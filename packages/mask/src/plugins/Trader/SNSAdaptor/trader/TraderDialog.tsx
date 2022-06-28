@@ -81,6 +81,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         }
     }, [currentChainId])
 
+    console.log(chainId)
     return (
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>

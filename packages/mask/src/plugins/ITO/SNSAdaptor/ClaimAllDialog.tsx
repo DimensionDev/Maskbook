@@ -285,31 +285,27 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     </div>
                 </DialogContent>
                 <DialogActions style={{ padding: 0 }}>
-                    {(swappedTokens && swappedTokens.length > 0) ||
-                    (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
-                        <PluginWalletStatusBar className={classes.actionButtonWrapper}>
-                            <ChainBoundary
-                                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={chainId}
-                                noSwitchNetworkTip>
-                                {swappedTokens?.length ? (
-                                    <WalletConnectedBoundary>
-                                        <ActionButton
-                                            fullWidth
-                                            className={classNames(classes.actionButton)}
-                                            loading={isClaiming}
-                                            disabled={claimablePids!.length === 0 || isClaiming}
-                                            size="small"
-                                            onClick={claim}>
-                                            {t('plugin_ito_claim_all')}
-                                        </ActionButton>
-                                    </WalletConnectedBoundary>
-                                ) : (
-                                    <div />
-                                )}
-                            </ChainBoundary>
-                        </PluginWalletStatusBar>
-                    ) : null}
+                    <PluginWalletStatusBar className={classes.actionButtonWrapper}>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={chainId}
+                            noSwitchNetworkTip>
+                            {(swappedTokens && swappedTokens.length > 0) ||
+                            (chainId === ChainId.Matic && Flags.nft_airdrop_enabled && swappedTokens?.length) ? (
+                                <WalletConnectedBoundary>
+                                    <ActionButton
+                                        fullWidth
+                                        className={classNames(classes.actionButton)}
+                                        loading={isClaiming}
+                                        disabled={claimablePids!.length === 0 || isClaiming}
+                                        size="small"
+                                        onClick={claim}>
+                                        {t('plugin_ito_claim_all')}
+                                    </ActionButton>
+                                </WalletConnectedBoundary>
+                            ) : null}
+                        </ChainBoundary>
+                    </PluginWalletStatusBar>
                 </DialogActions>
             </InjectedDialog>
         </SnackbarProvider>

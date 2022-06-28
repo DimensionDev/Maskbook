@@ -351,6 +351,7 @@
     "plugin_wallet_switch_network": "Switch to {{network}}",
     "plugin_wallet_switch_network_under_going": "Switching to {{network}}",
     "plugin_wallet_connect_tips": "Please switch to this network in the mobile\napplication wallet you are connected to.",
+    "plugin_wallet_not_support_network": "This network is not supported yet.",
     "plugin_wallet_connect_network": "Change to {{network}} wallet",
     "plugin_wallet_change_network": "Change to {{network}}",
     "plugin_wallet_connect_network_under_going": "Change to {{network}} wallet",
