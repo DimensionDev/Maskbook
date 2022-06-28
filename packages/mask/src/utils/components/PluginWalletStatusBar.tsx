@@ -26,6 +26,7 @@ import { useMount } from 'react-use'
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
     actionProps?: {}
+    onClick?: () => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -98,7 +99,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 8,
     },
 }))
-export function PluginWalletStatusBar({ className, children }: WalletStatusBarProps) {
+export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
@@ -129,7 +130,7 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
         <Box className={cx(classes.root, className)}>
             {account ? (
                 <>
-                    <Box className={classes.wallet} onClick={openSelectProviderDialog}>
+                    <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
                         <WalletIcon
                             size={30}
                             badgeSize={12}
