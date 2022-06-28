@@ -295,11 +295,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 0 }}>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"
-                            sx={{ cursor: 'pointer', paddingLeft: 0.5 }}
+                            sx={{ cursor: 'pointer', paddingLeft: 0 }}
                             onClick={onClick}>
                             {t.add_collectible()}
                         </Typography>
