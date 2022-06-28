@@ -31,16 +31,11 @@ const duration = 60 * 60 * 24
 const useStyles = makeStyles()((theme) => ({
     field: {
         display: 'flex',
-        margin: theme.spacing(1, 0),
-        padding: '0 16px',
-    },
-    line: {
-        display: 'flex',
-        margin: theme.spacing(1),
+        gap: 16,
+        margin: 16,
     },
     input: {
         flex: 1,
-        padding: theme.spacing(0.5),
     },
 
     tip: {
@@ -48,7 +43,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     button: {
-        marginTop: theme.spacing(1.5),
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
     selectShrinkLabel: {
         top: 6,
