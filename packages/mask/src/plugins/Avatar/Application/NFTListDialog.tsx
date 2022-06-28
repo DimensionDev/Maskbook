@@ -1,14 +1,30 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import {
+    Box,
+    Button,
+    DialogActions,
+    DialogContent,
+    Divider,
+    ListItemIcon,
+    MenuItem,
+    Stack,
+    Typography,
+} from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
-import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
 import { uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useNonFungibleAssets,
+    useWallet,
+} from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
@@ -16,7 +32,13 @@ import { useSubscription } from 'use-subscription'
 import { context } from '../context'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useAsync } from 'react-use'
-import { WalletRPC } from '../../Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { PluginWalletStatusBar, useMenu } from '../../../utils'
+import { WalletItem } from './WalletList'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import Services from '../../../extension/service'
+import { WalletSettingIcon } from '../assets/setting'
+import { Verify2Icon } from '../assets/Verify2'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -41,6 +63,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         padding: 0,
         display: 'block',
+        margin: 0,
     },
     content: {
         height: 612,
@@ -114,6 +137,11 @@ const useStyles = makeStyles()((theme) => ({
     tabPanel: {
         marginTop: theme.spacing(3),
     },
+    divider: {
+        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
+        marginLeft: 16,
+        marginRight: 16,
+    },
 }))
 
 function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNonFungibleToken) {
@@ -128,10 +156,11 @@ interface NFTListDialogProps {
 }
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const { onNext, wallets, onSelected, tokenInfo } = props
+    const { onNext, wallets = [], onSelected, tokenInfo } = props
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount(currentPluginId)
+    const wallet = useWallet(currentPluginId)
     const currentChainId = useChainId(currentPluginId)
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
     const [open_, setOpen_] = useState(false)
@@ -275,6 +304,85 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    const openPopupsWindow = useCallback(() => {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            chainId,
+            internal: true,
+        })
+    }, [chainId])
+
+    console.log(wallets)
+    const [menu, openMenu] = useMenu([
+        account ? (
+            <>
+                <WalletItem
+                    walletName={wallet?.name ?? ''}
+                    selectedWallet={selectedAccount}
+                    wallet={account}
+                    nextIDWallets={wallets}
+                    chainId={chainId as ChainId}
+                    onConnectWallet={openSelectProviderDialog}
+                    onSelectedWallet={onChangeWallet}
+                    haveChangeWallet={Boolean(account)}
+                />
+                <Divider className={classes.divider} />
+            </>
+        ) : (
+            <>
+                <MenuItem key="Connect Wallet">
+                    <Button
+                        fullWidth
+                        onClick={openSelectProviderDialog}
+                        sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
+                        {t.connect_your_wallet()}
+                    </Button>
+                </MenuItem>
+                <Divider className={classes.divider} />
+            </>
+        ),
+        <>
+            {wallets
+                .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+                ?.filter((x) => !isSameAddress(x.identity, account))
+                .map((x, i) => (
+                    <div key={i}>
+                        <WalletItem
+                            selectedWallet={selectedAccount}
+                            wallet={x.identity}
+                            nextIDWallets={wallets}
+                            chainId={chainId as ChainId}
+                            onSelectedWallet={onChangeWallet}
+                        />
+                        <Divider className={classes.divider} />
+                    </div>
+                ))}
+        </>,
+        <MenuItem
+            key="Wallet Setting"
+            onClick={() => {
+                openPopupsWindow()
+            }}>
+            <ListItemIcon>
+                <WalletSettingIcon style={{ fontSize: 24 }} />
+            </ListItemIcon>
+            <Typography fontSize={14} fontWeight={700}>
+                {t.wallet_settings()}
+            </Typography>
+            <Verify2Icon style={{ marginLeft: 24 }} />
+        </MenuItem>,
+    ])
+    const onOpenMenu = useCallback(
+        (ev: React.MouseEvent<HTMLDivElement>) => {
+            ev.preventDefault()
+            openMenu(ev)
+        },
+        [openMenu],
+    )
+
     if (!wallets?.length && !account)
         return (
             <DialogContent className={classes.content}>
@@ -327,6 +435,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
+                <PluginWalletStatusBar onClick={(e) => onOpenMenu(e)}>
+                    <Button onClick={onSave} disabled={disabled} fullWidth>
+                        {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
+                    </Button>
+                </PluginWalletStatusBar>
+                {menu}
                 {/* TODO: Next Id Wallets action */}
                 {/* <PluginWalletStatusBar*/}
                 {/*    actionProps={{*/}

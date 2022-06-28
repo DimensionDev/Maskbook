@@ -26,7 +26,7 @@ import { useMount } from 'react-use'
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
     actionProps?: {}
-    onClick?: () => void
+    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -130,7 +130,7 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
         <Box className={cx(classes.root, className)}>
             {account ? (
                 <>
-                    <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
+                    <Box className={classes.wallet} onClick={(e) => onClick?.(e) ?? openSelectProviderDialog()}>
                         <WalletIcon
                             size={30}
                             badgeSize={12}
