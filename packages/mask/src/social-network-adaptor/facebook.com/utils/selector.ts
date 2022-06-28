@@ -98,25 +98,19 @@ export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    location.pathname.startsWith('/profile.php')
-        ? querySelector<E>('[role="main"] a[aria-selected="false"]')
-        : emptySelector
+    querySelector<E>('[role="main"] a[aria-selected="false"]')
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    location.pathname.startsWith('/profile.php')
-        ? querySelector<E>('[role="main"] a[aria-selected="true"]')
-        : emptySelector
+    querySelector<E>('[role="main"] a[aria-selected="true"]')
 
 // for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    location.pathname.startsWith('/profile.php') ? querySelector<E>('[role="main"] a:nth-child(7)') : emptySelector
+    querySelector<E>('[role="main"] a:nth-child(7)')
 
 // for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    location.pathname.startsWith('/profile.php')
-        ? querySelector<HTMLSpanElement>('[role="main"] a:nth-child(7)+span')
-        : emptySelector
+    querySelector<HTMLSpanElement>('[role="main"] a:nth-child(7)+span')
 
 // for inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
