@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
-import { PluginGameMessages } from '../messages'
-
+import { useCustomSnackbar } from '@masknet/theme'
+import { useAccount } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
+import { PluginGameMessages } from '../messages'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import GameList from './GameList'
 import GameWindow from './GameWindow'
 import GameShareDialog from './GameShareDialog'
-
 import { WalletMessages } from '../../Wallet/messages'
 import type { GameInfo, GameNFT } from '../types'
 import { useI18N } from '../../../utils'
@@ -31,6 +32,8 @@ export const ConnectContext = createContainer(() => {
 
 const WalletConnectDialog = () => {
     const { t } = useI18N()
+    const { showSnackbar } = useCustomSnackbar()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
@@ -45,6 +48,10 @@ const WalletConnectDialog = () => {
     }
 
     const handleGameOpen = (gameInfo: GameInfo) => {
+        if (gameInfo.wallet && !account) {
+            showSnackbar(t('plugin_game_list_play_error'), { variant: 'error' })
+            return
+        }
         closeDialog()
         _closeDialog()
         closeWalletDialog()
