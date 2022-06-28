@@ -38,7 +38,6 @@ const useStyles = makeStyles()(() => ({
     infoTitle: {
         fontSize: '18px',
         fontWeight: 'bold',
-        color: '#000',
     },
     introduction: {
         fontSize: '14px',

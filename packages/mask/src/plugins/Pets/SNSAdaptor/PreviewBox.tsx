@@ -142,7 +142,7 @@ export function PreviewBox(props: Props) {
                 </video>
             )
         } else {
-            return <ImageLoader className={classes.image} src={mediaUrl} />
+            return <ImageLoader className={classes.image} src={imageUrl} />
         }
     }
 

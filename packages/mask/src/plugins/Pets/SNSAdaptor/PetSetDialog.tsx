@@ -112,7 +112,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const user = useUser()
-    const { nfts, state } = useNFTs(user, configNFTs)
+    const { nfts, state } = useNFTs(user)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
