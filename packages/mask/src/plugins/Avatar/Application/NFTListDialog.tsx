@@ -441,18 +441,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Button>
                 </PluginWalletStatusBar>
                 {menu}
-                {/* TODO: Next Id Wallets action */}
-                {/* <PluginWalletStatusBar*/}
-                {/*    actionProps={{*/}
-                {/*        title: !selectedToken ? t.set_PFP_title() : t.set_avatar_title(),*/}
-                {/*        waiting: t.downloading_image(),*/}
-                {/*        action: onSave,*/}
-                {/*        disabled,*/}
-                {/*    }}*/}
-                {/*    onChange={onChangeWallet}*/}
-                {/*    userId={lastRecognizedProfile?.identifier?.userId}*/}
-                {/*    haveMenu*/}
-                {/* />*/}
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
