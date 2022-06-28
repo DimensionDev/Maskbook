@@ -1,4 +1,4 @@
-import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, startWatch, useI18N, useLocationChange } from '../../../../utils'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
@@ -224,6 +224,10 @@ function NFTAvatarInTwitter() {
             }
         }
     }, [location.pathname, showAvatar])
+
+    useLocationChange(() => {
+        setAvatar(undefined)
+    })
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
