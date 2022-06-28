@@ -130,7 +130,7 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
         <Box className={cx(classes.root, className)}>
             {account ? (
                 <>
-                    <Box className={classes.wallet} onClick={(e) => onClick?.(e) ?? openSelectProviderDialog()}>
+                    <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
                         <WalletIcon
                             size={30}
                             badgeSize={12}
