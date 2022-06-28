@@ -14,6 +14,7 @@ import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
 import { PluginWalletStatusBar } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -259,12 +260,14 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
             </Grid>
             <PluginWalletStatusBar>
-                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
-                    {t.send_symbol({
-                        amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
-                        symbol: settings?.token?.symbol ?? '-',
-                    })}
-                </ActionButton>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
+                        {t.send_symbol({
+                            amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
+                            symbol: settings?.token?.symbol ?? '-',
+                        })}
+                    </ActionButton>
+                </ChainBoundary>
             </PluginWalletStatusBar>
         </>
     )

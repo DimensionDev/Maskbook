@@ -28,6 +28,7 @@ import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@ma
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -328,24 +329,26 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     </Grid>
                 </Grid>
                 <PluginWalletStatusBar>
-                    <WalletConnectedBoundary
-                        classes={{
-                            connectWallet: classNames(classes.button, classes.sendButton),
-                            unlockMetaMask: classNames(classes.button, classes.sendButton),
-                        }}>
-                        <ActionButton
-                            size="medium"
-                            loading={isSending}
-                            disabled={isSending}
-                            onClick={onSendTx}
-                            className={classNames(classes.button, classes.sendButton)}
-                            fullWidth>
-                            {t.send_symbol({
-                                amount: tokenList.length.toString(),
-                                symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
-                            })}
-                        </ActionButton>
-                    </WalletConnectedBoundary>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary
+                            classes={{
+                                connectWallet: classNames(classes.button, classes.sendButton),
+                                unlockMetaMask: classNames(classes.button, classes.sendButton),
+                            }}>
+                            <ActionButton
+                                size="medium"
+                                loading={isSending}
+                                disabled={isSending}
+                                onClick={onSendTx}
+                                className={classNames(classes.button, classes.sendButton)}
+                                fullWidth>
+                                {t.send_symbol({
+                                    amount: tokenList.length.toString(),
+                                    symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
+                                })}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </PluginWalletStatusBar>
             </DialogContent>
         </InjectedDialog>

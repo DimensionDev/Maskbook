@@ -52,8 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     dialogContent: {
-        minHeight: 600,
-        height: 600,
         position: 'relative',
         boxSizing: 'border-box',
     },

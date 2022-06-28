@@ -155,7 +155,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 disableEnforceFocus
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
-                    onClose?.()
+                    !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
                 onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{

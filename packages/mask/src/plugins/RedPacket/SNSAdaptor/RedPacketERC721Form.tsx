@@ -22,6 +22,7 @@ import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@ma
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginWalletStatusBar } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -373,23 +374,25 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                 <PluginWalletStatusBar>
-                    <WalletConnectedBoundary>
-                        <EthereumERC721TokenApprovedBoundary
-                            validationMessage={validationMessage}
-                            owner={account}
-                            contractDetailed={contract}
-                            classes={{ approveButton: classes.approveButton }}
-                            operator={RED_PACKET_NFT_ADDRESS}>
-                            <ActionButton
-                                style={{ height: 40, padding: 0, margin: 0 }}
-                                size="large"
-                                disabled={!!validationMessage}
-                                fullWidth
-                                onClick={() => setOpenConfirmDialog(true)}>
-                                {t.next()}
-                            </ActionButton>
-                        </EthereumERC721TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary>
+                            <EthereumERC721TokenApprovedBoundary
+                                validationMessage={validationMessage}
+                                owner={account}
+                                contractDetailed={contract}
+                                classes={{ approveButton: classes.approveButton }}
+                                operator={RED_PACKET_NFT_ADDRESS}>
+                                <ActionButton
+                                    style={{ height: 40, padding: 0, margin: 0 }}
+                                    size="large"
+                                    disabled={!!validationMessage}
+                                    fullWidth
+                                    onClick={() => setOpenConfirmDialog(true)}>
+                                    {t.next()}
+                                </ActionButton>
+                            </EthereumERC721TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
                 </PluginWalletStatusBar>
             </Box>
             {open ? (

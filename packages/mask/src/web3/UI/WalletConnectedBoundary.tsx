@@ -4,7 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { isZero } from '@masknet/web3-shared-base'
+import { isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     useAccount,
     useChainId,
@@ -49,7 +49,8 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const account = useAccount()
     const chainIdValid = useChainId()
     const nativeTokenBalance = useNativeTokenBalance()
-    const approved = useRiskWarningApproved()
+    // TODO: Risk warning is currently only supported by evm, the default param will be removed in the future when they are all supported
+    const approved = useRiskWarningApproved(NetworkPluginID.PLUGIN_EVM)
 
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
