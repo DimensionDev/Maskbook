@@ -20,6 +20,8 @@ import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import type { PropsWithChildren } from 'react'
+import { useRef, useState } from 'react'
+import { useMount } from 'react-use'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -97,8 +99,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export function PluginWalletStatusBar({ className, children }: WalletStatusBarProps) {
+    const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
-
+    const [emptyChildren, setEmptyChildren] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     const account = useAccount(currentPluginId)
@@ -118,6 +121,10 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
+    useMount(() => {
+        if (ref.current?.innerHTML) return
+        setEmptyChildren(true)
+    })
     return (
         <Box className={cx(classes.root, className)}>
             {account ? (
@@ -161,7 +168,15 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
                             </Typography>
                         </Box>
                     </Box>
-                    <Box className={classes.action}>{children}</Box>
+                    <Box className={classes.action} ref={ref}>
+                        {emptyChildren ? (
+                            <Button fullWidth onClick={openSelectProviderDialog}>
+                                {t('wallet_status_button_change')}
+                            </Button>
+                        ) : (
+                            children
+                        )}
+                    </Box>
                 </>
             ) : (
                 <Button fullWidth onClick={openSelectProviderDialog}>
