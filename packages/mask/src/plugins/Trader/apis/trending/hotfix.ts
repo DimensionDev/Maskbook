@@ -1,5 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
@@ -98,6 +99,10 @@ const NETWORK_ID_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
+export const SCAM_ADDRESS_MAP: { [key in ChainId]?: string[] } = {
+    [ChainId.Mainnet]: ['0xc89f3672d1178c83470a53edf67c4f5521e8d400'],
+}
+
 getEnumAsArray(ChainId).map(({ value: chainId }) => {
     NETWORK_ID_MAP[DataProvider.COIN_GECKO][chainId] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
     NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][chainId] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
@@ -124,6 +129,10 @@ export function resolveChainId(id: string, dataProvider: DataProvider) {
 
 export function isBlockedId(chainId: ChainId, id: string, dataProvider: DataProvider) {
     return BLACKLIST_MAP[dataProvider][chainId]?.includes(id)
+}
+
+export function isBlockedAddress(chainId: ChainId, address: string) {
+    return SCAM_ADDRESS_MAP[chainId]?.find((scamAddress) => isSameAddress(scamAddress, address))
 }
 
 export function isBlockedKeyword(type: TagType, keyword: string) {

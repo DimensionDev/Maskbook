@@ -14,6 +14,7 @@ import {
     resolveChainId,
     resolveCoinAddress,
     resolveCoinId,
+    isBlockedAddress,
 } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
@@ -174,7 +175,11 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
-    return ids?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? []
+    return (
+        ids
+            ?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase())
+            ?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
+    )
 }
 // #endregion
 
