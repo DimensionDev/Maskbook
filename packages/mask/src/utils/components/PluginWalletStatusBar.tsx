@@ -138,7 +138,7 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
                             badgeSize={12}
                             mainIcon={providerDescriptor?.icon}
                             badgeIcon={networkDescriptor?.icon}
-                            iconFilterColor={providerDescriptor.iconFilterColor}
+                            iconFilterColor={providerDescriptor?.iconFilterColor}
                         />
                         <Box className={classes.description}>
                             <Typography className={classes.walletName}>
