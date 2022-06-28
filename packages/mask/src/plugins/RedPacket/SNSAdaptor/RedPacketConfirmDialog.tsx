@@ -1,6 +1,15 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import {
+    useAccount,
+    useChainId,
+    useBalance,
+    useNetworkType,
+    useWeb3,
+    useNativeToken,
+    useNativeTokenAddress,
+} from '@masknet/plugin-infra/web3'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -9,14 +18,6 @@ import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback'
-import {
-    useAccount,
-    useChainId,
-    useNetworkType,
-    useWeb3,
-    useNativeToken,
-    useNativeTokenAddress,
-} from '@masknet/plugin-infra/web3'
 import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
@@ -87,6 +88,8 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useI18N()
     const { onBack, settings, onCreated, onClose } = props
     const { classes } = useStyles()
+    const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    console.log({ balance })
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
@@ -116,10 +119,14 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         : undefined
 
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
-    let total = isNativeToken
-        ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
-        : (settings?.total as string)
-    const isWaitGasBeMinus = !estimateGasFee && isNativeToken
+    let total =
+        isNativeToken &&
+        new BigNumber(balance).isLessThan(
+            new BigNumber(settings?.total ?? '0').plus(new BigNumber(estimateGasFee ?? '')),
+        )
+            ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
+            : (settings?.total as string)
+    const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
     const isBalanceInsufficient = new BigNumber(total).isLessThanOrEqualTo(0)
     total = isBalanceInsufficient ? '0' : total
 
