@@ -16,11 +16,11 @@ export function useTipsWalletsList(
         }),
     )
     if (kv && kv.proofs.length > 0 && proofs.length > 0) {
-        const kvCache = kv.proofs.find((x) => x.identity === identity)
+        const bindings = kv.proofs.find((x) => x.identity === identity)?.content[PluginId.Tips]
         const result = proofs.map((x) => {
             x.isDefault = 0
             x.isPublic = 1
-            const matched = kvCache?.content[PluginId.Tips]?.find((proof) => isSameAddress(x.identity, proof.identity))
+            const matched = bindings?.find((proof) => isSameAddress(x.identity, proof.identity))
             if (matched) {
                 x.isDefault = matched.isDefault
                 x.isPublic = matched.isPublic
