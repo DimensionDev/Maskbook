@@ -35,16 +35,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         position: 'relative',
         padding: 0,
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
+            display: 'none',
         },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
-        },
+
         overflowX: 'hidden',
     },
     tabs: {
@@ -92,15 +85,21 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
+    const [showHistory, setShowHistory] = useState(false)
 
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
     const onNext = useCallback(() => {
         if (step === ITOCreateFormPageStep.NewItoPage) setStep(ITOCreateFormPageStep.ConfirmItoPage)
+        setShowHistory(false)
     }, [step])
 
     const onBack = useCallback(() => {
+        if (showHistory) {
+            setShowHistory(false)
+            return
+        }
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
     }, [step])
     // #endregion
@@ -238,8 +237,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
         if (!ITO2_CONTRACT_ADDRESS) onClose()
     }, [ITO2_CONTRACT_ADDRESS, onClose])
 
-    const [showHistory, setShowHistory] = useState(false)
-
     return (
         <InjectedDialog
             titleTail={
@@ -249,10 +246,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             disableBackdropClick
-            isOnBack={step === ITOCreateFormPageStep.ConfirmItoPage}
+            isOnBack={showHistory || step === ITOCreateFormPageStep.ConfirmItoPage}
             open={props.open}
             title={t('plugin_ito_display_name')}
-            onClose={onClose}>
+            onClose={() => (showHistory ? setShowHistory(false) : onClose())}>
             <DialogContent className={classes.content}>
                 {step === ITOCreateFormPageStep.NewItoPage ? (
                     !showHistory ? (

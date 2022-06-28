@@ -15,7 +15,7 @@ import {
 import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
-import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
+import { DialogTabs, RedPacketJSONPayload } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketPast } from './RedPacketPast'
@@ -45,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
             backgroundClip: 'padding-box',
         },
+        overflowX: 'hidden',
     },
     tabPaper: {
         position: 'sticky',
@@ -93,12 +94,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
     const [showHistory, setShowHistory] = useState(false)
+    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const onClose = useCallback(() => {
-        if (showHistory) {
-            setShowHistory(false)
-            return
-        }
         if (step === CreateRedPacketPageStep.ConfirmPage) {
             setStep(CreateRedPacketPageStep.NewRedPacketPage)
             return
@@ -109,7 +107,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props, state, step])
 
     const currentIdentity = useCurrentIdentity()
     const lastRecognized = useLastRecognizedIdentity()
@@ -147,14 +145,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onClose, chainId, senderName, connection],
     )
 
-    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
-        if (showHistory) {
-            setShowHistory(false)
-            return
-        }
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
-        setShowHistory(false)
     }, [step])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
@@ -163,14 +155,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
     }, [])
-
-    const tokenState = useState(RpTypeTabs.ERC20)
-
-    // nft dialog height depends on the detailed step
-    const [ERC721DialogHeight, setERC721DialogHeight] = useState(350)
-
-    const dialogContentHeight =
-        state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : ERC721DialogHeight
 
     const handleCreated = useCallback(
         (payload: RedPacketJSONPayload) => {
@@ -192,7 +176,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 open={props.open}
                 title={title}
                 titleTail={
-                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
                         <HistoryIcon onClick={() => setShowHistory((history) => !history)} />
                     ) : null
                 }
@@ -218,8 +202,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </MaskTabList>
                     ) : null
                 }
-                onClose={onClose}
-                isOnBack={step !== CreateRedPacketPageStep.NewRedPacketPage}
+                onClose={() => (showHistory ? setShowHistory(false) : onClose())}
+                isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
                 <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
