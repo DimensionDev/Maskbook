@@ -35,7 +35,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import { useSelectFungibleToken, useSelectGasSettings } from '@masknet/shared'
+import { useSelectFungibleToken, useSelectAdvancedSettings } from '@masknet/shared'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -149,7 +149,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     )
 
     const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectGasSettings()
+    const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <section className={classes.container}>
@@ -344,7 +344,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button
                                 size="small"
                                 onClick={async () => {
-                                    const token = await onSelectFungibleToken({})
+                                    const token = await onSelectFungibleToken()
                                     console.log(token)
                                 }}>
                                 Select Fungible Token
@@ -362,7 +362,14 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 size="small"
                                 onClick={async () => {
                                     onClose?.()
-                                    const gasSettings = await onSelectGasSettings({})
+                                    const gasSettings = await onSelectGasSettings({
+                                        transaction: {
+                                            from: account,
+                                            to: account,
+                                            gas: '300000',
+                                            value: '1',
+                                        },
+                                    })
                                     console.log(gasSettings)
                                 }}>
                                 Gas Settings

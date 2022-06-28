@@ -1,10 +1,9 @@
-import { makeStyles, MaskAlert } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { Typography } from '@mui/material'
-import { WarningIcon, WarningTriangleIcon } from '@masknet/icons'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import { Section } from './Section'
-import { SlippageToleranceSelector } from './SlippageToleranceSelector'
+import { SlippageToleranceForm } from './SlippageToleranceForm'
 import { SettingsContext } from './Context'
 
 const useStyles = makeStyles()((theme) => {
@@ -51,23 +50,12 @@ export function SlippageToleranceSection(props: SlippageToleranceSectionProps) {
                         <span className={classes.percentage}>{percentage}%</span>
                     </Typography>
                 }>
-                <SlippageToleranceSelector
+                <SlippageToleranceForm
                     slippageTolerances={DEFAULT_SLIPPAGE_TOLERANCES}
-                    onChange={setSlippageTolerance}
+                    onChange={(data) => {
+                        setSlippageTolerance(data ? Number.parseFloat(data.customSlippageTolerance) : 0)
+                    }}
                 />
-                {slippageTolerance !== 0 && slippageTolerance <= 0.5 ? (
-                    <MaskAlert icon={<WarningTriangleIcon />} severity="warning">
-                        {t.gas_settings_alert_low_slippage_tolerance()}
-                    </MaskAlert>
-                ) : null}
-
-                {slippageTolerance > 5 ? (
-                    <MaskAlert icon={<WarningIcon />} severity="error">
-                        {t.gas_settings_alert_high_slippage_tolerance({
-                            percentage,
-                        })}
-                    </MaskAlert>
-                ) : null}
             </Section>
         </div>
     )

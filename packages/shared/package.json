@@ -9,6 +9,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
+    "@hookform/resolvers": "^2.8.10",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared-base": "workspace:*",
@@ -29,10 +30,12 @@
     "lodash-es": "^4.17.21",
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
+    "react-hook-form": "^7.31.1",
     "react-use": "^17.4.0",
     "urlcat": "^2.0.4",
     "use-subscription": "1.6.0",
-    "unstated-next": "^1.1.0"
+    "unstated-next": "^1.1.0",
+    "zod": "^3.16.0"
   },
   "devDependencies": {
     "@types/qrcode": "^1.4.2"

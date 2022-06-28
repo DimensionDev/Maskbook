@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { makeStyles, MaskAlert, MaskColorVar, MaskTabList, MaskTextField } from '@masknet/theme'
+import { makeStyles, MaskColorVar, MaskTabList } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
-import { Grid, Tab, Typography } from '@mui/material'
-import { InfoIcon, WarningIcon } from '@masknet/icons'
+import { Tab, Typography } from '@mui/material'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { GasOptionSelector } from './GasOptionSelector'
 import { Section } from './Section'
 import { SettingsContext } from './Context'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainIdSupport } from '@masknet/plugin-infra/src/web3'
-import { chainResolver } from '@masknet/web3-shared-evm'
+import { GasForm } from './GasForm'
 
 enum GasSettingsType {
     Basic = 'Basic',
@@ -33,28 +33,10 @@ const useStyles = makeStyles()((theme) => {
         label: {
             color: MaskColorVar.textSecondary,
             fontWeight: 700,
+            fontSize: 14,
         },
         price: {
             fontWeight: 700,
-        },
-        caption: {
-            color: MaskColorVar.textSecondary,
-            fontWeight: 700,
-            margin: theme.spacing(1, 0, 1.5),
-        },
-        unit: {
-            color: MaskColorVar.textLight,
-        },
-        textfield: {
-            '& input[type=number]': {
-                '-moz-appearance': 'textfield',
-            },
-            '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
-            },
-            '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
-            },
         },
     }
 })
@@ -65,12 +47,8 @@ export function GasSection(props: GasSectionProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
     const [activeTab, setActiveTab] = useState(GasSettingsType.Basic)
-    const { pluginID, chainId, gasOptions, gasOptionType, maxFee, GAS_OPTION_NAMES } = SettingsContext.useContainer()
-
-    // only EVM is supported
-    if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
-
-    const isEIP1559 = chainResolver.isSupport(chainId, 'EIP1559')
+    const { pluginID, chainId, transaction, gasOption, setGasOption, gasOptions, gasOptionType, GAS_OPTION_NAMES } =
+        SettingsContext.useContainer()
 
     return (
         <div className={classes.root}>
@@ -84,100 +62,41 @@ export function GasSection(props: GasSectionProps) {
                                 : t.gas_settings_custom()}
                         </span>
                         <span className={classes.price}>
-                            {' '}
-                            {activeTab === GasSettingsType.Basic
-                                ? new BigNumber(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0).toFixed(2)
-                                : new BigNumber(maxFee).toFixed(2)}{' '}
+                            {` ${new BigNumber(gasOption?.suggestedMaxFeePerGas ?? 0).toFixed(2)}} `}
                             Gwei
                         </span>
                     </Typography>
                 }>
-                <TabContext value={activeTab}>
-                    <MaskTabList
-                        classes={{ root: classes.tabs }}
-                        variant="round"
-                        aria-label="Gas Tabs"
-                        onChange={(event, tab) => setActiveTab(tab as GasSettingsType)}>
-                        <Tab label={t.gas_settings_tab_basic()} value={GasSettingsType.Basic} />
-                        <Tab label={t.gas_settings_tab_advanced()} value={GasSettingsType.Advanced} />
-                    </MaskTabList>
-                </TabContext>
+                {pluginID === NetworkPluginID.PLUGIN_EVM ? (
+                    <TabContext value={activeTab}>
+                        <MaskTabList
+                            classes={{ root: classes.tabs }}
+                            variant="round"
+                            aria-label="Gas Tabs"
+                            onChange={(event, tab) => setActiveTab(tab as GasSettingsType)}>
+                            <Tab label={t.gas_settings_tab_basic()} value={GasSettingsType.Basic} />
+                            <Tab label={t.gas_settings_tab_advanced()} value={GasSettingsType.Advanced} />
+                        </MaskTabList>
+                    </TabContext>
+                ) : null}
                 {activeTab === GasSettingsType.Basic ? (
-                    <GasOptionSelector options={gasOptions} />
-                ) : (
-                    <>
-                        <MaskAlert icon={<InfoIcon />} severity="info">
-                            {t.gas_settings_error_low_gas_limit()}
-                        </MaskAlert>
-                        <Grid container direction="row" spacing={2}>
-                            <Grid item xs={isEIP1559 ? 12 : 6}>
-                                <MaskTextField
-                                    className={classes.textfield}
-                                    InputProps={{
-                                        type: 'number',
-                                    }}
-                                    label={
-                                        <Typography className={classes.caption}>
-                                            {t.gas_settings_label_gas_limit()}
-                                        </Typography>
-                                    }
-                                />
-                            </Grid>
-                            {isEIP1559 ? null : (
-                                <Grid item xs={6}>
-                                    <MaskTextField
-                                        className={classes.textfield}
-                                        InputProps={{
-                                            type: 'number',
-                                        }}
-                                        label={
-                                            <Typography className={classes.caption}>
-                                                {t.gas_settings_label_gas_price()}
-                                            </Typography>
-                                        }
-                                    />
-                                </Grid>
-                            )}
-                        </Grid>
-                        {isEIP1559 ? (
-                            <>
-                                <Grid container direction="row" spacing={2}>
-                                    <Grid item xs={6}>
-                                        <MaskTextField
-                                            className={classes.textfield}
-                                            InputProps={{
-                                                type: 'number',
-                                                endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                            }}
-                                            label={
-                                                <Typography className={classes.caption}>
-                                                    {t.gas_settings_label_max_priority_fee()}
-                                                </Typography>
-                                            }
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <MaskTextField
-                                            className={classes.textfield}
-                                            InputProps={{
-                                                type: 'number',
-                                                endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
-                                            }}
-                                            label={
-                                                <Typography className={classes.caption}>
-                                                    {t.gas_settings_label_max_fee()}
-                                                </Typography>
-                                            }
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </>
-                        ) : null}
-                        <MaskAlert icon={<WarningIcon />} severity="error">
-                            {t.gas_settings_error_low_gas_limit()}
-                        </MaskAlert>
-                    </>
-                )}
+                    <GasOptionSelector
+                        options={gasOptions}
+                        onChange={(gasOption) => {
+                            setGasOption(gasOption)
+                        }}
+                    />
+                ) : transaction && gasOptions && pluginID === NetworkPluginID.PLUGIN_EVM ? (
+                    <GasForm
+                        chainId={chainId as ChainId}
+                        transaction={transaction as Transaction}
+                        gasOptions={gasOptions}
+                        onChange={(gasOption) => {
+                            if (!gasOption) setGasOption(null)
+                            else setGasOption(gasOption as Web3Helper.GasOptionAll)
+                        }}
+                    />
+                ) : null}
             </Section>
         </div>
     )

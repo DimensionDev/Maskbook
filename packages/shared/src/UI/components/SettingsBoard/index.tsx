@@ -18,14 +18,14 @@ const useStyles = makeStyles()((theme) => {
 export interface SettingsBoardProps {
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
-    onSubmit?(settings: { slippageTolerance?: number; option?: Web3Helper.GasOptionAll }): void
+    onSubmit?(settings: { slippageTolerance?: number; transaction?: Web3Helper.TransactionAll }): void
 }
 
 export function SettingsBoard(props: SettingsBoardProps) {
     const { disableGasPrice = false, disableSlippageTolerance = false, onSubmit } = props
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const { gasOptions, gasOptionType, slippageTolerance } = SettingsContext.useContainer()
+    const { transaction, gasOption, slippageTolerance } = SettingsContext.useContainer()
 
     return (
         <div className={classes.root}>
@@ -36,10 +36,11 @@ export function SettingsBoard(props: SettingsBoardProps) {
                 fullWidth
                 variant="contained"
                 color="primary"
+                disabled={(!disableGasPrice && !gasOption) || (!disableSlippageTolerance && slippageTolerance === 0)}
                 onClick={() =>
                     onSubmit?.({
                         slippageTolerance,
-                        option: gasOptions?.[gasOptionType],
+                        transaction,
                     })
                 }>
                 {t.dialog_confirm()}

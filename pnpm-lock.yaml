@@ -1196,6 +1196,7 @@ importers:
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
+      '@hookform/resolvers': ^2.8.10
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
@@ -1206,6 +1207,7 @@ importers:
       '@masknet/web3-shared-flow': workspace:*
       '@masknet/web3-shared-solana': workspace:*
       '@react-hookz/web': ^14.2.2
+      '@solana/web3.js': 1.39.1
       '@types/qrcode': ^1.4.2
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
@@ -1215,12 +1217,15 @@ importers:
       lodash-es: ^4.17.21
       qrcode: ^1.5.0
       react-feather: ^2.0.9
+      react-hook-form: ^7.31.1
       react-use: ^17.4.0
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
       use-subscription: 1.6.0
+      zod: ^3.16.0
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
+      '@hookform/resolvers': 2.8.10_react-hook-form@7.31.1
       '@masknet/icons': link:../icons
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/shared-base': link:../shared-base
@@ -1231,6 +1236,7 @@ importers:
       '@masknet/web3-shared-flow': link:../web3-shared/flow
       '@masknet/web3-shared-solana': link:../web3-shared/solana
       '@react-hookz/web': 14.2.2
+      '@solana/web3.js': 1.39.1
       '@types/qrcode': 1.4.2
       anchorme: 2.1.2
       bignumber.js: 9.0.2
@@ -1240,10 +1246,12 @@ importers:
       lodash-es: 4.17.21
       qrcode: 1.5.0
       react-feather: 2.0.9
+      react-hook-form: 7.31.1
       react-use: 17.4.0
       unstated-next: 1.1.0
       urlcat: 2.0.4
       use-subscription: 1.6.0
+      zod: 3.16.0
 
   packages/shared-base:
     specifiers:
@@ -6951,7 +6959,7 @@ packages:
     resolution: {integrity: sha512-Q7XnWTAiU7n7GcoINDAAMLO7CJHpm5kPK46HKwJi2x0cusHQ3WFa7QEp6aPzH7tuf7yl/Kw1lYitcwTVOvqARA==}
     engines: {node: '>=12.20.0'}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       '@ethersproject/sha2': 5.5.0
       '@solana/buffer-layout': 4.0.0
       bn.js: 5.2.0
@@ -9296,7 +9304,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 17.0.34
+      '@types/node': 17.0.45
 
   /@types/d3-array/1.2.9:
     resolution: {integrity: sha512-E/7RgPr2ylT5dWG0CswMi9NpFcjIEDqLcUSBgNHe/EMahfqYaTx4zhcggG3khqoEB/leY4Vl6nTSbwLUPjXceA==}
@@ -9524,21 +9532,12 @@ packages:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
     dev: true
 
-  /@types/express-serve-static-core/4.17.28:
-    resolution: {integrity: sha512-P1BJAEAW3E2DJUlkgq4tOL3RyMunoWXqbSCygWo5ZIWTjUgN1YnaXWW4VWl/oc8vs/XoYibEGBKP0uZyF4AHig==}
-    dependencies:
-      '@types/node': 17.0.34
-      '@types/qs': 6.9.7
-      '@types/range-parser': 1.2.4
-    dev: false
-
   /@types/express-serve-static-core/4.17.29:
     resolution: {integrity: sha512-uMd++6dMKS32EOuw1Uli3e3BPgdLIXmezcfHv7N4c1s3gkhikBplORPpMq3fuWkxncZN1reb16d5n8yhQ80x7Q==}
     dependencies:
       '@types/node': 17.0.45
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
-    dev: true
 
   /@types/express/4.17.13:
     resolution: {integrity: sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==}
@@ -10028,7 +10027,7 @@ packages:
   /@types/ws/7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 17.0.34
+      '@types/node': 17.0.45
     dev: false
 
   /@types/ws/8.5.3:
@@ -13056,7 +13055,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -15845,7 +15844,7 @@ packages:
     dev: false
 
   /es6-promisify/5.0.0:
-    resolution: {integrity: sha1-UQnWLz5W6pZ8S2NQWu8IKRyKUgM=}
+    resolution: {integrity: sha512-C+d6UdsYDk0lMebHNR4S2NybQMMngAOnOwYBQjTOiv0MkoJMP0Myw2mgpDLBcpfCmRLxyFqYhS/CfOENq4SJhQ==}
     dependencies:
       es6-promise: 4.2.8
     dev: false
@@ -16982,7 +16981,7 @@ packages:
     dev: false
 
   /eyes/0.1.8:
-    resolution: {integrity: sha1-Ys8SAjTGg3hdkCNIqADvPgzCC8A=}
+    resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
     dev: false
 
@@ -19873,9 +19872,9 @@ packages:
     hasBin: true
     dependencies:
       '@types/connect': 3.4.35
-      '@types/express-serve-static-core': 4.17.28
+      '@types/express-serve-static-core': 4.17.29
       '@types/lodash': 4.14.182
-      '@types/node': 17.0.34
+      '@types/node': 17.0.45
       '@types/ws': 7.4.7
       commander: 2.20.3
       delay: 5.0.0
@@ -20639,7 +20638,7 @@ packages:
     dev: false
 
   /json-stringify-safe/5.0.1:
-    resolution: {integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=}
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: false
 
   /json-text-sequence/0.1.1:
@@ -23520,6 +23519,17 @@ packages:
         optional: true
     dev: true
 
+  /promise-inflight/1.0.1_bluebird@3.7.2:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dependencies:
+      bluebird: 3.7.2
+    dev: true
+
   /promise-to-callback/1.0.0:
     resolution: {integrity: sha512-uhMIZmKM5ZteDMfLgJnoSq9GCwsNKrYau73Awf1jIy6/eUcuuZ3P+CD9zUv0kJsIUbU+x6uLNIhXhLHDs1pNPA==}
     engines: {node: '>=0.10.0'}
@@ -25044,7 +25054,7 @@ packages:
   /rpc-websockets/7.4.16:
     resolution: {integrity: sha512-0b7OVhutzwRIaYAtJo5tqtaQTWKfwAsKnaThOSOy+VkhVdleNUgb8eZnWSdWITRZZEigV5uPEIDr5KZe4DBrdQ==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
       circular-json: 0.5.9
       eventemitter3: 4.0.7
       uuid: 8.3.2

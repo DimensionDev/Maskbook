@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Box, Divider } from '@mui/material'
+import { Box, Divider, Skeleton } from '@mui/material'
 import type { GasOptionType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { GasOption } from './GasOption'
@@ -19,12 +19,21 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: theme.spacing(0, 2),
         },
+        skeleton: {
+            height: 201.5,
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+        },
+        rectangle: {
+            borderRadius: 8,
+        },
     }
 })
 
 export interface GasOptionSelectorProps {
     options?: Record<GasOptionType, Web3Helper.GasOptionAll>
-    onChange?: (type: GasOptionType, option: Web3Helper.GasOptionAll) => void
+    onChange?: (option: Web3Helper.GasOptionAll) => void
 }
 
 export function GasOptionSelector(props: GasOptionSelectorProps) {
@@ -32,7 +41,16 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     const { classes } = useStyles()
     const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
 
-    if (!options) return null
+    if (!options)
+        return (
+            <Box className={classes.root}>
+                <div className={classes.skeleton}>
+                    <Skeleton className={classes.rectangle} height={62} variant="rectangular" />
+                    <Skeleton className={classes.rectangle} height={62} variant="rectangular" />
+                    <Skeleton className={classes.rectangle} height={62} variant="rectangular" />
+                </div>
+            </Box>
+        )
 
     return (
         <Box className={classes.root}>
@@ -48,7 +66,7 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
                                 checked={type_ === gasOptionType}
                                 onClick={() => {
                                     setGasOptionType(type_)
-                                    onChange?.(type_, option)
+                                    onChange?.(option)
                                 }}
                             />
                         </React.Fragment>

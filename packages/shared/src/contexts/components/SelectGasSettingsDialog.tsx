@@ -10,6 +10,8 @@ import { InjectedDialog } from '../components'
 import { SettingsBoard } from '../../UI/components/SettingsBoard'
 import { SettingsContext } from '../../UI/components/SettingsBoard/Context'
 
+const isDashboard = isDashboardPage()
+
 interface StyleProps {
     compact: boolean
 }
@@ -42,18 +44,21 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    transaction?: Web3Helper.Definition[T]['Transaction']
     title?: string
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
-    onSubmit?(settings: { slippageTolerance?: number; option?: Web3Helper.GasOptionAll } | null): void
+    onSubmit?(
+        settings: { slippageTolerance?: number; transaction?: Web3Helper.Definition[T]['Transaction'] } | null,
+    ): void
     onClose?(): void
 }
 
-const isDashboard = isDashboardPage()
 export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     open,
     pluginID,
     chainId,
+    transaction,
     disableGasPrice,
     disableSlippageTolerance,
     onSubmit,
@@ -81,6 +86,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
                     initialState={{
                         pluginID: pluginID_,
                         chainId: chainId_,
+                        transaction,
                     }}>
                     <SettingsBoard
                         disableGasPrice={disableGasPrice}

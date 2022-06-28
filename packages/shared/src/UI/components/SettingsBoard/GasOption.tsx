@@ -64,7 +64,7 @@ export function GasOption(props: GasOptionProps) {
             {checked ? <CheckCircle color="inherit" /> : <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
             <Typography className={classes.estimate}>
-                &lt;
+                &lt;{' '}
                 {formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
                     addSuffix: true,
                     locale: getLocale(lang),
