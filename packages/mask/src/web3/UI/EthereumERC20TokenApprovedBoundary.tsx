@@ -44,8 +44,9 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'left',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor?.bottom,
+        color: theme.palette.maskColor.bottom,
         whiteSpace: 'normal',
+        backgroundColor: theme.palette.maskColor.tips,
     },
 }))
 
