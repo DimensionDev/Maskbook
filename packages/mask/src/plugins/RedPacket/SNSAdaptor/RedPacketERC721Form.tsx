@@ -75,6 +75,17 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 12,
             padding: theme.spacing(1.5, 1.5, 1, 1),
             boxSizing: 'border-box',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
         },
         tokenSelectorWrapper: {
             position: 'relative',
@@ -142,7 +153,7 @@ const useStyles = makeStyles()((theme) => {
         selectWrapper: {
             display: 'flex',
             alignItems: 'center',
-            margin: '16px 0 8px 0',
+            margin: 0,
         },
         option: {
             display: 'flex',
@@ -192,6 +203,11 @@ const useStyles = makeStyles()((theme) => {
         },
         assetImgWrapper: {
             maxHeight: 155,
+        },
+        approveButton: {
+            height: 40,
+            margin: 0,
+            padding: 0,
         },
     }
 })
@@ -275,12 +291,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     return (
         <>
             <Box className={classes.root}>
-                <ERC721ContractSelectPanel
-                    contract={contract}
-                    onContractChange={setContract}
-                    balance={balance}
-                    onBalanceChange={setBalance}
-                />
+                <Box style={{ margin: '16px 0' }}>
+                    <ERC721ContractSelectPanel
+                        contract={contract}
+                        onContractChange={setContract}
+                        balance={balance}
+                        onBalanceChange={setBalance}
+                    />
+                </Box>
                 {contract && balance ? (
                     loadingOwnerList ? (
                         <CircularProgress size={24} className={classes.loadingOwnerList} />
@@ -353,23 +371,27 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     </>
                 ) : null}
             </Box>
-            <PluginWalletStatusBar>
-                <WalletConnectedBoundary>
-                    <EthereumERC721TokenApprovedBoundary
-                        validationMessage={validationMessage}
-                        owner={account}
-                        contractDetailed={contract}
-                        operator={RED_PACKET_NFT_ADDRESS}>
-                        <ActionButton
-                            size="large"
-                            disabled={!!validationMessage}
-                            fullWidth
-                            onClick={() => setOpenConfirmDialog(true)}>
-                            {t.next()}
-                        </ActionButton>
-                    </EthereumERC721TokenApprovedBoundary>
-                </WalletConnectedBoundary>
-            </PluginWalletStatusBar>
+            <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary>
+                        <EthereumERC721TokenApprovedBoundary
+                            validationMessage={validationMessage}
+                            owner={account}
+                            contractDetailed={contract}
+                            classes={{ approveButton: classes.approveButton }}
+                            operator={RED_PACKET_NFT_ADDRESS}>
+                            <ActionButton
+                                style={{ height: 40, padding: 0, margin: 0 }}
+                                size="large"
+                                disabled={!!validationMessage}
+                                fullWidth
+                                onClick={() => setOpenConfirmDialog(true)}>
+                                {t.next()}
+                            </ActionButton>
+                        </EthereumERC721TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
+            </Box>
             {open ? (
                 <SelectNftTokenDialog
                     open={open}

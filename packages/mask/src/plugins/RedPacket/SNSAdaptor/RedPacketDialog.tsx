@@ -23,7 +23,6 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { HistoryIcon } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
-import { IconURLs } from './IconURL'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -35,6 +34,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     tabPaper: {
         position: 'sticky',
@@ -192,7 +202,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <Tab
                                 label={
                                     <div className={classes.labelWrapper}>
-                                        <img className={classes.img} src={IconURLs.erc20Token} />
                                         <span>{t.erc20_tab_title()}</span>
                                     </div>
                                 }
@@ -201,7 +210,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             <Tab
                                 label={
                                     <div className={classes.labelWrapper}>
-                                        <img className={classes.img} src={IconURLs.erc721Token} />
                                         <span>{t.erc721_tab_title()}</span>
                                     </div>
                                 }

@@ -46,7 +46,7 @@
     "nft_select_all_option": "ALL ({{total}} NFT)",
     "erc721_insufficient_balance": "Insufficient Balance",
     "erc721_tab_title": "NFT Collections",
-    "erc20_tab_title": "Token",
+    "erc20_tab_title": "Tokens",
     "claimed": "Claimed",
     "details": "Lucky Drop Details",
     "display_name": "Lucky Drop",
