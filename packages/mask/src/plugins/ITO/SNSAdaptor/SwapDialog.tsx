@@ -266,7 +266,6 @@ export function SwapDialog(props: SwapDialogProps) {
                 <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
                         onlyInfiniteUnlock
-                        withTokenIcon
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>

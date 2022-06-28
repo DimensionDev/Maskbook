@@ -98,7 +98,6 @@ export function UnlockDialog(props: UnlockDialogProps) {
             <WalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     onlyInfiniteUnlock
-                    withTokenIcon
                     amount={amount.toFixed()}
                     spender={ITO2_CONTRACT_ADDRESS}
                     token={token}>

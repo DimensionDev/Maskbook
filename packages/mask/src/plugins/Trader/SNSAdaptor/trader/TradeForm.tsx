@@ -463,8 +463,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                             color: 'primary',
                         }}>
                         <EthereumERC20TokenApprovedBoundary
-                            withTokenIcon
-                            withToolTip
                             onlyInfiniteUnlock
                             spender={approveAddress}
                             amount={approveAmount.toFixed()}

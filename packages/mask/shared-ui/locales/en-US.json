@@ -337,7 +337,7 @@
     "plugin_wallet_select_provider_dialog_title": "Connect Wallet",
     "plugin_wallet_qr_code_with_wallet_connect": "Scan QR code with a WalletConnect-compatible wallet",
     "plugin_wallet_token_unlock": "Exact Unlock",
-    "plugin_wallet_token_infinite_unlock": "Infinite Unlock",
+    "plugin_wallet_token_infinite_unlock": "Unlock {{symbol}}",
     "plugin_wallet_token_exact_unlock_tips": "You must give the {{provider}} smart contract permission to use your part of {{symbol}}. ",
     "plugin_wallet_token_infinite_unlock_tips": "You must give the {{provider}} smart contract permission to use your {{symbol}}. You only have to do this once per token.",
     "plugin_wallet_connect_dialog_title": "WalletConnect",

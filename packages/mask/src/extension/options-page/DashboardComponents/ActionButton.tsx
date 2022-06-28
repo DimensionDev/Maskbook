@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Button, CircularProgress } from '@mui/material'
+import { Box, Button, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import CheckIcon from '@mui/icons-material/Check'
@@ -8,6 +8,7 @@ import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
+import { CircleLoadingAnimation } from '@masknet/shared'
 
 const circle = <CircularProgress color="inherit" size={18} />
 
@@ -70,13 +71,23 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
     return (
         <Button
             disableElevation
-            disabled={loading}
-            startIcon={loading && circle}
             className={'actionButton ' + className}
-            style={{ width, ...style }}
-            children={children}
-            {...rest}
-        />
+            style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
+            {...rest}>
+            {loading ? (
+                <Box
+                    position="absolute"
+                    width="100%"
+                    height="100%"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
+                    <CircleLoadingAnimation />
+                </Box>
+            ) : null}
+            {children}
+        </Button>
     )
 }
 

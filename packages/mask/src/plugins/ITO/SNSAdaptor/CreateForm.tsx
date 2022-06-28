@@ -476,7 +476,6 @@ export function CreateForm(props: CreateFormProps) {
                     <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
                             onlyInfiniteUnlock
-                            withTokenIcon
                             amount={inputTokenAmount}
                             spender={ITO2_CONTRACT_ADDRESS}
                             token={

@@ -1,4 +1,3 @@
-import React, { useCallback } from 'react'
 import { Grid, Tooltip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -9,6 +8,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
+import React, { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {},
@@ -58,24 +58,11 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     infiniteUnlockContent?: React.ReactNode
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
-    withTokenIcon?: boolean
     contractName?: string
-    withToolTip?: boolean
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const {
-        children = null,
-        onlyInfiniteUnlock = false,
-        withTokenIcon = false,
-        withToolTip = false,
-        amount,
-        spender,
-        token,
-        fallback,
-        infiniteUnlockContent,
-        contractName,
-    } = props
+    const { children = null, amount, spender, token, fallback, infiniteUnlockContent, contractName } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -83,13 +70,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
 
-    const onApprove = useCallback(
-        async (useExact = false) => {
-            if (approveStateType !== ApproveStateType.NOT_APPROVED) return
-            await approveCallback(useExact)
-        },
-        [approveStateType, transactionState, approveCallback],
-    )
+    const onApprove = useCallback(async () => {
+        if (approveStateType !== ApproveStateType.NOT_APPROVED) return
+        await approveCallback(false)
+    }, [approveStateType, transactionState, approveCallback])
 
     // not a valid erc20 token, please given token as undefined
     if (!token)
@@ -97,22 +81,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
             <Grid container className={classes.container}>
                 {typeof children === 'function' ? children(allowance) : children}
             </Grid>
-        )
-
-    if (transactionState.loading || approveStateType === ApproveStateType.UPDATING)
-        return (
-            <ActionButton
-                className={classes.button}
-                fullWidth
-                variant="contained"
-                size="large"
-                disabled
-                {...props.ActionButtonProps}>
-                {transactionState.loading
-                    ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
-                    : `Updating ${token.symbol}`}
-                &hellip;
-            </ActionButton>
         )
 
     if (approveStateType === ApproveStateType.UNKNOWN)
@@ -143,7 +111,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 </ActionButton>
             </Grid>
         )
-    if (approveStateType === ApproveStateType.NOT_APPROVED)
+    if (
+        approveStateType === ApproveStateType.NOT_APPROVED ||
+        transactionState.loading ||
+        approveStateType === ApproveStateType.UPDATING
+    )
         return (
             <Grid
                 container
@@ -152,92 +124,43 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 alignItems="center"
                 spacing={2}
                 className={classes.container}>
-                {!onlyInfiniteUnlock ? (
-                    <Grid item xs={6}>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            onClick={() => onApprove(true)}
-                            startIcon={
-                                withTokenIcon ? (
-                                    <TokenIcon
-                                        address={token.address}
-                                        chainId={token.chainId}
-                                        name={token.name}
-                                        classes={{ icon: classes.icon }}
-                                    />
-                                ) : null
-                            }
-                            endIcon={
-                                withToolTip ? (
-                                    <Tooltip
-                                        classes={{
-                                            tooltip: classes.tooltip,
-                                        }}
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        title={t('plugin_wallet_token_exact_unlock_tips', {
-                                            provider: contractName,
-                                            symbol: token.symbol,
-                                        })}
-                                        placement="top"
-                                        arrow
-                                        disableFocusListener
-                                        disableTouchListener>
-                                        <HelpOutline className={classes.helpIcon} />
-                                    </Tooltip>
-                                ) : null
-                            }
-                            {...props.ActionButtonProps}>
-                            <span>{t('plugin_wallet_token_unlock')}</span>
-                        </ActionButton>
-                    </Grid>
-                ) : null}
-                <Grid item xs={onlyInfiniteUnlock ? 12 : 6}>
-                    <ActionButton
-                        className={classes.button}
-                        fullWidth
-                        variant="contained"
-                        size="large"
-                        startIcon={
-                            withTokenIcon ? (
-                                <TokenIcon
-                                    address={token.address}
-                                    chainId={token.chainId}
-                                    name={token.name}
-                                    classes={{ icon: classes.icon }}
-                                />
-                            ) : null
-                        }
-                        endIcon={
-                            withToolTip ? (
-                                <Tooltip
-                                    classes={{
-                                        tooltip: classes.tooltip,
-                                    }}
-                                    PopperProps={{
-                                        disablePortal: true,
-                                    }}
-                                    title={t('plugin_wallet_token_infinite_unlock_tips', {
-                                        provider: contractName,
-                                        symbol: token.symbol,
-                                    })}
-                                    placement="top"
-                                    arrow
-                                    disableFocusListener
-                                    disableTouchListener>
-                                    <HelpOutline className={classes.helpIcon} />
-                                </Tooltip>
-                            ) : null
-                        }
-                        onClick={() => onApprove(false)}
-                        {...props.ActionButtonProps}>
-                        {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock')}
-                    </ActionButton>
-                </Grid>
+                <ActionButton
+                    loading={transactionState.loading || approveStateType === ApproveStateType.UPDATING}
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    startIcon={
+                        <TokenIcon
+                            address={token.address}
+                            chainId={token.chainId}
+                            name={token.name}
+                            classes={{ icon: classes.icon }}
+                        />
+                    }
+                    endIcon={
+                        <Tooltip
+                            classes={{
+                                tooltip: classes.tooltip,
+                            }}
+                            PopperProps={{
+                                disablePortal: true,
+                            }}
+                            title={t('plugin_wallet_token_infinite_unlock_tips', {
+                                provider: contractName,
+                                symbol: token.symbol,
+                            })}
+                            placement="top"
+                            arrow
+                            disableFocusListener
+                            disableTouchListener>
+                            <HelpOutline className={classes.helpIcon} />
+                        </Tooltip>
+                    }
+                    onClick={onApprove}
+                    {...props.ActionButtonProps}>
+                    {infiniteUnlockContent ?? t('plugin_wallet_token_infinite_unlock', { symbol: token.symbol })}
+                </ActionButton>
             </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)

@@ -289,8 +289,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             <PluginWalletStatusBar>
                 <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        withTokenIcon
-                        withToolTip
                         onlyInfiniteUnlock
                         amount={totalAmount.toFixed()}
                         classes={{ container: classes.unlockContainer }}
