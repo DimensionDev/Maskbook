@@ -8,10 +8,10 @@ overrides:
 
 patchedDependencies:
   ts-results@3.3.0:
-    hash: uflqnzybx3g5lpziqbetz6muqq
+    hash: g2bdan7o336xxsymnx5nlozu2m
     path: patches/ts-results@3.3.0.patch
   immer@9.0.15:
-    hash: ui2odohbx4jytbuv6lkm3lc7rq
+    hash: 6jcdg7ah6q6tk4odwno72n5llq
     path: patches/immer@9.0.15.patch
 
 importers:
@@ -92,7 +92,7 @@ importers:
       react-dom: 18.1.0_react@18.1.0
       react-i18next: 11.16.9_nlaekqjbpikw4agfyzvj2iejnm
       ses: 0.15.16
-      ts-results: 3.3.0_uflqnzybx3g5lpziqbetz6muqq
+      ts-results: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
     devDependencies:
       '@commitlint/cli': 17.0.2_@swc+core@1.2.177
       '@commitlint/config-conventional': 17.0.2
@@ -574,7 +574,7 @@ importers:
       https-browserify: 1.0.0
       idb: 7.0.1
       iframe-resizer-react: 1.1.0
-      immer: 9.0.15_ui2odohbx4jytbuv6lkm3lc7rq
+      immer: 9.0.15_6jcdg7ah6q6tk4odwno72n5llq
       isomorphic-dompurify: 0.18.0
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
@@ -1114,7 +1114,7 @@ importers:
       ts-results: ^3.3.0
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
-      ts-results: 3.3.0_uflqnzybx3g5lpziqbetz6muqq
+      ts-results: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
 
   packages/plugins/template:
     specifiers:
@@ -1396,7 +1396,7 @@ importers:
       '@msgpack/msgpack': 2.7.2
       '@mui/material': link:../empty
       anchorme: 2.1.2
-      immer: 9.0.15_ui2odohbx4jytbuv6lkm3lc7rq
+      immer: 9.0.15_6jcdg7ah6q6tk4odwno72n5llq
       z-schema: 5.0.3
 
   packages/web3-constants:
@@ -18830,7 +18830,7 @@ packages:
     resolution: {integrity: sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==}
     dev: false
 
-  /immer/9.0.15_ui2odohbx4jytbuv6lkm3lc7rq:
+  /immer/9.0.15_6jcdg7ah6q6tk4odwno72n5llq:
     resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
     dev: false
     patched: true
@@ -27128,7 +27128,7 @@ packages:
         optional: true
     dev: true
 
-  /ts-results/3.3.0_uflqnzybx3g5lpziqbetz6muqq:
+  /ts-results/3.3.0_g2bdan7o336xxsymnx5nlozu2m:
     resolution: {integrity: sha512-FWqxGX2NHp5oCyaMd96o2y2uMQmSu8Dey6kvyuFdRJ2AzfmWo3kWa4UsPlCGlfQ/qu03m09ZZtppMoY8EMHuiA==}
     dev: false
     patched: true
