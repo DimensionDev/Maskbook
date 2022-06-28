@@ -83,9 +83,23 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
     return 1
 }
 
+export async function getNextIDBindings(userId: string) {
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+
+    const nextIDPersonaBindings: NextIDPersonaBindings[] = []
+    let page = 0
+    do {
+        const personaBindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase(), page)
+        if (personaBindings.length === 0) return nextIDPersonaBindings
+        nextIDPersonaBindings.push(...personaBindings)
+        page += 1
+    } while (page > 0)
+    return []
+}
+
 export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
+    const bindings = await getNextIDBindings(userId)
 
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
         const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(

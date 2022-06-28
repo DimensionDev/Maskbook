@@ -101,7 +101,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         if (!platform && !identity) return []
 
         const response = await fetchJSON<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', { platform, identity }),
+            urlcat(BASE_URL, '/v1/proof', { platform, identity, page }),
             undefined,
             true,
         )
