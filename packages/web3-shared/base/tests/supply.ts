@@ -12,6 +12,7 @@ describe('Supply format util test', () => {
         { give: 99999.0101, expected: '99,999.01' },
         { give: 0.0101, expected: '0.01' },
         { give: 0.0102, expected: '0.01' },
+        { give: 1.55, expected: '1.55' },
         { give: 0.00000000001, expected: '0.0' },
         { give: 0, expected: '0.0' },
         { give: 99999.0151, expected: '99,999.02' },

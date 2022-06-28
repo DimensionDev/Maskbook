@@ -154,22 +154,31 @@ export function useLineChart(
                         .text((d) => d),
                 )
 
-            const textBBox = (text.node() as SVGTextElement)?.getBBox()
+            const textNodeBox = (text.node() as SVGTextElement)?.getBBox()
 
-            if (textBBox) {
-                const { x, y: yValue, width: w, height: h } = textBBox
+            if (textNodeBox) {
+                const { x, y: yValue, width: w, height: h } = textNodeBox
+                const boxHalfWidth = w / 2
+                const offset =
+                    position.x - boxHalfWidth < 0
+                        ? boxHalfWidth - position.x
+                        : position.x + boxHalfWidth > contentWidth
+                        ? -(position.x + boxHalfWidth - contentWidth)
+                        : 0
+                const boxArrowX = 42.5 - offset
+
                 if (position.y + 54 > contentHeight) {
-                    text.attr('transform', `translate(${-w / 2},${-46 - yValue})`)
+                    text.attr('transform', `translate(${-boxHalfWidth + offset},${-46 - yValue})`)
                     path.attr(
                         'd',
-                        'M-42.5 -54h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 0L-7 -10L12 -10L7 -10Z',
+                        `M-${boxArrowX} -54h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 0L-7 -10L12 -10L7 -10Z`,
                     ).attr('fill', theme.palette.background.tipMask)
                 } else {
-                    text.attr('transform', `translate(${-w / 2},${14 - yValue})`)
+                    text.attr('transform', `translate(${-boxHalfWidth + offset},${18 - yValue})`)
 
                     path.attr(
                         'd',
-                        'M-42.5 10h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 2L-7 10L12 10L7 10Z',
+                        `M-${boxArrowX} 10h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 2L-7 10L12 10L7 10Z`,
                     ).attr('fill', theme.palette.background.tipMask)
                 }
             }
