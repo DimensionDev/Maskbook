@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 99999,
     },
     shareNotice: {
-        color: '#222',
+        color: MaskColorVar.normalText,
         fontSize: '16px',
         fontFamily: 'TwitterChirp',
         lineHeight: '16px',
