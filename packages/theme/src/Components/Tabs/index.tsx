@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
+import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab, useTheme } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
@@ -36,10 +36,10 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: 38,
     width: 38,
     minWidth: '38px !important',
-    background: get(theme.palette.background, 'input') ?? '#F2F6FA',
+    background: theme.palette.maskColor.input,
 
     '&:hover': {
-        background: get(theme.palette.background, 'input') ?? '#F2F6FA',
+        background: theme.palette.maskColor.input,
     },
 }))
 
@@ -76,7 +76,6 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
     padding: theme.spacing(1, 1, 0, 1),
     margin: theme.spacing(-1, -1, 0, -1),
-    background: 'transparent',
     borderRadius: 0,
 }))
 
@@ -138,6 +137,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
+    const theme = useTheme()
 
     if (context === null) throw new TypeError('No TabContext provided')
 
@@ -154,8 +154,9 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
-    const children = Children.map(props.children, (child) => {
+    const children = Children.map(props.children, (child, i) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
+        console.log(child.props.value, { firstId })
         const extra = {
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
@@ -171,6 +172,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                 if (variant === 'flexible' && !isVisitable) {
                     setFirstTabId(value)
                 }
+            },
+            style: {
+                background:
+                    child.props.value === firstId || (!firstId && i === 0)
+                        ? theme.palette.maskColor.input
+                        : 'transparent',
             },
         }
 
@@ -195,7 +202,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             return 0
         })
     }, [firstId, children])
-    // #endregion
 
     // #region Should close panel when click other area
     useClickAway(flexPanelRef, (event) => {

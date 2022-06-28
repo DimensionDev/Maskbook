@@ -22,6 +22,7 @@ declare module '@mui/material/styles/createPalette.d' {
             warn: string
             danger: string
             white: string
+            secondaryDark: string
             dark: string
         }
     }

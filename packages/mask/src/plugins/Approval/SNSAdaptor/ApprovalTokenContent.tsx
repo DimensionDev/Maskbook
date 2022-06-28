@@ -13,11 +13,10 @@ import { ApprovalLoadingContent } from './ApprovalLoadingContent'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent'
 import type { TokenSpender } from './types'
 
-export function ApprovalTokenContent() {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { value: spenders, loading } = useApprovedTokenList(account, chainId)
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
@@ -30,7 +29,7 @@ export function ApprovalTokenContent() {
     ) : (
         <List className={classes.approvalContentWrapper}>
             {spenders.map((spender, i) => (
-                <ApprovalTokenItem key={i} spender={spender} networkDescriptor={networkDescriptor} />
+                <ApprovalTokenItem key={i} spender={spender} networkDescriptor={networkDescriptor} chainId={chainId} />
             ))}
         </List>
     )
@@ -39,11 +38,12 @@ export function ApprovalTokenContent() {
 interface ApprovalTokenItemProps {
     spender: TokenSpender
     networkDescriptor: NetworkDescriptor<ChainId, NetworkType>
+    chainId: ChainId
 }
 
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { networkDescriptor, spender } = props
+    const { targetChainId: currentChainId } = TargetChainIdContext.useContainer()
+    const { networkDescriptor, spender, chainId } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
@@ -60,42 +60,51 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     )
 
     return cancelled ? null : (
-        <ListItem className={classes.listItem}>
-            <div className={classes.listItemInfo}>
-                <div>
-                    <Avatar src={spender.tokenInfo.logo_url} className={classes.logoIcon} />
-                    <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
-                    <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
+        <ListItem className={classes.listItemWrapper}>
+            <ListItem className={classes.listItem}>
+                <div className={classes.listItemInfo}>
+                    <div>
+                        <Avatar src={spender.tokenInfo.logo_url} className={classes.logoIcon} />
+                        <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
+                        <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
+                    </div>
+                    <div className={classes.contractInfo}>
+                        <Typography className={classes.secondaryText}>{t.contract()}</Typography>
+                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
+                            <img src={spender.logo} className={classes.spenderLogoIcon} />
+                        ) : (
+                            <div className={classes.spenderMaskLogoIcon}>{spender.logo}</div>
+                        )}
+                        <Typography className={classes.primaryText}>
+                            {spender.name ?? Others?.formatAddress(spender.id, 4)}
+                        </Typography>
+                        <Link
+                            className={classes.link}
+                            href={Others?.explorerResolver.addressLink?.(chainId, spender.id) ?? ''}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
+                        </Link>
+                    </div>
+                    <div>
+                        <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
+                        <Typography className={classes.primaryText}>
+                            {new BigNumber('1e+10').isLessThan(new BigNumber(spender.value))
+                                ? t.infinite()
+                                : spender.value}
+                        </Typography>
+                    </div>
                 </div>
-                <div className={classes.contractInfo}>
-                    <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                    {!spender.logo ? null : typeof spender.logo === 'string' ? (
-                        <img src={spender.logo} className={classes.spenderLogoIcon} />
-                    ) : (
-                        <div className={classes.spenderMaskLogoIcon}>{spender.logo}</div>
-                    )}
-                    <Typography className={classes.primaryText}>
-                        {spender.name ?? Others?.formatAddress(spender.id, 4)}
-                    </Typography>
-                    <Link
-                        className={classes.link}
-                        href={Others?.explorerResolver.addressLink?.(chainId, spender.id) ?? ''}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
-                    </Link>
-                </div>
-                <div>
-                    <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                    <Typography className={classes.primaryText}>
-                        {new BigNumber('1e+10').isLessThan(new BigNumber(spender.value)) ? t.infinite() : spender.value}
-                    </Typography>
-                </div>
-            </div>
 
-            <Button onClick={() => approveCallback(true, true)} disabled={transactionState.loadingApprove}>
-                {transactionState.loadingApprove ? t.revoking() : t.revoke()}
-            </Button>
+                {currentChainId === chainId ? (
+                    <Button
+                        onClick={() => approveCallback(true, true)}
+                        disabled={transactionState.loadingApprove}
+                        className={classes.button}>
+                        {transactionState.loadingApprove ? t.revoking() : t.revoke()}
+                    </Button>
+                ) : null}
+            </ListItem>
         </ListItem>
     )
 }

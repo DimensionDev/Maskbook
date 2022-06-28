@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, parseColor } from '@masknet/theme'
 
 export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -12,6 +12,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             width: 600,
             padding: '12px 0px 0px',
             margin: 'auto',
+            overflowX: 'hidden',
         },
         dialogTitle: {
             '& > p': {
@@ -101,12 +102,20 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         loadingText: {
             color: theme.palette.text.primary,
         },
+        listItemWrapper: {
+            width: '100%',
+            height: 90,
+            padding: 0,
+            background: theme.palette.common.white,
+            borderRadius: 8,
+            marginBottom: theme.spacing(1),
+        },
         listItem: {
             width: '100%',
             height: 90,
             padding: 12,
             borderRadius: 8,
-            marginBottom: theme.spacing(1),
+            marginBottom: 0,
             background: props?.listItemBackground ?? theme.palette.background.default,
             display: 'flex',
             alignItems: 'center',
@@ -150,7 +159,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             height: 16,
         },
         linkOutIcon: {
-            stroke: theme.palette.text.secondary,
+            stroke: theme.palette.maskColor.secondaryDark,
             marginLeft: 2,
         },
         spenderMaskLogoIcon: {
@@ -171,18 +180,27 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             fontSize: 14,
             fontWeight: 700,
             marginRight: 4,
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.dark,
         },
         secondaryText: {
             fontSize: 14,
             fontWeight: 400,
             marginRight: 4,
-            color: theme.palette.text.secondary,
+            color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
             boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
             position: 'sticky',
             bottom: 0,
+        },
+        button: {
+            color: theme.palette.common.white,
+            background: theme.palette.common.black,
+            '&:hover': {
+                color: theme.palette.common.white,
+                background: theme.palette.common.black,
+                boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
+            },
         },
     }),
 )

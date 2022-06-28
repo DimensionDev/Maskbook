@@ -1,5 +1,5 @@
 import { ListItem, List, Typography, Avatar, Link, Button } from '@mui/material'
-import { TargetChainIdContext, useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
+import { useERC721ContractSetApproveForAllCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
@@ -12,11 +12,10 @@ import { ApprovalLoadingContent } from './ApprovalLoadingContent'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent'
 import type { NFTInfo } from './types'
 
-export function ApprovalNFTContent() {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { value: NFTList, loading } = useApprovedNFTList(account, chainId)
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
@@ -29,7 +28,7 @@ export function ApprovalNFTContent() {
     ) : (
         <List className={classes.approvalContentWrapper}>
             {NFTList.map((nft, i) => (
-                <ApprovalNFTItem key={i} nft={nft} networkDescriptor={networkDescriptor} />
+                <ApprovalNFTItem key={i} nft={nft} networkDescriptor={networkDescriptor} chainId={chainId} />
             ))}
         </List>
     )
@@ -38,11 +37,12 @@ export function ApprovalNFTContent() {
 interface ApprovalNFTItemProps {
     nft: NFTInfo
     networkDescriptor: NetworkDescriptor<ChainId, NetworkType>
+    chainId: ChainId
 }
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { networkDescriptor, nft } = props
+    const { targetChainId: currentChainId } = TargetChainIdContext.useContainer()
+    const { networkDescriptor, nft, chainId } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
@@ -100,10 +100,11 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     <Typography className={classes.primaryText}>{nft.amount}</Typography>
                 </div>
             </div>
-
-            <Button onClick={approveCallback} disabled={approveState.loading}>
-                {approveState.loading ? t.revoking() : t.revoke()}
-            </Button>
+            {currentChainId === chainId ? (
+                <Button onClick={approveCallback} disabled={approveState.loading} className={classes.button}>
+                    {approveState.loading ? t.revoking() : t.revoke()}
+                </Button>
+            ) : null}
         </ListItem>
     )
 }

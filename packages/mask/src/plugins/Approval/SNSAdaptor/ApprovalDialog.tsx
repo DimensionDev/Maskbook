@@ -64,7 +64,8 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
-    const { targetChainId: chainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = approvalDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
@@ -74,15 +75,19 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
         <div className={classes.approvalWrapper}>
             <div className={classes.abstractTabWrapper}>
                 <NetworkTab
-                    chainId={chainId}
-                    setChainId={setTargetChainId}
+                    chainId={networkTabChainId}
+                    setChainId={setNetworkTabChainId}
                     classes={classes}
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-            {tab === Tabs.Tokens ? <ApprovalTokenContent /> : <ApprovalNFTContent />}
+            {tab === Tabs.Tokens ? (
+                <ApprovalTokenContent chainId={networkTabChainId} />
+            ) : (
+                <ApprovalNFTContent chainId={networkTabChainId} />
+            )}
             <PluginWalletStatusBar className={classes.footer}>
-                <ChainBoundary expectedChainId={chainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM} />
+                <ChainBoundary expectedChainId={networkTabChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM} />
             </PluginWalletStatusBar>
         </div>
     )
