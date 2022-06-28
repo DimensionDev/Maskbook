@@ -3024,7 +3024,7 @@
         "network": "mainnet",
         "rpc": ["https://evm.astar.network"],
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "nativeCurrency": {
             "chainId": 592,
             "name": "Astar",
