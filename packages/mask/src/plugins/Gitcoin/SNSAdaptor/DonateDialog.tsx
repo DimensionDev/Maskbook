@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -78,14 +78,14 @@ export function DonateDialog(props: DonateDialogProps) {
     const tokenBalance = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
 
     // #region select token dialog
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const pickedToken = await pickToken({
+        const pickedToken = await selectFungibleToken({
             disableNativeToken: false,
             selectedTokens: token?.address ? [token.address] : [],
         })
         if (pickedToken) setToken(pickedToken)
-    }, [pickToken, token?.address])
+    }, [selectFungibleToken, token?.address])
     // #endregion
 
     // #region amount
@@ -180,8 +180,7 @@ export function DonateDialog(props: DonateDialogProps) {
                                 fullWidth
                                 size="large"
                                 disabled={!!validationMessage || loading}
-                                onClick={donate}
-                                variant="contained">
+                                onClick={donate}>
                                 {validationMessage || t.donate()}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>

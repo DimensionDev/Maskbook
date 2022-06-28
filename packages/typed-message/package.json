@@ -18,6 +18,7 @@
     "@msgpack/msgpack": "^2.7.2",
     "@mui/material": "link:..\\empty",
     "anchorme": "^2.1.2",
+    "immer": "9.0.15",
     "z-schema": "^5.0.3"
   }
 }

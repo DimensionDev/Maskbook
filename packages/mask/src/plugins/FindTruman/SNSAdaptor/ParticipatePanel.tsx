@@ -93,7 +93,6 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
                         <Button
                             fullWidth
                             color="primary"
-                            variant="contained"
                             onClick={() => {
                                 onDialogOpen()
                             }}>
