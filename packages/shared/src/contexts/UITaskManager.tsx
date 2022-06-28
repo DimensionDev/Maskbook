@@ -1,13 +1,13 @@
+import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import type { InjectedDialogProps } from './components'
 
-interface ContextOptions<T, R> {
+export interface ContextOptions<T, R> {
     show(options: T, signal?: AbortSignal): Promise<R>
 }
 
-interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
+export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
     onSubmit?(result: T): void
 }
 
@@ -16,9 +16,9 @@ interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose
  * which provide both a Context and a Provider.
  */
 export const createUITaskManager = <
-    TaskOptions extends { onSubmit?(result: Result | null): void },
     Result,
     Props extends BaseDialogProps<Result>,
+    TaskOptions extends { onSubmit?(result: Result | null): void },
 >(
     Component: ComponentType<Props>,
 ) => {

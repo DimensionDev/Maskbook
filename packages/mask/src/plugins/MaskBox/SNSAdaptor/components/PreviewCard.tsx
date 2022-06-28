@@ -10,12 +10,11 @@ import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import AbstractTab from '../../../../components/shared/AbstractTab'
-import { TargetChainIdContext } from '../../contexts'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {

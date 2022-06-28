@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -92,16 +92,16 @@ export function DepositDialog() {
     // #endregion
 
     // #region select token
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
         if (!token) return
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: true,
             selectedTokens: [token.address],
             whitelist: [token.address],
         })
         if (picked) setToken(picked)
-    }, [token, pickToken])
+    }, [token, selectFungibleToken])
     // #endregion
 
     // #region amount

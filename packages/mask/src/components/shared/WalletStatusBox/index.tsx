@@ -112,6 +112,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
 interface WalletStatusBox {
     disableChange?: boolean
     showPendingTransaction?: boolean
+    closeDialog?: () => void
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
@@ -217,8 +218,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={async () => {
-                                await connection.disconnect()
+                                props.closeDialog?.()
                                 closeWalletStatusDialog()
+                                await connection.disconnect()
                                 openSelectProviderDialog()
                             }}>
                             {t('plugin_wallet_disconnect')}

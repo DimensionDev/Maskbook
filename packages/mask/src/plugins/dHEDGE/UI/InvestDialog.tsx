@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -68,14 +68,14 @@ export function InvestDialog() {
     // #endregion
 
     // #region select token
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: true,
             whitelist: allowedTokens,
         })
         if (picked) setToken(picked)
-    }, [pickToken, token?.address, allowedTokens])
+    }, [selectFungibleToken, token?.address, allowedTokens])
     // #endregion
 
     // #region amount
