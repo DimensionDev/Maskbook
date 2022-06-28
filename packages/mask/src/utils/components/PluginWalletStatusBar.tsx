@@ -20,8 +20,7 @@ import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import type { PropsWithChildren } from 'react'
-import { useRef, useState } from 'react'
-import { useMount } from 'react-use'
+import { useEffect, useRef, useState } from 'react'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -122,10 +121,13 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
-    useMount(() => {
-        if (ref.current?.innerHTML) return
+    useEffect(() => {
+        if (ref.current?.innerHTML) {
+            setEmptyChildren(false)
+            return
+        }
         setEmptyChildren(true)
-    })
+    }, [children])
     return (
         <Box className={cx(classes.root, className)}>
             {account ? (

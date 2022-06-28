@@ -23,7 +23,6 @@ import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundar
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { Flags } from '../../../../shared'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -290,15 +289,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             noSwitchNetworkTip>
-                            {(swappedTokens && swappedTokens.length > 0) ||
-                            (chainId === ChainId.Matic && Flags.nft_airdrop_enabled && swappedTokens?.length) ? (
+                            {swappedTokens?.length ? (
                                 <WalletConnectedBoundary>
                                     <ActionButton
                                         fullWidth
                                         className={classNames(classes.actionButton)}
                                         loading={isClaiming}
-                                        disabled={claimablePids!.length === 0 || isClaiming}
-                                        size="small"
+                                        disabled={claimablePids!.length === 0}
                                         onClick={claim}>
                                         {t('plugin_ito_claim_all')}
                                     </ActionButton>
