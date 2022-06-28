@@ -20,12 +20,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {
-        const snsID = usePostInfoDetails.snsID()
         const links = usePostInfoDetails.mentionedLinks()
         const author = usePostInfoDetails.author()
         const id = usePostInfoDetails.identifier()
         const nickname = usePostInfoDetails.nickname()
         const message = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
+        const network = id?.identifier.network
+        const isTwitter = network === EnhanceableSite.Twitter
         const postDetail = {
             id: id ? id.postID : undefined,
             nickname,
@@ -35,14 +36,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         }
         const [scamProject, setScamProject] = useState<ScamResult | null>(null)
         useAsync(async () => {
+            if (!isTwitter) return
             const scamProject = await PluginScamRPC.detectScam(postDetail)
             if (scamProject) {
                 setScamProject(scamProject)
             }
         }, [])
 
-        if (EnhanceableSite.Twitter !== snsID) return null
-        return scamProject ? <Renderer project={scamProject} /> : null
+        return isTwitter && scamProject ? <Renderer project={scamProject} /> : null
     },
     ApplicationEntries: [
         (() => {
@@ -57,6 +58,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     fallback: PLUGIN_DESCRIPTION,
                 },
                 name: { i18nKey: '__plugin_name', fallback: PLUGIN_NAME },
+                tutorialLink: 'https://scamsniffer.io/?utm_source=mask-setting',
             }
         })(),
     ],

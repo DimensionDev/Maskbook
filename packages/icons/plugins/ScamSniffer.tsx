@@ -14,5 +14,5 @@ export const ScamSnifferIcon: typeof SvgIcon = createIcon(
         />
         ,
     </g>,
-    '0 0 100 100',
+    '0 0 1600 1600',
 )
