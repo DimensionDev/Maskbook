@@ -1,5 +1,8 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { base } from '../base'
+import { ScamSnifferIcon } from '@masknet/icons'
+import { EnhanceableSite } from '@masknet/shared-base'
+import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { ScamResult } from '@scamsniffer/detector'
@@ -17,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {
+        const snsID = usePostInfoDetails.snsID()
         const links = usePostInfoDetails.mentionedLinks()
         const author = usePostInfoDetails.author()
         const id = usePostInfoDetails.identifier()
@@ -36,8 +40,26 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 setScamProject(scamProject)
             }
         }, [])
+
+        if (EnhanceableSite.Twitter !== snsID) return null
         return scamProject ? <Renderer project={scamProject} /> : null
     },
+    ApplicationEntries: [
+        (() => {
+            const icon = <ScamSnifferIcon />
+            return {
+                ApplicationEntryID: base.ID,
+                marketListSortingPriority: 19,
+                icon,
+                category: 'dapp',
+                description: {
+                    i18nKey: '__plugin_description',
+                    fallback: PLUGIN_DESCRIPTION,
+                },
+                name: { i18nKey: '__plugin_name', fallback: PLUGIN_NAME },
+            }
+        })(),
+    ],
 }
 
 export default sns
