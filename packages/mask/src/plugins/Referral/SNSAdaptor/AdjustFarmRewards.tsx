@@ -343,7 +343,6 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
                         <WalletConnectedBoundary>
                             <ActionButton
                                 fullWidth
-                                variant="contained"
                                 size="medium"
                                 disabled={adjustRewardsBtnDisabled}
                                 onClick={onClickAdjustRewards}>

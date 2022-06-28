@@ -321,7 +321,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             }}>
                                             <ActionButton
                                                 className={classNames(classes.actionButton, classes.claimAllButton)}
-                                                variant="contained"
                                                 loading={isClaiming}
                                                 disabled={claimablePids!.length === 0 || isClaiming}
                                                 size="small"

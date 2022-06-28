@@ -18,13 +18,13 @@ const useStyles = makeStyles()((theme) => ({
         margin: 0,
     },
     timeline: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
 }))
@@ -69,7 +69,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 startIcon={props.startIcon}
                 className={buttonClass}
                 fullWidth
-                variant="contained"
                 onClick={openSelectProviderDialog}
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_connect_a_wallet')}

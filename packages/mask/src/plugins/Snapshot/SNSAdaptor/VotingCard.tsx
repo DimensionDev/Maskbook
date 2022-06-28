@@ -135,7 +135,6 @@ export function VotingCard() {
 
                     <Button
                         color="primary"
-                        variant="contained"
                         className={classes.button}
                         disabled={choice === 0 || !account || !power}
                         onClick={() => setOpen(true)}>

@@ -86,7 +86,7 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
     if (step === BodyViewStep.AddWallet) return null
     return (
         <div className={classes.btnContainer}>
-            <Button onClick={onClick} className={classes.walletBtn} variant="contained" size="small">
+            <Button onClick={onClick} className={classes.walletBtn} size="small">
                 {step === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets}
             </Button>
         </div>
@@ -123,7 +123,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
         currentPersonaIdentifier?.publicKeyAsHex,
     )
-    const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)
@@ -312,7 +312,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <div className={classes.actions}>
                             <ActionButton
                                 fullWidth
-                                variant="roundedFlat"
+                                variant="roundedOutlined"
                                 color="secondary"
                                 disabled={!hasChanged}
                                 onClick={onCancel}>

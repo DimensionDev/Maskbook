@@ -123,7 +123,6 @@ export function PurchaseDialog(props: ActionBarProps) {
             className={classes.button}
             disabled={!!validationMessage || isPurchasing}
             color="primary"
-            variant="contained"
             onClick={purchase}
             fullWidth>
             {validationMessage || (isPurchasing ? t('plugin_artblocks_purchasing') : t('plugin_artblocks_purchase'))}
