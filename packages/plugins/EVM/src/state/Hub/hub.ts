@@ -5,6 +5,7 @@ import {
     DeBank,
     EthereumWeb3,
     MetaSwap,
+    Astar,
     OpenSea,
     Rarible,
     TokenList,
@@ -88,6 +89,7 @@ class Hub implements EVM_Hub {
         })
         try {
             const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
+            if (isEIP1559 && ChainId.Astar) return await Astar.getGasOptions()
             if (isEIP1559) return await MetaSwap.getGasOptions(options.chainId)
             return await DeBank.getGasOptions(options.chainId)
         } catch (error) {

@@ -13,6 +13,7 @@ import { InstagramAPI } from './instagram'
 import { DeBankAPI } from './debank'
 import { ZerionAPI } from './zerion'
 import { MetaSwapAPI } from './metaswap'
+import { AstarAPI } from './astar'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 import { Alchemy_EVM_API, Alchemy_FLOW_API } from './alchemy'
@@ -40,6 +41,7 @@ export const TokenList = new TokenListAPI()
 export const DeBank = new DeBankAPI()
 export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()
+export const Astar = new AstarAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()
