@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
         root: props.isPopper
             ? {
-                  width: 450,
+                  width: 598,
                   boxShadow:
                       theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
