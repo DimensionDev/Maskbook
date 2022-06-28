@@ -52,7 +52,6 @@ const WalletConnectDialog = () => {
             showSnackbar(t('plugin_game_list_play_error'), { variant: 'error' })
             return
         }
-        closeDialog()
         _closeDialog()
         closeWalletDialog()
         setGameInfo(gameInfo)
