@@ -30,7 +30,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {},
     button: {
-        marginTop: theme.spacing(1.5),
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
     stateBar: {
         marginTop: theme.spacing(1.5),

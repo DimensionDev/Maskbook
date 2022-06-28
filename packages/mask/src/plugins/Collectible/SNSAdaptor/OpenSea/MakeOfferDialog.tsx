@@ -58,6 +58,8 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
+            height: 40,
+            margin: 0,
         },
     }
 })

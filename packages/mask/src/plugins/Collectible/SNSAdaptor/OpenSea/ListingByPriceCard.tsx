@@ -38,7 +38,9 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 11,
         },
         button: {
-            marginTop: theme.spacing(1.5),
+            padding: 0,
+            margin: 0,
+            height: 40,
         },
     }
 })
