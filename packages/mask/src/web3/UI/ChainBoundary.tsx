@@ -168,12 +168,6 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         fullWidth
                         className={classes.switchButton}
                         disabled={actualProviderType === ProviderType.WalletConnect}
-                        startIcon={
-                            <WalletIcon
-                                mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
-                                size={18}
-                            />
-                        }
                         sx={props.ActionButtonPromiseProps?.sx}
                         init={
                             <span>
