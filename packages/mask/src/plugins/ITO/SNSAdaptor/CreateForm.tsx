@@ -366,6 +366,7 @@ export function CreateForm(props: CreateFormProps) {
                     token={tokenAndAmount?.token}
                     origin={tokenAndAmounts}
                     onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
+                    chainId={chainId}
                 />
             </Box>
             <Box className={classes.line}>
