@@ -120,7 +120,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
         currentPersonaIdentifier?.publicKeyAsHex,
     )
-    const { loading, value: proofRes, retry: retryProof } = useProvedWallets(currentPersonaIdentifier)
+    const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
     const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
     useMemo(() => {
         setHasChanged(false)

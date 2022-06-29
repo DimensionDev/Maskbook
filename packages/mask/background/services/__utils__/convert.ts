@@ -1,4 +1,5 @@
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared-base'
+import { noop } from 'lodash-unified'
 import { queryAvatarsDataURL } from '../../database/avatar-cache/avatar'
 import { FullPersonaDBTransaction, PersonaRecord, ProfileRecord, queryProfilesDB } from '../../database/persona/db'
 
@@ -42,6 +43,16 @@ export function toPersonaInformation(personas: PersonaRecord[], t: FullPersonaDB
             )
         }
     })
+    dbQueryPass2.push(
+        queryAvatarsDataURL(personas.map((x) => x.identifier))
+            .then((avatars) => {
+                for (const [id, avatar] of avatars) {
+                    const info = personaInfo.find((x) => x.identifier === id)
+                    if (info) info.avatar = avatar
+                }
+            })
+            .catch(noop),
+    )
 
     return {
         // we have to split two arrays for them and await them one by one, otherwise it will be race condition

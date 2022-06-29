@@ -1,8 +1,4 @@
-// ! We're going to SSR this UI, so DO NOT import anything new!
-
-// TODO: Migrate following files before we can SSR
-// ProfileList
-// useI18N
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
 
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
@@ -11,7 +7,7 @@ import { Avatar, Button, Typography } from '@mui/material'
 import { AddUserIcon, ArrowRightIosIcon, EmptyIcon, MenuPersonasActiveIcon, PopupRestoreIcon } from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/i18n-next-ui'
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles()({
