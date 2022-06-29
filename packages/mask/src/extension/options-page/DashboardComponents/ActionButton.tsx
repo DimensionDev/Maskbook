@@ -73,7 +73,8 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
             disableElevation
             className={'actionButton ' + className}
             style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
-            {...rest}>
+            {...rest}
+            disabled={rest.disabled && !loading}>
             {loading ? (
                 <Box
                     position="absolute"
@@ -92,7 +93,7 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
 }
 
 export interface ActionButtonPromiseProps extends ButtonProps {
-    executor: () => Promise<void>
+    executor: () => Promise<ActionButtonPromiseState | undefined>
     init: React.ReactChild
     complete: React.ReactChild
     completeOnClick?: 'use executor' | (() => void)
@@ -131,8 +132,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            () => {
-                setState('complete')
+            (status?: ActionButtonPromiseState) => {
+                setState(status ?? 'complete')
                 onComplete?.()
             },
             (error) => {
@@ -155,10 +156,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return <Button {...b} startIcon={circle} disabled={!waitingOnClick} children={waiting} onClick={cancel} />
+        return <ActionButton {...b} loading disabled={!waitingOnClick} children={waiting} onClick={cancel} />
     if (state === 'complete')
         return (
-            <Button
+            <ActionButton
                 {...b}
                 disabled={!completeClick}
                 startIcon={completeIcon}
@@ -169,7 +170,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         )
     if (state === 'fail')
         return (
-            <Button
+            <ActionButton
                 {...b}
                 disabled={!failClick}
                 startIcon={failIcon}
@@ -178,7 +179,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onClick={failClick}
             />
         )
-    return <Button {...b} children={init} onClick={run} />
+    return <ActionButton {...b} children={init} onClick={run} />
 }
 const useStyles = makeStyles()({
     success: {

@@ -475,7 +475,6 @@ export function CreateForm(props: CreateFormProps) {
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                     <WalletConnectedBoundary>
                         <EthereumERC20TokenApprovedBoundary
-                            onlyInfiniteUnlock
                             amount={inputTokenAmount}
                             spender={ITO2_CONTRACT_ADDRESS}
                             token={

@@ -97,17 +97,18 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         // a short time loading makes the user fells better
         await delay(1000)
 
-        if (!expectedChainAllowed) return
+        if (!expectedChainAllowed) return 'init'
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
             openSelectProviderDialog()
-            return
+            return 'init'
         }
         if (!isMatched) {
             await expectedConnection?.connect({
                 chainId: expectedChainId,
             })
         }
+        return
     }, [
         expectedChainAllowed,
         isMatched,
@@ -139,8 +140,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<PluginWalletConnectIcon />}
-                        sx={{ marginTop: 1.5 }}
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_connect_wallet')}

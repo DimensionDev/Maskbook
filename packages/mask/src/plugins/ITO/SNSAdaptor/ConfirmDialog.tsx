@@ -307,11 +307,6 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                             {t('plugin_ito_send_tip')}
                         </Typography>
                     </Grid>
-                    <Grid item lg={6} xs={12} className={classes.button}>
-                        <ActionButton disabled={loading} fullWidth onClick={onBack}>
-                            {t('plugin_ito_back')}
-                        </ActionButton>
-                    </Grid>
                 </Grid>
             </Card>
             <PluginWalletStatusBar>

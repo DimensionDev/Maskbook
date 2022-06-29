@@ -91,7 +91,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    size="large"
                     disabled
                     {...props.ActionButtonProps}>
                     {fallback ?? 'Enter an amount'}
@@ -105,7 +104,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    size="large"
                     onClick={resetApproveCallback}
                     {...props.ActionButtonProps}>
                     {t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' })}
@@ -130,7 +128,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     className={classes.button}
                     fullWidth
                     variant="contained"
-                    size="large"
                     startIcon={
                         <TokenIcon
                             address={token.address}

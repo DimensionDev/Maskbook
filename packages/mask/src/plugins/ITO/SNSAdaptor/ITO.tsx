@@ -30,7 +30,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
+import { getAssetAsBlobURL, getTextUILength, useClassicMaskSNSTheme, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -49,6 +49,7 @@ import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { ThemeProvider } from '@mui/material/styles'
 
 export interface IconProps {
     size?: number
@@ -159,17 +160,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     actionButton: {
         width: '100%',
-        backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
-        fontSize: 14,
-        paddingTop: 10,
-        fontWeight: 700,
-        margin: '0 !important',
-        paddingBottom: 10,
-        lineHeight: '20px',
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
-        },
     },
     textProviderErr: {
         color: '#EB5757',
@@ -529,7 +519,6 @@ export function ITO(props: ITO_Props) {
                 <ActionButton
                     loading={isClaiming}
                     onClick={claim}
-                    size="large"
                     disabled={isClaiming}
                     className={classes.actionButton}>
                     {isClaiming ? t('plugin_ito_claiming') : t('plugin_ito_claim')}
@@ -539,7 +528,7 @@ export function ITO(props: ITO_Props) {
 
         if (canWithdraw) {
             return (
-                <ActionButton onClick={onWithdraw} size="large" className={classes.actionButton}>
+                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
                     {t('plugin_ito_withdraw')}
                 </ActionButton>
             )
@@ -557,7 +546,6 @@ export function ITO(props: ITO_Props) {
                         <ActionButton
                             onClick={() => undefined}
                             disabled
-                            size="large"
                             className={classNames(classes.actionButton, classes.textInOneLine)}>
                             {t('plugin_ito_claim')}
                         </ActionButton>
@@ -576,7 +564,7 @@ export function ITO(props: ITO_Props) {
                     if (canWithdraw) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton onClick={onWithdraw} size="large" className={classes.actionButton}>
+                                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
                                     {t('plugin_ito_withdraw')}
                                 </ActionButton>
                             </Box>
@@ -589,6 +577,7 @@ export function ITO(props: ITO_Props) {
         [hasLockTime, canWithdraw],
     )
 
+    const theme = useClassicMaskSNSTheme()
     return (
         <>
             <Card
@@ -667,11 +656,7 @@ export function ITO(props: ITO_Props) {
                     if (!isRegionAllow) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton
-                                    disabled
-                                    onClick={() => undefined}
-                                    size="large"
-                                    className={classes.actionButton}>
+                                <ActionButton disabled onClick={() => undefined} className={classes.actionButton}>
                                     {t('plugin_ito_region_ban')}
                                 </ActionButton>
                             </Box>
@@ -689,11 +674,7 @@ export function ITO(props: ITO_Props) {
                     if (loadingTradeInfo || loadingAvailability) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton
-                                    disabled
-                                    onClick={() => undefined}
-                                    size="large"
-                                    className={classes.actionButton}>
+                                <ActionButton disabled onClick={() => undefined} className={classes.actionButton}>
                                     {t('plugin_ito_loading')}
                                 </ActionButton>
                             </Box>
@@ -705,7 +686,7 @@ export function ITO(props: ITO_Props) {
                     if (canWithdraw) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton onClick={onWithdraw} size="large" className={classes.actionButton}>
+                                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
                                     {t('plugin_ito_withdraw')}
                                 </ActionButton>
                             </Box>
@@ -722,7 +703,6 @@ export function ITO(props: ITO_Props) {
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                         onClick={onShareSuccess}
-                                        size="large"
                                         className={classes.actionButton}>
                                         {t('plugin_ito_share')}
                                     </ActionButton>
@@ -738,7 +718,6 @@ export function ITO(props: ITO_Props) {
                                             <ActionButton
                                                 onClick={retryIfQualified}
                                                 loading={loadingIfQualified}
-                                                size="large"
                                                 className={classes.actionButton}>
                                                 {loadingIfQualified
                                                     ? t('plugin_ito_qualification_loading')
@@ -761,7 +740,7 @@ export function ITO(props: ITO_Props) {
                         return (
                             <>
                                 <Box style={{ padding: 12, flex: 1 }}>
-                                    <ActionButton onClick={onUnlock} size="large" className={classes.actionButton}>
+                                    <ActionButton onClick={onUnlock} className={classes.actionButton}>
                                         {t('plugin_ito_unlock_in_advance')}
                                     </ActionButton>
                                 </Box>
@@ -770,7 +749,6 @@ export function ITO(props: ITO_Props) {
                                         <ActionButton
                                             startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                             onClick={onShare}
-                                            size="large"
                                             className={classes.actionButton}>
                                             {t('plugin_ito_share')}
                                         </ActionButton>
@@ -784,7 +762,7 @@ export function ITO(props: ITO_Props) {
                         return (
                             <>
                                 <Box style={{ flex: 1, padding: 12 }}>
-                                    <ActionButton onClick={onClaim} size="large" className={classes.actionButton}>
+                                    <ActionButton onClick={onClaim} className={classes.actionButton}>
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
                                 </Box>
@@ -792,7 +770,6 @@ export function ITO(props: ITO_Props) {
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                         onClick={onShareSuccess}
-                                        size="large"
                                         className={classes.actionButton}>
                                         {t('plugin_ito_share')}
                                     </ActionButton>
@@ -805,18 +782,20 @@ export function ITO(props: ITO_Props) {
                 })()}
             </Box>
 
-            <SwapGuide
-                status={claimDialogStatus}
-                total_remaining={total_remaining}
-                payload={{ ...payload, qualification_address: qualificationAddress }}
-                shareSuccessText={successShareText}
-                isBuyer={isBuyer}
-                exchangeTokens={exchange_tokens}
-                open={openClaimDialog}
-                onUpdate={setClaimDialogStatus}
-                onClose={() => setOpenClaimDialog(false)}
-                retryPayload={retryITOCard}
-            />
+            <ThemeProvider theme={theme}>
+                <SwapGuide
+                    status={claimDialogStatus}
+                    total_remaining={total_remaining}
+                    payload={{ ...payload, qualification_address: qualificationAddress }}
+                    shareSuccessText={successShareText}
+                    isBuyer={isBuyer}
+                    exchangeTokens={exchange_tokens}
+                    open={openClaimDialog}
+                    onUpdate={setClaimDialogStatus}
+                    onClose={() => setOpenClaimDialog(false)}
+                    retryPayload={retryITOCard}
+                />
+            </ThemeProvider>
         </>
     )
 }
