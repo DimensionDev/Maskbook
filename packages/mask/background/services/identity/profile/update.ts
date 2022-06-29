@@ -115,6 +115,7 @@ export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID
         hasLogout: false,
         uninitialized: false,
     }
+
     const profileRecord = {
         identifier: item.identifier,
         nickname: item.nickname,
@@ -122,6 +123,13 @@ export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID
         createdAt: item.createdAt!,
         updatedAt: item.updatedAt!,
     }
+    item.linkedTwitterNames
+        .filter((x) => x !== profileRecord.identifier.userId)
+        .forEach((x) =>
+            personaRecord.linkedProfiles.set(ProfileIdentifier.of('twitter.com', x).unwrap(), {
+                connectionConfirmState: 'confirmed',
+            }),
+        )
 
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
@@ -133,7 +141,9 @@ export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID
                 { connectionConfirmState: 'confirmed' },
                 t,
             )
-            await createNewRelation(profileRecord.identifier, whoAmI)
+            item.linkedTwitterNames.map(async (name) => {
+                await createNewRelation(ProfileIdentifier.of('twitter.com', name).unwrap(), whoAmI)
+            })
         })
     } catch {
         // already exist
