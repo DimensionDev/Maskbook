@@ -111,6 +111,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 'walletAddress',
                 'linkedPersona.rawPublicKey',
                 'linkedPersona.publicKeyAsHex',
+                'linkedTwitterNames',
             ],
             isCaseSensitive: false,
             ignoreLocation: true,
@@ -121,6 +122,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             (x) => x.linkedPersona?.rawPublicKey.toLowerCase(),
         )
     }, [search, items])
+
     return (
         <InjectedDialog
             className={classes.root}

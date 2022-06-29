@@ -1,4 +1,10 @@
-import { NextIDAction, PersonaIdentifier, ProfileIdentifier, ProfileInformationFromNextID } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    NextIDAction,
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { storeAvatar } from '../../../database/avatar-cache/avatar'
 import {
@@ -10,12 +16,12 @@ import {
     deleteProfileDB,
     detachProfileDB,
     LinkedProfileDetails,
-    PersonaRecord,
     ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db'
 import { NextIDProof } from '@masknet/web3-providers'
+import { createNewRelation } from '../relation/create'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -97,30 +103,43 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
  * Set NextID profile to profileDB
  * */
 
-export async function attachNextIDTuProfileDB(item: ProfileInformationFromNextID) {
-    const personaRecord: PersonaRecord = {
-        createdAt: item.createdAt!,
-        updatedAt: item.updatedAt!,
-        identifier: item.linkedPersona!,
-        linkedProfiles: new Map(),
-        publicKey: undefined as any,
-        publicHexKey: item.linkedPersona?.publicKeyAsHex,
-        nickname: item.nickname,
-        hasLogout: false,
-        uninitialized: false,
-    }
-    const profileRecord: ProfileRecord = {
-        identifier: item.identifier,
-        nickname: item.nickname!,
-        linkedPersona: item.linkedPersona,
-        createdAt: item.createdAt!,
-        updatedAt: item.updatedAt!,
-    }
+export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
+    const recordMap = item.linkedTwitterNames.map((x) => ({
+        personaRecord: {
+            createdAt: item.createdAt!,
+            updatedAt: item.updatedAt!,
+            identifier: item.linkedPersona!,
+            linkedProfiles: new Map(),
+            publicKey: undefined as any,
+            publicHexKey: item.linkedPersona?.publicKeyAsHex,
+            nickname: x,
+            hasLogout: false,
+            uninitialized: false,
+        },
+        profileRecord: {
+            identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
+            nickname: x,
+            linkedPersona: item.linkedPersona,
+            createdAt: item.createdAt!,
+            updatedAt: item.updatedAt!,
+        },
+    }))
+
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
-            await createPersonaDB(personaRecord, t)
-            await createProfileDB(profileRecord, t)
-            await attachProfileDB(item.identifier, item.linkedPersona!, { connectionConfirmState: 'confirmed' }, t)
+            await Promise.all(
+                recordMap.map(async (i) => {
+                    await createPersonaDB(i.personaRecord, t)
+                    await createProfileDB(i.profileRecord, t)
+                    await attachProfileDB(
+                        i.profileRecord.identifier,
+                        item.linkedPersona!,
+                        { connectionConfirmState: 'confirmed' },
+                        t,
+                    )
+                    await createNewRelation(i.profileRecord.identifier, whoAmI)
+                }),
+            )
         })
     } catch {
         // already exist

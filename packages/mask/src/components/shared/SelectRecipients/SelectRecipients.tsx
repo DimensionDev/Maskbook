@@ -58,10 +58,10 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
+        const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
-        if (!item || !item.fromNextID || !item.linkedPersona) return
-
-        Services.Identity.attachNextIDTuProfileDB(item)
+        if (!item || !item.fromNextID || !item.linkedPersona || !whoAmI) return
+        Services.Identity.attachNextIDToProfileDB(item, whoAmI)
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])
