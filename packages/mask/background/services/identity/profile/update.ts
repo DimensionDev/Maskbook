@@ -104,10 +104,11 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
  * */
 
 export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
+    if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
     const personaRecord = {
-        createdAt: item.createdAt!,
-        updatedAt: item.updatedAt!,
-        identifier: item.linkedPersona!,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        identifier: item.linkedPersona,
         linkedProfiles: new Map(),
         publicKey: undefined as any,
         publicHexKey: item.linkedPersona?.publicKeyAsHex,
@@ -120,8 +121,8 @@ export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID
         identifier: item.identifier,
         nickname: item.nickname,
         linkedPersona: item.linkedPersona,
-        createdAt: item.createdAt!,
-        updatedAt: item.updatedAt!,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     }
     item.linkedTwitterNames
         .filter((x) => x !== profileRecord.identifier.userId)
