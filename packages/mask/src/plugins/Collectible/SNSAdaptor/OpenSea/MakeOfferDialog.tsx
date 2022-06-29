@@ -6,10 +6,10 @@ import {
     Checkbox,
     Card,
     CardContent,
-    CardActions,
     FormControlLabel,
     Typography,
     Link,
+    DialogActions,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
@@ -242,52 +242,42 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             />
                         )}
                     </CardContent>
-                    <CardActions className={classes.footer}>
-                        <PluginWalletStatusBar>
-                            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                                <Box
-                                    className={classes.buttons}
-                                    display="flex"
-                                    alignItems="center"
-                                    justifyContent="center">
-                                    <ActionButtonPromise
-                                        className={classes.button}
-                                        disabled={!!validationMessage}
-                                        size="large"
-                                        init={
-                                            validationMessage ||
-                                            t(
-                                                isAuction
-                                                    ? 'plugin_collectible_place_bid'
-                                                    : 'plugin_collectible_make_offer',
-                                            )
-                                        }
-                                        waiting={t(
-                                            isAuction
-                                                ? 'plugin_collectible_place_bid'
-                                                : 'plugin_collectible_make_offer',
-                                        )}
-                                        complete={t('plugin_collectible_done')}
-                                        failed={t('plugin_collectible_retry')}
-                                        executor={onMakeOffer}
-                                        completeOnClick={onClose}
-                                        failedOnClick="use executor"
-                                    />
-                                    {insufficientBalance ? (
-                                        <ActionButton
-                                            className={classes.button}
-                                            variant="contained"
-                                            size="large"
-                                            onClick={onConvertClick}>
-                                            {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
-                                        </ActionButton>
-                                    ) : null}
-                                </Box>
-                            </ChainBoundary>
-                        </PluginWalletStatusBar>
-                    </CardActions>
                 </Card>
             </DialogContent>
+            <DialogActions style={{ padding: 0 }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
+                            <ActionButtonPromise
+                                className={classes.button}
+                                disabled={!!validationMessage}
+                                size="large"
+                                init={
+                                    validationMessage ||
+                                    t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer')
+                                }
+                                waiting={t(
+                                    isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
+                                )}
+                                complete={t('plugin_collectible_done')}
+                                failed={t('plugin_collectible_retry')}
+                                executor={onMakeOffer}
+                                completeOnClick={onClose}
+                                failedOnClick="use executor"
+                            />
+                            {insufficientBalance ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onConvertClick}>
+                                    {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
+                                </ActionButton>
+                            ) : null}
+                        </Box>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
+            </DialogActions>
         </InjectedDialog>
     )
 }
