@@ -71,6 +71,7 @@ export enum SourceType {
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
     X2Y2 = 'X2Y2',
+    MagicEden = 'magiceden',
 
     // Rarity
     RaritySniper = 'RaritySniper',

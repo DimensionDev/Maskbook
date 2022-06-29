@@ -130,7 +130,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan]
+const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan, SourceType.MagicEden]
 
 export interface CollectibleProps {}
 

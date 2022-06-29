@@ -3,13 +3,14 @@ import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
     disableSearch?: boolean
     onSelect?(token: FungibleToken<ChainId, SchemaType> | null): void

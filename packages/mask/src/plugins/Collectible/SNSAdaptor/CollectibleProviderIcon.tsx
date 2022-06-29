@@ -22,9 +22,15 @@ const useStyles = makeStyles()({
         height: 16,
         verticalAlign: 'bottom',
     },
+    MagicEden: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
 })
 
 const NftScan = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
+const MagicEdenIcon = new URL('../../../resources/MagicEdenIcon.png', import.meta.url).toString()
 const ZerionIcon = new URL('../../../resources/zerion.png', import.meta.url).toString()
 
 export interface CollectibleProviderIconProps {
@@ -38,6 +44,8 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <img src={NftScan} className={classes.NFTScan} />
         case SourceType.Zerion:
             return <img src={ZerionIcon} className={classes.NFTScan} />
+        case SourceType.MagicEden:
+            return <img src={MagicEdenIcon} className={classes.MagicEden} />
         case SourceType.OpenSea:
             return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
         case SourceType.Rarible:

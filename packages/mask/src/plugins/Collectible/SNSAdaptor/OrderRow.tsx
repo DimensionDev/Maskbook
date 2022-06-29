@@ -1,7 +1,8 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { ChainId, explorerResolver, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import {
     isOne,
     isZero,
@@ -54,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface IRowProps {
-    order: NonFungibleTokenOrder<ChainId, SchemaType>
+    order: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     isDifferenceToken?: boolean
     acceptable?: boolean
 }
@@ -148,7 +149,9 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                 order.priceInToken?.token?.decimals,
                                 order.quantity,
                             )?.toString()}{' '}
-                            {provider === SourceType.OpenSea ? order.priceInToken?.token?.symbol ?? '' : 'ETH'}
+                            {provider === SourceType.OpenSea || SourceType.MagicEden
+                                ? order.priceInToken?.token?.symbol ?? ''
+                                : 'ETH'}
                         </Typography>
                     </TableCell>
                     {provider === SourceType.OpenSea ? (

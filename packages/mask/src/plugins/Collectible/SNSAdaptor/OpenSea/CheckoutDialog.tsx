@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { UnreviewedWarning } from '../UnreviewedWarning'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface CheckoutDialogProps {
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     order?: Order
     open: boolean
     onClose: () => void

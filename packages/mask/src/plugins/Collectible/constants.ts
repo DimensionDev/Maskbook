@@ -13,6 +13,9 @@ export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
 export const zoraHostnames = ['zora.co']
 export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/
 
+export const magicedenHostnames = ['magiceden.io']
+export const magicedenPathnameRegexMatcher = /^\/item-details\/([1-9A-HJ-NP-Za-km-z]{32,44})/
+
 export const NullAddress = 'NullAddress'
 export const ReferrerAddress = ''
 export const OpenSeaMainnetURL = 'https://opensea.io'

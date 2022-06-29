@@ -117,6 +117,7 @@ export interface TokenActivity {
     seller: string
     sellerReferral: string
     price: number
+    type: string
 }
 
 /**

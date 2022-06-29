@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedBalance } from '@masknet/shared'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import { CurrencyType, formatBalance, NonFungibleTokenEvent, SourceType } from '@masknet/web3-shared-base'
 import { formatElapsed } from '../../../Wallet/formatter'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props {
-    event: NonFungibleTokenEvent<ChainId, SchemaType>
+    event: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     isDifferenceToken?: boolean
 }
 

@@ -30,7 +30,8 @@ import { SelectTokenListPanel } from '.././SelectTokenListPanel'
 import { isWyvernSchemaName } from '../../utils'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { Order } from 'opensea-js/lib/types'
 import { useOpenSea } from '../../hooks/useOpenSea'
 
@@ -66,7 +67,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface MakeOfferDialogProps {
     open: boolean
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     order?: Order
     onClose: () => void
 }

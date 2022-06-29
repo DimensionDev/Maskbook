@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { Network } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { createLookupTableResolver, createPredicate, SourceType } from '@masknet/web3-shared-base'
 import {
     RaribleRopstenUserURL,
@@ -60,7 +61,10 @@ export const resolveLinkOnZora = createLookupTableResolver<ZoraSupportedChainId,
     'https://zora.co',
 )
 
-export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
+export const magicEdenLink = 'https://magiceden.io'
+export const solanaExplorerLink = 'https://explorer.solana.com/'
+
+export function resolveTraitLinkOnOpenSea(chainId: Web3Helper.ChainIdAll, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
     }
@@ -87,13 +91,17 @@ export function resolveAssetLinkOnCurrentProvider(chainId: ChainId, address: str
                 address,
                 id,
             })
+        case SourceType.MagicEden:
+            return urlcat(magicEdenLink, '/item-details/:address', {
+                address,
+            })
         default:
             return ''
     }
 }
 
 export function resolveUserUrlOnCurrentProvider(
-    chainId: ChainId,
+    chainId: Web3Helper.ChainIdAll,
     address: string,
     provider: SourceType,
     username?: string,
@@ -107,6 +115,8 @@ export function resolveUserUrlOnCurrentProvider(
             return ''
         case SourceType.Zora:
             return urlcat(resolveLinkOnZora(chainId as ZoraSupportedChainId), `/${address}`)
+        case SourceType.MagicEden:
+            return urlcat(solanaExplorerLink, `address/${address}`)
         default:
             return ''
     }
@@ -124,6 +134,8 @@ export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any,
         case SourceType.NFTScan:
             return ''
         case SourceType.Zora:
+            return ''
+        case SourceType.MagicEden:
             return ''
         default:
             return ''

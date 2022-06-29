@@ -5,7 +5,7 @@ import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -36,10 +36,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface SelectTokenPanelProps {
     amount: string
     balance: string
-    token?: FungibleToken<ChainId, SchemaType>
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
-    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    onTokenChange: (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {

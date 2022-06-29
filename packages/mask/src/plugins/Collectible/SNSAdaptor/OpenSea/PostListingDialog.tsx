@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DialogContent, Tab, Typography } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import { ListingByPriceCard } from './ListingByPriceCard'
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PostListingDialogProps {
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     open: boolean
     onClose: () => void
 }

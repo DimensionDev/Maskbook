@@ -2,7 +2,8 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { isZero, isGreaterThan, NetworkPluginID, FungibleToken, NonFungibleAsset } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
@@ -48,8 +49,8 @@ const useStyles = makeStyles()((theme) => {
 export interface ListingByPriceCardProps {
     open: boolean
     onClose: () => void
-    asset?: NonFungibleAsset<ChainId, SchemaType>
-    paymentTokens: Array<FungibleToken<ChainId, SchemaType>>
+    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    paymentTokens: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {

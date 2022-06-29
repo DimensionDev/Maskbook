@@ -6,6 +6,8 @@ import {
     rariblePathnameRegexMatcher,
     zoraHostnames,
     zoraPathnameRegexMatcher,
+    magicedenHostnames,
+    magicedenPathnameRegexMatcher,
 } from './constants'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
@@ -19,7 +21,8 @@ export function checkUrl(url: string): boolean {
     return (
         (openseaHostnames.includes(_url.hostname) && openseaPathnameRegexMatcher.test(_url.pathname)) ||
         (raribleHostnames.includes(_url.hostname) && rariblePathnameRegexMatcher.test(_url.pathname)) ||
-        (zoraHostnames.includes(_url.hostname) && zoraPathnameRegexMatcher.test(_url.pathname))
+        (zoraHostnames.includes(_url.hostname) && zoraPathnameRegexMatcher.test(_url.pathname)) ||
+        (magicedenHostnames.includes(_url.hostname) && magicedenPathnameRegexMatcher.test(_url.pathname))
     )
 }
 
@@ -68,6 +71,18 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
             address: zoraMatched[1],
             token_id: zoraMatched[2],
             provider: SourceType.Zora,
+        }
+    }
+    // #endregion
+
+    // #region magiceden
+    const magicEdenMatched = _url.pathname.match(magicedenPathnameRegexMatcher)
+    if (magicEdenMatched) {
+        return {
+            chain_id: ChainId.Mainnet,
+            address: magicEdenMatched[1],
+            token_id: '0',
+            provider: SourceType.MagicEden,
         }
     }
     // #endregion

@@ -9,18 +9,19 @@ import {
     OrderSide,
     TokenType,
 } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import urlcat from 'urlcat'
 import { courier } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
 import { MAGIC_EDEN_API_URL } from './constants'
 import type {
-    Auction,
     MagicEdenCollection as Collection,
     MagicEdenNFT,
     MagicEdenToken,
     TokenActivity,
     WalletOffer,
+    TokenInListings,
 } from './types'
 import { toImage } from './utils'
 
@@ -40,7 +41,10 @@ async function fetchFromMagicEden<T>(path: string) {
     }
 }
 
-function createNFTToken(token: MagicEdenToken, collection: Collection): NonFungibleToken<ChainId, SchemaType> {
+function createNFTToken(
+    token: MagicEdenToken,
+    collection: Collection,
+): NonFungibleToken<ChainId, SchemaType> | undefined {
     const chainId = ChainId.Mainnet
     return {
         id: token.mintAddress,
@@ -92,7 +96,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getToken(address: string, tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
-            urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
+            urlcat('/v2/tokens/:mint_address', { mint_address: address }),
         )
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
@@ -118,6 +122,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
                 tokenId: token.mintAddress,
+                ownerId: token.owner,
                 address: token.mintAddress,
                 metadata: {
                     chainId: ChainId.Mainnet,
@@ -144,67 +149,48 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     verified: false,
                     address: token.mintAddress,
                 },
+                link: urlcat('https://magiceden.io/item-details/:mint_address', {
+                    mint_address: token.mintAddress,
+                }),
+                creator: {
+                    address: token.properties.creators[0].address || '',
+                },
+                owner: {
+                    address: token.owner,
+                },
+                traits: token.attributes?.map(({ trait_type, value }) => ({ type: trait_type, value })) ?? [],
             }
         })
         return createPageable(data, createIndicator(indicator))
     }
 
     async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const [token, auction, nft] = await Promise.all([
+        const [token, offers, listings, events] = await Promise.all([
             this.getToken(address, tokenMint),
-            fetchFromMagicEden<Auction>(urlcat('/auctions/token-mint/:mint_address', { mint_address: tokenMint })),
-            fetchFromMagicEden<MagicEdenNFT>(
-                urlcat('/rpc/getNFTByMintAddress/:mint_address', { mint_address: tokenMint }),
-            ),
+            this.getOrders(address, tokenMint, OrderSide.Buy),
+            this.getOrders(address, tokenMint, OrderSide.Sell),
+            this.getEvents(address, tokenMint),
         ])
         const link = urlcat('https://magiceden.io/item-details/:mint_address', {
             mint_address: tokenMint,
         })
+        const combinedOrders = offers.data.concat(listings.data)
         if (!token) return
         return {
             ...token,
             link,
-            auction: auction
+            creator: token.address
                 ? {
-                      endAt: Date.parse(auction.config.endDate),
-                      // TODO
-                      orderTokens: [],
-                      // TODO
-                      offerTokens: [],
-                  }
-                : undefined,
-            creator: nft?.creators?.length
-                ? {
-                      address: nft.creators[0].address,
+                      address: token.address,
                       nickname: 'Unknown',
                   }
                 : undefined,
             owner: {
-                address: nft?.owner,
+                address: token.ownerId,
                 nickname: 'Unknown',
             },
-            traits: auction?.attributes.map((x) => ({
-                type: x.trait_type,
-                value: x.value,
-            })),
-            orders: auction?.bids
-                ? auction.bids.map((x) => ({
-                      id: x.bid,
-                      chainId: ChainId.Mainnet,
-                      assetPermalink: link,
-                      hash: x.bid,
-                      quantity: '1',
-                      createdAt: x.timestamp * 1000,
-                      paymentToken: createFungibleToken<ChainId.Mainnet, SchemaType.Fungible | SchemaType.Native>(
-                          ChainId.Mainnet,
-                          SchemaType.Native,
-                          auction.config.payees[0].address,
-                          'Sol',
-                          'Sol',
-                          9,
-                      ),
-                  }))
-                : [],
+            orders: combinedOrders || [],
+            events: events.data,
         }
     }
 
@@ -224,8 +210,6 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
                 mint_address: address,
-                offset: (indicator?.index ?? 0) * size,
-                limit: size,
             }),
         )
         const events = (activities || []).map((activity) => {
@@ -241,8 +225,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     address: activity.buyerReferral,
                 },
                 // TODO's
-                quantity: '1',
-                type: '',
+                quantity: activity.price.toString(),
+                type: activity.type,
             }
         })
         return createPageable(
@@ -252,24 +236,41 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 
-    async getOrders(address: string, tokenId: string, side: OrderSide, { indicator, size }: HubOptions<ChainId> = {}) {
-        const limit = size || 20
-        const offers = await fetchFromMagicEden<WalletOffer[]>(
-            urlcat('/tokens/:mint_address/offer_received', {
+    async getListings(address: string, tokenId: string, { indicator, size }: HubOptions<ChainId> = {}) {
+        const listings = await fetchFromMagicEden<TokenInListings[]>(
+            urlcat('/v2/tokens/:mint_address/listings', {
                 mint_address: address,
-                side,
-                offset: (indicator?.index ?? 0) * limit,
-                limit,
             }),
         )
-        const orders = (offers || []).map((offer) => {
+
+        const orders = (listings || []).map((listing) => {
             return {
-                id: offer.pdaAddress,
+                id: listing.pdaAddress,
                 chainId: ChainId.Mainnet,
-                side,
+                side: OrderSide.Sell,
                 quantity: '1',
-                // TODO's
                 assetPermalink: '',
+                hash: '',
+                maker: {
+                    address: listing.seller,
+                    nickname: listing.seller,
+                    avatarURL: '',
+                    link: urlcat('https://magiceden.io/u/:address', { address: listing.seller }),
+                },
+                price: {
+                    usd: (listing.price * 10 ** 9).toString(),
+                },
+                priceInToken: {
+                    amount: (listing.price * 10 ** 9).toString(),
+                    token: createFungibleToken<ChainId.Mainnet, SchemaType.Fungible | SchemaType.Native>(
+                        ChainId.Mainnet,
+                        SchemaType.Native,
+                        listing.seller,
+                        'Sol',
+                        'Sol',
+                        9,
+                    ),
+                },
             }
         })
         return createPageable(
@@ -277,6 +278,62 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             createIndicator(indicator),
             orders.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getOffers(address: string, tokenId: string, { indicator, size }: HubOptions<ChainId> = {}) {
+        const offers = await fetchFromMagicEden<WalletOffer[]>(
+            urlcat('/v2/tokens/:mint_address/offers_received', {
+                mint_address: address,
+            }),
+        )
+
+        const orders = (offers || []).map((offer) => {
+            return {
+                id: offer.pdaAddress,
+                chainId: ChainId.Mainnet,
+                side: OrderSide.Buy,
+                quantity: '1',
+                assetPermalink: '',
+                hash: '',
+                expiresAt: offer.expiry,
+                maker: {
+                    address: offer.buyer,
+                    nickname: offer.buyer,
+                    avatarURL: '',
+                    link: urlcat('https://magiceden.io/u/:address', { address: offer.buyer }),
+                },
+                price: {
+                    usd: (offer.price * 10 ** 9).toString(),
+                },
+                priceInToken: {
+                    amount: (offer.price * 10 ** 9).toString(),
+                    token: createFungibleToken<ChainId.Mainnet, SchemaType.Fungible | SchemaType.Native>(
+                        ChainId.Mainnet,
+                        SchemaType.Native,
+                        offer.buyer,
+                        'Sol',
+                        'Sol',
+                        9,
+                    ),
+                },
+            }
+        })
+        return createPageable(
+            orders,
+            createIndicator(indicator),
+            orders.length === size ? createNextIndicator(indicator) : undefined,
+        )
+    }
+
+    async getOrders(address: string, tokenId: string, side: OrderSide, { indicator, size }: HubOptions<ChainId> = {}) {
+        switch (side) {
+            case OrderSide.Buy:
+                return this.getOffers(address, tokenId, { indicator, size })
+            case OrderSide.Sell:
+                return this.getListings(address, tokenId, { indicator, size })
+            default:
+                return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
     }
 
     async getCollections(symbol: string, { indicator, size }: HubOptions<ChainId> = {}) {

@@ -4,12 +4,13 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import { ChainId, chainResolver, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatAddress } from '@masknet/web3-shared-solana'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea, resolveUserUrlOnCurrentProvider } from '../pipes'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,8 +63,14 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset, provider } = CollectibleState.useContainer()
+
+    const chainId = useChainId(
+        provider === SourceType.MagicEden ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+    )
+    const { Others } = useWeb3State(
+        provider === SourceType.MagicEden ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+    )
 
     if (!asset.value) return null
 
@@ -94,13 +101,16 @@ export function TokenTab(props: TokenTabProps) {
                         <Link
                             href={resolveUserUrlOnCurrentProvider(
                                 chainId,
-                                asset.value.owner?.address ?? '',
+                                (asset.value.owner?.address || asset.value.ownerId) ?? '',
                                 provider,
                                 asset.value.owner?.nickname,
                             )}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Account address={asset.value.owner?.nickname} username={asset.value.owner?.address} />
+                            <Account
+                                address={asset.value.owner?.address || asset.value.ownerId}
+                                username={asset.value.owner?.address}
+                            />
                         </Link>
                     </Typography>
                 ) : null}
@@ -156,14 +166,14 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_contract_address')}</Typography>
                     <Link
-                        href={explorerResolver.addressLink(ChainId.Mainnet, token?.contractAddress ?? '')}
+                        href={Others?.explorerResolver.addressLink(chainId, token?.contractAddress ?? '')}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
                             <FormattedAddress
                                 address={token?.contractAddress ?? ''}
                                 size={4}
-                                formatter={formatEthereumAddress}
+                                formatter={provider === SourceType.MagicEden ? formatAddress : formatEthereumAddress}
                             />
                         </Typography>
                     </Link>
@@ -176,7 +186,7 @@ export function TokenTab(props: TokenTabProps) {
                 </Box>
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_block_chain')}</Typography>
-                    <Typography variant="body2">{chainResolver.chainName(chainId)}</Typography>
+                    <Typography variant="body2">{Others?.chainResolver.chainName(chainId)}</Typography>
                 </Box>
             </Box>
         </CollectibleTab>
