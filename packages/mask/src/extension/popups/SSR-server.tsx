@@ -17,10 +17,12 @@ import { PersonaHomeUI } from './pages/Personas/Home/UI'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 import { PersonaHeaderUI } from './pages/Personas/components/PersonaHeader/UI'
 import { NormalHeader } from './components/NormalHeader'
+import { addShareBaseI18N } from '@masknet/shared-base-ui'
 
 const init = once(() =>
     i18NextInstance.init().then(() => {
         addMaskI18N(i18NextInstance)
+        addShareBaseI18N(i18NextInstance)
         initReactI18next.init(i18NextInstance)
     }),
 )
