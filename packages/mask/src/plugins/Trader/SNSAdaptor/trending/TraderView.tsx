@@ -169,12 +169,12 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region tabs
-    const tabs = [
-        ContentTabs.Market,
-        ContentTabs.Price,
-        ContentTabs.Exchange,
-        ...(isSwappable ? [ContentTabs.Swap] : []),
-    ]
+    const tabs = useMemo(() => {
+        const list = [ContentTabs.Market, ContentTabs.Price, ContentTabs.Exchange]
+        if (isSwappable) list.push(ContentTabs.Swap)
+        if (isNFT) list.push(ContentTabs.NFTItems)
+        return list
+    }, [isSwappable, isNFT])
     const [currentTab, , , setTab] = useTabs<ContentTabs>(tabs[0], ...tabs)
     const tabComponents = useMemo(() => {
         const configs = [

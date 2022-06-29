@@ -96,6 +96,7 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns }) => ({
         padding: theme.spacing(0.5),
         color: theme.palette.text.primary,
         fontWeight: 700,
+        fontSize: 12,
     },
     tooltip: {
         marginBottom: `${theme.spacing(0.5)} !important`,

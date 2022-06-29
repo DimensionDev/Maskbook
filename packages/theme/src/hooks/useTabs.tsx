@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 /**
  * @example
@@ -18,11 +18,18 @@ import { useCallback, useState } from 'react'
  */
 export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     const [currentTab, setTab] = useState(defaultTab)
-    const enum_: Record<T, T> = { [defaultTab]: defaultTab } as any
-    possibleTabs.forEach((t) => (enum_[t] = t))
+    const tabRecords = { [defaultTab]: defaultTab } as Record<T, T>
+    possibleTabs.forEach((t) => (tabRecords[t] = t))
+
+    const isCurrentTabAvaliable = [defaultTab, ...possibleTabs].includes(currentTab)
+    useEffect(() => {
+        if (!isCurrentTabAvaliable) {
+            setTab(defaultTab)
+        }
+    }, [isCurrentTabAvaliable, defaultTab])
 
     const onChange = useCallback((event: unknown, value: any) => {
         setTab(value)
     }, [])
-    return [currentTab, onChange, enum_, setTab] as const
+    return [currentTab, onChange, tabRecords, setTab] as const
 }
