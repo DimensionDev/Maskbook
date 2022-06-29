@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -11,6 +11,7 @@ import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
 import { PopupSnackbarProvider } from '@masknet/theme'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -23,11 +24,17 @@ const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+function PluginRenderDelayed() {
+    const [canRenderPlugin, setRenderPlugins] = useState(false)
+    useEffect(() => setRenderPlugins(true), [])
+    if (!canRenderPlugin) return null
+    return <PluginRender />
+}
 
 export default function Popups() {
     const [title, setTitle] = useState('')
     return (
-        <MaskUIRoot useTheme={usePopupTheme} kind="page">
+        <MaskUIRoot fallback={frame(<LoadingPlaceholder />)} useTheme={usePopupTheme} kind="page">
             <PopupSnackbarProvider>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={{ title, setTitle }}>
@@ -48,7 +55,7 @@ export default function Popups() {
                                 <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
                             </Routes>
                             {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                            <PluginRender />
+                            <PluginRenderDelayed />
                         </HashRouter>
                     </PageTitleContext.Provider>
                 </PopupContext.Provider>

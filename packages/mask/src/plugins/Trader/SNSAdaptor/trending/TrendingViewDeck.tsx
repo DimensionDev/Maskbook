@@ -244,7 +244,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
                             />
                         </Typography>
-                        {!isTokenSecurityClosed && tokenSecurityInfo && !error && (
+                        {isTokenSecurityEnable && tokenSecurityInfo && !error && (
                             <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
                         )}
                     </Stack>
