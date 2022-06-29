@@ -533,7 +533,7 @@
     "plugin_ito_error_enter_amount_and_token": "Enter an amount and Select a token",
     "plugin_ito_error_allocation_absence": "Enter swap limit",
     "plugin_ito_error_allocation_invalid": "Invalid amount",
-    "plugin_ito_error_exchange_time": "start time cannot be later than end time",
+    "plugin_ito_error_exchange_time": "Start time cannot be later than end time",
     "plugin_ito_error_unlock_time": "End time cannot be later than unlock time",
     "plugin_ito_error_balance": "Insufficient {{symbol}} balance",
     "plugin_ito_list_start_date": "Start Time {{date}}",
