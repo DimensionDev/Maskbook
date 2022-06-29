@@ -168,19 +168,25 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         fullWidth
                         className={classes.switchButton}
                         disabled={actualProviderType === ProviderType.WalletConnect}
+                        startIcon={
+                            <WalletIcon
+                                mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
+                                size={18}
+                            />
+                        }
                         sx={props.ActionButtonPromiseProps?.sx}
                         init={
                             <span>
                                 {t('plugin_wallet_connect_network', {
-                                    network: 'EVM',
+                                    network: expectedChainName,
                                 })}
                             </span>
                         }
                         waiting={t('plugin_wallet_connect_network_under_going', {
-                            network: 'EVM',
+                            network: expectedChainName,
                         })}
                         complete={t('plugin_wallet_connect_network', {
-                            network: 'EVM',
+                            network: expectedChainName,
                         })}
                         failed={t('retry')}
                         executor={onSwitchChain}
