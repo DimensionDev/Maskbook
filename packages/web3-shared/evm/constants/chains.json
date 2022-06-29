@@ -841,7 +841,6 @@
     {
         "chainId": 66,
         "name": "OKExChain Mainnet",
-        "chain": "OKEx",
         "network": "mainnet",
         "shortName": "okt",
         "features": [],
@@ -3020,8 +3019,8 @@
     {
         "chainId": 592,
         "name": "Astar",
-        "chain": "Astar",
         "network": "mainnet",
+        "shortName": "Astar",
         "rpc": ["https://evm.astar.network"],
         "faucets": [],
         "features": ["EIP1559"],
@@ -3033,7 +3032,6 @@
             "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
         },
         "infoURL": "https://blockscout.com/astar/",
-        "shortName": "Astar",
         "explorers": [
             {
                 "name": "blockscout",
