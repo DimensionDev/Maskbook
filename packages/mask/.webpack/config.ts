@@ -259,7 +259,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
-        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/render.tsx')),
+        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
@@ -328,7 +328,7 @@ function addHTMLEntry(
     if (options.sourceMap) {
         templateContent = templateContent.replace(
             `<!-- CSP -->`,
-            `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
+            `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack ssr">`,
         )
     }
     if (options.lockdown) {
