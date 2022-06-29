@@ -56,7 +56,7 @@ interface WalletItemProps {
     onSelectedWallet?: (address: string, pluginId: NetworkPluginID, chainId: ChainId) => void
     nextIDWallets?: BindingProof[]
     selectedWallet?: string
-    chainId?: ChainId
+    chainId: ChainId
     haveChangeWallet?: boolean
     onConnectWallet?: () => void
 }
@@ -67,7 +67,7 @@ export function WalletItem(props: WalletItemProps) {
         wallet,
         nextIDWallets = [],
         selectedWallet,
-        chainId = ChainId.Mainnet,
+        chainId,
         onSelectedWallet,
         haveChangeWallet = false,
         onConnectWallet,

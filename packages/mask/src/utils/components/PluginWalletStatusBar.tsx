@@ -144,8 +144,8 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
                             <Typography className={classes.walletName}>
                                 <span>
                                     {providerType === ProviderType.MaskWallet
-                                        ? wallet?.name ??
-                                          domain ??
+                                        ? domain ??
+                                          wallet?.name ??
                                           providerDescriptor?.name ??
                                           Others?.formatAddress(account, 4)
                                         : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}

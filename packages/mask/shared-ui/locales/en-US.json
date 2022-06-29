@@ -879,6 +879,7 @@
     "plugin_pets_dialog_preview": "Preview",
     "plugin_pets_dialog_created": "Created by NonFFriend",
     "plugin_pets_dialog_powered": "Powered by RSS3",
+    "powered_by": "Powered by",
     "plugin_pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",
     "plugin_pets_dialog_fail": "Setting failed, please try later",
     "plugin_pets_dialog_check_title": "Show NFT friends on the profile page.",

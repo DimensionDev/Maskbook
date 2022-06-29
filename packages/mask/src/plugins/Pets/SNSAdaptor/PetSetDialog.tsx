@@ -27,7 +27,7 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
 import { RSS3Icon } from '../assets/rss3'
-import { LoadingButton } from '@mui/lab'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -61,7 +61,9 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     btn: {
-        margin: theme.spacing(8, 0, 2),
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
     thumbnail: {
         width: 25,
@@ -323,7 +325,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 />
                 <Box className={classes.desBox}>
                     <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
-                        {t('plugin_pets_dialog_created')}
+                        {t('powered_by')}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
@@ -349,16 +351,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         size: 'large',
                         fullWidth: true,
                     }}>
-                    <LoadingButton
+                    <ActionButton
                         loading={loading}
-                        color="inherit"
-                        size="large"
                         fullWidth
                         className={classes.btn}
                         onClick={saveHandle}
                         disabled={!collection.name || !metaData.image}>
                         {t('plugin_pets_dialog_btn')}
-                    </LoadingButton>
+                    </ActionButton>
                 </ChainBoundary>
             </PluginWalletStatusBar>
 

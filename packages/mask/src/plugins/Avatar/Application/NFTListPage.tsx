@@ -1,7 +1,7 @@
 import { ElementAnchor, RetryHint, useImageChecker } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, List, ListItem, Skeleton, Stack } from '@mui/material'
+import { Box, List, ListItem, Skeleton, Stack, useTheme } from '@mui/material'
 import { range } from 'lodash-unified'
 import { useState } from 'react'
 import { NFTImage } from '../SNSAdaptor/NFTImage'
@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         gridGap: 13,
         display: 'grid',
         gridTemplateColumns: 'repeat(5, 1fr)',
-        padding: '0 16px',
+        padding: '0 16px 50px 16px',
     },
 
     nftItem: {
@@ -48,6 +48,16 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
     skeletonBox: {
         marginLeft: 'auto',
         marginRight: 'auto',
+    },
+    image: {
+        width: 100,
+        height: 100,
+        objectFit: 'cover',
+        boxSizing: 'border-box',
+        '&:hover': {
+            border: `1px solid ${theme.palette.primary.main}`,
+        },
+        borderRadius: 12,
     },
 }))
 
@@ -132,6 +142,10 @@ export function NFTImageCollectibleAvatar({
 }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles({ networkPluginID: pluginId })
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
+    const theme = useTheme()
+
+    const assetPlayerFallbackImageDark = new URL('../assets/nft_token_fallback_dark.png', import.meta.url)
+    const assetPlayerFallbackImageLight = new URL('../assets/nft_token_fallback.png', import.meta.url)
 
     if (loading)
         return (
@@ -139,7 +153,17 @@ export function NFTImageCollectibleAvatar({
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
+
     return isImageToken ? (
         <NFTImage pluginId={pluginId} showBadge token={token} selectedToken={selectedToken} onChange={onChange} />
-    ) : null
+    ) : (
+        <img
+            className={classes.image}
+            src={
+                theme.palette.mode === 'dark'
+                    ? assetPlayerFallbackImageDark.toString()
+                    : assetPlayerFallbackImageLight.toString()
+            }
+        />
+    )
 }
