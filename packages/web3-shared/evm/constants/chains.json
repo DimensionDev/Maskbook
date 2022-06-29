@@ -3018,6 +3018,7 @@
     },
     {
         "chainId": 592,
+        "type": "Astar",
         "name": "Astar",
         "network": "mainnet",
         "shortName": "Astar",
@@ -3026,8 +3027,8 @@
         "features": ["EIP1559"],
         "nativeCurrency": {
             "chainId": 592,
-            "name": "Astar",
-            "symbol": "Astar",
+            "name": "ASTR",
+            "symbol": "ASTR",
             "decimals": 18,
             "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
         },
