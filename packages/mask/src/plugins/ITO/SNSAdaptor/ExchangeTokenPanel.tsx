@@ -55,6 +55,7 @@ export interface ExchangeTokenPanelProps {
     showRemove: boolean
     showAdd: boolean
 
+    chainId: ChainId
     label: string
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
@@ -75,6 +76,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         label,
         excludeTokensAddress = [],
         selectedTokensAddress = [],
+        chainId,
         onRemove,
         onAdd,
     } = props
@@ -87,6 +89,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             disableNativeToken: isSell,
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
+            chainId,
         })
         if (picked) onExchangeTokenChange(picked, dataIndex)
     }, [

@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
@@ -31,17 +31,13 @@ const useStyles = makeStyles()((theme) => ({
     galleryItem: {
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
-        padding: theme.spacing(1),
-    },
-    gallery: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        height: 150,
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
+        height: 200,
+        '::-webkit-scrollbar': {
             display: 'none',
         },
+        overflowY: 'auto',
     },
+
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
@@ -51,13 +47,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     setNFTAvatar: {},
     skeleton: {
-        width: 97,
-        height: 97,
+        width: 100,
+        height: 100,
         objectFit: 'cover',
-        borderRadius: '100%',
         boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
     },
     skeletonBox: {
         marginLeft: 'auto',
@@ -80,6 +73,26 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         marginTop: theme.spacing(1),
         gap: 16,
+    },
+    list: {
+        gridGap: 13,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        padding: 8,
+        overflowY: 'auto',
+    },
+
+    nftItem: {
+        position: 'relative',
+        cursor: 'pointer',
+        display: 'flex',
+        overflow: 'hidden',
+        padding: 0,
+        flexDirection: 'column',
+        borderRadius: 12,
+        userSelect: 'none',
+        justifyContent: 'center',
+        lineHeight: 0,
     },
 }))
 
@@ -125,13 +138,15 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const LoadStatus = Array.from({ length: 8 })
-        .fill(0)
-        .map((_, i) => (
-            <div key={i} className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        ))
+    const LoadStatus = (
+        <List className={classes.list}>
+            {range(8).map((i) => (
+                <ListItem key={i} className={classes.nftItem}>
+                    <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+                </ListItem>
+            ))}
+        </List>
+    )
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
@@ -169,17 +184,17 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 </Box>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                     <Box className={classes.galleryItem}>
-                        <Box className={classes.gallery}>
-                            {!loadFinish && !loadError && !collectibles?.length ? (
-                                LoadStatus
-                            ) : loadError || (!collectibles?.length && !collectibles_.length) ? (
-                                Retry
-                            ) : (
-                                <Stack direction="row" flexWrap="wrap">
-                                    {uniqBy(
-                                        [...collectibles_, ...(collectibles ?? [])],
-                                        (x) => x.contract?.address && x.tokenId,
-                                    ).map((token: AllChainsNonFungibleToken, i) => (
+                        {!loadFinish && !loadError && !collectibles?.length ? (
+                            LoadStatus
+                        ) : loadError || (!collectibles?.length && !collectibles_.length) ? (
+                            Retry
+                        ) : (
+                            <List className={classes.list}>
+                                {uniqBy(
+                                    [...collectibles_, ...(collectibles ?? [])],
+                                    (x) => x.contract?.address && x.tokenId,
+                                ).map((token: AllChainsNonFungibleToken, i) => (
+                                    <ListItem className={classes.nftItem} key={i}>
                                         <NFTImageCollectibleAvatar
                                             key={i}
                                             pluginId={NetworkPluginID.PLUGIN_EVM}
@@ -187,25 +202,26 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                             selectedToken={selectedToken}
                                             onChange={(token) => _onChange(token)}
                                         />
-                                    ))}
-                                    <ElementAnchor
-                                        callback={() => {
-                                            if (nextPage) nextPage()
-                                        }}>
-                                        {!loadFinish && <LoadingBase />}
-                                    </ElementAnchor>
-                                </Stack>
-                            )}
-                        </Box>
-                        <Box className={classes.buttons}>
-                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                {t('nft_button_add_collectible')}
-                            </Button>
+                                    </ListItem>
+                                ))}
+                                <ElementAnchor
+                                    callback={() => {
+                                        nextPage?.()
+                                    }}>
+                                    {!loadFinish && <LoadingBase />}
+                                </ElementAnchor>
+                            </List>
+                        )}
+                    </Box>
 
-                            <Button size="small" onClick={onClick} disabled={!selectedToken}>
-                                {t('nft_button_set_avatar')}
-                            </Button>
-                        </Box>
+                    <Box className={classes.buttons}>
+                        <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                            {t('nft_button_add_collectible')}
+                        </Button>
+
+                        <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
+                            {t('nft_button_set_avatar')}
+                        </Button>
                     </Box>
                 </ChainBoundary>
             </Box>

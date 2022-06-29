@@ -19,6 +19,7 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "@react-hookz/web": "^14.2.2",
     "@types/qrcode": "^1.4.2",
     "@solana/web3.js": "^1.30.2",
