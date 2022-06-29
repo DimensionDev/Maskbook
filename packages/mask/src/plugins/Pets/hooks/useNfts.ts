@@ -22,9 +22,9 @@ export function useNFTs(user: User | undefined) {
                     [NFT.tokenId]: { ...NFT, tokenId: NFT.tokenId, glbSupport },
                 }
                 tempNFTs[NFT.address] = {
-                    name: NFT.collection?.name ?? '',
+                    name: (NFT.collection?.name || NFT.contract?.name) ?? '',
                     contract: NFT.address,
-                    icon: NFT.collection?.iconURL ?? '',
+                    icon: (NFT.collection?.iconURL || NFT.metadata?.imageURL) ?? '',
                     tokens,
                     chainId: NFT.chainId,
                 }
