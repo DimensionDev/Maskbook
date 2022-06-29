@@ -13,7 +13,7 @@ export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | '
 
 /**
  * Create a manager of small UI task sessions,
- * which provide both a Context and a Provider.
+ * which provides both a Context and a Provider.
  */
 export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>, Result>(
     Component: ComponentType<TaskOptions>,
@@ -63,8 +63,8 @@ export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>,
                     return createElement(
                         Component,
                         {
-                            key: task.id,
                             ...task.options,
+                            key: task.id,
                             open: true,
                             onSubmit: (result: Result | null) => {
                                 task.options?.onSubmit?.(result)

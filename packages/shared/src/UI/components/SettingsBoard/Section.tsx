@@ -25,7 +25,7 @@ export function Section(props: SectionProps) {
         <div className={classes.root}>
             <Box display="flex" alignItems="center" justifyContent="space-between">
                 <Typography className={classes.title}>{title}</Typography>
-                {additions ?? <Typography> </Typography>}
+                {additions ?? <div />}
             </Box>
             {children}
         </div>
