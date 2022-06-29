@@ -13,6 +13,7 @@ import IntroductionPanel from './IntroductionPanel'
 import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -77,6 +78,7 @@ interface FindTrumanDialogProps {
 }
 
 export function FindTrumanDialog(props: FindTrumanDialogProps) {
+    const i18N = useI18N()
     const { open, onClose } = props
     const { classes } = useStyles()
     const account = useAccount()
@@ -125,7 +127,7 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                 color="textSecondary"
                                 fontSize={14}
                                 fontWeight={700}>
-                                Powered by
+                                {i18N.powered_by()}
                             </Typography>
                             <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
                                 FindTruman
@@ -196,7 +198,7 @@ const FindTrumanDialogTabValues = [
 interface FindTrumanDialogTabsProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     tabs: Record<FindTrumanDialogTab, FindTrumanDialogTab>
-    onChange: (event: unknown, value: any) => void
+    onChange: (event: unknown, value: string) => void
 }
 
 function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanDialogTab) {

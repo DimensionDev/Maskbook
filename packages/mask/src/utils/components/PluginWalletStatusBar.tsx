@@ -19,9 +19,7 @@ import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
-import type { PropsWithChildren } from 'react'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -101,7 +99,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
-    // const changeButtonRef = useRef<HTMLButtonElement>(null)
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
@@ -122,7 +119,6 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
     )
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
-
 
     useLayoutEffect(() => {
         if (ref.current?.children.length && ref.current.children.length > 1) {

@@ -87,7 +87,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 disabled
                 {...props.ActionButtonProps}>
-                {fallback ?? 'Enter an amount'}
+                {fallback ?? t('wallet_transfer_error_amount_absence')}
             </ActionButton>
         )
     if (approveStateType === ApproveStateType.FAILED)

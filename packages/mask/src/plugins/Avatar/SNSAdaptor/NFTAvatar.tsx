@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
@@ -140,13 +140,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const LoadStatus = (
         <List className={classes.list}>
-            {Array.from({ length: 8 })
-                .fill(0)
-                .map((_, i) => (
-                    <ListItem key={i} className={classes.nftItem}>
-                        <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-                    </ListItem>
-                ))}
+            {range(8).map((i) => (
+                <ListItem key={i} className={classes.nftItem}>
+                    <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+                </ListItem>
+            ))}
         </List>
     )
     const Retry = (
@@ -208,7 +206,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 ))}
                                 <ElementAnchor
                                     callback={() => {
-                                        if (nextPage) nextPage()
+                                        nextPage?.()
                                     }}>
                                     {!loadFinish && <LoadingBase />}
                                 </ElementAnchor>

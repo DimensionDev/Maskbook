@@ -15,6 +15,7 @@ import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
 import { PluginWalletStatusBar } from '../../../../utils'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -90,6 +91,7 @@ export function DrawDialog(props: DrawDialogProps) {
     const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
+    const t = useI18N()
 
     const {
         paymentCount,
@@ -270,7 +272,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 sx={{ marginTop: 2 }}
                                 disabled={isBalanceInsufficient || drawing}
                                 onClick={onSubmit}>
-                                {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
+                                {isBalanceInsufficient ? t.insufficient_balance() : drawing ? t.drawing() : t.draw()}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
                     </WalletConnectedBoundary>

@@ -1,6 +1,6 @@
 import { PluginId, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useITOConstants } from '@masknet/web3-shared-evm'
@@ -81,7 +81,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const pluginID = useCurrentWeb3NetworkPluginID()
     const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
-    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)

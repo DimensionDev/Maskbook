@@ -144,7 +144,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         contentWrapper: {
             display: 'flex',
             flexDirection: 'column',
-            padding: '0 16px',
+            padding: theme.spacing(0, 2),
         },
         actionButtonWrapper: {
             position: 'sticky',

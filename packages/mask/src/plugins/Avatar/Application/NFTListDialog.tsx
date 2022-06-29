@@ -156,7 +156,7 @@ interface NFTListDialogProps {
 }
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const { onNext, wallets = [], onSelected, tokenInfo } = props
+    const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo } = props
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount(currentPluginId)
@@ -315,7 +315,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         })
     }, [chainId])
 
-    console.log(wallets)
     const [menu, openMenu] = useMenu([
         account ? (
             <>
@@ -347,7 +346,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         <>
             {wallets
                 .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
-                ?.filter((x) => !isSameAddress(x.identity, account))
+                .filter((x) => !isSameAddress(x.identity, account))
                 .map((x, i) => (
                     <div key={i}>
                         <WalletItem

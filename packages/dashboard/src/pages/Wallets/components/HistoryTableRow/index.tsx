@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         color: MaskColorVar.textPrimary,
     },
     linkIcon: {
-        // TODO: replace to theme color
+        // TODO: replace with theme color
         fill: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
         fontSize: 16,
         marginLeft: 10,

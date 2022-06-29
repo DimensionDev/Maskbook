@@ -119,7 +119,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         openSelectProviderDialog,
     ])
 
-    const formaticDisabled = useMemo(() => {
+    const fortmaticDisabled = useMemo(() => {
         if (actualProviderType !== ProviderType.Fortmatic) return false
         return !(expectedChainId === ChainId.Mainnet || expectedChainId === ChainId.BSC)
     }, [actualProviderType, expectedChainId])
@@ -220,7 +220,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             size={18}
                         />
                     }
-                    disabled={actualProviderType === ProviderType.WalletConnect || formaticDisabled}
+                    disabled={actualProviderType === ProviderType.WalletConnect || fortmaticDisabled}
                     sx={props.ActionButtonPromiseProps?.sx}
                     init={<span>{t('plugin_wallet_switch_network', { network: expectedChainName })}</span>}
                     waiting={t('plugin_wallet_switch_network_under_going', {
@@ -237,7 +237,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         </>,
         actualProviderType === ProviderType.WalletConnect
             ? t('plugin_wallet_connect_tips')
-            : formaticDisabled
+            : fortmaticDisabled
             ? t('plugin_wallet_not_support_network')
             : '',
     )

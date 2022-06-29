@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
         fill: 'none',
     },
     linkIcon: {
-        // TODO: replace to theme color
+        // TODO: replace with theme color
         fill: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
         width: 17.5,
         height: 17.5,
