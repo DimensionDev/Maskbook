@@ -103,7 +103,7 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
  * Set NextID profile to profileDB
  * */
 
-export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
+export async function attachNextIDPersonaToProfile(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
     if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
     const personaRecord = {
         createdAt: new Date(),
