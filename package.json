@@ -50,7 +50,7 @@
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-i18next": "^11.16.9",
-    "ses": "0.15.16",
+    "ses": "0.15.17",
     "ts-results": "3.3.0"
   },
   "devDependencies": {
