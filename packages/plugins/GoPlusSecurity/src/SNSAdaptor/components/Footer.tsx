@@ -20,7 +20,7 @@ export const Footer = () => {
                 </Typography>
             </Stack>
             <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" rel="noopener noreferrer">
-                <GoPlusLabLogo sx={{ fontSize: '16px' }} />
+                <GoPlusLabLogo style={{ width: 24, height: 24 }} />
             </Link>
         </Stack>
     )

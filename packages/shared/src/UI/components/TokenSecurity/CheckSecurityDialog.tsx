@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     paperRoot: {
         backgroundImage: 'none',
-        width: 584,
+        width: 600,
         '&>h2': {
             borderBottom: theme.palette.mode === 'light' ? undefined : `1px solid ${theme.palette.divider}`,
             background:

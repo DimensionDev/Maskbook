@@ -50,6 +50,8 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         },
         paper: {
             width: '600px !important',
+            minHeight: 400,
+            maxHeight: 612,
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
