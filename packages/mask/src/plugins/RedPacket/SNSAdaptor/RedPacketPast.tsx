@@ -1,9 +1,7 @@
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
-import { IconURLs } from './IconURL'
 import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
 import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
@@ -12,6 +10,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { TabPanel } from '@mui/lab'
 
 enum RpTypeTabs {
     ERC20 = 0,
@@ -54,11 +53,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
+    tabs: Record<'tokens' | 'collectibles', 'tokens' | 'collectibles'>
     onSelect: (payload: RedPacketJSONPayload) => void
     onClose?: () => void
 }
 
-export function RedPacketPast({ onSelect, onClose }: Props) {
+export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const t = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
@@ -90,36 +90,14 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         [senderName, onClose],
     )
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: (
-                    <div className={classes.labelWrapper}>
-                        <img className={classes.img} src={IconURLs.erc20Token} />
-                        <span>{t.erc20_tab_title()}</span>
-                    </div>
-                ),
-                children: <RedPacketHistoryList onSelect={onSelect} />,
-                sx: { p: 0 },
-            },
-            {
-                label: (
-                    <div className={classes.labelWrapper}>
-                        <img className={classes.img} src={IconURLs.erc721Token} />
-                        <span>{t.erc721_tab_title()}</span>
-                    </div>
-                ),
-                children: <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />,
-                sx: { p: 0 },
-                disabled: ![ChainId.Mainnet, ChainId.Matic].includes(chainId),
-            },
-        ],
-        state,
-        classes,
-    }
     return (
         <div className={classes.tabWrapper}>
-            <AbstractTab height={512} {...tabProps} />
+            <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
+                <RedPacketHistoryList onSelect={onSelect} />
+            </TabPanel>
+            <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
+                <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />
+            </TabPanel>
         </div>
     )
 }
