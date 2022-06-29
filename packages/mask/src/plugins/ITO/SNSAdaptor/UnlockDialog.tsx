@@ -97,11 +97,12 @@ export function UnlockDialog(props: UnlockDialogProps) {
             ) : null}
             <WalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
+                    onlyInfiniteUnlock
                     amount={amount.toFixed()}
                     spender={ITO2_CONTRACT_ADDRESS}
                     token={token}>
                     {(allowance: string) => (
-                        <ActionButton className={classes.button} size="large" fullWidth disabled>
+                        <ActionButton className={classes.button} fullWidth disabled>
                             {isMoreThanMillion(allowance, token.decimals)
                                 ? t('plugin_ito_amount_unlocked_infinity', {
                                       symbol: token.symbol ?? 'Token',

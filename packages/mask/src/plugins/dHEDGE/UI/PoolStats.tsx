@@ -4,7 +4,7 @@ import { Divider, Grid, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
-import DOMPurify from 'isomorphic-dompurify'
+import { purify } from '@masknet/shared-base'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -51,9 +51,11 @@ export function PoolStats(props: PoolStatsProps) {
     const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
     const riskFactor = pool && pool?.riskFactor !== -1 ? pool?.riskFactor : '-'
-    // pool detail contains raw html and need to sanitize before use
-    const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
-    const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
+
+    const fullDesc = purify(pool.poolDetails)
+    const shortenDesc = purify(fullDesc.toString().slice(0, POOL_DESCRIPTION_LIMIT).concat('...'))
+
+    const [expanded, setExpanded] = useState(fullDesc.toString().length < POOL_DESCRIPTION_LIMIT)
     // #endregion
 
     return (
@@ -114,7 +116,7 @@ export function PoolStats(props: PoolStatsProps) {
                     </Grid>
                 </Grid>
             </div>
-            {cleanDescription ? (
+            {fullDesc ? (
                 <>
                     <Divider />
                     <div className={classes.description}>
@@ -124,13 +126,11 @@ export function PoolStats(props: PoolStatsProps) {
                         <Typography variant="body2" color="textSecondary">
                             <span
                                 dangerouslySetInnerHTML={{
-                                    __html: expanded
-                                        ? cleanDescription
-                                        : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
+                                    __html: expanded ? fullDesc : shortenDesc,
                                 }}
                             />
                         </Typography>
-                        {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
+                        {fullDesc.toString().length > POOL_DESCRIPTION_LIMIT ? (
                             <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>
                                 {expanded ? (
                                     <Trans i18nKey="plugin_dhedge_see_less" />

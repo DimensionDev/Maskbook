@@ -4,9 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -19,6 +18,8 @@ import type { Coin } from '../../Trader/types'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -179,33 +180,37 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    <WalletConnectedBoundary>
-                        {isZero(tokenBalance) ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                onClick={openSwap}
-                                disabled={isInvesting}
-                                loading={loadingTokenBalance || isInvesting}>
-                                {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
-                            </ActionButton>
-                        ) : (
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={amount.toFixed()}
-                                spender={pool.address}
-                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
+                </DialogContent>
+                <DialogActions style={{ padding: 0 }}>
+                    <PluginWalletStatusBar>
+                        <WalletConnectedBoundary>
+                            {isZero(tokenBalance) ? (
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage || isInvesting}
-                                    onClick={invest}
+                                    onClick={openSwap}
+                                    disabled={isInvesting}
                                     loading={loadingTokenBalance || isInvesting}>
-                                    {validationMessage || t('plugin_dhedge_invest')}
+                                    {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
                                 </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        )}
-                    </WalletConnectedBoundary>
-                </DialogContent>
+                            ) : (
+                                <EthereumERC20TokenApprovedBoundary
+                                    amount={amount.toFixed()}
+                                    spender={pool.address}
+                                    token={token?.schema === SchemaType.ERC20 ? token : undefined}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        disabled={!!validationMessage || isInvesting}
+                                        onClick={invest}
+                                        loading={loadingTokenBalance || isInvesting}>
+                                        {validationMessage || t('plugin_dhedge_invest')}
+                                    </ActionButton>
+                                </EthereumERC20TokenApprovedBoundary>
+                            )}
+                        </WalletConnectedBoundary>
+                    </PluginWalletStatusBar>
+                </DialogActions>
             </InjectedDialog>
         </div>
     )

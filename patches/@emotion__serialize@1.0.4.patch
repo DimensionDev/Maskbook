@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index e2fb1dee3dcdfad927a9530f26b6a79729533c9f..e50280360de14455c625a1f9db8f41f57bc45a2a 100644
+--- a/package.json
++++ b/package.json
+@@ -28,9 +28,5 @@
+     "src",
+     "dist",
+     "types/*.d.ts"
+-  ],
+-  "browser": {
+-    "./dist/emotion-serialize.cjs.js": "./dist/emotion-serialize.browser.cjs.js",
+-    "./dist/emotion-serialize.esm.js": "./dist/emotion-serialize.browser.esm.js"
+-  }
++  ]
+ }

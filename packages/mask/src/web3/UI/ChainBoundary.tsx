@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
 import {
@@ -12,7 +12,7 @@ import {
     useWeb3State,
     useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import ActionButton, {
@@ -97,17 +97,18 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         // a short time loading makes the user fells better
         await delay(1000)
 
-        if (!expectedChainAllowed) return
+        if (!expectedChainAllowed) return 'init'
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
             openSelectProviderDialog()
-            return
+            return 'init'
         }
         if (!isMatched) {
             await expectedConnection?.connect({
                 chainId: expectedChainId,
             })
         }
+        return
     }, [
         expectedChainAllowed,
         isMatched,
@@ -118,15 +119,15 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         openSelectProviderDialog,
     ])
 
+    const fortmaticDisabled = useMemo(() => {
+        if (actualProviderType !== ProviderType.Fortmatic) return false
+        return !(expectedChainId === ChainId.Mainnet || expectedChainId === ChainId.BSC)
+    }, [actualProviderType, expectedChainId])
+
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
-                <Box
-                    className={props.className}
-                    sx={{ flex: 1 }}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center">
+                <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
                     {children}
                 </Box>
             </ShadowRootTooltip>
@@ -139,8 +140,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<PluginWalletConnectIcon />}
-                        sx={{ marginTop: 1.5 }}
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_connect_wallet')}
@@ -167,6 +167,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     <ActionButtonPromise
                         fullWidth
                         className={classes.switchButton}
+                        disabled={actualProviderType === ProviderType.WalletConnect}
                         startIcon={
                             <WalletIcon
                                 mainIcon={expectedNetworkDescriptor?.icon} // switch the icon to meet design
@@ -177,15 +178,15 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                         init={
                             <span>
                                 {t('plugin_wallet_connect_network', {
-                                    network: 'EVM',
+                                    network: expectedChainName,
                                 })}
                             </span>
                         }
                         waiting={t('plugin_wallet_connect_network_under_going', {
-                            network: 'EVM',
+                            network: expectedChainName,
                         })}
                         complete={t('plugin_wallet_connect_network', {
-                            network: 'EVM',
+                            network: expectedChainName,
                         })}
                         failed={t('retry')}
                         executor={onSwitchChain}
@@ -195,6 +196,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     />
                 ) : null}
             </>,
+            actualProviderType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
         )
     }
 
@@ -218,6 +220,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             size={18}
                         />
                     }
+                    disabled={actualProviderType === ProviderType.WalletConnect || fortmaticDisabled}
                     sx={props.ActionButtonPromiseProps?.sx}
                     init={<span>{t('plugin_wallet_switch_network', { network: expectedChainName })}</span>}
                     waiting={t('plugin_wallet_switch_network_under_going', {
@@ -232,6 +235,10 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 />
             ) : null}
         </>,
-        actualProviderType === ProviderType.WalletConnect ? t('plugin_wallet_connect_tips') : '',
+        actualProviderType === ProviderType.WalletConnect
+            ? t('plugin_wallet_connect_tips')
+            : fortmaticDisabled
+            ? t('plugin_wallet_not_support_network')
+            : '',
     )
 }

@@ -955,6 +955,7 @@ export enum PluginId {
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
+    ScamSniffer = 'io.scamsniffer.mask-plugin',
     // @masknet/scripts: insert-here
 }
 /**

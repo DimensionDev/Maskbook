@@ -60,7 +60,7 @@ export function formatPrice(amount: string, symbol: string) {
 export function formatText(name: string, tokenId: string) {
     const _name = name.replace(/#\d*/, '').trim()
     const __name = `${_name} #${tokenId}`
-    if (__name.length > 35) return `${__name.slice(0, 35)}...`
+    if (__name.length > 28) return `${__name.slice(0, 28)}...`
     return __name
 }
 
