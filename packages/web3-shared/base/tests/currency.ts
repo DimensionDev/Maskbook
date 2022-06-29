@@ -11,6 +11,7 @@ describe('Currency format util test', () => {
         { give: 0.1234115, expected: '$0.123412' },
         { give: 1, expected: '$1.00' },
         { give: 1.1, expected: '$1.10' },
+        { give: 1.55, expected: '$1.55' },
         { give: 2, expected: '$2.00' },
         { give: 2.11, expected: '$2.11' },
         { give: 2.111, expected: '$2.11' },

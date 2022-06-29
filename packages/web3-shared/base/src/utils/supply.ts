@@ -18,9 +18,9 @@ export function formatSupply(value: BigNumber.Value): string {
     const bgValue = new BigNumber(value)
     const isGreaterThanOrEqualToMin = bgValue.isGreaterThanOrEqualTo(boundaryValues.mid)
 
-    const integerValue = bgValue.integerValue()
+    const integerValue = bgValue.integerValue(1)
     const decimalValue = bgValue.plus(integerValue.negated()).toFixed(2)
     const finalValue = integerValue.plus(decimalValue)
 
-    return isGreaterThanOrEqualToMin ? finalValue.toExponential() : finalValue.toFormat(2, 0).replace('.00', '.0')
+    return isGreaterThanOrEqualToMin ? finalValue.toExponential(2) : finalValue.toFormat(2, 0).replace('.00', '.0')
 }

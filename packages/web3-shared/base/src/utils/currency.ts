@@ -25,7 +25,7 @@ const boundaryValues = {
 export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
     const bgValue = new BigNumber(value)
 
-    const integerValue = bgValue.integerValue()
+    const integerValue = bgValue.integerValue(1)
     const decimalValue = bgValue.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bgValue.isGreaterThanOrEqualTo(1)
     const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
