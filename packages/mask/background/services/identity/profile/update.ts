@@ -104,42 +104,36 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
  * */
 
 export async function attachNextIDToProfileDB(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
-    const recordMap = item.linkedTwitterNames.map((x) => ({
-        personaRecord: {
-            createdAt: item.createdAt!,
-            updatedAt: item.updatedAt!,
-            identifier: item.linkedPersona!,
-            linkedProfiles: new Map(),
-            publicKey: undefined as any,
-            publicHexKey: item.linkedPersona?.publicKeyAsHex,
-            nickname: x,
-            hasLogout: false,
-            uninitialized: false,
-        },
-        profileRecord: {
-            identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
-            nickname: x,
-            linkedPersona: item.linkedPersona,
-            createdAt: item.createdAt!,
-            updatedAt: item.updatedAt!,
-        },
-    }))
+    const personaRecord = {
+        createdAt: item.createdAt!,
+        updatedAt: item.updatedAt!,
+        identifier: item.linkedPersona!,
+        linkedProfiles: new Map(),
+        publicKey: undefined as any,
+        publicHexKey: item.linkedPersona?.publicKeyAsHex,
+        nickname: item.nickname,
+        hasLogout: false,
+        uninitialized: false,
+    }
+    const profileRecord = {
+        identifier: item.identifier,
+        nickname: item.nickname,
+        linkedPersona: item.linkedPersona,
+        createdAt: item.createdAt!,
+        updatedAt: item.updatedAt!,
+    }
 
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
-            await Promise.all(
-                recordMap.map(async (i) => {
-                    await createPersonaDB(i.personaRecord, t)
-                    await createProfileDB(i.profileRecord, t)
-                    await attachProfileDB(
-                        i.profileRecord.identifier,
-                        item.linkedPersona!,
-                        { connectionConfirmState: 'confirmed' },
-                        t,
-                    )
-                    await createNewRelation(i.profileRecord.identifier, whoAmI)
-                }),
+            await createPersonaDB(personaRecord, t)
+            await createProfileDB(profileRecord, t)
+            await attachProfileDB(
+                profileRecord.identifier,
+                item.linkedPersona!,
+                { connectionConfirmState: 'confirmed' },
+                t,
             )
+            await createNewRelation(profileRecord.identifier, whoAmI)
         })
     } catch {
         // already exist
