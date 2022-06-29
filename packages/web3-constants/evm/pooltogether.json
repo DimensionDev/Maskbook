@@ -19,9 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -43,8 +43,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     }
 }

@@ -3040,5 +3040,30 @@
                 "standard": "EIP3091"
             }
         ]
+    },
+    {
+        "chainId": 81,
+        "type": "Shibuya",
+        "name": "Shibuya",
+        "network": "testnet",
+        "shortName": "Shibuya",
+        "rpc": ["https://evm.shibuya.network"],
+        "faucets": [],
+        "features": ["EIP1559"],
+        "nativeCurrency": {
+            "chainId": 81,
+            "name": "sby",
+            "symbol": "sby",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
+        },
+        "infoURL": "https://blockscout.com/shibuya/",
+        "explorers": [
+            {
+                "name": "blockscout",
+                "url": "https://blockscout.com/shibuya/",
+                "standard": "EIP3091"
+            }
+        ]
     }
 ]

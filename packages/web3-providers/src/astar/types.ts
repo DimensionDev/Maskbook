@@ -11,9 +11,6 @@ export interface EstimateSuggestResponse {
     average?: string
     fast?: string
     estimatedBaseFee: string
-    low?: EstimateSuggestOption
-    medium?: EstimateSuggestOption
-    high?: EstimateSuggestOption
     eip1559: Eip1559
     timestamp: number
 }

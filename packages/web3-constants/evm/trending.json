@@ -19,9 +19,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
         "Mainnet": "https://api.thegraph.com/index-node/graphql",
@@ -43,9 +43,9 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
@@ -67,8 +67,8 @@
         "Aurora": "",
         "Aurora_Testnet": "",
         "Conflux": "",
-        "Astar": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     }
 }
