@@ -101,7 +101,8 @@ export interface EC_Key<K extends EC_CryptoKey = EC_CryptoKey> {
     readonly key: K
 }
 export enum EC_KeyCurveEnum {
-    ed25519 = 0,
+    // ed25519 = 0, Ed25519 is not supported by WebCrypto. Don't have a standard name, but maybe "Ed25519"
+    // https://github.com/tQsW/webcrypto-curve25519/blob/master/explainer.md
     secp256p1 = 1, // P-256
     secp256k1 = 2, // K-256
 }

@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index d66152909e2cfb8ee5b2e420a1e9f9427a27e80e..e5738e81b38b13b42674812bfabcb626e5050c24 100644
+--- a/package.json
++++ b/package.json
+@@ -4,10 +4,6 @@
+   "description": "internal utils for emotion",
+   "main": "dist/emotion-utils.cjs.js",
+   "module": "dist/emotion-utils.esm.js",
+-  "browser": {
+-    "./dist/emotion-utils.cjs.js": "./dist/emotion-utils.browser.cjs.js",
+-    "./dist/emotion-utils.esm.js": "./dist/emotion-utils.browser.esm.js"
+-  },
+   "types": "types/index.d.ts",
+   "license": "MIT",
+   "scripts": {

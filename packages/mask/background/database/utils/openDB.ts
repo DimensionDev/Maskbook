@@ -56,6 +56,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     latestVersion: number,
     opener: (currentTryOpenVersion: number, knowledge?: AsyncUpgradePreparedData) => Promise<IDBPDatabase<DBSchema>>,
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
+    dbName: string,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
     if (process.env.engine === 'safari') {
@@ -99,7 +100,16 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
         if (!db) throw new Error('Invalid state')
         return db
     }
-    return () => {
+    return async () => {
+        if (indexedDB.databases) {
+            const oldDBs = await indexedDB.databases()
+            const hasNoOldVersion = !oldDBs.some((db) => db.name === dbName)
+            const hasSameLatestVersion = oldDBs.some((db) => db.name === dbName && db.version === latestVersion)
+            if (hasNoOldVersion || hasSameLatestVersion) {
+                return opener(latestVersion)
+            }
+        }
+
         // Share a Promise to prevent async upgrade for multiple times
         if (pendingOpen) return pendingOpen
         const promise = (pendingOpen = open())
