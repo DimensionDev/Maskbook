@@ -93,7 +93,7 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
 }
 
 export interface ActionButtonPromiseProps extends ButtonProps {
-    executor: () => Promise<ActionButtonPromiseState | undefined>
+    executor: () => Promise<ActionButtonPromiseState | undefined | void>
     init: React.ReactChild
     complete: React.ReactChild
     completeOnClick?: 'use executor' | (() => void)
@@ -132,7 +132,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            (status?: ActionButtonPromiseState) => {
+            (status?: ActionButtonPromiseState | void) => {
                 setState(status ?? 'complete')
                 onComplete?.()
             },
