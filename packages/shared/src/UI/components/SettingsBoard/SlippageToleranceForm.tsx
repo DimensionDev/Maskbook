@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
-import { makeStyles, MaskColorVar, MaskTextField, MaskAlert } from '@masknet/theme'
+import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
 import { WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             alignItems: 'center',
-            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
             backdropFilter: 'blur(16px)',
             marginTop: theme.spacing(1),
         },
@@ -31,9 +31,6 @@ const useStyles = makeStyles()((theme) => {
             '& input[type=number]::-webkit-inner-spin-button': {
                 '-webkit-appearance': 'none',
             },
-        },
-        unit: {
-            color: MaskColorVar.textLight,
         },
     }
 })

@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {},
         paper: {
-            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
             backdropFilter: 'blur(16px)',
             marginTop: theme.spacing(1),
         },

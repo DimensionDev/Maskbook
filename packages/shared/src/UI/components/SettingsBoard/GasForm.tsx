@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
-import { makeStyles, MaskAlert, MaskColorVar, MaskTextField } from '@masknet/theme'
+import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
@@ -16,7 +16,7 @@ import { useGasSchema } from './hooks'
 const useStyles = makeStyles()((theme) => {
     return {
         unit: {
-            color: MaskColorVar.textLight,
+            color: theme.palette.maskColor.third,
         },
         textfield: {
             '& input[type=number]': {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         caption: {
-            color: MaskColorVar.textSecondary,
+            color: theme.palette.maskColor.second,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { GasOptionType, getLocale } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '@masknet/shared'
-import { Typography } from '@mui/material'
+import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
@@ -49,6 +49,7 @@ export interface GasOptionProps {
 export function GasOption(props: GasOptionProps) {
     const { type, option, lang, checked = false, onClick } = props
     const { classes } = useStyles()
+    const theme = useTheme()
     const t = useSharedI18N()
     const { GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
@@ -59,7 +60,7 @@ export function GasOption(props: GasOptionProps) {
     return (
         <div
             className={classes.root}
-            style={{ color: checked ? MaskColorVar.primary : MaskColorVar.border }}
+            style={{ color: checked ? theme.palette.maskColor.primary : theme.palette.maskColor.line }}
             onClick={onClick}>
             {checked ? <CheckCircle color="inherit" /> : <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
