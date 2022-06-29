@@ -7,7 +7,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon'
-import type { Transaction } from '@masknet/web3-shared-base'
+import { TokenType, Transaction } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 
@@ -120,9 +120,16 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                                     </span>
                                 </Box>
                                 <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
-                                    <Typography variant="body2" color={MaskColorVar.textPrimary}>
-                                        {pair.symbol}
-                                    </Typography>
+                                    {pair.type === TokenType.NonFungible && (
+                                        <Typography variant="body2" color={MaskColorVar.textPrimary}>
+                                            {pair.name}
+                                        </Typography>
+                                    )}
+                                    {pair.type === TokenType.Fungible && (
+                                        <Typography variant="body2" color={MaskColorVar.textPrimary}>
+                                            {pair.symbol}
+                                        </Typography>
+                                    )}
                                 </Box>
                             </Stack>
                         )
