@@ -130,7 +130,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     return (
         <>
             <div ref={containerRef} className={classes.root}>
-                <List>
+                <List style={{ padding: '16px 0 0' }}>
                     {histories.map((history) => (
                         <NftRedPacketHistoryItem
                             key={history.rpid}
