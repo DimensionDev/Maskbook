@@ -5,7 +5,7 @@ import { LinkOutIcon } from '@masknet/icons'
 import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
-import { Box, Link, Stack, TableCell, TableRow, Typography } from '@mui/material'
+import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
@@ -46,6 +46,12 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             backgroundColor: theme.palette.background.default,
         },
+    },
+    nftName: {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        cursor: 'default',
     },
 }))
 
@@ -121,9 +127,14 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                                 </Box>
                                 <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
                                     {pair.type === TokenType.NonFungible && (
-                                        <Typography variant="body2" color={MaskColorVar.textPrimary}>
-                                            {pair.name}
-                                        </Typography>
+                                        <Tooltip title={pair.name} arrow disableInteractive>
+                                            <Typography
+                                                className={classes.nftName}
+                                                variant="body2"
+                                                color={MaskColorVar.textPrimary}>
+                                                {pair.name}
+                                            </Typography>
+                                        </Tooltip>
                                     )}
                                     {pair.type === TokenType.Fungible && (
                                         <Typography variant="body2" color={MaskColorVar.textPrimary}>
