@@ -85,10 +85,9 @@ globalThis.regeneratorRuntime = undefined
 {
     if (typeof trustedTypes === 'object' && location.protocol.includes('extension')) {
         trustedTypes.createPolicy('default', {
-            createHTML: (string) => {
-                console.trace('[Trusted Types](default policy): Possible XSS happened. Please remove it.', string)
-                return string
-            },
+            // do not add createHTML or createScript.
+            // createScriptURL is safe because according to the CSP we have, it is impossible to
+            // include/create a script from cross-origin.
             createScriptURL: (string) => string,
         })
 

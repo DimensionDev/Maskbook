@@ -71,17 +71,16 @@ export const VerifyNextID = ({
                 </Box>
             }
             tip={
-                <Typography
-                    className={classes.tip}
-                    variant="body2"
-                    dangerouslySetInnerHTML={{
-                        __html: !username
-                            ? t('setup_guide_login')
-                            : `<p>${t('user_guide_tip_connected')}</p><p>${t(
-                                  'user_guide_tip_need_verify_on_next_id',
-                              )}</p>`,
-                    }}
-                />
+                <Typography className={classes.tip} variant="body2">
+                    {!username ? (
+                        t('setup_guide_login')
+                    ) : (
+                        <>
+                            <p>{t('user_guide_tip_connected')}</p>
+                            <p>{t('user_guide_tip_need_verify_on_next_id')}</p>
+                        </>
+                    )}
+                </Typography>
             }
             footer={
                 username ? (
