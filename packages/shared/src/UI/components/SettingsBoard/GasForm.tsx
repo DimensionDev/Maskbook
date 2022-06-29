@@ -59,7 +59,7 @@ export function GasForm(props: GasFormProps) {
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            gasLimit: (transaction.gas as string | undefined) ?? '210000',
+            gasLimit: (transaction.gas as string | undefined) ?? '21000',
             gasPrice: transaction.gasPrice
                 ? formatWeiToGwei(transaction.gasPrice as string).toString()
                 : gasOptions.normal.suggestedMaxFeePerGas,
