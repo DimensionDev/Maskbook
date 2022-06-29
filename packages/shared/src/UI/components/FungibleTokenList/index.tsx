@@ -1,8 +1,8 @@
 import { memo, useMemo, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
-import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
-import { Stack, Typography } from '@mui/material'
+import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
+import { Box, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 import {
     useAccount,
@@ -28,6 +28,7 @@ import {
     toZero,
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
+import { ManageTokenListBar } from './ManageTokenListBar'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -46,6 +47,18 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
 }
+
+const useStyles = makeStyles()((theme) => ({
+    channel: {
+        position: 'relative',
+    },
+    bar: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+}))
 
 const Placeholder = memo(({ message, height }: { message: string; height?: number | string }) => (
     <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center" marginTop="12px">
@@ -66,6 +79,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedI18N()
+    const { classes } = useStyles()
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, props.chainId)
@@ -198,44 +212,52 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     }
 
     return (
-        <SearchableList<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
-            onSelect={(token) => onSelect?.(token)}
-            onSearch={setKeyword}
-            data={
-                searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                    ? [searchedToken]
-                    : sortedFungibleTokens
-            }
-            searchKey={SEARCH_KEYS}
-            disableSearch={!!props.disableSearch}
-            itemRender={getFungibleTokenItem<T>(
-                (address) => {
-                    if (isSameAddress(nativeToken?.address, address)) return 'official'
+        <Stack className={classes.channel}>
+            <SearchableList<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
+                onSelect={(token) => onSelect?.(token)}
+                onSearch={setKeyword}
+                data={
+                    searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
+                        ? [searchedToken]
+                        : sortedFungibleTokens
+                }
+                searchKey={SEARCH_KEYS}
+                disableSearch={!!props.disableSearch}
+                itemRender={getFungibleTokenItem<T>(
+                    (address) => {
+                        if (isSameAddress(nativeToken?.address, address)) return 'official'
 
-                    const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
-                    if (inOfficialList) return 'official'
+                        const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
+                        if (inOfficialList) return 'official'
 
-                    const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
-                    if (inPersonaList) return 'personal'
+                        const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
+                        if (inPersonaList) return 'personal'
 
-                    return 'external'
-                },
-                (address) => fungibleTokensBalance[address] ?? '0',
-                (address) => selectedTokens.some((x) => isSameAddress(x, address)),
-                () => loadingFungibleTokensBalance || loadingFungibleAssets,
-                async (
-                    token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-                ) => {
-                    await Token?.addToken?.(token)
-                    await Token?.trustToken?.(account, token)
-                },
-            )}
-            placeholder={getPlaceholder()}
-            FixedSizeListProps={FixedSizeListProps}
-            SearchFieldProps={{
-                placeholder: t.erc20_token_list_placeholder(),
-                ...props.SearchTextFieldProps,
-            }}
-        />
+                        return 'external'
+                    },
+                    (address) => fungibleTokensBalance[address] ?? '0',
+                    (address) => selectedTokens.some((x) => isSameAddress(x, address)),
+                    () => loadingFungibleTokensBalance || loadingFungibleAssets,
+                    async (
+                        token: FungibleToken<
+                            Web3Helper.Definition[T]['ChainId'],
+                            Web3Helper.Definition[T]['SchemaType']
+                        >,
+                    ) => {
+                        await Token?.addToken?.(token)
+                        await Token?.trustToken?.(account, token)
+                    },
+                )}
+                placeholder={getPlaceholder()}
+                FixedSizeListProps={FixedSizeListProps}
+                SearchFieldProps={{
+                    placeholder: t.erc20_token_list_placeholder(),
+                    ...props.SearchTextFieldProps,
+                }}
+            />
+            <Box className={classes.bar}>
+                <ManageTokenListBar onClick={() => {}} />
+            </Box>
+        </Stack>
     )
 }
