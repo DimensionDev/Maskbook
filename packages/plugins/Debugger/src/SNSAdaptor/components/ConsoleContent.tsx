@@ -429,7 +429,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
                                     const sourceType = formData.get('sourceType') as SourceType
-                                    const token = await hub.getNonFungibleAsset?.(address, tokenId, {
+                                    const token = await hub?.getNonFungibleAsset?.(address, tokenId, {
                                         sourceType,
                                     })
                                     console.log(token)
