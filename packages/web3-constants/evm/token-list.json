@@ -45,6 +45,6 @@
         "Conflux": [],
         "Harmony": [],
         "Harmony_Test": [],
-        "Astar": []
+        "Astar": ["https://tokens.r2d2.to/latest/592/non-fungible-tokens.json"]
     }
 }
