@@ -89,7 +89,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { onBack, settings, onCreated, onClose } = props
     const { classes } = useStyles()
     const { value: balance = '0', loading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    console.log({ balance })
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
@@ -115,7 +114,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const estimateGasFee = !createParams?.gas
         ? undefined
         : gasPrice && gasPrice !== '0'
-        ? new BigNumber(gasPrice).multipliedBy(createParams.gas ?? '0').toFixed()
+        ? new BigNumber(gasPrice).multipliedBy(createParams.gas * 1.5).toFixed()
         : undefined
 
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
@@ -129,8 +128,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
     const isBalanceInsufficient = new BigNumber(total).isLessThanOrEqualTo(0)
     total = isBalanceInsufficient ? '0' : total
-
-    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 6 : 0)
+    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         { ...settings!, total },
         contract_version,
