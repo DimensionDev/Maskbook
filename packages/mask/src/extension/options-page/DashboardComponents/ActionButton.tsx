@@ -64,14 +64,23 @@ export interface ActionButtonProps extends ButtonProps {
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
 }
 
+const useActionButtonStyles = makeStyles()((theme) => ({
+    loading: {
+        ['& > *']: {
+            opacity: 0.3,
+        },
+    },
+}))
+
 export default function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
     props: ActionButtonProps & PropsOf<T>,
 ) {
     const { width, loading, children, className, style, ...rest } = props
+    const { classes, cx } = useActionButtonStyles()
     return (
         <Button
             disableElevation
-            className={'actionButton ' + className}
+            className={cx('actionButton', className, loading ? classes.loading : undefined)}
             style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
             {...rest}
             disabled={rest.disabled && !loading}>
@@ -83,11 +92,11 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
-                    style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
+                    style={{ opacity: 1 }}>
                     <CircleLoadingAnimation />
                 </Box>
             ) : null}
-            {children}
+            <span>{children}</span>
         </Button>
     )
 }

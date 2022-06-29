@@ -20,7 +20,8 @@ import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import type { PropsWithChildren } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -100,7 +101,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
-    const changeButtonRef = useRef<HTMLButtonElement>(null)
+    // const changeButtonRef = useRef<HTMLButtonElement>(null)
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
@@ -122,8 +123,13 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
-    useEffect(() => {
-        setEmptyChildren(!ref.current?.innerHTML || ref.current.innerHTML === changeButtonRef.current?.outerHTML)
+
+    useLayoutEffect(() => {
+        if (ref.current?.children.length && ref.current.children.length > 1) {
+            setEmptyChildren(false)
+        } else {
+            setEmptyChildren(true)
+        }
     }, [children])
 
     return (
@@ -170,13 +176,13 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
                         </Box>
                     </Box>
                     <Box className={classes.action} ref={ref}>
-                        {emptyChildren ? (
-                            <Button ref={changeButtonRef} fullWidth onClick={openSelectProviderDialog}>
-                                {t('wallet_status_button_change')}
-                            </Button>
-                        ) : (
-                            children
-                        )}
+                        <Button
+                            fullWidth
+                            onClick={openSelectProviderDialog}
+                            style={{ display: !emptyChildren ? 'none' : undefined }}>
+                            {t('wallet_status_button_change')}
+                        </Button>
+                        {children}
                     </Box>
                 </>
             ) : (
