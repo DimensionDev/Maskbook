@@ -79,6 +79,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
         return { riskyFactors, attentionFactors, makeMessageList }
     }, [tokenSecurity])
 
+    const hasWarningFactor = riskyFactors !== 0 || attentionFactors !== 0
+
     const securityMessageLevel = useMemo(() => {
         if (riskyFactors) return SecurityMessageLevel.High
         if (attentionFactors) return SecurityMessageLevel.Medium
@@ -116,7 +118,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                 </Stack>
                 <Stack>
-                    {(riskyFactors !== 0 || attentionFactors !== 0) && (
+                    {hasWarningFactor && (
                         <div
                             style={{
                                 backgroundColor:

@@ -22,6 +22,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: '24px',
         color: theme.palette.grey[700],
     },
+    confirmButton: {
+        backgroundColor: theme.palette.maskColor.warn,
+        color: theme.palette.maskColor.white,
+        borderRadius: '99px',
+    },
 }))
 
 interface CheckSecurityConfirmDialogProps extends withClasses<never> {
@@ -46,7 +51,7 @@ function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {
                 </Stack>
                 <Stack marginTop="36px">
                     <Button
-                        style={{ backgroundColor: '#ffb100', color: '#fff', borderRadius: '99px' }}
+                        className={classes.confirmButton}
                         onClick={() => {
                             onConfirm()
                             onClose()

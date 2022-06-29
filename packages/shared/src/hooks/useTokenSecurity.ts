@@ -8,9 +8,9 @@ type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
     SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
 
-export const useTokenSecurity = (chainId: ChainId, address?: string, isTokenSecurityClosed = false) => {
+export const useTokenSecurity = (chainId: ChainId, address?: string, isTokenSecurityEnable = true) => {
     return useAsyncRetry(async (): Promise<TokenSecurity | undefined> => {
-        if (isTokenSecurityClosed) return
+        if (!isTokenSecurityEnable) return
         if (!address || isSameAddress(address, ZERO_ADDRESS)) return
         let values = await GoPlusLabs.getTokenSecurity(chainId, [address])
         values ??= {}
@@ -18,5 +18,5 @@ export const useTokenSecurity = (chainId: ChainId, address?: string, isTokenSecu
         const entity = first(Object.entries(values))
         if (!entity) return
         return { ...entity[1], contract: entity[0], chainId }
-    }, [chainId, address, isTokenSecurityClosed])
+    }, [chainId, address, isTokenSecurityEnable])
 }

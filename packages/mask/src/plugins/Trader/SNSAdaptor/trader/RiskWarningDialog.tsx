@@ -31,6 +31,12 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+    warningTitle: {
+        marginTop: '22px',
+        color: theme.palette.maskColor.danger,
+        fontSize: '24px',
+        fontWeight: '600',
+    },
     tokenInfo: {
         marginTop: '16px',
         backgroundColor: theme.palette.mode === 'light' ? '#f9f9f9' : '#1c1c1c',
@@ -61,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RiskWarningDialogProps extends withClasses<never> {
+export interface RiskWarningDialogProps {
     open: boolean
     onConfirm: () => void
     onClose?: () => void
@@ -92,17 +98,19 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
                 classes={{ paper: classes.paperRoot }}
                 maxWidth="xs"
                 fullWidth
-                title="Swapping Risk">
+                title={t('plugin_trader_swap_risk')}>
                 <DialogContent className={classes.content}>
                     <Stack alignItems="center">
                         <SecurityRiskIcon sx={{ fontSize: '68px' }} />
-                        <Typography marginTop="22px" color="#ff3545" fontSize="24px" fontWeight="600">
+                        <Typography className={classes.warningTitle}>
                             {t('plugin_trader_risk_warning_short')}
                         </Typography>
                     </Stack>
                     <Stack marginTop="51px">
-                        <Typography color="#ff3545">{t('plugin_trader_dear_user')}</Typography>
-                        <Typography color="#ff3545" marginTop="16px">
+                        <Typography color={(theme) => theme.palette.maskColor.danger}>
+                            {t('plugin_trader_dear_user')}
+                        </Typography>
+                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
                             {t('plugin_trader_user_warning')}
                         </Typography>
                     </Stack>

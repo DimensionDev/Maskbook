@@ -128,12 +128,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityClosed = snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+    const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         chainId,
         coin.contract_address?.trim(),
-        isTokenSecurityClosed,
+        isTokenSecurityEnable,
     )
 
     const onBuyButtonClicked = useCallback(() => {

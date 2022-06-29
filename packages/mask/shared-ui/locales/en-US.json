@@ -452,6 +452,7 @@
     "plugin_trader_no_enough_liquidity": "No enough liquidity",
     "plugin_trader_no_trade": "Please select a trade",
     "plugin_trader_gas": "GAS",
+    "plugin_trader_swap_risk": "Swapping Risk",
     "plugin_poll_display_name": "Plugin: Poll",
     "plugin_poll_question_hint": "Ask a question…",
     "plugin_poll_options_hint": "choice",

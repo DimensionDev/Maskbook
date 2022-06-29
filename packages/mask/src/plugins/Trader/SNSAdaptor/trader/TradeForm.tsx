@@ -224,12 +224,12 @@ export const TradeForm = memo<AllTradeFormProps>(
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
         const isDashboardClosed = useIsMinimalModeDashBoard(PluginId.GoPlusSecurity)
-        const isTokenSecurityClosed = isSNSClosed || isDashboardClosed
+        const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
             chainId,
             outputToken?.address.trim(),
-            isTokenSecurityClosed,
+            isTokenSecurityEnable,
         )
 
         const isRisky = isHighRisk(tokenSecurityInfo)
