@@ -11,6 +11,7 @@ import {
     MenuItem,
     Stack,
     Typography,
+    useTheme,
 } from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
@@ -315,65 +316,76 @@ export function NFTListDialog(props: NFTListDialogProps) {
         })
     }, [chainId])
 
-    const [menu, openMenu] = useMenu([
-        account ? (
+    const theme = useTheme()
+    const [menu, openMenu] = useMenu(
+        [
+            account ? (
+                <>
+                    <WalletItem
+                        walletName={wallet?.name ?? ''}
+                        selectedWallet={selectedAccount}
+                        wallet={account}
+                        nextIDWallets={wallets}
+                        chainId={chainId as ChainId}
+                        onConnectWallet={openSelectProviderDialog}
+                        onSelectedWallet={onChangeWallet}
+                        haveChangeWallet={Boolean(account)}
+                    />
+                    <Divider className={classes.divider} />
+                </>
+            ) : (
+                <>
+                    <MenuItem key="Connect Wallet">
+                        <Button
+                            fullWidth
+                            onClick={openSelectProviderDialog}
+                            sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
+                            {t.connect_your_wallet()}
+                        </Button>
+                    </MenuItem>
+                    <Divider className={classes.divider} />
+                </>
+            ),
             <>
-                <WalletItem
-                    walletName={wallet?.name ?? ''}
-                    selectedWallet={selectedAccount}
-                    wallet={account}
-                    nextIDWallets={wallets}
-                    chainId={chainId as ChainId}
-                    onConnectWallet={openSelectProviderDialog}
-                    onSelectedWallet={onChangeWallet}
-                    haveChangeWallet={Boolean(account)}
-                />
-                <Divider className={classes.divider} />
-            </>
-        ) : (
-            <>
-                <MenuItem key="Connect Wallet">
-                    <Button
-                        fullWidth
-                        onClick={openSelectProviderDialog}
-                        sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
-                        {t.connect_your_wallet()}
-                    </Button>
-                </MenuItem>
-                <Divider className={classes.divider} />
-            </>
-        ),
-        <>
-            {wallets
-                .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
-                .filter((x) => !isSameAddress(x.identity, account))
-                .map((x, i) => (
-                    <div key={i}>
-                        <WalletItem
-                            selectedWallet={selectedAccount}
-                            wallet={x.identity}
-                            nextIDWallets={wallets}
-                            chainId={chainId as ChainId}
-                            onSelectedWallet={onChangeWallet}
-                        />
-                        <Divider className={classes.divider} />
-                    </div>
-                ))}
-        </>,
-        <MenuItem
-            key="Wallet Setting"
-            onClick={() => {
-                openPopupsWindow()
-            }}>
-            <ListItemIcon>
-                <WalletSettingIcon style={{ fontSize: 24 }} />
-            </ListItemIcon>
-            <Typography fontSize={14} fontWeight={700}>
-                {t.wallet_settings()}
-            </Typography>
-            <Verify2Icon style={{ marginLeft: 24 }} />
-        </MenuItem>,
-    ])
+                {wallets
+                    .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+                    .filter((x) => !isSameAddress(x.identity, account))
+                    .map((x, i) => (
+                        <div key={i}>
+                            <WalletItem
+                                selectedWallet={selectedAccount}
+                                wallet={x.identity}
+                                nextIDWallets={wallets}
+                                chainId={chainId as ChainId}
+                                onSelectedWallet={onChangeWallet}
+                            />
+                            <Divider className={classes.divider} />
+                        </div>
+                    ))}
+            </>,
+            <MenuItem
+                key="Wallet Setting"
+                onClick={() => {
+                    openPopupsWindow()
+                }}>
+                <ListItemIcon>
+                    <WalletSettingIcon style={{ fontSize: 24 }} />
+                </ListItemIcon>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t.wallet_settings()}
+                </Typography>
+                <Verify2Icon style={{ marginLeft: 24 }} />
+            </MenuItem>,
+        ],
+        false,
+        {
+            paperProps: {
+                style: {
+                    background: theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                },
+            },
+        },
+    )
     const onOpenMenu = useCallback(
         (ev: React.MouseEvent<HTMLDivElement>) => {
             ev.preventDefault()

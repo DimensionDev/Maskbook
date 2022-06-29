@@ -1,4 +1,3 @@
-import { CopyIcon } from '@masknet/icons'
 import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
@@ -16,6 +15,7 @@ import { IconProps, Link, Stack, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { memo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { CopyIcon } from '../assets/copy'
 import { LinkIcon } from '../assets/link'
 import { VerifyIcon } from '../assets/verify'
 import { useI18N } from '../locales'
@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     copy: {
         fontSize: 16,
         cursor: 'pointer',
+        color: theme.palette.text.secondary,
     },
     link: {
         color: theme.palette.text.secondary,
@@ -82,6 +83,7 @@ export function WalletUI(props: WalletUIProps) {
                     <Typography
                         variant="body2"
                         color="textSecondary"
+                        fontSize={12}
                         className={classNames(classes.address, classes.walletAddress)}>
                         {formatAddress(address, 4)}
                     </Typography>
