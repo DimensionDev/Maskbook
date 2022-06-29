@@ -111,6 +111,7 @@ export function useClassicMaskSNSTheme() {
                             color: theme.palette.maskColor.main,
                             background: theme.palette.maskColor.thirdMain,
                             opacity: 0.4,
+                            border: 'none',
                         },
                     },
                 },
