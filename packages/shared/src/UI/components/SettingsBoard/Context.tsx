@@ -8,7 +8,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { useCurrentWeb3NetworkPluginID, useGasOptions } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Transaction } from '@masknet/web3-shared-evm'
-import { useCallbackOnce } from './useCallbackOnce'
+import { useCallbackOnce } from './hooks/useCallbackOnce'
 
 export function useSettingsContext(initial?: {
     pluginID?: NetworkPluginID

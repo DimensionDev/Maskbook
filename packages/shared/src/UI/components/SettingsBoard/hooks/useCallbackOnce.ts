@@ -1,4 +1,4 @@
-import { DependencyList, useCallback, useRef, } from "react";
+import { DependencyList, useCallback, useRef } from 'react'
 
 export function useCallbackOnce<T extends Function>(callback: T, deps: DependencyList) {
     const flag = useRef<boolean>(false)

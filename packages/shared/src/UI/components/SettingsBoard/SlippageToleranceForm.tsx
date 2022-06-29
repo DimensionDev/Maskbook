@@ -4,22 +4,11 @@ import { makeStyles, MaskColorVar, MaskTextField, MaskAlert } from '@masknet/the
 import { WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
-import { isGreaterThan, isLessThanOrEqualTo, isZero } from '@masknet/web3-shared-base'
-import { z as zod } from 'zod'
+import { isZero } from '@masknet/web3-shared-base'
+import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioChip } from './RadioChip'
-
-function useSchema() {
-    const t = useSharedI18N()
-
-    return useMemo(() => {
-        return zod.object({
-            customSlippageTolerance: zod.string().refine((value) => {
-                return isGreaterThan(value, 0) && isLessThanOrEqualTo(value, 50)
-            }, t.gas_settings_error_custom_slippage_tolerance_invalid()),
-        })
-    }, [t])
-}
+import { useSlippageToleranceSchema } from './hooks'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,7 +40,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface SlippageToleranceFormProps {
     slippageTolerances: number[]
-    onChange?: (data?: zod.infer<ReturnType<typeof useSchema>>) => void
+    onChange?: (data?: zod.infer<ReturnType<typeof useSlippageToleranceSchema>>) => void
 }
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
@@ -59,7 +48,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
     const t = useSharedI18N()
     const { classes } = useStyles()
 
-    const schema = useSchema()
+    const schema = useSlippageToleranceSchema()
     const [tolerance, setTolerance] = useState(1)
 
     const methods = useForm<zod.infer<typeof schema>>({
