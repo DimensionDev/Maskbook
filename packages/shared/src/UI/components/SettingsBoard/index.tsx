@@ -25,7 +25,7 @@ export function SettingsBoard(props: SettingsBoardProps) {
     const { disableGasPrice = false, disableSlippageTolerance = false, onSubmit } = props
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const { transaction, gasOption, slippageTolerance } = SettingsContext.useContainer()
+    const { transaction, transactionOptions, slippageTolerance } = SettingsContext.useContainer()
 
     return (
         <div className={classes.root}>
@@ -36,7 +36,9 @@ export function SettingsBoard(props: SettingsBoardProps) {
                 fullWidth
                 variant="contained"
                 color="primary"
-                disabled={(!disableGasPrice && !gasOption) || (!disableSlippageTolerance && slippageTolerance === 0)}
+                disabled={
+                    (!disableGasPrice && !transactionOptions) || (!disableSlippageTolerance && slippageTolerance === 0)
+                }
                 onClick={() =>
                     onSubmit?.({
                         slippageTolerance,

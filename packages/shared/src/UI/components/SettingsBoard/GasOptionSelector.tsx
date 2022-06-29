@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
-import type { GasOptionType } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { GasOption } from './GasOption'
+import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, formatGweiToWei, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { GasOption as GasOptionItem } from './GasOption'
 import { SettingsContext } from './Context'
 
 const useStyles = makeStyles()((theme) => {
@@ -32,14 +33,40 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface GasOptionSelectorProps {
-    options?: Record<GasOptionType, Web3Helper.GasOptionAll>
-    onChange?: (option: Web3Helper.GasOptionAll) => void
+    chainId: ChainId
+    options?: Record<GasOptionType, GasOption>
+    onChange?: (option: Partial<Transaction>) => void
 }
 
 export function GasOptionSelector(props: GasOptionSelectorProps) {
-    const { options, onChange } = props
+    const { chainId, options, onChange } = props
     const { classes } = useStyles()
     const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+
+    const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+
+    const onClick = useCallback(
+        (type: GasOptionType, option: GasOption) => {
+            setGasOptionType(type)
+            onChange?.(
+                isEIP1559
+                    ? {
+                          maxFeePerGas: formatGweiToWei(option.suggestedMaxFeePerGas).toFixed(),
+                          maxPriorityFeePerGas: formatGweiToWei(option.suggestedMaxPriorityFeePerGas).toFixed(),
+                      }
+                    : {
+                          gasPrice: formatGweiToWei(option.suggestedMaxFeePerGas).toFixed(),
+                      },
+            )
+        },
+        [isEIP1559, onChange],
+    )
+
+    useEffect(() => {
+        if (!options || gasOptionType) return
+        onClick(GasOptionType.NORMAL, options[GasOptionType.NORMAL])
+    }, [gasOptionType, options])
 
     if (!options)
         return (
@@ -60,14 +87,11 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
                     return (
                         <React.Fragment key={type}>
                             {i === 0 ? null : <Divider />}
-                            <GasOption
+                            <GasOptionItem
                                 type={type_}
                                 option={option}
                                 checked={type_ === gasOptionType}
-                                onClick={() => {
-                                    setGasOptionType(type_)
-                                    onChange?.(option)
-                                }}
+                                onClick={() => onClick(type_, option)}
                             />
                         </React.Fragment>
                     )

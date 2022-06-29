@@ -6,7 +6,14 @@ import { makeStyles, MaskAlert, MaskColorVar, MaskTextField } from '@masknet/the
 import { Grid, Typography } from '@mui/material'
 import { WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
-import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatGweiToEther,
+    formatGweiToWei,
+    formatWeiToGwei,
+    GasOption,
+    Transaction,
+} from '@masknet/web3-shared-evm'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'
@@ -41,7 +48,7 @@ export interface GasFormProps {
     chainId: ChainId
     transaction: Transaction
     gasOptions: Record<GasOptionType, GasOption>
-    onChange?: (data?: Partial<zod.infer<ReturnType<typeof useGasSchema>>>) => void
+    onChange?: (transactionOptions?: Partial<Transaction>) => void
 }
 
 export function GasForm(props: GasFormProps) {
@@ -60,11 +67,15 @@ export function GasForm(props: GasFormProps) {
         resolver: zodResolver(schema),
         defaultValues: {
             gasLimit: (transaction.gas as string | undefined) ?? '210000',
-            gasPrice: (transaction.gasPrice as string | undefined) ?? gasOptions.normal.suggestedMaxFeePerGas,
-            maxPriorityFeePerGas:
-                (transaction.maxPriorityFeePerGas as string | undefined) ??
-                gasOptions.normal.suggestedMaxPriorityFeePerGas,
-            maxFeePerGas: (transaction.maxFeePerGas as string | undefined) ?? gasOptions.normal.suggestedMaxFeePerGas,
+            gasPrice: transaction.gasPrice
+                ? formatWeiToGwei(transaction.gasPrice as string).toString()
+                : gasOptions.normal.suggestedMaxFeePerGas,
+            maxPriorityFeePerGas: transaction.maxPriorityFeePerGas
+                ? formatWeiToGwei(transaction.maxPriorityFeePerGas as string).toString()
+                : gasOptions.normal.suggestedMaxPriorityFeePerGas,
+            maxFeePerGas: transaction.maxFeePerGas
+                ? formatWeiToGwei(transaction.maxFeePerGas as string).toString()
+                : gasOptions.normal.suggestedMaxFeePerGas,
         },
     })
 
@@ -93,10 +104,13 @@ export function GasForm(props: GasFormProps) {
     // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!gasOptions) return
-        methods.setValue('maxFeePerGas', new BigNumber(gasOptions.normal?.suggestedMaxFeePerGas ?? 0).toString())
+        methods.setValue(
+            'maxFeePerGas',
+            new BigNumber(gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0).toString(),
+        )
         methods.setValue(
             'maxPriorityFeePerGas',
-            new BigNumber(gasOptions.normal?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+            new BigNumber(gasOptions[GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas ?? 0).toString(),
         )
     }, [gasOptions, methods.setValue])
     // #endregion
@@ -104,12 +118,12 @@ export function GasForm(props: GasFormProps) {
     useEffect(() => {
         const payload = isEIP1559
             ? {
-                  gasLimit,
-                  maxFeePerGas,
-                  maxPriorityFeePerGas,
+                  gas: gasLimit,
+                  maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
+                  maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
               }
             : {
-                  gasPrice,
+                  gasPrice: formatGweiToWei(gasPrice).toFixed(),
               }
         onChange?.(!error ? payload : undefined)
     }, [error, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas])

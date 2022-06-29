@@ -361,7 +361,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button
                                 size="small"
                                 onClick={async () => {
-                                    onClose?.()
                                     const gasSettings = await onSelectGasSettings({
                                         transaction: {
                                             from: account,
