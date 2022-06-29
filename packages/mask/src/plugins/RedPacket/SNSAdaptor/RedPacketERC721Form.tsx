@@ -357,7 +357,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         contractDetailed={contract}
                         operator={RED_PACKET_NFT_ADDRESS}>
                         <ActionButton
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage}
                             fullWidth

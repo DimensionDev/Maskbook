@@ -207,7 +207,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                         color: 'primary',
                     }}>
                     <ActionButton
-                        variant="contained"
                         size="large"
                         className={classes.actionButton}
                         fullWidth
@@ -218,7 +217,6 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                 </ChainBoundary>
             ) : (
                 <ActionButton
-                    variant="contained"
                     size="large"
                     className={classes.actionButton}
                     fullWidth

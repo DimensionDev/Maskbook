@@ -80,11 +80,7 @@ export function Transaction(props: TransactionDialogInterface | undefined) {
                     </Link>
                 </Grid>
                 <Grid item xs={12} marginTop="40px">
-                    <ActionButton
-                        fullWidth
-                        variant="contained"
-                        size="medium"
-                        onClick={() => transaction.actionButton.onClick()}>
+                    <ActionButton fullWidth size="medium" onClick={() => transaction.actionButton.onClick()}>
                         {transaction.actionButton.label}
                     </ActionButton>
                 </Grid>

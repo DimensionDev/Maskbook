@@ -47,6 +47,9 @@ export const Flags = {
     has_no_WebRTC: process.env.engine === 'safari' || !globalThis?.navigator?.permissions?.query,
     // #endregion
     using_emoji_flag: true,
+
+    // we still need to handle image encoding
+    v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
 } as const
 
 if (process.env.NODE_ENV === 'development') {

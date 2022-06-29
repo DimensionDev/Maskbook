@@ -128,7 +128,6 @@ export const getFungibleTokenItem =
                 <span>{loading ? <LoadingAnimation /> : null}</span>
             ) : (
                 <MaskLoadingButton
-                    variant="contained"
                     color="primary"
                     onClick={onImport}
                     size="small"

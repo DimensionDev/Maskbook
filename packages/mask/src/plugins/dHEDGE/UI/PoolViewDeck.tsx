@@ -142,7 +142,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
                 {account && pool.chainId === chainId ? (
-                    <Button className={classes.button} variant="contained" fullWidth color="primary" onClick={onInvest}>
+                    <Button className={classes.button} fullWidth color="primary" onClick={onInvest}>
                         {t('plugin_dhedge_invest')}
                     </Button>
                 ) : null}

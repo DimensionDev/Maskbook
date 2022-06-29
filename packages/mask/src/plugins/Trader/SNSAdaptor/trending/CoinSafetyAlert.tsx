@@ -49,7 +49,7 @@ export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
                         href={explorerResolver.fungibleTokenLink(ChainId.Mainnet, coin.contract_address)}>
                         {t('plugin_trader_view_on_etherscan')}
                     </Link>
-                    <Button variant="contained" className={classes.approve} onClick={onApprove}>
+                    <Button className={classes.approve} onClick={onApprove}>
                         {t('plugin_trader_safety_agree')}
                     </Button>
                 </Box>

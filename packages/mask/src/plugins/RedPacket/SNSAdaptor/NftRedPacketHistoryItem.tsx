@@ -223,7 +223,6 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                         classes.actionButton,
                                         isPasswordValid ? '' : classes.disabledButton,
                                     )}
-                                    variant="contained"
                                     size="large">
                                     {t.send()}
                                 </ActionButton>

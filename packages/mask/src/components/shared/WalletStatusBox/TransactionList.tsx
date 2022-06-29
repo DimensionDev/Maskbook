@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         fill: 'none',
-        stroke: theme.palette.maskColor?.main,
+        stroke: theme.palette.maskColor.main,
         width: 15,
         height: 15,
         marginLeft: theme.spacing(0.5),
