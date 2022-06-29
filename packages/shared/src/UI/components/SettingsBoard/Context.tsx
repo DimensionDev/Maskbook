@@ -4,8 +4,7 @@
 import { useCallback, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSharedI18N } from '@masknet/shared'
-import { useGasOptions, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useGasOptions, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useSettingsContext(initial?: {

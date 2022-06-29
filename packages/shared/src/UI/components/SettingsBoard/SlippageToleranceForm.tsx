@@ -106,7 +106,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                                 error={!!methods.formState.errors.customSlippageTolerance?.message}
                                 onChange={(ev) => {
                                     const v = Number.parseFloat(ev.target.value)
-                                    const tolerance = isNaN(v) ? 0 : v
+                                    const tolerance = Number.isNaN(v) ? 0 : v
                                     setTolerance(tolerance)
                                     methods.setValue(
                                         'customSlippageTolerance',

@@ -6,14 +6,7 @@ import { makeStyles, MaskAlert, MaskColorVar, MaskTextField } from '@masknet/the
 import { Grid, Typography } from '@mui/material'
 import { WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
-import {
-    ChainId,
-    formatGweiToEther,
-    formatGweiToWei,
-    formatWeiToGwei,
-    GasOption,
-    Transaction,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'

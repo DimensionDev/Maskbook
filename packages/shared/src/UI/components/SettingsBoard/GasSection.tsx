@@ -76,8 +76,7 @@ export function GasSection(props: GasSectionProps) {
                                 <span className={classes.price}>
                                     {` ${new BigNumber(
                                         (gasOptions?.[gasOptionType].suggestedMaxFeePerGas as string | undefined) ?? 0,
-                                    ).toFixed(2)} `}
-                                    Gwei
+                                    ).toFixed(2)} Gwei`}
                                 </span>
                             ) : (
                                 <span className={classes.price}>
@@ -89,8 +88,7 @@ export function GasSection(props: GasSectionProps) {
                                                       | undefined) ?? 0,
                                               ).toFixed(2)
                                             : 0
-                                    } `}
-                                    Gwei
+                                    } Gwei`}
                                 </span>
                             )}
                         </Typography>
