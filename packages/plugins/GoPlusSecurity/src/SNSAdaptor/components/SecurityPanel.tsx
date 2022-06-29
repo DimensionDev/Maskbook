@@ -52,6 +52,10 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.text.secondary,
     },
+    itemTitle: {
+        color: theme.palette.maskColor.second,
+        fontSize: 14,
+    },
 }))
 
 const LIST_HEIGHT = {
@@ -178,7 +182,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.High].icon(16)}
-                                <Typography component="span" color="#C4C7CD" fontSize={14}>
+                                <Typography component="span" className={classes.itemTitle}>
                                     {riskyFactors > 1
                                         ? t.risky_factors({ quantity: riskyFactors.toString() })
                                         : t.risky_factor({ quantity: riskyFactors.toString() })}
@@ -188,7 +192,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
-                                <Typography component="span" color="#C4C7CD" fontSize={14}>
+                                <Typography component="span" className={classes.itemTitle}>
                                     {attentionFactors > 1
                                         ? t.attention_factors({ quantity: attentionFactors.toString() })
                                         : t.attention_factor({ quantity: attentionFactors.toString() })}
