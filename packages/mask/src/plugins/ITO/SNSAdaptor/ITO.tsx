@@ -157,6 +157,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     actionFooter: {
         padding: 0,
         display: 'flex',
+        flex: 1,
     },
     actionButton: {
         width: '100%',
@@ -517,6 +518,7 @@ export function ITO(props: ITO_Props) {
         if (!availability?.claimed) {
             return (
                 <ActionButton
+                    fullWidth
                     loading={isClaiming}
                     onClick={claim}
                     disabled={isClaiming}
@@ -558,7 +560,7 @@ export function ITO(props: ITO_Props) {
 
     const FooterBuyerButton = useMemo(
         () => (
-            <div>
+            <div style={{ width: '100%' }}>
                 {(() => {
                     if (hasLockTime) return FooterBuyerWithLockTimeButton
                     if (canWithdraw) {
@@ -782,6 +784,7 @@ export function ITO(props: ITO_Props) {
                 })()}
             </Box>
 
+            {/* TODO: Remove the ThemeProvider when Dialog gets redefine */}
             <ThemeProvider theme={theme}>
                 <SwapGuide
                     status={claimDialogStatus}
