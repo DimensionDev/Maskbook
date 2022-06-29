@@ -322,12 +322,6 @@ function addHTMLEntry(
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
-    if (options.sourceMap) {
-        templateContent = templateContent.replace(
-            `<!-- CSP -->`,
-            `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack ssr">`,
-        )
-    }
     if (options.lockdown) {
         templateContent = templateContent.replace(
             `<!-- lockdown -->`,

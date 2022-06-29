@@ -52,7 +52,7 @@ function modify_2(manifest: ManifestV2, flags: NormalizedFlags) {
 
     // for eval-source-map
     if (flags.mode === 'development') {
-        manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types webpack mask ssr`
+        manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask ssr`
     }
 
     if (flags.hmr) {

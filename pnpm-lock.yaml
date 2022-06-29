@@ -451,6 +451,7 @@ importers:
       https-browserify: ^1.0.0
       idb: ^7.0.1
       iframe-resizer-react: ^1.1.0
+      immer: 9.0.15
       jsbi: 3.1.4
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
@@ -592,6 +593,7 @@ importers:
       https-browserify: 1.0.0
       idb: 7.0.1
       iframe-resizer-react: 1.1.0
+      immer: 9.0.15_6jcdg7ah6q6tk4odwno72n5llq
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
@@ -22973,13 +22975,13 @@ packages:
     engines: {node: '>=6'}
 
   /pinkie-promise/2.0.1:
-    resolution: {integrity: sha1-ITXW36ejWMBprJsXh3YogihFD/o=}
+    resolution: {integrity: sha512-0Gni6D4UcLTbv9c57DfxDGdr41XfgUjqWZu492f0cIGr16zDU06BWP/RAEvOuo7CQ0CNjHaLlM59YJJFm3NWlw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       pinkie: 2.0.4
 
   /pinkie/2.0.4:
-    resolution: {integrity: sha1-clVrgM+g1IqXToDnckjoDtT3+HA=}
+    resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
   /pirates/4.0.5:
