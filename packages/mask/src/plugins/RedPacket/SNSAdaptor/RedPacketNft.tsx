@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { explorerResolver, TransactionStateType, networkResolver } from '@masknet/web3-shared-evm'
+import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -77,10 +77,10 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         margin: '0 !important',
     },
@@ -258,13 +258,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
-    const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
+    const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
         web3?.eth.accounts.sign(account, payload.privateKey).signature ?? '',
     )
 
-    const isClaiming = claimState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+    const claim = useCallback(async () => {
+        const hash = await claimCallback()
+        if (typeof hash === 'string') {
+            retryAvailability()
+        }
+    }, [claimCallback, retryAvailability])
 
     const openAddressLinkOnExplorer = useCallback(() => {
         openWindow(explorerResolver.addressLink(payload.chainId, payload.contractAddress))
@@ -273,20 +278,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const [sourceType, setSourceType] = useState('')
 
     useEffect(() => {
-        if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
-            return
-        }
-
-        if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            retryAvailability()
-        }
-
-        resetCallback()
-    }, [claimState.type, retryAvailability])
-
-    useEffect(() => {
         retryAvailability()
-        resetCallback()
     }, [account])
 
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
@@ -294,22 +286,21 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const postLink = usePostLink()
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const shareText = useMemo(() => {
-        const isTwitterOrFacebook = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+        const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+        const isOnFacebook = isFacebook(activatedSocialNetworkUI)
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
             network: networkResolver.networkName(networkType) || '',
-            account: isTwitter(activatedSocialNetworkUI) ? i18n('twitter_account') : i18n('facebook_account'),
-        }
+            account_promote: t.account_promote({
+                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+            }),
+        } as const
         if (availability?.isClaimed) {
-            return isTwitterOrFacebook
-                ? t.nft_share_claimed_message(options)
-                : t.nft_share_claimed_message_not_twitter(options)
+            return t.nft_share_claimed_message(options)
         }
-        return isTwitterOrFacebook
-            ? t.nft_share_foreshow_message(options)
-            : t.nft_share_foreshow_message_not_twitter(options)
-    }, [availability?.isClaimed, t, i18n])
+        return t.nft_share_foreshow_message(options)
+    }, [availability?.isClaimed, t])
 
     const onShare = useCallback(() => {
         if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
@@ -429,8 +420,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                             className={classes.button}
                             fullWidth
-                            onClick={onShare}
-                            variant="contained">
+                            onClick={onShare}>
                             {i18n('share')}
                         </Button>
                     </Box>
@@ -438,21 +428,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         <Box sx={{ flex: 1, padding: 1.5 }}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                expectedChainId={payload.chainId}
-                                renderInTimeline>
+                                expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,
                                         gasFeeButton: classes.button,
-                                    }}
-                                    renderInTimeline>
+                                    }}>
                                     <ActionButton
-                                        variant="contained"
                                         loading={isClaiming}
                                         disabled={isClaiming}
-                                        onClick={claimCallback}
+                                        onClick={claim}
                                         className={classes.button}
                                         fullWidth>
                                         {isClaiming ? t.claiming() : t.claim()}

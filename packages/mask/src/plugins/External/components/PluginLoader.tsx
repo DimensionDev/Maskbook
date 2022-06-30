@@ -74,7 +74,7 @@ export function PluginLoader() {
                 )}
             />
             <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                <Button variant="contained" disabled={invalidURL} onClick={() => setURL(input)}>
+                <Button disabled={invalidURL} onClick={() => setURL(input)}>
                     {t('plugin_external_loader_search_button')}
                 </Button>
             </Box>
@@ -132,7 +132,7 @@ function Loader(props: { url: string }) {
             {/* <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 {contribution ? (
                     <Button
-                        variant="contained"
+
                         onClick={() => {
                             Services.ThirdPartyPlugin.openPluginPopup(
                                 PermissionAwareRedirectOf(

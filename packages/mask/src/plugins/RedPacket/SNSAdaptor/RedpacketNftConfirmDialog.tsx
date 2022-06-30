@@ -12,14 +12,13 @@ import {
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
-import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { useI18N as useBaseI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
@@ -28,6 +27,8 @@ import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infr
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -175,7 +176,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         return Services.Identity.queryPersona(currentIdentity.linkedPersona)
     }, [currentIdentity?.linkedPersona])
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const lastRecognized = useLastRecognizedIdentity()
+    const senderName =
+        lastRecognized.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
     const tokenIdList = tokenList.map((value) => value.tokenId)
     const [createState, createCallback, resetCallback] = useCreateNftRedpacketCallback(
         duration,
@@ -248,7 +254,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
-                            ({wallet?.name}) {formatEthereumAddress(account, 4)}
+                            {formatEthereumAddress(account, 4)}
                             {isNativeTokenAddress(wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"
@@ -317,26 +323,15 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} className={classes.buttonWrapper}>
-                    <Grid item xs={6}>
-                        <Button
-                            className={classNames(classes.button, classes.cancelButton)}
-                            fullWidth
-                            onClick={onBack}
-                            size="large"
-                            variant="contained">
-                            {i18n('cancel')}
-                        </Button>
-                    </Grid>
-                    <Grid item xs={6}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary
                             classes={{
                                 connectWallet: classNames(classes.button, classes.sendButton),
                                 unlockMetaMask: classNames(classes.button, classes.sendButton),
                             }}>
                             <ActionButton
-                                variant="contained"
-                                size="large"
+                                size="medium"
                                 loading={isSending}
                                 disabled={isSending}
                                 onClick={onSendTx}
@@ -348,8 +343,8 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 })}
                             </ActionButton>
                         </WalletConnectedBoundary>
-                    </Grid>
-                </Grid>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
             </DialogContent>
         </InjectedDialog>
     )

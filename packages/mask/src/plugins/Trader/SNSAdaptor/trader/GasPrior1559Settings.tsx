@@ -246,14 +246,12 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                 <Box className={classes.controller}>
                     <ActionButton
                         color="secondary"
-                        variant="contained"
                         className={classnames(classes.button, classes.cancelButton)}
                         onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton
                         color="primary"
-                        variant="contained"
                         className={classes.button}
                         onClick={() => {
                             handleConfirm()

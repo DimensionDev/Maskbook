@@ -12,7 +12,8 @@
             "chainId": 1,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://ethereum.org",
         "explorers": [
@@ -36,7 +37,8 @@
             "chainId": 3,
             "name": "Ropsten Ether",
             "symbol": "ROP",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://github.com/ethereum/ropsten",
         "explorers": [
@@ -60,7 +62,8 @@
             "chainId": 4,
             "name": "Rinkeby Ether",
             "symbol": "RIN",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://www.rinkeby.io",
         "explorers": [
@@ -132,7 +135,8 @@
             "chainId": 56,
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
         },
         "infoURL": "https://www.binance.org",
         "explorers": [
@@ -180,7 +184,8 @@
             "chainId": 137,
             "name": "Matic",
             "symbol": "MATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -204,7 +209,8 @@
             "chainId": 80001,
             "name": "Matic",
             "symbol": "tMATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -228,7 +234,8 @@
             "chainId": 42161,
             "name": "Arbitrum Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://assets.debank.com/static/media/arbitrum.8e326f58.svg"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -2230,7 +2237,8 @@
             "chainId": 43114,
             "name": "Avalanche",
             "symbol": "AVAX",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/avax_token/logo_url/avax/0b9c84359c84d6bdd5bfda9c2d4c4a82.png"
         },
         "infoURL": "https://snowtrace.io/",
         "explorers": [

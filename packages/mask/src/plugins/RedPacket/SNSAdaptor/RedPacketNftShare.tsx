@@ -25,7 +25,7 @@ export function RedPacketNftShareDialog(props: RedPacketNftShareDialogProps) {
         <InjectedDialog open={open} title={t('plugin_ito_dialog_swap_share_title')} onClose={onClose}>
             <DialogContent />
             <DialogActions>
-                <Button variant="contained" color="primary" className={classes.button} onClick={onShare}>
+                <Button color="primary" className={classes.button} onClick={onShare}>
                     {t('plugin_ito_dialog_swap_share_title')}
                 </Button>
             </DialogActions>

@@ -15,7 +15,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
 export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
-    'pluginID',
+    'PluginIdBySite',
     {
         [EnhanceableSite.Twitter]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Facebook]: NetworkPluginID.PLUGIN_EVM,

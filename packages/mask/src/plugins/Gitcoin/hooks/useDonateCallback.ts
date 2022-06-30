@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, encodeTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
+import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
 
@@ -51,13 +51,11 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
             value,
         }
 
-        const tx = await encodeTransaction(bulkCheckoutContract, bulkCheckoutContract.methods.donate(donations), config)
-
-        console.log('DEBUG: get tx')
-        console.log({
-            tx,
-        })
-
+        const tx = await encodeContractTransaction(
+            bulkCheckoutContract,
+            bulkCheckoutContract.methods.donate(donations),
+            config,
+        )
         return connection.sendTransaction(tx)
     }, [account, amount, token, donations, connection])
 }

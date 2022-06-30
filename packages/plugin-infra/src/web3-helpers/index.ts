@@ -206,8 +206,7 @@ export declare namespace Web3Helper {
     export type Web3HubAll = Hub<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],
-        Definition[NetworkPluginID]['GasOption'],
-        Definition[NetworkPluginID]['Transaction']
+        Definition[NetworkPluginID]['GasOption']
     >
 
     export type Web3StateAll = Web3Plugin.ObjectCapabilities.Capabilities<

@@ -10,12 +10,11 @@ import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import AbstractTab from '../../../../components/shared/AbstractTab'
-import { TargetChainIdContext } from '../../contexts'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -41,13 +40,13 @@ const useTabsStyles = makeStyles()((theme) => ({
         marginTop: `${theme.spacing(2)} !important`,
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
+        backgroundColor: theme.palette.maskColor.dark,
         color: 'white',
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
         '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
+            backgroundColor: theme.palette.maskColor.dark,
         },
         margin: '0 !important',
     },
@@ -140,10 +139,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -160,10 +159,10 @@ export function PreviewCard(props: PreviewCardProps) {
                     sx={{
                         margin: 1.125,
                         width: 254,
-                        backgroundColor: theme.palette.maskColor?.dark,
+                        backgroundColor: theme.palette.maskColor.dark,
                         color: 'white',
                         '&:.hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
+                            backgroundColor: theme.palette.maskColor.dark,
                         },
                     }}
                     size="small"
@@ -216,27 +215,14 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={targetChainId}
-                    renderInTimeline>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={targetChainId}>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}
-                        renderInTimeline>
+                        classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
                             fullWidth
-                            variant="contained"
-                            sx={{
-                                backgroundColor: theme.palette.maskColor?.dark,
-                                color: 'white',
-                                width: '100%',
-                                '&:hover': {
-                                    background: theme.palette.maskColor?.dark,
-                                },
-                            }}
                             disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>
                             {(() => {

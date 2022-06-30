@@ -6,7 +6,7 @@ import { toUniswapToken } from '../../helpers'
 import { PairState, usePairs } from './usePairs'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { chainResolver } from '@masknet/web3-shared-evm'
 
 export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {

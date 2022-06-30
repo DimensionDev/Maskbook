@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { encodeTransaction } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useITO_Contract } from './useITO_Contract'
 
@@ -18,7 +18,7 @@ export function useDestructCallback(ito_address: string) {
                 from: account,
             }
 
-            const tx = await encodeTransaction(ITO_Contract, ITO_Contract.methods.destruct(id), config)
+            const tx = await encodeContractTransaction(ITO_Contract, ITO_Contract.methods.destruct(id), config)
             return connection.sendTransaction(tx)
         },
         [ITO_Contract, connection],

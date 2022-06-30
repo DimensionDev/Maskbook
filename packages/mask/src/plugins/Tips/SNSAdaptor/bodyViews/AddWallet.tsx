@@ -10,6 +10,7 @@ import Services from '../../../../extension/service'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import {
+    useAccount,
     useChainId,
     useProviderDescriptor,
     useProviderType,
@@ -33,13 +34,14 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const isNotEvm = useProviderDescriptor()?.providerAdaptorPluginID !== NetworkPluginID.PLUGIN_EVM
     const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
-    const isBound = bindings.some((x) => isSameAddress(x.identity, wallet?.address))
+    const isBound = bindings.some((x) => isSameAddress(x.identity, account))
 
     const walletName = () => {
         if (isNotEvm && providerType) return `${Others?.providerResolver.providerName(providerType)} Wallet`
@@ -50,15 +52,15 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }
 
     const { value: payload, loading: payloadLoading } = useAsync(async () => {
-        if (!currentPersona || !wallet?.address) return
+        if (!currentPersona || !account) return
         return NextIDProof.createPersonaPayload(
             currentPersona.identifier.publicKeyAsHex,
             NextIDAction.Create,
-            wallet.address,
+            account,
             NextIDPlatform.Ethereum,
             'default',
         )
-    }, [currentPersona?.identifier, wallet?.address])
+    }, [currentPersona?.identifier, account])
 
     const [{ value: signature }, personaSilentSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier) return
@@ -82,16 +84,20 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     }, [currentPersona?.identifier, payload])
 
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
-        if (!payload || !currentPersona || !wallet?.address) return false
+        if (!payload || !currentPersona || !account) return false
         try {
-            const walletSig = await connection?.signMessage(payload.signPayload, wallet.address)
+            const walletSig = await connection?.signMessage(payload.signPayload, 'personalSign', {
+                chainId,
+                account,
+                providerType,
+            })
             if (!walletSig) throw new Error('Wallet sign failed')
             await NextIDProof.bindProof(
                 payload.uuid,
                 currentPersona.identifier.publicKeyAsHex,
                 NextIDAction.Create,
                 NextIDPlatform.Ethereum,
-                wallet.address,
+                account,
                 payload.createdAt,
                 {
                     walletSignature: walletSig,
@@ -101,6 +107,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             showSnackbar(t.tip_wallet_sign_success(), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
+            console.log(error, 'error')
             showSnackbar(t.tip_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
@@ -127,16 +134,17 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
         }
     }, [signature, walletSignState, walletSign, personaSilentSign])
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    if (!currentPersona || !wallet || !providerType) return null
+
+    if (!currentPersona || !providerType) return null
 
     return (
-        <div>
+        <div style={{ minHeight: 400 }}>
             <Steps
                 isBound={isBound}
                 notEvm={isNotEvm}
-                notConnected={!wallet?.address}
+                notConnected={!account}
                 wallet={{
-                    account: wallet.address,
+                    account,
                     chainId,
                     providerType,
                 }}
@@ -144,7 +152,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
                 nickname={currentPersona.nickname}
                 step={step}
                 confirmLoading={confirmLoading || payloadLoading}
-                disableConfirm={isBound || isNotEvm || !wallet.address}
+                disableConfirm={isBound || !!(isNotEvm && account) || !account}
                 notInPop
                 changeWallet={openDialog}
                 onConfirm={handleConfirm}

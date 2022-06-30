@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { encodeTransaction } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
 
@@ -16,7 +16,7 @@ export function useMaskClaimCallback() {
         const config = {
             from: account,
         }
-        const tx = await encodeTransaction(MaskITO_Contract, MaskITO_Contract.methods.claim(), config)
+        const tx = await encodeContractTransaction(MaskITO_Contract, MaskITO_Contract.methods.claim(), config)
         return connection.sendTransaction(tx)
     }, [account, chainId, MaskITO_Contract, connection])
 }

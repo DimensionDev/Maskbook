@@ -5,10 +5,9 @@ import type { Token, Currency } from '@uniswap/sdk-core'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext, MulticallStateType, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
 import { isZero } from '@masknet/web3-shared-base'
-import { MulticallStateType, useMultipleContractSingleData } from '@masknet/plugin-infra/web3-evm'
 
 export enum PoolState {
     LOADING = 0,

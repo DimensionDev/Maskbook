@@ -38,7 +38,7 @@ export function PetShareDialog({ onClose }: PetSetDialogProps) {
     return (
         <Box className={classes.root}>
             <Typography className={classes.shareNotice}>{t('plugin_pets_dialog_success')}</Typography>
-            <Button onClick={onShareClick} variant="contained" size="large" className={classes.shareButton}>
+            <Button onClick={onShareClick} size="large" className={classes.shareButton}>
                 {t('plugin_pets_dialog_btn_share')}
             </Button>
         </Box>

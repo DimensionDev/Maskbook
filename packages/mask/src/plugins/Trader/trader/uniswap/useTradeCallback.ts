@@ -6,7 +6,7 @@ import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

@@ -18,7 +18,7 @@ const useStyles = makeStyles()(() => ({
     },
     connect: {
         backgroundColor: '#ffffff',
-        padding: '11px 20px',
+        padding: '11px 16px',
         borderRadius: 99,
         fontWeight: 700,
         fontSize: 14,

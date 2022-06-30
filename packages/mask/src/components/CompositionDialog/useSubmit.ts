@@ -5,7 +5,7 @@ import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { ITO_MetadataReader } from '../../plugins/ITO/SNSAdaptor/helpers'
-import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
+import { RedPacketMetadataReader, RedPacketNftMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -24,13 +24,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             const fallbackProfile: ProfileIdentifier | undefined = globalUIState.profiles.value[0]?.identifier
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
-            const _encrypted = await Services.Crypto.encryptTo(
+            const rawEncrypted = await Services.Crypto.encryptTo(
+                info.version,
                 content,
                 target,
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
                 activatedSocialNetworkUI.encryptionNetwork,
             )
-            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
+            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, rawEncrypted)
             const [imageTemplateType, decoratedText] = decorateEncryptedText(encrypted, t, content.meta)
 
             if (encode === 'image') {
@@ -82,7 +83,7 @@ function decorateEncryptedText(
     const hasOfficialAccount = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
     const officialAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
 
-    if (RedPacketMetadataReader(meta).ok) {
+    if (RedPacketMetadataReader(meta).ok || RedPacketNftMetadataReader(meta).ok) {
         return [
             'eth',
             hasOfficialAccount

@@ -9,9 +9,8 @@ const Container = styled('div')`
     cursor: pointer;
     padding: 4px 0;
 `
-const ListItem = styled(ListItemButton)<{ itemPadding?: string }>`
+const ListItem = styled(ListItemButton)`
     border-radius: 9999px;
-    padding: 6px ${(props) => props.itemPadding ?? '11px'};
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
@@ -22,8 +21,7 @@ const ListItem = styled(ListItemButton)<{ itemPadding?: string }>`
         height: 50px;
     }
 `
-const Text = styled(Typography)<{ textMarginLeft?: string }>`
-    margin-left: ${(props) => props.textMarginLeft ?? '20px'};
+const Text = styled(Typography)`
     margin-right: 16px;
     font-size: 15px;
     font-family: inherit;
@@ -46,9 +44,9 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
             iconFontSize="1.75rem"
             mini={mini}
             ListItemIcon={Icon}
-            Typography={({ children }) => <Text textMarginLeft={textMarginLeft}>{children}</Text>}
+            Typography={({ children }) => <Text marginLeft={textMarginLeft ?? '20px'}>{children}</Text>}
             ListItemButton={({ children, onClick }) => (
-                <ListItem itemPadding={itemPadding} onClick={onClick}>
+                <ListItem style={{ padding: `6px ${itemPadding ?? '11px'}` }} onClick={onClick}>
                     {children}
                 </ListItem>
             )}

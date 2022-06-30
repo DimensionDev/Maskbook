@@ -66,7 +66,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
             chainId: selectedNetwork.chainId as ChainId,
         })
         const tokenDetailed = { ...token, ...tokenAsset }
-        const isOwner = await connection?.getNonFungibleTokenOwnership(address, account, tokenId, undefined, {
+        const isOwner = await connection?.getNonFungibleTokenOwnership(address, tokenId, account, undefined, {
             chainId: selectedNetwork.chainId as ChainId,
         })
 
@@ -74,6 +74,8 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         if (!isOwner) {
             throw new Error(FormErrorType.NotExist)
         } else {
+            tokenDetailed.owner = { address: account }
+            tokenDetailed.ownerId = account
             await Token?.addToken?.(tokenDetailed)
             onClose()
         }

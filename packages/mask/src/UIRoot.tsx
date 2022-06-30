@@ -29,9 +29,10 @@ function useMaskIconPalette(theme: Theme) {
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {
     kind: 'page' | 'sns'
     useTheme(): Theme
+    fallback?: React.ReactNode
 }
 
-export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
+export function MaskUIRoot({ children, kind, useTheme, fallback }: MaskUIRootProps) {
     const site = getSiteType()
     const pluginIDs = useValueRef(pluginIDSettings)
     const PluginsWeb3State = useAllPluginsWeb3State()
@@ -59,5 +60,6 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
             />
         ),
         (jsx) => <SharedContextProvider>{jsx}</SharedContextProvider>,
+        (jsx) => <Suspense fallback={fallback ?? null} children={jsx} />,
     )
 }

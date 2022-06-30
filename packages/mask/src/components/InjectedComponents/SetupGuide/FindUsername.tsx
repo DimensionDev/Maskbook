@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import { VerifiedIcon } from '@masknet/icons'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Trans } from 'react-i18next'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
     avatar: {
@@ -86,17 +87,15 @@ export function FindUsername({
                 </Box>
             }
             tip={
-                <Typography
-                    className={classes.tip}
-                    variant="body2"
-                    dangerouslySetInnerHTML={{
-                        __html: !username
-                            ? t('setup_guide_login')
-                            : connected
-                            ? t('user_guide_tip_connected')
-                            : t('setup_guide_find_username_text'),
-                    }}
-                />
+                <Typography className={classes.tip} variant="body2">
+                    {!username ? (
+                        t('setup_guide_login')
+                    ) : connected ? (
+                        t('user_guide_tip_connected')
+                    ) : (
+                        <Trans i18nKey="setup_guide_find_username_text" components={{ br: <br /> }} />
+                    )}
+                </Typography>
             }
             footer={
                 username ? (

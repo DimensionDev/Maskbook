@@ -7,7 +7,7 @@ import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
 import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import type { SwapBancorRequest, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()

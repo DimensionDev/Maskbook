@@ -113,6 +113,18 @@
             }
         },
         {
+            "input": "./packages/plugins/ScamSniffer/src/locales/en-US.json",
+            "output": "./packages/plugins/ScamSniffer/src/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "io.scamsniffer.mask-plugin",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/plugins/CyberConnect/src/locales/en-US.json",
             "output": "./packages/plugins/CyberConnect/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -288,6 +300,28 @@
                 "namespace": "com.maskbook.referral",
                 "trans": "Translate",
                 "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/mask/src/plugins/FindTruman/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/FindTruman/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "org.findtruman",
+                "trans": "Translate"
+            }
+        },
+        {
+            "input": "./packages/mask/src/plugins/MaskBox/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/MaskBox/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.box",
+                "trans": "Translate"
             }
         }
     ]

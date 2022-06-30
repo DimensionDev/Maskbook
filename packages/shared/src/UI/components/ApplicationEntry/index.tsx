@@ -10,7 +10,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.maskColor.bg,
             borderRadius: '8px',
             height: 100,
         },
@@ -18,8 +18,11 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             cursor: 'pointer',
             '&:hover': {
                 transform: 'scale(1.02) translateY(-2px)',
-                background: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
-                boxShadow: theme.palette.mode === 'light' ? '0px 5px 8px rgba(0, 0, 0, 0.05)' : 'none',
+                background: theme.palette.maskColor.bottom,
+                boxShadow:
+                    theme.palette.mode === 'light'
+                        ? '0px 5px 8px rgba(0, 0, 0, 0.05)'
+                        : '0px 0px 20px rgba(255, 255, 255, 0.12)',
             },
         },
         applicationImg: {
