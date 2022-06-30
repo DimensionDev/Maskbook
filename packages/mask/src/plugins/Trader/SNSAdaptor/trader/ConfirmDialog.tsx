@@ -7,7 +7,6 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Alert, Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import {
@@ -24,10 +23,10 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
 import { ONE_BIPS } from '../../constants'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { ArrowDownward } from '@mui/icons-material'
 import { PluginTraderMessages } from '../../messages'
+import type BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -112,6 +111,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         display: 'flex',
         alignItems: 'center',
         padding: 12,
+        borderRadius: 4,
     },
     warning: {
         backgroundColor: isDashboard
@@ -131,6 +131,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     action: {
         marginRight: 0,
+        padding: 0,
+        minWidth: 88,
     },
     infoIcon: {
         color: isDashboard ? MaskColorVar.twitterInfo : theme.palette.maskColor?.main,
@@ -171,8 +173,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
 }))
 
-const PERCENT_DENOMINATOR = 10000
-
 const MIN_SLIPPAGE = 50 // 0.5%
 const MAX_SLIPPAGE = 500 // 5%
 
@@ -185,7 +185,7 @@ export interface ConfirmDialogUIProps {
     gasPrice?: string
     onConfirm: () => void
     onClose?: () => void
-    openPriceImpact?: () => void
+    openPriceImpact: () => void
     wallet?: Wallet | null
     account?: string
 }
@@ -201,7 +201,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { classes, cx } = useStyles({ isDashboard })
 
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { setTemporarySlippage, temporarySlippage } = AllProviderTradeContext.useContainer()
+
     const [priceReversed, setPriceReversed] = useState(false)
 
     // #region detect price changing
@@ -244,7 +244,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     className={cx(classes.alert, classes.warning)}
                     icon={<WarningTriangleIcon />}
                     severity="warning">
-                    {t('plugin_trader_confirm_tips')}
+                    {t('plugin_trader_price_impact_warning_tips')}
                 </Alert>
             )
         else if (currentSlippage > MAX_SLIPPAGE && !isGreatThanSlippageSetting) {
@@ -279,13 +279,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         setCacheTrade(trade)
         setExecutionPrice(trade.executionPrice)
     }, [trade])
-
-    const onConfirmPriceImpact = useCallback(() => {
-        if (!cacheTrade?.priceImpact) return
-        setTemporarySlippage(
-            new BigNumber(cacheTrade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber(),
-        )
-    }, [cacheTrade?.priceImpact])
 
     // #region update cache trade and price updated state
     useUpdateEffect(() => {
@@ -432,19 +425,16 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         <Typography className={classes.title}>
                             {t('plugin_trader_confirm_slippage_tolerance')}
                         </Typography>
-                        <Typography className={temporarySlippage ? classes.danger : classes.description}>
+                        <Typography className={classes.description}>
                             <Typography component="span" className={classes.edit} onClick={openSwapSettingDialog}>
                                 {t('edit')}
                             </Typography>
-                            {(temporarySlippage ?? currentSlippage) / 100}%
+                            {currentSlippage / 100}%
                         </Typography>
                     </Box>
                     <Box className={classes.section}>
                         <Typography className={classes.title}>{t('plugin_trader_price_impact')}</Typography>
-                        <Typography
-                            className={
-                                isGreatThanSlippageSetting || temporarySlippage ? classes.danger : classes.description
-                            }>
+                        <Typography className={isGreatThanSlippageSetting ? classes.danger : classes.description}>
                             {cacheTrade?.priceImpact?.isLessThan(ONE_BIPS)
                                 ? '<0.01%'
                                 : formatPercentage(cacheTrade.priceImpact)}
@@ -453,7 +443,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
                     <Box className={classes.section}>
                         <Typography className={classes.title}>{t('plugin_trader_confirm_minimum_received')}</Typography>
-                        <Typography className={temporarySlippage ? classes.danger : classes.description}>
+                        <Typography className={classes.description}>
                             <FormattedBalance
                                 value={cacheTrade.minimumReceived}
                                 decimals={outputToken.decimals}
@@ -492,8 +482,13 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             className={cx(classes.alert, classes.info)}
                             icon={<InfoIcon className={classes.infoIcon} />}
                             action={
-                                <Button variant="roundedOutlined" size="small" color="error" onClick={onAccept}>
-                                    {t('plugin_trader_accept')}
+                                <Button
+                                    variant="roundedOutlined"
+                                    size="small"
+                                    color="info"
+                                    fullWidth
+                                    onClick={onAccept}>
+                                    {t('plugin_trader_update')}
                                 </Button>
                             }>
                             {t('plugin_trader_price_updated')}
@@ -502,23 +497,17 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         alertTip
                     )}
                 </DialogContent>
-                {!priceUpdated ? (
-                    <DialogActions className={classes.actions}>
-                        <PluginWalletStatusBar>
-                            {isGreatThanSlippageSetting ? (
-                                <Button color="error" fullWidth disabled={staled} onClick={onConfirmPriceImpact}>
-                                    {t('plugin_trader_confirm_price_impact', {
-                                        percent: formatPercentage(cacheTrade.priceImpact),
-                                    })}
-                                </Button>
-                            ) : (
-                                <Button color="primary" fullWidth disabled={staled} onClick={onConfirm}>
-                                    {t('plugin_trader_confirm_swap')}
-                                </Button>
-                            )}
-                        </PluginWalletStatusBar>
-                    </DialogActions>
-                ) : null}
+
+                <DialogActions className={classes.actions}>
+                    <PluginWalletStatusBar>
+                        <Button
+                            disabled={staled || priceUpdated}
+                            fullWidth
+                            onClick={isGreatThanSlippageSetting ? openPriceImpact : onConfirm}>
+                            {t('plugin_trader_confirm_swap')}
+                        </Button>
+                    </PluginWalletStatusBar>
+                </DialogActions>
             </InjectedDialog>
         </>
     )

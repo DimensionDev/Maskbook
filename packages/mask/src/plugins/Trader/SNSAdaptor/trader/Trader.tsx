@@ -253,10 +253,14 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             : ''
     }, [focusedTrade?.value, inputToken, outputToken, t])
     const openShareTxDialog = useOpenShareTxDialog()
-    const onConfirmDialogConfirm = useCallback(async () => {
+    const onConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
+        setPriceImpactDialogOpen(false)
         await delay(100)
         const hash = await tradeCallback()
+
+        setTemporarySlippage(undefined)
+
         if (typeof hash !== 'string') return
         await openShareTxDialog({
             hash,
@@ -269,11 +273,14 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-        setTemporarySlippage(undefined)
     }, [tradeCallback, shareText, openShareTxDialog])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
+    }, [])
+
+    const onPriceImpactDialogClose = useCallback(() => {
+        setPriceImpactDialogOpen(false)
         setTemporarySlippage(undefined)
     }, [])
     // #endregion
@@ -387,15 +394,18 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                         gasPrice={gasPrice}
                         inputToken={inputToken}
                         outputToken={outputToken}
-                        onConfirm={onConfirmDialogConfirm}
+                        onConfirm={onConfirm}
                         onClose={onConfirmDialogClose}
-                        openPriceImpact={() => setPriceImpactDialogOpen(true)}
+                        openPriceImpact={() => {
+                            setPriceImpactDialogOpen(true)
+                            setOpenConfirmDialog(false)
+                        }}
                     />
                     <PriceImpactDialog
                         open={priceImpactDialogOpen}
-                        onClose={() => setPriceImpactDialogOpen(false)}
+                        onClose={onPriceImpactDialogClose}
                         trade={focusedTrade.value}
-                        onConfirm={() => {}}
+                        onConfirm={onConfirm}
                     />
                 </>
             ) : null}

@@ -3,7 +3,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, Typography } from '@mui/material'
-import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
@@ -463,36 +463,21 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         style: { borderRadius: 8 },
                                         size: 'medium',
                                     }}>
-                                    {isGreatThanSlippageSetting ? (
-                                        <ActionButton
-                                            fullWidth
-                                            loading={isSwapping}
-                                            variant="contained"
-                                            color="error"
-                                            disabled={focusedTrade?.loading || !focusedTrade?.value || isSwapping}
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            onClick={onSwap}>
-                                            {t('plugin_trader_confirm_price_impact', {
-                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                            })}
-                                        </ActionButton>
-                                    ) : (
-                                        <ActionButton
-                                            fullWidth
-                                            loading={isSwapping}
-                                            variant="contained"
-                                            disabled={
-                                                focusedTrade?.loading ||
-                                                !focusedTrade?.value ||
-                                                !!validationMessage ||
-                                                isSwapping
-                                            }
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            color="primary"
-                                            onClick={onSwap}>
-                                            {validationMessage || nativeWrapMessage}
-                                        </ActionButton>
-                                    )}
+                                    <ActionButton
+                                        fullWidth
+                                        loading={isSwapping}
+                                        variant="contained"
+                                        disabled={
+                                            focusedTrade?.loading ||
+                                            !focusedTrade?.value ||
+                                            !!validationMessage ||
+                                            isSwapping
+                                        }
+                                        classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                        color="primary"
+                                        onClick={onSwap}>
+                                        {validationMessage || nativeWrapMessage}
+                                    </ActionButton>
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>

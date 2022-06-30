@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import type { TradeComputed } from '../../types'
 import { useI18N, Translate } from '../../locales'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
@@ -9,10 +9,12 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
 import { formatPercentage } from '@masknet/web3-shared-evm'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
-        padding: '62px 16px 144px 16px',
+        padding: '38px 16px 144px 16px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -43,6 +45,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         display: 'flex',
         flexDirection: 'column',
         rowGap: 16,
+        padding: 16,
     },
 }))
 
@@ -50,11 +53,14 @@ export interface PriceImpactDialogProps extends InjectedDialogProps {
     trade: TradeComputed
     onConfirm: () => void
 }
+const PERCENT_DENOMINATOR = 10000
 
-export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, trade }) => {
+export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, trade, onConfirm }) => {
     const t = useI18N()
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
+
+    const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
     const lostToken = formatBalance(
         multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(),
@@ -63,6 +69,13 @@ export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, 
     const { value: inputTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, trade.inputToken?.address)
 
     const lostValue = multipliedBy(inputTokenPrice ?? 0, lostToken).toFixed(2)
+
+    const handleConfirm = useCallback(() => {
+        if (!trade.priceImpact) return
+        setTemporarySlippage(new BigNumber(trade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
+
+        onConfirm()
+    }, [trade, onConfirm])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()}>
@@ -81,8 +94,10 @@ export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, 
                 </Typography>
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button fullWidth>{t.adjust_order()}</Button>
-                <Button fullWidth color="error">
+                <Button fullWidth onClick={onClose}>
+                    {t.adjust_order()}
+                </Button>
+                <Button fullWidth color="error" onClick={handleConfirm}>
                     {t.make_trade_anyway()}
                 </Button>
             </DialogActions>
