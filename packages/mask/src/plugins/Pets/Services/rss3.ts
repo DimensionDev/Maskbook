@@ -3,7 +3,7 @@ import type { Constant } from '@masknet/web3-shared-base/src/utils/types'
 import type { ConfigRSSNode, EssayRSSNode, PetMetaDB } from '../types'
 import { NFTS_CONFIG_ADDRESS } from '../constants'
 import { WalletRPC } from '../../Wallet/messages'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const cache = new Map<string, Record<string, Constant> | undefined>()
