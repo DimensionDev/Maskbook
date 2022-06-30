@@ -4,6 +4,7 @@ export const r2d2URL = 'r2d2.to'
 
 export enum R2d2Workers {
     opensea = 'opensea-proxy',
+    nftscan = 'nftscan-proxy',
     gitcoin = 'gitcoin-agent',
     coinMarketCap = 'coinmarketcap-agent',
     goPlusLabs = 'gopluslabs',
@@ -13,6 +14,7 @@ type R2d2WorkerMatchTuple = [string, R2d2Workers]
 
 const matchers: R2d2WorkerMatchTuple[] = [
     ['https://api.opensea.io', R2d2Workers.opensea],
+    ['https://restapi.nftscan.com', R2d2Workers.nftscan],
     ['https://gitcoin.co', R2d2Workers.gitcoin],
     ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
     ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],

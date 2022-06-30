@@ -15,7 +15,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import type { NonFungibleTokenAPI } from '..'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
 import type { NFTScanAsset } from './types'
-import { courier, isProxyENV } from '../helpers'
+import { courier } from '../helpers'
 
 const IPFS_BASE = 'https://ipfs.io/ipfs/:id'
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
@@ -25,7 +25,8 @@ async function getToken() {
     if (token && isBefore(Date.now(), token.expiration)) {
         return token.token
     }
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { ...(!isProxyENV() && { mode: 'cors' }) })
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { method: 'GET' })
     const {
         data,
     }: {
