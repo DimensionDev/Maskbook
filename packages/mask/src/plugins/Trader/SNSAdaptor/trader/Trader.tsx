@@ -27,7 +27,6 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
 import { PriceImpactDialog } from './PriceImpactDialog'
 
@@ -407,7 +406,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                     />
                 </>
             ) : null}
-            <SettingsDialog />
         </>
     )
 })
