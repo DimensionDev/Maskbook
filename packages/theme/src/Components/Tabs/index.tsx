@@ -132,7 +132,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
-    const [firstId, setFirstTabId] = useState<string>(context?.value)
+    const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
     const innerRef = useRef<HTMLDivElement>(null)
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
