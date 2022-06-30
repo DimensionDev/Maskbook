@@ -46,7 +46,6 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
             ? {
                   minHeight: 303,
                   overflow: 'hidden',
-                  // border: `solid 1px ${theme.palette.divider}`,
                   display: 'flex',
                   flexDirection: 'column',
                   background: 'transparent',

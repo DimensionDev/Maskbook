@@ -79,7 +79,7 @@ const brands: Record<CommunityType, React.ReactNode> = {
 }
 
 export function CoinMetadataTable(props: CoinMetadataTableProps) {
-    const { dataProvider, trending } = props
+    const { trending } = props
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -164,7 +164,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
-                                        Community
+                                        {t('plugin_trader_community')}
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">

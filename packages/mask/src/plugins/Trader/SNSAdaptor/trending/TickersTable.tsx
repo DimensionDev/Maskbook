@@ -55,11 +55,11 @@ export function TickersTable(props: TickersTableProps) {
     ]
     const tickers = props.tickers.map((ticker, index) => (
         <TableRow key={index}>
-            <TableCell className={classes.cell} colSpan={1}>
+            <TableCell className={classes.cell}>
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
                 <span>{ticker.market_name}</span>
             </TableCell>
-            <TableCell className={classes.cell} colSpan={1}>
+            <TableCell className={classes.cell}>
                 {(() => {
                     const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
@@ -76,16 +76,14 @@ export function TickersTable(props: TickersTableProps) {
                 })()}
             </TableCell>
             {ticker.price ? (
-                <TableCell className={classes.cell} colSpan={1}>
+                <TableCell className={classes.cell}>
                     <FormattedCurrency value={ticker.price} formatter={formatCurrency} />
                 </TableCell>
             ) : null}
-            <TableCell className={classes.cell} colSpan={1}>
+            <TableCell className={classes.cell}>
                 <FormattedCurrency value={ticker.volume} formatter={formatCurrency} />
             </TableCell>
-            <TableCell className={classes.cell} colSpan={1}>
-                {formatElapsed(ticker.updated.getTime())}
-            </TableCell>
+            <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>
     ))
 
@@ -96,7 +94,7 @@ export function TickersTable(props: TickersTableProps) {
                     <TableRow>
                         {rows.map((x) =>
                             x ? (
-                                <TableCell colSpan={1} className={classes.cell} key={x}>
+                                <TableCell className={classes.cell} key={x}>
                                     {x}
                                 </TableCell>
                             ) : null,
