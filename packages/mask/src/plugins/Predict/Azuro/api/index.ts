@@ -1,4 +1,4 @@
-import { fetchGames, fetchUserBets } from '@azuro-protocol/sdk'
+import { calculateActualOdds, fetchGames, fetchUserBets } from '@azuro-protocol/sdk'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { configureAzuroSDK } from '../helpers/configureAzuroSDK'
 
@@ -20,4 +20,26 @@ export async function fetchEvents(chainId: ChainId) {
     })
 
     return events
+}
+
+interface CalculateOddsProps {
+    chainId: ChainId
+    conditionId: number
+    outcomeId: number
+    betAmount: number
+}
+
+export async function calculateActualRate({
+    chainId,
+    conditionId,
+    outcomeId,
+    betAmount,
+}: CalculateOddsProps): Promise<number> {
+    configureAzuroSDK(chainId)
+
+    return calculateActualOdds({
+        conditionId,
+        outcomeId,
+        betAmount,
+    })
 }

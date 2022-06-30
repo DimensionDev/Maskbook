@@ -8,7 +8,6 @@ export function useFetchGames(searchTerm: string, market: number, league: string
 
     return useAsyncRetry(async () => {
         const games = await PluginPredictRPC.fetchEvents(chainId)
-        console.log(games)
 
         const gamesFiltered = games.filter((game) => {
             if (market !== 0) return game.marketRegistryId === market

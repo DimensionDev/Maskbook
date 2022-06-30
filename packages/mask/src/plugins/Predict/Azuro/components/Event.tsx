@@ -1,6 +1,5 @@
 import { Card, CardContent, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Odds as Pick } from '../types'
 import { useI18N } from '../../../../utils'
 import type { AzuroGame } from '@azuro-protocol/sdk'
 import { Market } from './Market'
@@ -30,15 +29,12 @@ interface EventProps {
     key: string
     game: AzuroGame
     isUserBet?: boolean
-    setOpenPlaceBetDialog: () => void
-    setConditionPick: (condition: Pick | null) => void
-    setGamePick: (game: AzuroGame | null) => void
 }
 
 export function Event(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { game, setOpenPlaceBetDialog, setConditionPick, setGamePick } = props
+    const { game } = props
 
     return (
         <Card className={classes.game}>
@@ -61,12 +57,7 @@ export function Event(props: EventProps) {
                         direction="column"
                         className={classes.choicesContainer}
                         wrap="nowrap">
-                        <Odds
-                            game={game}
-                            setOpenPlaceBetDialog={setOpenPlaceBetDialog}
-                            setPick={setConditionPick}
-                            setGamePick={setGamePick}
-                        />
+                        <Odds game={game} />
                     </Grid>
                 </Grid>
             </CardContent>

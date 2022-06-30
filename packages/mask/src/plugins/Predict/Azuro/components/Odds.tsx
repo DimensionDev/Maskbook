@@ -2,8 +2,11 @@ import type { AzuroGame } from '@azuro-protocol/sdk'
 import { makeStyles } from '@masknet/theme'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import { useCallback } from 'react'
+import { PickContext } from '../context/usePickContext'
 import { outcomeRegistry, param } from '../helpers'
 import type { Odds as Pick } from '../types'
+import { v4 } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     choice: {
@@ -42,27 +45,21 @@ const useStyles = makeStyles()((theme) => ({
 
 type OddsProps = {
     game: AzuroGame
-    setOpenPlaceBetDialog: () => void
-    setPick: (pick: Pick | null) => void
-    setGamePick: (game: AzuroGame | null) => void
 }
 
 export function Odds(props: OddsProps) {
     const { classes } = useStyles()
     const {
         game,
-        setOpenPlaceBetDialog,
-        setPick,
-        setGamePick,
         game: { conditions },
     } = props
-    const DEFAULT_PARAM_ID = 1
+    const { onOpenPlaceBetDialog, setConditionPick, setGamePick } = PickContext.useContainer()
 
-    const handleOnClickOdd = (pick: Pick) => {
-        setPick(pick)
+    const handleOnClickOdd = useCallback((pick: Pick) => {
+        setConditionPick(pick)
         setGamePick(game)
-        setOpenPlaceBetDialog()
-    }
+        onOpenPlaceBetDialog()
+    }, [])
 
     if (Object.keys(conditions).length === 1) {
         const odds = conditions[0].odds
@@ -75,7 +72,7 @@ export function Odds(props: OddsProps) {
 
                     return (
                         <Grid
-                            key={key}
+                            key={v4()}
                             container
                             justifyContent="space-between"
                             className={classes.choice}
@@ -91,17 +88,17 @@ export function Odds(props: OddsProps) {
 
     return (
         <>
-            {conditions.map((condition, index) => (
-                <Grid key={condition.paramId} container alignItems="center" flexWrap="nowrap">
+            {conditions.map((condition) => (
+                <Grid key={v4()} container alignItems="center" flexWrap="nowrap">
                     <Grid container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
                         <Typography>{param[condition.paramId]}</Typography>
                         {condition.odds.map((pick) => {
-                            const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
+                            // const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
                             const title = outcomeRegistry[pick.outcomeRegistryId](game)
 
                             return (
                                 <Grid
-                                    key={key}
+                                    key={v4()}
                                     container
                                     flexWrap="nowrap"
                                     justifyContent="space-between"

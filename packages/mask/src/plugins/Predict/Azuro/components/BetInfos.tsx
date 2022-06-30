@@ -51,19 +51,17 @@ export function BetInfos(props: BetInfosProps) {
         <Grid container justifyContent="center" direction="column" className={classes.container} wrap="nowrap">
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t.plugin_status()} </Typography>
-                <Typography>
-                    {bet.gameInfo.state === ConditionStatus.CREATED ? (
-                        bet.gameInfo.startsAt > Date.now() ? (
-                            t.plugin_pending()
-                        ) : (
-                            <Live />
-                        )
-                    ) : bet.gameInfo.state === ConditionStatus.RESOLVED ? (
-                        t.plugin_finished()
-                    ) : bet.gameInfo.state === ConditionStatus.CANCELED ? (
-                        t.plugin_canceled()
-                    ) : null}
-                </Typography>
+                {bet.gameInfo.state === ConditionStatus.CREATED ? (
+                    bet.gameInfo.startsAt > Date.now() ? (
+                        <Typography>{t.plugin_pending()}</Typography>
+                    ) : (
+                        <Live />
+                    )
+                ) : bet.gameInfo.state === ConditionStatus.RESOLVED ? (
+                    <Typography>{t.plugin_finished()}</Typography>
+                ) : bet.gameInfo.state === ConditionStatus.CANCELED ? (
+                    <Typography>{t.plugin_canceled()}</Typography>
+                ) : null}
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t.plugin_pick()} </Typography>
@@ -79,7 +77,7 @@ export function BetInfos(props: BetInfosProps) {
             <Grid container justifyContent="space-between" className={classes.info}>
                 <Typography className={classes.label}>{t.plugin_amount()} </Typography>
                 <Typography title={bet.amount.toString()}>
-                    {bet.amount.toFixed(6)} {betToken?.name}
+                    {bet.amount.toFixed()} {betToken?.name}
                 </Typography>
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>

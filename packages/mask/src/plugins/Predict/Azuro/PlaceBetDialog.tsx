@@ -7,18 +7,16 @@ import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web
 import { useAzuroConstants, ChainId } from '@masknet/web3-shared-evm'
 import { useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { useState, useMemo, useCallback } from 'react'
-import { AzuroGame, RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
-import type { Odds } from './types'
+import { RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { marketRegistry, outcomeRegistry } from './helpers'
 import { usePlaceBetCallback, useActualRate } from './hooks'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { contractAddresses } from '../constants'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { PickContext } from './context/usePickContext'
+import { useContainer } from 'unstated-next'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -60,15 +58,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PlaceBetDialogProps {
-    open: boolean
-    onClose?: () => void
-    game: AzuroGame
-    condition: Odds
-}
+export function PlaceBetDialog() {
+    const {
+        openPlaceBetDialog: open,
+        onClosePlaceBetDialog,
+        conditionPick: condition,
+        setConditionPick,
+        gamePick: game,
+        setGamePick,
+    } = useContainer(PickContext)
 
-export function PlaceBetDialog(props: PlaceBetDialogProps) {
-    const { open, onClose, game, condition } = props
+    const onCloseDialog = useCallback(() => {
+        setConditionPick(null)
+        setGamePick(null)
+        onClosePlaceBetDialog()
+    }, [])
+
     const { t: tr } = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
@@ -82,7 +87,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
         loading,
     } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
-        chainId === ChainId.Sokol ? contractAddresses[chainId as ChainId]?.token : '',
+        // chainId === ChainId.Sokol ? contractAddresses[chainId as ChainId]?.token : '',
     )
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
 
@@ -93,9 +98,9 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     const rawMinRate = rightShift(minRate ?? '0', RATE_DECIMALS)
 
     const [{ loading: isPlacing }, placeBetCallback] = usePlaceBetCallback(
-        condition.conditionId,
+        condition?.conditionId,
         rawAmount,
-        condition.outcomeId,
+        condition?.outcomeId,
         deadline,
         rawMinRate,
     )
@@ -135,7 +140,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>
-                <InjectedDialog open={open} title={t.plugin_place_bet()} onClose={onClose}>
+                <InjectedDialog open={open} title={t.plugin_place_bet()} onClose={onCloseDialog}>
                     <DialogContent>
                         <div className={classes.container}>
                             <TokenAmountPanel
@@ -149,23 +154,25 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Event:</Typography>
                                     <Typography>
-                                        {game.participants[0].name} {t.plugin_versus()}
-                                        {game.participants[1].name}
+                                        {game?.participants[0].name} {t.plugin_versus()}
+                                        {game?.participants[1].name}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Market:</Typography>
-                                    <Typography>{marketRegistry[game.marketRegistryId]}</Typography>
+                                    <Typography>{game ? marketRegistry[game.marketRegistryId] : null}</Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Outcome:</Typography>
-                                    <Typography>{outcomeRegistry[condition.outcomeRegistryId](game)}</Typography>
+                                    <Typography>
+                                        {condition && game ? outcomeRegistry[condition.outcomeRegistryId](game) : null}
+                                    </Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">
                                     <Typography className={classes.infoTitle}>Odds:</Typography>
                                     <Typography>
                                         {!amount ? (
-                                            condition.value
+                                            condition?.value
                                         ) : actualRateLoading ? (
                                             <LoadingAnimation />
                                         ) : (
@@ -177,7 +184,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                     <Typography className={classes.infoTitle}>Min odds:</Typography>
                                     <Typography>
                                         {!amount ? (
-                                            condition.value.toFixed(2)
+                                            condition?.value.toFixed(2)
                                         ) : actualRateLoading ? (
                                             <LoadingAnimation />
                                         ) : (
@@ -201,7 +208,7 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                 </Grid>
                             </Grid>
                             <WalletConnectedBoundary>
-                                {chainId === ChainId.Sokol ? (
+                                {/* {chainId === ChainId.Sokol ? (
                                     <ChainBoundary
                                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                         expectedChainId={ChainId.Sokol}>
@@ -222,22 +229,22 @@ export function PlaceBetDialog(props: PlaceBetDialogProps) {
                                     </ChainBoundary>
                                 ) : (
                                     ''
-                                )}
-                                {chainId === ChainId.xDai ? (
-                                    <ChainBoundary
-                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                        expectedChainId={ChainId.xDai}>
-                                        <ActionButton
-                                            className={classes.actionButton}
-                                            size="large"
-                                            variant="contained"
-                                            disabled={isPlacing || !!validationMessage}
-                                            onClick={placeBet}
-                                            fullWidth>
-                                            {isPlacing ? tr('loading') : validationMessage || t.plugin_place_bet()}
-                                        </ActionButton>
-                                    </ChainBoundary>
+                                )} */}
+                                {chainId === ChainId.xDai || ChainId.Sokol ? (
+                                    // <ChainBoundary
+                                    //     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                    //     expectedChainId={ChainId.xDai}>
+                                    <ActionButton
+                                        className={classes.actionButton}
+                                        size="large"
+                                        variant="contained"
+                                        disabled={isPlacing || !!validationMessage}
+                                        onClick={placeBet}
+                                        fullWidth>
+                                        {isPlacing ? tr('loading') : validationMessage || t.plugin_place_bet()}
+                                    </ActionButton>
                                 ) : (
+                                    // </ChainBoundary>
                                     ''
                                 )}
                             </WalletConnectedBoundary>

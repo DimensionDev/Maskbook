@@ -6,9 +6,9 @@ import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { useAsyncFn } from 'react-use'
 
 export function usePlaceBetCallback(
-    conditionID: number,
+    conditionID: number | undefined,
     amount: BigNumber,
-    outcomeID: number,
+    outcomeID: number | undefined,
     deadline: number,
     minOdds: BigNumber,
 ) {
