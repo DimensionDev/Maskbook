@@ -20,7 +20,7 @@ const useStyles = makeStyles()(() => {
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
-                padding: '8px 2px 0',
+                padding: '8px 0 0',
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
@@ -49,7 +49,7 @@ export function ApplicationRecommendArea(props: Props) {
                     naturalSlideWidth={220}
                     naturalSlideHeight={117}
                     totalSlides={recommendFeatureAppList.length}
-                    visibleSlides={2.2}
+                    visibleSlides={2}
                     infinite={false}
                     interval={2500}
                     className={classes.carousel}
