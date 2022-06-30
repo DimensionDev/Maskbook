@@ -44,6 +44,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: 1.2,
         fontWeight: 700,
     },
+    cellValue: {
+        border: 'none',
+    },
     label: {
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
@@ -110,11 +113,12 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         {t('contract')}
                                     </Typography>
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell className={classes.cellValue} align="right">
                                     {contracts[0].address ? (
                                         <Stack
                                             direction="row"
                                             justifyContent="flex-end"
+                                            height={18}
                                             style={{ position: 'relative', right: -5 }}>
                                             <ContractSection
                                                 iconURL={contracts[0].iconURL}
@@ -141,7 +145,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                             {label}
                                         </Typography>
                                     </TableCell>
-                                    <TableCell align="right">
+                                    <TableCell className={classes.cellValue} align="right">
                                         <Stack display="inline-flex" direction="row" gap={1}>
                                             {links.map((x, i) => (
                                                 <Linking
@@ -163,7 +167,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         Community
                                     </Typography>
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell className={classes.cellValue} align="right">
                                     <Stack
                                         height="100%"
                                         display="flex"
