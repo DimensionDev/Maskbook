@@ -1164,6 +1164,7 @@ importers:
 
   packages/plugins/Web3Profile:
     specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
@@ -1182,6 +1183,7 @@ importers:
       urlcat: ^2.0.4
       use-subscription: 1.7.0
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/plugin-wallet': link:../Wallet

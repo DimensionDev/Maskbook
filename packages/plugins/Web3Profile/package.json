@@ -20,6 +20,7 @@
       "classnames": "^2.3.1",
       "urlcat": "^2.0.4",
       "@types/use-subscription": "^1.0.0",
-      "date-fns":"2.28.0"
+      "date-fns":"2.28.0",
+      "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919"
   }
 }

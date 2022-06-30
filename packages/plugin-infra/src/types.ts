@@ -588,7 +588,7 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                personaList?: string[]
+                persona?: string
                 socialAddressList?: Array<SocialAddress<NetworkPluginID>>
                 open?: boolean
                 setOpen: (open: boolean) => void

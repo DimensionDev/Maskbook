@@ -17,7 +17,7 @@ import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
-import { ECKeyIdentifier, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useAsyncRetry } from 'react-use'
@@ -229,7 +229,7 @@ export function CollectionList({
 }: {
     addressName: SocialAddress<NetworkPluginID>
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
-    persona?: ECKeyIdentifier
+    persona?: string
     visitingProfile?: IdentityResolved
 }) {
     const { t } = useI18N()
@@ -258,7 +258,7 @@ export function CollectionList({
 
     const { value: kvValue } = useAsyncRetry(async () => {
         if (!persona) return
-        return getKV(persona?.publicKeyAsHex!)
+        return getKV(persona)
     }, [persona])
     const unHiddenCollectibles = useCollectionFilter(
         (kvValue as kvType)?.proofs,

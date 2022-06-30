@@ -15,7 +15,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform, usePersonaBoundPlatform } from '../DataSource/useNextID'
@@ -62,14 +62,20 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         identity.identifier?.userId,
     )
 
+    const currentPersonaBinding = first(
+        personaList.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId?.toLowerCase() ?? '')),
+    )
+
     const isOwn = currentIdentity?.identifier === identity?.identifier
 
-    const personaPublicKey = isOwn ? currentConnectedPersona?.identifier?.publicKeyAsHex : personaList?.[0]?.persona
+    const personaPublicKey = isOwn
+        ? currentConnectedPersona?.identifier?.publicKeyAsHex
+        : currentPersonaBinding?.persona
 
-    const { value: personaProof } = usePersonaBoundPlatform(personaPublicKey || ZERO_ADDRESS)
+    const { value: personaProof, retry } = usePersonaBoundPlatform(personaPublicKey || ZERO_ADDRESS)
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
     useEffect(() => {
-        if (wallets?.length === 0 || !wallets || !isOwn) {
+        if (wallets?.length === 0 || !wallets || (!isOwn && socialAddressList?.length)) {
             setAddressList(socialAddressList)
         } else {
             const addresses = wallets.map((proof) => {
@@ -97,8 +103,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         personaList,
         socialAddressList,
         identity,
-        activatedPlugins,
         isWeb3ProfileDisable,
+        personaPublicKey,
+        personaProof,
     })
 
     const tabs = displayPlugins
@@ -144,7 +151,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return (
             <Component
                 identity={identity}
-                personaList={personaList?.map((x) => x.persona)}
+                persona={personaPublicKey}
                 socialAddressList={addressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
                 open={profileOpen}
                 setOpen={setProfileOpen}

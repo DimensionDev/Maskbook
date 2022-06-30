@@ -10,7 +10,7 @@ import { useI18N } from '../locales'
 import { useCollectionFilter, useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useCurrentPersona, useCurrentVisitingProfile } from './hooks/useContext'
+import { useCurrentVisitingProfile } from './hooks/useContext'
 import { useAsyncRetry } from 'react-use'
 import type { kvType } from '../types'
 import { getKV } from './hooks/useKV'
@@ -33,11 +33,12 @@ export enum TabCardType {
 }
 
 export interface TabCardProps {
+    persona?: string
     type: TabCardType
     socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function TabCard({ type, socialAddressList }: TabCardProps) {
+export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
@@ -50,7 +51,6 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
         formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
     )
     const currentVisitingProfile = useCurrentVisitingProfile()
-    const currentPersona = useCurrentPersona()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
@@ -61,9 +61,9 @@ export function TabCard({ type, socialAddressList }: TabCardProps) {
     }
 
     const { value: kvValue } = useAsyncRetry(async () => {
-        if (!currentPersona) return
-        return getKV(currentPersona?.publicKeyAsHex!)
-    }, [currentPersona])
+        if (!persona) return
+        return getKV(persona)
+    }, [persona])
     const unHiddenDonations = useCollectionFilter(
         (kvValue as kvType)?.proofs,
         donations,
