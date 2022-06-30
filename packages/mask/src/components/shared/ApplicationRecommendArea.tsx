@@ -56,11 +56,9 @@ export function ApplicationRecommendArea(props: Props) {
                     isPlaying={isPlaying}>
                     <Slider onScroll={(e) => setIsPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
                         {recommendFeatureAppList.map((application, i) => (
-                            <Box width="852px" key={application.entry.ApplicationEntryID}>
-                                <Slide index={i} key={application.entry.ApplicationEntryID}>
-                                    <RenderEntryComponent application={application} />
-                                </Slide>
-                            </Box>
+                            <Slide index={i} key={application.entry.ApplicationEntryID}>
+                                <RenderEntryComponent application={application} />
+                            </Slide>
                         ))}
                     </Slider>
                 </CarouselProvider>
