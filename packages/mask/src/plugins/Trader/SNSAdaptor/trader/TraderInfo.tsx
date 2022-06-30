@@ -182,3 +182,55 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         />
     )
 })
+
+export const DefaultTraderPlaceholder = memo(() => {
+    const isDashboard = isDashboardPage()
+
+    const { t } = useI18N()
+    const { classes } = useStyles({ isDashboard })
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const nativeToken = createNativeToken(targetChainId)
+    return (
+        <TextField
+            fullWidth
+            type="text"
+            variant="filled"
+            value={0}
+            InputProps={{
+                className: classnames(classes.trade, classes.focus),
+                disableUnderline: true,
+                startAdornment: (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                            width: '100%',
+                        }}>
+                        <Typography className={classes.provider}>DEX</Typography>
+
+                        <Typography className={classes.cost}>
+                            <Typography fontSize={14} lineHeight="20px" component="span">
+                                {t('plugin_trader_gas_fee')}
+                            </Typography>
+                            <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
+                                <FormattedBalance
+                                    value={0}
+                                    decimals={nativeToken.decimals ?? 0}
+                                    significant={4}
+                                    symbol={nativeToken.symbol}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                            <Typography fontSize={14} lineHeight="20px" component="span">
+                                {t('plugin_trader_tx_cost_usd', { usd: 0 })}
+                            </Typography>
+                        </Typography>
+                    </Box>
+                ),
+            }}
+            inputProps={{ className: classes.input, disabled: true }}
+        />
+    )
+})

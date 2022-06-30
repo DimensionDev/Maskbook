@@ -11,7 +11,7 @@ import { first, noop } from 'lodash-unified'
 import { SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
-import { TraderInfo } from './TraderInfo'
+import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
 import { isNativeTokenWrapper } from '../../helpers'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
@@ -422,7 +422,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         />
                                     </Box>
                                 </>
-                            ) : null}
+                            ) : (
+                                <Box mt={1.5}>
+                                    <DefaultTraderPlaceholder />
+                                </Box>
+                            )}
                         </Box>
                     </Box>
                 </Box>

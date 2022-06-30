@@ -16,7 +16,7 @@ import {
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Alert, Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
-import { InfoIcon, RetweetIcon, WarningTriangleIcon } from '@masknet/icons'
+import { CircleWarningIcon, InfoIcon, RetweetIcon, WarningTriangleIcon } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 
@@ -245,7 +245,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                     <Alert
                         classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.error)}
-                        icon={<InfoIcon className={classes.danger} />}
+                        icon={<CircleWarningIcon className={classes.danger} />}
                         severity="error">
                         {t('plugin_trader_price_impact_too_high_tips', {
                             impact: formatPercentage(cacheTrade?.priceImpact),

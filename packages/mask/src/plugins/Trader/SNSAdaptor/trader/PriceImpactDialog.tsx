@@ -4,7 +4,7 @@ import { memo, useCallback } from 'react'
 import type { TradeComputed } from '../../types'
 import { useI18N, Translate } from '../../locales'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { InfoIcon } from '@masknet/icons'
+import { CircleWarningIcon } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
@@ -22,8 +22,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     icon: {
         color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
-        width: 85,
-        height: 85,
+        width: 90,
+        height: 90,
     },
     title: {
         color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
@@ -80,7 +80,7 @@ export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()}>
             <DialogContent className={classes.content}>
-                <InfoIcon className={classes.icon} />
+                <CircleWarningIcon className={classes.icon} />
                 <Typography className={classes.title}>{t.risk_warning()}</Typography>
                 <Typography className={classes.description}>
                     <Translate.risk_warning_description
