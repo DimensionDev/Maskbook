@@ -18,14 +18,8 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { GearIcon, RefreshIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
     abstractTabWrapper: {
         width: '100%',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
     },
     tab: {
         height: 36,
@@ -48,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
     },
     content: {
-        paddingTop: 0,
+        padding: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },

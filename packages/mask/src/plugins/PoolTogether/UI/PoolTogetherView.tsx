@@ -159,7 +159,6 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
                     predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
-                    renderInTimeline
                 />
             </Box>
         </>

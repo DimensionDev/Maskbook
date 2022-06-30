@@ -113,7 +113,6 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
     balance: string
     amount: string
     chainId: ChainId
-
     token?: FungibleToken<ChainId, SchemaType> | null
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>

@@ -160,11 +160,7 @@ export function TraderView(props: TraderViewProps) {
         const nextOption = indexOf === dataProviders.length - 1 ? dataProviders[0] : dataProviders[indexOf + 1]
 
         return (
-            <ActionButton
-                sx={{ marginTop: 1 }}
-                color="primary"
-                variant="contained"
-                onClick={() => setStorage(nextOption)}>
+            <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setStorage(nextOption)}>
                 Switch to {resolveDataProviderName(nextOption)}
             </ActionButton>
         )

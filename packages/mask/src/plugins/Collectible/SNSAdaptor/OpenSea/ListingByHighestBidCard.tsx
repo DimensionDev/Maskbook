@@ -5,8 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { isZero, isLessThan, NetworkPluginID, NonFungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../../utils'
-import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
@@ -15,12 +14,13 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { isWyvernSchemaName } from '../../utils'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { useOpenSea } from '../../hooks/useOpenSea'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
         display: 'flex',
         justifyContent: 'flex-end',
-        padding: theme.spacing(0, 2, 2),
+        padding: 0,
     },
     panel: {
         marginTop: theme.spacing(2),
@@ -30,6 +30,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {},
     button: {
+        margin: 0,
+        padding: 0,
+        height: 40,
+    },
+    stateBar: {
         marginTop: theme.spacing(1.5),
     },
 }))
@@ -144,22 +149,22 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                 />
             </CardContent>
             <CardActions className={classes.footer}>
-                <WalletConnectedBoundary>
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        disabled={!!validationMessage}
-                        fullWidth
-                        size="large"
-                        init={validationMessage || t('plugin_collectible_post_listing')}
-                        waiting={t('plugin_collectible_post_listing')}
-                        complete={t('plugin_collectible_done')}
-                        failed={t('plugin_collectible_retry')}
-                        executor={onPostListing}
-                        completeOnClick={onClose}
-                        failedOnClick="use executor"
-                    />
-                </WalletConnectedBoundary>
+                <PluginWalletStatusBar className={classes.stateBar}>
+                    <WalletConnectedBoundary>
+                        <ActionButtonPromise
+                            className={classes.button}
+                            disabled={!!validationMessage}
+                            fullWidth
+                            init={validationMessage || t('plugin_collectible_post_listing')}
+                            waiting={t('plugin_collectible_post_listing')}
+                            complete={t('plugin_collectible_done')}
+                            failed={t('plugin_collectible_retry')}
+                            executor={onPostListing}
+                            completeOnClick={onClose}
+                            failedOnClick="use executor"
+                        />
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
             </CardActions>
         </Card>
     )

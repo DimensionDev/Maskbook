@@ -155,7 +155,6 @@ function Content() {
             {proposal.isEnd ? (
                 <Button
                     color="primary"
-                    variant="contained"
                     className={classes.resultButton}
                     onClick={() => {
                         const csv = parse(dataForCsv)

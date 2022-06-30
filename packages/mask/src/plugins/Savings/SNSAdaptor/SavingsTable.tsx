@@ -14,10 +14,7 @@ const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
         fontFamily: theme.typography.fontFamily,
     },
-    tableContainer: {
-        maxHeight: 350,
-        overflowY: 'scroll',
-    },
+    tableContainer: {},
     tableHeader: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
@@ -188,7 +185,6 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                 </Grid>
                                 <Grid item xs={3} className={classes.tableCell}>
                                     <Button
-                                        variant="contained"
                                         color="primary"
                                         disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                         onClick={() => {

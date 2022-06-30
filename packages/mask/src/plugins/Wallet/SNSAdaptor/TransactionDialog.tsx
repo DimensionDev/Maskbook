@@ -136,7 +136,6 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                     <Button
                         color="primary"
                         size="large"
-                        variant="contained"
                         fullWidth
                         onClick={state.type === TransactionStateType.FAILED || !shareText ? closeDialog : onShare}>
                         {state.type === TransactionStateType.FAILED || !shareText ? t('dismiss') : t('share')}

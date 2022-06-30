@@ -52,7 +52,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic} renderInTimeline>
+        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic}>
             <PreviewCard id={id} />
         </ChainBoundary>
     )

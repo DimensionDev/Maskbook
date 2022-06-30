@@ -270,12 +270,7 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     {currentPluginID === NetworkPluginID.PLUGIN_EVM && account ? (
-                        <Button
-                            className={classes.deposit}
-                            variant="contained"
-                            fullWidth
-                            size="small"
-                            onClick={onDeposit}>
+                        <Button className={classes.deposit} fullWidth size="small" onClick={onDeposit}>
                             {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                         </Button>
                     ) : null}
