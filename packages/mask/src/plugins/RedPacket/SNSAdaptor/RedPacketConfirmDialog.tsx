@@ -266,7 +266,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                                 decimals={nativeToken?.decimals}
                                 symbol={nativeToken?.symbol}
                                 formatter={formatBalance}
-                                significant={6}
+                                significant={isNativeToken ? 3 : 0}
                             />
                         </Typography>
                     </Grid>

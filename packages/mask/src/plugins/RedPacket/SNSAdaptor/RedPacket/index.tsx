@@ -109,7 +109,7 @@ export function RedPacket(props: RedPacketProps) {
             return t.description_claimed(
                 availability.claimed_amount
                     ? {
-                          amount: formatBalance(availability.claimed_amount, token.decimals, 8),
+                          amount: formatBalance(availability.claimed_amount, token.decimals, 6),
                           symbol: token.symbol,
                       }
                     : { amount: '-', symbol: '-' },
@@ -122,7 +122,7 @@ export function RedPacket(props: RedPacketProps) {
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
             return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals),
+                balance: formatBalance(availability.balance, token.decimals, 6),
                 symbol: token.symbol ?? '-',
             })
         if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
@@ -130,7 +130,7 @@ export function RedPacket(props: RedPacketProps) {
         if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
         if (!payload.password) return t.description_broken()
         return t.description_failover({
-            total: formatBalance(payload.total, token.decimals),
+            total: formatBalance(payload.total, token.decimals, 6),
             symbol: token.symbol ?? '-',
             shares: payload.shares.toString() ?? '-',
         })
