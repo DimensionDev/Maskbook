@@ -132,7 +132,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
-    const [firstId, setFirstTabId] = useState<string>()
+    const [firstId, setFirstTabId] = useState<string>(context?.value)
     const innerRef = useRef<HTMLDivElement>(null)
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
@@ -156,11 +156,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const children = Children.map(props.children, (child, i) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
-        console.log(child.props.value, { firstId })
+        const selected = child.props.value === context.value
+
         const extra = {
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
-            selected: child.props.value === context.value,
+            selected,
             // if move tab to first in flexible tabs
             isVisitable: (top: number, right: number) => {
                 const anchor = anchorRef.current?.getBoundingClientRect()
@@ -175,7 +176,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             },
             style: {
                 background:
-                    child.props.value === firstId || (!firstId && i === 0)
+                    child.props.value === firstId || (!firstId && selected)
                         ? theme.palette.maskColor.input
                         : 'transparent',
             },
