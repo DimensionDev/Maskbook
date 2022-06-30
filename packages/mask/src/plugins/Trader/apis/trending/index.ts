@@ -3,13 +3,7 @@ import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../
 import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import {
-    isBlockedId,
-    isBlockedKeyword,
-    resolveAlias,
-    resolveCoinId,
-    isBlockedAddress,
-} from './hotfix'
+import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 import { CoinGecko, CoinMarketCap, UniSwap } from '@masknet/web3-providers'
