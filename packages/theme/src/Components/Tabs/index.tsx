@@ -20,6 +20,7 @@ import { RoundTab } from './RoundTab'
 import { get } from 'lodash-unified'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
+const defaultTabSize = 38
 
 export interface MaskTabListProps
     extends React.PropsWithChildren<Pick<ButtonGroupProps, 'classes' | 'disabled' | 'fullWidth' | 'size'>> {
@@ -33,9 +34,9 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     top: 0,
     right: 0,
     padding: theme.spacing(1.5),
-    height: 38,
-    width: 38,
-    minWidth: '38px !important',
+    height: defaultTabSize,
+    width: defaultTabSize,
+    minWidth: `${defaultTabSize}px !important`,
     background: theme.palette.maskColor.input ?? '#F2F6FA',
 
     '&:hover': {
@@ -91,14 +92,14 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
         overflow: 'hidden',
         flex: 1,
         maxWidth: '100%',
-        paddingRight: isOpen ? 38 : 0,
+        paddingRight: isOpen ? defaultTabSize : 0,
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         borderRadius: 0,
         background:
             !isOpen && isOverflow
                 ? theme.palette.mode === 'light'
-                    ? 'linear-gradient(270deg, rgba(255,255,255,1) 38px, rgba(223, 229, 244, 0.8) 38px, rgba(244, 247, 254, 0) 72px)'
-                    : 'linear-gradient(270deg, transparent 38px, rgba(49, 49, 49, 0.8) 38px, rgba(23, 23, 23, 0) 72px)'
+                    ? `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
+                    : `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
                 : 'transparent',
     }),
 )
@@ -165,12 +166,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             // if move tab to first in flexible tabs
             isVisitable: (top: number, right: number) => {
                 const anchor = anchorRef.current?.getBoundingClientRect()
-                return right <= (anchor?.right ?? 0) && top <= (anchor?.top ?? 0)
+                return right <= (anchor?.right ?? 0) - defaultTabSize && top - (anchor?.top ?? 0) < defaultTabSize
             },
-            onChange: (event: object, value: string, isVisitable?: boolean) => {
+            onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)
-                if (variant === 'flexible' && !isVisitable) {
+                if (variant === 'flexible' && !visitable) {
                     setFirstTabId(value)
                 }
             },
@@ -218,7 +219,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     if (variant === 'flexible') {
         return (
             <Box position="relative">
-                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: 38 }} />
+                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: defaultTabSize }} />
                 <FlexibleButtonGroupPanel className="test" isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}

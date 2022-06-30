@@ -1,5 +1,5 @@
 import { Button, ButtonProps, styled } from '@mui/material'
-import { memo, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { get } from 'lodash-unified'
 
 const FlexibleTabTabWrap = styled(Button, {
@@ -34,14 +34,24 @@ export interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps
 export const FlexibleTab = memo<ButtonTabProps>((props) => {
     const activated = !!props.selected
     const { onChange, onClick, value } = props
+    const { isVisitable, ...rest } = props
     const ref = useRef<HTMLButtonElement>(null)
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const isVisitable = props.isVisitable(
+    useEffect(() => {
+        if (!activated) return
+        const visitable = isVisitable(
             ref.current?.getBoundingClientRect().top ?? 0,
             ref.current?.getBoundingClientRect().right ?? 0,
         )
-        if (!activated && onChange) onChange(event, String(value), isVisitable)
+        if (!visitable) onChange?.({}, String(value), visitable)
+    }, [])
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const visitable = isVisitable(
+            ref.current?.getBoundingClientRect().top ?? 0,
+            ref.current?.getBoundingClientRect().right ?? 0,
+        )
+        if (!activated && onChange) onChange(event, String(value), visitable)
         if (onClick) onClick(event)
     }
 
@@ -50,7 +60,7 @@ export const FlexibleTab = memo<ButtonTabProps>((props) => {
             activated={activated}
             ref={ref}
             role="tab"
-            {...props}
+            {...rest}
             disableElevation
             variant="contained"
             aria-selected={activated}
