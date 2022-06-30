@@ -29,6 +29,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { getFungibleTokenItem } from './FungibleTokenItem'
 import { ManageTokenListBar } from './ManageTokenListBar'
+import { TokenListMode } from './type'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -80,6 +81,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const t = useSharedI18N()
     const { classes } = useStyles()
+
+    const [mode, setMode] = useState(TokenListMode.List)
+
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, props.chainId)
@@ -238,6 +242,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     (address) => fungibleTokensBalance[address] ?? '0',
                     (address) => selectedTokens.some((x) => isSameAddress(x, address)),
                     () => loadingFungibleTokensBalance || loadingFungibleAssets,
+                    mode,
                     async (
                         token: FungibleToken<
                             Web3Helper.Definition[T]['ChainId'],
@@ -255,9 +260,11 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     ...props.SearchTextFieldProps,
                 }}
             />
-            <Box className={classes.bar}>
-                <ManageTokenListBar onClick={() => {}} />
-            </Box>
+            {mode === TokenListMode.List && (
+                <Box className={classes.bar}>
+                    <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
+                </Box>
+            )}
         </Stack>
     )
 }
