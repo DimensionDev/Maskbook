@@ -386,8 +386,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <>
                     <ConfirmDialog
-                        account={account}
-                        wallet={wallet}
                         open={openConfirmDialog}
                         trade={focusedTrade.value}
                         gas={focusedTrade.gas.value}
