@@ -124,7 +124,7 @@ export function ITO_Card(props: ITO_CardProps) {
             <Box className={classes.root} display="flex" justifyContent="center">
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
-                    <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
+                    <ActionButton className={classes.button} onClick={() => packetRetry()}>
                         {t('retry')}
                     </ActionButton>
                 </Box>
@@ -147,7 +147,6 @@ export function ITO_Card(props: ITO_CardProps) {
                         <ActionButton
                             loading={isClaiming}
                             className={classes.button}
-                            variant="contained"
                             disabled={
                                 Number.parseInt(packet.unlockTime, 10) > Math.round(Date.now() / 1000) ||
                                 packet.claimable === '0' ||

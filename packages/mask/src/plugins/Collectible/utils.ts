@@ -9,6 +9,8 @@ import {
 } from './constants'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
+import type { CollectibleJSON_Payload } from './types'
+import { SourceType } from '@masknet/web3-shared-base'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -26,7 +28,7 @@ export function getRelevantUrl(textContent: string) {
     return urls.find(checkUrl)
 }
 
-export function getAssetInfoFromURL(url?: string) {
+export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | null {
     if (!url) return null
     const _url = new URL(url)
 
@@ -37,6 +39,7 @@ export function getAssetInfoFromURL(url?: string) {
             chain_id: _url.host.includes('testnets') ? ChainId.Rinkeby : ChainId.Mainnet,
             address: openSeaMatched[1],
             token_id: openSeaMatched[2],
+            provider: SourceType.OpenSea,
         }
     }
     // #endregion
@@ -52,6 +55,7 @@ export function getAssetInfoFromURL(url?: string) {
                 : ChainId.Mainnet,
             address: raribleMatched[1],
             token_id: raribleMatched[2],
+            provider: SourceType.Rarible,
         }
     }
     // #endregion
@@ -63,12 +67,13 @@ export function getAssetInfoFromURL(url?: string) {
             chain_id: _url.host.includes('rinkeby') ? ChainId.Rinkeby : ChainId.Mainnet,
             address: zoraMatched[1],
             token_id: zoraMatched[2],
+            provider: SourceType.Zora,
         }
     }
     // #endregion
 
     // nothing matched
-    return
+    return null
 }
 
 export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {

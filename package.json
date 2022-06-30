@@ -1,9 +1,9 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@7.1.1",
+  "packageManager": "pnpm@7.4.0",
   "engines": {
     "node": ">=17.0.0",
-    "pnpm": ">=7.0.0",
+    "pnpm": ">=7.4.0",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
@@ -20,7 +20,7 @@
     "lint": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache --fix",
     "lint:ci": "eslint -c packages/.eslintrc.json packages --ext .ts,.tsx,.js --cache",
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
-    "postinstall": "patch-package && gulp fix-lockfile",
+    "postinstall": "gulp fix-lockfile",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:debug": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand",
@@ -29,38 +29,34 @@
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20220617045824-8bc7a27",
-    "@emotion/cache": "^11.7.1",
-    "@emotion/react": "^11.9.0",
-    "@emotion/serialize": "^1.0.3",
-    "@emotion/styled": "^11.8.1",
-    "@emotion/utils": "^1.1.0",
+    "@emotion/cache": "11.9.3",
+    "@emotion/react": "11.9.3",
+    "@emotion/serialize": "1.0.4",
+    "@emotion/server": "11.4.0",
+    "@emotion/styled": "11.9.3",
+    "@emotion/utils": "1.1.0",
     "@mui/icons-material": "5.8.0",
     "@mui/lab": "5.0.0-alpha.82",
     "@mui/material": "5.8.0",
     "@mui/system": "5.8.0",
-    "@solana/web3.js": "1.39.1",
     "@types/masknet__global-types": "workspace:*",
     "@types/react": "18.0.14",
     "@types/react-dom": "^18.0.5",
     "@types/web": "^0.0.68",
     "i18next": "^21.8.2",
-    "immer": "9.0.12",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-i18next": "^11.16.9",
-    "ses": "0.15.16",
-    "ts-results": "3.3.0",
-    "web3-core": "1.7.3",
-    "web3-core-method": "1.7.3"
+    "ses": "0.15.17",
+    "ts-results": "3.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "@dimensiondev/eslint-plugin": "0.0.2-20220516081411-2649814",
-    "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^28.1.1",
     "@magic-works/i18n-codegen": "^0.2.0",
     "@masknet/cli": "workspace:*",
@@ -85,13 +81,12 @@
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1",
-    "typescript": "4.7.3"
+    "typescript": "^4.8.0-beta"
   },
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.34",
-      "@types/react": "18.0.9",
-      "@solana/web3.js": "1.39.1"
+      "@types/react": "18.0.9"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
@@ -109,6 +104,16 @@
         "react": "18",
         "react-dom": "18"
       }
+    },
+    "patchedDependencies": {
+      "ts-results@3.3.0": "patches/ts-results@3.3.0.patch",
+      "immer@9.0.15": "patches/immer@9.0.15.patch",
+      "@emotion/cache@11.9.3": "patches/@emotion__cache@11.9.3.patch",
+      "@emotion/react@11.9.3": "patches/@emotion__react@11.9.3.patch",
+      "@emotion/serialize@1.0.4": "patches/@emotion__serialize@1.0.4.patch",
+      "@emotion/server@11.4.0": "patches/@emotion__server@11.4.0.patch",
+      "@emotion/styled@11.9.3": "patches/@emotion__styled@11.9.3.patch",
+      "@emotion/utils@1.1.0": "patches/@emotion__utils@1.1.0.patch"
     }
   }
 }

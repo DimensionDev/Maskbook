@@ -18,9 +18,9 @@ import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import { useUpdateEffect } from 'react-use'
-import { useI18N } from '../../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { FungibleToken, isZero, multipliedBy, NetworkPluginID, formatBalance, Wallet } from '@masknet/web3-shared-base'
-import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 import { ONE_BIPS } from '../../constants'
@@ -91,11 +91,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
     },
     actions: {
-        marginLeft: 40,
-        marginRight: 40,
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingBottom: 40,
+        padding: 0,
     },
     accept: {
         backgroundColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
@@ -373,7 +369,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             severity="error"
                             icon={<CramIcon className={classes.alertIcon} />}
                             action={
-                                <Button variant="contained" color="error" className={classes.accept} onClick={onAccept}>
+                                <Button color="error" className={classes.accept} onClick={onAccept}>
                                     {t('plugin_trader_accept')}
                                 </Button>
                             }>
@@ -385,31 +381,31 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                 </DialogContent>
                 {!priceUpdated ? (
                     <DialogActions className={classes.actions}>
-                        {isGreatThanSlippageSetting ? (
-                            <Button
-                                classes={{ root: classes.button }}
-                                color="error"
-                                size="large"
-                                variant="contained"
-                                fullWidth
-                                disabled={staled}
-                                onClick={onConfirmPriceImpact}>
-                                {t('plugin_trader_confirm_price_impact', {
-                                    percent: formatPercentage(cacheTrade.priceImpact),
-                                })}
-                            </Button>
-                        ) : (
-                            <Button
-                                classes={{ root: classes.button }}
-                                color="primary"
-                                size="large"
-                                variant="contained"
-                                fullWidth
-                                disabled={staled}
-                                onClick={onConfirm}>
-                                {t('plugin_trader_confirm_swap')}
-                            </Button>
-                        )}
+                        <PluginWalletStatusBar>
+                            {isGreatThanSlippageSetting ? (
+                                <Button
+                                    classes={{ root: classes.button }}
+                                    color="error"
+                                    size="large"
+                                    fullWidth
+                                    disabled={staled}
+                                    onClick={onConfirmPriceImpact}>
+                                    {t('plugin_trader_confirm_price_impact', {
+                                        percent: formatPercentage(cacheTrade.priceImpact),
+                                    })}
+                                </Button>
+                            ) : (
+                                <Button
+                                    classes={{ root: classes.button }}
+                                    color="primary"
+                                    size="large"
+                                    fullWidth
+                                    disabled={staled}
+                                    onClick={onConfirm}>
+                                    {t('plugin_trader_confirm_swap')}
+                                </Button>
+                            )}
+                        </PluginWalletStatusBar>
                     </DialogActions>
                 ) : null}
             </InjectedDialog>

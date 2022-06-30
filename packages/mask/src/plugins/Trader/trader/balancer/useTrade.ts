@@ -3,7 +3,7 @@ import { ChainId, isNativeTokenAddress, SchemaType, useTokenConstants } from '@m
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 

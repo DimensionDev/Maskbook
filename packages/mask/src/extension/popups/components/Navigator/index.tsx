@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo } from 'react'
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
 import { PersonasIcon, WalletNavIcon, DashboardIcon } from '@masknet/icons'
@@ -5,7 +7,7 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 enum NavRouter {
     Personas = 'Personas',

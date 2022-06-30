@@ -89,8 +89,6 @@ export interface DecryptStaticECDH_PostKey {
 export interface DecryptEphemeralECDH_PostKey {
     encryptedPostKey: Uint8Array
     /** For the first time encryption, it might be included in the post payload. */
-    postKeyIV?: Uint8Array
-    /** For the first time encryption, it might be included in the post payload. */
     ephemeralPublicKey?: EC_Public_CryptoKey
     ephemeralPublicKeySignature?: Uint8Array
 }

@@ -251,7 +251,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -274,7 +274,7 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
-    async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
+    async getTokenSchema(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {
         const options = this.getOptions(initial)
         const ERC165_INTERFACE_ID = '0x01ffc9a7'
         const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
@@ -308,7 +308,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
         const allSettled = await Promise.allSettled([
             this.getNonFungibleTokenMetadata(address, tokenId, schema, options),
             this.getNonFungibleTokenContract(address, schema, options),
@@ -340,13 +340,13 @@ class Connection implements EVM_Connection {
 
     async getNonFungibleTokenOwnership(
         address: string,
-        owner: string,
         tokenId: string,
+        owner: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
     ) {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -380,7 +380,7 @@ class Connection implements EVM_Connection {
             return uri
         }
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -425,7 +425,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -471,7 +471,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -484,9 +484,9 @@ class Connection implements EVM_Connection {
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : '')) as string[]
         return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
     }
-    async switchChain(initial?: EVM_Web3ConnectionOptions): Promise<void> {
+    async switchChain(chainId: ChainId, initial?: EVM_Web3ConnectionOptions): Promise<void> {
         const options = this.getOptions(initial)
-        await Providers[options.providerType].switchChain(options.chainId)
+        await Providers[options.providerType].switchChain(chainId)
     }
     async getNativeTokenBalance(initial?: EVM_Web3ConnectionOptions): Promise<string> {
         const options = this.getOptions(initial)
@@ -510,7 +510,7 @@ class Connection implements EVM_Connection {
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
         const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getSchemaType(address, options))
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
@@ -893,7 +893,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    replaceRequest(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    requestTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<void>(
             {
@@ -904,7 +904,7 @@ class Connection implements EVM_Connection {
         )
     }
 
-    cancelRequest(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
+    cancelTransaction(hash: string, transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {
         const options = this.getOptions(initial)
         return this.hijackedRequest<void>(
             {

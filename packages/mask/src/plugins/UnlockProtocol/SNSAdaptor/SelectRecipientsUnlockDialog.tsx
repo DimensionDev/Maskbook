@@ -93,7 +93,7 @@ export function SelectRecipientsUnlockDialogUI(props: SelectRecipientsUnlockDial
                 </List>
             </DialogContent>
             <DialogActions>
-                <Button style={{ marginLeft: 'auto' }} variant="contained" onClick={props.onClose}>
+                <Button style={{ marginLeft: 'auto' }} onClick={props.onClose}>
                     {t('plugin_unlockprotocol_submit_post')}
                 </Button>
             </DialogActions>
