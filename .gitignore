@@ -1,7 +1,6 @@
 # generated files
-i18n_generated.js
-i18n_generated.d.ts
-i18n_generated.d.ts.map
+i18n_generated*
+icon-generated*
 
 # VSCode personal settings
 .vscode/launch.json

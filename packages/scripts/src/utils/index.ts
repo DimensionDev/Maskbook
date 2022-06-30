@@ -1,5 +1,6 @@
 export * from './paths'
 export * from './awaitChildProcess'
+export * from './prettier'
 export * from './task'
 export * from './args'
 export * from './run'
