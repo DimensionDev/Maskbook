@@ -10,7 +10,7 @@ import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { PoolFromNetwork, JSON_PayloadFromChain, SwappedTokenType } from '../../types'
 import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 import { checkAvailability } from './checkAvailability'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const interFace = new Interface(ITO_ABI)
 

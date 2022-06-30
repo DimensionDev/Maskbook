@@ -20,6 +20,7 @@ export function injectPostInspectorDefault<T extends string>(
 
     const { zipPost, injectionPoint } = config
     const zipPostF = zipPost || noop
+
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoProvider post={current}>

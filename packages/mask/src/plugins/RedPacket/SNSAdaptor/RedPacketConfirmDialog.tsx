@@ -6,13 +6,15 @@ import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
+import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -163,112 +165,110 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, networkType, contract_version])
 
     return (
-        <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
-            <Grid item xs={12}>
-                <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
-                    {settings?.message}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.token()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
-                    <span>{settings?.token?.symbol}</span>
-                    {isNativeTokenAddress(settings?.token) ? null : (
-                        <Link
-                            color="textPrimary"
-                            className={classes.link}
-                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
-                            <LaunchIcon fontSize="small" />
-                        </Link>
-                    )}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.split_mode()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.isRandom ? t.random() : t.average()}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.shares()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.shares}
-                </Typography>
-            </Grid>
-
-            {settings?.isRandom ? null : (
-                <>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textSecondary">
-                            {t.amount_per_share()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textPrimary" align="right">
-                            <FormattedBalance
-                                value={new BigNumber(settings?.total ?? 0).div(settings?.shares ?? 1)}
-                                decimals={settings?.token?.decimals}
-                                symbol={settings?.token?.symbol}
-                                formatter={formatBalance}
-                            />
-                        </Typography>
-                    </Grid>
-                </>
-            )}
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.total_amount()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    <FormattedBalance
-                        value={settings?.total}
-                        decimals={settings?.token?.decimals!}
-                        symbol={settings?.token?.symbol!}
-                        formatter={formatBalance}
-                    />
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Paper className={classes.hit}>
-                    <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
-                        {t.hint()}
+        <>
+            <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
+                <Grid item xs={12}>
+                    <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
+                        {settings?.message}
                     </Typography>
-                </Paper>
-            </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.token()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
+                        <span>{settings?.token?.symbol}</span>
+                        {isNativeTokenAddress(settings?.token) ? null : (
+                            <Link
+                                color="textPrimary"
+                                className={classes.link}
+                                href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <LaunchIcon fontSize="small" />
+                            </Link>
+                        )}
+                    </Typography>
+                </Grid>
 
-            <Grid item xs={6}>
-                <ActionButton disabled={isCreating} fullWidth onClick={onBack}>
-                    {t.back()}
-                </ActionButton>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.split_mode()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        {settings?.isRandom ? t.random() : t.average()}
+                    </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.shares()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        {settings?.shares}
+                    </Typography>
+                </Grid>
+
+                {settings?.isRandom ? null : (
+                    <>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textSecondary">
+                                {t.amount_per_share()}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textPrimary" align="right">
+                                <FormattedBalance
+                                    value={new BigNumber(settings?.total ?? 0).div(settings?.shares ?? 1)}
+                                    decimals={settings?.token?.decimals}
+                                    symbol={settings?.token?.symbol}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                        </Grid>
+                    </>
+                )}
+
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.total_amount()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        <FormattedBalance
+                            value={settings?.total}
+                            decimals={settings?.token?.decimals!}
+                            symbol={settings?.token?.symbol!}
+                            formatter={formatBalance}
+                        />
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Paper className={classes.hit}>
+                        <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
+                            {t.hint()}
+                        </Typography>
+                    </Paper>
+                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
-                    {t.send_symbol({
-                        amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
-                        symbol: settings?.token?.symbol ?? '-',
-                    })}
-                </ActionButton>
-            </Grid>
-        </Grid>
+            <PluginWalletStatusBar>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ActionButton loading={isCreating} fullWidth onClick={createRedpacket}>
+                        {t.send_symbol({
+                            amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
+                            symbol: settings?.token?.symbol ?? '-',
+                        })}
+                    </ActionButton>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
+        </>
     )
 }

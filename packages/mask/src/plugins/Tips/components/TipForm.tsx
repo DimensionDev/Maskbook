@@ -19,6 +19,7 @@ import {
 import classnames from 'classnames'
 import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
@@ -37,6 +38,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
+            padding: theme.spacing(2),
         },
         receiverRow: {
             display: 'flex',
@@ -51,12 +53,6 @@ const useStyles = makeStyles()((theme) => {
             height: 48,
             flexGrow: 1,
             marginLeft: theme.spacing(1),
-        },
-        actionButton: {
-            marginTop: theme.spacing(1.5),
-            paddingTop: 12,
-            paddingBottom: 12,
-            fontSize: 16,
         },
         button: {
             width: '100%',
@@ -196,7 +192,8 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                     <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
                 )}
             </div>
-            {account ? (
+
+            <PluginWalletStatusBar>
                 <ChainBoundary
                     expectedPluginID={pluginId}
                     expectedChainId={chainId}
@@ -206,24 +203,11 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                         classes: { root: classes.button, disabled: classes.disabledButton },
                         color: 'primary',
                     }}>
-                    <ActionButton
-                        size="large"
-                        className={classes.actionButton}
-                        fullWidth
-                        disabled={!isValid || isSending}
-                        onClick={send}>
+                    <ActionButton size="large" fullWidth disabled={!isValid || isSending} onClick={send}>
                         {buttonLabel}
                     </ActionButton>
                 </ChainBoundary>
-            ) : (
-                <ActionButton
-                    size="large"
-                    className={classes.actionButton}
-                    fullWidth
-                    onClick={openSelectProviderDialog}>
-                    {t.tip_connect_wallet()}
-                </ActionButton>
-            )}
+            </PluginWalletStatusBar>
         </Box>
     )
 })
