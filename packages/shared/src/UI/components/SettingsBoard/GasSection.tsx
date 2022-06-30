@@ -74,21 +74,23 @@ export function GasSection(props: GasSectionProps) {
                             </span>
                             {activeTab === GasSettingsType.Basic ? (
                                 <span className={classes.price}>
-                                    {` ${new BigNumber(
+                                    {' '}
+                                    {new BigNumber(
                                         (gasOptions?.[gasOptionType].suggestedMaxFeePerGas as string | undefined) ?? 0,
-                                    ).toFixed(2)} Gwei`}
+                                    ).toFixed(2)}
+                                    {' Gwei'}
                                 </span>
                             ) : (
                                 <span className={classes.price}>
-                                    {` ${
-                                        transactionOptions
-                                            ? formatWeiToGwei(
-                                                  ((transactionOptions as Transaction).maxFeePerGas as
-                                                      | string
-                                                      | undefined) ?? 0,
-                                              ).toFixed(2)
-                                            : 0
-                                    } Gwei`}
+                                    {' '}
+                                    {transactionOptions
+                                        ? formatWeiToGwei(
+                                              ((transactionOptions as Transaction).maxFeePerGas as
+                                                  | string
+                                                  | undefined) ?? 0,
+                                          ).toFixed(2)
+                                        : 0}
+                                    {' Gwei'}
                                 </span>
                             )}
                         </Typography>
