@@ -95,8 +95,10 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
         gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
         borderRadius: 0,
         background:
-            !isOpen && isOverflow && theme.palette.mode === 'light'
-                ? 'linear-gradient(270deg,rgba(255,255,255,1) 38px, rgba(223, 229, 244, 0.8) 38px, rgba(244, 247, 254, 0) 72px)'
+            !isOpen && isOverflow
+                ? theme.palette.mode === 'light'
+                    ? 'linear-gradient(270deg, rgba(255,255,255,1) 38px, rgba(223, 229, 244, 0.8) 38px, rgba(244, 247, 254, 0) 72px)'
+                    : 'linear-gradient(270deg, transparent 38px, rgba(49, 49, 49, 0.8) 38px, rgba(23, 23, 23, 0) 72px)'
                 : 'transparent',
     }),
 )
@@ -150,7 +152,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (!innerRef?.current) return
 
         const current = innerRef.current
-        setIsTabsOverflow(current?.scrollWidth > current?.clientWidth)
+        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth)
     }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
@@ -217,7 +219,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         return (
             <Box position="relative">
                 <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: 38 }} />
-                <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
+                <FlexibleButtonGroupPanel className="test" isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
