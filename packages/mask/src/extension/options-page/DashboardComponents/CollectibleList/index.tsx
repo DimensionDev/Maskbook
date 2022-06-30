@@ -265,7 +265,7 @@ export function CollectionList({
         collectibles,
         'NFTs',
         visitingProfile,
-        account,
+        account?.toLowerCase(),
     )
 
     console.log({ persona, kvValue, unHiddenCollectibles })
