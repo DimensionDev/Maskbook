@@ -10,9 +10,8 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
 import { cloneDeep, merge } from 'lodash-unified'
-import twitterColorSchema from '../../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
 import produce, { setAutoFreeze } from 'immer'
-import { parseColor } from '@masknet/theme'
+import { MaskColors, parseColor } from '@masknet/theme'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))
 const defaultUseTheme = (t: Theme) => t
@@ -29,8 +28,18 @@ export function useClassicMaskSNSTheme(mode?: string) {
 
     setAutoFreeze(false)
     const maskTheme = produce(baseTheme, (theme) => {
-        const colorSchema = twitterColorSchema[theme.palette.mode]
+        const colorSchema = MaskColors[theme.palette.mode]
+
+        const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
+
+        colors.forEach((color) => {
+            if (typeof theme.palette[color] === 'object') {
+                Object.assign(theme.palette[color] ?? {}, colorSchema[color])
+            }
+        })
         theme.palette.maskColor = colorSchema.maskColor
+        theme.palette.divider = colorSchema.divider
+        theme.palette.secondaryDivider = colorSchema.secondaryDivider
         theme.components = theme.components || {}
         theme.components.MuiButton = {
             defaultProps: {
@@ -708,7 +717,10 @@ export function useClassicMaskSNSTheme(mode?: string) {
             },
         }
     })
+    setAutoFreeze(true)
     // TODO: support RTL?
+
+    console.log(maskTheme)
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
     return usePostTheme(theme)
