@@ -53,18 +53,7 @@ export function useSwitcher<T extends string | number>(
     if (typeof nextOption === 'undefined') return null
 
     return (
-        <ActionButton
-            fullWidth={fullWidth}
-            sx={{
-                marginTop: 1,
-                backgroundColor: theme.palette.maskColor?.dark,
-                '&:hover': {
-                    backgroundColor: theme.palette.maskColor?.dark,
-                },
-                color: 'white',
-            }}
-            variant="contained"
-            onClick={() => onSwitch(nextOption)}>
+        <ActionButton fullWidth={fullWidth} onClick={() => onSwitch(nextOption)}>
             Switch to {resolver(nextOption)}
         </ActionButton>
     )

@@ -6,7 +6,7 @@ import { ChainId, chainResolver, getExplorerConstants, getRedPacketConstants } f
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const interFace = new Interface(REDPACKET_ABI)
 

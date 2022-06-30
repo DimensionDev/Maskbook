@@ -138,7 +138,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
     if (!currentPersona || !providerType) return null
 
     return (
-        <div>
+        <div style={{ minHeight: 400 }}>
             <Steps
                 isBound={isBound}
                 notEvm={isNotEvm}

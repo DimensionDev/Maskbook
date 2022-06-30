@@ -70,11 +70,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        return (
-            <Button variant="contained" onClick={personaConnectStatus.action}>
-                {button}
-            </Button>
-        )
+        return <Button onClick={personaConnectStatus.action}>{button}</Button>
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
@@ -141,9 +137,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                 </Box>
 
                 <Stack justifyContent="center" direction="row" mt="24px">
-                    <Button variant="contained" onClick={onVerify}>
-                        {t.verify_Twitter_ID_button()}
-                    </Button>
+                    <Button onClick={onVerify}>{t.verify_Twitter_ID_button()}</Button>
                 </Stack>
             </Box>
         )
@@ -167,9 +161,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                     </Box>
                     {isOwn && (
                         <Stack justifyContent="center" direction="row" mt="24px">
-                            <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                                {t.add_wallet_button()}
-                            </Button>
+                            <Button onClick={() => toggleBindDialog(true)}>{t.add_wallet_button()}</Button>
                         </Stack>
                     )}
                 </Box>
@@ -217,9 +209,7 @@ export function NextIdPage({ personaList }: NextIdPageProps) {
                 )}
                 {isOwn && (
                     <Stack justifyContent="center" direction="row" mt="24px">
-                        <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                            {t.verify_wallet_button()}
-                        </Button>
+                        <Button onClick={() => toggleBindDialog(true)}>{t.verify_wallet_button()}</Button>
                     </Stack>
                 )}
             </Box>

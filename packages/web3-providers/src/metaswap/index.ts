@@ -14,19 +14,19 @@ export class MetaSwapAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
         return {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: result.estimatedBaseFee ?? '0',
-                estimatedSeconds: result.high?.minWaitTimeEstimate ?? 0,
+                estimatedSeconds: (result.high?.maxWaitTimeEstimate ?? 0) / 1000,
                 suggestedMaxFeePerGas: result.high?.suggestedMaxFeePerGas ?? '0',
                 suggestedMaxPriorityFeePerGas: result.high?.suggestedMaxPriorityFeePerGas ?? '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedBaseFee: result.estimatedBaseFee ?? '0',
-                estimatedSeconds: result.medium?.minWaitTimeEstimate ?? 0,
+                estimatedSeconds: (result.medium?.maxWaitTimeEstimate ?? 0) / 1000,
                 suggestedMaxFeePerGas: result.medium?.suggestedMaxFeePerGas ?? '0',
                 suggestedMaxPriorityFeePerGas: result.medium?.suggestedMaxPriorityFeePerGas ?? '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedBaseFee: result.estimatedBaseFee ?? '0',
-                estimatedSeconds: result.low?.minWaitTimeEstimate ?? 0,
+                estimatedSeconds: (result.low?.maxWaitTimeEstimate ?? 0) / 1000,
                 suggestedMaxFeePerGas: result.low?.suggestedMaxFeePerGas ?? '0',
                 suggestedMaxPriorityFeePerGas: result.low?.suggestedMaxPriorityFeePerGas ?? '0',
             },

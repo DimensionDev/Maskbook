@@ -163,6 +163,7 @@ const VerifyWallet = memo(() => {
     return (
         <div className={classes.container}>
             <Steps
+                isBound={isBound}
                 walletName={walletName()}
                 disableConfirm={isBound && !signed}
                 nickname={currentPersona.nickname}

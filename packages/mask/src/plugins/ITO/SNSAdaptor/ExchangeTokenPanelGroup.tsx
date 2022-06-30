@@ -28,12 +28,13 @@ export interface ExchangeTokenPanelGroupProps {
     token: FungibleToken<ChainId, SchemaType> | undefined
     origin: ExchangeTokenAndAmountState[]
     onTokenAmountChange: (data: ExchangeTokenAndAmountState[]) => void
+    chainId: ChainId
 }
 
 export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const { onTokenAmountChange } = props
+    const { onTokenAmountChange, chainId } = props
     const [selectedTokensAddress, setSelectedTokensAddress] = useState<string[]>([])
     const [exchangeTokenArray, dispatchExchangeTokenArray] = useExchangeTokenAndAmount(props.origin)
 
@@ -86,6 +87,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                 return (
                     <Fragment key={idx}>
                         <ExchangeTokenPanel
+                            chainId={chainId}
                             label={idx ? t('plugin_ito_swap_ration_label') : t('plugin_ito_sell_total_amount')}
                             dataIndex={item.key}
                             disableBalance={idx !== 0}

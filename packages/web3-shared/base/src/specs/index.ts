@@ -367,6 +367,22 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
 }
 
 /**
+ * The security diagnosis about a fungible token.
+ */
+export interface FungibleTokenSecurity {
+    // TODO:
+    // security items
+}
+
+/**
+ * The security diagnosis about a non-fungible token.
+ */
+export interface NonFungibleTokenSecurity {
+    // TODO:
+    // security items
+}
+
+/**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
  * When the current chain is not supported, the composition entry will be hidden.
  */
@@ -737,6 +753,18 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 }
 
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
+    /** Get all gas options */
+    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
+    /** Get the most recent transactions */
+    getTransactions: (
+        chainId: ChainId,
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    /** Get security diagnosis about a fungible token */
+    getFungibleTokenSecurity?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<FungibleTokenSecurity>
+    /** Get security diagnosis about a non-fungible token */
+    getNonFungibleTokenSecurity?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<NonFungibleTokenSecurity>
     /** Get the fungible from built-in token list */
     getFungibleTokensFromTokenList?: (
         chainId: ChainId,
@@ -747,8 +775,6 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         initial?: Web3HubOptions,
     ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get all gas options */
-    getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
     /** Get a fungible asset */
     getFungibleAsset?: (
         address: string,
@@ -803,12 +829,6 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
-    /** Get the most recent transactions */
-    getTransactions: (
-        chainId: ChainId,
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
 }
 
 export interface SettingsState {

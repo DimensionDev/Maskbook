@@ -399,7 +399,6 @@ export function CreateFarm(props: PageInterface) {
                         <WalletConnectedBoundary>
                             <ActionButton
                                 fullWidth
-                                variant="contained"
                                 size="medium"
                                 disabled={createFarmBtnDisabled}
                                 onClick={onClickCreateFarm}>

@@ -30,10 +30,11 @@
     "use-subscription": "1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.3",
-    "web3-core-helpers": "1.7.3",
-    "web3-eth-contract": "1.7.3",
-    "web3-utils": "1.7.3"
+    "web3": "1.7.4",
+    "web3-core": "1.7.4",
+    "web3-core-helpers": "1.7.4",
+    "web3-eth-contract": "1.7.4",
+    "web3-utils": "1.7.4"
   },
   "devDependencies": {
     "@masknet/injected-script": "*",
