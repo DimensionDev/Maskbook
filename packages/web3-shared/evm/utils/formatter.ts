@@ -46,7 +46,7 @@ export function formatNumberString(input: string, size = 0) {
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {
-    return new BigNumber(value).shiftedBy(-9).integerValue()
+    return new BigNumber(value).shiftedBy(-9)
 }
 
 export function formatWeiToEther(value: BigNumber.Value) {
@@ -54,7 +54,7 @@ export function formatWeiToEther(value: BigNumber.Value) {
 }
 
 export function formatGweiToWei(value: BigNumber.Value) {
-    return new BigNumber(value).shiftedBy(9)
+    return new BigNumber(value).shiftedBy(9).integerValue()
 }
 
 export function formatGweiToEther(value: BigNumber.Value) {
