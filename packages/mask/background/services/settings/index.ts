@@ -23,3 +23,4 @@ export const getCurrentPortfolioDataProvider = async () => 'Debank'
 export const getCurrentCollectibleDataProvider = async () => 'OpenSea'
 export const getWalletAllowTestChain = async () => false
 export const getCurrentSelectedWalletNetwork = async () => 'Ethereum'
+export { getCurrentPersonaIdentifier_alternative, getLanguagePreference } from './old-settings'

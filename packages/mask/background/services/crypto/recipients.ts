@@ -21,7 +21,7 @@ export async function getRecipients(whoAmI: ProfileIdentifier): Promise<ProfileI
 export async function getIncompleteRecipientsOfPost(id: PostIVIdentifier): Promise<ProfileInformation[]> {
     const nameInDB = (await queryPostDB(id))?.recipients
     if (nameInDB === 'everyone') return []
-    if (!nameInDB) return []
+    if (!nameInDB?.size) return []
 
     const profiles = (
         await queryProfilesDB({

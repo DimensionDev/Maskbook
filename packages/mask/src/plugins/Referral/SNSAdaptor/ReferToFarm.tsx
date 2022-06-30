@@ -245,12 +245,7 @@ export function ReferToFarm(props: PageInterface) {
                     </Grid>
                     <ChainBoundary expectedChainId={requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
                         <WalletConnectedBoundary offChain>
-                            <ActionButton
-                                fullWidth
-                                variant="contained"
-                                size="medium"
-                                disabled={!token}
-                                onClick={onClickReferFarm}>
+                            <ActionButton fullWidth size="medium" disabled={!token} onClick={onClickReferFarm}>
                                 {t.refer_to_farm()}
                             </ActionButton>
                         </WalletConnectedBoundary>

@@ -61,14 +61,12 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
                             </Button>
                             <Button
                                 disabled
-                                variant="contained"
                                 size="medium"
                                 className={classes.buttonWithdraw}
                                 onClick={() => console.log('request to withdraw')}>
                                 {t.request_to_withdraw()}
                             </Button>
                             <Button
-                                variant="contained"
                                 size="medium"
                                 onClick={() => {
                                     onAdjustRewardButtonClick(farm)

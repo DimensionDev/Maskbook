@@ -3,7 +3,13 @@ import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../
 import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId } from './hotfix'
+import {
+    isBlockedId,
+    isBlockedKeyword,
+    resolveAlias,
+    resolveCoinId,
+    isBlockedAddress,
+} from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 import { CoinGecko, CoinMarketCap, UniSwap } from '@masknet/web3-providers'
@@ -150,7 +156,11 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
-    return ids?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? []
+    return (
+        ids
+            ?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase())
+            ?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
+    )
 }
 // #endregion
 

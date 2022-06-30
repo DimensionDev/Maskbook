@@ -142,12 +142,7 @@ export function AddNFT(props: AddNFTProps) {
             onClose={handleClose}
             titleBarIconStyle="close">
             <DialogContent>
-                <Button
-                    className={classes.addNFT}
-                    variant="contained"
-                    size="small"
-                    disabled={checking}
-                    onClick={onClick}>
+                <Button className={classes.addNFT} size="small" disabled={checking} onClick={onClick}>
                     {checking ? t('nft_add_button_label_checking') : t('nft_add_button_label')}
                 </Button>
                 <div className={classes.input}>
