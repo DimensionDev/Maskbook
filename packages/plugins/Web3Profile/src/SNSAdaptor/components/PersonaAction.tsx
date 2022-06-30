@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         boxShadow: '0px 0px 16px rgba(101, 119, 134, 0.2)',
-        padding: '19px 16px',
+        padding: 16,
     },
     link: {
         color: theme.palette.text.primary,

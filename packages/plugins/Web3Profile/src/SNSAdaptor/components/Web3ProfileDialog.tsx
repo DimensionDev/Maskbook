@@ -14,26 +14,22 @@ import { getDonationList, getFootprintList, getNFTList, getNFTList_Polygon } fro
 import { getWalletList, mergeList } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 520,
-    },
     paperRoot: {
         backgroundImage: 'none',
         '&>h2': {
             border: `1px solid ${theme.palette.divider}`,
-            padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
+            // padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
             marginBottom: 24,
         },
     },
     title: {
-        height: '32px',
+        height: '24px',
     },
     content: {
-        width: 480,
+        width: 488,
         height: 420,
-        maxHeight: 420,
-        position: 'relative',
-        paddingBottom: theme.spacing(3),
+        // paddingBottom: theme.spacing(3),
+        padding: '8px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
     },
     link: {
@@ -50,36 +46,22 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         overflow: 'scroll',
     },
-    bottomFixed: {
-        width: '100%',
-        display: 'flex',
-        padding: '19px 16px',
-    },
     actions: {
         padding: '0px !important',
         backgroundColor: theme.palette.background.paper,
         borderTop: `1px solid ${theme.palette.divider}`,
-    },
-    buttonWrapper: {
-        padding: '16px',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexGrow: 1,
-    },
-    button: {
-        width: '48%',
+        height: '70px',
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
+export interface BuyTokenDialogProps {
     open: boolean
     onClose(): void
 }
 
 export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles(), {})
     const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
     const [imageManageOpen, setImageManageOpen] = useState(false)

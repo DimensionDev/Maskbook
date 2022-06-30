@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NextIdPageProps {
-    persona: string
+    persona?: string
 }
 
 export function NextIdPage({ persona }: NextIdPageProps) {

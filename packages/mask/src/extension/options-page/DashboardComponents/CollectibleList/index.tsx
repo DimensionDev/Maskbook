@@ -268,6 +268,8 @@ export function CollectionList({
         account,
     )
 
+    console.log({ persona, kvValue, unHiddenCollectibles })
+
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
         ...unHiddenCollectibles,
