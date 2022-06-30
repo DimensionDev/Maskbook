@@ -1,15 +1,16 @@
-import { DialogContent } from '@mui/material'
+import { DialogContent, Button } from '@mui/material'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState, useMemo } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales'
+import { useI18N as useBaseI18n } from '../../../utils'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { InjectedDialog } from '@masknet/shared'
 import { useStyles } from './useStyles'
 import { ApprovalTokenContent } from './ApprovalTokenContent'
@@ -64,12 +65,16 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
+    const { t } = useBaseI18n()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = approvalDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const { classes } = useStyles()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
 
     return (
         <div className={classes.approvalWrapper}>
@@ -87,7 +92,9 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 <ApprovalNFTContent chainId={networkTabChainId} />
             )}
             <PluginWalletStatusBar className={classes.footer}>
-                <ChainBoundary expectedChainId={networkTabChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM} />
+                <Button variant="contained" size="medium" onClick={openSelectProviderDialog} fullWidth>
+                    {t('wallet_status_button_change')}
+                </Button>
             </PluginWalletStatusBar>
         </div>
     )
