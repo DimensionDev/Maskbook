@@ -22,6 +22,8 @@ import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
+import { PluginWalletStatusBar } from '../../../utils'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -202,130 +204,130 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, networkType, contract_version])
 
     return (
-        <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
-            <Grid item xs={12}>
-                <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
-                    {settings?.message}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.token()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
-                    <span>{settings?.token?.symbol}</span>
-                    {isNativeTokenAddress(settings?.token) ? null : (
-                        <Link
-                            color="textPrimary"
-                            className={classes.link}
-                            href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
-                            <LaunchIcon fontSize="small" />
-                        </Link>
-                    )}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.split_mode()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.isRandom ? t.random() : t.average()}
-                </Typography>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.shares()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {settings?.shares}
-                </Typography>
-            </Grid>
-
-            {!estimateGasFee ? null : (
-                <>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textSecondary">
-                            {t.estimate_gas_fee()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textPrimary" align="right">
-                            <FormattedBalance
-                                value={estimateGasFee}
-                                decimals={nativeToken?.decimals}
-                                symbol={nativeToken?.symbol}
-                                formatter={formatBalance}
-                                significant={isNativeToken ? 3 : 0}
-                            />
-                        </Typography>
-                    </Grid>
-                </>
-            )}
-
-            {settings?.isRandom ? null : (
-                <>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textSecondary">
-                            {t.amount_per_share()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textPrimary" align="right">
-                            {isBalanceInsufficient ? '0' : (Number(formatTotal) / (settings?.shares ?? 1)).toFixed(6)}{' '}
-                            {settings?.token?.symbol}
-                        </Typography>
-                    </Grid>
-                </>
-            )}
-
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textSecondary">
-                    {t.total_amount()}
-                </Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <Typography variant="body1" color="textPrimary" align="right">
-                    {formatTotal} {settings?.token?.symbol}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Paper className={classes.hit}>
-                    <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
-                        {t.hint()}
+        <>
+            <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
+                <Grid item xs={12}>
+                    <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
+                        {settings?.message}
                     </Typography>
-                </Paper>
-            </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.token()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
+                        <span>{settings?.token?.symbol}</span>
+                        {isNativeTokenAddress(settings?.token) ? null : (
+                            <Link
+                                color="textPrimary"
+                                className={classes.link}
+                                href={explorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <LaunchIcon fontSize="small" />
+                            </Link>
+                        )}
+                    </Typography>
+                </Grid>
 
-            <Grid item xs={6}>
-                <ActionButton disabled={isCreating} fullWidth onClick={onBack}>
-                    {t.back()}
-                </ActionButton>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.split_mode()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        {settings?.isRandom ? t.random() : t.average()}
+                    </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.shares()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        {settings?.shares}
+                    </Typography>
+                </Grid>
+
+                {!estimateGasFee ? null : (
+                    <>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textSecondary">
+                                {t.estimate_gas_fee()}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textPrimary" align="right">
+                                <FormattedBalance
+                                    value={estimateGasFee}
+                                    decimals={nativeToken?.decimals}
+                                    symbol={nativeToken?.symbol}
+                                    formatter={formatBalance}
+                                    significant={isNativeToken ? 3 : 0}
+                                />
+                            </Typography>
+                        </Grid>
+                    </>
+                )}
+
+                {settings?.isRandom ? null : (
+                    <>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textSecondary">
+                                {t.amount_per_share()}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="body1" color="textPrimary" align="right">
+                                {isBalanceInsufficient
+                                    ? '0'
+                                    : (Number(formatTotal) / (settings?.shares ?? 1)).toFixed(6)}{' '}
+                                {settings?.token?.symbol}
+                            </Typography>
+                        </Grid>
+                    </>
+                )}
+
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                        {t.total_amount()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" align="right">
+                        {formatTotal} {settings?.token?.symbol}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Paper className={classes.hit}>
+                        <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
+                            {t.hint()}
+                        </Typography>
+                    </Paper>
+                </Grid>
             </Grid>
-            <Grid item xs={6}>
-                <ActionButton
-                    loading={isCreating || isWaitGasBeMinus}
-                    fullWidth
-                    onClick={createRedpacket}
-                    disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
-                    {!isBalanceInsufficient
-                        ? t.send_symbol({
-                              amount: formatTotal,
-                              symbol: settings?.token?.symbol ?? '-',
-                          })
-                        : t.insufficient_balance()}
-                </ActionButton>
-            </Grid>
-        </Grid>
+            <PluginWalletStatusBar>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ActionButton
+                        loading={isCreating || isWaitGasBeMinus}
+                        fullWidth
+                        onClick={createRedpacket}
+                        disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
+                        {!isBalanceInsufficient
+                            ? t.send_symbol({
+                                  amount: formatTotal,
+                                  symbol: settings?.token?.symbol ?? '-',
+                              })
+                            : t.insufficient_balance()}
+                    </ActionButton>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
+        </>
     )
 }

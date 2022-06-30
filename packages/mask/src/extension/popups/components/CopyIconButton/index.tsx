@@ -1,6 +1,8 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo, useCallback, useState } from 'react'
 import { IconProps, Tooltip } from '@mui/material'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 import { PopupCopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 

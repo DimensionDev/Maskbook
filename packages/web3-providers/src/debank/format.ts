@@ -78,7 +78,7 @@ export function formatTransactions(
                     ...transaction.sends.map(({ amount, token_id }) => ({
                         id: token_id,
                         chainId,
-                        type: TokenType.Fungible,
+                        type: token_dict[token_id].decimals ? TokenType.Fungible : TokenType.NonFungible,
                         schema: SchemaType.ERC20,
                         name: token_dict[token_id]?.name ?? 'Unknown Token',
                         symbol: token_dict[token_id]?.optimized_symbol,
@@ -90,7 +90,7 @@ export function formatTransactions(
                     ...transaction.receives.map(({ amount, token_id }) => ({
                         id: token_id,
                         chainId,
-                        type: TokenType.Fungible,
+                        type: token_dict[token_id].decimals ? TokenType.Fungible : TokenType.NonFungible,
                         schema: SchemaType.ERC20,
                         name: token_dict[token_id]?.name ?? 'Unknown Token',
                         symbol: token_dict[token_id]?.optimized_symbol,

@@ -31,10 +31,11 @@ interface WalletIconProps {
     mainIcon?: URL
     badgeIcon?: URL
     badgeIconBorderColor?: string
+    iconFilterColor?: string
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
-    const { size = 24, badgeSize = 14, mainIcon, badgeIcon, badgeIconBorderColor } = props
+    const { size = 24, badgeSize = 14, mainIcon, badgeIcon, badgeIconBorderColor, iconFilterColor } = props
     const { classes } = useStyles({
         size: badgeSize > size ? badgeSize : size,
         badgeIconBorderColor,
@@ -54,6 +55,7 @@ export const WalletIcon = (props: WalletIconProps) => {
                     }}
                     size={size}
                     icon={mainIcon}
+                    iconFilterColor={iconFilterColor}
                 />
             ) : null}
             {badgeIcon ? (

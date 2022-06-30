@@ -9,6 +9,9 @@ export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDash
         width: '100%',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+        position: 'sticky',
+        top: 0,
+        zIndex: 2,
     },
     tableTabWrapper: {
         padding: theme.spacing(2),

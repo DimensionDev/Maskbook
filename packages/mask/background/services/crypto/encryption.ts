@@ -14,21 +14,21 @@ import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../databa
 import { savePostKeyToDB } from '../../database/post/helper'
 import { noop } from 'lodash-unified'
 import { queryProfileDB } from '../../database/persona/db'
-import { publishPostAESKey_version39Or38 } from '../../network/gun/encryption/queryPostKey'
-
+import { publishPostAESKey_version39Or38, publishPostAESKey_version37 } from '../../network/gun/encryption/queryPostKey'
 export async function encryptTo(
+    version: -37 | -38,
     content: SerializableTypedMessages,
     target: EncryptTargetPublic | EncryptTargetE2E,
     whoAmI: ProfileIdentifier | undefined,
     network: SocialNetworkEnum,
-): Promise<string> {
+): Promise<string | Uint8Array> {
     const { identifier, output, postKey, e2e } = await encrypt(
         {
             network: whoAmI?.network || SocialNetworkEnumToProfileDomain(network),
             author: whoAmI,
             message: content,
             target,
-            version: -38,
+            version,
         },
         {
             async deriveAESKey(pub) {
@@ -59,9 +59,12 @@ export async function encryptTo(
     })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
-        publishPostAESKey_version39Or38(-38, identifier.toIV(), network, e2e!)
+        if (version === -37) {
+            publishPostAESKey_version37(identifier.toIV(), network, e2e!)
+        } else {
+            publishPostAESKey_version39Or38(-38, identifier.toIV(), network, e2e!)
+        }
     }
-    if (typeof output !== 'string') throw new Error('version -37 is not enabled yet!')
     return output
 }
 

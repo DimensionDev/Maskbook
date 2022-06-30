@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { DialogActions, DialogContent, Typography } from '@mui/material'
+import { DialogActions, DialogContent, Typography, dialogClasses } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -42,6 +42,11 @@ const useStyles = makeStyles()((theme) => ({
     inVisible: {
         visibility: 'hidden',
     },
+    dialog: {
+        [`.${dialogClasses.paper}`]: {
+            minHeight: 'unset !important',
+        },
+    },
 }))
 export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
@@ -74,7 +79,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             open={open}
             onClose={closeDialog}
             maxWidth="sm"
-            className={isHidden ? classes.inVisible : ''}>
+            className={isHidden ? classes.inVisible : classes.dialog}>
             <DialogContent className={classes.content}>
                 <WalletStatusBox
                     showPendingTransaction
