@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { Icon  } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
@@ -157,7 +157,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                             href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Icon type="linkOut" className={classes.linkIcon} />
+                            <Icon type="linkOut" size={16} className={classes.linkIcon} />
                         </Link>
                     </Box>
                 </TableCell>

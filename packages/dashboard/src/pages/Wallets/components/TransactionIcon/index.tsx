@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Icon} from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -66,8 +66,8 @@ export interface TransactionIconUIProps {
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, type, transactionType }) => {
     const { classes } = useStyles()
     const icon = useMemo(() => {
-        if (isFailed) return <Icon type="close"  style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
-        if (isRedPacket) return <Icon type='redPacket' className={classes.icon} />
+        if (isFailed) return <Icon type="close" style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
+        if (isRedPacket) return <Icon type="redPacket" className={classes.icon} />
 
         switch (type) {
             case TransactionType.SEND:

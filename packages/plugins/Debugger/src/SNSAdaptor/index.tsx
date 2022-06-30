@@ -5,7 +5,7 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants'
 import { TabContent } from './components/TabContent'
 import { ConsoleDialog } from './components/ConsoleDialog'
 import { ApplicationEntry } from '@masknet/shared'
-import { MaskBlueIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
 
@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         title={PLUGIN_NAME}
                         disabled={false}
                         iconFilterColor=""
-                        icon={<MaskBlueIcon />}
+                        icon={<Icon type="maskBlue" size={36} />}
                         onClick={() => {
                             openDialog()
                         }}
@@ -31,7 +31,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
             marketListSortingPriority: Number.MAX_SAFE_INTEGER,
-            icon: <MaskBlueIcon />,
+            icon: <Icon type="maskBlue" size={36} />,
             name: PLUGIN_NAME,
         },
     ],

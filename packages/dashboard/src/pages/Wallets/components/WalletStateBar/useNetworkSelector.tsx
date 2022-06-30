@@ -1,4 +1,4 @@
-import { MenuItem, Stack, Theme, Typography, useMediaQuery } from '@mui/material'
+import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icon } from '@masknet/icons'
 import { useMenu, WalletIcon } from '@masknet/shared'
@@ -36,7 +36,6 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
     const Web3UI = useWeb3UI()
     const { NetworkIconClickBait } = Web3UI.SelectNetworkMenu ?? {}
     const { Connection } = useWeb3State(pluginID)
-    const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll) => {
@@ -63,9 +62,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                         onClick={() => onConnect(network.chainId)}>
                         <Stack direction="row" gap={0.5} alignItems="center">
                             <Stack justifyContent="center" width={18}>
-                                {network.chainId === currentChainId && (
-                                    <Icon type="success" size={isXs ? 18 : undefined} />
-                                )}
+                                {network.chainId === currentChainId && <Icon type="success" size={18} />}
                             </Stack>
                             <Stack justifyContent="center" alignItems="center" width={30}>
                                 <WalletIcon mainIcon={network.icon} size={30} />

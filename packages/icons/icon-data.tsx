@@ -296,7 +296,19 @@ export const chevronUpIcon = (
 export const circleCloseIcon = new URL('./general/CircleClose.svg', import.meta.url).href
 export const circleLoadingIcon = new URL('./general/CircleLoading.svg', import.meta.url).href
 export const circleWarningIcon = new URL('./general/CircleWarning.svg', import.meta.url).href
-export const closeIcon = new URL('./general/Close.svg', import.meta.url).href
+export const closeIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+        <g>
+            <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.25"
+                d="M15 5L5 15M5 5l10 10"
+            />
+        </g>
+    </svg>
+)
 export const cloudBackupIcon = new URL('./general/CloudBackup.svg', import.meta.url).href
 export const cloudLinkIcon = new URL('./general/CloudLink.svg', import.meta.url).href
 export const collectibleIcon = new URL('./general/Collectible.svg', import.meta.url).href
@@ -322,15 +334,13 @@ export const discordRoundIcon = new URL('./general/DiscordRound.svg', import.met
 export const documentIcon = new URL('./general/Document.svg', import.meta.url).href
 export const downloadIcon = (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-        <g>
-            <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.25"
-                d="M14 10v2.667A1.334 1.334 0 0112.667 14H3.333A1.334 1.334 0 012 12.667V10M4.667 6.667L8 10l3.333-3.333M8 10V2"
-            />
-        </g>
+        <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.25"
+            d="M14 10v2.667A1.334 1.334 0 0112.667 14H3.333A1.334 1.334 0 012 12.667V10M4.667 6.667L8 10l3.333-3.333M8 10V2"
+        />
     </svg>
 )
 export const dropIcon = new URL('./general/Drop.svg', import.meta.url).href
@@ -754,6 +764,7 @@ export const settingsSyncIcon = new URL('./settings/SettingsSync.svg', import.me
 export const iconsWithDynamicColor = [
     'check',
     'chevronUp',
+    'close',
     'dashboard',
     'download',
     'drop2',
