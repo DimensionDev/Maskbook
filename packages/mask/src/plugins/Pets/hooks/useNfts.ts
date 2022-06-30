@@ -7,7 +7,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useNFTs(user: User | undefined) {
     const [nfts, setNfts] = useState<FilterContract[]>([])
-    const { value: assets = EMPTY_LIST, loading: state, error } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets = EMPTY_LIST, loading: state } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     useEffect(() => {
         const tempNFTs: Record<string, NonFungibleContract> = {}
         if (assets?.length) {

@@ -80,6 +80,10 @@ const useStyles = makeStyles()((theme) => ({
     itemTxt: {
         flex: 1,
         marginLeft: theme.spacing(0.5),
+        textOverflow: 'ellipsis',
+        '-webkit-line-clamp': '1',
+        maxWidth: '260px',
+        overflow: 'hidden',
     },
     prevBox: {
         margin: theme.spacing(2, 0, 0),
@@ -235,6 +239,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         <Box {...props} component="span" className={classes.itemFix}>
                             {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
+                            <Typography>
+                                {blacklist.includes(option.contract) ? t('plugin_pets_dialog_unverified') : ''}
+                            </Typography>
                         </Box>
                     </MenuItem>
                 )}

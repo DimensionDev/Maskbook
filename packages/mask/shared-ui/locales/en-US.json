@@ -872,6 +872,7 @@
     "plugin_pets_dialog_btn": "Confirm",
     "plugin_pets_dialog_btn_share": "Share",
     "plugin_pets_dialog_preview": "Preview",
+    "plugin_pets_dialog_unverified": " (unverified)",
     "plugin_pets_dialog_created": "Created by NonFFriend",
     "plugin_pets_dialog_powered": "Powered by RSS3",
     "plugin_pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",

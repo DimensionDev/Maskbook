@@ -123,8 +123,8 @@ const GameWindow = (props: Props) => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',
             twitterId,
-            contract: tokenProps?.contract,
-            tokenId: tokenProps?.tokenId,
+            contract: tokenProps?.contract ?? '',
+            tokenId: tokenProps?.tokenId ?? '',
             chainId,
             account,
         })
