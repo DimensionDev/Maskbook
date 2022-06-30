@@ -124,12 +124,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
-    const { value: createParams } = useCreateParams(redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
         const { token } = redPacketSettings
+        const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
 
         const { gas, params, paramsObj, gasError } = createParams
@@ -170,5 +171,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             }
         }
         return { hash, receipt }
-    }, [account, connection, redPacketContract, redPacketSettings, chainId, createParams])
+    }, [account, connection, redPacketContract, redPacketSettings, chainId])
 }
