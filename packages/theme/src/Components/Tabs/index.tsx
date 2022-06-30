@@ -233,20 +233,16 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {isTabsOverflow && (
-                            <ArrowButtonWrap
-                                variant="text"
-                                size="small"
-                                aria-controls={open ? 'split-button-menu' : undefined}
-                                aria-expanded={open ? 'true' : undefined}
-                                aria-label="select tabs list"
-                                aria-haspopup="menu"
-                                onClick={() => handleToggle(!open)}>
-                                <ArrowBackIosNewIconWrap
-                                    sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }}
-                                />
-                            </ArrowButtonWrap>
-                        )}
+                        <ArrowButtonWrap
+                            variant="text"
+                            size="small"
+                            aria-controls={open ? 'split-button-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-label="select tabs list"
+                            aria-haspopup="menu"
+                            onClick={() => handleToggle(!open)}>
+                            <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
+                        </ArrowButtonWrap>
                     </FlexButtonGroupWrap>
                 </FlexibleButtonGroupPanel>
             </Box>
