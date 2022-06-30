@@ -38,6 +38,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         color: isDashboard ? MaskColorVar.redMain : theme.palette.maskColor?.danger,
         display: 'flex',
         alignItems: 'center',
+        gap: 4,
     },
     provider: {
         color: isDashboard ? theme.palette.text.primary : theme.palette.maskColor?.main,
@@ -60,8 +61,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         color: theme.palette.text.primary,
         lineHeight: 1.2,
         fontSize: 30,
+        padding: 0,
         cursor: 'pointer',
-        padding: '0 10px 0 0',
         width: 'auto',
     },
     focus: {

@@ -434,7 +434,7 @@
     "plugin_trader_update": "Update",
 
     "plugin_trader_price_impact": "Price Impact",
-    "plugin_trader_price_image_value": "Price Impact ({{percent}})",
+    "plugin_trader_price_image_value": "Price Impact (-{{percent}})",
     "plugin_trader_slippage_warning": "You may receive 10% less with this level of slippage tolerance.",
     "plugin_trader_confirm_price_impact": "Confirm Price Impact {{percent}}",
     "plugin_trader_max_slippage": "Max Slippage",

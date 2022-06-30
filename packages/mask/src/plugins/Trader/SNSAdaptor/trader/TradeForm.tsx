@@ -1,9 +1,8 @@
 import { memo, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, Typography } from '@mui/material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -13,7 +12,6 @@ import { SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
-import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper } from '../../helpers'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
@@ -28,7 +26,6 @@ import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { WalletMessages } from '@masknet/plugin-wallet'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -37,6 +34,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             flexDirection: 'column',
             alignItems: 'center',
             padding: 16,
+            flex: 1,
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -169,10 +167,12 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             color: theme.palette.text.secondary,
         },
         stateBar: {
-            backgroundColor: parseColor(theme.palette.maskColor?.bottom).setAlpha(0.8).toRgbString(),
             position: 'sticky',
             bottom: 0,
-            backdropFilter: 'blur(16px)',
+            boxShadow:
+                theme.palette.mode === 'dark'
+                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
         unlockContainer: {
             margin: 0,
@@ -248,18 +248,6 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         // #region get the best trade
         const bestTrade = useMemo(() => first(trades), [trades])
-        // #endregion
-
-        // #region remote controlled swap settings dialog
-        const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
-            PluginTraderMessages.swapSettingsUpdated,
-        )
-        // #endregion
-
-        // #region change provider
-        const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-            WalletMessages.events.selectProviderDialogUpdated,
-        )
         // #endregion
 
         // #region form controls
@@ -408,7 +396,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
                             {trades.filter((item) => !!item.value).length >= 1 ? (
                                 <>
-                                    <Box marginTop="20px">
+                                    <Box marginTop="12px">
                                         {firstTraderInfo}
                                         <Collapse in={isExpand}>
                                             {trades.slice(1).map((trade) => (
@@ -439,75 +427,77 @@ export const TradeForm = memo<AllTradeFormProps>(
                         </Box>
                     </Box>
                 </Box>
-                <PluginWalletStatusBar className={classes.stateBar}>
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={chainId}
-                        noSwitchNetworkTip
-                        className={classes.chainBoundary}
-                        ActionButtonPromiseProps={{
-                            fullWidth: true,
-                            classes: { root: classes.button, disabled: classes.disabledButton },
-                            color: 'primary',
-                        }}>
-                        <WalletConnectedBoundary>
-                            <EthereumERC20TokenApprovedBoundary
-                                onlyInfiniteUnlock
-                                spender={approveAddress}
-                                amount={approveAmount.toFixed()}
-                                classes={{ container: classes.unlockContainer }}
-                                contractName={
-                                    focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''
-                                }
-                                infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
-                                    symbol: approveToken?.symbol,
-                                })}
-                                token={
-                                    !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                    approveToken?.schema === SchemaType.ERC20 &&
-                                    !!approveAmount.toNumber()
-                                        ? approveToken
-                                        : undefined
-                                }
-                                ActionButtonProps={{
-                                    color: 'primary',
-                                    style: { borderRadius: 8 },
-                                    size: 'medium',
-                                }}>
-                                {isGreatThanSlippageSetting ? (
-                                    <ActionButton
-                                        fullWidth
-                                        loading={isSwapping}
-                                        variant="contained"
-                                        color="error"
-                                        disabled={focusedTrade?.loading || !focusedTrade?.value || isSwapping}
-                                        classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                        onClick={onSwap}>
-                                        {t('plugin_trader_confirm_price_impact', {
-                                            percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                        })}
-                                    </ActionButton>
-                                ) : (
-                                    <ActionButton
-                                        fullWidth
-                                        loading={isSwapping}
-                                        variant="contained"
-                                        disabled={
-                                            focusedTrade?.loading ||
-                                            !focusedTrade?.value ||
-                                            !!validationMessage ||
-                                            isSwapping
-                                        }
-                                        classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                        color="primary"
-                                        onClick={onSwap}>
-                                        {validationMessage || nativeWrapMessage}
-                                    </ActionButton>
-                                )}
-                            </EthereumERC20TokenApprovedBoundary>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
-                </PluginWalletStatusBar>
+                <Box className={classes.stateBar}>
+                    <PluginWalletStatusBar>
+                        <ChainBoundary
+                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                            expectedChainId={chainId}
+                            noSwitchNetworkTip
+                            className={classes.chainBoundary}
+                            ActionButtonPromiseProps={{
+                                fullWidth: true,
+                                classes: { root: classes.button, disabled: classes.disabledButton },
+                                color: 'primary',
+                            }}>
+                            <WalletConnectedBoundary>
+                                <EthereumERC20TokenApprovedBoundary
+                                    onlyInfiniteUnlock
+                                    spender={approveAddress}
+                                    amount={approveAmount.toFixed()}
+                                    classes={{ container: classes.unlockContainer }}
+                                    contractName={
+                                        focusedTrade?.provider ? resolveTradeProviderName(focusedTrade.provider) : ''
+                                    }
+                                    infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
+                                        symbol: approveToken?.symbol,
+                                    })}
+                                    token={
+                                        !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                        approveToken?.schema === SchemaType.ERC20 &&
+                                        !!approveAmount.toNumber()
+                                            ? approveToken
+                                            : undefined
+                                    }
+                                    ActionButtonProps={{
+                                        color: 'primary',
+                                        style: { borderRadius: 8 },
+                                        size: 'medium',
+                                    }}>
+                                    {isGreatThanSlippageSetting ? (
+                                        <ActionButton
+                                            fullWidth
+                                            loading={isSwapping}
+                                            variant="contained"
+                                            color="error"
+                                            disabled={focusedTrade?.loading || !focusedTrade?.value || isSwapping}
+                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                            onClick={onSwap}>
+                                            {t('plugin_trader_confirm_price_impact', {
+                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                            })}
+                                        </ActionButton>
+                                    ) : (
+                                        <ActionButton
+                                            fullWidth
+                                            loading={isSwapping}
+                                            variant="contained"
+                                            disabled={
+                                                focusedTrade?.loading ||
+                                                !focusedTrade?.value ||
+                                                !!validationMessage ||
+                                                isSwapping
+                                            }
+                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                            color="primary"
+                                            onClick={onSwap}>
+                                            {validationMessage || nativeWrapMessage}
+                                        </ActionButton>
+                                    )}
+                                </EthereumERC20TokenApprovedBoundary>
+                            </WalletConnectedBoundary>
+                        </ChainBoundary>
+                    </PluginWalletStatusBar>
+                </Box>
             </>
         )
     },

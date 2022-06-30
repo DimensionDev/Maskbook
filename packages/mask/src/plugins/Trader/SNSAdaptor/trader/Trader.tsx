@@ -32,11 +32,7 @@ import { TradeForm } from './TradeForm'
 import { PriceImpactDialog } from './PriceImpactDialog'
 
 const useStyles = makeStyles()(() => {
-    return {
-        root: {
-            margin: 'auto',
-        },
-    }
+    return {}
 })
 
 export interface TraderProps extends withClasses<'root'> {
@@ -363,7 +359,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #endregion
 
     return (
-        <div className={classes.root}>
+        <>
             <TradeForm
                 account={account}
                 trades={sortedAllTradeComputed}
@@ -404,6 +400,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 </>
             ) : null}
             <SettingsDialog />
-        </div>
+        </>
     )
 })

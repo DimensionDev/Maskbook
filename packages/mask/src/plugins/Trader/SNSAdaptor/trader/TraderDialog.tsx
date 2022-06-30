@@ -43,14 +43,14 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
+        minHeight: 556,
+        display: 'flex',
+        flexDirection: 'column',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
     },
-    tradeRoot: {
-        width: 535,
-        margin: 'auto',
-    },
+    tradeRoot: {},
     tail: {
         display: 'flex',
         gap: 8,
@@ -91,6 +91,10 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         },
     )
 
+    // #region remote controlled swap settings dialog
+    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    // #endregion
+
     useEffect(() => {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
@@ -117,7 +121,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             <IconButton onClick={() => tradeRef.current?.refresh()}>
                                 <RefreshIcon className={classes.icon} />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={openSwapSettingDialog}>
                                 <GearIcon className={classes.icon} />
                             </IconButton>
                         </div>

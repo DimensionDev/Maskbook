@@ -27,6 +27,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     amount: {
         marginLeft: 10,
         color: !isDashboard ? theme.palette.maskColor?.primary : undefined,
+        fontSize: 14,
+        fontWeight: 700,
     },
     input: {
         textAlign: 'right',
@@ -34,7 +36,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         color: theme.palette.text.primary,
         lineHeight: 1.2,
         fontSize: 30,
-        height: '1.86em',
+        paddingBottom: 20,
     },
     chip: {
         borderRadius: 6,
@@ -98,7 +100,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     noToken: {
         borderRadius: '18px !important',
-        backgroundColor: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+        backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary} !important`,
         ['&:hover']: {
             backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
         },

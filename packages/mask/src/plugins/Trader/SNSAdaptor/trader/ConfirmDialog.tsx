@@ -135,19 +135,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     infoIcon: {
         color: isDashboard ? MaskColorVar.twitterInfo : theme.palette.maskColor?.main,
     },
-    button: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        padding: '13px 0',
-        borderRadius: isDashboard ? 8 : 24,
-        height: 'auto',
-    },
     content: {
-        marginLeft: 40,
-        marginRight: 40,
-        paddingLeft: 0,
-        paddingRight: 0,
+        padding: 16,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -517,25 +506,13 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     <DialogActions className={classes.actions}>
                         <PluginWalletStatusBar>
                             {isGreatThanSlippageSetting ? (
-                                <Button
-                                    classes={{ root: classes.button }}
-                                    color="error"
-                                    size="large"
-                                    fullWidth
-                                    disabled={staled}
-                                    onClick={onConfirmPriceImpact}>
+                                <Button color="error" fullWidth disabled={staled} onClick={onConfirmPriceImpact}>
                                     {t('plugin_trader_confirm_price_impact', {
                                         percent: formatPercentage(cacheTrade.priceImpact),
                                     })}
                                 </Button>
                             ) : (
-                                <Button
-                                    classes={{ root: classes.button }}
-                                    color="primary"
-                                    size="large"
-                                    fullWidth
-                                    disabled={staled}
-                                    onClick={onConfirm}>
+                                <Button color="primary" fullWidth disabled={staled} onClick={onConfirm}>
                                     {t('plugin_trader_confirm_swap')}
                                 </Button>
                             )}
