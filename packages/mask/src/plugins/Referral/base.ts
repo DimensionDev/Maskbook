@@ -14,7 +14,7 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'Attrace Protocol' }, link: 'http://attrace.com/' },
     enableRequirement: {
-        architecture: { app: true, web: true },
+        architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
