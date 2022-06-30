@@ -13,10 +13,6 @@ const ADDRESS_FULL = /0x\w{40,}/
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
-function isValidSocialAddress(address: string) {
-    return address && isValidAddress(address) && !isZeroAddress(address)
-}
-
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     if (matched) return matched
@@ -40,12 +36,58 @@ export class IdentityService extends IdentityServiceState {
         super()
     }
 
-    override async getFromRemote(identity: SocialIdentity) {
-        const { identifier, bio = '', nickname = '', homepage = '' } = identity
+    /** When it has an allowlist, it then detects if a social address type is included.*/
+    private isSocialAddressIncludes(type: SocialAddressType, includes: SocialAddressType[] = []) {
+        return includes.length === 0 || includes.includes(type)
+    }
 
-        const address = getAddress(bio)
-        const ethereumName = getEthereumName(identifier?.userId ?? '', nickname, bio)
+    private createSocialAddress(
+        type: SocialAddressType,
+        address: string,
+        label = address,
+    ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
+        if (address && isValidAddress(address) && !isZeroAddress(address))
+            return {
+                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                type,
+                label,
+                address,
+            }
+        return
+    }
+
+    /** Read a social address from bio. */
+    private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
+        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio ?? ''))
+    }
+
+    /** Read a social address from NextID. */
+    private async getSocialAddressFromNextID({ identifier, nickname = '', homepage = '', bio = '' }: SocialIdentity) {
+        return this.createSocialAddress(SocialAddressType.NEXT_ID, '')
+    }
+
+    /** Read a social address from bio when it contains a RSS3 ID. */
+    private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
         const RSS3Id = getRSS3Id(nickname, homepage, bio)
+        const info = await RSS3.getNameInfo(RSS3Id)
+        return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${RSS3Id}.rss3`)
+    }
+
+    /** Read a social address from KV service. */
+    private async getSocialAddressFromKV({ identifier }: SocialIdentity) {
+        const address = await KeyValue.createJSON_Storage<
+            Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>
+        >(`com.maskbook.user_${getSiteType()}`)
+            .get(identifier?.userId ?? '$unknown')
+            .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? '')
+
+        return this.createSocialAddress(SocialAddressType.KV, address)
+    }
+
+    /** Read a social address from nickname, bio if them contain a ENS. */
+    private async getSocialAddressFromENS({ identifier, nickname = '', bio = '' }: SocialIdentity) {
+        const ethereumName = getEthereumName(identifier?.userId ?? '', nickname, bio)
+        if (!ethereumName) return
 
         const web3 = new Web3(
             createWeb3Provider(async (requestArguments: RequestArguments) => {
@@ -53,57 +95,34 @@ export class IdentityService extends IdentityServiceState {
                     .result
             }),
         )
+        return this.createSocialAddress(
+            SocialAddressType.ENS,
+            await web3.eth.ens.getAddress(ethereumName),
+            ethereumName,
+        )
+    }
+
+    override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const allSettled = await Promise.allSettled([
-            web3.eth.ens.getAddress(ethereumName),
-            RSS3.getNameInfo(RSS3Id).then((x) => x?.address ?? ''),
-            KeyValue.createJSON_Storage<Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>>(
-                `com.maskbook.user_${getSiteType()}`,
-            )
-                .get(identifier?.userId ?? '$unknown')
-                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? ''),
+            this.isSocialAddressIncludes(SocialAddressType.ADDRESS, includes)
+                ? this.getSocialAddressFromBio(identity)
+                : undefined,
+            this.isSocialAddressIncludes(SocialAddressType.ENS, includes)
+                ? this.getSocialAddressFromENS(identity)
+                : undefined,
+            this.isSocialAddressIncludes(SocialAddressType.RSS3, includes)
+                ? this.getSocialAddressFromRSS3(identity)
+                : undefined,
+            this.isSocialAddressIncludes(SocialAddressType.NEXT_ID, includes)
+                ? this.getSocialAddressFromNextID(identity)
+                : undefined,
+            this.isSocialAddressIncludes(SocialAddressType.KV, includes)
+                ? this.getSocialAddressFromKV(identity)
+                : undefined,
         ])
 
-        const getSettledAddress = (result: PromiseSettledResult<string>) => {
-            return result.status === 'fulfilled' ? result.value : ''
-        }
-
-        const addressENS = getSettledAddress(allSettled[0])
-        const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressKV = getSettledAddress(allSettled[2])
-
-        return [
-            isValidSocialAddress(address)
-                ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                      type: SocialAddressType.ADDRESS,
-                      label: address,
-                      address,
-                  }
-                : null,
-            isValidSocialAddress(addressENS)
-                ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                      type: SocialAddressType.ENS,
-                      label: ethereumName,
-                      address: addressENS,
-                  }
-                : null,
-            isValidSocialAddress(addressRSS3)
-                ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                      type: SocialAddressType.RSS3,
-                      label: `${RSS3Id}.rss3`,
-                      address: addressRSS3,
-                  }
-                : null,
-            isValidSocialAddress(addressKV)
-                ? {
-                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                      type: SocialAddressType.KV,
-                      label: addressKV,
-                      address: addressKV,
-                  }
-                : null,
-        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
+        return allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
+            SocialAddress<NetworkPluginID.PLUGIN_EVM>
+        >
     }
 }

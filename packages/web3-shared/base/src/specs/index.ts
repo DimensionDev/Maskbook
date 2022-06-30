@@ -947,7 +947,7 @@ export interface HubState<
 
 export interface IdentityServiceState {
     /** Find all social addresses related to the given identity. */
-    lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>>
+    lookup(identity: SocialIdentity, includes?: SocialAddressType[]): Promise<Array<SocialAddress<NetworkPluginID>>>
 }
 export interface NameServiceState<ChainId> {
     /** get address of domain name */
