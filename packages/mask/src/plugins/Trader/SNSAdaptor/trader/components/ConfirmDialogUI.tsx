@@ -163,6 +163,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     alertMessage: {
         padding: 0,
     },
+    alertIcon: {
+        padding: 0,
+    },
 }))
 
 export interface ConfirmDialogUIProps {
@@ -220,7 +223,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
             if (currentSlippage < MIN_SLIPPAGE && !isGreatThanSlippageSetting)
                 return (
                     <Alert
-                        classes={{ message: classes.alertMessage }}
+                        classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.warning)}
                         icon={<WarningTriangleIcon />}
                         severity="warning">
@@ -230,7 +233,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
             else if (currentSlippage > MAX_SLIPPAGE && !isGreatThanSlippageSetting) {
                 return (
                     <Alert
-                        classes={{ message: classes.alertMessage }}
+                        classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.warning)}
                         icon={<WarningTriangleIcon />}
                         severity="warning">
@@ -240,7 +243,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
             } else if (isGreatThanSlippageSetting && cacheTrade?.priceImpact) {
                 return (
                     <Alert
-                        classes={{ message: classes.alertMessage }}
+                        classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.error)}
                         icon={<InfoIcon className={classes.danger} />}
                         severity="error">
@@ -457,7 +460,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
 
                     {priceUpdated ? (
                         <Alert
-                            classes={{ action: classes.action, message: classes.alertMessage }}
+                            classes={{ action: classes.action, message: classes.alertMessage, icon: classes.alertIcon }}
                             className={cx(classes.alert, classes.info)}
                             icon={<InfoIcon className={classes.infoIcon} />}
                             action={

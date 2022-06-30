@@ -22,7 +22,6 @@ import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
-import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
@@ -33,7 +32,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 16,
+            padding: '28px 16px 16px',
             flex: 1,
         },
         reverseIcon: {
@@ -142,7 +141,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         noToken: {
             borderRadius: '18px !important',
-            backgroundColor: isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary,
+            backgroundColor: `${
+                isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
+            } !important`,
             ['&:hover']: {
                 backgroundColor: `${
                     isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
@@ -342,8 +343,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         useUpdateEffect(() => {
             userSelected.current = false
         }, [inputAmount, inputToken, outputToken])
-
-        const isGreatThanSlippageSetting = useGreatThanSlippageSetting(focusedTrade?.value?.priceImpact)
 
         return (
             <>

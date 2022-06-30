@@ -55,6 +55,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor?.second,
+        position: 'absolute',
+        top: 12,
+        left: 12,
     },
     price: {
         fontSize: 14,
@@ -74,15 +77,18 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     selectedTokenChip: {
         borderRadius: '22px!important',
         height: 'auto',
+        position: 'absolute',
+        top: 52.5,
+        left: 12,
         backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom,
         paddingRight: 8,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,
-            fontSize: 14,
-            fontWeight: 700,
-            marginRight: 12,
             lineHeight: '18px',
+            fontSize: 14,
+            marginRight: 12,
+            fontWeight: 700,
             color: !isDashboard ? theme.palette.maskColor?.main : undefined,
         },
         ['&:hover']: {
@@ -166,16 +172,8 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                     className: classes.filledInput,
                     disableUnderline: true,
                     startAdornment: (
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'flex-start',
-                            }}>
-                            <Box display="flex" justifyContent="flex-start" width="100%" style={{ marginBottom: 22 }}>
-                                <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
-                            </Box>
+                        <Box>
+                            <Typography className={classes.label}>{t('plugin_trader_swap_from')}</Typography>
                             <SelectTokenChip
                                 token={token}
                                 chainId={chainId}
