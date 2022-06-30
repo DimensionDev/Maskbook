@@ -26,13 +26,14 @@ import type {
     OpenSeaAssetEvent,
     OpenSeaAssetOrder,
     OpenSeaCollection,
+    OpenSeaCollectionStats,
     OpenSeaCustomAccount,
     OpenSeaResponse,
 } from './types'
 import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
-async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
+export async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
 
@@ -340,13 +341,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
         )
-        return createNonFungibleTokenContract(
+        const result = createNonFungibleTokenContract(
             chainId,
             SchemaType.ERC721,
             address,
             assetContract?.name ?? 'Unknown Token',
             assetContract?.symbol ?? 'UNKNOWN',
         )
+        return result
     }
 
     async getEvents(
@@ -426,6 +428,25 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             collections.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getCollectionStats(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+    ): Promise<OpenSeaCollectionStats | undefined> {
+        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
+            urlcat('/api/v1/asset_contract/:address', { address }),
+            chainId,
+        )
+        const slug = assetContract?.collection.slug
+        if (!slug) return
+        const response = await fetchFromOpenSea<{ stats: OpenSeaCollectionStats }>(
+            urlcat('/api/v1/collection/:slug/stats', {
+                slug,
+            }),
+            chainId,
+        )
+        return response?.stats
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {

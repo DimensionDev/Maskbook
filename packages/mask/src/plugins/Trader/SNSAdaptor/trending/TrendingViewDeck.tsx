@@ -243,6 +243,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Stack direction="row" gap={1} alignItems="center">
                                     {market ? (
                                         <Typography fontSize={18} fontWeight={500} lineHeight="24px">
+                                            {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                             <FormattedCurrency
                                                 value={
                                                     (dataProvider === DataProvider.COIN_MARKET_CAP

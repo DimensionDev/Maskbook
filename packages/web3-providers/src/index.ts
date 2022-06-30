@@ -1,5 +1,6 @@
 import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
+import { LooksRareAPI } from './LooksRare'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
@@ -27,6 +28,7 @@ export * from './types'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()
+export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()

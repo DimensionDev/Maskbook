@@ -705,12 +705,20 @@ export namespace TrendingAPI {
         logo_url: string
         trade_url: string
         market_name: string
-        base_name: string
-        target_name: string
+        /** fungible token only */
+        base_name?: string
+        /** fungible token only */
+        target_name?: string
         price?: number
-        volume: number
+        volume?: number
         score?: string
-        updated: Date
+        updated?: Date
+        /** NFT only */
+        volume_24h?: number
+        /** NFT only */
+        floor_price?: number
+        /** NFT only */
+        sales_24?: number
     }
 
     export interface Contract {
