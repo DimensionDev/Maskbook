@@ -16,11 +16,14 @@ const useStyles = makeStyles()(() => {
             },
         },
         carousel: {
-            height: 130,
+            position: 'relative',
+            zIndex: 100,
+            height: 270,
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
                 padding: '8px 0 0',
+                height: 270,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
@@ -38,7 +41,7 @@ interface Props {
 
 export function ApplicationRecommendArea(props: Props) {
     const { recommendFeatureAppList, RenderEntryComponent } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [isPlaying, setIsPlaying] = useState(true)
 
     return (

@@ -50,6 +50,11 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
                 gridGap: theme.spacing(1),
             },
         },
+        applicationWrapperWithCarousel: {
+            position: 'relative',
+            zIndex: 50,
+            top: '-140px',
+        },
         subTitle: {
             cursor: 'default',
             fontSize: 18,
@@ -150,7 +155,7 @@ function ApplicationBoardContent(props: Props) {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
-    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
+    const { classes, cx } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
             <ApplicationRecommendArea
@@ -159,7 +164,11 @@ function ApplicationBoardContent(props: Props) {
             />
 
             {listedAppList.length > 0 ? (
-                <section className={classes.applicationWrapper}>
+                <section
+                    className={cx(
+                        classes.applicationWrapper,
+                        recommendFeatureAppList.length > 2 ? classes.applicationWrapperWithCarousel : '',
+                    )}>
                     {listedAppList.map((application) => (
                         <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
