@@ -9,7 +9,6 @@ import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
-import { cloneDeep, merge } from 'lodash-unified'
 import produce, { setAutoFreeze } from 'immer'
 import { MaskColors, parseColor } from '@masknet/theme'
 
@@ -18,13 +17,12 @@ const defaultUseTheme = (t: Theme) => t
 /**
  * @deprecated Should migrate to \@masknet/theme
  */
-export function useClassicMaskSNSTheme(mode?: string) {
+export function useClassicMaskSNSTheme() {
     const provider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || staticRef).current
     const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
     const palette = useSubscription(provider)
-    const paletteMode = mode ?? palette
 
-    const baseTheme = paletteMode === 'dark' ? MaskDarkTheme : MaskLightTheme
+    const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
     setAutoFreeze(false)
     const maskTheme = produce(baseTheme, (theme) => {
@@ -103,30 +101,12 @@ export function useClassicMaskSNSTheme(mode?: string) {
                 },
                 {
                     props: {
-                        variant: 'contained',
-                        color: 'dark',
-                    },
-                    style: {
-                        backgroundColor: theme.palette.maskColor.dark,
-                        ['&:hover']: {
-                            backgroundColor: theme.palette.maskColor.dark,
-                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
-                        },
-                        [`&.${buttonClasses.disabled}`]: {
-                            background: theme.palette.maskColor.secondaryDark,
-                            opacity: 0.6,
-                            color: theme.palette.maskColor.white,
-                        },
-                    },
-                },
-                {
-                    props: {
                         variant: 'outlined',
                     },
                     style: {
                         backgroundColor: theme.palette.maskColor.thirdMain,
                         color: theme.palette.maskColor.main,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background: theme.palette.maskColor.bottom,
                             boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
@@ -137,7 +117,6 @@ export function useClassicMaskSNSTheme(mode?: string) {
                             color: theme.palette.maskColor.main,
                             background: theme.palette.maskColor.thirdMain,
                             opacity: 0.4,
-                            border: 'none',
                         },
                     },
                 },
@@ -184,7 +163,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                     style: {
                         backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.primary,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -247,7 +226,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                     style: {
                         backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -430,13 +409,32 @@ export function useClassicMaskSNSTheme(mode?: string) {
                 },
                 {
                     props: {
+                        variant: 'roundedDark',
+                    },
+                    style: {
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: theme.palette.maskColor.white,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            backgroundColor: theme.palette.maskColor.dark,
+                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: theme.palette.maskColor.secondaryDark,
+                            opacity: 0.6,
+                            color: theme.palette.maskColor.white,
+                        },
+                    },
+                },
+                {
+                    props: {
                         variant: 'roundedOutlined',
                     },
                     style: {
                         borderRadius: 99,
                         backgroundColor: theme.palette.maskColor.thirdMain,
                         color: theme.palette.maskColor.main,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background: theme.palette.maskColor.bottom,
                             boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.bottom)
@@ -494,7 +492,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                         backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.primary,
                         borderRadius: 99,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -559,7 +557,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                         borderRadius: 99,
                         backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -626,7 +624,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                         borderRadius: 99,
                         background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -692,6 +690,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                         borderRadius: 99,
                         backgroundColor: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.danger,
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -738,23 +737,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
     setAutoFreeze(true)
     // TODO: support RTL?
 
-    console.log(maskTheme)
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
     return usePostTheme(theme)
-}
-
-export function useClassicMaskSNSPluginTheme() {
-    const theme = useClassicMaskSNSTheme()
-    return unstable_createMuiStrictModeTheme(
-        merge(cloneDeep(theme), {
-            components: {
-                MuiButton: {
-                    defaultProps: {
-                        variant: 'roundedContained',
-                    },
-                },
-            },
-        }),
-    )
 }

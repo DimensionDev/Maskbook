@@ -5,11 +5,11 @@ declare global {
             roundedContained: true
             roundedOutlined: true
             roundedText: true
+            roundedDark: true
         }
         interface ButtonPropsColorOverrides {
             warning: true
             error: true
-            dark: true
         }
     }
     module '@mui/material/Paper' {
