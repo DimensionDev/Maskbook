@@ -3,7 +3,7 @@ import SettingItem from './SettingItem'
 import EmailSetting from './EmailSetting'
 import { UserContext } from '../hooks/UserContext'
 import { useContext } from 'react'
-import { SettingsEmailIcon } from '@masknet/icons'
+import { SettingsEmail as SettingsEmailIcon } from '@masknet/icons'
 
 export default function PasswordSettingItem() {
     const t = useDashboardI18N()

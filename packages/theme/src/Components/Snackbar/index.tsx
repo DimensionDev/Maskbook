@@ -17,7 +17,7 @@ import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import DoneIcon from '@mui/icons-material/Done'
-import { LoadingIcon, RiskIcon } from '@masknet/icons'
+import { Loading as LoadingIcon, Risk as RiskIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 

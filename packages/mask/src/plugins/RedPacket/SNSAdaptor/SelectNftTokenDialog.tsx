@@ -8,7 +8,7 @@ import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, Cir
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
-import { SearchIcon } from '@masknet/icons'
+import { Search as SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex } from 'lodash-unified'

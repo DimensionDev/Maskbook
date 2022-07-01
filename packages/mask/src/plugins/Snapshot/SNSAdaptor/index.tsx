@@ -7,7 +7,7 @@ import { PostInspector } from './PostInspector'
 import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { SnapshotIcon } from '@masknet/icons'
+import { Snapshot as SnapshotIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {

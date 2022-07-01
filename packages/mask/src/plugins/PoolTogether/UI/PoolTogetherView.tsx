@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@masknet/icons'
+import { Refresh as RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

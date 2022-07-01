@@ -4,7 +4,13 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Button, Typography } from '@mui/material'
-import { AddUserIcon, ArrowRightIosIcon, EmptyIcon, MenuPersonasActiveIcon, PopupRestoreIcon } from '@masknet/icons'
+import {
+    AddUser as AddUserIcon,
+    ArrowRightIos as ArrowRightIosIcon,
+    Empty as EmptyIcon,
+    MenuPersonasActive as MenuPersonasActiveIcon,
+    PopupRestore as PopupRestoreIcon,
+} from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils/i18n-next-ui'

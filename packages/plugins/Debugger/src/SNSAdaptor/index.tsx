@@ -5,7 +5,7 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants'
 import { TabContent } from './components/TabContent'
 import { ConsoleDialog } from './components/ConsoleDialog'
 import { ApplicationEntry } from '@masknet/shared'
-import { MaskBlueIcon } from '@masknet/icons'
+import { MaskBlue as MaskBlueIcon } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
 

@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { CreateWalletForm as C } from '../../../src/components/CreateWalletForm'
-import { ETHIcon } from '@masknet/icons'
+import { Eth as ETHIcon } from '@masknet/icons'
 
 const { meta, of } = story(C)
 

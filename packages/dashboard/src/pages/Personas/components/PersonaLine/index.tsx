@@ -13,7 +13,10 @@ import {
 } from '@masknet/shared-base'
 import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
+import {
+    NextIdPersonaWarning as NextIdPersonaWarningIcon,
+    NextIdPersonaVerified as NextIdPersonaVerifiedIcon,
+} from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {

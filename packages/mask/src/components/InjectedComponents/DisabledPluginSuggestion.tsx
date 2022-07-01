@@ -11,7 +11,7 @@ import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
-import { PluginIcon } from '@masknet/icons'
+import { Plugin as PluginIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 

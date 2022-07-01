@@ -3,7 +3,7 @@ import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } f
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbarCallback } from '@masknet/shared'
-import { SuccessIcon, CopyIcon } from '@masknet/icons'
+import { Success as SuccessIcon, Copy as CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
 import { useCopyToClipboard } from 'react-use'

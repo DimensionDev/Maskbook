@@ -4,7 +4,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { useState } from 'react'
-import { WarningIcon } from '@masknet/icons'
+import { Warning as WarningIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {

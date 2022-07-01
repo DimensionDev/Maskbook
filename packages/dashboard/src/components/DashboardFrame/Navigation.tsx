@@ -18,14 +18,14 @@ import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
 import {
-    MaskBannerIcon,
-    MaskNotSquareIcon,
-    MenuPersonasActiveIcon,
-    MenuPersonasIcon,
-    MenuSettingsActiveIcon,
-    MenuSettingsIcon,
-    MenuWalletsActiveIcon,
-    MenuWalletsIcon,
+    MaskBanner as MaskBannerIcon,
+    Mask as MaskNotSquareIcon,
+    MenuPersonasActive as MenuPersonasActiveIcon,
+    MenuPersonas as MenuPersonasIcon,
+    MenuSettingsActive as MenuSettingsActiveIcon,
+    MenuSettings as MenuSettingsIcon,
+    MenuWalletsActive as MenuWalletsActiveIcon,
+    MenuWallets as MenuWalletsIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'

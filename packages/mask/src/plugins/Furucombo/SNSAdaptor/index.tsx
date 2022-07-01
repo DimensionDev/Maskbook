@@ -4,7 +4,7 @@ import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plug
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { FurucomboIcon } from '@masknet/icons'
+import { Furucombo as FurucomboIcon } from '@masknet/icons'
 import { FurucomboView } from '../UI/FurucomboView'
 
 const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/

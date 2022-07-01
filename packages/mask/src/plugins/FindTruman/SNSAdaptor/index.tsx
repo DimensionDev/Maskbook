@@ -6,7 +6,7 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
-import { FindTrumanIcon } from '@masknet/icons'
+import { FindTruman as FindTrumanIcon } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'

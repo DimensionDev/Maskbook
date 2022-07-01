@@ -9,7 +9,13 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
+import {
+    ArrowRight as ArrowRightIcon,
+    CircleClose as CircleCloseIcon,
+    InteractionCircle as InteractionCircleIcon,
+    Loader as LoaderIcon,
+    Upload as UploadIcon,
+} from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'

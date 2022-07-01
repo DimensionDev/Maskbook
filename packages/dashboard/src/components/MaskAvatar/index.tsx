@@ -1,6 +1,6 @@
 import { Avatar, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MenuPersonasActiveIcon } from '@masknet/icons'
+import { MenuPersonasActive as MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
 

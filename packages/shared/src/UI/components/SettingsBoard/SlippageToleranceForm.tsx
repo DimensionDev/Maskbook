@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
-import { WarningIcon } from '@masknet/icons'
+import { Warning as WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'

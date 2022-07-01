@@ -47,7 +47,7 @@ import {
     useNativeTokenPrice,
     useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
-import { RightIcon } from '@masknet/icons'
+import { Right as RightIcon } from '@masknet/icons'
 import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({

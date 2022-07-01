@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { MasksIcon, TipIcon } from '@masknet/icons'
+import { Masks as MasksIcon, Tip as TipIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'

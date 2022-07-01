@@ -2,7 +2,7 @@
 
 import { memo } from 'react'
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
-import { PersonasIcon, WalletNavIcon, DashboardIcon } from '@masknet/icons'
+import { Personas as PersonasIcon, WalletNav as WalletNavIcon, Dashboard as DashboardIcon } from '@masknet/icons'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'

@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material'
-import { SecurityCheckerIcon } from '@masknet/icons'
+import { SecurityChecker as SecurityCheckerIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 
 export const DefaultPlaceholder = () => {

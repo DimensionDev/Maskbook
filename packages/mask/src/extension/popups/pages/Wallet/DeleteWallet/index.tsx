@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon, WarningIcon } from '@masknet/icons'
+import { Wallet as WalletIcon, Warning as WarningIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'

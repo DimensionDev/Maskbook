@@ -11,7 +11,7 @@ import {
     Plugin,
     PluginWrapperMethods,
 } from '@masknet/plugin-infra/content-script'
-import { ProviderByIcon } from '@masknet/icons'
+import { Provider as ProviderByIcon } from '@masknet/icons'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     open?: boolean

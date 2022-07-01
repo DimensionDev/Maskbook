@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { SelectedIcon } from '@masknet/icons'
+import { Selected as SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType } from '@masknet/shared-base'
 import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'

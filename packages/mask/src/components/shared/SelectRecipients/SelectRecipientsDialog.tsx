@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
-import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
+import { SearchEmpty as SearchEmptyIcon, Search as SearchIcon } from '@masknet/icons'
 import { uniqBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({

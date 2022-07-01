@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
-import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { MaskWallet as MaskWalletIcon, Success as SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'

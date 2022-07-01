@@ -4,7 +4,7 @@ import { Box, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { ArrowDropIcon, LinkOutIcon, MaskBlueIcon } from '@masknet/icons'
+import { ArrowDrop as ArrowDropIcon, LinkOut as LinkOutIcon, MaskBlue as MaskBlueIcon } from '@masknet/icons'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({

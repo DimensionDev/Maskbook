@@ -1,6 +1,6 @@
 import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, Tooltip, Typography } from '@mui/material'
-import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
+import { LocalBackup as LocalBackupIcon, CloudBackup as CloudBackupIcon } from '@masknet/icons'
 import { useContext, useMemo } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'

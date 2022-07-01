@@ -1,6 +1,6 @@
 import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { SuccessIcon } from '@masknet/icons'
+import { Success as SuccessIcon } from '@masknet/icons'
 import { useMenu, WalletIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import {

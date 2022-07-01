@@ -1,4 +1,4 @@
-import { DocumentIcon } from '@masknet/icons'
+import { Document as DocumentIcon } from '@masknet/icons'
 import { MaskDialog } from '@masknet/theme'
 import { Box, Button, DialogContent, Slider } from '@mui/material'
 import { memo, useCallback, useState } from 'react'

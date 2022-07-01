@@ -1,4 +1,4 @@
-import { LeftArrowIcon, RightArrowIcon } from '@masknet/icons'
+import { LeftArrow as LeftArrowIcon, RightArrow as RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classnames from 'classnames'

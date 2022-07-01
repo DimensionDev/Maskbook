@@ -18,7 +18,11 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import {
+    LinkOut as LinkOutIcon,
+    ArrowDrop as ArrowDropIcon,
+    WalletConnect as PluginWalletConnectIcon,
+} from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {

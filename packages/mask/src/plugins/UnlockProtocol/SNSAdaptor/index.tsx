@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { UnlockIcon } from '@masknet/icons'
+import { Unlock as UnlockIcon } from '@masknet/icons'
 import { base } from '../base'
 import { pluginMetaKey, pluginName } from '../constants'
 import type { UnlockLockInMetadata } from '../types'

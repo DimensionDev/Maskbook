@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CollectibleIcon } from '@masknet/icons'
+import { Collectible as CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'

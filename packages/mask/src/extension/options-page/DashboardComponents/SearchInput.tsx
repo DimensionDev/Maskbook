@@ -1,4 +1,4 @@
-import { SearchIcon } from '@masknet/icons'
+import { Search as SearchIcon } from '@masknet/icons'
 import { InputBox, InputBoxProps } from './InputBox'
 
 export interface SearchInputProps extends InputBoxProps {}

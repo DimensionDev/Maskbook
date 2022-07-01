@@ -3,7 +3,7 @@
 import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { MaskNotSquareIcon, SquareBack, PopupCloseIcon } from '@masknet/icons'
+import { Mask as MaskNotSquareIcon, SquareBack, PopupClose as PopupCloseIcon } from '@masknet/icons'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PageTitleContext } from '../../context'
 import { PopupRoutes } from '@masknet/shared-base'

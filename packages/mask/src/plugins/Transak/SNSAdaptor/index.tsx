@@ -5,7 +5,7 @@ import { BuyTokenDialog } from './BuyTokenDialog'
 import { PluginTransakMessages } from '../messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
-import { TransakIcon } from '@masknet/icons'
+import { Transak as TransakIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

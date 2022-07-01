@@ -22,7 +22,7 @@ import { PoolList } from './PoolList'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
-import { HistoryIcon } from '@masknet/icons'
+import { History as HistoryIcon } from '@masknet/icons'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 
 interface StyleProps {

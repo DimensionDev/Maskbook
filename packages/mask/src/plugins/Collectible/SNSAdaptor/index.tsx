@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
-import { CollectiblesIcon } from '@masknet/icons'
+import { Collectibles as CollectiblesIcon } from '@masknet/icons'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'

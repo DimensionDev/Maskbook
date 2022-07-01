@@ -4,7 +4,7 @@ import { Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar'
 import { useI18N } from '../../../../../utils'
 import { ConnectDialog } from '../components/ConnectDialog'
-import { EmptyIcon } from '@masknet/icons'
+import { Empty as EmptyIcon } from '@masknet/icons'
 import type { Account } from '../type'
 import type { EnhanceableSite } from '@masknet/shared-base'
 

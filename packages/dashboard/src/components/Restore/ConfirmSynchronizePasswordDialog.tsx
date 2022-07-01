@@ -2,7 +2,7 @@ import { useDashboardI18N } from '../../locales'
 import { memo } from 'react'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { SuccessIcon } from '@masknet/icons'
+import { Success as SuccessIcon } from '@masknet/icons'
 
 export interface ConfirmSynchronizePasswordDialogProps {
     open: boolean

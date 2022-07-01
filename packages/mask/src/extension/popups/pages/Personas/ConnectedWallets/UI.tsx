@@ -5,7 +5,12 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { CircleLoadingIcon, DeleteIcon, EmptyIcon, LinkOutIcon } from '@masknet/icons'
+import {
+    CircleLoading as CircleLoadingIcon,
+    Delete as DeleteIcon,
+    Empty as EmptyIcon,
+    LinkOut as LinkOutIcon,
+} from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'

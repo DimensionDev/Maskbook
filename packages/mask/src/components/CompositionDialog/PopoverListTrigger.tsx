@@ -1,4 +1,4 @@
-import { RightArrowIcon } from '@masknet/icons'
+import { RightArrow as RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Popover from '@mui/material/Popover'
 import { RadioGroup, Typography } from '@mui/material'

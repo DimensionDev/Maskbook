@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import VCentDialog from './TweetDialog'
 import { base } from '../base'
-import { ValuablesIcon } from '@masknet/icons'
+import { Valuables as ValuablesIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

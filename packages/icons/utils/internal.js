@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material'
+import { useTheme, Box } from '@mui/material'
 import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
@@ -13,13 +13,13 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
  */
 export function __createIcon(name, variants) {
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
-        const { size = 24, variant, color, style, ...rest } = props
+        const { size = 24, variant, color, sx, ...rest } = props
         const defaultPalette = useDefaultPalette()
         const selected = selectVariant(variants, variant || defaultPalette)
         const [, url, jsx, isColorful] = selected
 
         const iconStyle = React.useMemo(() => {
-            const bg = !isColorful
+            const bg = isColorful
                 ? null
                 : {
                       backgroundImage: `url(${url})`,
@@ -34,23 +34,28 @@ export function __createIcon(name, variants) {
                 width: `${size}px`,
                 color,
                 ...bg,
-                ...style,
+                ...sx,
             }
-        }, [selected, size, style])
+        }, [selected, size, sx])
 
         if (isColorful && jsx) {
-            return React.cloneElement(jsx, {
-                'aria-hidden': true,
-                ...rest,
-                ref,
-                style: iconStyle,
-            })
+            return React.createElement(
+                Box,
+                {
+                    'aria-hidden': true,
+                    ...rest,
+                    ref,
+                    component: 'svg',
+                    sx: iconStyle,
+                },
+                jsx,
+            )
         }
-        return React.createElement('span', {
+        return React.createElement(Box, {
             'aria-hidden': true,
             ...rest,
             ref,
-            style: iconStyle,
+            sx: iconStyle,
         })
     }
     Icon.displayName = name

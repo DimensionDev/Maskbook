@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { SavingsIcon } from '@masknet/icons'
+import { Savings as SavingsIcon } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { useState } from 'react'
 import { base } from '../base'

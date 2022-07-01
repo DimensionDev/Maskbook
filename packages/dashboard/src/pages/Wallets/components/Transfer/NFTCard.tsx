@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { CheckboxBorder as CheckedBorderIcon, Checkbox as CheckedIcon } from '@masknet/icons'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

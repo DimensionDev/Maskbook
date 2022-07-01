@@ -117,6 +117,7 @@ export async function iconCodegen() {
 }
 
 export async function iconCodegenWatch() {
+    iconCodegen()
     watch(pattern, iconCodegen)
 }
 

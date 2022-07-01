@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { IconProps, Tooltip, useTheme } from '@mui/material'
-import { CopyIcon } from '@masknet/icons'
+import { Copy as CopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
 import { useSnackbarCallback } from '@masknet/shared'

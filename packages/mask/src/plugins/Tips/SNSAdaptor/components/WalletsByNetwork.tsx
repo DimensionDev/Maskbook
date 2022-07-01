@@ -1,4 +1,4 @@
-import { SettingsIcon } from '@masknet/icons'
+import { Settings as SettingsIcon } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
 import { networkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'

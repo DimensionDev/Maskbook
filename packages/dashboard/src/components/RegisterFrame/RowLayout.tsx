@@ -1,4 +1,4 @@
-import { MaskBannerIcon } from '@masknet/icons'
+import { MaskBanner as MaskBannerIcon } from '@masknet/icons'
 import { styled } from '@mui/material/styles'
 import { memo } from 'react'
 import { Container } from '@mui/material'

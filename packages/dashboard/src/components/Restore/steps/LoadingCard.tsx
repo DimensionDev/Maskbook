@@ -1,4 +1,4 @@
-import { LoadingIcon } from '@masknet/icons'
+import { Loading as LoadingIcon } from '@masknet/icons'
 import { Card, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 

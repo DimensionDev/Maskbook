@@ -8,7 +8,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { GearIcon } from '@masknet/icons'
+import { Gear as GearIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {

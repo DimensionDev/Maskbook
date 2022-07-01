@@ -1,4 +1,4 @@
-import { TipsIcon } from '@masknet/icons'
+import { Tips as TipsIcon } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'

@@ -1,5 +1,12 @@
 import { memo, useMemo } from 'react'
-import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
+import {
+    Close as CloseIcon,
+    Download as DownloadIcon,
+    Interaction as InteractionIcon,
+    Ito as ITOIcon,
+    RedPacket as RedPacketIcon,
+    Upload as UploadIcon,
+} from '@masknet/icons'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'

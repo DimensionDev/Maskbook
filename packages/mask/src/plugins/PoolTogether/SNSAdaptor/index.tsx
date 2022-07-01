@@ -7,7 +7,7 @@ import { DepositDialog } from '../UI/DepositDialog'
 import { Trans } from 'react-i18next'
 import { URL_PATTERN } from '../constants'
 import { PoolTogetherView } from '../UI/PoolTogetherView'
-import { PoolTogetherIcon } from '@masknet/icons'
+import { PoolTogether as PoolTogetherIcon } from '@masknet/icons'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 

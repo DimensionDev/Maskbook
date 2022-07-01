@@ -8,7 +8,7 @@ import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { MaskBoxIcon } from '@masknet/icons'
+import { MaskBox as MaskBoxIcon } from '@masknet/icons'
 import { RootContext } from '../contexts'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

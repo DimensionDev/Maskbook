@@ -2,7 +2,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import { FooterLine } from '../FooterLine'
 import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
+import { MaskBanner as MaskBannerIcon, Mask as MaskNotSquareIcon } from '@masknet/icons'
 
 const Container = styled('div')(
     ({ theme }) => `

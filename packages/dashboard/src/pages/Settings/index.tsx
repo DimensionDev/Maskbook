@@ -16,7 +16,11 @@ import RestoreSetting from './components/RestoreSetting'
 
 import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
 import { UserProvider } from './hooks/UserContext'
-import { SettingsAppearanceIcon, SettingsLanguageIcon, SettingsRestoreIcon } from '@masknet/icons'
+import {
+    SettingsAppearance as SettingsAppearanceIcon,
+    SettingsLanguage as SettingsLanguageIcon,
+    SettingsRestore as SettingsRestoreIcon,
+} from '@masknet/icons'
 
 export default function Settings() {
     const t = useDashboardI18N()

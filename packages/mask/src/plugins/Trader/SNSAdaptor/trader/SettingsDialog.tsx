@@ -11,7 +11,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
 import { chainResolver, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { InfoIcon } from '@masknet/icons'
+import { Info as InfoIcon } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
 

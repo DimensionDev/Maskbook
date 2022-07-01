@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossBridgeIcon } from '@masknet/icons'
+import { CrossBridge as CrossBridgeIcon } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { useState } from 'react'

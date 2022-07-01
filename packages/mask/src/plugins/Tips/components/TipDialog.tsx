@@ -1,4 +1,4 @@
-import { Drop2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
+import { Drop2 as Drop2Icon, LinkOut as LinkOutIcon, Success as SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import {
     useAccount,

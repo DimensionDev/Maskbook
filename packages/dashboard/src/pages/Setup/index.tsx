@@ -1,7 +1,7 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { Box, Container, Stack, Typography } from '@mui/material'
-import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
+import { Restore as RestoreIcon, SignUpAccount as SignUpAccountIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'

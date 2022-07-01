@@ -1,6 +1,12 @@
 import { memo } from 'react'
 import { noop } from 'lodash-unified'
-import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
+import {
+    Card as CardIcon,
+    Download as DownloadIcon,
+    MaskWallet as MaskWalletIcon,
+    Send as SendIcon,
+    Swap as SwapIcon,
+} from '@masknet/icons'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
@@ -109,7 +115,7 @@ export const Balance = memo<BalanceCardProps>(
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
                     <IconContainer sx={{ width: 48, height: 48 }}>
-                        <MaskWalletIcon viewBox="0 0 48 48" fontSize="inherit" />
+                        <MaskWalletIcon size={48} sx={{ fontSize: 'inherit' }} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
@@ -142,20 +148,20 @@ export const Balance = memo<BalanceCardProps>(
                         <Button
                             size="small"
                             onClick={onSend}
-                            endIcon={<SendIcon style={{ fill: '#fff' }} fontSize="inherit" />}>
+                            endIcon={<SendIcon color="#fff" sx={{ fontSize: 'inherit' }} />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon fontSize="inherit" />}>
+                        <Button size="small" onClick={onBuy} endIcon={<CardIcon sx={{ fontSize: 'inherit' }} />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon sx={{ fontSize: 'inherit' }} />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
+                            endIcon={<DownloadIcon sx={{ fontSize: 'inherit' }} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

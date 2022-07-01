@@ -1,5 +1,9 @@
 import type { SecurityAPI } from '@masknet/web3-providers'
-import { NextIdPersonaWarningIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
+import {
+    NextIdPersonaWarning as NextIdPersonaWarningIcon,
+    Risk as RiskIcon,
+    Success as SuccessIcon,
+} from '@masknet/icons'
 import { memo, ReactNode } from 'react'
 import { Stack } from '@mui/material'
 import type { useI18N } from '../../locales'

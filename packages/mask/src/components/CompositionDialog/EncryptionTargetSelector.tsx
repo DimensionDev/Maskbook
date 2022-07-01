@@ -5,7 +5,7 @@ import { PopoverListTrigger } from './PopoverListTrigger'
 import { useState } from 'react'
 import { PopoverListItem } from './PopoverListItem'
 import { E2EUnavailableReason } from './CompositionUI'
-import { RightArrowIcon } from '@masknet/icons'
+import { RightArrow as RightArrowIcon } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 

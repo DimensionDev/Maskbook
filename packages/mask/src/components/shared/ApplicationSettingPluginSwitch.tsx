@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
-import { TutorialIcon } from '@masknet/icons'
+import { Tutorial as TutorialIcon } from '@masknet/icons'
 import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'

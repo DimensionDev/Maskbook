@@ -1,6 +1,13 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
-import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import {
+    FileMessage as FileMessageIcon,
+    Ito as ITOIcon,
+    Message as MessageIcon,
+    Poll as PollIcon,
+    RedPacket as RedPacketIcon,
+    NftRedPacket as NFTRedPacketIcon,
+} from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostInformation } from '@masknet/shared-base'

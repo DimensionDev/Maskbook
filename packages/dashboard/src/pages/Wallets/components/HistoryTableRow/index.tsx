@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { LinkOutIcon } from '@masknet/icons'
+import { LinkOut as LinkOutIcon } from '@masknet/icons'
 import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'

@@ -4,7 +4,7 @@ import { SetupGuideStep } from './types'
 import { Box, Button, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import ExtensionIcon from '@mui/icons-material/Extension'
-import { PinIcon } from '@masknet/icons'
+import { Pin as PinIcon } from '@masknet/icons'
 
 interface PinExtensionProps {
     onDone?: () => void

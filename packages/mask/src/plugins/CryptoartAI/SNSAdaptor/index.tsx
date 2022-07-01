@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
-import { CryptoArtIcon } from '@masknet/icons'
+import { CryptoArt as CryptoArtIcon } from '@masknet/icons'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 

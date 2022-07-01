@@ -1,4 +1,4 @@
-import { RightIcon } from '@masknet/icons'
+import { Right as RightIcon } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 import {
     useChainId,

@@ -11,7 +11,7 @@ import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { Context } from '../../hooks/useContext'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { SharedIcon } from '@masknet/icons'
+import { Shared as SharedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     main: { padding: 8 },

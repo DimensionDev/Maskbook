@@ -6,7 +6,7 @@ import { Services } from '../../../../API'
 import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { WarningIcon } from '@masknet/icons'
+import { Warning as WarningIcon } from '@masknet/icons'
 import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({

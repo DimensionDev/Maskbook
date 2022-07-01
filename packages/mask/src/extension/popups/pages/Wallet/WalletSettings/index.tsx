@@ -1,6 +1,6 @@
 import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
+import { BackUp as BackUpIcon, CloudLink as CloudLinkIcon, Trash as TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'

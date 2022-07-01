@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
-import { MasksIcon } from '@masknet/icons'
+import { Masks as MasksIcon } from '@masknet/icons'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'

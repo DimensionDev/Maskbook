@@ -1,7 +1,7 @@
 import { Button, styled, FilledInput, Tab, Typography } from '@mui/material'
 import { makeStyles, ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
 import { memo } from 'react'
-import { RefreshIcon } from '@masknet/icons'
+import { Refresh as RefreshIcon } from '@masknet/icons'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
 import { useDashboardI18N } from '../../../../locales'

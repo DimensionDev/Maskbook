@@ -1,6 +1,6 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
-import { LinkOutIcon } from '@masknet/icons'
+import { LinkOut as LinkOutIcon } from '@masknet/icons'
 import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'

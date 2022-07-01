@@ -1,4 +1,10 @@
-import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
+import {
+    Discord as DiscordIcon,
+    MaskBlue as MaskBlueIcon,
+    MaskGrey as MaskGreyIcon,
+    MaskText as MaskTextIcon,
+    MaskTextNightly as MaskTextNightlyIcon,
+} from '@masknet/icons'
 import { Avatar, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import FacebookIcon from '@mui/icons-material/Facebook'

@@ -20,7 +20,7 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketPast } from './RedPacketPast'
 import { TabContext, TabPanel } from '@mui/lab'
-import { HistoryIcon } from '@masknet/icons'
+import { History as HistoryIcon } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 

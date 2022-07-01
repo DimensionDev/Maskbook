@@ -12,7 +12,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField'
-import { InfoIcon } from '@masknet/icons'
+import { Info as InfoIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

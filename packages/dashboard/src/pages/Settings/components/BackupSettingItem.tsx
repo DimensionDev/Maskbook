@@ -1,5 +1,5 @@
 import SettingItem from './SettingItem'
-import { SettingsBackupIcon } from '@masknet/icons'
+import { SettingsBackup as SettingsBackupIcon } from '@masknet/icons'
 import BackupSetting from './BackupSetting'
 import { UserContext } from '../hooks/UserContext'
 import { useContext, useState, useEffect } from 'react'

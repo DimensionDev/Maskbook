@@ -3,7 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { EditIcon, MaskWalletIcon, SettingIcon, SuccessIcon } from '@masknet/icons'
+import {
+    Edit as EditIcon,
+    MaskWallet as MaskWalletIcon,
+    Setting as SettingIcon,
+    Success as SuccessIcon,
+} from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'

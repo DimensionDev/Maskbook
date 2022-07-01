@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react'
 import {
-    FacebookColoredIcon,
-    InstagramColoredIcon,
-    MindsIcon,
-    TwitterColoredIcon,
+    FacebookColored as FacebookColoredIcon,
+    InstagramColored as InstagramColoredIcon,
+    Minds as MindsIcon,
+    TwitterColored as TwitterColoredIcon,
     OpenSeaColoredIcon,
-    FacebookRoundIcon,
-    TwitterRoundIcon,
-    InstagramRoundIcon,
-    MindsRoundIcon,
+    FacebookRound as FacebookRoundIcon,
+    TwitterRound as TwitterRoundIcon,
+    InstagramRound as InstagramRoundIcon,
+    MindsRound as MindsRoundIcon,
 } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
 

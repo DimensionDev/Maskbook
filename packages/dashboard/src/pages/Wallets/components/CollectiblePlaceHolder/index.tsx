@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { MiniMaskIcon } from '@masknet/icons'
+import { MiniMask as MiniMaskIcon } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletIcon } from '@masknet/shared'
 import { Box } from '@mui/material'
@@ -53,7 +53,7 @@ export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ chain
                 <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
             </Box>
             <div className={classes.placeholder}>
-                <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48, opacity: 0.5 }} />
+                <MiniMaskIcon size={48} sx={{ opacity: 0.5 }} />
             </div>
         </div>
     )

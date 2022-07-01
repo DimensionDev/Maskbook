@@ -19,7 +19,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { WalletConnect as PluginWalletConnectIcon, Shared as SharedIcon } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({

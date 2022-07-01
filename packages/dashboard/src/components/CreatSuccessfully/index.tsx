@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Button, styled, Typography } from '@mui/material'
-import { SuccessIcon } from '@masknet/icons'
+import { Success as SuccessIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 export interface CreateSuccessfully {
@@ -14,7 +14,7 @@ export const CreateSuccessfully = memo((props: CreateSuccessfully) => {
     return (
         <Container>
             <Icon>
-                <SuccessIcon fontSize="inherit" />
+                <SuccessIcon sx={{ fontSize: 'inherit' }} />
             </Icon>
             <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
             <SuccessTips>{t.wallets_create_successfully_tips()}</SuccessTips>

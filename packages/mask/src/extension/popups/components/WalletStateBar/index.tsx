@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { LoadingIcon } from '@masknet/icons'
+import { Loading as LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'

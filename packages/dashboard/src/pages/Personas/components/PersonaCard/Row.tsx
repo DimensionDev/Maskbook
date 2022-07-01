@@ -1,6 +1,6 @@
 import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
+import { PublicKey as PublicKeyIcon, Settings as SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import {
@@ -159,7 +159,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     openMenu(e)
                 }}
                 className={classes.setting}>
-                <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
+                <SettingsIcon sx={{ fontSize: 'inherit' }} color={MaskColorVar.textPrimary} />
             </IconButton>
             <Stack direction="row" alignItems="center" justifyContent="center" width="240px" className={classes.avatar}>
                 <Box textAlign="center" className={classes.icon} onClick={() => toggleAvatar(true)}>

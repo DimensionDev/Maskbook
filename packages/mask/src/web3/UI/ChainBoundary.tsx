@@ -22,7 +22,7 @@ import ActionButton, {
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { WalletIcon } from '@masknet/shared'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { WalletConnect as PluginWalletConnectIcon } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 

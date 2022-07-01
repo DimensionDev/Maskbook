@@ -8,7 +8,7 @@ import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
-import { FileServiceIcon } from '@masknet/icons'
+import { FileService as FileServiceIcon } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 

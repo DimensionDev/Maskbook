@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { EmptyIcon } from '@masknet/icons'
+import { Empty as EmptyIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

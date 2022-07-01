@@ -3,7 +3,7 @@
 import { memo, useCallback, useState } from 'react'
 import { IconProps, Tooltip } from '@mui/material'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { PopupCopyIcon } from '@masknet/icons'
+import { PopupCopy as PopupCopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 
 export interface CopyIconButtonProps extends IconProps {

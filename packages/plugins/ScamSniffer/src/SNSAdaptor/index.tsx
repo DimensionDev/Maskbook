@@ -1,6 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { base } from '../base'
-import { ScamSnifferIcon } from '@masknet/icons'
+import { ScamSniffer as ScamSnifferIcon } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'

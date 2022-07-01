@@ -1,6 +1,6 @@
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
-import { CyberConnectIcon } from '@masknet/icons'
+import { CyberConnect as CyberConnectIcon } from '@masknet/icons'
 import { useMemo } from 'react'
 import { parseURL } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'

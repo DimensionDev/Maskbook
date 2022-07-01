@@ -4,7 +4,7 @@ import { base } from '../base'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
-import { SecurityCheckerIcon } from '@masknet/icons'
+import { SecurityChecker as SecurityCheckerIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

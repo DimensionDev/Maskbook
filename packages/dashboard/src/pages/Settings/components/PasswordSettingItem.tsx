@@ -3,7 +3,7 @@ import SettingItem from './SettingItem'
 import PasswordSetting from './PasswordSetting'
 import { UserContext } from '../hooks/UserContext'
 import { useContext } from 'react'
-import { SettingsPasswordIcon } from '@masknet/icons'
+import { SettingsPassword as SettingsPasswordIcon } from '@masknet/icons'
 
 export default function PasswordSettingItem() {
     const t = useDashboardI18N()

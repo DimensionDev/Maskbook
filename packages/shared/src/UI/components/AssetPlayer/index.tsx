@@ -6,7 +6,7 @@ import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, SvgIconProps } from '@mui/material'
-import { AssetLoadingIcon, MaskPlaceholder } from '@masknet/icons'
+import { AssetLoading as AssetLoadingIcon, GeneratedIconProps, MaskPlaceholder } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ERC721TokenQuery {
@@ -31,7 +31,7 @@ interface AssetPlayerProps
     loadingIcon?: React.ReactNode
     erc721Token?: ERC721TokenQuery
     renderTimeout?: number
-    iconProps?: SvgIconProps
+    iconProps?: GeneratedIconProps<never>
     fallbackImage?: URL
     isFixedIframeSize?: boolean
     showIframeFromInit?: boolean

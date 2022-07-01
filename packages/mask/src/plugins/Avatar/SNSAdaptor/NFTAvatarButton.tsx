@@ -1,4 +1,4 @@
-import { GearSettingsIcon } from '@masknet/icons'
+import { GearSettings as GearSettingsIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'

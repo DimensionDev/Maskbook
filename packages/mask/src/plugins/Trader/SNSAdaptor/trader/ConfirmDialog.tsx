@@ -1,4 +1,4 @@
-import { CramIcon, InfoIcon, RetweetIcon } from '@masknet/icons'
+import { Cram as CramIcon, Info as InfoIcon, Retweet as RetweetIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, InjectedDialog, TokenIcon } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'

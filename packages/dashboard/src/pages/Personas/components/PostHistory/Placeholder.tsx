@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { EmptyIcon } from '@masknet/icons'
+import { Empty as EmptyIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import urlcat from 'urlcat'
 import { MaskColorVar } from '@masknet/theme'

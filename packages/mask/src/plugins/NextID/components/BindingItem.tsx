@@ -2,7 +2,7 @@ import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
-import { DeleteIcon } from '@masknet/icons'
+import { Delete as DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'

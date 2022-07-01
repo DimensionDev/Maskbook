@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InfoIcon, RefreshIcon } from '@masknet/icons'
+import { Info as InfoIcon, Refresh as RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'

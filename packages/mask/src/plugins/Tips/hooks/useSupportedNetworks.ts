@@ -1,10 +1,9 @@
-import { EVMChainsIcon, SolanaIcon, FlowIcon } from '@masknet/icons'
-import type { OverridableComponent } from '@mui/material/OverridableComponent'
-import type { SvgIconTypeMap } from '@mui/material'
+import { EvmChains as EVMChainsIcon, Solana as SolanaIcon, Flow as FlowIcon, GeneratedIconProps } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ComponentType } from 'react'
 export interface SupportedNetworkMap {
     name: string
-    icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
+    icon: ComponentType<GeneratedIconProps<never>>
 }
 
 export const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {

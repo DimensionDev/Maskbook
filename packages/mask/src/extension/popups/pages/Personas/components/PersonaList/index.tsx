@@ -8,7 +8,7 @@ import {
     PopupRoutes,
 } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
-import { EditIcon, MasksIcon, TickIcon } from '@masknet/icons'
+import { Edit as EditIcon, Masks as MasksIcon, Tick as TickIcon } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 import { useHover } from 'react-use'

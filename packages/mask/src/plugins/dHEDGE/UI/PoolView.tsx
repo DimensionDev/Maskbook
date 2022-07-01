@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RefreshIcon } from '@masknet/icons'
+import { Refresh as RefreshIcon } from '@masknet/icons'
 import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'

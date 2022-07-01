@@ -21,7 +21,7 @@ import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { Services } from '../../../API'
 import PrintIcon from '@mui/icons-material/Print'
 import { PreviewDialog } from './PreviewDialog'
-import { DownloadIcon } from '@masknet/icons'
+import { Download as DownloadIcon } from '@masknet/icons'
 import { useAsync } from 'react-use'
 
 export const MnemonicRevealForm = memo(() => {

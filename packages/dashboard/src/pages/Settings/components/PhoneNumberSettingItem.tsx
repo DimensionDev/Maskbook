@@ -3,7 +3,7 @@ import SettingItem from './SettingItem'
 import PhoneNumberSetting from './PhoneNumberSetting'
 import { UserContext } from '../hooks/UserContext'
 import { useContext } from 'react'
-import { SettingsPhoneIcon } from '@masknet/icons'
+import { SettingsPhone as SettingsPhoneIcon } from '@masknet/icons'
 
 export default function PhoneNumberSettingItem() {
     const t = useDashboardI18N()

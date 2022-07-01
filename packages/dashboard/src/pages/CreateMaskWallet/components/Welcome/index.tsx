@@ -4,7 +4,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
-import { MaskNotSquareIcon } from '@masknet/icons'
+import { Mask as MaskNotSquareIcon } from '@masknet/icons'
 import urlcat from 'urlcat'
 import { openWindow } from '@masknet/shared-base-ui'
 
