@@ -88,7 +88,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
                     style: {
                         backgroundColor: theme.palette.maskColor.main,
                         ['&:hover']: {
-                            backgroundColor: theme.palette.text.primary,
+                            backgroundColor: theme.palette.maskColor.main,
                             boxShadow:
                                 theme.palette.mode === 'dark'
                                     ? '0 8px 25px rgba(255, 255, 255, 0.2)'
@@ -98,6 +98,24 @@ export function useClassicMaskSNSTheme(mode?: string) {
                             background: theme.palette.maskColor.primaryMain,
                             opacity: 0.6,
                             color: theme.palette.background.paper,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'contained',
+                        color: 'dark',
+                    },
+                    style: {
+                        backgroundColor: theme.palette.maskColor.dark,
+                        ['&:hover']: {
+                            backgroundColor: theme.palette.maskColor.dark,
+                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: theme.palette.maskColor.secondaryDark,
+                            opacity: 0.6,
+                            color: theme.palette.maskColor.white,
                         },
                     },
                 },
@@ -727,7 +745,7 @@ export function useClassicMaskSNSTheme(mode?: string) {
 }
 
 export function useClassicMaskSNSPluginTheme() {
-    const theme = useClassicMaskSNSTheme('light')
+    const theme = useClassicMaskSNSTheme()
     return unstable_createMuiStrictModeTheme(
         merge(cloneDeep(theme), {
             components: {

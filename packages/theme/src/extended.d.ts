@@ -9,6 +9,7 @@ declare global {
         interface ButtonPropsColorOverrides {
             warning: true
             error: true
+            dark: true
         }
     }
     module '@mui/material/Paper' {

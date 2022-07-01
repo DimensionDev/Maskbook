@@ -37,6 +37,7 @@ export const MaskColors = {
             danger: '#FF3545',
             white: '#ffffff',
             dark: '#07101B',
+            secondaryDark: '#767F8D',
         },
         background: {
             default: '#F9F9F9',
@@ -85,6 +86,7 @@ export const MaskColors = {
             danger: '#FF3545',
             white: '#ffffff',
             dark: '#07101B',
+            secondaryDark: '#767F8D',
         },
         text: {
             primary: '#F5F5F5',
