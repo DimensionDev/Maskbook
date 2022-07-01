@@ -4,16 +4,18 @@ import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
 import { useAccount, useChainId, useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
-import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
+import { PluginWalletStatusBar } from '../../../../utils'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -89,6 +91,7 @@ export function DrawDialog(props: DrawDialogProps) {
     const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
+    const t = useI18N()
 
     const {
         paymentCount,
@@ -254,24 +257,27 @@ export function DrawDialog(props: DrawDialogProps) {
                         )}
                     </Box>
                 </Box>
-
-                <WalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
-                        spender={MASK_BOX_CONTRACT_ADDRESS}
-                        token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
-                        ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
-                        <ActionButton
-                            size="medium"
-                            fullWidth
-                            sx={{ marginTop: 2 }}
-                            disabled={isBalanceInsufficient || drawing}
-                            onClick={onSubmit}>
-                            {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
-                        </ActionButton>
-                    </EthereumERC20TokenApprovedBoundary>
-                </WalletConnectedBoundary>
             </DialogContent>
+            <DialogActions style={{ padding: 0 }}>
+                <PluginWalletStatusBar>
+                    <WalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
+                            spender={MASK_BOX_CONTRACT_ADDRESS}
+                            token={paymentTokenDetailed?.schema === SchemaType.ERC20 ? paymentTokenDetailed : undefined}
+                            ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
+                            <ActionButton
+                                size="medium"
+                                fullWidth
+                                sx={{ marginTop: 2 }}
+                                disabled={isBalanceInsufficient || drawing}
+                                onClick={onSubmit}>
+                                {isBalanceInsufficient ? t.insufficient_balance() : drawing ? t.drawing() : t.draw()}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </PluginWalletStatusBar>
+            </DialogActions>
         </InjectedDialog>
     )
 }

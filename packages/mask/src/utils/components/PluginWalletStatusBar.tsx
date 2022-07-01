@@ -19,11 +19,12 @@ import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
-import type { PropsWithChildren } from 'react'
+import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
     actionProps?: {}
+    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '0 0 12px 12px',
         alignItems: 'center',
         justifyContent: 'space-between',
+        flex: 1,
     },
     wallet: {
         display: 'flex',
@@ -95,9 +97,10 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 8,
     },
 }))
-export function PluginWalletStatusBar({ className, children }: WalletStatusBarProps) {
+export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
+    const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
-
+    const [emptyChildren, setEmptyChildren] = useState(false)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     const account = useAccount(currentPluginId)
@@ -121,24 +124,32 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
 
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
+    useLayoutEffect(() => {
+        if (ref.current?.children.length && ref.current.children.length > 1) {
+            setEmptyChildren(false)
+        } else {
+            setEmptyChildren(true)
+        }
+    }, [children])
+
     return (
         <Box className={cx(classes.root, className)}>
             {account ? (
                 <>
-                    <Box className={classes.wallet} onClick={openSelectProviderDialog}>
+                    <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
                         <WalletIcon
                             size={30}
                             badgeSize={12}
                             mainIcon={providerDescriptor?.icon}
                             badgeIcon={networkDescriptor?.icon}
-                            iconFilterColor={providerDescriptor.iconFilterColor}
+                            iconFilterColor={providerDescriptor?.iconFilterColor}
                         />
                         <Box className={classes.description}>
                             <Typography className={classes.walletName}>
                                 <span>
                                     {providerType === ProviderType.MaskWallet
-                                        ? wallet?.name ??
-                                          domain ??
+                                        ? domain ??
+                                          wallet?.name ??
                                           providerDescriptor?.name ??
                                           Others?.formatAddress(account, 4)
                                         : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
@@ -169,7 +180,15 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
                             </Typography>
                         </Box>
                     </Box>
-                    <Box className={classes.action}>{children}</Box>
+                    <Box className={classes.action} ref={ref}>
+                        <Button
+                            fullWidth
+                            onClick={openSelectProviderDialog}
+                            style={{ display: !emptyChildren ? 'none' : undefined }}>
+                            {t('wallet_status_button_change')}
+                        </Button>
+                        {children}
+                    </Box>
                 </>
             ) : (
                 <Button fullWidth onClick={openSelectProviderDialog}>

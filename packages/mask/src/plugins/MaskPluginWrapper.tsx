@@ -1,8 +1,8 @@
-import { Typography, SnackbarContent, Link, useTheme } from '@mui/material'
+import { Typography, SnackbarContent, Link, ThemeProvider } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useI18N } from '../utils'
+import { useClassicMaskSNSPluginTheme, useI18N } from '../utils'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
@@ -84,7 +84,6 @@ const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) =
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
     const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
-    const theme = useTheme()
     const { t } = useI18N()
 
     const publisherInfo = useMemo(() => {
@@ -153,6 +152,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
+        const theme = useClassicMaskSNSPluginTheme()
         const refItem = useMemo((): PluginWrapperMethods => {
             return {
                 setWidth,
@@ -164,15 +164,17 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         useImperativeHandle(ref, () => refItem, [refItem])
 
         return (
-            <MaskPostExtraInfoWrapper
-                wrapperProps={wrapperProps}
-                open={open}
-                title={title || t(ID, name)}
-                width={width}
-                publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
-                publisherLink={publisher?.link}
-                children={props.children}
-            />
+            <ThemeProvider theme={theme}>
+                <MaskPostExtraInfoWrapper
+                    wrapperProps={wrapperProps}
+                    open={open}
+                    title={title || t(ID, name)}
+                    width={width}
+                    publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
+                    publisherLink={publisher?.link}
+                    children={props.children}
+                />
+            </ThemeProvider>
         )
     },
 )

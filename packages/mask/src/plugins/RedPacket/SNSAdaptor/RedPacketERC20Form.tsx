@@ -15,15 +15,16 @@ import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelectFungibleToken } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
-import { useI18N as useBaseI18n } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -31,15 +32,11 @@ const duration = 60 * 60 * 24
 const useStyles = makeStyles()((theme) => ({
     field: {
         display: 'flex',
-        margin: theme.spacing(1, 0),
-    },
-    line: {
-        display: 'flex',
-        margin: theme.spacing(1),
+        gap: 16,
+        margin: 16,
     },
     input: {
         flex: 1,
-        padding: theme.spacing(0.5),
     },
 
     tip: {
@@ -47,7 +44,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     button: {
-        marginTop: theme.spacing(1.5),
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
     selectShrinkLabel: {
         top: 6,
@@ -71,6 +70,14 @@ const useStyles = makeStyles()((theme) => ({
         '& > p': {
             marginRight: 5,
             color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+    },
+    unlockContainer: {
+        margin: 0,
+        columnGap: 16,
+        flexFlow: 'unset',
+        ['& > div']: {
+            padding: '0px !important',
         },
     },
 }))
@@ -280,21 +287,30 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </div>
-            <WalletConnectedBoundary>
-                <EthereumERC20TokenApprovedBoundary
-                    amount={totalAmount.toFixed()}
-                    token={token?.schema === SchemaType.ERC20 ? token : undefined}
-                    spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                    <ActionButton
-                        size="large"
-                        className={classes.button}
-                        fullWidth
-                        disabled={!!validationMessage}
-                        onClick={onClick}>
-                        {validationMessage || t.next()}
-                    </ActionButton>
-                </EthereumERC20TokenApprovedBoundary>
-            </WalletConnectedBoundary>
+            <PluginWalletStatusBar>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <WalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            onlyInfiniteUnlock
+                            amount={totalAmount.toFixed()}
+                            classes={{ container: classes.unlockContainer }}
+                            ActionButtonProps={{
+                                size: 'medium',
+                            }}
+                            token={token?.schema === SchemaType.ERC20 ? token : undefined}
+                            spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                            <ActionButton
+                                size="large"
+                                className={classes.button}
+                                fullWidth
+                                disabled={!!validationMessage}
+                                onClick={onClick}>
+                                {validationMessage || t.next()}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
         </>
     )
 }

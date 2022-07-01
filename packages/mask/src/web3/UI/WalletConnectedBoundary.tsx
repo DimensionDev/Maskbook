@@ -17,16 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: 0,
     },
-    timeline: {
-        backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
-        fontSize: 14,
-        fontWeight: 700,
-        width: '100%',
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
-        },
-    },
 }))
 
 export interface WalletConnectedBoundaryProps
@@ -36,11 +26,10 @@ export interface WalletConnectedBoundaryProps
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
-    renderInTimeline?: boolean
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, renderInTimeline = false } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -58,10 +47,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    // TODO: will remove  this and extract new boundary for timeline
-    const buttonClass = classNames(
-        classNames(classes.button, classes.connectWallet, renderInTimeline ? classes.timeline : null),
-    )
+    const buttonClass = classNames(classNames(classes.button, classes.connectWallet))
 
     if (!account)
         return (

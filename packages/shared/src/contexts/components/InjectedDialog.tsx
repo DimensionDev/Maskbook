@@ -1,5 +1,4 @@
 import { EnhanceableSite, isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
-import classNames from 'classnames'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { omit } from 'lodash-unified'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
@@ -21,6 +20,7 @@ import { Children, cloneElement, useCallback } from 'react'
 import { useSharedI18N } from '../../locales'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
+import classnames from 'classnames'
 
 interface StyleProps {
     clean: boolean
@@ -32,17 +32,25 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         display: 'flex',
         gridTemplateColumns: '50px auto 50px',
     },
-    dialogTitleWithTabs: {
-        paddingBottom: '0px !important',
-        rowGap: 16,
-    },
     dialogTitleEndingContent: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
+    dialogTitleWithTabs: {
+        paddingBottom: '0 !important',
+        gridRowGap: 16,
+        gridTemplateRows: '1fr 1fr',
+        gridTemplateAreas: `
+            ". . ."
+            "tabs tabs tabs"
+        `,
+    },
     dialogContent: {
         overscrollBehavior: 'contain',
+    },
+    dialogTitleTabs: {
+        gridArea: 'tabs',
     },
     dialogTitleTypography: {
         flex: 1,
@@ -104,8 +112,8 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     titleTail?: React.ReactChild | null
+    titleTabs?: React.ReactChild | null
     disableBackdropClick?: boolean
-    titleTabs?: Array<{ label: string; isActive: boolean; clickHandler(): void }>
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
     isOnBack?: boolean
@@ -123,8 +131,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleEndingContent,
-        dialogTitleTypography,
+        dialogTitleTabs,
         dialogTitleWithTabs,
+        dialogTitleTypography,
         dialogBackdropRoot,
         container,
         ...dialogClasses
@@ -171,7 +180,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 disableEnforceFocus
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
-                    onClose?.()
+                    !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
                 onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{
@@ -184,10 +193,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className="dashboard-dialog-title-hook"
-                            classes={{
-                                root: classNames(dialogTitle, titleTabs ? dialogTitleWithTabs : ''),
-                            }}
+                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
+                            classes={{ root: dialogTitle }}
                             style={{
                                 border: isDashboard || disableTitleBorder ? 'none' : undefined,
                                 fontSize: isDashboard ? 24 : undefined,
@@ -210,21 +217,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {title}
                             </Typography>
                             <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
-                            {titleTabs ? (
-                                <div className={dialogClasses.tabs}>
-                                    {titleTabs.map((tab, i) => (
-                                        <div
-                                            key={i}
-                                            onClick={tab.clickHandler}
-                                            className={classNames(
-                                                dialogClasses.tab,
-                                                tab.isActive ? dialogClasses.activeTab : '',
-                                            )}>
-                                            {tab.label}
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : null}
+                            {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
                         </DialogTitle>
                     ) : null}
 

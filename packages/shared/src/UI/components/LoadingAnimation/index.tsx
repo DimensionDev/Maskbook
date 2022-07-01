@@ -21,3 +21,8 @@ export const LoadingAnimation = (props: SvgIconProps) => {
     const { classes } = useStyles()
     return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
 }
+
+export const CircleLoadingAnimation = (props: SvgIconProps) => {
+    const { classes } = useStyles()
+    return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
+}

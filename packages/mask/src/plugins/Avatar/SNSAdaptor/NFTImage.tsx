@@ -3,36 +3,33 @@ import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectedIcon } from '../assets/selected'
 import type { AllChainsNonFungibleToken } from '../types'
+import { Box } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
-    imgBackground: {
+    root: {
         position: 'relative',
-        padding: 6,
-        borderRadius: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     icon: {
         position: 'absolute',
-        top: 8,
-        right: 13,
+        top: 5,
+        right: 5,
         width: 20,
         height: 20,
         color: theme.palette.primary.main,
     },
     image: {
-        width: 97,
-        height: 97,
+        width: 100,
+        height: 100,
         objectFit: 'cover',
-        borderRadius: '100%',
         boxSizing: 'border-box',
         '&:hover': {
             border: `1px solid ${theme.palette.primary.main}`,
         },
+        borderRadius: 12,
     },
     selected: {
         border: `1px solid ${theme.palette.primary.main}`,
+        borderRadius: 12,
     },
 }))
 
@@ -58,13 +55,13 @@ export function NFTImage(props: NFTImageProps) {
     const { classes } = useStyles()
 
     return (
-        <div className={classes.imgBackground}>
+        <Box className={classes.root}>
             <img
                 onClick={() => onChange(token)}
                 src={token.metadata?.imageURL}
                 className={classNames(classes.image, isSameNFT(pluginId, token, selectedToken) ? classes.selected : '')}
             />
             {showBadge && isSameNFT(pluginId, token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
-        </div>
+        </Box>
     )
 }

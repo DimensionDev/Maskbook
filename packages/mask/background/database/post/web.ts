@@ -99,11 +99,15 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     const store = transaction.objectStore('post')
                     for await (const cursor of store) {
                         const v4Record: PostDB_HistoryTypes.Version4PostRecord = cursor.value as any
-                        const data = knowledge?.data!
+                        const data = knowledge?.data
+                        if (!data) {
+                            await cursor.delete()
+                            continue
+                        }
                         if (!v4Record.postCryptoKey) continue
                         const v5Record: PostDB_HistoryTypes.Version5PostRecord = {
                             ...v4Record,
-                            postCryptoKey: data.get(v4Record.identifier)!,
+                            postCryptoKey: data.get(v4Record.identifier),
                         }
                         if (!v5Record.postCryptoKey) delete v5Record.postCryptoKey
                         await cursor.update(v5Record as any)
@@ -126,7 +130,8 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                         ).toText()
                         cursor.update(cursor.value)
                     }
-                    store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
+                    if (!store.indexNames.contains('persona, date'))
+                        store.createIndex('persona, date', ['encryptBy', 'foundAt'], { unique: false })
                 }
             },
         }),
@@ -149,6 +154,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
         }
         return undefined
     },
+    'maskbook-post-v2',
 )
 
 /** @internal */

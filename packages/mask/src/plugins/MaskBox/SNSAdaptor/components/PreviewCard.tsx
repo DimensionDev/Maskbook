@@ -223,14 +223,6 @@ export function PreviewCard(props: PreviewCardProps) {
                             loading={isOpening}
                             size="medium"
                             fullWidth
-                            sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
-                                color: 'white',
-                                width: '100%',
-                                '&:hover': {
-                                    background: theme.palette.maskColor.dark,
-                                },
-                            }}
                             disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>
                             {(() => {

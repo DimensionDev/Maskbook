@@ -27,6 +27,8 @@ const useStyles = makeStyles()((theme) => ({
 export interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {
     onChange(v: EncryptionMethodType): void
     method: EncryptionMethodType
+    textDisabled: boolean
+    imageDisabled: boolean
 }
 export enum EncryptionMethodType {
     Text = 'text',
@@ -54,12 +56,14 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                     value={EncryptionMethodType.Text}
                     title={t('compose_encrypt_method_text')}
                     subTitle={t('compose_encrypt_method_text_sub_title')}
+                    disabled={props.textDisabled}
                 />
                 <div className={classes.divider} />
                 <PopoverListItem
                     value={EncryptionMethodType.Image}
                     title={t('compose_encrypt_method_image')}
                     subTitle={t('compose_encrypt_method_image_sub_title')}
+                    disabled={props.imageDisabled}
                 />
             </PopoverListTrigger>
         </>

@@ -4,6 +4,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
+import { useUpdateEffect } from 'react-use'
 
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
@@ -19,6 +20,13 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
+
+    useUpdateEffect(() => {
+        setTab((prev) => {
+            if (prev !== chainId.toString()) return chainId.toString()
+            return prev
+        })
+    }, [chainId])
 
     return (
         <TabContext value={currentTab}>

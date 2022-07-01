@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Button, CircularProgress } from '@mui/material'
+import { Box, Button, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import CheckIcon from '@mui/icons-material/Check'
@@ -8,6 +8,7 @@ import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
+import { CircleLoadingAnimation } from '@masknet/shared'
 
 const circle = <CircularProgress color="inherit" size={18} />
 
@@ -63,25 +64,45 @@ export interface ActionButtonProps extends ButtonProps {
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
 }
 
+const useActionButtonStyles = makeStyles()((theme) => ({
+    loading: {
+        ['& > *']: {
+            opacity: 0.3,
+        },
+    },
+}))
+
 export default function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
     props: ActionButtonProps & PropsOf<T>,
 ) {
     const { width, loading, children, className, style, ...rest } = props
+    const { classes, cx } = useActionButtonStyles()
     return (
         <Button
             disableElevation
-            disabled={loading}
-            startIcon={loading && circle}
-            className={'actionButton ' + className}
-            style={{ width, ...style }}
-            children={children}
+            className={cx('actionButton', className, loading ? classes.loading : undefined)}
+            style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
             {...rest}
-        />
+            disabled={rest.disabled && !loading}>
+            {loading ? (
+                <Box
+                    position="absolute"
+                    width="100%"
+                    height="100%"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    style={{ opacity: 1 }}>
+                    <CircleLoadingAnimation />
+                </Box>
+            ) : null}
+            <span>{children}</span>
+        </Button>
     )
 }
 
 export interface ActionButtonPromiseProps extends ButtonProps {
-    executor: () => Promise<void>
+    executor: () => Promise<ActionButtonPromiseState | undefined | void>
     init: React.ReactChild
     complete: React.ReactChild
     completeOnClick?: 'use executor' | (() => void)
@@ -124,8 +145,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            () => {
-                setState('complete')
+            (status?: ActionButtonPromiseState | void) => {
+                setState(status ?? 'complete')
                 onComplete?.()
             },
             (error) => {
@@ -148,10 +169,19 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return <Button {...b} startIcon={waitingIcon} disabled={!waitingOnClick} children={waiting} onClick={cancel} />
+        return (
+            <ActionButton
+                {...b}
+                startIcon={waitingIcon}
+                loading
+                disabled={!waitingOnClick}
+                children={waiting}
+                onClick={cancel}
+            />
+        )
     if (state === 'complete')
         return (
-            <Button
+            <ActionButton
                 {...b}
                 disabled={!completeClick}
                 startIcon={completeIcon}
@@ -162,7 +192,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         )
     if (state === 'fail')
         return (
-            <Button
+            <ActionButton
                 {...b}
                 disabled={!failClick}
                 startIcon={failIcon}
@@ -171,7 +201,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onClick={failClick}
             />
         )
-    return <Button {...b} children={init} onClick={run} />
+    return <ActionButton {...b} children={init} onClick={run} />
 }
 const useStyles = makeStyles()({
     success: {
