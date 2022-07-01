@@ -25,6 +25,15 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
     actionProps?: {}
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
+    showConnect?: boolean
+    walletInfo?: {
+        providerIcon?: URL
+        networkIcon?: URL
+        iconFilterColor?: string
+        name?: string
+        account?: string
+        link?: string
+    }
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -97,7 +106,13 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 8,
     },
 }))
-export function PluginWalletStatusBar({ className, children, onClick }: WalletStatusBarProps) {
+export function PluginWalletStatusBar({
+    className,
+    children,
+    onClick,
+    showConnect = false,
+    walletInfo,
+}: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
@@ -130,32 +145,50 @@ export function PluginWalletStatusBar({ className, children, onClick }: WalletSt
 
     return (
         <Box className={cx(classes.root, className)}>
-            {account ? (
+            {account || !showConnect ? (
                 <>
                     <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
-                        <WalletIcon
-                            size={30}
-                            badgeSize={12}
-                            mainIcon={providerDescriptor?.icon}
-                            badgeIcon={networkDescriptor?.icon}
-                            iconFilterColor={providerDescriptor?.iconFilterColor}
-                        />
+                        {walletInfo ? (
+                            <WalletIcon
+                                size={30}
+                                badgeSize={12}
+                                mainIcon={walletInfo.providerIcon}
+                                badgeIcon={walletInfo.networkIcon}
+                                iconFilterColor={walletInfo.iconFilterColor}
+                            />
+                        ) : (
+                            <WalletIcon
+                                size={30}
+                                badgeSize={12}
+                                mainIcon={providerDescriptor?.icon}
+                                badgeIcon={networkDescriptor?.icon}
+                                iconFilterColor={providerDescriptor?.iconFilterColor}
+                            />
+                        )}
                         <Box className={classes.description}>
                             <Typography className={classes.walletName}>
-                                <span>
-                                    {providerType === ProviderType.MaskWallet
-                                        ? domain ??
-                                          wallet?.name ??
-                                          providerDescriptor?.name ??
-                                          Others?.formatAddress(account, 4)
-                                        : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
-                                </span>
+                                {walletInfo ? (
+                                    walletInfo.name
+                                ) : (
+                                    <span>
+                                        {providerType === ProviderType.MaskWallet
+                                            ? domain ??
+                                              wallet?.name ??
+                                              providerDescriptor?.name ??
+                                              Others?.formatAddress(account, 4)
+                                            : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
+                                    </span>
+                                )}
                                 <ArrowDropIcon />
                             </Typography>
                             <Typography className={classes.address}>
-                                <span>{Others?.formatAddress(account, 4)}</span>
+                                <span>{walletInfo ? walletInfo.account : Others?.formatAddress(account, 4)}</span>
                                 <Link
-                                    href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                                    href={
+                                        walletInfo
+                                            ? walletInfo.link
+                                            : Others?.explorerResolver.addressLink?.(chainId, account) ?? ''
+                                    }
                                     target="_blank"
                                     title="View on Explorer"
                                     rel="noopener noreferrer"
