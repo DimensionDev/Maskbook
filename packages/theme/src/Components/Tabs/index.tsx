@@ -17,7 +17,7 @@ import { FlexibleTab } from './FlexibleTab'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import { useClickAway, useWindowSize } from 'react-use'
 import { RoundTab } from './RoundTab'
-import { get, omit } from 'lodash-unified'
+import { get } from 'lodash-unified'
 
 type MaskTabVariant = 'base' | 'flexible' | 'round'
 
@@ -185,7 +185,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (child.type === Tab) {
             const C = tabMapping[variant]
             return (
-                <C value={child.props.value} {...omit(extra, 'isVisitable')}>
+                <C value={child.props.value} {...extra}>
                     {child.props.label}
                 </C>
             )

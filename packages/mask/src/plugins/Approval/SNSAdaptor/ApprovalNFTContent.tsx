@@ -1,6 +1,7 @@
 import { ListItem, List, Typography, Avatar, Link, Button } from '@mui/material'
-import { useERC721ContractSetApproveForAllCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import { useAccount, useWeb3State, useNetworkDescriptor, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
@@ -41,7 +42,6 @@ interface ApprovalNFTItemProps {
 }
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
-    const { targetChainId: currentChainId } = TargetChainIdContext.useContainer()
     const { networkDescriptor, nft, chainId } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
@@ -100,11 +100,27 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     <Typography className={classes.primaryText}>{nft.amount}</Typography>
                 </div>
             </div>
-            {currentChainId === chainId ? (
+
+            <ChainBoundary
+                expectedChainId={chainId}
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                classes={{ switchButton: classes.button }}
+                ActionButtonPromiseProps={{
+                    fullWidth: false,
+                    init: t.revoke(),
+                    startIcon: null,
+                    failIcon: null,
+                    waitingIcon: null,
+                    className: classes.button,
+                    failedButtonStyle: classes.button,
+                    waiting: t.revoking(),
+                    complete: t.revoke(),
+                    failed: t.revoke(),
+                }}>
                 <Button onClick={approveCallback} disabled={approveState.loading} className={classes.button}>
                     {approveState.loading ? t.revoking() : t.revoke()}
                 </Button>
-            ) : null}
+            </ChainBoundary>
         </ListItem>
     )
 }

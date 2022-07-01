@@ -1,6 +1,7 @@
 import { ListItem, List, Typography, Link, Button, Avatar } from '@mui/material'
-import { TargetChainIdContext, useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
+import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import BigNumber from 'bignumber.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useState } from 'react'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
@@ -42,7 +43,6 @@ interface ApprovalTokenItemProps {
 }
 
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
-    const { targetChainId: currentChainId } = TargetChainIdContext.useContainer()
     const { networkDescriptor, spender, chainId } = props
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
@@ -57,6 +57,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         '0',
         spender.id,
         () => setCancelled(true),
+        chainId,
     )
 
     return cancelled ? null : (
@@ -95,15 +96,29 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         </Typography>
                     </div>
                 </div>
-
-                {currentChainId === chainId ? (
+                <ChainBoundary
+                    expectedChainId={chainId}
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    classes={{ switchButton: classes.button }}
+                    ActionButtonPromiseProps={{
+                        fullWidth: false,
+                        init: t.revoke(),
+                        startIcon: null,
+                        failIcon: null,
+                        waitingIcon: null,
+                        className: classes.button,
+                        failedButtonStyle: classes.button,
+                        waiting: t.revoking(),
+                        complete: t.revoke(),
+                        failed: t.revoke(),
+                    }}>
                     <Button
                         onClick={() => approveCallback(true, true)}
                         disabled={transactionState.loadingApprove}
                         className={classes.button}>
                         {transactionState.loadingApprove ? t.revoking() : t.revoke()}
                     </Button>
-                ) : null}
+                </ChainBoundary>
             </ListItem>
         </div>
     )

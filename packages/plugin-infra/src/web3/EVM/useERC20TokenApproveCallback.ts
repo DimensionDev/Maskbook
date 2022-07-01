@@ -8,7 +8,7 @@ import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useChainId } from '../useChainId'
 import { useAccount } from '../useAccount'
 import { useFungibleTokenBalance } from '../../entry-web3'
-import { TransactionEventType } from '@masknet/web3-shared-evm'
+import { TransactionEventType, ChainId } from '@masknet/web3-shared-evm'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -21,8 +21,14 @@ export enum ApproveStateType {
     FAILED = 5,
 }
 
-export function useERC20TokenApproveCallback(address: string, amount: string, spender: string, callback?: () => void) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+export function useERC20TokenApproveCallback(
+    address: string,
+    amount: string,
+    spender: string,
+    callback?: () => void,
+    _chainId?: ChainId,
+) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const erc20Contract = useERC20TokenContract(chainId, address)
 

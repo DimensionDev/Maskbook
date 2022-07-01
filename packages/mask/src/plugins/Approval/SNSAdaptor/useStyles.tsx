@@ -197,6 +197,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         button: {
             color: theme.palette.common.white,
             background: theme.palette.common.black,
+            flex: 'initial !important',
             '&:hover': {
                 color: theme.palette.common.white,
                 background: theme.palette.common.black,
