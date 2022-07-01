@@ -1,9 +1,9 @@
-import { COIN_GECKO_BASE_URL } from '../../constants'
-import { Flags } from '../../../../../shared'
+import { COINGECKO_URL_BASE } from './constants'
+import { getTraderAllAPICachedFlag } from '../helpers'
 
 // #region get currency
 export async function getAllCurrencies() {
-    const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, {
+    const response = await fetch(`${COINGECKO_URL_BASE}/simple/supported_vs_currencies`, {
         cache: 'force-cache',
     })
     return response.json() as Promise<string[]>
@@ -18,7 +18,7 @@ export interface Coin {
 }
 
 export async function getAllCoins() {
-    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/list`, { cache: 'force-cache' })
+    const response = await fetch(`${COINGECKO_URL_BASE}/coins/list`, { cache: 'force-cache' })
     return response.json() as Promise<Coin[]>
 }
 // #endregion
@@ -112,8 +112,8 @@ export interface CoinInfo {
 
 export async function getCoinInfo(coinId: string) {
     const response = await fetch(
-        `${COIN_GECKO_BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
-        { cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default' },
+        `${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
+        { cache: getTraderAllAPICachedFlag() },
     )
     return response.json() as Promise<CoinInfo>
 }
@@ -127,8 +127,8 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     params.append('vs_currency', currencyId)
     params.append('days', String(days))
 
-    const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/${coinId}/market_chart?${params.toString()}`, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    const response = await fetch(`${COINGECKO_URL_BASE}/coins/${coinId}/market_chart?${params.toString()}`, {
+        cache: getTraderAllAPICachedFlag(),
     })
     return response.json() as Promise<{
         market_caps: Stat[]

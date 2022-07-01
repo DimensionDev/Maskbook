@@ -1,7 +1,7 @@
 import type { DataProvider } from '@masknet/public-api'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { CardActions, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
+import { Box, useTheme } from '@mui/system'
 import type { FC } from 'react'
 import { useI18N } from '../../../../utils'
 import { resolveDataProviderName } from '../../pipes'
@@ -10,60 +10,64 @@ import { FootnoteMenu, FootnoteMenuOption } from './FootnoteMenu'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        footer: {
+        source: {
             justifyContent: 'space-between',
         },
-        footnote: {
+        sourceNote: {
             color: theme.palette.text.secondary,
-            fontSize: 10,
-            marginRight: theme.spacing(0.5),
+            fontSize: 14,
+            fontWeight: 700,
         },
-        footMenu: {
+        sourceMenu: {
             color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
+            fontSize: 14,
+            fontWeight: 'bolder',
         },
-        footName: {
-            marginLeft: theme.spacing(0.5),
+        sourceName: {
+            fontSize: 14,
+            fontWeight: 700,
+            color: theme.palette.text.primary,
         },
     }
 })
 
-export interface TradeFooterProps extends withClasses<'footer'> {
+export interface TradeDataSourceProps extends withClasses<'source'> {
     showDataProviderIcon?: boolean
     dataProvider?: DataProvider
     dataProviders?: DataProvider[]
     onDataProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const TradeFooter: FC<TradeFooterProps> = (props) => {
+export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
+    const theme = useTheme()
     const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <CardActions className={classes.footer}>
-            <div />
-            {/* actions on the  */}
+        <Box className={classes.source}>
             {showDataProviderIcon ? (
-                <div className={classes.footMenu}>
-                    <Typography className={classes.footnote}>{t('plugin_trader_data_source')}</Typography>
+                <Stack
+                    className={classes.sourceMenu}
+                    display="inline-flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={0.5}>
+                    <Typography className={classes.sourceNote}>{t('plugin_trader_data_source')}</Typography>
                     <FootnoteMenu
                         options={dataProviders.map((x) => ({
                             name: (
-                                <>
-                                    <DataProviderIcon provider={x} />
-                                    <span className={classes.footName}>{resolveDataProviderName(x)}</span>
-                                </>
+                                <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
+                                    <DataProviderIcon provider={x} size={20} />
+                                    <Typography className={classes.sourceName}>{resolveDataProviderName(x)}</Typography>
+                                </Stack>
                             ),
                             value: x,
                         }))}
                         selectedIndex={typeof dataProvider !== 'undefined' ? dataProviders.indexOf(dataProvider) : -1}
                         onChange={onDataProviderChange}
                     />
-                    <ArrowDropDownIcon />
-                </div>
+                </Stack>
             ) : null}
-        </CardActions>
+        </Box>
     )
 }

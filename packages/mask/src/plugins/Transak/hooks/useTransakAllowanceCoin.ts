@@ -10,12 +10,12 @@ const URL = ENV[process.env.NODE_ENV]
 
 export function useTransakAllowanceCoin(token: { address?: string; symbol: string }): boolean {
     return useAsync(async () => {
-        if (token.address) {
+        if (token.symbol) {
             const allowanceList = await fetch(URL, { method: 'GET' })
                 .then((res) => res.json())
                 .then((res) => res.response)
             return allowanceList.map((val: { symbol: string }) => val.symbol).includes(token.symbol)
         }
         return false
-    }).value
+    }, [JSON.stringify(token)]).value
 }

@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
-import type { Coin, Currency, Stat } from '../../types'
-import type { Pair } from '../uniswap-v2-subgraph'
+import type { Pair } from './uniswap-v2-subgraph'
 import {
     fetchEtherPriceByBlockNumber,
     fetchEtherPricesByBlockNumbers,
@@ -10,15 +9,16 @@ import {
     fetchPricesByBlocks,
     fetchTokenData,
     fetchTokensByKeyword,
-} from '../uniswap-v2-subgraph'
+} from './uniswap-v2-subgraph'
 import {
     fetchBlockNumberByTimestamp,
     fetchBlockNumbersByTimestamps,
     fetchBlockNumbersObjectByTimestamps,
-} from '../blocks'
-import { fetchLatestBlocks } from '../uniswap-health'
+} from './blocks'
+import { fetchLatestBlocks } from './uniswap-health'
 import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import type { TrendingAPI } from '../types'
 
 type Value = string | number | BigNumber | undefined
 
@@ -108,7 +108,7 @@ export function getAllCoins() {
     throw new Error('For uniswap all coins are available by default.')
 }
 
-export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): Promise<Coin[]> {
+export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
     keyword = keyword.toLowerCase()
     if (keyword === 'mask') {
         return [
@@ -125,7 +125,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
 
     const tokens = await fetchTokensByKeyword(chainId, keyword)
 
-    const coins: Coin[] = tokens.map((x) => ({
+    const coins: TrendingAPI.Coin[] = tokens.map((x) => ({
         ...x,
         address: x.id,
         contract_address: x.id,
@@ -353,10 +353,12 @@ export async function getBulkPairData(chainId: ChainId, pairList: string[]) {
     )
 }
 
+// the bitcoin ledger started at 03 Jan 2009
+export const BTC_FIRST_LEGER_DATE = new Date('2009-01-03T00:00:00.000Z')
+
 export async function getPriceStats(
     chainId: ChainId,
     id: string,
-    currency: Currency,
     interval: number,
     startTime: number,
     endTime: number,
@@ -389,6 +391,6 @@ export async function getPriceStats(
     const prices = await fetchPricesByBlocks(chainId, id, blocks)
 
     return prices.map(({ timestamp, derivedETH, ethPrice }) => {
-        return [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as Stat
+        return [timestamp, new BigNumber(ethPrice ?? 0).multipliedBy(derivedETH ?? 0).toNumber()] as TrendingAPI.Stat
     })
 }
