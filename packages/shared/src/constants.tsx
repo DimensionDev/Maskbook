@@ -13,11 +13,11 @@ import {
 import { EnhanceableSite } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
-    [EnhanceableSite.Facebook]: <FacebookColoredIcon />,
-    [EnhanceableSite.Minds]: <MindsIcon />,
-    [EnhanceableSite.Instagram]: <InstagramColoredIcon />,
-    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+    [EnhanceableSite.Twitter]: <TwitterColoredIcon size={18} />,
+    [EnhanceableSite.Facebook]: <FacebookColoredIcon size={18} />,
+    [EnhanceableSite.Minds]: <MindsIcon size={18} />,
+    [EnhanceableSite.Instagram]: <InstagramColoredIcon size={18} />,
+    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon size={18} />,
     [EnhanceableSite.Localhost]: null,
 }
 

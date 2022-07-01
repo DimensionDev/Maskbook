@@ -14,7 +14,7 @@ export const CreateSuccessfully = memo((props: CreateSuccessfully) => {
     return (
         <Container>
             <Icon>
-                <SuccessIcon sx={{ fontSize: 'inherit' }} />
+                <SuccessIcon color="inherit" />
             </Icon>
             <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
             <SuccessTips>{t.wallets_create_successfully_tips()}</SuccessTips>

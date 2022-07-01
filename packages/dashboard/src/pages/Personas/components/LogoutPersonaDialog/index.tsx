@@ -26,7 +26,7 @@ export interface LogoutPersonaDialogProps {
 export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClose, identifier }) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const handleLogout = useCallback(async () => {
         await Services.Identity.logoutPersona(identifier)
@@ -46,7 +46,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
             <DialogContent>
                 <Box>
                     <Box textAlign="center" py={2}>
-                        <WarningIcon className={classes.svg} sx={{ fontSize: 64 }} color="warning" />
+                        <WarningIcon className={classes.svg} size={64} color={theme.palette.warning.main} />
                     </Box>
                 </Box>
                 <Typography color="error" variant="body2" fontSize={13}>

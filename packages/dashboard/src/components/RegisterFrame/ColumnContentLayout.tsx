@@ -37,15 +37,9 @@ export const LogoBoxStyled = styled(Box)(({ theme }) => ({
     },
 }))
 
-export const SignUpAccountLogo = styled(SignUpAccountIcon)(({ theme }) => ({
-    width: '100%',
-    height: '96px',
-})) as any as typeof SignUpAccountIcon
+export const SignUpAccountLogo = () => <SignUpAccountIcon size={96} />
 
-export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
-    width: '100%',
-    height: '96px',
-})) as any as typeof RestoreBlueIcon
+export const RestoreBlueLogo = () => <RestoreBlueIcon size={96} />
 
 interface PersonaLogoBoxProps {}
 

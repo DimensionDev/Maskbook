@@ -140,7 +140,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                        startIcon={<PluginWalletConnectIcon size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_connect_wallet')}

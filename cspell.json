@@ -9,6 +9,7 @@
         "**/dist/**",
         "**/node_modules/**",
         "*generated*",
+        "*.svg",
         "patches/**",
         "pnpm-lock.yaml"
     ],

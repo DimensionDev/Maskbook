@@ -84,7 +84,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                                 formatter={formatBalance}
                             />
                         </ListItemText>
-                        <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                        <ArrowRightIcon className={classes.arrow} />
                     </ListItem>
                 )
             })}

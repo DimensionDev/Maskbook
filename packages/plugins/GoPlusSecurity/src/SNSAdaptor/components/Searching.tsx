@@ -4,7 +4,7 @@ import { Stack } from '@mui/material'
 export const Searching = () => {
     return (
         <Stack>
-            <LoadingBase sx={{ fontSize: 48 }} />
+            <LoadingBase size={48} />
         </Stack>
     )
 }

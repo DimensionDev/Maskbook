@@ -80,7 +80,7 @@ const Unlock = memo(() => {
         <>
             <main className={classes.contain}>
                 <div className={classes.header}>
-                    <MaskWalletIcon style={{ fontSize: 48 }} />
+                    <MaskWalletIcon size={48} />
                     <Typography className={classes.title}>{t('popups_wallet_unlock_wallet')}</Typography>
                 </div>
                 <div>

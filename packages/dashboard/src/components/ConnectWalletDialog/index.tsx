@@ -18,17 +18,17 @@ export const ConnectWalletList = memo(({ onConnect }: ConnectWalletListProps) =>
         <ConnectActionList>
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_metamask()}
-                icon={<MetaMaskIcon sx={{ fontSize: 'inherit' }} />}
+                icon={<MetaMaskIcon />}
                 onClick={() => onConnect(ConnectWalletTargets.MetaMask)}
             />
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_connect()}
-                icon={<WalletConnectIcon sx={{ fontSize: 'inherit' }} />}
+                icon={<WalletConnectIcon />}
                 onClick={() => onConnect(ConnectWalletTargets.Connect)}
             />
             <ConnectActionListItem
                 title={t.wallets_connect_wallet_polka()}
-                icon={<PolkaDotIcon sx={{ fontSize: 'inherit' }} />}
+                icon={<PolkaDotIcon />}
                 onClick={() => onConnect(ConnectWalletTargets.PolkaDot)}
             />
         </ConnectActionList>

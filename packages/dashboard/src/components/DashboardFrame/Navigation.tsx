@@ -131,7 +131,11 @@ export function Navigation({ onClose }: NavigationProps) {
 
     return (
         <List onClick={() => onClose?.()}>
-            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
+            {isLargeScreen && (
+                <LogoItem>
+                    {mode === 'dark' ? <MaskBannerIcon height={40} /> : <MaskNotSquareIcon height={40} />}
+                </LogoItem>
+            )}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ItemIcon>
                     {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}

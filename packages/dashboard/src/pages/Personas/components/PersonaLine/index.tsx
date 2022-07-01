@@ -67,7 +67,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                     alignItems: 'center',
                     cursor: 'pointer',
                 }}>
-                {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                <Box mr={1.5}>{SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}</Box>
                 <Typography variant="caption">
                     <Button variant="text" size="small" sx={{ fontSize: 13, p: 0 }}>
                         {t.personas_connect_to({ internalName: networkIdentifier })}
@@ -145,9 +145,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             {proof.loading ? (
                                 <LoadingAnimation />
                             ) : isProved?.is_valid ? (
-                                <NextIdPersonaVerifiedIcon />
+                                <NextIdPersonaVerifiedIcon size={16} />
                             ) : (
-                                <NextIdPersonaWarningIcon />
+                                <NextIdPersonaWarningIcon size={16} />
                             )}
                         </Typography>
                     )}
@@ -165,7 +165,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         width: '100%',
                     }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                        {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                        <Box mr={1.5}>{SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}</Box>
                         <Stack flexWrap="wrap" flexDirection="row">
                             {profileIdentifiers.map((x) => (
                                 <Typography

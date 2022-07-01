@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         (() => {
-            const icon = <CrossBridgeIcon />
+            const icon = <CrossBridgeIcon size={36} />
             const name = { i18nKey: '__plugin_name', fallback: 'Cross-chain' }
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {

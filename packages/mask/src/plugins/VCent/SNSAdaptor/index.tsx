@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_valuables_name" />,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
-            icon: <ValuablesIcon />,
+            icon: <ValuablesIcon size={36} />,
         },
     ],
 }

@@ -133,7 +133,7 @@ export const getFungibleTokenItem =
                     size="small"
                     className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
+                    loadingIndicator={<LoadingIcon size={14} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )

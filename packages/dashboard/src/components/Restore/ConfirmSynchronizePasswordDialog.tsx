@@ -18,7 +18,7 @@ export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordD
             <MaskDialog open={open} title={t.cloud_backup()} onClose={onClose} maxWidth="xs">
                 <DialogContent>
                     <Stack alignItems="center" py={2}>
-                        <SuccessIcon sx={{ fontSize: 54 }} />
+                        <SuccessIcon size={54} />
                         <Typography variant="caption" sx={{ color: (t) => getMaskColor(t).greenMain }} fontSize={24}>
                             {t.successful()}
                         </Typography>

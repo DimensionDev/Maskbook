@@ -40,16 +40,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 fallback: 'Decentralized social graph protocol for user-centric Web3.',
             },
             name: { i18nKey: '__plugin_name', fallback: 'CyberConnect' },
-            icon: <CyberConnectIcon />,
+            icon: <CyberConnectIcon size={36} />,
             tutorialLink: 'https://cyberconnect.me/',
         },
     ],
     wrapperProps: {
-        icon: (
-            <CyberConnectIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }}
-            />
-        ),
+        icon: <CyberConnectIcon size={24} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
     },

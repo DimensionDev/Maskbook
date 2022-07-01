@@ -34,7 +34,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     if (!avatar) {
         return (
             <Stack justifyContent="center" width="100%" height={size} flexDirection="row">
-                <MenuPersonasActiveIcon {...commonProps} />
+                <MenuPersonasActiveIcon size={size} {...commonProps} />
             </Stack>
         )
     }

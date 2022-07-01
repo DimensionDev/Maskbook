@@ -139,7 +139,7 @@ export const WelcomeUI = memo(
 
         return (
             <Content>
-                <MaskNotSquareIcon style={{ width: 208, height: 60 }} />
+                <MaskNotSquareIcon height={60} />
                 <IFrame ref={iframeRef} src={privacyPolicyURL} onLoad={iframeLoadHandler} />
                 <ButtonGroup>
                     <CancelButton color="secondary" onClick={cancelHandler}>

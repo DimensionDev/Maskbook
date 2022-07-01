@@ -27,7 +27,7 @@ export const LoadingPlaceholder = memo((props: LoadingPlaceholderProps) => {
 
     return (
         <main className={classes.container}>
-            <LoadingIcon style={{ color: props.iconColor ?? '#1C68F3' }} />
+            <LoadingIcon color={props.iconColor ?? '#1C68F3'} />
             <Typography variant="caption" color={props.titleColor ?? '#A6A9B6'}>
                 {props.title ?? t('loading')}
             </Typography>

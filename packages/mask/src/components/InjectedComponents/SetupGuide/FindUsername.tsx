@@ -76,7 +76,9 @@ export function FindUsername({
                                         src={avatar}
                                         className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
                                     />
-                                    {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
+                                    {connected ? (
+                                        <VerifiedIcon size={16} className={findUsernameClasses.verified} />
+                                    ) : null}
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}

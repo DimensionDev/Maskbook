@@ -79,7 +79,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Button
                             size="small"
-                            startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
+                            startIcon={<PluginIcon size={18} />}
                             variant="contained"
                             onClick={() => onClick(x)}
                             sx={{

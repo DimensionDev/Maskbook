@@ -101,7 +101,7 @@ export const WalletStartUp = memo(() => {
                     <NetworkSelector />
                 </Box>
                 <Box className={classes.item} onClick={onEnterCreateWallet}>
-                    <MaskWalletIcon sx={{ fontSize: 24 }} />
+                    <MaskWalletIcon size={24} />
                     <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
                 {!loading ? (
@@ -109,7 +109,7 @@ export const WalletStartUp = memo(() => {
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
-                            <ImportWalletIcon sx={{ fontSize: 24 }} />
+                            <ImportWalletIcon size={24} />
                             <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
                         </Box>
                     </Link>

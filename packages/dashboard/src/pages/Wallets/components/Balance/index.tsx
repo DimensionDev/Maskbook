@@ -115,7 +115,7 @@ export const Balance = memo<BalanceCardProps>(
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
                     <IconContainer sx={{ width: 48, height: 48 }}>
-                        <MaskWalletIcon size={48} sx={{ fontSize: 'inherit' }} />
+                        <MaskWalletIcon size={48} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
@@ -145,23 +145,20 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button
-                            size="small"
-                            onClick={onSend}
-                            endIcon={<SendIcon color="#fff" sx={{ fontSize: 'inherit' }} />}>
+                        <Button size="small" onClick={onSend} endIcon={<SendIcon />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon sx={{ fontSize: 'inherit' }} />}>
+                        <Button size="small" onClick={onBuy} endIcon={<CardIcon size={18} />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon sx={{ fontSize: 'inherit' }} />}>
+                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon size={18} />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon sx={{ fontSize: 'inherit' }} color={MaskColorVar.textLink} />}>
+                            endIcon={<DownloadIcon size={18} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

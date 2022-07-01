@@ -58,7 +58,7 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <InfoIcon style={{ width: 20, height: 20 }} />
+                            <InfoIcon sx={{ width: 20, height: 20 }} />
                             <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                 {t.persona_hint()}
                             </Typography>

@@ -152,7 +152,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     <div className={classes.list}>
                         {itemsAfterSearch.length === 0 ? (
                             <div className={classes.empty}>
-                                <SearchEmptyIcon style={{ width: 36, height: 36 }} />
+                                <SearchEmptyIcon size={36} />
                                 <Typography>
                                     {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                 </Typography>

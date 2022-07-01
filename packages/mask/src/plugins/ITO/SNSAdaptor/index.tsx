@@ -54,7 +54,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         label: (
             <>
-                <MarketsIcon style={{ width: 16, height: 16 }} />
+                <MarketsIcon size={16} />
                 ITO
             </>
         ),

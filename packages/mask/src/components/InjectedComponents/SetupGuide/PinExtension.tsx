@@ -47,7 +47,7 @@ export function PinExtension({ onDone }: PinExtensionProps) {
                         </li>
                         <li>
                             {t('setup_guide_pin_tip_step_find_left')}
-                            <PinIcon sx={{ fontSize: 16 }} />
+                            <PinIcon size={16} />
                             {t('setup_guide_pin_tip_step_find_right')}
                         </li>
                         <li>{t('setup_guide_pin_tip_successfully')}</li>

@@ -23,8 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     maskIcon: {
         position: 'absolute',
-        width: 16,
-        height: 16,
         right: 0,
         bottom: 0,
     },
@@ -117,10 +115,9 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         <Box className={classes.favorite}>
                             {contact.fingerprint ? (
                                 <StarIcon
-                                    sx={{
-                                        fill: contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight,
-                                        cursor: 'pointer',
-                                    }}
+                                    color={contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight}
+                                    sx={{ cursor: 'pointer' }}
+                                    aria-hidden={false}
                                     onClick={handleClickStar}
                                 />
                             ) : null}
@@ -140,7 +137,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                     last?.codePointAt(0) ?? SPACE_POINT,
                                 )}
                             </Avatar>
-                            {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}
+                            {contact.fingerprint ? <MaskBlueIcon size={16} className={classes.maskIcon} /> : null}
                         </Box>
                         <Box className={classes.info}>
                             <Typography>{contact.name}</Typography>

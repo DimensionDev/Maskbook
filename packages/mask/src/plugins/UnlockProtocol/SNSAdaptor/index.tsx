@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: (
             <>
-                <UnlockIcon style={{ width: 16, height: 16 }} />
+                <UnlockIcon size={16} />
                 {pluginName}
             </>
         ),

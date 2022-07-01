@@ -177,7 +177,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                 {t('plugin_trader_price_image_value', {
                                     percent: formatPercentage(trade.value.priceImpact),
                                 })}
-                                <TriangleWarning style={{ width: 20, height: 20 }} />
+                                <TriangleWarning size={20} />
                             </Typography>
                         ) : null}
                     </>

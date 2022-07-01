@@ -72,7 +72,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
         const { classes } = useStyles()
         return (
             <Box className={classes.container}>
-                <MaskNotSquareIcon className={classes.logo} />
+                <MaskNotSquareIcon height={40} className={classes.logo} />
                 <div className={classes.action} onClick={onActionClick}>
                     {avatar ? (
                         <Avatar src={avatar} className={classes.avatar} />

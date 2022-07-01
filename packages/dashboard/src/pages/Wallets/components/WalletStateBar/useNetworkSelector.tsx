@@ -62,7 +62,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                         onClick={() => onConnect(network.chainId)}>
                         <Stack direction="row" gap={0.5} alignItems="center">
                             <Stack justifyContent="center" width={18}>
-                                {network.chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
+                                {network.chainId === currentChainId && <SuccessIcon size={18} />}
                             </Stack>
                             <Stack justifyContent="center" alignItems="center" width={30}>
                                 <WalletIcon mainIcon={network.icon} size={30} />
