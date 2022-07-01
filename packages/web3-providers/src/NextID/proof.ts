@@ -7,6 +7,7 @@ import {
     NextIDAction,
     NextIDBindings,
     NextIDPayload,
+    NextIDPersonaBindings,
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
@@ -108,6 +109,17 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         // TODO: merge Pagination into this
         return response.unwrap().ids
+    }
+    async queryAllExistedBindingByPlatform(platform: NextIDPlatform, identity: string) {
+        const nextIDPersonaBindings: NextIDPersonaBindings[] = []
+        let page = 0
+        do {
+            const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
+            if (personaBindings.length === 0) return nextIDPersonaBindings
+            nextIDPersonaBindings.push(...personaBindings)
+            page += 1
+        } while (page > 0)
+        return []
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {

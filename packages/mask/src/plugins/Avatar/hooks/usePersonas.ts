@@ -1,11 +1,12 @@
 import { NextIDPlatform } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { first } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { context } from '../context'
-import { getNextIDBindings, sortPersonaBindings } from '../utils'
+import { sortPersonaBindings } from '../utils'
 
 export function usePersonas(userId?: string) {
     const personaConnectStatus = usePersonaConnectStatus()
@@ -14,7 +15,10 @@ export function usePersonas(userId?: string) {
     const identifier = useSubscription(context.lastRecognizedProfile)
     return useAsyncRetry(async () => {
         if (!identifier?.identifier?.userId) return
-        const personaBindings = await getNextIDBindings(userId ?? identifier.identifier.userId)
+        const personaBindings = await NextIDProof.queryAllExistedBindingByPlatform(
+            platform,
+            userId ?? identifier.identifier.userId,
+        )
 
         const currentPersonaBinding = first(
             personaBindings.sort((a, b) =>

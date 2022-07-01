@@ -2,7 +2,13 @@ import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    NextIDAction,
+    NextIDStoragePayload,
+    NextIDPayload,
+    NextIDPlatform,
+    NextIDPersonaBindings,
+} from '@masknet/shared-base'
 import type {
     Transaction,
     FungibleAsset,
@@ -248,6 +254,8 @@ export namespace NextIDBaseAPI {
         queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
 
         queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
+
+        queryAllExistedBindingByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
 
         queryIsBound(
             personaPublicKey: string,
