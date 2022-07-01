@@ -38,6 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         flex: 1,
+        maxHeight: 40,
     },
     wallet: {
         display: 'flex',

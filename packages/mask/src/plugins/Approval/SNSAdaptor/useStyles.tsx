@@ -204,26 +204,5 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
                 boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
             },
         },
-        tab: {
-            width: '50%',
-            textAlign: 'center',
-            cursor: 'pointer',
-            fontSize: 16,
-            padding: theme.spacing(1, 0),
-            fontWeight: 700,
-            lineHeight: '20px',
-            color: theme.palette.text.secondary,
-            borderRadius: '12px 12px 0px 0px',
-        },
-        activeTab: {
-            color: theme.palette.text.primary,
-            background: theme.palette.background.paper,
-            ...(theme.palette.mode === 'dark'
-                ? {
-                      boxShadow: '0px -15px 15px rgba(255, 255, 255, 0.06)',
-                      backdropFilter: 'blur(16px)',
-                  }
-                : {}),
-        },
     }),
 )

@@ -68,59 +68,61 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     )
 
     return cancelled ? null : (
-        <ListItem className={classes.listItem}>
-            <div className={classes.listItemInfo}>
-                <div>
-                    <Avatar className={classes.logoIcon} src={contractDetailed?.iconURL} />
-                    {contractDetailed ? (
-                        <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
-                    ) : null}
-                    <Typography className={classes.secondaryText}>{nft.contract_name}</Typography>
+        <div className={classes.listItemWrapper}>
+            <ListItem className={classes.listItem}>
+                <div className={classes.listItemInfo}>
+                    <div>
+                        <Avatar className={classes.logoIcon} src={contractDetailed?.iconURL} />
+                        {contractDetailed ? (
+                            <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
+                        ) : null}
+                        <Typography className={classes.secondaryText}>{nft.contract_name}</Typography>
+                    </div>
+                    <div className={classes.contractInfo}>
+                        <Typography className={classes.secondaryText}>{t.contract()}</Typography>
+                        {!nft.spender.logo ? null : typeof nft.spender.logo === 'string' ? (
+                            <img src={nft.spender.logo} className={classes.spenderLogoIcon} />
+                        ) : (
+                            <div className={classes.spenderMaskLogoIcon}>{nft.spender.logo}</div>
+                        )}
+                        <Typography className={classes.primaryText}>
+                            {nft.spender.name ?? Others?.formatAddress(nft.spender.id, 4)}
+                        </Typography>
+                        <Link
+                            className={classes.link}
+                            href={Others?.explorerResolver.addressLink?.(chainId, nft.spender.id) ?? ''}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
+                        </Link>
+                    </div>
+                    <div>
+                        <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
+                        <Typography className={classes.primaryText}>{nft.amount}</Typography>
+                    </div>
                 </div>
-                <div className={classes.contractInfo}>
-                    <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                    {!nft.spender.logo ? null : typeof nft.spender.logo === 'string' ? (
-                        <img src={nft.spender.logo} className={classes.spenderLogoIcon} />
-                    ) : (
-                        <div className={classes.spenderMaskLogoIcon}>{nft.spender.logo}</div>
-                    )}
-                    <Typography className={classes.primaryText}>
-                        {nft.spender.name ?? Others?.formatAddress(nft.spender.id, 4)}
-                    </Typography>
-                    <Link
-                        className={classes.link}
-                        href={Others?.explorerResolver.addressLink?.(chainId, nft.spender.id) ?? ''}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
-                    </Link>
-                </div>
-                <div>
-                    <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
-                    <Typography className={classes.primaryText}>{nft.amount}</Typography>
-                </div>
-            </div>
 
-            <ChainBoundary
-                expectedChainId={chainId}
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                classes={{ switchButton: classes.button }}
-                ActionButtonPromiseProps={{
-                    fullWidth: false,
-                    init: t.revoke(),
-                    startIcon: null,
-                    failIcon: null,
-                    waitingIcon: null,
-                    className: classes.button,
-                    failedButtonStyle: classes.button,
-                    waiting: t.revoking(),
-                    complete: t.revoke(),
-                    failed: t.revoke(),
-                }}>
-                <Button onClick={approveCallback} disabled={approveState.loading} className={classes.button}>
-                    {approveState.loading ? t.revoking() : t.revoke()}
-                </Button>
-            </ChainBoundary>
-        </ListItem>
+                <ChainBoundary
+                    expectedChainId={chainId}
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    classes={{ switchButton: classes.button }}
+                    ActionButtonPromiseProps={{
+                        fullWidth: false,
+                        init: t.revoke(),
+                        startIcon: null,
+                        failIcon: null,
+                        waitingIcon: null,
+                        className: classes.button,
+                        failedButtonStyle: classes.button,
+                        waiting: t.revoking(),
+                        complete: t.revoke(),
+                        failed: t.revoke(),
+                    }}>
+                    <Button onClick={approveCallback} disabled={approveState.loading} className={classes.button}>
+                        {approveState.loading ? t.revoking() : t.revoke()}
+                    </Button>
+                </ChainBoundary>
+            </ListItem>
+        </div>
     )
 }

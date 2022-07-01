@@ -1,6 +1,7 @@
-import { DialogContent, Button } from '@mui/material'
+import { DialogContent, Button, Tab, Typography } from '@mui/material'
+import { MaskTabList, useTabs } from '@masknet/theme'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
@@ -15,6 +16,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useStyles } from './useStyles'
 import { ApprovalTokenContent } from './ApprovalTokenContent'
 import { ApprovalNFTContent } from './ApprovalNFTContent'
+import { TabContext } from '@mui/lab'
 
 export interface ApprovalDialogProps {
     open: boolean
@@ -28,55 +30,39 @@ enum Tabs {
 
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
-    const { classes, cx } = useStyles()
-    const [currentTab, setCurrentTab] = useState(Tabs.Tokens)
-    const tabs = useMemo(
-        () => [
-            {
-                label: t.tokens(),
-                isActive: currentTab === Tabs.Tokens,
-                clickHandler: () => setCurrentTab(Tabs.Tokens),
-            },
-            {
-                label: t.collectibles(),
-                isActive: currentTab === Tabs.Collectibles,
-                clickHandler: () => setCurrentTab(Tabs.Collectibles),
-            },
-        ],
-        [currentTab],
-    )
+    const { classes } = useStyles()
+
+    const [currentTab, onChange] = useTabs(t.tokens(), t.collectibles())
+
     return (
-        <InjectedDialog
-            open={open}
-            title={t.plugin_name()}
-            onClose={onClose}
-            classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
-            titleTabs={
-                <>
-                    {tabs.map((tab, i) => (
-                        <div
-                            key={i}
-                            onClick={tab.clickHandler}
-                            className={cx(classes.titleTab, tab.isActive ? classes.activeTab : '')}>
-                            {tab.label}
-                        </div>
-                    ))}
-                </>
-            }>
-            <DialogContent className={classes.dialogContent}>
-                <ApprovalWrapper tab={currentTab} />
-            </DialogContent>
-        </InjectedDialog>
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                open={open}
+                title={t.plugin_name()}
+                onClose={onClose}
+                classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
+                titleTabs={
+                    <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                        <Tab label={<Typography>{t.tokens()}</Typography>} value={t.tokens()} />
+                        <Tab label={<Typography>{t.collectibles()}</Typography>} value={t.collectibles()} />
+                    </MaskTabList>
+                }>
+                <DialogContent className={classes.dialogContent}>
+                    <ApprovalWrapper tab={currentTab} />
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }
 
 interface ApprovalWrapperProps {
-    tab: Tabs
+    tab: string
 }
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
     const { tab } = props
-    const { t } = useBaseI18n()
+    const { t: tr } = useBaseI18n()
+    const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
     const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
@@ -97,14 +83,14 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-            {tab === Tabs.Tokens ? (
+            {tab === t.tokens() ? (
                 <ApprovalTokenContent chainId={networkTabChainId} />
             ) : (
                 <ApprovalNFTContent chainId={networkTabChainId} />
             )}
             <PluginWalletStatusBar className={classes.footer}>
                 <Button variant="contained" size="medium" onClick={openSelectProviderDialog} fullWidth>
-                    {t('wallet_status_button_change')}
+                    {tr('wallet_status_button_change')}
                 </Button>
             </PluginWalletStatusBar>
         </div>
