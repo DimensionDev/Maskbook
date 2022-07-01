@@ -378,6 +378,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         <Box className={classes.card}>
                             <Typography className={classes.title}>{t('plugin_trader_swap_receive')}</Typography>
                             <SelectTokenChip
+                                chainId={chainId}
                                 classes={{
                                     chip: classes.selectedTokenChip,
                                     tokenIcon: classes.chipTokenIcon,
