@@ -102,13 +102,15 @@ async function generateIcons() {
             .join(', ')
         const intrinsicSize = getIntrinsicSize(variant.find((x) => x[2])?.[2] || '')
         const args = [nameField, `[${variantsField}]`] as any[]
-        if (intrinsicSize && intrinsicSize[0] !== intrinsicSize[1])
-            args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
+        const notSquare = intrinsicSize && intrinsicSize[0] !== intrinsicSize[1]
+        if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
         asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
 
         const variantNames = [...new Set(variant.flatMap((x) => x[0]))].map((x) => JSON.stringify(x))
         asJSX.dts.push(
-            `export const ${Ident}: ComponentType<GeneratedIconProps<${variantNames.join(' | ') || 'never'}>>`,
+            `export const ${Ident}: ComponentType<${notSquare ? 'GeneratedIconNonSquareProps' : 'GeneratedIconProps'}<${
+                variantNames.join(' | ') || 'never'
+            }>>`,
         )
     }
 
