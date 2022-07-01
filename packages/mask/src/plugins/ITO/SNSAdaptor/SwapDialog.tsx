@@ -32,9 +32,7 @@ import { SwapStatus } from './SwapGuide'
 import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
-    button: {
-        marginTop: theme.spacing(1.5),
-    },
+    button: {},
     providerBar: {},
     swapLimitWrap: {
         display: 'flex',
@@ -267,6 +265,7 @@ export function SwapDialog(props: SwapDialogProps) {
             <section className={classes.swapButtonWrapper}>
                 <WalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
+                        onlyInfiniteUnlock
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
@@ -274,7 +273,6 @@ export function SwapDialog(props: SwapDialogProps) {
                             loading={isSwapping}
                             className={classes.button}
                             fullWidth
-                            variant="contained"
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>

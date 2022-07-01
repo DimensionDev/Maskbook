@@ -5,18 +5,18 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { DialogContent, Link, Typography } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { Translate, useI18N } from '../locales'
-import { useI18N as useBaseI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -38,6 +38,9 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1.5, 0, 0),
         padding: 12,
+    },
+    actions: {
+        padding: '0 !important',
     },
 }))
 
@@ -168,25 +171,28 @@ export function DonateDialog(props: DonateDialogProps) {
                             }}
                         />
                     </Typography>
-                    <WalletConnectedBoundary>
-                        <EthereumERC20TokenApprovedBoundary
-                            classes={{ button: classes.button }}
-                            amount={amount.toFixed()}
-                            spender={BULK_CHECKOUT_ADDRESS}
-                            token={token.schema === SchemaType.ERC20 ? token : undefined}>
-                            <ActionButton
-                                className={classes.button}
-                                loading={loading}
-                                fullWidth
-                                size="large"
-                                disabled={!!validationMessage || loading}
-                                onClick={donate}
-                                variant="contained">
-                                {validationMessage || t.donate()}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
                 </DialogContent>
+                <DialogActions className={classes.actions}>
+                    <PluginWalletStatusBar>
+                        <WalletConnectedBoundary>
+                            <EthereumERC20TokenApprovedBoundary
+                                classes={{ button: classes.button }}
+                                amount={amount.toFixed()}
+                                spender={BULK_CHECKOUT_ADDRESS}
+                                token={token.schema === SchemaType.ERC20 ? token : undefined}>
+                                <ActionButton
+                                    className={classes.button}
+                                    loading={loading}
+                                    fullWidth
+                                    size="large"
+                                    disabled={!!validationMessage || loading}
+                                    onClick={donate}>
+                                    {validationMessage || t.donate()}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </PluginWalletStatusBar>
+                </DialogActions>
             </InjectedDialog>
         </div>
     )

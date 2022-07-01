@@ -31,9 +31,6 @@ async function generateEC_KeyPair(io: Pick<EncryptIO, 'getRandomECKey'>, kind: E
     const namedCurve: Record<EC_KeyCurveEnum, string> = {
         [EC_KeyCurveEnum.secp256p1]: 'P-256',
         [EC_KeyCurveEnum.secp256k1]: 'K-256',
-        get [EC_KeyCurveEnum.ed25519](): string {
-            throw new Error('TODO: support ED25519')
-        },
     }
     const { privateKey, publicKey } = await crypto.subtle.generateKey(
         { name: 'ECDH', namedCurve: namedCurve[kind] },

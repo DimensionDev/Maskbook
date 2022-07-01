@@ -44,7 +44,7 @@ export const PluginEntryRender = memo(
                     const entry = plugin.CompositionDialogEntry
                     const unstable = plugin.enableRequirement.target !== 'stable'
                     const ID = plugin.ID
-                    if (!entry || !operatingSupportedChainMapping[ID]) return null
+                    if (!entry) return null
                     const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
                     return (
                         <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>

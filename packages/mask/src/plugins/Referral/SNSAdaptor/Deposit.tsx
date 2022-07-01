@@ -72,7 +72,7 @@ export function Deposit(props: DepositDialogInterface | undefined) {
             <Grid item xs={12} marginTop="24px">
                 <ChainBoundary expectedChainId={deposit.requiredChainId} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
                     <WalletConnectedBoundary>
-                        <ActionButton fullWidth variant="contained" size="medium" onClick={onClickDeposit}>
+                        <ActionButton fullWidth size="medium" onClick={onClickDeposit}>
                             {t.deposit()} {totalDeposit} {deposit.token?.symbol}
                         </ActionButton>
                     </WalletConnectedBoundary>
