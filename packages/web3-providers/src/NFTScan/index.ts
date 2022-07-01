@@ -151,7 +151,7 @@ function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<ChainId, 
 }
 
 const prependIpfs = (url: string) => {
-    if (!url || url.startsWith('http')) return url
+    if (!url || url.match(/^\w+:/)) return url
     return `https://nftscan.mypinata.cloud/ipfs/${url}`
 }
 

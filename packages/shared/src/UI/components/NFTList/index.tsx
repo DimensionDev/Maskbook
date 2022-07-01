@@ -85,6 +85,12 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns }) => ({
     assetPlayerIframe: {
         aspectRatio: '1 / 1',
     },
+    wrapper: {
+        aspectRatio: '1 / 1',
+        height: 'auto',
+        width: '100%',
+        borderRadius: 8,
+    },
     imgWrapper: {
         aspectRatio: '1 / 1',
         img: {
@@ -117,6 +123,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.assetPlayerIframe,
                     imgWrapper: classes.imgWrapper,
+                    wrapper: classes.wrapper,
                 }}
             />
             <Typography className={classes.caption}>#{token.tokenId}</Typography>
