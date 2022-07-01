@@ -73,7 +73,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                                 <TableCell className={classes.cell}>
                                     {trending.market?.circulating_supply
-                                        ? formatSupply(trending.market?.circulating_supply)
+                                        ? formatSupply(trending.market.circulating_supply)
                                         : '--'}
                                 </TableCell>
                             </TableRow>
@@ -99,7 +99,7 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    {trending.market?.total_supply ? formatSupply(trending.market?.total_supply) : '--'}
+                                    {trending.market?.total_supply ? formatSupply(trending.market.total_supply) : '--'}
                                 </TableCell>
                             </TableRow>
                         ) : null}
