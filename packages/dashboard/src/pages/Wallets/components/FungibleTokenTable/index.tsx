@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { TrendingCoinType } from '@masknet/web3-providers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -18,7 +19,6 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { PluginMessages } from '../../../../API'
-import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

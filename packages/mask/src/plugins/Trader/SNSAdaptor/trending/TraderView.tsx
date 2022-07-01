@@ -9,7 +9,7 @@ import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrendin
 import { TickersTable } from './TickersTable'
 import { PriceChart } from './PriceChart'
 import { usePriceStats } from '../../trending/usePriceStats'
-import { Days, DEFAULT_RANGE_OPTONS, NFT_RANGE_OPTONS, PriceChartDaysControl } from './PriceChartDaysControl'
+import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
@@ -51,6 +51,9 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
                   borderRadius: 0,
                   marginBottom: 0,
               },
+        tabListRoot: {
+            flexGrow: 0,
+        },
         body: props.isPopper
             ? {
                   minHeight: 303,
@@ -293,7 +296,11 @@ export function TraderView(props: TraderViewProps) {
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
-                <MaskTabList variant="base" onChange={(_, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
+                <MaskTabList
+                    variant="base"
+                    classes={{ root: classes.tabListRoot }}
+                    onChange={(_, v: ContentTabs) => setTab(v)}
+                    aria-label="Network Tabs">
                     {tabComponents}
                 </MaskTabList>
             </TabContext>
@@ -311,7 +318,7 @@ export function TraderView(props: TraderViewProps) {
                             retry={retryStats}
                             loading={loadingStats}>
                             <PriceChartDaysControl
-                                rangeOptions={isNFT ? NFT_RANGE_OPTONS : DEFAULT_RANGE_OPTONS}
+                                rangeOptions={isNFT ? NFT_RANGE_OPTIONS : DEFAULT_RANGE_OPTIONS}
                                 days={days}
                                 onDaysChange={setDays}
                             />

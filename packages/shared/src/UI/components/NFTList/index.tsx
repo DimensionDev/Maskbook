@@ -36,7 +36,7 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns }) => ({
         display: 'grid',
         gridTemplateColumns: `repeat(${columns ?? 4}, 1fr)`,
     },
-    nftConatiner: {
+    nftContainer: {
         background: theme.palette.mode === 'light' ? '#EDEFEF' : '#2F3336',
         borderRadius: 8,
         width: '100%',
@@ -107,7 +107,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
     const chainId = useChainId()
     return (
-        <div className={classes.nftConatiner}>
+        <div className={classes.nftContainer}>
             <NFTCardStyledAssetPlayer
                 chainId={chainId}
                 contractAddress={token.contract?.address}

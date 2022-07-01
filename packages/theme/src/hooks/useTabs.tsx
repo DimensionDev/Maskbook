@@ -21,12 +21,12 @@ export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     const tabRecords = { [defaultTab]: defaultTab } as Record<T, T>
     possibleTabs.forEach((t) => (tabRecords[t] = t))
 
-    const isCurrentTabAvaliable = [defaultTab, ...possibleTabs].includes(currentTab)
+    const isCurrentTabAvailable = [defaultTab, ...possibleTabs].includes(currentTab)
     useEffect(() => {
-        if (!isCurrentTabAvaliable) {
+        if (!isCurrentTabAvailable) {
             setTab(defaultTab)
         }
-    }, [isCurrentTabAvaliable, defaultTab])
+    }, [isCurrentTabAvailable, defaultTab])
 
     const onChange = useCallback((event: unknown, value: any) => {
         setTab(value)

@@ -31,12 +31,12 @@ export enum Days {
     ONE_DAY = 1,
     ONE_WEEK = 7,
     ONE_MONTH = 30,
-    THREE_MONTHES = 90,
+    THREE_MONTHS = 90,
     ONE_YEAR = 365,
 }
 
-export const DEFAULT_RANGE_OPTONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
-export const NFT_RANGE_OPTONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHES]
+export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
+export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS]
 
 export interface PriceChartDaysControlProps {
     days: number
@@ -45,7 +45,7 @@ export interface PriceChartDaysControlProps {
 }
 
 export function PriceChartDaysControl({
-    rangeOptions = DEFAULT_RANGE_OPTONS,
+    rangeOptions = DEFAULT_RANGE_OPTIONS,
     days,
     onDaysChange,
 }: PriceChartDaysControlProps) {
