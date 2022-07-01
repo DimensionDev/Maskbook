@@ -28,7 +28,7 @@ enum Tabs {
 
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [currentTab, setCurrentTab] = useState(Tabs.Tokens)
     const tabs = useMemo(
         () => [
@@ -51,7 +51,18 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
             title={t.plugin_name()}
             onClose={onClose}
             classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
-            titleTabs={tabs}>
+            titleTabs={
+                <>
+                    {tabs.map((tab, i) => (
+                        <div
+                            key={i}
+                            onClick={tab.clickHandler}
+                            className={cx(classes.titleTab, tab.isActive ? classes.activeTab : '')}>
+                            {tab.label}
+                        </div>
+                    ))}
+                </>
+            }>
             <DialogContent className={classes.dialogContent}>
                 <ApprovalWrapper tab={currentTab} />
             </DialogContent>
