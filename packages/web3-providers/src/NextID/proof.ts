@@ -110,7 +110,7 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         // TODO: merge Pagination into this
         return response.unwrap().ids
     }
-    async queryAllExistedBindingByPlatform(platform: NextIDPlatform, identity: string) {
+    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 0
         do {

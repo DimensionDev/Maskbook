@@ -15,7 +15,7 @@ export function usePersonas(userId?: string) {
     const identifier = useSubscription(context.lastRecognizedProfile)
     return useAsyncRetry(async () => {
         if (!identifier?.identifier?.userId) return
-        const personaBindings = await NextIDProof.queryAllExistedBindingByPlatform(
+        const personaBindings = await NextIDProof.queryAllExistedBindingsByPlatform(
             platform,
             userId ?? identifier.identifier.userId,
         )

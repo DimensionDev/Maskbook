@@ -255,7 +255,7 @@ export namespace NextIDBaseAPI {
 
         queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
 
-        queryAllExistedBindingByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
+        queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
 
         queryIsBound(
             personaPublicKey: string,
