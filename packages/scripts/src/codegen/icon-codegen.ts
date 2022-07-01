@@ -26,6 +26,17 @@ function svg2jsx(code: string) {
             })
     )
 }
+function getIntrinsicSize(data: string | Buffer) {
+    if (typeof data === 'string') {
+        // from `viewBox="0 0 2124 660"`, we match `2124 / 660` out.
+        const match = data.match(/viewBox="0 0 (\d+) (\d+)"/)
+        if (match) {
+            return [parseFloat(match[1]), parseFloat(match[2])]
+        }
+    }
+    // TODO: support binary image.
+    return undefined
+}
 
 function getBase(fileName: string) {
     return fileName.split('.')[0]
@@ -89,7 +100,11 @@ async function generateIcons() {
                 }]`
             })
             .join(', ')
-        asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${nameField}, [${variantsField}])`)
+        const intrinsicSize = getIntrinsicSize(variant.find((x) => x[2])?.[2] || '')
+        const args = [nameField, `[${variantsField}]`] as any[]
+        if (intrinsicSize && intrinsicSize[0] !== intrinsicSize[1])
+            args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
+        asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
 
         const variantNames = [...new Set(variant.flatMap((x) => x[0]))].map((x) => JSON.stringify(x))
         asJSX.dts.push(

@@ -2,43 +2,74 @@ import { useTheme, Box } from '@mui/material'
 import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
+const supportCSSAspectRatio = (() => {
+    try {
+        return CSS.supports('aspect-ratio: 1')
+    } catch {
+        return false
+    }
+})()
 /**
- * @typedef {[currentVariant: null | string[], url: string, jsx: object | null, isColorful?: boolean]} RawIcon
+ * @typedef {[currentVariant: null | string[], url: string, jsx: object | null, supportColor?: boolean]} RawIcon
  */
 
 /**
  * @param {string} name
- * @param {Array<RawIcon>} variants isMono means the icon doesn't have it's own color.
+ * @param {Array<RawIcon>} variants
+ * @param {[number, number]} intrinsicSize
  * @returns {React.ComponentType<import('./internal').GeneratedIconProps>}
  */
-export function __createIcon(name, variants) {
+export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
+    const intrinsicAspectRatio = intrinsicSize[0] / intrinsicSize[1]
+
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
-        const { size = 24, variant, color, sx, ...rest } = props
+        let { size = 24, variant, color, sx, height, width, ...rest } = props
+
+        if (intrinsicAspectRatio !== 1 && props.size) {
+            console.warn(`Icon ${name} is not a square. Please use height or width property instead of size.`)
+        }
+
         const defaultPalette = useDefaultPalette()
         const selected = selectVariant(variants, variant || defaultPalette)
-        const [, url, jsx, isColorful] = selected
+        const [, url, jsx, supportColor] = selected
 
         const iconStyle = React.useMemo(() => {
-            const bg = isColorful
+            const bg = supportColor
                 ? null
                 : {
                       backgroundImage: `url(${url})`,
                       backgroundSize: 'contain',
                   }
-            return {
+            const base = {
                 display: 'inline-block',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 flexShrink: 0,
-                height: `${size}px`,
-                width: `${size}px`,
+                aspectRatio: `${intrinsicSize[0] / intrinsicSize[1]}`,
                 color,
+            }
+
+            if (intrinsicAspectRatio !== 1 && !width && !height) height = 24
+            if (!supportCSSAspectRatio) {
+                if (height && !width) width = (height || 24) * intrinsicAspectRatio
+                if (width && !height) height = (width || 24) / intrinsicAspectRatio
+            }
+            if (intrinsicAspectRatio === 1) {
+                base.height = height || size
+                base.width = width || size
+            } else {
+                if (height) base.height = height
+                if (width) base.width = width
+            }
+
+            return {
+                ...base,
                 ...bg,
                 ...sx,
             }
         }, [selected, size, sx])
 
-        if (isColorful && jsx) {
+        if (supportColor && jsx) {
             return React.createElement(
                 Box,
                 {
@@ -56,6 +87,7 @@ export function __createIcon(name, variants) {
             ...rest,
             ref,
             sx: iconStyle,
+            component: 'span',
         })
     }
     Icon.displayName = name
