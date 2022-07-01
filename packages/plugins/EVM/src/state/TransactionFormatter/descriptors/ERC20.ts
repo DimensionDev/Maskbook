@@ -11,10 +11,9 @@ export class ERC20Descriptor implements TransactionDescriptor {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-
         switch (context.name) {
             case 'approve':
-                if (context.parameters?.value === '0') {
+                if (Number(context.value) === 0) {
                     return {
                         chainId: context.chainId,
                         title: 'Cancel Unlock',

@@ -60,7 +60,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     )
 
     return cancelled ? null : (
-        <ListItem className={classes.listItemWrapper}>
+        <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
@@ -105,6 +105,6 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </Button>
                 ) : null}
             </ListItem>
-        </ListItem>
+        </div>
     )
 }

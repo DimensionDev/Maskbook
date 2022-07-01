@@ -10,7 +10,7 @@ export class ERC721Descriptor implements TransactionDescriptor {
             case 'setApprovalForAll':
                 return {
                     chainId: context.chainId,
-                    title: context.parameters?.approved === false ? 'Cancel Unlock' : 'Unlock',
+                    title: context.parameters?.approved === false ? 'Revoke' : 'Unlock',
                     description: `${
                         context.parameters?.approved === false ? 'Revoke the approval for' : 'Unlock'
                     } the token.`,
