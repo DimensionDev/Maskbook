@@ -14,7 +14,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, parseColor } from '@masknet/theme'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -23,17 +23,12 @@ import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
-    actionProps?: {}
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     showConnect?: boolean
-    walletInfo?: {
-        providerIcon?: URL
-        networkIcon?: URL
-        iconFilterColor?: string
-        name?: string
-        account?: string
-        link?: string
-    }
+    expectedAccount?: string
+    expectedWallet?: Wallet
+    expectedProviderType?: ProviderType
+    expectedPluginID?: NetworkPluginID
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -111,20 +106,27 @@ export function PluginWalletStatusBar({
     children,
     onClick,
     showConnect = false,
-    walletInfo,
+    expectedWallet,
+    expectedAccount,
+    expectedPluginID,
+    expectedProviderType,
 }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
     const [emptyChildren, setEmptyChildren] = useState(false)
-    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const currentPluginId = useCurrentWeb3NetworkPluginID(expectedPluginID)
 
-    const account = useAccount(currentPluginId)
-    const wallet = useWallet(currentPluginId)
+    const account = useAccount(currentPluginId, expectedAccount)
+    const currentWallet = useWallet(currentPluginId)
+
+    const wallet = expectedWallet ?? currentWallet
+
     const chainId = useChainId(currentPluginId)
     const { classes, cx } = useStyles()
 
-    const providerDescriptor = useProviderDescriptor()
-    const providerType = useProviderType()
+    const providerDescriptor = useProviderDescriptor(expectedPluginID, expectedProviderType)
+
+    const providerType = useProviderType(expectedPluginID)
     const networkDescriptor = useNetworkDescriptor(currentPluginId)
     const { value: domain } = useReverseAddress(currentPluginId, account)
     const { Others } = useWeb3State<'all'>(currentPluginId)
@@ -148,47 +150,30 @@ export function PluginWalletStatusBar({
             {account || !showConnect ? (
                 <>
                     <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
-                        {walletInfo ? (
-                            <WalletIcon
-                                size={30}
-                                badgeSize={12}
-                                mainIcon={walletInfo.providerIcon}
-                                badgeIcon={walletInfo.networkIcon}
-                                iconFilterColor={walletInfo.iconFilterColor}
-                            />
-                        ) : (
-                            <WalletIcon
-                                size={30}
-                                badgeSize={12}
-                                mainIcon={providerDescriptor?.icon}
-                                badgeIcon={networkDescriptor?.icon}
-                                iconFilterColor={providerDescriptor?.iconFilterColor}
-                            />
-                        )}
+                        <WalletIcon
+                            size={30}
+                            badgeSize={12}
+                            mainIcon={providerDescriptor?.icon}
+                            badgeIcon={networkDescriptor?.icon}
+                            iconFilterColor={providerDescriptor?.iconFilterColor}
+                        />
                         <Box className={classes.description}>
                             <Typography className={classes.walletName}>
-                                {walletInfo ? (
-                                    walletInfo.name
-                                ) : (
-                                    <span>
-                                        {providerType === ProviderType.MaskWallet
-                                            ? domain ??
-                                              wallet?.name ??
-                                              providerDescriptor?.name ??
-                                              Others?.formatAddress(account, 4)
-                                            : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
-                                    </span>
-                                )}
+                                <span>
+                                    {providerType === ProviderType.MaskWallet
+                                        ? domain ??
+                                          wallet?.name ??
+                                          providerDescriptor?.name ??
+                                          Others?.formatAddress(account, 4)
+                                        : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
+                                </span>
+
                                 <ArrowDropIcon />
                             </Typography>
                             <Typography className={classes.address}>
-                                <span>{walletInfo ? walletInfo.account : Others?.formatAddress(account, 4)}</span>
+                                <span>{Others?.formatAddress(account, 4)}</span>
                                 <Link
-                                    href={
-                                        walletInfo
-                                            ? walletInfo.link
-                                            : Others?.explorerResolver.addressLink?.(chainId, account) ?? ''
-                                    }
+                                    href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
                                     target="_blank"
                                     title="View on Explorer"
                                     rel="noopener noreferrer"
