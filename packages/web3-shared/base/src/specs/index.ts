@@ -268,8 +268,12 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
 }
 
 export interface NonFungibleTokenTrait {
+    /** The type of trait. */
     type: string
+    /** The value of trait. */
     value: string
+    /** The rarity of trait in percentage. */
+    rarity?: string
 }
 
 export interface NonFungibleTokenAuction<ChainId, SchemaType> {
@@ -363,7 +367,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     auction?: NonFungibleTokenAuction<ChainId, SchemaType>
     orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>
     events?: Array<NonFungibleTokenEvent<ChainId, SchemaType>>
-    payment_tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
 }
 
 /**

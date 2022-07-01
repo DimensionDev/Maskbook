@@ -37,7 +37,7 @@ export interface PostListingDialogProps {
 
 export function PostListingDialog(props: PostListingDialogProps) {
     const { asset, open, onClose } = props
-    const paymentTokens = asset?.auction?.offerTokens ?? asset?.payment_tokens ?? []
+    const paymentTokens = asset?.auction?.offerTokens ?? asset?.paymentTokens ?? []
 
     const { t } = useI18N()
     const { classes } = useStyles()
