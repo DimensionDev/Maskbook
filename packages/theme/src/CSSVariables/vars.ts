@@ -11,6 +11,7 @@ export type MaskCSSVariableColor = string & {
     alpha(alpha: number): string
 } & ((defaultValue?: string) => string)
 
+/** @deprecated Do not use in new code */
 export const MaskColorVar: Record<keyof typeof LightColor, MaskCSSVariableColor> = new Proxy(
     { __proto__: null } as any,
     {
