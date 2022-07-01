@@ -3,7 +3,7 @@ import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { memo, useCallback } from 'react'
 import type { TradeComputed } from '../../types'
 import { useI18N, Translate } from '../../locales'
-import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { Button, DialogActions, dialogClasses, DialogContent, Typography } from '@mui/material'
 import { CircleWarningIcon } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -13,8 +13,13 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+    dialog: {
+        [`.${dialogClasses.paper}`]: {
+            width: '420px!important',
+        },
+    },
     content: {
-        padding: '38px 16px 144px 16px',
+        padding: '38px 16px 120px 16px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -46,6 +51,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         flexDirection: 'column',
         rowGap: 16,
         padding: 16,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : ' 0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
 }))
 
@@ -78,7 +87,7 @@ export const PriceImpactDialog = memo<PriceImpactDialogProps>(({ open, onClose, 
     }, [trade, onConfirm])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()}>
+        <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>
             <DialogContent className={classes.content}>
                 <CircleWarningIcon className={classes.icon} />
                 <Typography className={classes.title}>{t.risk_warning()}</Typography>

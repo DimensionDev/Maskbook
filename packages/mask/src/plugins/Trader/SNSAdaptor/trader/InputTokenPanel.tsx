@@ -3,11 +3,11 @@ import { useI18N } from '../../../../utils'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, FormattedCurrency } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType , addGasMargin } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
@@ -124,10 +124,13 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
     token?: FungibleToken<ChainId, SchemaType> | null
     onAmountChange: (amount: string) => void
     SelectTokenChip?: Partial<SelectTokenChipProps>
+    gasPrice?: string
 }
 
+const MIN_GAS_LIMIT = 21000
+
 export const InputTokenPanel = memo<InputTokenPanelProps>(
-    ({ chainId, token, balance, onAmountChange, amount, ...props }) => {
+    ({ chainId, token, balance, onAmountChange, amount, gasPrice, SelectTokenChip: SelectTokenChipProps }) => {
         const isDashboard = isDashboardPage()
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
@@ -149,6 +152,13 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
             },
             [onAmountChange, RE_MATCH_FRACTION_AMOUNT, RE_MATCH_WHOLE_AMOUNT],
         )
+
+        const maxAmount = useMemo(() => {
+            const gasFee = multipliedBy(gasPrice ?? 0, addGasMargin(MIN_GAS_LIMIT))
+            let amount_ = new BigNumber(balance ?? 0)
+            amount_ = token?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+            return formatBalance(BigNumber.max(0, amount_).toFixed(), token?.decimals, 6)
+        }, [gasPrice, balance, token])
 
         const { value: tokenPrice = 0 } = useFungibleTokenPrice(
             NetworkPluginID.PLUGIN_EVM,
@@ -182,7 +192,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                     tokenIcon: classes.chipTokenIcon,
                                     noToken: classes.noToken,
                                 }}
-                                {...props.SelectTokenChip}
+                                {...SelectTokenChipProps}
                             />
                         </Box>
                     ),
@@ -208,7 +218,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                     variant="filled"
                                     classes={{ root: classes.chip, label: classes.chipLabel }}
                                     onClick={() => {
-                                        onAmountChange(formatBalance(balance, token?.decimals, 6))
+                                        onAmountChange(maxAmount)
                                     }}
                                 />
                             </Box>

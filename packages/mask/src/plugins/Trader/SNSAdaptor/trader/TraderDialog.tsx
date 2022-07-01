@@ -21,26 +21,12 @@ import { currentSlippageSettings } from '../../settings'
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         width: '100%',
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        width: 535,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
+        position: 'sticky',
+        top: 0,
+        zIndex: 2,
     },
     indicator: {
         display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
     },
     content: {
         padding: 0,

@@ -2,9 +2,9 @@ import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress, TextField, Typography } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
-import { FormattedBalance } from '@masknet/shared'
+import { CircleLoadingAnimation, FormattedBalance } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
@@ -28,6 +28,17 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         cursor: 'pointer',
         position: 'relative',
         minHeight: 82,
+    },
+    loading: {
+        marginBottom: 8,
+        height: 80,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.maskColor?.line}`,
+        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
+        borderRadius: 8,
+        cursor: 'pointer',
     },
     warningText: {
         fontSize: 14,
@@ -113,8 +124,8 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     if (trade.loading)
         return (
-            <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
-                <CircularProgress />
+            <Box className={classes.loading}>
+                <CircleLoadingAnimation />
             </Box>
         )
 

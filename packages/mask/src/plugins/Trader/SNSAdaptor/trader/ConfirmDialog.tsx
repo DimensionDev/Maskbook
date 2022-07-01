@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
 import { createNativeToken, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
@@ -9,6 +9,7 @@ import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 import { PluginTraderMessages } from '../../messages'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI'
+import { useSelectAdvancedSettings } from '@masknet/shared'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -45,7 +46,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade?.priceImpact)
 
     // #region remote controlled swap settings dialog
-    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     return (
@@ -57,7 +58,20 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
             nativeToken={nativeToken}
             inputTokenPrice={inputTokenPrice}
             outputTokenPrice={outputTokenPrice}
-            openSettingDialog={openSwapSettingDialog}
+            openSettingDialog={async () => {
+                const { slippageTolerance, transaction } = await selectAdvancedSettings()
+
+                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+
+                PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                    open: false,
+                    gasConfig: {
+                        gasPrice: transaction?.gasPrice as string | undefined,
+                        maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
+                        maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+                    },
+                })
+            }}
             isGreatThanSlippageSetting={isGreatThanSlippageSetting}
             onConfirm={isGreatThanSlippageSetting ? openPriceImpact : onConfirm}
         />

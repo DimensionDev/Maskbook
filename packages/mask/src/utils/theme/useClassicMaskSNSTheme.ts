@@ -719,7 +719,6 @@ export function useClassicMaskSNSTheme(mode?: string) {
     setAutoFreeze(true)
     // TODO: support RTL?
 
-    console.log(maskTheme)
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
     return usePostTheme(theme)

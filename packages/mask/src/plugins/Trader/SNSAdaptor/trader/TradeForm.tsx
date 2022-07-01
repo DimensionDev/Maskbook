@@ -320,6 +320,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         onClick={() => {
                             if (!userSelected.current) userSelected.current = true
                             onFocusedTradeChange(bestTrade)
+                            setExpand(false)
                         }}
                         isFocus={bestTrade.provider === focusedTrade?.provider}
                         isBest
@@ -332,6 +333,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         gasPrice={gasPrice}
                         onClick={() => {
                             onFocusedTradeChange(focusedTrade)
+                            setExpand(false)
                         }}
                         isFocus
                         isBest={bestTrade.provider === focusedTrade.provider}
@@ -349,6 +351,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 <Box className={classes.root}>
                     <InputTokenPanel
                         chainId={chainId}
+                        gasPrice={gasPrice}
                         amount={inputAmount}
                         balance={inputTokenBalanceAmount.toFixed()}
                         token={inputToken}
@@ -405,6 +408,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                     onClick={() => {
                                                         if (!userSelected.current) userSelected.current = true
                                                         onFocusedTradeChange(trade)
+                                                        setExpand(false)
                                                     }}
                                                     isFocus={trade.provider === focusedTrade?.provider}
                                                     gasPrice={gasPrice}
