@@ -232,6 +232,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             value: coin.id,
                                         }))}
                                         value={coins.find((x) => x.id === coin.id)?.id}
+                                        type={coin.type}
                                         onChange={onCoinMenuChange}>
                                         <IconButton sx={{ padding: 0 }} size="small">
                                             <ArrowDropIcon />
