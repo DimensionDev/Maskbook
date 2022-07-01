@@ -88,6 +88,9 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     open={open || remoteOpen}
                     onClose={() => {
                         onClose?.()
+                        if (currentChainId) {
+                            setChainId(currentChainId)
+                        }
                         setTraderProps(undefined)
                         closeDialog()
                     }}
