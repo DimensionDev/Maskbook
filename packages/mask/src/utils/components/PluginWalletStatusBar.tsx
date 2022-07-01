@@ -115,6 +115,10 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
     return (
@@ -152,7 +156,12 @@ export function PluginWalletStatusBar({ className, children }: WalletStatusBarPr
                                     <LinkOutIcon className={classes.linkIcon} />
                                 </Link>
                                 {pendingTransactions.length ? (
-                                    <span className={classes.pending}>
+                                    <span
+                                        className={classes.pending}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            openWalletStatusDialog()
+                                        }}>
                                         {t('wallet_status_bar_pending')}
                                         <CircularProgress thickness={6} size={12} className={classes.progress} />
                                     </span>
