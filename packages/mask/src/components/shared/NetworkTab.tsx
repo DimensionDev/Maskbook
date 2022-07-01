@@ -1,7 +1,7 @@
 import { useNetworkDescriptors, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
@@ -58,7 +58,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
     const isDashboard = isDashboardPage()
     const { chainId, setChainId, chains } = props
 
-    const networks = useNetworkDescriptors()
+    const networks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)

@@ -150,7 +150,8 @@ export interface TipDialogProps {
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
-    const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
+    const chainIdList =
+        tipDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
     const { classes } = useStyles()
 

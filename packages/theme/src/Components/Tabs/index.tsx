@@ -216,6 +216,8 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     })
     // #endregion
 
+    if (!children?.length) return null
+
     if (variant === 'flexible') {
         return (
             <Box position="relative">
