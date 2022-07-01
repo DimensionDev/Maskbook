@@ -160,7 +160,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             height: 16,
         },
         linkOutIcon: {
-            stroke: theme.palette.maskColor.secondaryDark,
+            color: theme.palette.maskColor.secondaryDark,
             marginLeft: 2,
         },
         spenderMaskLogoIcon: {
