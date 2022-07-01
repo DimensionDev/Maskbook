@@ -33,7 +33,22 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
 
     if (bgValue.isZero()) return formatter.format(0)
 
-    const numberPart = formatter
+    if (isLessMinValue)
+        return `< ${formatter
+            .formatToParts(boundaryValues.min)
+            .map(({ type, value }) => {
+                switch (type) {
+                    case 'currency':
+                        return value
+                    case 'fraction':
+                        return boundaryValues.min.toString()
+                    default:
+                        return ''
+                }
+            })
+            .reduce((string, part) => string + part)}`
+
+    return formatter
         .formatToParts(bgValue.toNumber())
         .map(({ type, value }) => {
             switch (type) {
@@ -47,6 +62,4 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             }
         })
         .reduce((string, part) => string + part)
-
-    return isLessMinValue ? '< $0.000001' : numberPart
 }
