@@ -59,6 +59,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         approvalContentWrapper: {
             flexGrow: 1,
             width: 568,
+            paddingTop: 0,
             margin: 'auto',
             display: 'flex',
             flexDirection: 'column',
