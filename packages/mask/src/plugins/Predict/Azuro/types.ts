@@ -30,6 +30,7 @@ export interface Odds {
     conditionId: number
     outcomeId: number
     outcomeRegistryId: number
+    paramId: number
     value: number
 }
 

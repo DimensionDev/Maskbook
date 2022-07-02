@@ -76,7 +76,7 @@ export function Odds(props: OddsProps) {
                             container
                             justifyContent="space-between"
                             className={classes.choice}
-                            onClick={() => handleOnClickOdd(pick)}>
+                            onClick={() => handleOnClickOdd(pick as Pick)}>
                             <Typography className={classes.outcome}>{title}</Typography>
                             <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
                         </Grid>
@@ -103,7 +103,7 @@ export function Odds(props: OddsProps) {
                                     flexWrap="nowrap"
                                     justifyContent="space-between"
                                     className={classes.OUchoice}
-                                    onClick={() => handleOnClickOdd(pick)}>
+                                    onClick={() => handleOnClickOdd(pick as Pick)}>
                                     <Typography className={classes.outcome}>{title.slice(0, 1)}</Typography>
                                     <Typography className={classes.odds}>{pick.value.toFixed(2)}</Typography>
                                 </Grid>
