@@ -25,6 +25,13 @@ import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
+import BenQi from '@masknet/web3-constants/evm/benqi.json'
+import Aurigami from '@masknet/web3-constants/evm/aurigami.json'
+import Tranquil from '@masknet/web3-constants/evm/tranquil.json'
+import Compound from '@masknet/web3-constants/evm/compound.json'
+import Moola from '@masknet/web3-constants/evm/moola.json'
+import Giest from '@masknet/web3-constants/evm/giest.json'
+import Alpaca from '@masknet/web3-constants/evm/alpaca.json'
 import { hookTransform, transform, transformFromJSON } from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
 
@@ -119,3 +126,24 @@ export const useAaveConstants = hookTransform(getAaveConstants)
 
 export const getLidoConstants = transform(ChainId, Lido)
 export const useLidoConstants = hookTransform(getLidoConstants)
+
+export const getBenQiConstants = transform(ChainId, BenQi)
+export const useBenQiConstants = hookTransform(getBenQiConstants)
+
+export const getAurigamiConstants = transform(ChainId, Aurigami)
+export const useAurigamiConstants = hookTransform(getAurigamiConstants)
+
+export const getTranquilConstants = transform(ChainId, Tranquil)
+export const useTranquilConstants = hookTransform(getTranquilConstants)
+
+export const getCompoundConstants = transform(ChainId, Compound)
+export const useCompoundConstants = hookTransform(getCompoundConstants)
+
+export const getMoolaConstants = transform(ChainId, Moola)
+export const useMoolaConstants = hookTransform(getMoolaConstants)
+
+export const getGiestConstants = transform(ChainId, Giest)
+export const useGiestConstants = hookTransform(getGiestConstants)
+
+export const getAlpacaConstants = transform(ChainId, Alpaca)
+export const useAlpacaConstants = hookTransform(getAlpacaConstants)

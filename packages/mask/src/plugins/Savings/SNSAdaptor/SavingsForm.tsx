@@ -1,31 +1,19 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { unreachable } from '@dimensiondev/kit'
 import {
     isLessThan,
     rightShift,
-    createLookupTableResolver,
     NetworkPluginID,
     ZERO,
     isSameAddress,
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
-import {
-    createContract,
-    createERC20Token,
-    SchemaType,
-    getAaveConstants,
-    useTokenConstants,
-    ZERO_ADDRESS,
-    chainResolver,
-} from '@masknet/web3-shared-evm'
+import { createERC20Token, SchemaType, useTokenConstants, chainResolver } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 import { FormattedCurrency, LoadingAnimation, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -47,13 +35,13 @@ export interface SavingsFormProps {
     onClose?: () => void
 }
 
-export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
-    {
-        [ProtocolType.Lido]: 'Lido',
-        [ProtocolType.AAVE]: 'AAVE',
-    },
-    'unknown',
-)
+// export const resolveProtocolName = createLookupTableResolver<ProtocolType, string>(
+//     {
+//         [ProtocolType.Lido]: 'Lido',
+//         [ProtocolType.AAVE]: 'AAVE',
+//     },
+//     'unknown',
+// )
 
 export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
     const { t } = useI18N()
@@ -145,24 +133,13 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     const { value: approvalData } = useAsync(async () => {
         const token = protocol.bareToken
-        const aavePoolAddress =
-            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
-            aavePoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
-        )
-
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
         return {
             approveToken:
                 token.schema === SchemaType.ERC20
                     ? createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals)
                     : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: poolAddress,
+            approveAddress: protocol.approveAddress,
         }
     }, [protocol.bareToken, inputAmount, chainId])
 

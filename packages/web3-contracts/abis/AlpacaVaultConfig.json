@@ -1,0 +1,346 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "addStrat", "type": "address" },
+            { "indexed": false, "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "SetApprovedAddStrategy",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "maxKillBps", "type": "uint256" }
+        ],
+        "name": "SetMaxKillBps",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "minDebtSize", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "reservePoolBps", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "killBps", "type": "uint256" },
+            { "indexed": false, "internalType": "address", "name": "interestModel", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "wrappedNative", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "wNativeRelayer", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "fairLaunch", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "killTreasuryBps", "type": "uint256" },
+            { "indexed": false, "internalType": "address", "name": "treasury", "type": "address" }
+        ],
+        "name": "SetParams",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "addr", "type": "address" },
+            { "indexed": false, "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "SetWhitelistedCaller",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "addr", "type": "address" },
+            { "indexed": false, "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "SetWhitelistedLiquidator",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "caller", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "worker", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "workerConfig", "type": "address" }
+        ],
+        "name": "SetWorkers",
+        "type": "event"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "worker", "type": "address" }],
+        "name": "acceptDebt",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "approvedAddStrategies",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getFairLaunchAddr",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "debt", "type": "uint256" },
+            { "internalType": "uint256", "name": "floating", "type": "uint256" }
+        ],
+        "name": "getInterestRate",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getKillBps",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getKillTreasuryBps",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getReservePoolBps",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getTreasuryAddr",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getWNativeRelayer",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getWrappedNativeAddr",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_minDebtSize", "type": "uint256" },
+            { "internalType": "uint256", "name": "_reservePoolBps", "type": "uint256" },
+            { "internalType": "uint256", "name": "_killBps", "type": "uint256" },
+            { "internalType": "contract InterestModel", "name": "_interestModel", "type": "address" },
+            { "internalType": "address", "name": "_getWrappedNativeAddr", "type": "address" },
+            { "internalType": "address", "name": "_getWNativeRelayer", "type": "address" },
+            { "internalType": "address", "name": "_getFairLaunchAddr", "type": "address" },
+            { "internalType": "uint256", "name": "_getKillTreasuryBps", "type": "uint256" },
+            { "internalType": "address", "name": "_treasury", "type": "address" }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "interestModel",
+        "outputs": [{ "internalType": "contract InterestModel", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "worker", "type": "address" }],
+        "name": "isWorker",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "worker", "type": "address" }],
+        "name": "isWorkerReserveConsistent",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "worker", "type": "address" }],
+        "name": "isWorkerStable",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "worker", "type": "address" },
+            { "internalType": "uint256", "name": "debt", "type": "uint256" }
+        ],
+        "name": "killFactor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "maxKillBps",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minDebtSize",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "worker", "type": "address" },
+            { "internalType": "uint256", "name": "debt", "type": "uint256" }
+        ],
+        "name": "rawKillFactor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [
+            { "internalType": "address[]", "name": "addStrats", "type": "address[]" },
+            { "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "setApprovedAddStrategy",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_maxKillBps", "type": "uint256" }],
+        "name": "setMaxKillBps",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_minDebtSize", "type": "uint256" },
+            { "internalType": "uint256", "name": "_reservePoolBps", "type": "uint256" },
+            { "internalType": "uint256", "name": "_killBps", "type": "uint256" },
+            { "internalType": "contract InterestModel", "name": "_interestModel", "type": "address" },
+            { "internalType": "address", "name": "_getWrappedNativeAddr", "type": "address" },
+            { "internalType": "address", "name": "_getWNativeRelayer", "type": "address" },
+            { "internalType": "address", "name": "_getFairLaunchAddr", "type": "address" },
+            { "internalType": "uint256", "name": "_getKillTreasuryBps", "type": "uint256" },
+            { "internalType": "address", "name": "_treasury", "type": "address" }
+        ],
+        "name": "setParams",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address[]", "name": "callers", "type": "address[]" },
+            { "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "setWhitelistedCallers",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address[]", "name": "callers", "type": "address[]" },
+            { "internalType": "bool", "name": "ok", "type": "bool" }
+        ],
+        "name": "setWhitelistedLiquidators",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address[]", "name": "addrs", "type": "address[]" },
+            { "internalType": "contract IWorkerConfig[]", "name": "configs", "type": "address[]" }
+        ],
+        "name": "setWorkers",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "treasury",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "whitelistedCallers",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "whitelistedLiquidators",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "worker", "type": "address" },
+            { "internalType": "uint256", "name": "debt", "type": "uint256" }
+        ],
+        "name": "workFactor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "workers",
+        "outputs": [{ "internalType": "contract IWorkerConfig", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

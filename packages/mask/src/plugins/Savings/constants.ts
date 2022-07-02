@@ -1,5 +1,13 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Tokens, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createERC20Tokens,
+    createNativeToken,
+    SchemaType,
+    getBenQiConstants,
+    getCompoundConstants,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
 
 export const SAVINGS_PLUGIN_NAME = 'Savings'
 export const SAVINGS_PLUGIN_ID = 'com.savings'
@@ -137,3 +145,8 @@ export const AAVE_PAIRS: Array<[FungibleToken<ChainId, SchemaType>, FungibleToke
         createERC20Tokens('aFEI_ADDRESS', 'aFEI', 'aFEI', 18)[ChainId.Mainnet],
     ],
 ]
+
+export const COMPOUND_COMPTROLLER = getCompoundConstants(ChainId.Mainnet).COMPTROLLER || ZERO_ADDRESS
+
+export const BENQI_COMPTROLLER = getBenQiConstants(ChainId.Avalanche).COMPTROLLER || ZERO_ADDRESS
+export const BENQI_ChainlinkOracle = getBenQiConstants(ChainId.Avalanche).ORACLE || ZERO_ADDRESS

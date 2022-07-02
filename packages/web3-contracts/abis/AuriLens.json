@@ -1,0 +1,108 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "contract AuToken",
+                "name": "auToken",
+                "type": "address"
+            }
+        ],
+        "name": "auTokenUnderlyingPrice",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "address",
+                        "name": "auToken",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "underlyingPrice",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct AuriLens.AuTokenUnderlyingPrice",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract ComptrollerLensInterface",
+                "name": "comptroller",
+                "type": "address"
+            }
+        ],
+        "name": "getAddresses",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "ply",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "aurora",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "tokenLock",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract ComptrollerLensInterface",
+                "name": "comptroller",
+                "type": "address"
+            },
+            {
+                "internalType": "contract AuToken",
+                "name": "auToken",
+                "type": "address"
+            }
+        ],
+        "name": "getRewardSpeeds",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "plyRewardSupplySpeed",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "plyRewardBorrowSpeed",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "auroraRewardSupplySpeed",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "auroraRewardBorrowSpeed",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct AuriLens.RewardSpeeds",
+                "name": "rewardSpeeds",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

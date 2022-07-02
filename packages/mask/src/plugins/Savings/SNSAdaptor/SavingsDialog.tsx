@@ -1,16 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { DialogContent, CircularProgress } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
-import {
-    createContract,
-    ChainId,
-    SchemaType,
-    getAaveConstants,
-    ZERO_ADDRESS,
-    networkResolver,
-} from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
@@ -22,15 +15,11 @@ import { SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
-import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider'
-import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
-import { LidoProtocol } from '../protocols/LDOProtocol'
-import { AAVEProtocol } from '../protocols/AAVEProtocol'
-import { LDO_PAIRS } from '../constants'
-import type { AbiItem } from 'web3-utils'
-import { flatten, compact, chunk } from 'lodash-unified'
-import { useChainId, useFungibleTokens, useWeb3 } from '@masknet/plugin-infra/web3'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { flatten } from 'lodash-unified'
+import { useChainId, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { SavingsProtocols, LazyProtocolsResolvers } from '../protocols'
+
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
@@ -44,6 +33,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
@@ -53,46 +43,22 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         return networks.map((network) => networkResolver.networkChainId(network))
     }, [])
 
-    const { value: aaveTokens } = useAsync(async () => {
-        if (!open || chainId !== ChainId.Mainnet) {
-            return EMPTY_LIST
+    const { loading: lazyLoading, value: lazyProtocols } = useAsync(async () => {
+        const currentChainLazyResolvers = LazyProtocolsResolvers.filter((_) => _.supportChains.includes(chainId))
+        try {
+            const allResults = await Promise.all(
+                currentChainLazyResolvers.map((resolver) => resolver.resolve(chainId, web3, connection)),
+            )
+            return flatten(allResults)
+        } catch (error) {
+            console.error('lazyProtocols: resolve error', error)
         }
+        return []
+    }, [web3, chainId])
 
-        const address = getAaveConstants(chainId).AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-
-        const protocolDataContract = createContract<AaveProtocolDataProvider>(
-            web3,
-            address,
-            AaveProtocolDataProviderABI as AbiItem[],
-        )
-
-        const tokens = await protocolDataContract?.methods.getAllReservesTokens().call()
-
-        const aTokens = await protocolDataContract?.methods.getAllATokens().call()
-
-        return tokens?.map((token) => {
-            return [token[1], aTokens?.filter((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())[0][1]]
-        })
-    }, [open, web3, chainId])
-
-    const { value: detailedAaveTokens } = useFungibleTokens(
-        NetworkPluginID.PLUGIN_EVM,
-        compact(flatten(aaveTokens ?? [])),
-        {
-            chainId,
-        },
-    )
-
-    const protocols = useMemo(
-        () => [
-            ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
-            ...chunk(detailedAaveTokens, 2).map(
-                (pair) =>
-                    new AAVEProtocol(pair as [FungibleToken<ChainId, SchemaType>, FungibleToken<ChainId, SchemaType>]),
-            ),
-        ],
-        [chainId, detailedAaveTokens, tab],
-    )
+    const protocols = useMemo(() => {
+        return [...SavingsProtocols, ...(lazyProtocols ?? [])].filter((x) => x.bareToken.chainId === chainId)
+    }, [chainId, lazyProtocols])
 
     useUpdateEffect(() => {
         setChainId(currentChainId)
@@ -134,22 +100,34 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                 <div className={classes.tableTabWrapper}>
                                     <FolderTabs>
                                         <FolderTabPanel label="Deposit">
-                                            <SavingsTable
-                                                chainId={chainId}
-                                                tab={TabType.Deposit}
-                                                protocols={protocols}
-                                                setTab={setTab}
-                                                setSelectedProtocol={setSelectedProtocol}
-                                            />
+                                            {lazyLoading ? (
+                                                <div className={classes.loading}>
+                                                    <CircularProgress />
+                                                </div>
+                                            ) : (
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Deposit}
+                                                    protocols={protocols}
+                                                    setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                />
+                                            )}
                                         </FolderTabPanel>
                                         <FolderTabPanel label="Withdraw">
-                                            <SavingsTable
-                                                chainId={chainId}
-                                                tab={TabType.Withdraw}
-                                                protocols={protocols}
-                                                setTab={setTab}
-                                                setSelectedProtocol={setSelectedProtocol}
-                                            />
+                                            {lazyLoading ? (
+                                                <div className={classes.loading}>
+                                                    <CircularProgress />
+                                                </div>
+                                            ) : (
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Withdraw}
+                                                    protocols={protocols}
+                                                    setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                />
+                                            )}
                                         </FolderTabPanel>
                                     </FolderTabs>
                                 </div>

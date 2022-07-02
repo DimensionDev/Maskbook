@@ -1,0 +1,252 @@
+[
+    {
+        "type": "constructor",
+        "inputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "name": "OwnershipTransferred",
+        "type": "event",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "previousOwner",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "type": "address",
+                "internalType": "address",
+                "name": "newOwner",
+                "indexed": true
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "inputs": [],
+        "name": "WONE_ADDRESS",
+        "outputs": [
+            {
+                "type": "address",
+                "internalType": "address",
+                "name": ""
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function",
+        "constant": true,
+        "signature": "0x6a255ac6"
+    },
+    {
+        "name": "chainlinkOracle",
+        "stateMutability": "view",
+        "outputs": [
+            {
+                "internalType": "contract ChainlinkOracle",
+                "type": "address",
+                "name": ""
+            }
+        ],
+        "type": "function",
+        "inputs": [],
+        "constant": true,
+        "signature": "0xef06e72c"
+    },
+    {
+        "type": "function",
+        "name": "fallbackOracle",
+        "outputs": [
+            {
+                "name": "",
+                "internalType": "contract FallbackOracle",
+                "type": "address"
+            }
+        ],
+        "inputs": [],
+        "stateMutability": "view",
+        "constant": true,
+        "signature": "0x629838e5"
+    },
+    {
+        "inputs": [],
+        "stateMutability": "view",
+        "name": "isPriceOracle",
+        "type": "function",
+        "outputs": [
+            {
+                "name": "",
+                "internalType": "bool",
+                "type": "bool"
+            }
+        ],
+        "constant": true,
+        "signature": "0x66331bba"
+    },
+    {
+        "stateMutability": "view",
+        "inputs": [],
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "type": "function",
+        "name": "owner",
+        "constant": true,
+        "signature": "0x8da5cb5b"
+    },
+    {
+        "type": "function",
+        "inputs": [],
+        "name": "renounceOwnership",
+        "stateMutability": "nonpayable",
+        "outputs": []
+    },
+    {
+        "inputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "type": "function",
+        "name": "specialTokenOracles",
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract ITokenOracle"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "stateMutability": "nonpayable",
+        "inputs": [
+            {
+                "name": "newOwner",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "address",
+                "name": "",
+                "internalType": "contract UniswapOracle"
+            }
+        ],
+        "name": "uniswapOracle",
+        "stateMutability": "view",
+        "constant": true,
+        "signature": "0x120c6c5b"
+    },
+    {
+        "stateMutability": "nonpayable",
+        "outputs": [],
+        "inputs": [
+            {
+                "type": "address",
+                "name": "_token",
+                "internalType": "address"
+            },
+            {
+                "type": "address",
+                "name": "_specialTokenOracle",
+                "internalType": "contract ITokenOracle"
+            }
+        ],
+        "name": "setSpecialTokenOracle",
+        "type": "function"
+    },
+    {
+        "stateMutability": "nonpayable",
+        "type": "function",
+        "name": "setChainlinkOracle",
+        "outputs": [],
+        "inputs": [
+            {
+                "name": "_chainlinkOracle",
+                "type": "address",
+                "internalType": "contract ChainlinkOracle"
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "outputs": [],
+        "name": "setUniswapOracle",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "_uniswapOracle",
+                "internalType": "contract UniswapOracle"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setFallbackOracle",
+        "stateMutability": "nonpayable",
+        "inputs": [
+            {
+                "name": "_fallbackOracle",
+                "internalType": "contract FallbackOracle",
+                "type": "address"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "name": "getUnderlyingPrice",
+        "inputs": [
+            {
+                "internalType": "contract TqToken",
+                "name": "tqToken",
+                "type": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "type": "function",
+        "stateMutability": "view"
+    },
+    {
+        "stateMutability": "view",
+        "name": "getPrice",
+        "inputs": [
+            {
+                "name": "token",
+                "internalType": "address",
+                "type": "address"
+            }
+        ],
+        "type": "function",
+        "outputs": [
+            {
+                "type": "uint256",
+                "internalType": "uint256",
+                "name": ""
+            }
+        ],
+        "constant": true,
+        "signature": "0x41976e09"
+    }
+]

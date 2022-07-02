@@ -1,0 +1,25 @@
+{
+    "SUMMARY_API": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "https://alpaca-static-api.alpacafinance.org/bsc/v1/landing/summary.json",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
+    }
+}
