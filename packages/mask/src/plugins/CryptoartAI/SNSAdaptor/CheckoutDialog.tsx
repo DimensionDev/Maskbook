@@ -4,7 +4,6 @@ import { first } from 'lodash-unified'
 import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
@@ -13,8 +12,9 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+            padding: 0,
         },
         panel: {
             marginTop: theme.spacing(2),
@@ -39,7 +39,6 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
         container: {
             padding: theme.spacing(1),
@@ -174,16 +173,18 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                         </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
-                        <WalletConnectedBoundary>
-                            <ActionButton
-                                loading={isPurchasing}
-                                className={classes.button}
-                                fullWidth
-                                disabled={!!validationMessage || isPurchasing}
-                                onClick={purchase}>
-                                {validationMessage || t('plugin_cryptoartai_buy_now')}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
+                        <PluginWalletStatusBar>
+                            <WalletConnectedBoundary>
+                                <ActionButton
+                                    loading={isPurchasing}
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage || isPurchasing}
+                                    onClick={purchase}>
+                                    {validationMessage || t('plugin_cryptoartai_buy_now')}
+                                </ActionButton>
+                            </WalletConnectedBoundary>
+                        </PluginWalletStatusBar>
                     </CardActions>
                 </Card>
             </DialogContent>

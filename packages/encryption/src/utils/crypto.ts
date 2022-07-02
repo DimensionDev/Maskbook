@@ -1,4 +1,4 @@
-import { AESCryptoKey, CheckedError, EC_CryptoKey } from '@masknet/shared-base'
+import { AESCryptoKey, CheckedError, EC_CryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { EC_KeyCurveEnum } from '../payload'
 import { CryptoException } from '../types'
@@ -24,16 +24,21 @@ export function exportCryptoKeyToRaw(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x)))
 }
 
-export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurveEnum) {
+export function importEC_Key(key: Uint8Array, kind: EC_KeyCurveEnum): Promise<Result<EC_Public_CryptoKey, unknown>>
+export function importEC_Key(
+    key: JsonWebKey | Uint8Array,
+    kind: EC_KeyCurveEnum,
+): Promise<Result<EC_CryptoKey, unknown>>
+export function importEC_Key(
+    key: JsonWebKey | Uint8Array,
+    kind: EC_KeyCurveEnum,
+): Promise<Result<EC_CryptoKey, unknown>> {
     const DeriveKeyUsage: KeyUsage[] = ['deriveKey', 'deriveBits']
     const ImportParamsMap = {
         [EC_KeyCurveEnum.secp256k1]: { name: 'ECDH', namedCurve: 'K-256' } as EcKeyImportParams,
         [EC_KeyCurveEnum.secp256p1]: { name: 'ECDH', namedCurve: 'P-256' } as EcKeyImportParams,
     } as const
     return Result.wrapAsync(async () => {
-        if (kind === EC_KeyCurveEnum.ed25519) {
-            throw new CheckedError(CryptoException.UnsupportedAlgorithm, 'TODO: support ED25519')
-        }
         const args = [ImportParamsMap[kind], true, DeriveKeyUsage] as const
         if (key instanceof Uint8Array) {
             return crypto.subtle.importKey('raw', key, ...args) as Promise<EC_CryptoKey>
@@ -57,4 +62,11 @@ export function decryptWithAES(key: CryptoKey, iv: Uint8Array, message: Uint8Arr
 export function assertIVLengthEq16(arrayBuffer: Uint8Array) {
     if (arrayBuffer.byteLength === 16) return Ok(arrayBuffer)
     return new CheckedError(CryptoException.InvalidIVLength, null).toErr()
+}
+
+export function getEcKeyCurve(key: EC_CryptoKey) {
+    const algr = key.algorithm as EcKeyAlgorithm
+    if (algr.namedCurve === 'K-256') return EC_KeyCurveEnum.secp256k1
+    if (algr.namedCurve === 'P-256') return EC_KeyCurveEnum.secp256p1
+    throw new Error('Unknown curve')
 }

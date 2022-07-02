@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index fdb6ec6d76951ae4fc91292971f7434c1bffdf2a..26c61fd3a61c5e3ab77861cc32c12e71ab45b3af 100644
+--- a/package.json
++++ b/package.json
+@@ -50,9 +50,6 @@
+   "bugs": {
+     "url": "https://github.com/emotion-js/emotion/issues"
+   },
+-  "browser": {
+-    "./dist/emotion-server.cjs.js": "./dist/emotion-server.browser.cjs.js"
+-  },
+   "preconstruct": {
+     "entrypoints": [
+       "./index.js",
