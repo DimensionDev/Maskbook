@@ -1,4 +1,4 @@
-const param: Record<number, number> = {
+const outcomeSecondParam: Record<number, number> = {
     1: 0,
     4: 1.5,
     5: 2.5,
@@ -10,4 +10,4 @@ const param: Record<number, number> = {
     96: -4.5,
 }
 
-export default param
+export default outcomeSecondParam

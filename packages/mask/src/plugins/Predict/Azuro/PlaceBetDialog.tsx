@@ -10,13 +10,14 @@ import { useState, useMemo, useCallback } from 'react'
 import { RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { marketRegistry, outcomeRegistry } from './helpers'
+import { marketRegistry, outcomeRegistry, outcomeSecondParam } from './helpers'
 import { usePlaceBetCallback, useActualRate } from './hooks'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { PickContext } from './context/usePickContext'
 import { useContainer } from 'unstated-next'
+import { Markets } from './types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -166,6 +167,10 @@ export function PlaceBetDialog() {
                                     <Typography className={classes.infoTitle}>Outcome:</Typography>
                                     <Typography>
                                         {condition && game ? outcomeRegistry[condition.outcomeRegistryId](game) : null}
+                                        &nbsp;
+                                        {game?.marketRegistryId === Markets.TotalGoals
+                                            ? outcomeSecondParam[condition?.paramId ?? 0]
+                                            : null}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.infoContainer} container justifyContent="space-between">

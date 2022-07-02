@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
-import { outcomeRegistry, param } from '../helpers'
+import { outcomeRegistry, outcomeSecondParam } from '../helpers'
 import type { AzuroGame } from '@azuro-protocol/sdk'
 import { RedeemButton } from './RedeemButton'
 
@@ -67,7 +67,7 @@ export function BetInfos(props: BetInfosProps) {
                 <Typography className={classes.label}>{t.plugin_pick()} </Typography>
                 <Typography>
                     {outcomeRegistry[bet.outcomeRegistryId](bet.gameInfo as AzuroGame)}{' '}
-                    {outcomesWithParams.includes(bet.outcomeRegistryId) ? param[bet.paramId] : null}
+                    {outcomesWithParams.includes(bet.outcomeRegistryId) ? outcomeSecondParam[bet.paramId] : null}
                 </Typography>
             </Grid>
             <Grid container justifyContent="space-between" className={classes.info}>

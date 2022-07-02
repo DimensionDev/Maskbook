@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useCallback } from 'react'
 import { PickContext } from '../context/usePickContext'
-import { outcomeRegistry, param } from '../helpers'
+import { outcomeRegistry, outcomeSecondParam } from '../helpers'
 import type { Odds as Pick } from '../types'
 import { v4 } from 'uuid'
 
@@ -91,7 +91,7 @@ export function Odds(props: OddsProps) {
             {conditions.map((condition) => (
                 <Grid key={v4()} container alignItems="center" flexWrap="nowrap">
                     <Grid container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
-                        <Typography>{param[condition.paramId]}</Typography>
+                        <Typography>{outcomeSecondParam[condition.paramId]}</Typography>
                         {condition.odds.map((pick) => {
                             // const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
                             const title = outcomeRegistry[pick.outcomeRegistryId](game)
