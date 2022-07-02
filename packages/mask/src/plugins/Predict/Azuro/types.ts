@@ -59,3 +59,21 @@ export enum ConditionStatus {
     RESOLVED = 1,
     CANCELED = 2,
 }
+
+export enum Markets {
+    FullTimeResult = 1,
+    DoubleChance = 2,
+    Handicap = 3,
+    TotalGoals = 4,
+    IndividualTotal1 = 5,
+    IndividualTotal2 = 6,
+    ScoredGoal = 8,
+    BothTeamsToScore = 9,
+    CorrectScore = 10,
+    TotalEven = 14,
+    HTFT = 17,
+    EuropeanHandicap3w = 18,
+    WinnerOfMatch = 19,
+    WinnerOf1stMap = 20,
+    WinnerOf2ndMap = 21,
+}
