@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
@@ -49,6 +51,12 @@ interface NormalHeaderProps {
     onlyTitle?: boolean
 }
 
+function canNavBack() {
+    try {
+        return history.length !== 1 || !!new URLSearchParams(location.search).get('goBack')
+    } catch {}
+    return false
+}
 export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -57,7 +65,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
 
     const goBack = new URLSearchParams(location.search).get('goBack')
 
-    const showTitle = (history.length !== 1 && title) || !!goBack
+    const showTitle = canNavBack() && title
 
     const showClose = location.pathname === PopupRoutes.ConnectWallet && !goBack
 
