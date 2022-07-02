@@ -6,8 +6,8 @@ import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useI18N } from '../locales'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useState } from 'react'
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { ChainId, networkResolver } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../Wallet/messages'
 import { protocols, PLUGIN_AZURO_ID } from './protocols'
@@ -70,11 +70,11 @@ export function PredictDialog(props: PredictDialogProps) {
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const [openAzuro, setOpenAzuro] = useState(false)
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    // const pluginID = useCurrentWeb3NetworkPluginID()
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => networkResolver.networkChainId(network))
+        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
     useUpdateEffect(() => {
