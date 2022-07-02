@@ -70,7 +70,6 @@ export function PredictDialog(props: PredictDialogProps) {
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const [openAzuro, setOpenAzuro] = useState(false)
-    // const pluginID = useCurrentWeb3NetworkPluginID()
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()

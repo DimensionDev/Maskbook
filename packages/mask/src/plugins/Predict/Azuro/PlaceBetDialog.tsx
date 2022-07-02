@@ -4,8 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAzuroConstants, ChainId } from '@masknet/web3-shared-evm'
-import { useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { useState, useMemo, useCallback } from 'react'
 import { RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -80,16 +79,7 @@ export function PlaceBetDialog() {
     const { classes } = useStyles()
     const [amount, setAmount] = useState('')
     const [slippage, setSlippage] = useState(2)
-    const chainId = useChainId()
-    const { AZURO_LP } = useAzuroConstants()
-    const {
-        value: token,
-        error,
-        loading,
-    } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        // chainId === ChainId.Sokol ? contractAddresses[chainId as ChainId]?.token : '',
-    )
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
 
     const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
@@ -122,8 +112,6 @@ export function PlaceBetDialog() {
             ? t.plugin_share({ account: isOnTwitter ? tr('twitter_account') : tr('facebook_account') })
             : t.plugin_share_no_official_account()
     }, [activatedSocialNetworkUI])
-
-    const successMessage = <Typography>{t.plugin_success_message()}</Typography>
 
     const openShareTxDialog = useOpenShareTxDialog()
     const placeBet = useCallback(async () => {
@@ -213,45 +201,15 @@ export function PlaceBetDialog() {
                                 </Grid>
                             </Grid>
                             <WalletConnectedBoundary>
-                                {/* {chainId === ChainId.Sokol ? (
-                                    <ChainBoundary
-                                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                        expectedChainId={ChainId.Sokol}>
-                                        <EthereumERC20TokenApprovedBoundary
-                                            amount={rightShift(amount || '0', token?.decimals).toFixed()}
-                                            spender={AZURO_LP}
-                                            token={token}>
-                                            <ActionButton
-                                                className={classes.actionButton}
-                                                size="large"
-                                                variant="contained"
-                                                disabled={!!validationMessage}
-                                                onClick={placeBet}
-                                                fullWidth>
-                                                {validationMessage || t.plugin_place_bet()}
-                                            </ActionButton>
-                                        </EthereumERC20TokenApprovedBoundary>
-                                    </ChainBoundary>
-                                ) : (
-                                    ''
-                                )} */}
-                                {chainId === ChainId.xDai || ChainId.Sokol ? (
-                                    // <ChainBoundary
-                                    //     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                    //     expectedChainId={ChainId.xDai}>
-                                    <ActionButton
-                                        className={classes.actionButton}
-                                        size="large"
-                                        variant="contained"
-                                        disabled={isPlacing || !!validationMessage}
-                                        onClick={placeBet}
-                                        fullWidth>
-                                        {isPlacing ? tr('loading') : validationMessage || t.plugin_place_bet()}
-                                    </ActionButton>
-                                ) : (
-                                    // </ChainBoundary>
-                                    ''
-                                )}
+                                <ActionButton
+                                    className={classes.actionButton}
+                                    size="large"
+                                    variant="contained"
+                                    disabled={isPlacing || !!validationMessage}
+                                    onClick={placeBet}
+                                    fullWidth>
+                                    {isPlacing ? tr('loading') : validationMessage || t.plugin_place_bet()}
+                                </ActionButton>
                             </WalletConnectedBoundary>
                         </div>
                     </DialogContent>

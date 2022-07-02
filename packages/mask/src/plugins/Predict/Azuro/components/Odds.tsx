@@ -67,7 +67,6 @@ export function Odds(props: OddsProps) {
         return (
             <div>
                 {odds.map((pick) => {
-                    const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
                     const title = outcomeRegistry[pick.outcomeRegistryId](game)
 
                     return (
@@ -93,7 +92,6 @@ export function Odds(props: OddsProps) {
                     <Grid container flexWrap="nowrap" justifyContent="space-between" alignItems="center">
                         <Typography>{outcomeSecondParam[condition.paramId]}</Typography>
                         {condition.odds.map((pick) => {
-                            // const key = `${pick.conditionId}-${pick.outcomeId}-${pick.outcomeRegistryId}`
                             const title = outcomeRegistry[pick.outcomeRegistryId](game)
 
                             return (
