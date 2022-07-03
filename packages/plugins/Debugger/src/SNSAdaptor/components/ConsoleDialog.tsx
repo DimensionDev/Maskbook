@@ -11,7 +11,7 @@ export function ConsoleDialog(props: ConsoleDialogProps) {
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <ConsoleContent />
+                <ConsoleContent onClose={closeDialog} />
             </DialogContent>
         </InjectedDialog>
     )

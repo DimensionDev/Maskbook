@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@7.4.0",
+  "packageManager": "pnpm@7.5.0",
   "engines": {
     "node": ">=17.0.0",
     "pnpm": ">=7.4.0",
