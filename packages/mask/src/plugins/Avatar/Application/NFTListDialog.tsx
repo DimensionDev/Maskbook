@@ -1,5 +1,5 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     Box,
@@ -23,8 +23,13 @@ import {
     useAccount,
     useChainId,
     useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
     useNonFungibleAssets,
+    useProviderDescriptor,
+    useProviderType,
+    useReverseAddress,
     useWallet,
+    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
@@ -316,6 +321,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
         })
     }, [chainId])
 
+    const networkDescriptor = useNetworkDescriptor(selectedPluginId, chainId)
+    const { value: domain } = useReverseAddress(selectedPluginId, selectedAccount)
+    const { Others } = useWeb3State<'all'>(selectedPluginId)
+    const providerDescriptor = useProviderDescriptor()
+    const providerType = useProviderType()
+
     const theme = useTheme()
     const [menu, openMenu] = useMenu(
         [
@@ -446,7 +457,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
-                <PluginWalletStatusBar onClick={(e) => onOpenMenu(e)}>
+                <PluginWalletStatusBar
+                    onClick={(e) => onOpenMenu(e)}
+                    showConnect={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
+                    expectedAccount={selectedAccount}
+                    expectedWallet={wallet!}
+                    expectedProviderType={providerType as ProviderType}
+                    expectedPluginID={selectedPluginId}>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                     </Button>
