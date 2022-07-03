@@ -4,7 +4,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import type { Coin } from '../../types'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { useTheme } from '@mui/system'
-import { CheckCircleIcon } from '@masknet/icons'
+import { CheckCircle as CheckCircleIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     symbol: {
@@ -53,7 +53,7 @@ export function CoinMenu(props: CoinMenuProps) {
                                 <span className={classes.symbol}>({x.coin.symbol})</span>
                             </Typography>
                             {selectedIndex === i ? (
-                                <CheckCircleIcon style={{ fontSize: 20, color: theme.palette.maskColor.primary }} />
+                                <CheckCircleIcon size={20} color={theme.palette.maskColor.primary} />
                             ) : (
                                 <RadioButtonUncheckedIcon
                                     style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}

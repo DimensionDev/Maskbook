@@ -17,11 +17,11 @@ import { useI18N, useMenu } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
 import {
-    DiscordRoundIcon,
-    FacebookRoundIcon,
-    RedditRoundIcon,
-    TelegramRoundIcon,
-    TwitterRoundIcon,
+    DiscordRound as DiscordRoundIcon,
+    FacebookRound as FacebookRoundIcon,
+    RedditRound as RedditRoundIcon,
+    TelegramRound as TelegramRoundIcon,
+    TwitterRound as TwitterRoundIcon,
 } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
@@ -70,11 +70,11 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
-    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
-    discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
-    reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
+    facebook: <FacebookRoundIcon size={16} />,
+    twitter: <TwitterRoundIcon size={16} />,
+    telegram: <TelegramRoundIcon size={16} />,
+    discord: <DiscordRoundIcon size={16} />,
+    reddit: <RedditRoundIcon size={16} />,
     other: null,
 }
 

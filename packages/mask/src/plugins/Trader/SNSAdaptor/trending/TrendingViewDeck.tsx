@@ -24,7 +24,7 @@ import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
-import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
+import { ArrowDrop as ArrowDropIcon, Buy as BuyIcon } from '@masknet/icons'
 import { TrendingTokenSecurity } from './TrendingTokenSecurity'
 import type { TrendingAPI } from '@masknet/web3-providers'
 

@@ -1,4 +1,4 @@
-import { TrendingIcon } from '@masknet/icons'
+import { MarketTrend as TrendingIcon } from '@masknet/icons'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 
