@@ -1,6 +1,4 @@
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -90,13 +88,9 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     const currentChainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const { isSending, sendTip, tipType, setTipType } = useTip()
     const [isValid, validateMessage] = useTipValidate()
-    const account = useAccount()
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     const [empty, setEmpty] = useState(false)
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
