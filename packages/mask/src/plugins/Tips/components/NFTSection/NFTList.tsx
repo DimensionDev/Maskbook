@@ -1,8 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio, Stack } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -158,14 +158,20 @@ export const NFTList: FC<Props> = ({
                 const name = token.collection?.name || token.contract?.name
                 const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
                 return (
-                    <ShadowRootTooltip
+                    <Tooltip
                         classes={{ tooltip: classes.tooltip }}
-                        key={`${token.address}/${token.tokenId + token.id}`}
+                        key={`${token.address}/${token.tokenId}/${token.id}`}
                         title={title}
                         placement="top"
+                        disableInteractive
+                        PopperProps={{
+                            disablePortal: true,
+                            popperOptions: {
+                                strategy: 'absolute',
+                            },
+                        }}
                         arrow>
                         <ListItem
-                            key={token.tokenId + token.id}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
@@ -190,7 +196,7 @@ export const NFTList: FC<Props> = ({
                                 checked={selected}
                             />
                         </ListItem>
-                    </ShadowRootTooltip>
+                    </Tooltip>
                 )
             })}
             {loadError && !loadFinish && tokens.length && (
