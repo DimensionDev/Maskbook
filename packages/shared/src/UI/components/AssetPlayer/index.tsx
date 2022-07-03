@@ -5,7 +5,7 @@ import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, SvgIconProps } from '@mui/material'
+import { Box } from '@mui/material'
 import { AssetLoading as AssetLoadingIcon, GeneratedIconProps, MaskPlaceholder } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 

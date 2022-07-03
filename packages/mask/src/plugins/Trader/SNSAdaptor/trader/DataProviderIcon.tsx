@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { unreachable } from '@dimensiondev/kit'
 import { DataProvider } from '@masknet/public-api'
 import { CoinGecko as CoinGeckoIcon, CoinMarketCap as CoinMarketCapIcon, Uniswap as UniswapIcon } from '@masknet/icons'

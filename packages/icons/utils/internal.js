@@ -23,6 +23,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
     const intrinsicAspectRatio = intrinsicSize[0] / intrinsicSize[1]
 
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
+        /* eslint-disable */
         let { size = 24, variant, color, sx, height, width, ...rest } = props
 
         if (intrinsicAspectRatio !== 1 && props.size) {
@@ -46,7 +47,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 flexShrink: 0,
-                aspectRatio: `${intrinsicSize[0] / intrinsicSize[1]}`,
+                aspectRatio: String(intrinsicSize[0] / intrinsicSize[1]),
                 color,
             }
             if (hasClickHandler) base.cursor = 'pointer'

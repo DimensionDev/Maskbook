@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { IconProps, Tooltip, useTheme } from '@mui/material'
+import { Tooltip, useTheme } from '@mui/material'
 import { Copy as CopyIcon, type GeneratedIconProps } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
