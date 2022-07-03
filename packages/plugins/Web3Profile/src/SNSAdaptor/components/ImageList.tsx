@@ -1,14 +1,14 @@
-import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
-import { ImageIcon } from './ImageIcon'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, NFTImageCollectibleAvatar } from '@masknet/shared'
 import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
 import type { CollectionTypes } from '../types'
 import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -29,24 +29,23 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: '4px',
         },
         collectionWrap: {
-            width: '50px',
-            height: '50px',
-            borderRadius: '12px',
-            marginTop: '12px',
-            marginRight: '5px',
-            border: `1px solid ${theme.palette.divider}`,
-            background: 'rgba(229,232,235,1)',
+            position: 'relative',
             cursor: 'pointer',
-            '&:nth-child(8n)': {
-                marginRight: 0,
-            },
+            display: 'flex',
+            overflow: 'hidden',
+            padding: 0,
+            flexDirection: 'column',
+            borderRadius: 12,
+            userSelect: 'none',
+            justifyContent: 'center',
+            lineHeight: 0,
         },
         content: {
-            width: 480,
+            width: 564,
+            padding: '8px 16px 0 16px',
             height: 420,
             maxHeight: 420,
             position: 'relative',
-            paddingBottom: theme.spacing(3),
             backgroundColor: theme.palette.background.paper,
         },
         actions: {
@@ -72,6 +71,13 @@ const useStyles = makeStyles()((theme) => {
         button: {
             width: '48%',
             borderRadius: '99px',
+        },
+        list: {
+            gridGap: 13,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(7, 1fr)',
+            paddingBottom: '16px',
+            marginTop: '16px',
         },
     }
 })
@@ -167,25 +173,53 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 <div className={classes.wrapper}>
                     <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
-                        {listedCollections?.map((collection, i) => (
-                            <div
-                                key={collection?.iconURL}
-                                className={classes.collectionWrap}
-                                onClick={() => unList(collection.key)}>
-                                <ImageIcon size={49} borderRadius="12px" icon={collection?.iconURL} />
-                            </div>
-                        ))}
+                        <List className={classes.list}>
+                            {listedCollections?.map((collection, i) => (
+                                <ListItem
+                                    className={classes.collectionWrap}
+                                    onClick={() => unList(collection.key)}
+                                    key={collection.key}>
+                                    <NFTImageCollectibleAvatar
+                                        pluginId={NetworkPluginID.PLUGIN_EVM}
+                                        size={64}
+                                        token={{
+                                            ...collection,
+                                            contract: {
+                                                chainId: ChainId.Mainnet,
+                                            },
+                                            metadata: {
+                                                imageURL: collection.iconURL,
+                                            },
+                                        }}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
                     </Box>
                     <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
-                        {unListedCollections?.map((collection, i) => (
-                            <div
-                                key={collection?.iconURL}
-                                className={classes.collectionWrap}
-                                onClick={() => list(collection.key)}>
-                                <ImageIcon size={49} borderRadius="12px" icon={collection?.iconURL} />
-                            </div>
-                        ))}
+                        <List className={classes.list}>
+                            {unListedCollections?.map((collection, i) => (
+                                <ListItem
+                                    key={collection?.key}
+                                    className={classes.collectionWrap}
+                                    onClick={() => list(collection.key)}>
+                                    <NFTImageCollectibleAvatar
+                                        pluginId={NetworkPluginID.PLUGIN_EVM}
+                                        size={64}
+                                        token={{
+                                            ...collection,
+                                            contract: {
+                                                chainId: ChainId.Mainnet,
+                                            },
+                                            metadata: {
+                                                imageURL: collection.iconURL,
+                                            },
+                                        }}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
                     </Box>
                 </div>
             </DialogContent>

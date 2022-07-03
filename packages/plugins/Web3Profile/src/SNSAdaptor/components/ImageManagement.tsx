@@ -6,13 +6,14 @@ import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { Button, DialogActions, DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { PersonaAction } from './PersonaAction'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { accountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
+import { GearIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paperRoot: {
@@ -30,11 +31,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '99px',
     },
     content: {
-        width: 600,
+        width: 564,
         height: 420,
         maxHeight: 420,
         position: 'relative',
-        paddingBottom: theme.spacing(3),
+        padding: '8px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
     },
     bottomFixed: {
@@ -110,14 +111,11 @@ export function ImageManagement(props: ImageManagementProps) {
             fullWidth={false}
             open={open}
             titleTail={
-                <Button
-                    size="small"
+                <GearIcon
                     onClick={() =>
                         allWallets && allWallets?.length > 0 ? setWalletSettingOpen(true) : openPopupsWindow()
                     }
-                    className={classes.titleTailButton}>
-                    {allWallets && allWallets?.length > 0 ? 'Settings' : 'Add wallet'}
-                </Button>
+                />
             }
             onClose={onClose}>
             <DialogContent className={classes.content}>

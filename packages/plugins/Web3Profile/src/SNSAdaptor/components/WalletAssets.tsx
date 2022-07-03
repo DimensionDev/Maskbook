@@ -1,17 +1,19 @@
-import { Card, Typography, Link, Box } from '@mui/material'
-import { LinkOutIcon } from '@masknet/icons'
+import { Card, Typography, Link, List, ListItem } from '@mui/material'
+import { Edit2Icon, LinkOutIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { useReverseAddress } from '@masknet/plugin-infra/web3'
 import type { CollectionTypes } from '../types'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NFTImageCollectibleAvatar } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
-    console.log({ theme })
     return {
-        wrapper: {},
+        wrapper: {
+            marginBottom: '16px',
+        },
 
         walletInfo: {
             display: 'flex',
@@ -22,31 +24,49 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 400,
             marginLeft: '4px',
         },
-        collectionWrap: {
-            width: '90px',
-            height: '90px',
-            marginTop: '12px',
-            marginRight: '5px',
-            border: `1px solid ${theme.palette.divider}`,
-            background: 'rgba(229,232,235,1)',
+        imageIconWrapper: {
+            position: 'relative',
             cursor: 'pointer',
-            '&:nth-child(5n)': {
-                marginRight: 0,
-            },
+            display: 'flex',
+            overflow: 'hidden',
+            padding: 0,
+            flexDirection: 'column',
+            borderRadius: 12,
+            userSelect: 'none',
+            justifyContent: 'center',
+            lineHeight: 0,
         },
         link: {
             cursor: 'pointer',
-            lineHeight: '10px',
             marginTop: 2,
             '&:hover': {
                 textDecoration: 'none',
             },
         },
         linkIcon: {
-            fill: 'none',
-            width: 14,
-            height: 14,
+            fill: theme.palette.maskColor.second,
+            height: 20,
+            width: 20,
             marginLeft: theme.spacing(0.5),
+            marginTop: '2px',
+        },
+        editIcon: {
+            height: 20,
+            width: 20,
+            fill: theme.palette.text.primary,
+            cursor: 'pointer',
+        },
+        loadingFailImage: {
+            minHeight: '0 !important',
+            maxWidth: '126px',
+            transform: 'translateY(10px)',
+        },
+        list: {
+            gridGap: 13,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            paddingBottom: '20px',
+            marginTop: '20px',
         },
     }
 })
@@ -66,50 +86,48 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
 
+    const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
+
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
 
     return (
         <Card className={classes.wrapper}>
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div className={classes.walletInfo}>
-                        <ImageIcon
-                            icon={new URL('../assets/ethereum.png', import.meta.url)}
-                            size={20}
-                            borderRadius="0"
-                        />
-                        <Typography className={classes.walletName}>{domain || address}</Typography>
-                        <Link
-                            className={classes.link}
-                            href={address ? explorerResolver.addressLink(chainId, address) ?? '' : ''}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} />
-                        </Link>
-                    </div>
-                    <div onClick={() => onSetting()}>
-                        <ImageIcon size={20} icon={new URL('../assets/settingIcon.png', import.meta.url)} />
-                    </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className={classes.walletInfo}>
+                    <ImageIcon icon={iconURL} size={20} borderRadius="99px" />
+                    <Typography className={classes.walletName}>{domain || address}</Typography>
+                    <Link
+                        className={classes.link}
+                        href={address ? explorerResolver.addressLink(chainId, address) ?? '' : ''}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <LinkOutIcon className={classes.linkIcon} />
+                    </Link>
                 </div>
+                <Edit2Icon onClick={onSetting} className={classes.editIcon} />
             </div>
-
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <List className={classes.list}>
                 {collectionList
                     ?.filter((collection) => !collection?.hidden)
-                    ?.slice(0, 10)
+                    ?.slice(0, 8)
                     ?.map((collection, i) => (
-                        <div
-                            key={i}
-                            className={classes.collectionWrap}
-                            style={{ borderRadius: type === 'Donations' ? '50%' : '12px' }}>
-                            <ImageIcon
-                                size={89}
-                                borderRadius={type === 'Donations' ? '50%' : '12px'}
-                                icon={collection?.iconURL}
+                        <ListItem className={classes.imageIconWrapper} key={collection.key}>
+                            <NFTImageCollectibleAvatar
+                                pluginId={NetworkPluginID.PLUGIN_EVM}
+                                key={i}
+                                token={{
+                                    ...collection,
+                                    contract: {
+                                        chainId: ChainId.Mainnet,
+                                    },
+                                    metadata: {
+                                        imageURL: collection.iconURL,
+                                    },
+                                }}
                             />
-                        </div>
+                        </ListItem>
                     ))}
-            </Box>
+            </List>
         </Card>
     )
 }
