@@ -6,13 +6,15 @@ import { InjectedDialog } from '@masknet/shared'
 import { PersonaAction } from './PersonaAction'
 import { useAllPersona, useCurrentPersona, useCurrentVisitingProfile } from '../hooks/usePersona'
 import { Main } from './Main'
-import { NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
 import { getDonationList, getFootprintList, getNFTList, getNFTList_Polygon } from '../hooks/useCollectionList'
 import { getWalletList, mergeList } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
+import { WalletUnderTabsIcon } from '@masknet/icons'
+import { context } from '../context'
 const useStyles = makeStyles()((theme) => ({
     paperRoot: {
         backgroundImage: 'none',
@@ -51,6 +53,11 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.paper,
         borderTop: `1px solid ${theme.palette.divider}`,
         height: '70px',
+    },
+    titleTailButton: {
+        cursor: 'pointer',
+        fill: theme.palette.maskColor.main,
+        fontSize: '24px',
     },
 }))
 
@@ -121,7 +128,9 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     }, [currentPersona])
 
     const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
-
+    const openPopupsWindow = async () => {
+        await context.openPopupWindow(PopupRoutes.ConnectedWallets)
+    }
     console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList })
     return (
         <>
@@ -130,6 +139,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                 title={title}
                 fullWidth={false}
                 open={open}
+                titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
                 onClose={onClose}>
                 <DialogContent className={classes.content}>
                     <Main

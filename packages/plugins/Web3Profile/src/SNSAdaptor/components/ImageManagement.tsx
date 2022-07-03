@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
 // import { Copy } from 'react-feather'
 import { WalletAssetsCard } from './WalletAssets'
@@ -15,9 +15,6 @@ import { Empty } from './Empty'
 import { context } from '../context'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '520px !important',
-    },
     paperRoot: {
         backgroundImage: 'none',
         '&>h2': {
@@ -33,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '99px',
     },
     content: {
-        width: 480,
+        width: 600,
         height: 420,
         maxHeight: 420,
         position: 'relative',
@@ -66,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ImageManagementProps extends withClasses<never | 'root'> {
+export interface ImageManagementProps {
     title: string
     currentPersona?: PersonaInformation
     open: boolean
@@ -86,7 +83,7 @@ const getAddressesByTitle = (title: string, accountList: accountType) => {
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
 
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const {
         title,
         currentPersona,
@@ -109,7 +106,6 @@ export function ImageManagement(props: ImageManagementProps) {
     }
     return (
         <InjectedDialog
-            classes={{ paper: classes.root, dialogContent: classes.content, dialogActions: classes.actions }}
             title={title}
             fullWidth={false}
             open={open}
@@ -162,7 +158,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     retryData={getWalletHiddenRetry}
                 />{' '}
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
             </DialogActions>
         </InjectedDialog>
