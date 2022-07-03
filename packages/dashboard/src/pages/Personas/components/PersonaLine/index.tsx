@@ -141,10 +141,11 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
                             {proof.loading ? (
                                 <LoadingAnimation />
-                            ) : isProved?.is_valid ? (
-                                <Icon type="nextIdPersonaVerified" size={16} />
                             ) : (
-                                <Icon type="nextIdPersonaWarning" size={16} />
+                                <Icon
+                                    type={isProved?.is_valid ? 'nextIdPersonaVerified' : 'nextIdPersonaWarning'}
+                                    size={16}
+                                />
                             )}
                         </Typography>
                     )}

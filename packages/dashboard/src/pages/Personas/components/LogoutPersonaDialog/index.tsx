@@ -1,6 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { getMaskColor, makeStyles, MaskDialog } from '@masknet/theme'
+import { makeStyles, MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
@@ -11,11 +11,9 @@ import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
-        '& path': {
-            fill: getMaskColor(theme).redMain,
-        },
         [theme.breakpoints.down('xs')]: {
-            fontSize: 64,
+            height: 64,
+            width: 64,
         },
     },
 }))

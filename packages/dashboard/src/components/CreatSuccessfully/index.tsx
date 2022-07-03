@@ -13,7 +13,7 @@ export const CreateSuccessfully = memo((props: CreateSuccessfully) => {
     const t = useDashboardI18N()
     return (
         <Container>
-            <Icon type="success" color="inherit" />
+            <Icon type="success" size={64} />
             <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
             <SuccessTips>{t.wallets_create_successfully_tips()}</SuccessTips>
             <UnlockButton onClick={onUnlock}>{t.wallets_create_successfully_unlock()}</UnlockButton>

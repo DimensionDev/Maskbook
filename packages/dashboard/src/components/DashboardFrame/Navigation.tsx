@@ -124,30 +124,24 @@ export function Navigation({ onClose }: NavigationProps) {
         <List onClick={() => onClose?.()}>
             {isLargeScreen && (
                 <LogoItem>
-                    {mode === 'dark' ? (
-                        <Icon type="maskBanner" style={{ width: 130, height: 40 }} />
-                    ) : (
-                        <Icon type="mask" style={{ width: 130, height: 40 }} />
-                    )}
+                    <Icon type={mode === 'dark' ? 'maskBanner' : 'mask'} style={{ width: 130, height: 40 }} />
                 </LogoItem>
             )}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ItemIcon>
-                    {useMatch(DashboardRoutes.Personas) ? (
-                        <Icon type="menuPersonasActive" />
-                    ) : (
-                        <Icon type="menuPersonas" />
-                    )}
+                    <Icon type={useMatch(DashboardRoutes.Personas) ? 'menuPersonasActive' : 'menuPersonas'} />
                 </ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
             <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
                 <ItemIcon>
-                    {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
-                        <Icon type="menuWalletsActive" />
-                    ) : (
-                        <Icon type="menuWallets" />
-                    )}
+                    <Icon
+                        type={
+                            isWalletPath || isWalletHistoryPath || isWalletTransferPath
+                                ? 'menuWalletsActive'
+                                : 'menuWallets'
+                        }
+                    />
                 </ItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
@@ -171,11 +165,7 @@ export function Navigation({ onClose }: NavigationProps) {
             </Collapse>
             <ListItemLink to={DashboardRoutes.Settings}>
                 <ItemIcon sx={{ fontSize: 36 }}>
-                    {useMatch(DashboardRoutes.Settings) ? (
-                        <Icon type="menuSettingsActive" />
-                    ) : (
-                        <Icon type="menuSettings" />
-                    )}
+                    <Icon type={useMatch(DashboardRoutes.Settings) ? 'menuSettingsActive' : 'menuSettings'} />
                 </ItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>

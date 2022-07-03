@@ -40,7 +40,9 @@ export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps)
         <Container>
             <Content>
                 <Paper className={classes.paper} variant="outlined">
-                    <Typography>{mode === 'dark' ? <Icon type="maskBanner" /> : <Icon type="mask" />}</Typography>
+                    <Typography>
+                        <Icon type={mode === 'dark' ? 'maskBanner' : 'mask'} />
+                    </Typography>
                     {children}
                 </Paper>
                 {haveFooter && <FooterLine />}

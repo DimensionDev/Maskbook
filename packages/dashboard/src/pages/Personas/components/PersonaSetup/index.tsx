@@ -37,7 +37,7 @@ export const PersonaSetup = memo(({ networkIdentifier, onConnect }: PersonaSetup
     return (
         <div className={classes.container}>
             <div className={classes.iconContainer}>
-                <Icon type="link" />
+                <Icon type="link" size={36} />
             </div>
             <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
                 {t.personas_setup_connect_tips({ type: networkIdentifier.split('.')[0] })}

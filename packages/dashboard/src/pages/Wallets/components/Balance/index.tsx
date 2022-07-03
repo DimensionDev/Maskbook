@@ -5,7 +5,7 @@ import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
 import type { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
+import { Box, Button, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useIsMatched } from '../../hooks'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
@@ -24,7 +24,6 @@ const BalanceContainer = styled('div')(
 const IconContainer = styled('div')`
     width: 48px;
     height: 48px;
-    font-size: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,10 +62,6 @@ const ButtonGroup = styled('div')`
     & > * {
         font-size: 12px;
         white-space: nowrap;
-        & .${buttonClasses.endIcon} > *:nth-of-type(1) {
-            font-size: 16px;
-            fill: none;
-        }
     }
 `
 
@@ -108,8 +103,8 @@ export const Balance = memo<BalanceCardProps>(
         return (
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
-                    <IconContainer sx={{ width: 48, height: 48 }}>
-                        <Icon size={48} type="maskWallet" />
+                    <IconContainer>
+                        <Icon type="maskWallet" size={48} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>

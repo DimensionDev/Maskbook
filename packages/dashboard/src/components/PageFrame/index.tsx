@@ -145,7 +145,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                             <MenuButton size="large" onClick={toggleDrawer}>
                                 {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                             </MenuButton>
-                            {mode === 'dark' ? <Icon type="maskBanner" /> : <Icon type="mask" />}
+                            <Icon type={mode === 'dark' ? 'maskBanner' : 'mask'} />
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>
