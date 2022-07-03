@@ -119,10 +119,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         })
         return uniqBy(
             (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected),
-            (x) => x.linkedPersona?.rawPublicKey.toLowerCase(),
+            (x) => x.identifier.userId,
         )
     }, [search, items])
-
     return (
         <InjectedDialog
             className={classes.root}

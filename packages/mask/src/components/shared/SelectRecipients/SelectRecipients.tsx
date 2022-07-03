@@ -56,6 +56,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         profileItems?.concat(NextIDItems) ?? [],
         ({ linkedPersona, nickname }) => linkedPersona?.publicKeyAsHex && nickname,
     )
+
     console.log(searchedList, 'search')
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
