@@ -72,15 +72,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
             name: <Trans i18nKey="plugin_snapshot_info_snapshot" />,
             marketListSortingPriority: 8,
-            icon: <SnapshotIcon />,
+            icon: <SnapshotIcon size={36} />,
         },
     ],
     wrapperProps: {
-        icon: (
-            <SnapshotIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }}
-            />
-        ),
+        icon: <SnapshotIcon size={24} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(255, 159, 10, 0.2) 100%), #FFFFFF;',
     },

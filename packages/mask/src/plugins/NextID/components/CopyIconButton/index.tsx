@@ -1,11 +1,11 @@
 import { memo, useState } from 'react'
 import { IconProps, Tooltip, useTheme } from '@mui/material'
-import { Copy as CopyIcon } from '@masknet/icons'
+import { Copy as CopyIcon, type GeneratedIconProps } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
 import { useSnackbarCallback } from '@masknet/shared'
 
-export interface CopyIconButtonProps extends IconProps {
+export interface CopyIconButtonProps extends GeneratedIconProps<never> {
     text: string
 }
 
@@ -28,7 +28,7 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
-            <CopyIcon onClick={onCopy} className={props.className} />
+            <CopyIcon {...props} onClick={onCopy} className={props.className} />
         </Tooltip>
     )
 })

@@ -86,7 +86,7 @@ export function OperationFooter({
             <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet}>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
-                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                    startIcon={<PluginWalletConnectIcon size={18} />}
                     classes={{
                         connectWallet: classes.connectWallet,
                     }}>
@@ -102,7 +102,7 @@ export function OperationFooter({
                                     padding: 1.125,
                                 }}
                                 fullWidth
-                                startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                startIcon={<SharedIcon size={18} />}
                                 onClick={onShare}>
                                 {tr('share')}
                             </ActionButton>

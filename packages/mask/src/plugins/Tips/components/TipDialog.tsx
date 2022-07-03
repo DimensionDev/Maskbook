@@ -274,7 +274,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         href={account ? Others?.explorerResolver.addressLink(chainId, account) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.linkIcon} />
+                        <LinkOutIcon size={12} className={classes.linkIcon} />
                     </Link>
                 </Typography>
             </div>
@@ -319,7 +319,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     reset()
                     onClose?.()
                 }}
-                icon={isTokenTip ? <SuccessIcon style={{ height: 64, width: 64 }} /> : null}
+                icon={isTokenTip ? <SuccessIcon size={64} /> : null}
                 message={successMessage}
                 confirmText={t.tip_share()}
                 onConfirm={handleConfirm}

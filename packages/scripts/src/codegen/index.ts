@@ -8,7 +8,7 @@ import { iconCodegen, iconCodegenWatch } from './icon-codegen'
 
 export function codegen(cb: TaskFunctionCallback) {
     if (isLocked('codegen')) return cb()
-    const codegen = series(i18nCodegen, typescript, resourceCopy, iconCodegen)
+    const codegen = series(i18nCodegen, iconCodegen, typescript, resourceCopy)
     codegen(cb)
 }
 export const codegenWatch = series(

@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     copy: {
         color: theme.palette.text.primary,
-        fontSize: 16,
         cursor: 'pointer',
     },
     address: {
@@ -77,7 +76,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                 <Stack direction="row" alignItems="center" gap="12px">
                     <ImageIcon size={18} icon={networkDescriptor?.icon} />
                     <Typography className={classes.address}>{formatEthereumAddress(identity, 4)}</Typography>
-                    <CopyIconButton text={identity} className={classes.copy} />
+                    <CopyIconButton size={16} text={identity} className={classes.copy} />
                     <Link
                         className={classes.link}
                         href={explorerResolver.addressLink(ChainId.Mainnet, identity) ?? ''}

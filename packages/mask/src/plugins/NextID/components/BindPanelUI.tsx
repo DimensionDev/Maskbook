@@ -156,7 +156,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                         </Stack>
                         <Stack direction="row" className={classes.persona} mb={3}>
                             <div className={classes.iconContainer}>
-                                <MasksIcon style={{ fontSize: '48px' }} />
+                                <MasksIcon size={48} />
                             </div>
                             <div>
                                 <Typography className={classes.name}>{currentPersona?.nickname}</Typography>

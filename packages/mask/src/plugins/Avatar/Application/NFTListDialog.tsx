@@ -369,7 +369,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     openPopupsWindow()
                 }}>
                 <ListItemIcon>
-                    <WalletSettingIcon style={{ fontSize: 24 }} />
+                    <WalletSettingIcon size={24} />
                 </ListItemIcon>
                 <Typography fontSize={14} fontWeight={700}>
                     {t.wallet_settings()}

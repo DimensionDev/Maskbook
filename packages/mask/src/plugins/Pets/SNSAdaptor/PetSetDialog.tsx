@@ -337,7 +337,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <RSS3Icon style={{ fontSize: 24 }} />
+                    <RSS3Icon size={24} />
                 </Box>
             </Box>
 

@@ -61,7 +61,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <MarketsIcon />
+            const icon = <MarketsIcon size={36} />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
@@ -102,7 +102,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
         (() => {
-            const icon = <MarketsClaimIcon />
+            const icon = <MarketsClaimIcon size={36} />
             const name = <Trans i18nKey="plugin_ito_claim" />
             const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
             return {
@@ -135,7 +135,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         })(),
     ],
     wrapperProps: {
-        icon: <MarketsIcon style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))', fontSize: 24 }} />,
+        icon: <MarketsIcon size={24} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF;',
     },

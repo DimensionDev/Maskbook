@@ -171,7 +171,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                     ))
                 ) : (
                     <div className={classes.placeholder}>
-                        <EmptyIcon style={{ fontSize: 60 }} />
+                        <EmptyIcon size={60} />
                     </div>
                 )}
                 <DisconnectWalletDialog

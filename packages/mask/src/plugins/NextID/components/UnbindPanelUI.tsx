@@ -111,7 +111,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                             <Typography className={classes.subTitle}>{t.persona()}</Typography>
                             <Stack direction="row" className={classes.persona}>
                                 <div className={classes.iconContainer}>
-                                    <MasksIcon style={{ fontSize: '48px' }} />
+                                    <MasksIcon size={48} />
                                 </div>
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>

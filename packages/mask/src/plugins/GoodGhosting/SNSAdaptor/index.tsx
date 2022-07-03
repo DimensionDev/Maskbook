@@ -39,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: <Trans i18nKey="plugin_good_ghosting_description" />,
             name: <Trans i18nKey="plugin_good_ghosting_name" />,
             tutorialLink: 'https://realmasknetwork.notion.site/f94aa38b01404b9c99c7a03935840962',
-            icon: <GoodGhostingIcon />,
+            icon: <GoodGhostingIcon size={36} />,
         },
     ],
 }

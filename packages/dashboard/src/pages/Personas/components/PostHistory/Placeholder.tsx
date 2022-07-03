@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography, useMediaQuery, type Theme } from '@mui/material'
 import { Empty as EmptyIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import urlcat from 'urlcat'
@@ -13,13 +13,14 @@ interface PlaceholderProps {
 export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const t = useDashboardI18N()
     const url = urlcat('https://www.:network', { network })
+    const isXs = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
     const handleClick = () => openWindow(url)
 
     return (
         <Stack height="100%" alignItems="center" justifyContent="center" mt={-3.5}>
             <Box textAlign="center">
-                <EmptyIcon size={100} />
+                <EmptyIcon size={isXs ? 100 : undefined} />
                 <Typography variant="body2" mb={3} sx={{ color: MaskColorVar.textSecondary }}>
                     {t.personas_post_is_empty()}
                 </Typography>

@@ -417,7 +417,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Box className={classes.buttonWrapper}>
                     <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
-                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            startIcon={<SharedIcon size={18} />}
                             className={classes.button}
                             fullWidth
                             onClick={onShare}>
@@ -430,7 +430,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
-                                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                    startIcon={<PluginWalletConnectIcon size={18} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,

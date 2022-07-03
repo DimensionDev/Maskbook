@@ -163,12 +163,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         <Box display="flex">
                             <Typography fontSize={14} fontWeight={600} width={102}>
                                 <span style={{ verticalAlign: 'middle' }}>{t.create_account_private_key()} </span>
-                                <CopyIcon
-                                    aria-hidden="false"
-                                    aria-role="button"
-                                    className={classes.copyIcon}
-                                    onClick={() => copyToClipboard(privateKey)}
-                                />
+                                <CopyIcon className={classes.copyIcon} onClick={() => copyToClipboard(privateKey)} />
                             </Typography>
                             <Typography
                                 fontSize={10}

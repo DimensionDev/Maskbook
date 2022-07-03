@@ -69,11 +69,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             margin: '20px 0 16px 0',
         },
         chevron: {
-            fill: 'none',
-            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
-            color: theme.palette.text.primary,
         },
         reverseChevron: {
             transform: 'rotate(-180deg)',
@@ -142,7 +140,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         dropIcon: {
             width: 20,
             height: 24,
-            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
         },
         connectWallet: {
             marginTop: 0,
@@ -188,7 +186,6 @@ export interface AllTradeFormProps {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
-        account,
         trades,
         inputAmount,
         inputToken,
@@ -346,10 +343,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             ChipProps: {
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <DropIcon
-                                        className={classes.dropIcon}
-                                        style={{ fill: !inputToken ? '#ffffff' : undefined }}
-                                    />
+                                    <DropIcon className={classes.dropIcon} color={inputToken ? undefined : '#ffffff'} />
                                 ),
                                 onDelete: noop,
                             },
@@ -393,7 +387,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     deleteIcon: (
                                         <DropIcon
                                             className={classes.dropIcon}
-                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                            color={outputToken ? '#ffffff' : undefined}
                                         />
                                     ),
                                     onDelete: noop,

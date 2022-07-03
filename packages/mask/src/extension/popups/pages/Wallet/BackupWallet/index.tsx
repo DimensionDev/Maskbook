@@ -177,7 +177,7 @@ const BackupWallet = memo(() => {
                             className={classes.tabPanel}
                             style={{ flex: currentTab === BackupTabs.JsonFile ? 1 : 0 }}>
                             <div className={classes.placeholder}>
-                                <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
+                                <FileIcon size={32} />
                             </div>
                             <Typography className={classes.tip}>
                                 {t('popups_wallet_backup_json_file_confirm_password_tip')}

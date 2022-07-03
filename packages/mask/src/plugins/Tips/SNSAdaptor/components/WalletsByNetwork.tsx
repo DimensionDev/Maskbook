@@ -59,13 +59,13 @@ export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }
     const t = useI18N()
     const { classes } = useStyles()
     const isAllHide = wallets.every((x) => !x.isPublic)
-    const network = networkMap[networkId]
+    const Network = networkMap[networkId]
     return (
         <div className={classes.container}>
             <div className={classes.topBox}>
                 <Typography className={classes.commonFlexBox} sx={{ fontWeight: 'bold' }}>
-                    <network.icon className={classes.networkIcon} />
-                    {network.name}
+                    <Network.icon className={classes.networkIcon} />
+                    {Network.name}
                 </Typography>
                 <SettingsIcon onClick={toSetting} className={classes.settingIcon} />
             </div>

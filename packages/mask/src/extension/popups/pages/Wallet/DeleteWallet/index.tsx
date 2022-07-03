@@ -137,7 +137,7 @@ const DeleteWallet = memo(() => {
         <>
             <div className={classes.content}>
                 <div className={classes.warning}>
-                    <WarningIcon style={{ fontSize: 48 }} />
+                    <WarningIcon size={48} />
                     <Typography className={classes.title}>{t('delete_wallet')}</Typography>
                 </div>
                 <div className={classes.info}>

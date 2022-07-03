@@ -112,7 +112,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     if (error || errorMask) {
-        return <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryMask} />
+        return <RefreshIcon className={classes.refresh} color="inherit" onClick={error ? retry : retryMask} />
     }
 
     if (pools.length === 0) {

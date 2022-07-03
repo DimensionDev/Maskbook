@@ -62,11 +62,7 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
                             </Box>
                         ))}
                     </Box>
-                    <ActionButton
-                        startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
-                        size="medium"
-                        fullWidth
-                        onClick={onShare}>
+                    <ActionButton startIcon={<SharedIcon size={18} />} size="medium" fullWidth onClick={onShare}>
                         Share
                     </ActionButton>
                 </Box>

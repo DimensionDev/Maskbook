@@ -125,8 +125,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     <Avatar src={avatar} className={classes.avatar} />
                                 ) : (
                                     <MenuPersonasActiveIcon
+                                        color="#f9fafa"
                                         className={classes.avatar}
-                                        style={{ fill: '#f9fafa', backgroundColor: '#F9FAFA', borderRadius: 99 }}
+                                        sx={{ borderRadius: 99 }}
                                     />
                                 )}
                             </div>
@@ -164,7 +165,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                     ) : (
                         <>
                             <div className={classes.placeholder}>
-                                <EmptyIcon style={{ fontSize: 60 }} />
+                                <EmptyIcon size={60} />
                             </div>
                             <div className={classes.controller}>
                                 <Button
@@ -172,14 +173,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     style={{ backgroundColor: '#07101B', color: '#F2F5F6' }}
                                     onClick={onCreatePersona}>
                                     {t('popups_create_persona')}
-                                    <AddUserIcon style={{ fill: '#F2F5F6' }} />
+                                    <AddUserIcon color="#F2F5F6" />
                                 </Button>
                                 <Button
                                     className={classes.button}
                                     style={{ backgroundColor: '#FFFFFF', color: '#07101B' }}
                                     onClick={onRestore}>
                                     {t('popups_restore_and_login')}
-                                    <PopupRestoreIcon style={{ fill: '#07101B' }} />
+                                    <PopupRestoreIcon color="#07101B" />
                                 </Button>
                             </div>
                         </>

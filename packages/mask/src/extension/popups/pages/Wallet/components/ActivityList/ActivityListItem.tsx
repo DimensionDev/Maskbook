@@ -98,7 +98,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                     return <InteractionCircleIcon className={classes.interaction} />
                 case TransactionStatusType.FAILED:
                 default:
-                    return <CircleCloseIcon style={{ fill: 'none' }} />
+                    return <CircleCloseIcon />
             }
         }, [formatterTransaction])
 
@@ -148,7 +148,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                         </Typography>
                     ) : null}
                 </ListItemText>
-                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                <ArrowRightIcon className={classes.arrow} />
             </ListItem>
         )
     },

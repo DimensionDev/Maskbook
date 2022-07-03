@@ -90,7 +90,7 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <EmptyIcon style={{ fontSize: 60 }} />
+                    <EmptyIcon size={60} />
                 </div>
             )}
             <Button className={classes.connect} onClick={() => setOpen(true)}>

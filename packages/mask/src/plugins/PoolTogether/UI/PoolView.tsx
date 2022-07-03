@@ -166,7 +166,7 @@ interface PoolProps {
 
 export function PoolView(props: PoolProps) {
     const { pool } = props
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
 
     const poolURL = usePoolURL(pool)
@@ -217,7 +217,7 @@ export function PoolView(props: PoolProps) {
     if (errorToken) {
         return (
             <div className={classes.root}>
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retryToken} />
+                <RefreshIcon className={classes.refresh} color={theme.palette.primary.main} onClick={retryToken} />
             </div>
         )
     }

@@ -104,13 +104,7 @@ export function PoolView(props: PoolViewProps) {
                 <br />
                 {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
-                <RefreshIcon
-                    className={classes.refresh}
-                    color="primary"
-                    aria-hidden="false"
-                    role="button"
-                    onClick={error ? retry : retryAllowedTokens}
-                />
+                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
             </Typography>
         )
 

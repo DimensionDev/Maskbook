@@ -117,7 +117,6 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                 <StarIcon
                                     color={contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight}
                                     sx={{ cursor: 'pointer' }}
-                                    aria-hidden={false}
                                     onClick={handleClickStar}
                                 />
                             ) : null}

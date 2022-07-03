@@ -27,10 +27,6 @@ const containerStyle = {
     display: 'flex',
     alignItems: 'center',
 }
-const badgeSvgIconSize = {
-    width: 16,
-    height: 16,
-}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -69,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return {
                     text: (
                         <div style={containerStyle}>
-                            <NFTRedPacketIcon style={badgeSvgIconSize} />
+                            <NFTRedPacketIcon size={16} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
                         </div>
                     ),
@@ -81,7 +77,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         dialog: RedPacketDialog,
         label: (
             <>
-                <RedPacketIcon style={badgeSvgIconSize} />
+                <RedPacketIcon size={16} />
                 Lucky Drop
             </>
         ),
@@ -132,11 +128,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         })(),
     ],
     wrapperProps: {
-        icon: (
-            <RedPacketIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(240, 51, 51, 0.2))' }}
-            />
-        ),
+        icon: <RedPacketIcon size={24} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(240, 51, 51, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
     },
@@ -156,8 +148,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
-            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
-            {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
+            <RedPacketIcon size={16} /> A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
         </div>
     )

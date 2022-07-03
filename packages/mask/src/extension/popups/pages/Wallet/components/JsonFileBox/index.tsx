@@ -72,7 +72,7 @@ export const JsonFileBox = memo<JsonFileBox>(({ onChange }) => {
                     }}
                 />
                 <div className={classes.enter} data-active={over} onClick={() => inputRef.current?.click()}>
-                    <FileIcon style={{ fontSize: 32, width: 32, height: 32 }} />
+                    <FileIcon size={32} />
                     <Typography className={classes.tips}>
                         {over
                             ? t('popups_wallet_backup_json_file_drag_tip')

@@ -28,6 +28,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
         if (intrinsicAspectRatio !== 1 && props.size) {
             console.warn(`Icon ${name} is not a square. Please use height or width property instead of size.`)
         }
+        const hasClickHandler = rest.onClick
 
         const defaultPalette = useDefaultPalette()
         const selected = selectVariant(variants, variant || defaultPalette)
@@ -48,6 +49,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 aspectRatio: `${intrinsicSize[0] / intrinsicSize[1]}`,
                 color,
             }
+            if (hasClickHandler) base.cursor = 'pointer'
 
             if (intrinsicAspectRatio !== 1 && !width && !height) height = 24
             if (!supportCSSAspectRatio) {
@@ -67,28 +69,25 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 ...bg,
                 ...sx,
             }
-        }, [selected, size, sx])
+        }, [selected, size, sx, hasClickHandler])
 
-        if (supportColor && jsx) {
-            return React.createElement(
-                Box,
-                {
-                    'aria-hidden': true,
-                    ...rest,
-                    ref,
-                    component: 'svg',
-                    sx: iconStyle,
-                },
-                jsx,
-            )
-        }
-        return React.createElement(Box, {
+        const iconProps = {
             'aria-hidden': true,
+            'aria-role': undefined,
             ...rest,
             ref,
             sx: iconStyle,
-            component: 'span',
-        })
+        }
+        if (hasClickHandler) {
+            iconProps['aria-hidden'] = false
+            iconProps['aria-role'] = 'button'
+        }
+        if (supportColor && jsx) {
+            iconProps.component = 'svg'
+            return React.createElement(Box, iconProps, jsx)
+        }
+        iconProps.component = 'span'
+        return React.createElement(Box, iconProps)
     }
     Icon.displayName = name
     return React.memo(React.forwardRef(Icon))

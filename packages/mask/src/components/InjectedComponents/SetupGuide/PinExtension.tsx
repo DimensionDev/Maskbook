@@ -1,7 +1,7 @@
 import { useWizardDialogStyles, WizardDialog } from './WizardDialog'
 import { useI18N } from '../../../utils'
 import { SetupGuideStep } from './types'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, useMediaQuery, type Theme } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import ExtensionIcon from '@mui/icons-material/Extension'
 import { Pin as PinIcon } from '@masknet/icons'
@@ -14,6 +14,7 @@ export function PinExtension({ onDone }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useWizardDialogStyles()
     const { t } = useI18N()
+    const isMini = useMediaQuery<Theme>((theme) => theme.breakpoints.down('xs'))
 
     return (
         <WizardDialog
@@ -47,7 +48,7 @@ export function PinExtension({ onDone }: PinExtensionProps) {
                         </li>
                         <li>
                             {t('setup_guide_pin_tip_step_find_left')}
-                            <PinIcon size={16} />
+                            <PinIcon size={isMini ? 16 : 22} />
                             {t('setup_guide_pin_tip_step_find_right')}
                         </li>
                         <li>{t('setup_guide_pin_tip_successfully')}</li>
