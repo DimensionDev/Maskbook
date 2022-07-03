@@ -18,8 +18,6 @@
     }
   },
   "types": "./index.d.ts",
-  "scripts": {
-  },
   "dependencies": {
     "@emotion/server": "^11.4.0"
   }

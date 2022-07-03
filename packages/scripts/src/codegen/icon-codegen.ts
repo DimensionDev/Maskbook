@@ -61,6 +61,7 @@ async function generateIcons() {
     const asURL = { js: [] as string[], dts: [] as string[] }
 
     const relativePrefix = pathToFileURL(iconRoot).toString().length + 1
+    /* cspell:disable-next-line */
     const filePaths = await glob.promise(pattern, { cwd: ROOT_PATH, nodir: true })
 
     const variants: Record<

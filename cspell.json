@@ -4,6 +4,7 @@
     "ignorePaths": [
         ".github",
         ".prettierignore",
+        ".gitignore",
         "*.snap",
         "**/*.json",
         "**/dist/**",
