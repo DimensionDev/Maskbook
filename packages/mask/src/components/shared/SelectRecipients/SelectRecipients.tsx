@@ -5,6 +5,7 @@ import {
     NextIDPlatform,
     ECKeyIdentifier,
     ProfileInformationFromNextID,
+    ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
@@ -53,15 +54,26 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
     const searchedList = uniqBy(
         profileItems?.concat(NextIDItems) ?? [],
-        ({ linkedPersona }) => linkedPersona?.publicKeyAsHex,
+        ({ linkedPersona, nickname }) => linkedPersona?.publicKeyAsHex && nickname,
     )
+    console.log(searchedList, 'search')
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
         const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
         if (!item || !item.fromNextID || !item.linkedPersona || !whoAmI) return
-        await Services.Identity.attachNextIDPersonaToProfile(item, whoAmI)
+        await Promise.all(
+            item.linkedTwitterNames.map(async (x) => {
+                const newItem = {
+                    ...item,
+                    nickname: x,
+                    identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
+                }
+
+                await Services.Identity.attachNextIDPersonaToProfile(newItem, whoAmI)
+            }),
+        )
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])

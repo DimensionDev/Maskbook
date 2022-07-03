@@ -11,7 +11,6 @@ import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,
     createOrUpdateProfileDB,
-    createPersonaDB,
     createProfileDB,
     deleteProfileDB,
     detachProfileDB,
@@ -21,7 +20,7 @@ import {
     queryProfilesDB,
 } from '../../../database/persona/db'
 import { NextIDProof } from '@masknet/web3-providers'
-import { createNewRelation } from '../relation/create'
+import { createOrUpdatePersonaDB } from '../../../database/persona/web'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -124,17 +123,13 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         createdAt: new Date(),
         updatedAt: new Date(),
     }
-    item.linkedTwitterNames
-        .filter((x) => x !== profileRecord.identifier.userId)
-        .forEach((x) =>
-            personaRecord.linkedProfiles.set(ProfileIdentifier.of('twitter.com', x).unwrap(), {
-                connectionConfirmState: 'confirmed',
-            }),
-        )
-
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
-            await createPersonaDB(personaRecord, t)
+            await createOrUpdatePersonaDB(
+                personaRecord,
+                { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
+                t,
+            )
             await createProfileDB(profileRecord, t)
             await attachProfileDB(
                 profileRecord.identifier,
@@ -142,9 +137,6 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
                 { connectionConfirmState: 'confirmed' },
                 t,
             )
-            item.linkedTwitterNames.map(async (name) => {
-                await createNewRelation(ProfileIdentifier.of('twitter.com', name).unwrap(), whoAmI)
-            })
         })
     } catch {
         // already exist
