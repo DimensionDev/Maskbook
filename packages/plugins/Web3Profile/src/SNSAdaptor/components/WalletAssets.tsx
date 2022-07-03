@@ -8,6 +8,7 @@ import type { CollectionTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTImageCollectibleAvatar } from '@masknet/shared'
+import { formatAddress } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -95,7 +96,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className={classes.walletInfo}>
                     <ImageIcon icon={iconURL} size={20} borderRadius="99px" />
-                    <Typography className={classes.walletName}>{domain || address}</Typography>
+                    <Typography className={classes.walletName}>{domain || formatAddress(address, 4)}</Typography>
                     <Link
                         className={classes.link}
                         href={address ? explorerResolver.addressLink(chainId, address) ?? '' : ''}

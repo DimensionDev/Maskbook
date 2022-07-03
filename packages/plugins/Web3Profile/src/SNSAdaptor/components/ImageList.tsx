@@ -1,6 +1,6 @@
 import { Box, Button, DialogActions, DialogContent, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
 import { InjectedDialog, NFTImageCollectibleAvatar } from '@masknet/shared'
@@ -8,7 +8,8 @@ import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-b
 import type { CollectionTypes } from '../types'
 import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { AddNFT } from './AddCollectibles'
 
 const useStyles = makeStyles()((theme) => {
     console.log({ theme })
@@ -79,6 +80,10 @@ const useStyles = makeStyles()((theme) => {
             paddingBottom: '16px',
             marginTop: '16px',
         },
+        AddCollectiblesButton: {
+            fontWeight: 600,
+            color: '#1D9BF0',
+        },
     }
 })
 
@@ -100,6 +105,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
     const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
     const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
+    const [open_, setOpen_] = useState(false)
 
     useEffect(() => {
         setListedCollections(collectionList?.filter((collection) => !collection?.hidden) || [])
@@ -162,6 +168,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
         }
     }
 
+    const onAddClick = (token: NonFungibleToken<ChainId, SchemaType>) => {
+        console.log({ token })
+        // setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
+    }
+
     return (
         <InjectedDialog
             classes={{ paper: classes.root, dialogContent: classes.content }}
@@ -171,7 +182,12 @@ export function ImageListDialog(props: ImageListDialogProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
+                        <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
+                            {t.add_collectible()}
+                        </Button>
+                    </Box>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
                         <List className={classes.list}>
                             {listedCollections?.map((collection, i) => (
@@ -221,6 +237,15 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             ))}
                         </List>
                     </Box>
+                    <AddNFT
+                        account={address}
+                        chainId={ChainId.Mainnet}
+                        title={t.add_collectible()}
+                        open={open_}
+                        onClose={() => setOpen_(false)}
+                        onAddClick={onAddClick}
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    />
                 </div>
             </DialogContent>
             <DialogActions className={classes.actions}>

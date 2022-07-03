@@ -17,7 +17,7 @@ export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
 }
 
 export const formatAddress = (address: string, size = 4) => {
-    return `${address?.slice(0, size)}...${address?.slice(-size)}`
+    return `${address?.slice(0, size + 2)}...${address?.slice(-size)}`
 }
 
 const deduplicateArray = (listA?: WalletTypes[], listB?: WalletTypes[]) => {

@@ -5,7 +5,7 @@ import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()(() => ({
     icon: {
-        marginLeft: '36px',
+        marginLeft: 'calc(50% - 16px)',
     },
 }))
 
