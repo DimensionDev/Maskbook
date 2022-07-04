@@ -55,6 +55,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             gasFeeValueUSD={gasFeeValueUSD}
             nativeToken={nativeToken}
             isBest={isBest}
+            isFocus={isFocus}
             isGreatThanSlippageSetting={isGreatThanSlippageSetting}
             priceImpact={formatPercentage(trade.value.priceImpact)}
         />

@@ -7,6 +7,7 @@ import { useI18N } from '../../../../../utils'
 import { Box, TextField, Typography } from '@mui/material'
 import { CircleLoadingAnimation, FormattedBalance } from '@masknet/shared'
 import { BestTradeIcon, CircleWarningIcon } from '@masknet/icons'
+import classNames from 'classnames'
 
 // TODO: remove isDashboard after remove Dashboard page
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -110,7 +111,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
-        const { classes, cx } = useStyles({ isDashboard })
+        const { classes } = useStyles({ isDashboard })
 
         if (loading)
             return (
@@ -128,7 +129,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                 onClick={onClick}
                 value={balance}
                 InputProps={{
-                    className: cx(classes.trade, isFocus ? classes.focus : null),
+                    className: classNames(classes.trade, isFocus ? classes.focus : null),
                     disableUnderline: true,
                     startAdornment: (
                         <Box
@@ -191,7 +192,7 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
     const isDashboard = isDashboardPage()
 
     const { t } = useI18N()
-    const { classes, cx } = useStyles({ isDashboard })
+    const { classes } = useStyles({ isDashboard })
 
     return (
         <TextField
@@ -200,7 +201,7 @@ export const DefaultTraderPlaceholderUI = memo<DefaultTraderPlaceholderUIProps>(
             variant="filled"
             value={0}
             InputProps={{
-                className: cx(classes.trade, classes.focus),
+                className: classNames(classes.trade, classes.focus),
                 disableUnderline: true,
                 startAdornment: (
                     <Box

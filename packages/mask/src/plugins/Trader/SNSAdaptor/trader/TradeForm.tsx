@@ -1,9 +1,9 @@
-import { memo, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, Typography } from '@mui/material'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -234,6 +234,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         gasPrice,
         onSwitch,
     }) => {
+        const maxAmountTrade = useRef<TradeInfo | null>(null)
         const userSelected = useRef(false)
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
@@ -262,6 +263,14 @@ export const TradeForm = memo<AllTradeFormProps>(
         const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
         // #endregion
 
+        const maxAmount = useMemo(() => {
+            const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
+            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+            let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
+            amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+            return formatBalance(BigNumber.max(0, amount_).toFixed(), inputToken?.decimals, 6)
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
+
         // #region UI logic
         // validate form return a message if an error exists
         const validationMessage = useMemo(() => {
@@ -269,10 +278,16 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
+
+            if (
+                inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount) ||
+                (inputToken.schema === SchemaType.Native &&
+                    formatWeiToEther(inputTokenTradeAmount).isGreaterThan(maxAmount))
+            )
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
+
             if (focusedTrade?.value && !focusedTrade.value.outputAmount) return t('plugin_trader_no_enough_liquidity')
             return ''
         }, [
@@ -283,6 +298,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             outputToken,
             inputTokenBalanceAmount.toFixed(),
             inputTokenTradeAmount.toFixed(),
+            maxAmount,
         ])
         // #endregion
 
@@ -306,19 +322,26 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [focusedTrade, outputToken])
         // #endregion
 
-        const maxAmount = useMemo(() => {
-            const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
-            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
-            let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
-            amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-            return formatBalance(BigNumber.max(0, amount_).toFixed(), inputToken?.decimals, 6)
-        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
+        const handleAmountChange = useCallback(
+            (amount: string) => {
+                if (amount === maxAmount && focusedTrade) {
+                    maxAmountTrade.current = focusedTrade
+                }
+                onInputAmountChange(amount)
+            },
+            [onInputAmountChange, maxAmount, focusedTrade],
+        )
 
         useUpdateEffect(() => {
             setExpand(false)
         }, [chainId, inputToken, inputAmount, outputToken])
 
         useUpdateEffect(() => {
+            if (maxAmountTrade.current) {
+                onFocusedTradeChange(maxAmountTrade.current)
+                return
+            }
+
             if (bestTrade?.value && !userSelected.current) {
                 onFocusedTradeChange(bestTrade)
             }
@@ -361,6 +384,11 @@ export const TradeForm = memo<AllTradeFormProps>(
             userSelected.current = false
         }, [inputAmount, inputToken, outputToken])
 
+        useUpdateEffect(() => {
+            if (!focusedTrade || !maxAmountTrade.current) return
+            if (focusedTrade.provider !== maxAmountTrade.current.provider) maxAmountTrade.current = null
+        }, [focusedTrade])
+
         return (
             <>
                 <Box className={classes.root}>
@@ -369,7 +397,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         amount={inputAmount}
                         balance={inputTokenBalanceAmount.toFixed()}
                         token={inputToken}
-                        onAmountChange={onInputAmountChange}
+                        onAmountChange={handleAmountChange}
                         maxAmount={maxAmount}
                         SelectTokenChip={{
                             ChipProps: {
