@@ -448,7 +448,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 {/* TODO: remove hard-code network type*/}
                 <PluginWalletStatusBar
                     onClick={(e) => onOpenMenu(e)}
-                    showConnect={!wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
+                    showConnect={!wallets.length && !account}
                     expectedAccount={selectedAccount}
                     expectedWallet={wallet}
                     expectedProviderType={providerType}
