@@ -76,7 +76,6 @@ export function useCreateNftRedpacketCallback(
             const receipt = await connection.getTransactionReceipt(hash)
             if (receipt) {
                 const events = decodeEvents(web3, nftRedPacketContract.options.jsonInterface, receipt)
-                console.log({ receipt, events })
                 return {
                     hash,
                     receipt,
