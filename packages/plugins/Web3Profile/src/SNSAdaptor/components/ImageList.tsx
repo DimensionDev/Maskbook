@@ -12,7 +12,6 @@ import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shar
 import { AddNFT } from './AddCollectibles'
 
 const useStyles = makeStyles()((theme) => {
-    console.log({ theme })
     return {
         wrapper: {},
 

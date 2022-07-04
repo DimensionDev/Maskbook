@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => {
         wrapper: {
             border: `1px solid ${theme.palette.divider}`,
             padding: '16px',
-            marginBottom: '12px',
+            marginTop: '12px',
         },
         divider: {
             color: theme.palette.divider,

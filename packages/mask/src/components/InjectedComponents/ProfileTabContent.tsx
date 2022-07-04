@@ -22,7 +22,7 @@ import { useNextIDBoundByPlatform, usePersonaBoundPlatform } from '../DataSource
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { GearSettingsIcon } from '@masknet/icons'
+import { GearIcon } from '@masknet/icons'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -216,7 +216,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         onChange={setSelectedTab}
                         openDialog={handleOpenDialog}
                         isOwn={isOwn}
-                        tail={isOwn && <GearSettingsIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
                 ) : (
                     <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
