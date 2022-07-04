@@ -8,7 +8,7 @@ import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-b
 import type { CollectionTypes } from '../types'
 import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
 
 const useStyles = makeStyles()((theme) => {
@@ -199,11 +199,23 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                         size={64}
                                         token={{
                                             ...collection,
+                                            tokenId: collection.tokenId ?? '',
+                                            id: collection.address,
+                                            chainId: ChainId.Mainnet,
+                                            schema: SchemaType.ERC721,
+                                            type: TokenType.NonFungible,
                                             contract: {
                                                 chainId: ChainId.Mainnet,
+                                                name: '',
+                                                symbol: '',
+                                                address: collection.address,
+                                                schema: SchemaType.ERC721,
                                             },
                                             metadata: {
                                                 imageURL: collection.iconURL,
+                                                chainId: ChainId.Mainnet,
+                                                name: '',
+                                                symbol: '',
                                             },
                                         }}
                                     />
@@ -226,11 +238,23 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                         size={64}
                                         token={{
                                             ...collection,
+                                            tokenId: collection.tokenId ?? '',
+                                            id: collection.address,
+                                            chainId: ChainId.Mainnet,
+                                            schema: SchemaType.ERC721,
+                                            type: TokenType.NonFungible,
                                             contract: {
                                                 chainId: ChainId.Mainnet,
+                                                name: '',
+                                                symbol: '',
+                                                address: collection.address,
+                                                schema: SchemaType.ERC721,
                                             },
                                             metadata: {
                                                 imageURL: collection.iconURL,
+                                                chainId: ChainId.Mainnet,
+                                                name: '',
+                                                symbol: '',
                                             },
                                         }}
                                     />
