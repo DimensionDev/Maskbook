@@ -11,9 +11,6 @@ import { useChainId } from '@masknet/plugin-infra/web3'
 import { TabContext, TabPanel } from '@mui/lab'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => ({
-    container: {
-        height: '100%',
-    },
     content: {
         width: 564,
         height: 420,

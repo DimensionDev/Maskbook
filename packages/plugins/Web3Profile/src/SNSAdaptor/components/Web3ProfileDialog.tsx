@@ -16,21 +16,9 @@ import { getWalletHiddenList } from '../hooks/useHiddenList'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
 const useStyles = makeStyles()((theme) => ({
-    paperRoot: {
-        backgroundImage: 'none',
-        '&>h2': {
-            border: `1px solid ${theme.palette.divider}`,
-            // padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
-            marginBottom: 24,
-        },
-    },
-    title: {
-        height: '24px',
-    },
     content: {
-        width: 488,
+        width: 564,
         height: 420,
-        // paddingBottom: theme.spacing(3),
         padding: '8px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
     },
@@ -133,45 +121,43 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     }
     console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList })
     return (
-        <>
-            <InjectedDialog
-                classes={{ paper: classes.root, dialogTitle: classes.title }}
-                title={title}
-                fullWidth={false}
-                open={open}
-                titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
-                onClose={onClose}>
-                <DialogContent className={classes.content}>
-                    <Main
-                        openImageSetting={(str: string, accountId: string) => {
-                            setTitle(str)
-                            setImageManageOpen(true)
-                            setAccountId(accountId)
-                        }}
-                        persona={currentPersona}
-                        currentVisitingProfile={currentVisitingProfile}
-                        accountList={accountList}
-                    />
-                </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
-                </DialogActions>
-            </InjectedDialog>
-            <ImageManagement
-                currentPersona={currentPersona}
-                accountList={accountList?.find((x) => x?.identity === accountId)}
-                title={title}
-                onClose={() => {
-                    setImageManageOpen(false)
-                    setTitle('Web3 Profile')
-                }}
-                open={imageManageOpen}
-                accountId={accountId}
-                currentVisitingProfile={currentVisitingProfile}
-                allWallets={wallets}
-                getWalletHiddenRetry={retryGetWalletHiddenList}
-                getBindingsRetry={retryQueryBinding}
-            />
-        </>
+        <InjectedDialog
+            classes={{ dialogContent: classes.content }}
+            title={title}
+            fullWidth={false}
+            open={open}
+            titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
+            onClose={onClose}>
+            <DialogContent className={classes.content}>
+                <Main
+                    openImageSetting={(str: string, accountId: string) => {
+                        setTitle(str)
+                        setImageManageOpen(true)
+                        setAccountId(accountId)
+                    }}
+                    persona={currentPersona}
+                    currentVisitingProfile={currentVisitingProfile}
+                    accountList={accountList}
+                />
+                <ImageManagement
+                    currentPersona={currentPersona}
+                    accountList={accountList?.find((x) => x?.identity === accountId)}
+                    title={title}
+                    onClose={() => {
+                        setImageManageOpen(false)
+                        setTitle('Web3 Profile')
+                    }}
+                    open={imageManageOpen}
+                    accountId={accountId}
+                    currentVisitingProfile={currentVisitingProfile}
+                    allWallets={wallets}
+                    getWalletHiddenRetry={retryGetWalletHiddenList}
+                    getBindingsRetry={retryQueryBinding}
+                />
+            </DialogContent>
+            <DialogActions className={classes.actions}>
+                <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
+            </DialogActions>
+        </InjectedDialog>
     )
 }
