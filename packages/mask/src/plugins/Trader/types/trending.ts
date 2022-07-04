@@ -21,6 +21,9 @@ export interface Platform {
     symbol: string
 }
 
+export type CommunityType = 'twitter' | 'facebook' | 'telegram' | 'reddit' | 'other' | 'discord'
+export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
+
 export interface Coin {
     id: string
     name: string
@@ -32,7 +35,7 @@ export interface Coin {
     tech_docs_urls?: string[]
     message_board_urls?: string[]
     source_code_urls?: string[]
-    community_urls?: string[]
+    community_urls?: CommunityUrls
     home_urls?: string[]
     announcement_urls?: string[]
     blockchain_urls?: string[]

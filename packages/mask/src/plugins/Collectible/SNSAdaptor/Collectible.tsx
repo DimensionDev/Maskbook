@@ -1,12 +1,23 @@
 import { ReactElement, useCallback } from 'react'
-import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import {
+    Box,
+    Button,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Link,
+    Paper,
+    Stack,
+    Tab,
+    Tabs,
+    Typography,
+} from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
@@ -274,17 +285,16 @@ export function Collectible(props: CollectibleProps) {
                         <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
-                                    <>
+                                    <Stack direction="row" alignItems="center" gap={1}>
                                         <CollectibleProviderIcon provider={x.value} />
                                         <span className={classes.footName}>{resolveSourceName(x.value)}</span>
-                                    </>
+                                    </Stack>
                                 ),
                                 value: x.value,
                             }))}
                             selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
                             onChange={onDataProviderChange}
                         />
-                        <ArrowDropDownIcon />
                     </div>
                 </CardActions>
             </CollectibleCard>
