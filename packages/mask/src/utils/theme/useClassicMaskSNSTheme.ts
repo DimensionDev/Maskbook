@@ -109,9 +109,7 @@ export function useClassicMaskSNSTheme() {
                         border: 'none!important',
                         ['&:hover']: {
                             background: theme.palette.maskColor.bottom,
-                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
-                                .setAlpha(0.1)
-                                .toRgbString()}`,
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             color: theme.palette.maskColor.main,
