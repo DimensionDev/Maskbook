@@ -2,7 +2,13 @@ import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    NextIDAction,
+    NextIDStoragePayload,
+    NextIDPayload,
+    NextIDPlatform,
+    NextIDPersonaBindings,
+} from '@masknet/shared-base'
 import type {
     Transaction,
     FungibleAsset,
@@ -135,54 +141,73 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+        /** Get balance of a token owned by the account. */
+        getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get the detailed of a token. */
+        getContract?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        /** Get a token asset. */
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
+        /** Get a list of token assets */
         getAssets?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get a token. */
         getToken?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        /** Get a list of tokens. */
         getTokens?: (
             from: string,
-            opts?: HubOptions<ChainId, Indicator>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        getHistory?: (
+        /** Get history events related to a token. */
+        getEvents?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        /** Get all listed orders for selling a token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get all listed orders for buying a token. */
         getOffers?: (
             address: string,
             tokenId: string,
-            opts?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get all orders. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getContract?: (
-            address: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        getContractBalance?: (address: string) => Promise<number>
+        /** Get all collections owned by the account. */
         getCollections?: (
             address: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+        /** Place a bid on a token. */
+        createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Listing a token for public sell. */
+        createSellOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Fulfill an order. */
+        fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Cancel an order. */
+        cancelOrder?: (/** TODO: add parameters */) => Promise<void>
     }
 }
 
@@ -250,6 +275,8 @@ export namespace NextIDBaseAPI {
         queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
 
         queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
+
+        queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
 
         queryIsBound(
             personaPublicKey: string,

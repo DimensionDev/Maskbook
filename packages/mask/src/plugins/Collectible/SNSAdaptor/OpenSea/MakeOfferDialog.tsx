@@ -79,7 +79,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const desktopOrder = first(asset?.orders)
     const leastPrice = desktopOrder ? new BigNumber(desktopOrder.price?.[CurrencyType.USD] ?? '0') : ZERO
 
-    const paymentTokens = asset?.payment_tokens
+    const paymentTokens = asset?.paymentTokens
 
     const selectedPaymentToken = first(paymentTokens)
 
