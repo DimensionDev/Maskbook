@@ -126,7 +126,7 @@ export function ImageManagement(props: ImageManagementProps) {
                         />
                     ))
                 ) : (
-                    <Empty />
+                    <Empty content={t.add_wallet()} />
                 )}
                 <ImageListDialog
                     currentPersona={currentPersona}

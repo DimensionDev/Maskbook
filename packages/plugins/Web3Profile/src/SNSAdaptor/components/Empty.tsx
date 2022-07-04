@@ -9,11 +9,22 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export function Empty() {
+interface EmptyProps {
+    content: string
+}
+
+export function Empty({ content }: EmptyProps) {
     const { classes } = useStyles()
     const t = useI18N()
     return (
-        <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div
+            style={{
+                height: '100%',
+                display: 'flex',
+                paddingTop: '24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
             <div>
                 <ImageIcon
                     classes={{ icon: classes.icon }}
@@ -21,7 +32,7 @@ export function Empty() {
                     icon={new URL('../assets/Empty.png', import.meta.url)}
                 />
                 <Typography color="#767f8d" marginTop="10px">
-                    {t.add_wallet()}
+                    {content}
                 </Typography>
             </div>
         </div>

@@ -9,6 +9,7 @@ import { ChainId, explorerResolver, NETWORK_DESCRIPTORS, SchemaType } from '@mas
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { NFTImageCollectibleAvatar } from '@masknet/shared'
 import { formatAddress } from '../utils'
+import { Empty } from './Empty'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -107,40 +108,44 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                 </div>
                 <Edit2Icon onClick={onSetting} className={classes.editIcon} />
             </div>
-            <List className={classes.list}>
-                {collectionList
-                    ?.filter((collection) => !collection?.hidden)
-                    ?.slice(0, 8)
-                    ?.map((collection, i) => (
-                        <ListItem className={classes.imageIconWrapper} key={collection.key}>
-                            <NFTImageCollectibleAvatar
-                                pluginId={NetworkPluginID.PLUGIN_EVM}
-                                key={i}
-                                token={{
-                                    ...collection,
-                                    tokenId: collection.tokenId ?? '',
-                                    id: collection.address,
-                                    chainId: ChainId.Mainnet,
-                                    schema: SchemaType.ERC721,
-                                    type: TokenType.NonFungible,
-                                    contract: {
+            {collectionList?.length > 0 ? (
+                <List className={classes.list}>
+                    {collectionList
+                        ?.filter((collection) => !collection?.hidden)
+                        ?.slice(0, 8)
+                        ?.map((collection, i) => (
+                            <ListItem className={classes.imageIconWrapper} key={collection.key}>
+                                <NFTImageCollectibleAvatar
+                                    pluginId={NetworkPluginID.PLUGIN_EVM}
+                                    key={i}
+                                    token={{
+                                        ...collection,
+                                        tokenId: collection.tokenId ?? '',
+                                        id: collection.address,
                                         chainId: ChainId.Mainnet,
-                                        name: '',
-                                        symbol: '',
-                                        address: collection.address,
                                         schema: SchemaType.ERC721,
-                                    },
-                                    metadata: {
-                                        imageURL: collection.iconURL,
-                                        chainId: ChainId.Mainnet,
-                                        name: '',
-                                        symbol: '',
-                                    },
-                                }}
-                            />
-                        </ListItem>
-                    ))}
-            </List>
+                                        type: TokenType.NonFungible,
+                                        contract: {
+                                            chainId: ChainId.Mainnet,
+                                            name: '',
+                                            symbol: '',
+                                            address: collection.address,
+                                            schema: SchemaType.ERC721,
+                                        },
+                                        metadata: {
+                                            imageURL: collection.iconURL,
+                                            chainId: ChainId.Mainnet,
+                                            name: '',
+                                            symbol: '',
+                                        },
+                                    }}
+                                />
+                            </ListItem>
+                        ))}
+                </List>
+            ) : (
+                <Empty content={t.no_collection_item()} />
+            )}
         </Card>
     )
 }

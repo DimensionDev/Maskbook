@@ -37,5 +37,6 @@
     "plugin_avatar_input_token_id": "Token ID",
     "wallets_add_collectible": "Add Collectible",
     "add_collectible": "Add collectible",
-    "nft_add_dialog_title": "Add Collectible"
+    "nft_add_dialog_title": "Add Collectible",
+    "no_collection_item": "No items to preview. Please go to setting."
 }
