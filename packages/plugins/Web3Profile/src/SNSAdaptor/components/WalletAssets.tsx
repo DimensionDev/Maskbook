@@ -36,7 +36,6 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             borderRadius: 12,
             userSelect: 'none',
-            justifyContent: 'center',
             lineHeight: 0,
         },
         link: {

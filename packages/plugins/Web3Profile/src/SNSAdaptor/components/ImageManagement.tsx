@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
-        overflowY: 'scroll',
+        overflow: 'scroll',
     },
     settingIcon: {
         cursor: 'pointer',
@@ -99,31 +99,33 @@ export function ImageManagement(props: ImageManagementProps) {
             titleTail={<GearIcon className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                {addresses && addresses?.length > 0 ? (
-                    addresses?.map((address) => (
-                        <WalletAssetsCard
-                            key={address.address}
-                            onSetting={() => {
-                                setSettingAddress(address.address)
-                                setImageListOpen(true)
-                            }}
-                            type={title}
-                            collectionList={address?.collections}
-                            address={address.address}
-                        />
-                    ))
-                ) : (
-                    <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
-                )}
-                {!hasConnectedWallets && (
-                    <Box className={classes.bottomButton}>
-                        {' '}
-                        <Button onClick={openPopupsWindow} className={classes.button}>
-                            <WalletUnderTabsIcon className={classes.walletIcon} />
-                            Add Wallet
-                        </Button>
-                    </Box>
-                )}
+                <div>
+                    {addresses && addresses?.length > 0 ? (
+                        addresses?.map((address) => (
+                            <WalletAssetsCard
+                                key={address.address}
+                                onSetting={() => {
+                                    setSettingAddress(address.address)
+                                    setImageListOpen(true)
+                                }}
+                                type={title}
+                                collectionList={address?.collections}
+                                address={address.address}
+                            />
+                        ))
+                    ) : (
+                        <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
+                    )}
+                    {!hasConnectedWallets && (
+                        <Box className={classes.bottomButton}>
+                            {' '}
+                            <Button onClick={openPopupsWindow} className={classes.button}>
+                                <WalletUnderTabsIcon className={classes.walletIcon} />
+                                Add Wallet
+                            </Button>
+                        </Box>
+                    )}
+                </div>
                 <ImageListDialog
                     currentPersona={currentPersona}
                     title={title}
