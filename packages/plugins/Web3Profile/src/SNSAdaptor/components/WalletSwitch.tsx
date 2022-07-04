@@ -1,12 +1,13 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
-import { FormattedAddress, ImageIcon } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
 import { formatAddress } from '../utils'
 import type { WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
+import { ImageIcon } from './ImageIcon'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {

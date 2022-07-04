@@ -24,6 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     actions: {
         backgroundColor: theme.palette.background.paper,
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     titleTailButton: {
         cursor: 'pointer',
@@ -45,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     switchContainer: {
         width: 'calc(50% - 6px)',
-        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         borderRadius: '8px',
     },
     buttonWrapper: {
@@ -54,20 +54,20 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         flexGrow: 1,
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     cancelButton: {
         width: '48%',
-        borderRadius: '99px',
-        backgroundColor: theme.palette.background.paper,
+        borderRadius: '8px',
+        backgroundColor: theme.palette.maskColor.thirdMain,
         color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
-        border: `1px solid ${theme.palette.divider}`,
         '&:hover': {
             backgroundColor: theme.palette.background.paper,
         },
     },
     button: {
         width: '48%',
-        borderRadius: '99px',
+        borderRadius: '8px',
     },
 }))
 

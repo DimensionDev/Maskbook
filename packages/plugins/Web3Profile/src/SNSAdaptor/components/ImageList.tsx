@@ -38,7 +38,6 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             borderRadius: 12,
             userSelect: 'none',
-            justifyContent: 'center',
             lineHeight: 0,
         },
         content: {
@@ -74,11 +73,11 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: '99px',
         },
         list: {
-            gridGap: 13,
+            gridRowGap: 16,
+            gridColumnGap: 20,
             display: 'grid',
             gridTemplateColumns: 'repeat(7, 1fr)',
             paddingBottom: '16px',
-            marginTop: '16px',
         },
         AddCollectiblesButton: {
             fontWeight: 600,
@@ -212,7 +211,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             ))}
                         </List>
                     </Box>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
+                    <Box>
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
+                    </Box>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
                         <List className={classes.list}>
                             {unListedCollections?.map((collection, i) => (
