@@ -141,7 +141,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
             await createOrUpdateRelationDB(
                 {
                     profile: profileRecord.identifier,
-                    linked: profileRecord.linkedPersona,
+                    linked: whoAmI,
                     favor: RelationFavor.UNCOLLECTED,
                 },
                 t,
