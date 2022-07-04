@@ -19,11 +19,13 @@ const defaultUseTheme = (t: Theme) => t
 /**
  * @deprecated Should migrate to \@masknet/theme
  */
-export function useClassicMaskSNSTheme() {
+export function useClassicMaskSNSTheme(mode?: string) {
     const provider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || staticRef).current
     const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
     const palette = useSubscription(provider)
-    const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
+    const paletteMode = mode ?? palette
+
+    const baseTheme = paletteMode === 'dark' ? MaskDarkTheme : MaskLightTheme
 
     setAutoFreeze(false)
     const maskTheme = produce(baseTheme, (theme) => {
@@ -75,7 +77,7 @@ export function useClassicMaskSNSTheme() {
                         variant: 'contained',
                     },
                     style: {
-                        backgroundColor: theme.palette.text.primary,
+                        backgroundColor: theme.palette.maskColor.main,
                         ['&:hover']: {
                             backgroundColor: theme.palette.text.primary,
                             boxShadow:
@@ -99,10 +101,7 @@ export function useClassicMaskSNSTheme() {
                         color: theme.palette.maskColor.main,
                         border: 'none',
                         ['&:hover']: {
-                            background:
-                                theme.palette.mode === 'dark'
-                                    ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
-                                    : theme.palette.maskColor.white,
+                            background: theme.palette.maskColor.bottom,
                             boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
                                 .setAlpha(0.1)
                                 .toRgbString()}`,
@@ -111,6 +110,7 @@ export function useClassicMaskSNSTheme() {
                             color: theme.palette.maskColor.main,
                             background: theme.palette.maskColor.thirdMain,
                             opacity: 0.4,
+                            border: 'none',
                         },
                     },
                 },
@@ -119,7 +119,7 @@ export function useClassicMaskSNSTheme() {
                         variant: 'text',
                     },
                     style: {
-                        color: theme.palette.text.primary,
+                        color: theme.palette.maskColor.main,
                         ['&:hover']: {
                             background: theme.palette.maskColor.thirdMain,
                         },
@@ -386,18 +386,18 @@ export function useClassicMaskSNSTheme() {
                         variant: 'roundedContained',
                     },
                     style: {
-                        backgroundColor: theme.palette.text.primary,
+                        backgroundColor: theme.palette.maskColor.main,
                         borderRadius: 99,
                         ['&:hover']: {
-                            backgroundColor: theme.palette.text.primary,
-                            boxShadow: `0 8px 25px ${parseColor(theme.palette.text.primary)
-                                .setAlpha(0.3)
+                            backgroundColor: theme.palette.maskColor.main,
+                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.main)
+                                .setAlpha(0.2)
                                 .toRgbString()}`,
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             background: theme.palette.maskColor.primaryMain,
                             opacity: 0.6,
-                            color: theme.palette.background.paper,
+                            color: theme.palette.maskColor.bottom,
                         },
                     },
                 },
@@ -411,15 +411,14 @@ export function useClassicMaskSNSTheme() {
                         color: theme.palette.maskColor.main,
                         border: 'none',
                         ['&:hover']: {
-                            backgroundColor: theme.palette.background.paper,
-                            boxShadow:
-                                theme.palette.mode === 'dark'
-                                    ? '0 8px 25px rgba(255, 255, 255, 0.1)'
-                                    : '0 8px 25px rgba(0, 0, 0, 0.1)',
+                            background: theme.palette.maskColor.bottom,
+                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.bottom)
+                                .setAlpha(0.1)
+                                .toRgbString()}`,
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             opacity: 0.4,
-                            color: theme.palette.text.primary,
+                            color: theme.palette.maskColor.main,
                         },
                     },
                 },
@@ -428,7 +427,7 @@ export function useClassicMaskSNSTheme() {
                         variant: 'roundedText',
                     },
                     style: {
-                        color: theme.palette.text.primary,
+                        color: theme.palette.maskColor.main,
                         borderRadius: 99,
                         ['&:hover']: {
                             background: theme.palette.maskColor.thirdMain,
@@ -716,7 +715,7 @@ export function useClassicMaskSNSTheme() {
 }
 
 export function useClassicMaskSNSPluginTheme() {
-    const theme = useClassicMaskSNSTheme()
+    const theme = useClassicMaskSNSTheme('light')
     return unstable_createMuiStrictModeTheme(
         merge(cloneDeep(theme), {
             components: {

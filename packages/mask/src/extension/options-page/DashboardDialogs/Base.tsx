@@ -243,7 +243,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
     icon?: React.ReactElement
     iconColor?: string
     primary: string
-    secondary?: string
+    secondary?: React.ReactNode
     constraintSecondary?: boolean
     size?: 'small' | 'medium'
     content?: React.ReactNode
@@ -269,7 +269,7 @@ export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
                         )}
                         color="textSecondary"
                         variant="body2"
-                        dangerouslySetInnerHTML={{ __html: secondary ?? '' }}
+                        children={secondary}
                     />
                 </section>
                 {content ? <section className={classes.content}>{content}</section> : null}

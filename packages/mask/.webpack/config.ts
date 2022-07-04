@@ -259,20 +259,19 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
-        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/render.tsx')),
+        popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/SSR-client.ts')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
-            sourceMap: !!sourceMapKind,
             lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', lockdown }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -289,7 +288,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 gun: true,
-                sourceMap: !!sourceMapKind,
                 lockdown,
             }),
         )
@@ -316,7 +314,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
 }
 function addHTMLEntry(
     options: HTMLPlugin.Options & {
-        sourceMap: boolean
         gun?: boolean
         lockdown: boolean
     },
@@ -324,12 +321,6 @@ function addHTMLEntry(
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.gun) {
         templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
-    }
-    if (options.sourceMap) {
-        templateContent = templateContent.replace(
-            `<!-- CSP -->`,
-            `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
-        )
     }
     if (options.lockdown) {
         templateContent = templateContent.replace(

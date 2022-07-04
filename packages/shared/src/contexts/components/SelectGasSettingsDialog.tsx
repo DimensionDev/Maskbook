@@ -1,24 +1,26 @@
 import type { FC } from 'react'
-import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
-import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useSharedI18N } from '@masknet/shared'
+import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { DialogContent, Theme, useMediaQuery } from '@mui/material'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { DialogContent } from '@mui/material'
 import { useBaseUIRuntime } from '../base'
 import { InjectedDialog } from '../components'
-import { useRowSize } from './useRowSize'
+import { SettingsBoard } from '../../UI/components/SettingsBoard'
+import { SettingsContext } from '../../UI/components/SettingsBoard/Context'
+
+const isDashboard = isDashboardPage()
 
 interface StyleProps {
     compact: boolean
-    disablePaddingTop: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(3),
-        paddingTop: disablePaddingTop ? 0 : theme.spacing(2.8),
+        paddingTop: 0,
     },
     list: {
         scrollbarWidth: 'none',
@@ -42,29 +44,23 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
-    keyword?: string
-    whitelist?: string[]
+    transaction?: Web3Helper.Definition[T]['Transaction']
     title?: string
-    blacklist?: string[]
-    tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
-    disableSearchBar?: boolean
-    disableNativeToken?: boolean
-    selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
+    disableGasPrice?: boolean
+    disableSlippageTolerance?: boolean
+    onSubmit?(
+        settings: { slippageTolerance?: number; transaction?: Web3Helper.Definition[T]['Transaction'] } | null,
+    ): void
     onClose?(): void
 }
 
-const isDashboard = isDashboardPage()
 export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     open,
     pluginID,
     chainId,
-    disableSearchBar,
-    disableNativeToken,
-    tokens,
-    whitelist,
-    blacklist = EMPTY_LIST,
-    selectedTokens = EMPTY_LIST,
+    transaction,
+    disableGasPrice,
+    disableSlippageTolerance,
     onSubmit,
     onClose,
     title,
@@ -72,39 +68,32 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
-    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
-    const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
-
-    const rowSize = useRowSize()
-
-    const nativeTokenAddress = useNativeTokenAddress(pluginId)
+    const pluginID_ = useCurrentWeb3NetworkPluginID(pluginID)
+    const chainId_ = useChainId(pluginID_, chainId)
+    const { classes } = useStyles({ compact })
 
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
-            onClose={onClose}
-            title={title ?? t.select_token()}>
+            onClose={() => {
+                onSubmit?.(null)
+                onClose?.()
+            }}
+            title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
-                <FungibleTokenList
-                    classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    pluginID={pluginId}
-                    chainId={chainId}
-                    tokens={tokens ?? []}
-                    whitelist={whitelist}
-                    blacklist={
-                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
-                    }
-                    disableSearch={disableSearchBar}
-                    selectedTokens={selectedTokens}
-                    onSelect={onSubmit}
-                    FixedSizeListProps={{
-                        itemSize: rowSize,
-                        height: isMdScreen ? 300 : 503,
-                    }}
-                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
-                />
+                <SettingsContext.Provider
+                    initialState={{
+                        pluginID: pluginID_,
+                        chainId: chainId_,
+                        transaction,
+                    }}>
+                    <SettingsBoard
+                        disableGasPrice={disableGasPrice}
+                        disableSlippageTolerance={disableSlippageTolerance}
+                        onSubmit={onSubmit}
+                    />
+                </SettingsContext.Provider>
             </DialogContent>
         </InjectedDialog>
     )

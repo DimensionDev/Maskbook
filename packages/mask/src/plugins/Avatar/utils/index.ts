@@ -60,7 +60,7 @@ export function formatPrice(amount: string, symbol: string) {
 export function formatText(name: string, tokenId: string) {
     const _name = name.replace(/#\d*/, '').trim()
     const __name = `${_name} #${tokenId}`
-    if (__name.length > 35) return `${__name.slice(0, 35)}...`
+    if (__name.length > 28) return `${__name.slice(0, 28)}...`
     return __name
 }
 
@@ -85,7 +85,7 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
 
 export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const bindings = await NextIDProof.queryExistedBindingByPlatform(platform, userId.toLowerCase())
+    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
         const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(

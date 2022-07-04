@@ -1,1 +1,5 @@
-{}
+{
+    "insufficient_balance": "Insufficient balance",
+    "drawing": "Drawing",
+    "draw": "Draw"
+}

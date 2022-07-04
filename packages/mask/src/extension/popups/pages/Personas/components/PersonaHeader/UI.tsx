@@ -1,3 +1,5 @@
+// ! This file is used during SSR. DO NOT import new files that does not work in SSR
+
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'

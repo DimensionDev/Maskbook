@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { dialogClasses, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -15,6 +15,11 @@ import { getSiteType } from '@masknet/shared-base'
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2),
+    },
+    dialog: {
+        [`.${dialogClasses.paper}`]: {
+            minHeight: 'unset !important',
+        },
     },
 }))
 
@@ -80,6 +85,7 @@ export function ConnectWalletDialog() {
         <InjectedDialog
             title={t('plugin_wallet_dialog_title')}
             open={open}
+            className={classes.dialog}
             onClose={() => setConnectWalletDialog({ open: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress

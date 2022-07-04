@@ -4,13 +4,14 @@ import classNames from 'classnames'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { List, Popper, Typography } from '@mui/material'
+import { List, Popper, Typography, Box } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 import { useI18N as useBaseI18n } from '../../../utils'
 import { useI18N } from '../locales'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -18,7 +19,7 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
         root: {
             display: 'flex',
             width: 568,
-            padding: '0 12px',
+            padding: 0,
             boxSizing: 'border-box',
             height: '100%',
             flexDirection: 'column',
@@ -33,13 +34,13 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             },
         },
         placeholder: {
-            height: '100%',
             display: 'flex',
-            width: 360,
-            margin: '0 auto',
+            height: 350,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
+            width: 360,
+            margin: '0 auto',
         },
         popper: {
             overflow: 'visible',
@@ -112,9 +113,9 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     if (loading) {
         return (
-            <Typography className={classes.placeholder} color="textSecondary">
-                {tr('loading')}
-            </Typography>
+            <Box style={{ height: 350, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                <LoadingAnimation />
+            </Box>
         )
     }
 
@@ -129,7 +130,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     return (
         <>
             <div ref={containerRef} className={classes.root}>
-                <List>
+                <List style={{ padding: '16px 0 0' }}>
                     {histories.map((history) => (
                         <NftRedPacketHistoryItem
                             key={history.rpid}

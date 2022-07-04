@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 
 export const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
-        padding: '0 15px',
+        padding: 0,
         fontFamily: theme.typography.fontFamily,
     },
     inputWrap: {
@@ -43,23 +43,8 @@ export const useStyles = makeStyles()((theme, props) => ({
         height: '24px',
         margin: '0 5px 0 0',
     },
-    button: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        padding: '13px 0',
-        borderRadius: 24,
-        height: 'auto',
-        marginTop: '0 !important',
-    },
-    disabledButton: {
-        fontSize: 18,
-        lineHeight: '22px',
-        fontWeight: 600,
-        padding: '13px 0',
-        borderRadius: 24,
-        height: 'auto',
-    },
+    button: {},
+    disabledButton: {},
     connectWallet: {
         marginTop: 0,
     },
