@@ -62,10 +62,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     // #region trade state
     const {
         setIsSwapping,
-        tradeState: [
-            { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
-            dispatchTradeStore,
-        ],
+        tradeState: [{ inputToken, outputToken, inputTokenBalance, inputAmount }, dispatchTradeStore],
         allTradeComputed,
         setTemporarySlippage,
     } = AllProviderTradeContext.useContainer()
@@ -372,7 +369,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 inputToken={inputToken}
                 outputToken={outputToken}
                 inputTokenBalance={inputTokenBalance}
-                outputTokenBalance={outputTokenBalance}
                 inputAmount={inputAmount}
                 onInputAmountChange={onInputAmountChange}
                 onTokenChipClick={onTokenChipClick}

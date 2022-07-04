@@ -4,7 +4,14 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, Typography } from '@mui/material'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
+import {
+    FungibleToken,
+    isLessThan,
+    formatBalance,
+    NetworkPluginID,
+    rightShift,
+    multipliedBy,
+} from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -150,7 +157,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
-                color: theme.palette.common.white,
+                color: `${theme.palette.common.white}!important`,
                 marginRight: 4,
             },
         },
@@ -192,13 +199,14 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
     }
 })
 
+const MIN_GAS_LIMIT = 150000
+
 export interface AllTradeFormProps {
     account?: string | null
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType>
     outputToken?: FungibleToken<ChainId, SchemaType>
     inputTokenBalance?: string
-    outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
     onTokenChipClick?: (token: TokenPanelType) => void
     onRefreshClick?: () => void
@@ -220,7 +228,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         onTokenChipClick = noop,
         onInputAmountChange,
         inputTokenBalance,
-        outputTokenBalance,
         focusedTrade,
         onFocusedTradeChange,
         onSwap,
@@ -299,6 +306,14 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [focusedTrade, outputToken])
         // #endregion
 
+        const maxAmount = useMemo(() => {
+            const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
+            const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
+            let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
+            amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
+            return formatBalance(BigNumber.max(0, amount_).toFixed(), inputToken?.decimals, 6)
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
+
         useUpdateEffect(() => {
             setExpand(false)
         }, [chainId, inputToken, inputAmount, outputToken])
@@ -351,11 +366,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                 <Box className={classes.root}>
                     <InputTokenPanel
                         chainId={chainId}
-                        gasPrice={gasPrice}
                         amount={inputAmount}
                         balance={inputTokenBalanceAmount.toFixed()}
                         token={inputToken}
                         onAmountChange={onInputAmountChange}
+                        maxAmount={maxAmount}
                         SelectTokenChip={{
                             ChipProps: {
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
