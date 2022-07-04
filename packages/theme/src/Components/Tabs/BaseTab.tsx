@@ -21,7 +21,7 @@ const BaseTabWrap = styled(Button, {
     '&:hover': {
         color: theme.palette.text.primary,
         boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
-        background: activated ? theme.palette.background.paper : 'transparent',
+        background: activated ? theme.palette.maskColor.bottom : 'transparent',
     },
 }))
 
