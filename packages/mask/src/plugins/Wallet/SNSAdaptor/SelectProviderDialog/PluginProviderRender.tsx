@@ -181,7 +181,9 @@ export function PluginProviderRender({
                             .map((network, i) => (
                                 <NetworkItem
                                     key={i}
-                                    disabled={supportedNetworkList && !supportedNetworkList?.includes(network.type)}
+                                    disabled={Boolean(
+                                        supportedNetworkList && !supportedNetworkList?.includes(network.type),
+                                    )}
                                     onNetworkIconClicked={onNetworkIconClicked}
                                     NetworkIconClickBait={NetworkIconClickBait}
                                     network={network}
