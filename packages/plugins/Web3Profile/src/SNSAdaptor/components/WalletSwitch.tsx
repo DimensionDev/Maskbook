@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'space-between',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     accountInfo: {
         fontSize: 16,

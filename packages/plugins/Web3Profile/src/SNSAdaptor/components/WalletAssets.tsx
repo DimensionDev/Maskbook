@@ -108,7 +108,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                 </div>
                 <Edit2Icon onClick={onSetting} className={classes.editIcon} />
             </div>
-            {!collectionList || collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
+            {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
                 <List className={classes.list}>
                     {collectionList
                         ?.filter((collection) => !collection?.hidden)
