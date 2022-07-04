@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
 import { useCustomSnackbar } from '@masknet/theme'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
 import { PluginGameMessages } from '../messages'
@@ -34,6 +34,7 @@ const WalletConnectDialog = () => {
     const { t } = useI18N()
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const { isGameShow, setGameShow, tokenProps, setTokenProps, gameInfo, setGameInfo } = ConnectContext.useContainer()
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated, (ev) => {
@@ -48,6 +49,10 @@ const WalletConnectDialog = () => {
     }
 
     const handleGameOpen = (gameInfo: GameInfo) => {
+        if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
+            showSnackbar(t('plugin_game_list_play_evm_error'), { variant: 'error' })
+            return
+        }
         if (gameInfo.wallet && !account) {
             showSnackbar(t('plugin_game_list_play_error'), { variant: 'error' })
             return

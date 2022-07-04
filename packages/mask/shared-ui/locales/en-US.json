@@ -892,6 +892,7 @@
     "plugin_game_list_rank": "Rank",
     "plugin_game_list_play": "Play",
     "plugin_game_list_play_error": "Please connect wallet",
+    "plugin_game_list_play_evm_error": "Please connect to EVM wallet",
     "plugin_game_share_btn": "Share",
     "plugin_game_share_title": "Share",
     "plugin_game_dialog_info": "Share this game to twitter",
