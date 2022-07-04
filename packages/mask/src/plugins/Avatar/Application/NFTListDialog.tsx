@@ -1,5 +1,5 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     Box,
@@ -434,7 +434,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 ) : null}
             </DialogContent>
 
-            <DialogActions className={classes.actions}>
+            <DialogActions className={classes.actions} disableSpacing>
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
                     <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', padding: 2 }}>
                         <Typography
@@ -453,9 +453,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     onClick={(e) => onOpenMenu(e)}
                     showConnect={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
                     expectedAccount={selectedAccount}
-                    expectedWallet={wallet!}
-                    expectedProviderType={providerType as ProviderType}
-                    expectedPluginID={selectedPluginId}>
+                    expectedWallet={wallet}
+                    expectedProviderType={providerType}
+                    expectedPluginID={selectedPluginId}
+                    onlyNetworkIcon>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                     </Button>

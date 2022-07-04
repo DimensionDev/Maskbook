@@ -9,6 +9,7 @@ import {
     useReverseAddress,
     useWeb3State,
     useProviderType,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletIcon } from '@masknet/shared'
@@ -17,17 +18,18 @@ import { makeStyles, parseColor } from '@masknet/theme'
 import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     showConnect?: boolean
+    onlyNetworkIcon?: boolean
     expectedAccount?: string
-    expectedWallet?: Wallet
-    expectedProviderType?: ProviderType
+    expectedWallet?: Wallet | null
+    expectedProviderType?: Web3Helper.ProviderTypeAll
     expectedPluginID?: NetworkPluginID
 }
 
@@ -110,6 +112,7 @@ export function PluginWalletStatusBar({
     expectedAccount,
     expectedPluginID,
     expectedProviderType,
+    onlyNetworkIcon = false,
 }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
@@ -145,65 +148,67 @@ export function PluginWalletStatusBar({
         }
     }, [children])
 
-    return (
-        <Box className={cx(classes.root, className)}>
-            {account || !showConnect ? (
-                <>
-                    <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
-                        <WalletIcon
-                            size={30}
-                            badgeSize={12}
-                            mainIcon={providerDescriptor?.icon}
-                            badgeIcon={networkDescriptor?.icon}
-                            iconFilterColor={providerDescriptor?.iconFilterColor}
-                        />
-                        <Box className={classes.description}>
-                            <Typography className={classes.walletName}>
-                                <span>
-                                    {providerType === ProviderType.MaskWallet
-                                        ? domain ??
-                                          wallet?.name ??
-                                          providerDescriptor?.name ??
-                                          Others?.formatAddress(account, 4)
-                                        : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
-                                </span>
-
-                                <ArrowDropIcon />
-                            </Typography>
-                            <Typography className={classes.address}>
-                                <span>{Others?.formatAddress(account, 4)}</span>
-                                <Link
-                                    href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
-                                    target="_blank"
-                                    title="View on Explorer"
-                                    rel="noopener noreferrer"
-                                    className={classes.linkIcon}>
-                                    <LinkOutIcon className={classes.linkIcon} />
-                                </Link>
-                                {pendingTransactions.length ? (
-                                    <span className={classes.pending}>
-                                        {t('wallet_status_bar_pending')}
-                                        <CircularProgress thickness={6} size={12} className={classes.progress} />
-                                    </span>
-                                ) : null}
-                            </Typography>
-                        </Box>
-                    </Box>
-                    <Box className={classes.action} ref={ref}>
-                        <Button
-                            fullWidth
-                            onClick={openSelectProviderDialog}
-                            style={{ display: !emptyChildren ? 'none' : undefined }}>
-                            {t('wallet_status_button_change')}
-                        </Button>
-                        {children}
-                    </Box>
-                </>
-            ) : (
+    if (showConnect || !account) {
+        return (
+            <Box className={cx(classes.root, className)}>
                 <Button fullWidth onClick={openSelectProviderDialog}>
                     <PluginWalletConnectIcon className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                 </Button>
-            )}
+            </Box>
+        )
+    }
+
+    return (
+        <Box className={cx(classes.root, className)}>
+            <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
+                <WalletIcon
+                    size={30}
+                    badgeSize={12}
+                    mainIcon={onlyNetworkIcon ? networkDescriptor?.icon : providerDescriptor?.icon}
+                    badgeIcon={!onlyNetworkIcon ? networkDescriptor?.icon : undefined}
+                    iconFilterColor={!onlyNetworkIcon ? providerDescriptor?.iconFilterColor : undefined}
+                />
+                <Box className={classes.description}>
+                    <Typography className={classes.walletName}>
+                        <span>
+                            {providerType === ProviderType.MaskWallet
+                                ? domain ??
+                                  wallet?.name ??
+                                  providerDescriptor?.name ??
+                                  Others?.formatAddress(account, 4)
+                                : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
+                        </span>
+
+                        <ArrowDropIcon />
+                    </Typography>
+                    <Typography className={classes.address}>
+                        <span>{Others?.formatAddress(account, 4)}</span>
+                        <Link
+                            href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                            target="_blank"
+                            title="View on Explorer"
+                            rel="noopener noreferrer"
+                            className={classes.linkIcon}>
+                            <LinkOutIcon className={classes.linkIcon} />
+                        </Link>
+                        {pendingTransactions.length ? (
+                            <span className={classes.pending}>
+                                {t('wallet_status_bar_pending')}
+                                <CircularProgress thickness={6} size={12} className={classes.progress} />
+                            </span>
+                        ) : null}
+                    </Typography>
+                </Box>
+            </Box>
+            <Box className={classes.action} ref={ref}>
+                <Button
+                    fullWidth
+                    onClick={openSelectProviderDialog}
+                    style={{ display: !emptyChildren ? 'none' : undefined }}>
+                    {t('wallet_status_button_change')}
+                </Button>
+                {children}
+            </Box>
         </Box>
     )
 }
