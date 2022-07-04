@@ -348,7 +348,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
-                        size: 'large',
+                        height: 40,
+                        padding: 0,
+                        margin: 0,
                         fullWidth: true,
                     }}>
                     <ActionButton
