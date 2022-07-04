@@ -51,12 +51,6 @@ const useStyles = makeStyles()((theme) => ({
             textDecoration: 'none',
         },
     },
-    linkIcon: {
-        fill: 'none',
-        width: 12,
-        height: 12,
-        marginLeft: theme.spacing(0.5),
-    },
     actions: {
         padding: '0px !important',
         backgroundColor: theme.palette.background.paper,

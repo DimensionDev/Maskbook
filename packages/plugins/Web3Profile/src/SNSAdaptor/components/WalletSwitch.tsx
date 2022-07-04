@@ -1,18 +1,17 @@
 import { makeStyles } from '@masknet/theme'
-import { Link, Switch, Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
+import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
+import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { useI18N } from '../../locales'
-import { ExternalLink } from 'react-feather'
 import { useState } from 'react'
 import { formatAddress } from '../utils'
 import type { WalletTypes } from '../types'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { LinkOutIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
-        padding: theme.spacing(1.5),
+        padding: '8px',
         display: 'flex',
-        border: `1px solid ${theme.palette.background.default}`,
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -27,12 +26,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 16,
-        marginRight: 6,
+        fontSize: 14,
+        fontWeight: 700,
     },
     address: {
-        fontSize: 14,
-        marginRight: theme.spacing(1),
+        fontSize: 12,
+        fontWeight: 400,
         color: theme.palette.text.secondary,
         display: 'inline-block',
     },
@@ -43,7 +42,58 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     linkIcon: {
-        marginRight: theme.spacing(1),
+        fill: theme.palette.maskColor.second,
+        height: 15,
+        width: 15,
+        marginTop: '1px',
+    },
+}))
+
+const IOSSwitch = styled((props: SwitchProps) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+    width: 43,
+    height: 22,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+        padding: 0,
+        margin: 3.5,
+        transitionDuration: '300ms',
+        '&.Mui-checked': {
+            transform: 'translateX(22px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+                backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+                opacity: 1,
+                border: 0,
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: 0.5,
+            },
+        },
+        '&.Mui-focusVisible .MuiSwitch-thumb': {
+            color: '#33cf4d',
+            border: '6px solid #fff',
+        },
+        '&.Mui-disabled .MuiSwitch-thumb': {
+            color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+            opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        boxSizing: 'border-box',
+        width: 14,
+        height: 14,
+    },
+    '& .MuiSwitch-track': {
+        borderRadius: 26 / 2,
+        backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500,
+        }),
     },
 }))
 
@@ -63,6 +113,8 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
         return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
     }
 
+    const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
+
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         if (!v) {
@@ -79,6 +131,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
     }
     return (
         <div className={classes.currentAccount}>
+            <ImageIcon icon={iconURL} size={30} borderRadius="99px" />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{getWalletName()}</Typography>
@@ -94,12 +147,12 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
                         target="_blank"
                         title={t.plugin_wallet_view_on_explorer()}
                         rel="noopener noreferrer">
-                        <ExternalLink className={classes.linkIcon} size={14} />
+                        <LinkOutIcon className={classes.linkIcon} />
                     </Link>
                 </div>
             </div>
             <div>
-                <Switch checked={checked} onChange={onSwitch} />
+                <IOSSwitch checked={checked} onChange={onSwitch} />
             </div>
         </div>
     )
