@@ -9,6 +9,10 @@ export function useCurrentVisitingProfile() {
     return useSubscription(context.currentVisitingProfile)
 }
 
+export function useLastRecognizedProfile() {
+    return useSubscription(context.lastRecognizedProfile)
+}
+
 export function useAllPersona() {
     return useSubscription(context.allPersona!)
 }

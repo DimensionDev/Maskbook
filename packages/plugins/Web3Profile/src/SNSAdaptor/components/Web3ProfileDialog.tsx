@@ -3,7 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { useAllPersona, useCurrentPersona, useCurrentVisitingProfile } from '../hooks/usePersona'
+import { useAllPersona, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
 import { NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -63,7 +63,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const [accountId, setAccountId] = useState<string>()
 
     const persona = useCurrentPersona()
-    const currentVisitingProfile = useCurrentVisitingProfile()
+    const currentVisitingProfile = useLastRecognizedProfile()
     const allPersona = useAllPersona()
     const currentPersona = allPersona?.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
@@ -124,7 +124,17 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
             internal: true,
         })
     }
-    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList, wallets })
+    console.log({
+        accounts,
+        allPersona,
+        accountList,
+        hiddenObj,
+        footprintList,
+        donationList,
+        NFTList,
+        wallets,
+        currentVisitingProfile,
+    })
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
