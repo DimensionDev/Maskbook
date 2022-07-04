@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -64,7 +64,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = approvalDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const { classes } = useStyles()
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
@@ -86,7 +86,21 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 )}
             </section>
             <PluginWalletStatusBar className={classes.footer}>
-                <Button variant="contained" size="medium" onClick={openSelectProviderDialog} fullWidth>
+                <Button
+                    variant="contained"
+                    size="medium"
+                    onClick={() => {
+                        setSelectProviderDialog({
+                            open: true,
+                            supportedNetworkList: chainIdList
+                                .map((chainId) => {
+                                    const x = chainResolver.chainNetworkType(chainId)
+                                    return x
+                                })
+                                .filter((x) => Boolean(x)) as NetworkType[],
+                        })
+                    }}
+                    fullWidth>
                     {tr('wallet_status_button_change')}
                 </Button>
             </PluginWalletStatusBar>

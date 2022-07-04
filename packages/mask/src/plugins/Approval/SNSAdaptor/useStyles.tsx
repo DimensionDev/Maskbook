@@ -78,7 +78,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             flexGrow: 1,
             width: 568,
             paddingTop: 0,
-            margin: 'auto',
+            marginLeft: 18,
             display: 'flex',
             flexDirection: 'column',
         },

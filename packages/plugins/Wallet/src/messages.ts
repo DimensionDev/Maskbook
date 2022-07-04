@@ -25,6 +25,7 @@ export type SelectProviderDialogEvent =
     | {
           open: true
           walletConnectedCallback?: () => void
+          supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
       }
     | {
           open: false

@@ -115,6 +115,11 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.primary,
             fontWeight: 700,
         },
+        disabled: {
+            opacity: 0.5,
+            pointerEvents: 'none',
+            cursor: 'default',
+        },
     }
 })
 
@@ -142,6 +147,7 @@ export interface PluginProviderRenderProps {
             Web3Helper.Definition[NetworkPluginID]['NetworkType']
         >
     >
+    supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
 }
 
 export function PluginProviderRender({
@@ -151,6 +157,7 @@ export function PluginProviderRender({
     undeterminedNetworkID,
     NetworkIconClickBait,
     ProviderIconClickBait,
+    supportedNetworkList,
     onNetworkIconClicked,
     onProviderIconClicked,
 }: PluginProviderRenderProps) {
@@ -174,6 +181,7 @@ export function PluginProviderRender({
                             .map((network, i) => (
                                 <NetworkItem
                                     key={i}
+                                    disabled={supportedNetworkList && !supportedNetworkList?.includes(network.type)}
                                     onNetworkIconClicked={onNetworkIconClicked}
                                     NetworkIconClickBait={NetworkIconClickBait}
                                     network={network}
@@ -238,15 +246,22 @@ interface NetworkItemProps {
     onNetworkIconClicked: PluginProviderRenderProps['onNetworkIconClicked']
     NetworkIconClickBait?: PluginProviderRenderProps['NetworkIconClickBait']
     network: Web3Helper.NetworkDescriptorAll
+    disabled: boolean
     selected: boolean
 }
 
-function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, selected }: NetworkItemProps) {
+function NetworkItem({
+    onNetworkIconClicked,
+    NetworkIconClickBait,
+    network,
+    selected,
+    disabled = false,
+}: NetworkItemProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State<'all'>(network.networkSupporterPluginID)
     return (
         <ListItem
-            className={classes.networkItem}
+            className={cx(classes.networkItem, disabled ? classes.disabled : '')}
             key={network.ID}
             onClick={() => {
                 onNetworkIconClicked(network)
