@@ -19,7 +19,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
-        padding: theme.spacing(3),
+        padding: theme.spacing(3, 2),
         paddingTop: 0,
     },
     list: {
