@@ -23,13 +23,9 @@ import {
     useAccount,
     useChainId,
     useCurrentWeb3NetworkPluginID,
-    useNetworkDescriptor,
     useNonFungibleAssets,
-    useProviderDescriptor,
     useProviderType,
-    useReverseAddress,
     useWallet,
-    useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
@@ -170,7 +166,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const currentChainId = useChainId(currentPluginId)
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
     const [open_, setOpen_] = useState(false)
-    const [selectedAccount, setSelectedAccount] = useState(account ?? wallets?.[0]?.identity ?? '')
+    const [selectedAccount, setSelectedAccount] = useState((account || wallets?.[0]?.identity) ?? '')
     const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId ?? NetworkPluginID.PLUGIN_EVM)
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
@@ -321,10 +317,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         })
     }, [chainId])
 
-    const networkDescriptor = useNetworkDescriptor(selectedPluginId, chainId)
-    const { value: domain } = useReverseAddress(selectedPluginId, selectedAccount)
-    const { Others } = useWeb3State<'all'>(selectedPluginId)
-    const providerDescriptor = useProviderDescriptor()
     const providerType = useProviderType()
 
     const theme = useTheme()
