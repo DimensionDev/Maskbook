@@ -257,7 +257,7 @@ const WalletSetting = memo(
                                 Cancel
                             </Button>
                             <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
-                                Confirm
+                                Save
                             </Button>
                         </div>
                     </DialogActions>

@@ -1,4 +1,4 @@
-import { Card, Typography, Link, List, ListItem } from '@mui/material'
+import { Card, Typography, Link, List, ListItem, Box } from '@mui/material'
 import { Edit2Icon, LinkOutIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
@@ -14,6 +14,7 @@ import { Empty } from './Empty'
 const useStyles = makeStyles()((theme) => {
     return {
         wrapper: {
+            width: '100%',
             marginBottom: '16px',
         },
 
@@ -147,7 +148,9 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         ))}
                 </List>
             ) : (
-                <Empty content={t.no_collection_item()} />
+                <Box>
+                    <Empty content={t.no_collection_item()} />
+                </Box>
             )}
         </Card>
     )

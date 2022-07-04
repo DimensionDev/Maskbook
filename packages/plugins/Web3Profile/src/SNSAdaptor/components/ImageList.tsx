@@ -42,9 +42,9 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             width: 564,
-            padding: '8px 16px 0 16px',
-            height: 420,
-            maxHeight: 420,
+            padding: '0 16px',
+            height: 492,
+            maxHeight: 492,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
         },
@@ -280,7 +280,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             </List>
                         ) : (
                             <Typography className={classes.unListedEmpty}>
-                                Click to show your NFTs on Web3 profile.
+                                {t.no_unlisted_collection({ collection: title })}
                             </Typography>
                         )}
                     </Box>
@@ -301,7 +301,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         Cancel
                     </Button>
                     <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
-                        Confirm
+                        Save
                     </Button>
                 </div>
             </DialogActions>

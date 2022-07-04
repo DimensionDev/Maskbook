@@ -19,6 +19,7 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "add_wallet": "No connected wallet, pleae add wallet.",
+    "open_wallet": "You’ve switched off all wallets. Please go to settings to active.",
     "tip_persona_sign_success": "Persona signed successfully.",
     "tip_wallet_sign_error": "Wallet connection failed.",
     "plugin_tips_not_evm_alert": "The tips feature currently supports only EVM chains. Support for other chains will be added in the future.",
@@ -38,5 +39,6 @@
     "wallets_add_collectible": "Add Collectible",
     "add_collectible": "Add collectible",
     "nft_add_dialog_title": "Add Collectible",
-    "no_collection_item": "No items to preview. Please go to setting."
+    "no_collection_item": "No items to preview. Please go to setting.",
+    "no_unlisted_collection": " Click to show your {{collection}} on Web3 profile."
 }

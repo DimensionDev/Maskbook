@@ -6,54 +6,43 @@ import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { DialogContent } from '@mui/material'
+import { Box, Button, DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { accountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
-import { GearIcon } from '@masknet/icons'
+import { GearIcon, WalletUnderTabsIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    paperRoot: {
-        backgroundImage: 'none',
-        '&>h2': {
-            height: 30,
-            border: `1px solid ${theme.palette.divider}`,
-            padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
-            marginBottom: 24,
-        },
-    },
-    titleTailButton: {
-        marginLeft: 'auto',
+    bottomButton: {
+        width: '100%',
+        height: '72px',
+        position: 'absolute',
+        marginLeft: -16,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '99px',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+    },
+    button: {
+        width: 'calc(100% - 32px)',
     },
     content: {
         width: 564,
-        height: 420,
-        maxHeight: 420,
-        position: 'relative',
-        padding: '8px 16px 0 16px',
+        height: 564,
+        padding: '0 16px',
         backgroundColor: theme.palette.background.paper,
-    },
-    bottomFixed: {
-        width: '100%',
         display: 'flex',
-        borderTop: `1px solid ${theme.palette.divider}`,
+        posotion: 'relative',
+        flexDirection: 'column',
     },
-    link: {
+    settingIcon: {
         cursor: 'pointer',
-        lineHeight: '10px',
-        marginTop: 2,
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
-    actions: {
-        padding: '0px !important',
-        backgroundColor: theme.palette.background.paper,
-        borderTop: `1px solid ${theme.palette.divider}`,
+    walletIcon: {
+        marginRight: '8px',
     },
 }))
 
@@ -95,24 +84,21 @@ export function ImageManagement(props: ImageManagementProps) {
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
     const addresses = getAddressesByTitle(title, accountList!)
 
+    const hasConnectedWallets = allWallets?.length > 0
+
     const openPopupsWindow = async () => {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
     }
     return (
         <InjectedDialog
             title={title}
+            classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
-            titleTail={
-                <GearIcon
-                    onClick={() =>
-                        allWallets && allWallets?.length > 0 ? setWalletSettingOpen(true) : openPopupsWindow()
-                    }
-                />
-            }
+            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                {allWallets?.length > 0 ? (
+                {addresses && addresses?.length > 0 ? (
                     addresses?.map((address) => (
                         <WalletAssetsCard
                             key={address.address}
@@ -126,7 +112,16 @@ export function ImageManagement(props: ImageManagementProps) {
                         />
                     ))
                 ) : (
-                    <Empty content={t.add_wallet()} />
+                    <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
+                )}
+                {!hasConnectedWallets && (
+                    <Box className={classes.bottomButton}>
+                        {' '}
+                        <Button onClick={openPopupsWindow} className={classes.button}>
+                            <WalletUnderTabsIcon className={classes.walletIcon} />
+                            Add Wallet
+                        </Button>
+                    </Box>
                 )}
                 <ImageListDialog
                     currentPersona={currentPersona}
@@ -149,9 +144,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     retryData={getWalletHiddenRetry}
                 />{' '}
             </DialogContent>
-            {/* <DialogActions className={classes.actions}>
-                <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
-            </DialogActions> */}
+            {/* <DialogActions className={classes.noneAction} /> */}
         </InjectedDialog>
     )
 }

@@ -13,6 +13,7 @@ import { context } from '../context'
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
         width: '100%',
+        height: '38px',
         display: 'flex',
         padding: 16,
     },

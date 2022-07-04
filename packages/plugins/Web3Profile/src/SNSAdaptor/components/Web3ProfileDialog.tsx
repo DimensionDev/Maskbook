@@ -3,7 +3,6 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { PersonaAction } from './PersonaAction'
 import { useAllPersona, useCurrentPersona, useCurrentVisitingProfile } from '../hooks/usePersona'
 import { Main } from './Main'
 import { NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
@@ -15,11 +14,13 @@ import { getWalletList, mergeList } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
+import { PersonaAction } from './PersonaAction'
+import { useChainId } from '@masknet/plugin-infra/web3'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 564,
-        height: 420,
-        padding: '8px 16px 0 16px',
+        height: 494,
+        padding: '0px 16px',
         backgroundColor: theme.palette.background.paper,
     },
     link: {
@@ -40,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0px !important',
         backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
-        height: '70px',
     },
     titleTailButton: {
         cursor: 'pointer',
@@ -116,10 +116,15 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     }, [currentPersona])
 
     const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
-    const openPopupsWindow = async () => {
-        await context.openPopupWindow(PopupRoutes.ConnectedWallets)
+    const chainId = useChainId()
+
+    const openPopupsWindow = () => {
+        context.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            chainId,
+            internal: true,
+        })
     }
-    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList })
+    console.log({ accounts, allPersona, accountList, hiddenObj, footprintList, donationList, NFTList, wallets })
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
