@@ -137,7 +137,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         )
     }
 
-    if (!chainIdValid)
+    if (!chainIdValid && !expectedChainAllowed)
         return renderBox(
             <>
                 {!props.hiddenConnectButton ? (
