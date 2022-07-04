@@ -195,7 +195,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             {t.add_collectible()}
                         </Button>
                     </Box>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 232, overflow: 'scroll' }}>
                         <List className={classes.list}>
                             {listedCollections?.map((collection, i) => (
                                 <ListItem
