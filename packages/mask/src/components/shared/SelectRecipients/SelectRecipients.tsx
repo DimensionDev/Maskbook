@@ -57,8 +57,6 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         ({ linkedPersona, nickname }) => linkedPersona?.publicKeyAsHex && nickname,
     )
 
-    console.log(searchedList, 'search')
-
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
         const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
