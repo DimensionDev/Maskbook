@@ -1,4 +1,5 @@
 import {
+    decompressSecp256k1Key,
     ECKeyIdentifier,
     NextIDAction,
     PersonaIdentifier,
@@ -110,7 +111,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         updatedAt: new Date(),
         identifier: item.linkedPersona,
         linkedProfiles: new Map(),
-        publicKey: undefined as any,
+        publicKey: await decompressSecp256k1Key(item.linkedPersona.rawPublicKey),
         publicHexKey: item.linkedPersona?.publicKeyAsHex,
         nickname: item.nickname,
         hasLogout: false,
