@@ -1,7 +1,8 @@
-import { ListItem, List, Typography, Avatar, Link, Button } from '@mui/material'
+import { ListItem, List, Typography, Avatar, Link } from '@mui/material'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import { useAccount, useWeb3State, useNetworkDescriptor, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
@@ -118,9 +119,13 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         complete: t.revoke(),
                         failed: t.revoke(),
                     }}>
-                    <Button onClick={approveCallback} disabled={approveState.loading} className={classes.button}>
+                    <ActionButton
+                        onClick={approveCallback}
+                        disabled={approveState.loading}
+                        loading={approveState.loading}
+                        className={classes.button}>
                         {approveState.loading ? t.revoking() : t.revoke()}
-                    </Button>
+                    </ActionButton>
                 </ChainBoundary>
             </ListItem>
         </div>

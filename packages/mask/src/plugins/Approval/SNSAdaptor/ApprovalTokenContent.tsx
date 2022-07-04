@@ -1,7 +1,8 @@
-import { ListItem, List, Typography, Link, Button, Avatar } from '@mui/material'
+import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import BigNumber from 'bignumber.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useState } from 'react'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
@@ -112,12 +113,13 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         complete: t.revoke(),
                         failed: t.revoke(),
                     }}>
-                    <Button
+                    <ActionButton
                         onClick={() => approveCallback(true, true)}
                         disabled={transactionState.loadingApprove}
+                        loading={transactionState.loadingApprove}
                         className={classes.button}>
                         {transactionState.loadingApprove ? t.revoking() : t.revoke()}
-                    </Button>
+                    </ActionButton>
                 </ChainBoundary>
             </ListItem>
         </div>
