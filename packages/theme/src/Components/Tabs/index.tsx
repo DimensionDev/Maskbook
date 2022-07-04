@@ -72,11 +72,10 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'nowrap',
-    overflow: 'hidden',
+    overflowY: 'clip',
     flex: 1,
     gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
     paddingTop: theme.spacing(1),
-    marginTop: theme.spacing(-1),
     background: 'transparent',
     borderRadius: 0,
 }))
