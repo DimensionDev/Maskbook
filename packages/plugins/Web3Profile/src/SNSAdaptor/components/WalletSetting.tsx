@@ -2,19 +2,20 @@ import { InjectedDialog } from '@masknet/shared'
 import { context } from '../context'
 import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
 import type { accountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { TabContext, TabPanel } from '@mui/lab'
-import { WalletUnderTabsIcon } from '@masknet/icons'
+import { Close as CloseIcon } from '@mui/icons-material'
+import { InfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
+import { useI18N } from '../../locales'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 564,
-        height: 420,
-        maxHeight: 420,
+        height: 430,
         position: 'relative',
         padding: '16px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
@@ -67,6 +68,23 @@ const useStyles = makeStyles()((theme) => ({
         width: '48%',
         borderRadius: '8px',
     },
+    messageBox: {
+        display: 'flex',
+        borderRadius: 4,
+        padding: 12,
+        backgroundColor: theme.palette.maskColor.bg,
+        fontSize: 14,
+        alignItems: 'center',
+        color: theme.palette.text.primary,
+        marginBottom: 12,
+        justifyContent: 'space-between',
+    },
+    closeIcon: {
+        color: theme.palette.maskColor.main,
+    },
+    infoIcon: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 interface WalletSettingProp {
@@ -84,7 +102,10 @@ const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
 
+        const t = useI18N()
+
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
+        const [visible, setVisible] = useState(false)
 
         const [currentTab, onChange, tabs] = useTabs('NFTs', 'Footprints', 'Donations')
 
@@ -102,6 +123,11 @@ const WalletSetting = memo(
                 (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
             ),
         )
+
+        useEffect(() => {
+            const visible = localStorage.getItem('web3_profile_wallet_setting_hint_visible')
+            setVisible(visible !== 'no')
+        }, [])
 
         useEffect(() => {
             if (confirmButtonDisabled) setConfirmButtonDisabled(false)
@@ -147,6 +173,11 @@ const WalletSetting = memo(
                 internal: true,
             })
         }
+
+        const onCloseHint = () => {
+            localStorage.setItem('web3_profile_wallet_setting_hint_visible', 'no')
+            setVisible(false)
+        }
         return (
             <TabContext value={currentTab}>
                 <InjectedDialog
@@ -186,6 +217,17 @@ const WalletSetting = memo(
                     onClose={onClose}>
                     <DialogContent className={classes.content}>
                         <>
+                            {visible && (
+                                <Box className={classes.messageBox}>
+                                    <Box display="flex" flexDirection="row" gap={1} alignItems="center">
+                                        <InfoIcon fontSize="small" className={classes.infoIcon} />
+                                        <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
+                                            {t.wallet_setting_hint()}
+                                        </Typography>
+                                    </Box>
+                                    <CloseIcon onClick={onCloseHint} className={classes.closeIcon} />
+                                </Box>
+                            )}
                             <TabPanel value={tabs.NFTs} style={{ padding: 0 }}>
                                 <div className={classes.walletSwitchBox}>
                                     {wallets?.map((x) => {

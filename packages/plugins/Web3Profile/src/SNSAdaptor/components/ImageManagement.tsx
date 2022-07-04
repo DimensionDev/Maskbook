@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 16px',
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
-        posotion: 'relative',
+        position: 'relative',
         flexDirection: 'column',
     },
     settingIcon: {

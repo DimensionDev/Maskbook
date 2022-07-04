@@ -40,5 +40,6 @@
     "add_collectible": "Add collectible",
     "nft_add_dialog_title": "Add Collectible",
     "no_collection_item": "No items to preview. Please go to setting.",
-    "no_unlisted_collection": " Click to show your {{collection}} on Web3 profile."
+    "no_unlisted_collection": " Click to show your {{collection}} on Web3 profile.",
+    "wallet_setting_hint": "Toggle the button to manage wallet display settings."
 }
