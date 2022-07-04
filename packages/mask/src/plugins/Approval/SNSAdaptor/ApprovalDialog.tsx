@@ -23,11 +23,6 @@ export interface ApprovalDialogProps {
     onClose?: () => void
 }
 
-enum Tabs {
-    Tokens = 0,
-    Collectibles = 1,
-}
-
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -83,11 +78,13 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                     chains={chainIdList.filter(Boolean) as ChainId[]}
                 />
             </div>
-            {tab === t.tokens() ? (
-                <ApprovalTokenContent chainId={networkTabChainId} />
-            ) : (
-                <ApprovalNFTContent chainId={networkTabChainId} />
-            )}
+            <section className={classes.contentWrapper}>
+                {tab === t.tokens() ? (
+                    <ApprovalTokenContent chainId={networkTabChainId} />
+                ) : (
+                    <ApprovalNFTContent chainId={networkTabChainId} />
+                )}
+            </section>
             <PluginWalletStatusBar className={classes.footer}>
                 <Button variant="contained" size="medium" onClick={openSelectProviderDialog} fullWidth>
                     {tr('wallet_status_button_change')}
