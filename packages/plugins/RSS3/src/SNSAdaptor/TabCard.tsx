@@ -1,7 +1,7 @@
 import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Button, MenuItem, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
@@ -110,7 +110,12 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
                         size="small"
                         onClick={onOpen}
                         className={classes.button}>
-                        <ReversedAddress address={selectedAddress.address} />
+                        {selectedAddress?.type === SocialAddressType.KV ||
+                        selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                            <ReversedAddress address={selectedAddress.address} />
+                        ) : (
+                            selectedAddress.label
+                        )}
                         <KeyboardArrowDownIcon />
                     </Button>
                     <ShadowRootMenu
@@ -122,7 +127,12 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
                         {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                             return (
                                 <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                                    <ReversedAddress address={x.address} />
+                                    {selectedAddress?.type === SocialAddressType.KV ||
+                                    selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                                        <ReversedAddress address={x.address} />
+                                    ) : (
+                                        x.label
+                                    )}
                                 </MenuItem>
                             )
                         })}

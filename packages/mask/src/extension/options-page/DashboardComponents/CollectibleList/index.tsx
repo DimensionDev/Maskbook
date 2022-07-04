@@ -306,7 +306,8 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                {addressName.type === SocialAddressType.ADDRESS ? (
+                                {addressName.type === SocialAddressType.ADDRESS ||
+                                addressName.type === SocialAddressType.KV ? (
                                     <ReversedAddress
                                         address={addressName.address}
                                         pluginId={addressName.networkSupporterPluginID}
@@ -333,7 +334,7 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {addressName.type === SocialAddressType.ADDRESS ? (
+                        {addressName.type === SocialAddressType.ADDRESS || addressName.type === SocialAddressType.KV ? (
                             <ReversedAddress
                                 address={addressName.address}
                                 pluginId={addressName.networkSupporterPluginID}

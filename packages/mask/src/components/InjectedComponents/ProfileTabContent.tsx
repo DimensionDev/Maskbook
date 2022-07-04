@@ -87,7 +87,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             const addresses = wallets.map((proof) => {
                 return {
                     networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                    type: SocialAddressType.ADDRESS,
+                    type: SocialAddressType.KV,
                     label: proof?.identity,
                     address: proof?.identity,
                 }
