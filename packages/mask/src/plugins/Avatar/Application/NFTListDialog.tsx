@@ -405,7 +405,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             <DialogContent className={classes.content}>
                 {account || Boolean(wallets?.length) ? (
                     <>
-                        {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={chains.filter(Boolean) as ChainId[]}
