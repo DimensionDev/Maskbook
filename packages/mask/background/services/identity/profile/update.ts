@@ -4,6 +4,7 @@ import {
     PersonaIdentifier,
     ProfileIdentifier,
     ProfileInformationFromNextID,
+    RelationFavor,
 } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { storeAvatar } from '../../../database/avatar-cache/avatar'
@@ -20,7 +21,7 @@ import {
     queryProfilesDB,
 } from '../../../database/persona/db'
 import { NextIDProof } from '@masknet/web3-providers'
-import { createOrUpdatePersonaDB } from '../../../database/persona/web'
+import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -135,6 +136,14 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
                 profileRecord.identifier,
                 item.linkedPersona!,
                 { connectionConfirmState: 'confirmed' },
+                t,
+            )
+            await createOrUpdateRelationDB(
+                {
+                    profile: profileRecord.identifier,
+                    linked: profileRecord.linkedPersona,
+                    favor: RelationFavor.UNCOLLECTED,
+                },
                 t,
             )
         })
