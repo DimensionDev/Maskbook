@@ -5,8 +5,8 @@ import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { useReverseAddress } from '@masknet/plugin-infra/web3'
 import type { CollectionTypes } from '../types'
-import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, explorerResolver, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { NFTImageCollectibleAvatar } from '@masknet/shared'
 import { formatAddress } from '../utils'
 
@@ -118,11 +118,23 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                                 key={i}
                                 token={{
                                     ...collection,
+                                    tokenId: collection.tokenId ?? '',
+                                    id: collection.address,
+                                    chainId: ChainId.Mainnet,
+                                    schema: SchemaType.ERC721,
+                                    type: TokenType.NonFungible,
                                     contract: {
                                         chainId: ChainId.Mainnet,
+                                        name: '',
+                                        symbol: '',
+                                        address: collection.address,
+                                        schema: SchemaType.ERC721,
                                     },
                                     metadata: {
                                         imageURL: collection.iconURL,
+                                        chainId: ChainId.Mainnet,
+                                        name: '',
+                                        symbol: '',
                                     },
                                 }}
                             />

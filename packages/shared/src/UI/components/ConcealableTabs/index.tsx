@@ -1,4 +1,4 @@
-import { GearSettingsIcon, LeftArrowIcon, RightArrowIcon } from '@masknet/icons'
+import { LeftArrowIcon, RightArrowIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classnames from 'classnames'
@@ -206,15 +206,6 @@ export function ConcealableTabs<T extends number | string>({
                                 }}>
                                 <RightArrowIcon color="inherit" />
                             </Button>
-                            {isOwn && (
-                                <Button
-                                    disableRipple
-                                    disabled={reachedRightEdge}
-                                    onClick={openDialog}
-                                    className={classnames(classes.normal, classes.controller)}>
-                                    <GearSettingsIcon />
-                                </Button>
-                            )}
                         </>
                     ) : null}
                     {tail}
