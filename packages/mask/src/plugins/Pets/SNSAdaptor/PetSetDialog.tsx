@@ -1,5 +1,6 @@
 import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
+import classNames from 'classnames'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
@@ -109,6 +110,9 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(0, 1),
         width: 21,
         height: 15,
+    },
+    logo: {
+        height: 21,
     },
 }))
 
@@ -358,7 +362,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
                     </Typography>
-                    <img className={classes.icon} src={new URL('../assets/pets.png', import.meta.url).toString()} />
+                    <img
+                        className={classNames(classes.icon, classes.logo)}
+                        src={new URL('../assets/pets.png', import.meta.url).toString()}
+                    />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         &
                     </Typography>
