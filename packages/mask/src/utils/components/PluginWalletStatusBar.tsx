@@ -12,7 +12,7 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletIcon } from '@masknet/shared'
+import { ImageIcon, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, parseColor } from '@masknet/theme'
 import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
@@ -31,6 +31,7 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
     expectedWallet?: Wallet | null
     expectedProviderType?: Web3Helper.ProviderTypeAll
     expectedPluginID?: NetworkPluginID
+    expectedChainIdOrNetworkTypeOrID?: string | number
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -161,13 +162,17 @@ export function PluginWalletStatusBar({
     return (
         <Box className={cx(classes.root, className)}>
             <Box className={classes.wallet} onClick={onClick ?? openSelectProviderDialog}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={onlyNetworkIcon ? networkDescriptor?.icon : providerDescriptor?.icon}
-                    badgeIcon={!onlyNetworkIcon ? networkDescriptor?.icon : undefined}
-                    iconFilterColor={!onlyNetworkIcon ? providerDescriptor?.iconFilterColor : undefined}
-                />
+                {onlyNetworkIcon ? (
+                    <ImageIcon size={30} icon={networkDescriptor?.icon} />
+                ) : (
+                    <WalletIcon
+                        size={30}
+                        badgeSize={12}
+                        mainIcon={providerDescriptor?.icon}
+                        badgeIcon={networkDescriptor?.icon}
+                        iconFilterColor={providerDescriptor?.iconFilterColor}
+                    />
+                )}
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>

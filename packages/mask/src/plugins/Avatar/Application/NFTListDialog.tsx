@@ -320,52 +320,48 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const providerType = useProviderType()
 
     const theme = useTheme()
+
+    const walletItems = wallets
+        .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+        .filter((x) => !isSameAddress(x.identity, account))
+        .map((x, i) => (
+            <div key={i}>
+                <WalletItem
+                    selectedWallet={selectedAccount}
+                    wallet={x.identity}
+                    nextIDWallets={wallets}
+                    chainId={chainId as ChainId}
+                    onSelectedWallet={onChangeWallet}
+                />
+                <Divider className={classes.divider} />
+            </div>
+        ))
+
     const [menu, openMenu] = useMenu(
         [
             account ? (
-                <>
-                    <WalletItem
-                        walletName={wallet?.name ?? ''}
-                        selectedWallet={selectedAccount}
-                        wallet={account}
-                        nextIDWallets={wallets}
-                        chainId={chainId as ChainId}
-                        onConnectWallet={openSelectProviderDialog}
-                        onSelectedWallet={onChangeWallet}
-                        haveChangeWallet={Boolean(account)}
-                    />
-                    <Divider className={classes.divider} />
-                </>
+                <WalletItem
+                    walletName={wallet?.name ?? ''}
+                    selectedWallet={selectedAccount}
+                    wallet={account}
+                    nextIDWallets={wallets}
+                    chainId={chainId as ChainId}
+                    onConnectWallet={openSelectProviderDialog}
+                    onSelectedWallet={onChangeWallet}
+                    haveChangeWallet={Boolean(account)}
+                />
             ) : (
-                <>
-                    <MenuItem key="Connect Wallet">
-                        <Button
-                            fullWidth
-                            onClick={openSelectProviderDialog}
-                            sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
-                            {t.connect_your_wallet()}
-                        </Button>
-                    </MenuItem>
-                    <Divider className={classes.divider} />
-                </>
+                <MenuItem key="Connect Wallet">
+                    <Button
+                        fullWidth
+                        onClick={openSelectProviderDialog}
+                        sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
+                        {t.connect_your_wallet()}
+                    </Button>
+                </MenuItem>
             ),
-            <>
-                {wallets
-                    .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
-                    .filter((x) => !isSameAddress(x.identity, account))
-                    .map((x, i) => (
-                        <div key={i}>
-                            <WalletItem
-                                selectedWallet={selectedAccount}
-                                wallet={x.identity}
-                                nextIDWallets={wallets}
-                                chainId={chainId as ChainId}
-                                onSelectedWallet={onChangeWallet}
-                            />
-                            <Divider className={classes.divider} />
-                        </div>
-                    ))}
-            </>,
+            <Divider key="divider" className={classes.divider} />,
+            ...walletItems,
             <MenuItem
                 key="Wallet Setting"
                 onClick={() => {
@@ -449,6 +445,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         </Typography>
                     </Stack>
                 ) : null}
+                {/* TODO: remove hard-code network type*/}
                 <PluginWalletStatusBar
                     onClick={(e) => onOpenMenu(e)}
                     showConnect={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
@@ -456,7 +453,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     expectedWallet={wallet}
                     expectedProviderType={providerType}
                     expectedPluginID={selectedPluginId}
-                    onlyNetworkIcon>
+                    expectedChainIdOrNetworkTypeOrID={NetworkType.Ethereum}
+                    onlyNetworkIcon={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                     </Button>
