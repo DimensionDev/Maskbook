@@ -37,6 +37,8 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 48,
     },
     tooltip: {
+        background: theme.palette.common.black,
+        color: theme.palette.common.white,
         borderRadius: 4,
         padding: 10,
     },
