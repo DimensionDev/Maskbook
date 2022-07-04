@@ -1,6 +1,6 @@
 import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMenu } from '../../../../utils'
+import { useMenu } from '../../../../../utils'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { useTheme } from '@mui/system'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -33,7 +33,7 @@ export interface FootnoteMenuProps {
     onChange?: (option: FootnoteMenuOption) => void
 }
 
-export function FootnoteMenu(props: FootnoteMenuProps) {
+export function FootnoteMenuUI(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
     const theme = useTheme()
 
