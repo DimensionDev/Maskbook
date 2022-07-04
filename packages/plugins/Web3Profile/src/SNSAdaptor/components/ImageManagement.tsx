@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
+        overflowY: 'scroll',
     },
     settingIcon: {
         cursor: 'pointer',
