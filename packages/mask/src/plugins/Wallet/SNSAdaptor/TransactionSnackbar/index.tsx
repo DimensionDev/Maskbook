@@ -108,7 +108,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.id)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
+                        {progress.status === TransactionStatusType.SUCCEED
+                            ? computed.successfulDescription ?? computed.description
+                            : computed.description}{' '}
+                        <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
                     </Link>
                 ),
             },

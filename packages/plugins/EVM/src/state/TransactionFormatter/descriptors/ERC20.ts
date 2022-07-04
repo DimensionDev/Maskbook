@@ -18,6 +18,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                         chainId: context.chainId,
                         title: 'Revoke',
                         description: 'Revoke the approval for the token.',
+                        successfulDescription: 'Revoke the approval successfully.',
                     }
                 }
 

@@ -14,6 +14,7 @@ export class ERC721Descriptor implements TransactionDescriptor {
                     description: `${
                         context.parameters?.approved === false ? 'Revoke the approval for' : 'Unlock'
                     } the token.`,
+                    successfulDescription: 'Revoke the approval successfully.',
                 }
 
             default:

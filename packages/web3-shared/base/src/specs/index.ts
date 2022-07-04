@@ -411,6 +411,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     title: string
     /** a human-readable description. */
     description?: string
+    /** a human-readable description for successful transaction. */
+    successfulDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }
