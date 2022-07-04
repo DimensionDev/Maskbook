@@ -324,9 +324,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const handleAmountChange = useCallback(
             (amount: string) => {
-                if (amount === maxAmount && focusedTrade) {
-                    maxAmountTrade.current = focusedTrade
-                }
+                maxAmountTrade.current = amount === maxAmount && focusedTrade ? focusedTrade : null
                 onInputAmountChange(amount)
             },
             [onInputAmountChange, maxAmount, focusedTrade],
@@ -384,10 +382,16 @@ export const TradeForm = memo<AllTradeFormProps>(
             userSelected.current = false
         }, [inputAmount, inputToken, outputToken])
 
+        // #region clear maxAmount trade cache
         useUpdateEffect(() => {
             if (!focusedTrade || !maxAmountTrade.current) return
             if (focusedTrade.provider !== maxAmountTrade.current.provider) maxAmountTrade.current = null
         }, [focusedTrade])
+
+        useUpdateEffect(() => {
+            maxAmountTrade.current = null
+        }, [inputToken, outputToken])
+        // #endregion
 
         return (
             <>
