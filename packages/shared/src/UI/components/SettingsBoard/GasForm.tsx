@@ -4,10 +4,10 @@ import { Controller, FormProvider, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
-import { WarningIcon } from '@masknet/icons'
+import { InfoIcon, WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, GasOptionType, isPositive, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -51,6 +51,7 @@ export function GasForm(props: GasFormProps) {
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+    const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)
 
@@ -123,6 +124,13 @@ export function GasForm(props: GasFormProps) {
 
     return (
         <FormProvider {...methods}>
+            {isEIP1559 && isPositive(baseFeePerGas) ? (
+                <MaskAlert icon={<InfoIcon />} severity="info">
+                    {t.gas_settings_info_gas_fee({
+                        fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
+                    })}
+                </MaskAlert>
+            ) : null}
             <Grid container direction="row" spacing={2}>
                 <Grid item xs={isEIP1559 ? 12 : 6}>
                     <Controller

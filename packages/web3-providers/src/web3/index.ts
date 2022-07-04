@@ -48,18 +48,21 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
             [GasOptionType.FAST]: {
                 estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
                 estimatedSeconds: 0,
+                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
                 suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + fast).toFixed(),
                 suggestedMaxPriorityFeePerGas: formatWeiToGwei(fast).toFixed(),
             },
             [GasOptionType.NORMAL]: {
                 estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
                 estimatedSeconds: 0,
+                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
                 suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + normal).toFixed(),
                 suggestedMaxPriorityFeePerGas: formatWeiToGwei(normal).toFixed(),
             },
             [GasOptionType.SLOW]: {
                 estimatedBaseFee: formatWeiToGwei(baseFeePerGas).toFixed(),
                 estimatedSeconds: 0,
+                baseFeePerGas: formatWeiToGwei(baseFeePerGas).toFixed(),
                 suggestedMaxFeePerGas: formatWeiToGwei(baseFeePerGas + slow).toFixed(),
                 suggestedMaxPriorityFeePerGas: formatWeiToGwei(slow).toFixed(),
             },
@@ -71,19 +74,19 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
         return {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: '0',
-                estimatedSeconds: 0,
+                estimatedSeconds: 15,
                 suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedBaseFee: '0',
-                estimatedSeconds: 0,
+                estimatedSeconds: 30,
                 suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedBaseFee: '0',
-                estimatedSeconds: 0,
+                estimatedSeconds: 60,
                 suggestedMaxFeePerGas: formatWeiToGwei(gasPrice).toFixed(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
