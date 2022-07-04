@@ -95,7 +95,7 @@ export async function getNFTAvatarByUserId(userId: string, avatarId: string): Pr
             PLUGIN_ID,
         )
         if (!avatarId && response.ok) return response.val
-        if (response.ok && response.val.avatarId === avatarId) return response.val
+        if (response.ok && response.val?.avatarId === avatarId) return response.val
     }
     return
 }
