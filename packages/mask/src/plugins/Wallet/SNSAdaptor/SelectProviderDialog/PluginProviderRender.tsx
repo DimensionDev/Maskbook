@@ -268,7 +268,7 @@ function NetworkItem({
             onClick={() => {
                 onNetworkIconClicked(network)
             }}>
-            <div className={classes.iconWrapper} style={{ boxShadow: `3px 10px 15px -8px ${network.iconColor}` }}>
+            <div className={classes.iconWrapper} style={{ boxShadow: `0px 3px 20px -4px ${network.iconColor}` }}>
                 {NetworkIconClickBait ? (
                     <NetworkIconClickBait network={network}>
                         <ImageIcon size={30} icon={network.icon} />
