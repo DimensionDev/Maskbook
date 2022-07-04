@@ -110,19 +110,25 @@ const WalletSetting = memo(
         const [currentTab, onChange, tabs] = useTabs('NFTs', 'Footprints', 'Donations')
 
         const chainId = useChainId()
-        const [NFTs, setNFTs] = useState(
-            wallets?.filter((x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1),
-        )
-        const [footprints, setFootprints] = useState(
-            wallets?.filter(
-                (x) => accountList?.walletList?.footprints?.findIndex((y) => x.address === y.address) === -1,
-            ),
-        )
-        const [donations, setDonations] = useState(
-            wallets?.filter(
-                (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
-            ),
-        )
+        const [NFTs, setNFTs] = useState<WalletTypes[]>()
+        const [footprints, setFootprints] = useState<WalletTypes[]>()
+        const [donations, setDonations] = useState<WalletTypes[]>()
+
+        useEffect(() => {
+            setNFTs(
+                wallets?.filter((x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1),
+            )
+            setFootprints(
+                wallets?.filter(
+                    (x) => accountList?.walletList?.footprints?.findIndex((y) => x.address === y.address) === -1,
+                ),
+            )
+            setDonations(
+                wallets?.filter(
+                    (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
+                ),
+            )
+        }, [open])
 
         useEffect(() => {
             const visible = localStorage.getItem('web3_profile_wallet_setting_hint_visible')
