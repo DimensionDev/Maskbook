@@ -65,6 +65,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'block',
         margin: 0,
+        '&>:not(:first-of-type)': {
+            margin: 0,
+        },
     },
     content: {
         height: 612,
