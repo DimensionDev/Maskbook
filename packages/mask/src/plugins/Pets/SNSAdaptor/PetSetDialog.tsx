@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
         justifyContent: 'flex-end',
-        margin: theme.spacing(2, 0),
+        margin: theme.spacing(1, 0),
         alignItems: 'center',
     },
     poweredBy: {
