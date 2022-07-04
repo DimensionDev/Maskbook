@@ -1,5 +1,6 @@
 import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
+import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
@@ -155,19 +156,23 @@ function ApplicationBoardContent(props: Props) {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    const [isCarouselReady] = useTimeout(300)
     const { classes, cx } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
                 RenderEntryComponent={RenderEntryComponent}
+                isCarouselReady={isCarouselReady}
             />
 
             {listedAppList.length > 0 ? (
                 <section
                     className={cx(
                         classes.applicationWrapper,
-                        recommendFeatureAppList.length > 2 ? classes.applicationWrapperWithCarousel : '',
+                        recommendFeatureAppList.length > 2 && isCarouselReady()
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
                     )}>
                     {listedAppList.map((application) => (
                         <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
