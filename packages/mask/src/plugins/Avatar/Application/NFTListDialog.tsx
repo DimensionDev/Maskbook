@@ -448,13 +448,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 {/* TODO: remove hard-code network type*/}
                 <PluginWalletStatusBar
                     onClick={(e) => onOpenMenu(e)}
-                    showConnect={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
+                    showConnect={!wallets.some((x) => isSameAddress(x.identity, selectedAccount))}
                     expectedAccount={selectedAccount}
                     expectedWallet={wallet}
                     expectedProviderType={providerType}
                     expectedPluginID={selectedPluginId}
                     expectedChainIdOrNetworkTypeOrID={NetworkType.Ethereum}
-                    onlyNetworkIcon={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}>
+                    onlyNetworkIcon>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                     </Button>
