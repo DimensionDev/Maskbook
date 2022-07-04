@@ -49,10 +49,10 @@ export function ApplicationRecommendArea(props: Props) {
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
             {recommendFeatureAppList.length > 2 ? (
                 <CarouselProvider
-                    naturalSlideWidth={220}
+                    naturalSlideWidth={290}
                     naturalSlideHeight={117}
                     totalSlides={recommendFeatureAppList.length}
-                    visibleSlides={2}
+                    visibleSlides={2.25}
                     infinite={false}
                     interval={2500}
                     className={classes.carousel}

@@ -58,8 +58,8 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
         recommendFeatureApplicationBox: {
-            width: 255,
-            minWidth: 255,
+            width: 220,
+            minWidth: 220,
             height: 97,
             marginRight: 12,
             cursor: 'pointer',

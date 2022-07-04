@@ -14,7 +14,6 @@ const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
         width: '100%',
         display: 'flex',
-        boxShadow: '0px 0px 16px rgba(101, 119, 134, 0.2)',
         padding: 16,
     },
     link: {

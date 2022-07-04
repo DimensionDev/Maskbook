@@ -50,6 +50,9 @@ const useStyles = makeStyles()((theme) => {
         },
         actions: {
             backgroundColor: theme.palette.background.paper,
+            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            height: '72px',
+            padding: '0 !important',
         },
         buttonWrapper: {
             padding: '16px',
@@ -60,17 +63,16 @@ const useStyles = makeStyles()((theme) => {
         },
         cancelButton: {
             width: '48%',
-            borderRadius: '99px',
-            backgroundColor: theme.palette.background.paper,
+            borderRadius: '8px',
+            backgroundColor: theme.palette.maskColor.thirdMain,
             color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
-            border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
                 backgroundColor: theme.palette.background.paper,
             },
         },
         button: {
             width: '48%',
-            borderRadius: '99px',
+            borderRadius: '8px',
         },
         list: {
             gridRowGap: 16,
@@ -82,6 +84,13 @@ const useStyles = makeStyles()((theme) => {
         AddCollectiblesButton: {
             fontWeight: 600,
             color: '#1D9BF0',
+        },
+        unListedEmpty: {
+            color: theme.palette.maskColor.third,
+            alignSelf: 'center',
+            fontSize: '14px',
+            fontWeight: 400,
+            justifySelf: 'center',
         },
     }
 })
@@ -226,41 +235,54 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     <Box>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 170, overflow: 'scroll' }}>
-                        <List className={classes.list}>
-                            {unListedCollections?.map((collection, i) => (
-                                <ListItem
-                                    key={collection?.key}
-                                    className={classes.collectionWrap}
-                                    onClick={() => list(collection.key)}>
-                                    <NFTImageCollectibleAvatar
-                                        pluginId={NetworkPluginID.PLUGIN_EVM}
-                                        size={64}
-                                        token={{
-                                            ...collection,
-                                            tokenId: collection.tokenId ?? '',
-                                            id: collection.address,
-                                            chainId: ChainId.Mainnet,
-                                            schema: SchemaType.ERC721,
-                                            type: TokenType.NonFungible,
-                                            contract: {
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            height: 170,
+                            justifyContent: 'center',
+                            overflow: 'scroll',
+                        }}>
+                        {unListedCollections?.length > 0 ? (
+                            <List className={classes.list}>
+                                {unListedCollections?.map((collection, i) => (
+                                    <ListItem
+                                        key={collection?.key}
+                                        className={classes.collectionWrap}
+                                        onClick={() => list(collection.key)}>
+                                        <NFTImageCollectibleAvatar
+                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            size={64}
+                                            token={{
+                                                ...collection,
+                                                tokenId: collection.tokenId ?? '',
+                                                id: collection.address,
                                                 chainId: ChainId.Mainnet,
-                                                name: '',
-                                                symbol: '',
-                                                address: collection.address,
                                                 schema: SchemaType.ERC721,
-                                            },
-                                            metadata: {
-                                                imageURL: collection.iconURL,
-                                                chainId: ChainId.Mainnet,
-                                                name: '',
-                                                symbol: '',
-                                            },
-                                        }}
-                                    />
-                                </ListItem>
-                            ))}
-                        </List>
+                                                type: TokenType.NonFungible,
+                                                contract: {
+                                                    chainId: ChainId.Mainnet,
+                                                    name: '',
+                                                    symbol: '',
+                                                    address: collection.address,
+                                                    schema: SchemaType.ERC721,
+                                                },
+                                                metadata: {
+                                                    imageURL: collection.iconURL,
+                                                    chainId: ChainId.Mainnet,
+                                                    name: '',
+                                                    symbol: '',
+                                                },
+                                            }}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                            <Typography className={classes.unListedEmpty}>
+                                Click to show your NFTs on Web3 profile.
+                            </Typography>
+                        )}
                     </Box>
                     <AddNFT
                         account={address}

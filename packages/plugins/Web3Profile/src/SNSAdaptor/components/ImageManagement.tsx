@@ -6,8 +6,7 @@ import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { DialogActions, DialogContent } from '@mui/material'
-import { PersonaAction } from './PersonaAction'
+import { DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import type { accountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
@@ -150,9 +149,9 @@ export function ImageManagement(props: ImageManagementProps) {
                     retryData={getWalletHiddenRetry}
                 />{' '}
             </DialogContent>
-            <DialogActions className={classes.actions}>
+            {/* <DialogActions className={classes.actions}>
                 <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
-            </DialogActions>
+            </DialogActions> */}
         </InjectedDialog>
     )
 }

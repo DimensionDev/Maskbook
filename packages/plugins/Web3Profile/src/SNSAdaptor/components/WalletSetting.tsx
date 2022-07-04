@@ -25,6 +25,8 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        height: '72px',
+        padding: '0px !important',
     },
     titleTailButton: {
         cursor: 'pointer',
@@ -54,7 +56,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         flexGrow: 1,
-        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     cancelButton: {
         width: '48%',
