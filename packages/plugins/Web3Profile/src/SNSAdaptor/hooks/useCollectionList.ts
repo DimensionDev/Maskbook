@@ -13,6 +13,7 @@ export const getDonationList = async (walletList: string[]) => {
                         address: asset?.id,
                         platform: asset?.platform,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
+                        name: asset?.info?.collection,
                     })),
                 })
             } else {
@@ -38,6 +39,7 @@ export const getFootprintList = async (walletList: string[]) => {
                         address: asset?.id,
                         platform: asset?.platform,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
+                        name: asset?.info?.collection,
                     })),
                 })
             } else {
@@ -70,6 +72,7 @@ export const getNFTList = async (walletList: string[]) => {
                                 asset?.metadata?.animation_url ||
                                 '',
                         ),
+                        name: asset?.metadata?.name,
                     })),
                 })
             } else {

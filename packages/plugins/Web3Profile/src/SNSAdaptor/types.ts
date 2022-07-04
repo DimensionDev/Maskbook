@@ -51,6 +51,7 @@ export interface CollectionTypes {
     tokenId?: string
     iconURL?: string
     hidden?: boolean
+    name?: string
 }
 
 export interface Collection {
