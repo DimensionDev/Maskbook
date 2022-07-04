@@ -57,10 +57,9 @@ export function ArticleTab(props: ArticleTabProps) {
 
     return useMemo(() => {
         if (!asset.value) return null
-        // TODO: Migrate `hasNativeAPI` to `@masknet/shared` to use it in <NFTCardStyledAssetPlayer /> directly.
-        const resourceUrl = hasNativeAPI
-            ? asset.value.metadata?.imageURL || asset.value.metadata?.mediaURL
-            : asset.value.metadata?.mediaURL || asset.value.metadata?.imageURL
+
+        const resourceUrl = asset.value.metadata?.imageURL ?? asset.value.metadata?.mediaURL
+
         return (
             <CollectibleTab>
                 <div className={classes.body}>
