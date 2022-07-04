@@ -55,7 +55,7 @@ enum AssetPlayerState {
 
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
-    const { url, type, options, iconProps, isFixedIframeSize = true, fallbackResourceLoader } = props
+    const { url, type, options, iconProps, isFixedIframeSize = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
@@ -184,7 +184,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     allowFullScreen
                 />
             ),
-        [hidden, playerState, classes, mediaViewerUrl],
+        [hidden, playerState, classes.hidden, classes.iframe, mediaViewerUrl],
     )
 
     return (

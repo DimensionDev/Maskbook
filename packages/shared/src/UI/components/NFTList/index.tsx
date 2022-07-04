@@ -87,8 +87,8 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns }) => ({
     },
     wrapper: {
         aspectRatio: '1 / 1',
-        height: 'auto',
-        width: '100%',
+        height: 'auto !important',
+        width: '100% !important',
         borderRadius: 8,
     },
     imgWrapper: {
