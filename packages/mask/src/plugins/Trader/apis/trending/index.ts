@@ -27,7 +27,7 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
     }
 }
 
-export async function getCoins(dataProvider: DataProvider, keyword?: string): Promise<Coin[]> {
+export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
             return CoinGecko.getCoins()
@@ -36,9 +36,24 @@ export async function getCoins(dataProvider: DataProvider, keyword?: string): Pr
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoins()
         case DataProvider.NFTSCAN:
-            return keyword ? NFTScan.getCoins(keyword) : []
+            return []
         default:
             unreachable(dataProvider)
+    }
+}
+
+export async function getCoinsByKeyword(
+    chainId: ChainId,
+    dataProvider: DataProvider,
+    keyword: string,
+): Promise<Coin[]> {
+    switch (dataProvider) {
+        case DataProvider.UNISWAP_INFO:
+            return UniSwap.getCoinsByKeyword(chainId, keyword)
+        case DataProvider.NFTSCAN:
+            return keyword ? NFTScan.getCoins(keyword) : []
+        default:
+            return []
     }
 }
 
@@ -58,7 +73,7 @@ const coinNamespace = new Map<
 async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword?: string) {
     try {
         // uniswap update cache with keyword
-        if (dataProvider === DataProvider.UNISWAP_INFO) {
+        if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN) {
             if (!keyword) return
             if (!coinNamespace.has(dataProvider))
                 coinNamespace.set(dataProvider, {
@@ -67,7 +82,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = (await UniSwap.getCoinsByKeyword(chainId, keyword)).filter(
+            const coins = (await getCoinsByKeyword(chainId, dataProvider, keyword)).filter(
                 (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
             if (coins.length) {
@@ -79,7 +94,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
         }
 
         // other providers fetch all of supported coins
-        const coins = (await getCoins(dataProvider, keyword)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
+        const coins = (await getCoins(dataProvider)).filter((x) => !isBlockedId(chainId, x.id, dataProvider))
         const coinsGrouped = groupBy(coins, (x) => x.symbol.toLowerCase())
         coinNamespace.set(dataProvider, {
             supportedSymbolsSet: new Set<string>(Object.keys(coinsGrouped)),
@@ -122,9 +137,6 @@ export async function checkAvailabilityOnDataProvider(
     // data fetched before update in non-blocking way
     else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider, keyword)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
-    if (dataProvider === DataProvider.NFTSCAN) {
-        console.log('checkAvailabilityOnDataProvider', dataProvider, symbols)
-    }
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
 }
 
@@ -132,7 +144,6 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
     const networkType = chainResolver.chainNetworkType(chainId)
     const isMainnet = chainResolver.isMainnet(chainId)
     if (!isMainnet) return []
-    console.log('pairs', getEnumAsArray(DataProvider), type, keyword)
     if (!type || !keyword)
         return getEnumAsArray(DataProvider)
             .filter((x) => (isMainnet ? true : x.value !== DataProvider.UNISWAP_INFO))

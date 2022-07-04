@@ -114,7 +114,7 @@ getEnumAsArray(ChainId).map(({ value: chainId }) => {
 })
 
 export function resolveAlias(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UNISWAP_INFO) return keyword
+    if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN) return keyword
     return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
 }
 
