@@ -454,7 +454,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     expectedProviderType={providerType}
                     expectedPluginID={selectedPluginId}
                     expectedChainIdOrNetworkTypeOrID={NetworkType.Ethereum}
-                    onlyNetworkIcon>
+                    onlyNetworkIcon={wallets.some((x) => isSameAddress(x.identity, selectedAccount))}>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
                     </Button>
