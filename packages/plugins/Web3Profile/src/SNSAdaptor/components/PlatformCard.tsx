@@ -5,6 +5,7 @@ import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
 import type { accountType } from '../types'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
@@ -54,10 +55,11 @@ export interface PlatformCardProps extends withClasses<never | 'root'> {
     account?: accountType
     openImageSetting: (str: string) => void
     isCurrent?: boolean
+    currentPersona?: IdentityResolved
 }
 
 export function PlatformCard(props: PlatformCardProps) {
-    const { account, openImageSetting, isCurrent } = props
+    const { account, openImageSetting, isCurrent, currentPersona } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -67,13 +69,15 @@ export function PlatformCard(props: PlatformCardProps) {
                 <div className={classes.flexItem}>
                     <div style={{ display: 'flex' }}>
                         <PlatformAvatar
-                            networkIcon={account?.linkedProfile?.avatar}
+                            networkIcon={isCurrent ? currentPersona?.avatar : account?.linkedProfile?.avatar}
                             providerIcon={new URL('../assets/twitter.png', import.meta.url)}
                             size={36}
                         />
                         <div style={{ marginLeft: '20px' }}>
                             <Typography style={{ fontSize: '14px', fontWeight: '700', display: 'flex' }}>
-                                {account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
+                                {isCurrent
+                                    ? currentPersona?.nickname
+                                    : account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
                                 {isCurrent && <Typography className={classes.currentTag}>{t.current()}</Typography>}
                             </Typography>
                             <Typography>@{account?.identity}</Typography>
