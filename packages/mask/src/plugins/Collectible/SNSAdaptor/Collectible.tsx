@@ -157,20 +157,13 @@ export function Collectible(props: CollectibleProps) {
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
                     Failed to load your collectible on {resolveSourceName(provider)}.
                 </Typography>
-                <Box
-                    alignItems="center"
-                    sx={{
-                        padding: 1.5,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: 'calc(100% - 24px)',
-                        columnGap: 2,
-                    }}>
-                    {CollectibleProviderSwitcher}
-
-                    <Button fullWidth onClick={() => asset.retry()}>
-                        Refresh
-                    </Button>
+                <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
+                    <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
+                    <Box sx={{ flex: 1, padding: 1 }}>
+                        <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
+                            Refresh
+                        </Button>
+                    </Box>
                 </Box>
             </Box>
         )

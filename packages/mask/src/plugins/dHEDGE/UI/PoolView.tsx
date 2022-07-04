@@ -142,6 +142,7 @@ export function PoolView(props: PoolViewProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={pool?.chainId ?? ChainId.Mainnet}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                 />
             </Box>
         </>

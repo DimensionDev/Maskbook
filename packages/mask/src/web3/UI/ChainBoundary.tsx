@@ -11,6 +11,7 @@ import {
     Web3Helper,
     useWeb3State,
     useWeb3Connection,
+    useChainIdValid,
 } from '@masknet/plugin-infra/web3'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -83,6 +84,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const expectedConnection = useWeb3Connection(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
 
+    const chainIdValid = useChainIdValid(actualPluginID)
+
     const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
@@ -134,6 +137,21 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             </ShadowRootTooltip>
         )
     }
+
+    if (!chainIdValid && !expectedChainAllowed)
+        return renderBox(
+            <>
+                {!props.hiddenConnectButton ? (
+                    <ActionButton
+                        fullWidth
+                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                        onClick={openSelectProviderDialog}
+                        {...props.ActionButtonPromiseProps}>
+                        {t('plugin_wallet_wrong_network')}
+                    </ActionButton>
+                ) : null}
+            </>,
+        )
 
     if (!account)
         return renderBox(

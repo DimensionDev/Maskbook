@@ -52,7 +52,10 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic}>
+        <ChainBoundary
+            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+            expectedChainId={ChainId.Matic}
+            ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
             <PreviewCard id={id} />
         </ChainBoundary>
     )
