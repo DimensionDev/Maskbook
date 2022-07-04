@@ -17,6 +17,7 @@ import type { Account } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -192,7 +193,7 @@ export function Steps(props: StepsProps) {
                         <div className={classes.stepRow}>
                             <Typography className={classes.stepTitle}>{walletName ?? t('wallet')} Sign</Typography>
                             <Typography className={classes.stepIntro}>
-                                {t('waller_verify_wallet_sign_intro')}
+                                <Trans i18nKey="waller_verify_wallet_sign_intro" components={{ br: <br /> }} />
                             </Typography>
                         </div>
                     </div>
