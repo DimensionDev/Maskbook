@@ -14,13 +14,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: theme.spacing(0),
         },
-        button: {
-            backgroundColor: theme.palette.maskColor.dark,
-            color: 'white',
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
-            },
-        },
     }
 })
 
@@ -47,9 +40,8 @@ export function ActionBar(props: ActionBarProps) {
     return (
         <Box className={classes.root} display="flex" justifyContent="center">
             <ActionButton
-                className={classes.button}
                 fullWidth
-                color="primary"
+                variant="roundedDark"
                 onClick={onOpenMintDialog}
                 disabled={project.complete || project.paused || !project.active}>
                 {status}
