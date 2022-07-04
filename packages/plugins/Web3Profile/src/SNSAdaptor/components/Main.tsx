@@ -19,7 +19,7 @@ export function Main(props: MainProps) {
                     }}
                     key={account?.identity}
                     account={account}
-                    isCurrent={account?.identity === currentVisitingProfile?.identifier?.userId}
+                    isCurrent={account?.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase()}
                 />
             ))}
         </div>
