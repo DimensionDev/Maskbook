@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
-import { WarningIcon } from '@masknet/icons'
+import { WarningTriangleIcon, WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
@@ -22,7 +22,11 @@ const useStyles = makeStyles()((theme) => {
         textfield: {
             flex: 1,
             paddingRight: 9,
+            '& input::-webkit-input-placeholder': {
+                fontWeight: 700,
+            },
             '& input[type=number]': {
+                textAlign: 'center',
                 '-moz-appearance': 'textfield',
             },
             '& input[type=number]::-webkit-outer-spin-button': {
@@ -122,6 +126,16 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
             {error ? (
                 <MaskAlert icon={<WarningIcon />} severity="error">
                     {error}
+                </MaskAlert>
+            ) : tolerance < slippageTolerances[0] ? (
+                <MaskAlert icon={<WarningTriangleIcon color="warning" />} severity="warning">
+                    {t.gas_settings_alert_low_slippage_tolerance()}
+                </MaskAlert>
+            ) : tolerance > slippageTolerances[slippageTolerances.length - 1] ? (
+                <MaskAlert icon={<WarningIcon />} severity="error">
+                    {t.gas_settings_alert_high_slippage_tolerance({
+                        percentage: tolerance.toString(),
+                    })}
                 </MaskAlert>
             ) : null}
         </FormProvider>

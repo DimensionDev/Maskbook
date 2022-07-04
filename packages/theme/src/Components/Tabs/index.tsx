@@ -37,7 +37,6 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     width: 38,
     minWidth: '38px !important',
     background: theme.palette.maskColor.input ?? '#F2F6FA',
-
     '&:hover': {
         background: theme.palette.maskColor.input ?? '#F2F6FA',
     },

@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => {
         },
         caption: {
             color: theme.palette.maskColor.second,
+            fontSize: 14,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },
@@ -80,16 +81,17 @@ export function GasForm(props: GasFormProps) {
         'maxPriorityFeePerGas',
     ])
 
-    const error = useMemo(() => {
+    const errorGasLimit = useMemo(() => {
+        return methods.formState.errors.gasLimit?.message ?? ''
+    }, [methods.formState.errors.gasLimit?.message])
+    const errorNonGasLimit = useMemo(() => {
         return (
-            methods.formState.errors.gasLimit?.message ??
             methods.formState.errors.gasPrice?.message ??
             methods.formState.errors.maxFeePerGas?.message ??
             methods.formState.errors.maxPriorityFeePerGas?.message ??
             ''
         )
     }, [
-        methods.formState.errors.gasLimit?.message,
         methods.formState.errors.gasPrice?.message,
         methods.formState.errors.maxFeePerGas?.message,
         methods.formState.errors.maxPriorityFeePerGas?.message,
@@ -119,8 +121,8 @@ export function GasForm(props: GasFormProps) {
             : {
                   gasPrice: formatGweiToWei(gasPrice).toFixed(),
               }
-        onChange?.(!error ? payload : undefined)
-    }, [error, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas])
+        onChange?.(!errorGasLimit && !errorNonGasLimit ? payload : undefined)
+    }, [errorGasLimit, errorNonGasLimit, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas])
 
     return (
         <FormProvider {...methods}>
@@ -155,6 +157,11 @@ export function GasForm(props: GasFormProps) {
                         )}
                         name="gasLimit"
                     />
+                    {errorGasLimit ? (
+                        <MaskAlert icon={<WarningIcon />} severity="error">
+                            {errorGasLimit}
+                        </MaskAlert>
+                    ) : null}
                 </Grid>
                 {isEIP1559 ? null : (
                     <Grid item xs={6}>
@@ -237,9 +244,9 @@ export function GasForm(props: GasFormProps) {
                     </Grid>
                 </Grid>
             ) : null}
-            {error ? (
+            {errorNonGasLimit ? (
                 <MaskAlert icon={<WarningIcon />} severity="error">
-                    {error}
+                    {errorNonGasLimit}
                 </MaskAlert>
             ) : null}
         </FormProvider>

@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             color: theme.palette.text.secondary,
             fontWeight: 400,
+            fontSize: 14,
         },
         amount: {
             fontWeight: 700,
