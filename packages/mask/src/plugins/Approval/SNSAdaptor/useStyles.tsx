@@ -214,6 +214,9 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             bottom: 0,
         },
         button: {
+            width: 80,
+            height: 32,
+            fontSize: 12,
             color: theme.palette.common.white,
             background: theme.palette.common.black,
             flex: 'initial !important',
