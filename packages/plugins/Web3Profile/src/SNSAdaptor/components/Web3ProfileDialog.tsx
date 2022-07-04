@@ -10,7 +10,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
 import { getDonationList, getFootprintList, getNFTList, getNFTList_Polygon } from '../hooks/useCollectionList'
-import { getWalletList, mergeList } from '../utils'
+import { getWalletList, mergeList, placeFirst } from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
@@ -115,7 +115,9 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         return getWalletHiddenList(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
 
-    const accountList = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
+    const accountArr = getWalletList(accounts, wallets, allPersona, hiddenObj, footprintList, donationList, NFTList)
+
+    const accountList = placeFirst(currentVisitingProfile?.identifier?.userId, accountArr)
     const chainId = useChainId()
 
     const openPopupsWindow = () => {

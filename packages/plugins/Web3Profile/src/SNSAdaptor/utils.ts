@@ -1,5 +1,5 @@
 import { BindingProof, NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import type { Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
+import type { accountType, Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -113,4 +113,12 @@ export const getWalletList = (
             ),
         },
     }))
+}
+
+export const placeFirst = (userId?: string, accountList?: accountType[]) => {
+    if (!accountList || accountList?.length === 0) return accountList
+    const currentAccountIndex = accountList?.findIndex((account) => account?.identity === userId?.toLowerCase())
+    if (currentAccountIndex === -1) return accountList
+    const currentItem = accountList?.splice(currentAccountIndex, 1)?.[0]
+    return [currentItem, ...accountList]
 }

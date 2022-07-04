@@ -110,7 +110,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
             </div>
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 288, overflow: 'scroll' }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 298, overflow: 'scroll' }}>
                     <List className={classes.list}>
                         {collectionList
                             ?.filter((collection) => !collection?.hidden)
