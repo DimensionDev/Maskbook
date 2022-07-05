@@ -348,12 +348,9 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 type: TrendingCoinType.NonFungible,
                 description: platformInfo.description,
                 image_url: platformInfo.image,
+                home_urls: compact([platformInfo.website]),
                 community_urls: (
                     [
-                        {
-                            type: 'other',
-                            link: platformInfo.website,
-                        },
                         {
                             type: 'twitter',
                             link: platformInfo.twitter && `https://twitter.com/${platformInfo.twitter}`,
