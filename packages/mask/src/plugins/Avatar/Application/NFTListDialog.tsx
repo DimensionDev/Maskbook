@@ -345,7 +345,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     selectedWallet={selectedAccount}
                     wallet={account}
                     nextIDWallets={wallets}
-                    chainId={chainId as ChainId}
+                    chainId={currentChainId as ChainId}
                     onConnectWallet={openSelectProviderDialog}
                     onSelectedWallet={onChangeWallet}
                     haveChangeWallet={Boolean(account)}
