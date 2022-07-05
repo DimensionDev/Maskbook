@@ -20,6 +20,9 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         padding: '16px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     actions: {
         backgroundColor: theme.palette.background.paper,

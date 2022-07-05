@@ -30,6 +30,7 @@ const useStyles = makeStyles()(() => {
                     display: 'none',
                 },
             },
+            overflow: 'hidden',
         },
     }
 })

@@ -37,7 +37,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
-        overflow: 'scroll',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     settingIcon: {
         cursor: 'pointer',
