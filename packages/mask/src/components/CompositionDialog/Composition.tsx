@@ -100,7 +100,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const isE2E_Disabled = (() => {
         if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
-        if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
+        // if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return
     })()
 
