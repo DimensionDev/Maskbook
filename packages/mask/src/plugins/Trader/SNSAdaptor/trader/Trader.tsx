@@ -27,7 +27,6 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { SettingsDialog } from './SettingsDialog'
 import { TradeForm } from './TradeForm'
 
 const useStyles = makeStyles()(() => {
@@ -377,7 +376,6 @@ export function Trader(props: TraderProps) {
                     onClose={onConfirmDialogClose}
                 />
             ) : null}
-            <SettingsDialog />
         </div>
     )
 }

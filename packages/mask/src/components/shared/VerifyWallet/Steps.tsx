@@ -203,9 +203,8 @@ export function Steps(props: StepsProps) {
             <div className={classes.actionBox}>
                 <ActionButton
                     className={notInPop ? '' : classes.cancelBtn}
-                    variant="roundedOutlined"
+                    variant={notInPop ? 'outlined' : 'roundedOutlined'}
                     fullWidth
-                    color="secondary"
                     onClick={onCustomCancel}>
                     {t('cancel')}
                 </ActionButton>
@@ -215,7 +214,7 @@ export function Steps(props: StepsProps) {
                     loading={confirmLoading}
                     size={notInPop ? 'medium' : 'large'}
                     disabled={disableConfirm}
-                    variant={notInPop ? 'roundedContained' : 'contained'}
+                    variant="contained"
                     fullWidth
                     onClick={onConfirm}>
                     {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
