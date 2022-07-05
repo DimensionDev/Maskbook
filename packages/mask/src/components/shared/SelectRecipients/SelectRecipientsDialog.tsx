@@ -11,7 +11,6 @@ import type {
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
-import { uniqBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -117,10 +116,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
-        return uniqBy(
-            (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected),
-            (x) => x.identifier.userId,
-        )
+        return (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected)
     }, [search, items])
     return (
         <InjectedDialog

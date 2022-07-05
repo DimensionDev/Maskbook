@@ -98,9 +98,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (() => {
-        if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
-        if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
-        // if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
+        if (!connectStatus.currentConnectedPersona || !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
+        if (!connectStatus.connected) return E2EUnavailableReason.NoConnection
+        if (!hasLocalKey) return E2EUnavailableReason.NoLocalKey
         return
     })()
 

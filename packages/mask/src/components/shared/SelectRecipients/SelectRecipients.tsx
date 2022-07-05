@@ -52,9 +52,10 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     )
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
+
     const searchedList = uniqBy(
         profileItems?.concat(NextIDItems) ?? [],
-        ({ linkedPersona, nickname }) => linkedPersona?.publicKeyAsHex && nickname,
+        ({ linkedPersona }) => linkedPersona?.rawPublicKey,
     )
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
