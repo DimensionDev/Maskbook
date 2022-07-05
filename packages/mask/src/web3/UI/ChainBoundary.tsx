@@ -56,6 +56,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     children?: React.ReactNode
+    expectedChainIdSwitchedCallback?: () => void
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
@@ -64,6 +65,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         noSwitchNetworkTip = true,
         expectedPluginID,
         expectedChainId,
+        expectedChainIdSwitchedCallback,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -109,6 +111,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             await expectedConnection?.connect({
                 chainId: expectedChainId,
             })
+            expectedChainIdSwitchedCallback?.()
         }
         return
     }, [

@@ -101,6 +101,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     expectedChainId={chainId}
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     classes={{ switchButton: classes.button }}
+                    expectedChainIdSwitchedCallback={() => approveCallback(true, true)}
                     ActionButtonPromiseProps={{
                         fullWidth: false,
                         init: t.revoke(),
