@@ -88,7 +88,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
         width: 32,
         height: 32,
-        borderRadius: 16,
+        borderRadius: 99,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
