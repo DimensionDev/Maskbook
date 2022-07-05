@@ -39,7 +39,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogTitleWithTabs: {
         paddingBottom: '0 !important',
-        gridRowGap: 16,
         gridTemplateRows: '1fr 1fr',
         gridTemplateAreas: `
             ". . ."
