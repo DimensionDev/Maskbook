@@ -7,6 +7,7 @@ export enum R2d2Workers {
     gitcoin = 'gitcoin-agent',
     coinMarketCap = 'coinmarketcap-agent',
     goPlusLabs = 'gopluslabs',
+    coingecko = 'coingecko-agent',
 }
 
 type R2d2WorkerMatchTuple = [string, R2d2Workers]
@@ -16,6 +17,7 @@ const matchers: R2d2WorkerMatchTuple[] = [
     ['https://gitcoin.co', R2d2Workers.gitcoin],
     ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
     ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],
+    ['https://api.coingecko.com', R2d2Workers.coingecko],
 ]
 
 /**

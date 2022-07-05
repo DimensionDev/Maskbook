@@ -25,22 +25,19 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
             ['contract_addresses']: addressList,
             ['vs_currencies']: currency,
         })
-        return fetch(requestPath).then((r) => r.json() as Promise<Record<string, Price>>)
+
+        return fetchJSON<Record<string, Price>>(requestPath)
     }
 
     async getTokenPriceByCoinId(coin_id: string, currency = CurrencyType.USD) {
         const requestPath = urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: coin_id, ['vs_currencies']: currency })
-        const price = await fetch(requestPath).then(
-            (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
-        )
+        const price = await fetchJSON<Record<string, Record<CurrencyType, number>>>(requestPath)
         return price[coin_id][currency]
     }
 
     async getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {
         const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${listOfAddress}&vs_currencies=${currencyType}`
-        const response = await fetch(requestPath).then(
-            (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
-        )
+        const response = await fetchJSON<Record<string, Record<CurrencyType, number>>>(requestPath)
 
         return Object.fromEntries(Object.keys(response).map((address) => [address, response[address][currencyType]]))
     }
