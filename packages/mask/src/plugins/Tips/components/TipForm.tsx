@@ -177,7 +177,11 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
 
             <PluginWalletStatusBar>
                 <ChainBoundary
-                    expectedPluginID={pluginId === NetworkPluginID.PLUGIN_FLOW ? NetworkPluginID.PLUGIN_EVM : pluginId}
+                    expectedPluginID={
+                        [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+                            ? pluginId
+                            : NetworkPluginID.PLUGIN_EVM
+                    }
                     expectedChainId={chainId}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{

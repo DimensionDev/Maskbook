@@ -219,7 +219,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         return (
             <Box position="relative">
                 <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: defaultTabSize }} />
-                <FlexibleButtonGroupPanel className="test" isOpen={open && isTabsOverflow} ref={flexPanelRef}>
+                <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}
                         isOpen={open}
