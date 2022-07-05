@@ -268,7 +268,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                 ))}
                             </List>
                         ) : (
-                            <Typography className={classes.unListedEmpty}>{t.no_items_found()}</Typography>
+                            (!collectionList || collectionList?.length === 0) && (
+                                <Typography className={classes.unListedEmpty}>{t.no_items_found()}</Typography>
+                            )
                         )}
                     </Box>
                     <Box>
@@ -314,7 +316,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             <Typography className={classes.unListedEmpty}>
                                 {listedCollections && listedCollections?.length > 0
                                     ? t.no_unlisted_collection({ collection: title })
-                                    : t.no_items_found()}
+                                    : (!collectionList || collectionList?.length === 0) && t.no_items_found()}
                             </Typography>
                         )}
                     </Box>
