@@ -5,7 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { DialogContent, Tab, Typography } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
@@ -172,22 +172,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 titleTabs={
                     step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                            <Tab
-                                label={
-                                    <Typography component="div" className={classes.labelWrapper}>
-                                        <span>{t.erc20_tab_title()}</span>
-                                    </Typography>
-                                }
-                                value={tabs.tokens}
-                            />
-                            <Tab
-                                label={
-                                    <Typography component="div" className={classes.labelWrapper}>
-                                        <span>{t.erc721_tab_title()}</span>
-                                    </Typography>
-                                }
-                                value={tabs.collectibles}
-                            />
+                            <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                            <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
                         </MaskTabList>
                     ) : null
                 }

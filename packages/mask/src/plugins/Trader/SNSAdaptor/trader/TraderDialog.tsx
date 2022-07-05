@@ -72,7 +72,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const tradeRef = useRef<TraderRef>(null)
     const pluginID = useCurrentWeb3NetworkPluginID()
     const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
-    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -106,6 +106,9 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     open={open || remoteOpen}
                     onClose={() => {
                         onClose?.()
+                        if (currentChainId) {
+                            setChainId(currentChainId)
+                        }
                         setTraderProps(undefined)
                         closeDialog()
                     }}
@@ -145,6 +148,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 setChainId={setChainId}
                                 classes={classes}
                                 chains={chainIdList}
+                                networkId={NetworkPluginID.PLUGIN_EVM}
                             />
                         </div>
                         <Trader
