@@ -34,7 +34,9 @@ const useStyles = makeStyles()((theme) => {
         },
         arrowIcon: {
             alignSelf: 'center',
-            color: theme.palette.grey[700],
+            color: theme.palette.maskColor.second,
+            width: 24,
+            height: 24,
         },
         currentTag: {
             width: '46px',

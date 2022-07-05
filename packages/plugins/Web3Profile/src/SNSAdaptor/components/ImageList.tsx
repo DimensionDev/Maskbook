@@ -47,18 +47,7 @@ const useStyles = makeStyles()((theme) => {
             maxHeight: 492,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
-            overflowX: 'hidden',
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 20,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 5,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
-            },
+            overflow: 'hidden',
         },
         actions: {
             backgroundColor: theme.palette.background.paper,
@@ -78,9 +67,9 @@ const useStyles = makeStyles()((theme) => {
             width: '48%',
             borderRadius: '8px',
             backgroundColor: theme.palette.maskColor.thirdMain,
-            color: theme.palette.maskColor.thirdMain,
+            color: theme.palette.maskColor.main,
             '&:hover': {
-                backgroundColor: theme.palette.background.paper,
+                backgroundColor: theme.palette.maskColor.thirdMain,
             },
         },
         button: {
@@ -229,7 +218,13 @@ export function ImageListDialog(props: ImageListDialogProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div className={classes.wrapper}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '16px 0 0',
+                        }}>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
                         <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
                             {t.add_collectible()}
