@@ -60,9 +60,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 
     // r2d2 worker
     const r2deWorkerType =
-        workerMatchers.find((x) => url.startsWith(x[0]))?.[1] ?? alchemyMatchers.find((x) => url.startsWith(x[0]))
-            ? R2d2Workers.alchemy
-            : undefined
+        workerMatchers.find((x) => url.startsWith(x[0]))?.[1] ??
+        (alchemyMatchers.find((x) => url.startsWith(x[0])) ? R2d2Workers.alchemy : undefined)
 
     const u = new URL(url)
 
