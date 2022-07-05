@@ -1,11 +1,11 @@
 import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useAllPersona, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
-import { NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { NextIDPersonaBindings, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
@@ -61,6 +61,9 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
     const [title, setTitle] = useState('Web3 Profile')
     const [imageManageOpen, setImageManageOpen] = useState(false)
     const [accountId, setAccountId] = useState<string>()
+    const [flashFlag, toggleFlash] = useState(false)
+
+    const [bindings, setBindings] = useState<NextIDPersonaBindings>()
 
     const persona = useCurrentPersona()
     const currentVisitingProfile = useLastRecognizedProfile()
@@ -69,14 +72,28 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )
 
-    const {
-        value: bindings,
-        loading,
-        retry: retryQueryBinding,
-    } = useAsyncRetry(async () => {
+    useEffect(() => {
         if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
-    }, [currentPersona])
+        ;(async () => {
+            const res = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
+            setBindings(res)
+        })()
+    }, [currentPersona, flashFlag])
+
+    // const {
+    //     value: bindings,
+    //     loading,
+    //     retry: retryQueryBinding,
+    // } = useAsyncRetry(async () => {
+    //     if (!currentPersona) return
+    //     return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
+    // }, [currentPersona])
+    useEffect(() => {
+        return context?.MaskMessages.events.ownProofChanged.on(() => {
+            console.log('listened')
+            toggleFlash((pre) => !pre)
+        })
+    }, [])
 
     const wallets =
         bindings?.proofs
@@ -169,7 +186,7 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
                     currentVisitingProfile={currentVisitingProfile}
                     allWallets={wallets}
                     getWalletHiddenRetry={retryGetWalletHiddenList}
-                    getBindingsRetry={retryQueryBinding}
+                    getBindingsRetry={() => toggleFlash((pre) => !pre)}
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>

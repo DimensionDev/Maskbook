@@ -140,6 +140,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     return Services.Identity.generateSignResult
                 },
                 getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                MaskMessages,
             }
         }),
     )

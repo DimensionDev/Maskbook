@@ -13,6 +13,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { MaskMessages } from '../../../../../../shared/messages'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
@@ -99,7 +100,7 @@ const ConnectedWallets = memo(() => {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-
+                MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
                 refreshProofs()
             } catch {

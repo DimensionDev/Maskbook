@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -18,11 +18,11 @@ import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform, usePersonaBoundPlatform } from '../DataSource/useNextID'
+import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { GearIcon } from '@masknet/icons'
+import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -56,6 +56,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
     const [addressList, setAddressList] = useState<Array<SocialAddress<NetworkPluginID>>>([])
     const [profileOpen, setProfileOpen] = useState(false)
+    const [personaProof, setPersonaProof] = useState<NextIDPersonaBindings>()
+    const [flashFlag, toggleFlash] = useState<number>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -78,7 +80,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
         : currentPersonaBinding?.persona
 
-    const { value: personaProof, retry } = usePersonaBoundPlatform(personaPublicKey || ZERO_ADDRESS)
+    useEffect(() => {
+        console.log('hook', personaPublicKey)
+        if (!personaPublicKey) return
+        ;(async () => {
+            const res = await NextIDProof.queryExistedBindingByPersona(personaPublicKey)
+            console.log('new bindings', res)
+            setPersonaProof(res)
+        })()
+    }, [personaPublicKey, flashFlag])
+
+    useEffect(() => {
+        MaskMessages.events.ownProofChanged.on(() => {
+            console.log('profile listened')
+            toggleFlash(Math.random())
+        })
+    }, [])
+
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
     useEffect(() => {
         if (wallets?.length === 0 || !wallets || (!isOwn && socialAddressList?.length)) {
@@ -103,16 +121,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
         // .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
     }, [identity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
-    console.log({
-        addressList,
-        currentConnectedPersona,
-        personaList,
-        socialAddressList,
-        identity,
-        isWeb3ProfileDisable,
-        personaPublicKey,
-        personaProof,
-    })
 
     const tabs = displayPlugins
         .sort((a, z) => {
@@ -145,6 +153,19 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
             : selectedTabId
+
+    console.log({
+        componentTabId,
+        flashFlag,
+        addressList,
+        currentConnectedPersona,
+        personaList,
+        socialAddressList,
+        identity,
+        isWeb3ProfileDisable,
+        personaPublicKey,
+        personaProof,
+    })
 
     const handleOpenDialog = () => {
         setSelectedTab(`${PluginId.Web3Profile}_web3_profile`)

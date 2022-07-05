@@ -11,6 +11,7 @@ import type {
     PopupRoutes,
     PersonaInformation,
     ECKeyIdentifier,
+    MaskEvents,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -25,6 +26,7 @@ import type {
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -353,6 +355,7 @@ export namespace Plugin.SNSAdaptor {
         allPersona?: Subscription<PersonaInformation[]>
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
+        MaskMessages: WebExtensionMessage<MaskEvents>
     }
 
     export type SelectProviderDialogEvent =
