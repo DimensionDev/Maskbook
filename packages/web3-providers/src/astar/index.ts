@@ -19,19 +19,19 @@ export class AstarAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
             [GasOptionType.FAST]: {
                 estimatedBaseFee: fromWei(result.eip1559.baseFeePerGas) ?? '0',
                 estimatedSeconds: result.timestamp ?? 0,
-                suggestedMaxFeePerGas: fromWei(tip.fast) ?? '0',
+                suggestedMaxFeePerGas: tip.fast ?? '0',
                 suggestedMaxPriorityFeePerGas: fromWei(priorityFeePerGas.fast) ?? '0',
             },
             [GasOptionType.NORMAL]: {
-                estimatedBaseFee: fromWei(result.eip1559.baseFeePerGas) ?? '0',
+                estimatedBaseFee: result.eip1559.baseFeePerGas ?? '0',
                 estimatedSeconds: result.timestamp ?? 0,
-                suggestedMaxFeePerGas: fromWei(tip.average) ?? '0',
-                suggestedMaxPriorityFeePerGas: fromWei(priorityFeePerGas.average) ?? '0',
+                suggestedMaxFeePerGas: tip.average ?? '0',
+                suggestedMaxPriorityFeePerGas: priorityFeePerGas.average ?? '0',
             },
             [GasOptionType.SLOW]: {
                 estimatedBaseFee: fromWei(result.estimatedBaseFee) ?? '0',
                 estimatedSeconds: result.timestamp ?? 0,
-                suggestedMaxFeePerGas: fromWei(tip.slow) ?? '0',
+                suggestedMaxFeePerGas: tip.slow ?? '0',
                 suggestedMaxPriorityFeePerGas: fromWei(priorityFeePerGas.slow) ?? '0',
             },
         }
