@@ -74,9 +74,17 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     overflowY: 'clip',
     flex: 1,
     gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-    paddingTop: theme.spacing(1),
-    background: 'transparent',
-    borderRadius: 0,
+    ...(maskVariant === 'round'
+        ? {
+              padding: theme.spacing(0.5),
+              background: theme.palette.background.input,
+              borderRadius: 18,
+          }
+        : {
+              paddingTop: theme.spacing(1),
+              background: 'transparent',
+              borderRadius: 0,
+          }),
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
