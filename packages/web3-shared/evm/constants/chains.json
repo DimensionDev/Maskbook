@@ -3021,6 +3021,7 @@
         "chainId": 9001,
         "name": "Evmos Network",
         "chain": "Evmos",
+        "type": "Evmos",
         "network": "mainnet",
         "shortName": "Evmos",
         "features": [],
