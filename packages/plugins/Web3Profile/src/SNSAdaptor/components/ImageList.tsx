@@ -10,6 +10,7 @@ import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,6 +47,18 @@ const useStyles = makeStyles()((theme) => {
             maxHeight: 492,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
+            overflowX: 'hidden',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
         },
         actions: {
             backgroundColor: theme.palette.background.paper,
@@ -90,6 +103,31 @@ const useStyles = makeStyles()((theme) => {
             fontSize: '14px',
             fontWeight: 400,
             justifySelf: 'center',
+        },
+        scrollBar: {
+            overflowX: 'hidden',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
+        },
+        listedBox: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            height: 232,
+        },
+        unlistedBox: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            height: 170,
+            justifyContent: 'center',
         },
     }
 })
@@ -195,7 +233,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             {t.add_collectible()}
                         </Button>
                     </Box>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', height: 232, overflow: 'scroll' }}>
+                    <Box className={classNames(classes.listedBox, classes.scrollBar)}>
                         <List className={classes.list}>
                             {listedCollections?.map((collection, i) => (
                                 <ListItem
@@ -234,14 +272,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     <Box>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
                     </Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            height: 170,
-                            justifyContent: 'center',
-                            overflow: 'scroll',
-                        }}>
+                    <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
                         {unListedCollections?.length > 0 ? (
                             <List className={classes.list}>
                                 {unListedCollections?.map((collection, i) => (

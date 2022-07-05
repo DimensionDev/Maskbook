@@ -22,6 +22,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 494,
         padding: '0px 16px',
         backgroundColor: theme.palette.background.paper,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     link: {
         color: theme.palette.text.primary,
