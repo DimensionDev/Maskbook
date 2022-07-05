@@ -1,5 +1,4 @@
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -52,16 +51,16 @@ interface WalletUIProps {
     address: string
     verify?: boolean
     isETH?: boolean
+    chainId?: ChainId
 }
 
 export function WalletUI(props: WalletUIProps) {
-    const { isETH, address, verify = false, name } = props
+    const { isETH, address, verify = false, name, chainId = ChainId.Mainnet } = props
 
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: domain } = useReverseAddress(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, address)
     const { Others } = useWeb3State<'all'>(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
@@ -75,6 +74,8 @@ export function WalletUI(props: WalletUIProps) {
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {providerType === ProviderType.MaskWallet
                             ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            : isETH
+                            ? domain ?? 'EVM Wallet'
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}

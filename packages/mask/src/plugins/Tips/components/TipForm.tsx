@@ -54,24 +54,6 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             marginLeft: theme.spacing(1),
         },
-        button: {
-            width: '100%',
-            fontSize: 16,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '10px 0',
-            borderRadius: 24,
-            height: 'auto',
-            marginTop: theme.spacing(1.5),
-        },
-        disabledButton: {
-            fontSize: 16,
-            lineHeight: '22px',
-            fontWeight: 600,
-            padding: '10px 0',
-            borderRadius: 24,
-            height: 'auto',
-        },
         controls: {
             marginTop: theme.spacing(1),
             display: 'flex',
@@ -195,15 +177,17 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
 
             <PluginWalletStatusBar>
                 <ChainBoundary
-                    expectedPluginID={pluginId}
+                    expectedPluginID={
+                        [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+                            ? pluginId
+                            : NetworkPluginID.PLUGIN_EVM
+                    }
                     expectedChainId={chainId}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         fullWidth: true,
-                        classes: { root: classes.button, disabled: classes.disabledButton },
-                        color: 'primary',
                     }}>
-                    <ActionButton size="large" fullWidth disabled={!isValid || isSending} onClick={send}>
+                    <ActionButton fullWidth disabled={!isValid || isSending} onClick={send}>
                         {buttonLabel}
                     </ActionButton>
                 </ChainBoundary>

@@ -21,25 +21,11 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: 600,
     },
-    paperRoot: {
-        backgroundImage: 'none',
-        display: 'flex',
-        width: 600,
-        '&>h2': {
-            height: 30,
-            border: theme.palette.mode === 'light' ? undefined : `1px solid ${theme.palette.divider}`,
-            padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
-            justifySelf: 'center',
-            background:
-                theme.palette.mode === 'light'
-                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                    : undefined,
-        },
-    },
+    paperRoot: {},
     content: {
         height: 510,
         maxHeight: 510,
-        paddingBottom: theme.spacing(3),
+        padding: theme.spacing(2),
     },
     footer: {
         boxShadow:

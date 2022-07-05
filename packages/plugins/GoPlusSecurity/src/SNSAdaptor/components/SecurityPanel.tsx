@@ -1,6 +1,5 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
-import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
@@ -11,7 +10,7 @@ import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
 import { getMessageList, TokenIcon } from '@masknet/shared'
 import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultTokenIcon } from '@masknet/icons'
+import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
@@ -167,7 +166,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
                         </Link>
                     </Stack>
                 </Stack>

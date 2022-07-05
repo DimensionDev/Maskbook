@@ -49,7 +49,6 @@ import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { ThemeProvider } from '@mui/material/styles'
 
 export interface IconProps {
     size?: number
@@ -518,6 +517,7 @@ export function ITO(props: ITO_Props) {
         if (!availability?.claimed) {
             return (
                 <ActionButton
+                    variant="roundedDark"
                     fullWidth
                     loading={isClaiming}
                     onClick={claim}
@@ -530,7 +530,7 @@ export function ITO(props: ITO_Props) {
 
         if (canWithdraw) {
             return (
-                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
+                <ActionButton onClick={onWithdraw} className={classes.actionButton} variant="roundedDark">
                     {t('plugin_ito_withdraw')}
                 </ActionButton>
             )
@@ -546,6 +546,7 @@ export function ITO(props: ITO_Props) {
 
                     return (
                         <ActionButton
+                            variant="roundedDark"
                             onClick={() => undefined}
                             disabled
                             className={classNames(classes.actionButton, classes.textInOneLine)}>
@@ -566,7 +567,10 @@ export function ITO(props: ITO_Props) {
                     if (canWithdraw) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    className={classes.actionButton}
+                                    variant="roundedDark">
                                     {t('plugin_ito_withdraw')}
                                 </ActionButton>
                             </Box>
@@ -658,7 +662,11 @@ export function ITO(props: ITO_Props) {
                     if (!isRegionAllow) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton disabled onClick={() => undefined} className={classes.actionButton}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    className={classes.actionButton}
+                                    variant="roundedDark">
                                     {t('plugin_ito_region_ban')}
                                 </ActionButton>
                             </Box>
@@ -676,7 +684,11 @@ export function ITO(props: ITO_Props) {
                     if (loadingTradeInfo || loadingAvailability) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton disabled onClick={() => undefined} className={classes.actionButton}>
+                                <ActionButton
+                                    disabled
+                                    onClick={() => undefined}
+                                    className={classes.actionButton}
+                                    variant="roundedDark">
                                     {t('plugin_ito_loading')}
                                 </ActionButton>
                             </Box>
@@ -688,7 +700,10 @@ export function ITO(props: ITO_Props) {
                     if (canWithdraw) {
                         return (
                             <Box sx={{ flex: 1, padding: 1.5 }}>
-                                <ActionButton onClick={onWithdraw} className={classes.actionButton}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    className={classes.actionButton}
+                                    variant="roundedDark">
                                     {t('plugin_ito_withdraw')}
                                 </ActionButton>
                             </Box>
@@ -705,19 +720,23 @@ export function ITO(props: ITO_Props) {
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                         onClick={onShareSuccess}
-                                        className={classes.actionButton}>
+                                        className={classes.actionButton}
+                                        variant="roundedDark">
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Box>
                                 <Box style={{ padding: 12, flex: 1 }}>
                                     <ChainBoundary
                                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                                        expectedChainId={payload.chain_id}>
+                                        expectedChainId={payload.chain_id}
+                                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                                         <WalletConnectedBoundary
                                             hideRiskWarningConfirmed
                                             startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                            ActionButtonProps={{ variant: 'roundedDark' }}
                                             classes={{ button: classes.actionButton }}>
                                             <ActionButton
+                                                variant="roundedDark"
                                                 onClick={retryIfQualified}
                                                 loading={loadingIfQualified}
                                                 className={classes.actionButton}>
@@ -742,7 +761,10 @@ export function ITO(props: ITO_Props) {
                         return (
                             <>
                                 <Box style={{ padding: 12, flex: 1 }}>
-                                    <ActionButton onClick={onUnlock} className={classes.actionButton}>
+                                    <ActionButton
+                                        onClick={onUnlock}
+                                        className={classes.actionButton}
+                                        variant="roundedDark">
                                         {t('plugin_ito_unlock_in_advance')}
                                     </ActionButton>
                                 </Box>
@@ -751,7 +773,8 @@ export function ITO(props: ITO_Props) {
                                         <ActionButton
                                             startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                             onClick={onShare}
-                                            className={classes.actionButton}>
+                                            className={classes.actionButton}
+                                            variant="roundedDark">
                                             {t('plugin_ito_share')}
                                         </ActionButton>
                                     </Box>
@@ -764,7 +787,10 @@ export function ITO(props: ITO_Props) {
                         return (
                             <>
                                 <Box style={{ flex: 1, padding: 12 }}>
-                                    <ActionButton onClick={onClaim} className={classes.actionButton}>
+                                    <ActionButton
+                                        onClick={onClaim}
+                                        className={classes.actionButton}
+                                        variant="roundedDark">
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
                                 </Box>
@@ -772,7 +798,8 @@ export function ITO(props: ITO_Props) {
                                     <ActionButton
                                         startIcon={<SharedIcon style={{ width: 18, height: 18 }} />}
                                         onClick={onShareSuccess}
-                                        className={classes.actionButton}>
+                                        className={classes.actionButton}
+                                        variant="roundedDark">
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Box>
@@ -784,21 +811,18 @@ export function ITO(props: ITO_Props) {
                 })()}
             </Box>
 
-            {/* TODO: Remove the ThemeProvider when Dialog gets redefine */}
-            <ThemeProvider theme={theme}>
-                <SwapGuide
-                    status={claimDialogStatus}
-                    total_remaining={total_remaining}
-                    payload={{ ...payload, qualification_address: qualificationAddress }}
-                    shareSuccessText={successShareText}
-                    isBuyer={isBuyer}
-                    exchangeTokens={exchange_tokens}
-                    open={openClaimDialog}
-                    onUpdate={setClaimDialogStatus}
-                    onClose={() => setOpenClaimDialog(false)}
-                    retryPayload={retryITOCard}
-                />
-            </ThemeProvider>
+            <SwapGuide
+                status={claimDialogStatus}
+                total_remaining={total_remaining}
+                payload={{ ...payload, qualification_address: qualificationAddress }}
+                shareSuccessText={successShareText}
+                isBuyer={isBuyer}
+                exchangeTokens={exchange_tokens}
+                open={openClaimDialog}
+                onUpdate={setClaimDialogStatus}
+                onClose={() => setOpenClaimDialog(false)}
+                retryPayload={retryITOCard}
+            />
         </>
     )
 }

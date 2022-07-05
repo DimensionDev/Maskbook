@@ -3,10 +3,10 @@ import type { TokenSecurity } from './Common'
 import { useI18N } from '../../locales'
 import React from 'react'
 import { useTheme } from '@mui/system'
-import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency } from '@masknet/web3-shared-base'
+import { LinkOutIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -88,7 +88,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />{' '}
                         </Link>
                     </Stack>
                 </Stack>
@@ -109,7 +109,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
                             </Link>
                         )}
                     </Stack>
@@ -128,7 +128,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />{' '}
                             </Link>
                         )}
                     </Stack>

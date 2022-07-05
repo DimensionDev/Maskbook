@@ -37,6 +37,7 @@ export const MaskColors = {
             danger: '#FF3545',
             white: '#ffffff',
             dark: '#07101B',
+            secondaryDark: '#767F8D',
         },
         background: {
             default: '#F9F9F9',
@@ -68,8 +69,8 @@ export const MaskColors = {
             second: '#C4C7CD',
             third: '#666C75',
             primaryMain: '#494949',
-            secondaryMain: '#181818',
-            thirdMain: '#151515',
+            secondaryMain: '#232323',
+            thirdMain: '#1e1e1e',
             bg: '#1C1C1C',
             bottom: '#101010',
             secondaryBottom: 'rgba(0, 0, 0, 0.8)',
@@ -85,6 +86,7 @@ export const MaskColors = {
             danger: '#FF3545',
             white: '#ffffff',
             dark: '#07101B',
+            secondaryDark: '#767F8D',
         },
         text: {
             primary: '#F5F5F5',
