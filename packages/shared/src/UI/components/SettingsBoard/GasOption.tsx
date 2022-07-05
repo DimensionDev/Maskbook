@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'row',
             alignItems: 'center',
             fontWeight: 700,
-            padding: theme.spacing(2.75, 0),
+            padding: theme.spacing(2.5, 0),
         },
         type: {
             fontWeight: 700,

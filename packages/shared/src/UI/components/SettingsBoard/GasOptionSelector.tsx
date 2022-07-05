@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => {
             marginTop: theme.spacing(2),
         },
         content: {
-            padding: theme.spacing(0, 2),
+            padding: theme.spacing(0.5, 2),
         },
         skeleton: {
             height: 201.5,
