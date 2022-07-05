@@ -4,7 +4,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form'
 import BigNumber from 'bignumber.js'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
-import { InfoIcon, WarningIcon } from '@masknet/icons'
+import { InfoIcon, CircleWarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, GasOptionType, isPositive, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
@@ -158,7 +158,7 @@ export function GasForm(props: GasFormProps) {
                         name="gasLimit"
                     />
                     {errorGasLimit ? (
-                        <MaskAlert icon={<WarningIcon />} severity="error">
+                        <MaskAlert icon={<CircleWarningIcon />} severity="error">
                             {errorGasLimit}
                         </MaskAlert>
                     ) : null}
@@ -245,7 +245,7 @@ export function GasForm(props: GasFormProps) {
                 </Grid>
             ) : null}
             {errorNonGasLimit ? (
-                <MaskAlert icon={<WarningIcon />} severity="error">
+                <MaskAlert icon={<CircleWarningIcon />} severity="error">
                     {errorNonGasLimit}
                 </MaskAlert>
             ) : null}

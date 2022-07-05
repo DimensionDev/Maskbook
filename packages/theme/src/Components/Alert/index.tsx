@@ -7,12 +7,16 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
-        padding: '7px 14px',
+        padding: 11.5,
         borderRadius: 4,
     },
     message: {
         fontSize: 14,
         fontWeight: 400,
+        padding: 0,
+    },
+    icon: {
+        padding: 0,
     },
     action: {
         padding: 0,
