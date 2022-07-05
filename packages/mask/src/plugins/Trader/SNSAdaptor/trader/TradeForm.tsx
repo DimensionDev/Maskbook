@@ -3,17 +3,15 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, formatPercentage, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, isLessThan, formatBalance, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, useSelectAdvancedSettings } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
-import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { currentSlippageSettings } from '../../settings'
 import TuneIcon from '@mui/icons-material/Tune'
@@ -30,6 +28,7 @@ import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { PluginTraderMessages } from '../../messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -227,11 +226,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const bestTrade = useMemo(() => first(trades), [trades])
         // #endregion
 
-        // #region remote controlled swap settings dialog
-        const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
-            PluginTraderMessages.swapSettingsUpdated,
-        )
-        // #endregion
+        const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
         // #region form controls
         const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
@@ -444,7 +439,25 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 <Typography className={classes.slippageValue}>
                                     {formatPercentage(toBips(currentSlippageSettings.value))}
                                 </Typography>
-                                <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                                <IconButton
+                                    className={classes.icon}
+                                    size="small"
+                                    onClick={async () => {
+                                        const { slippageTolerance, transaction } = await selectAdvancedSettings()
+
+                                        if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+
+                                        PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                                            open: false,
+                                            gasConfig: {
+                                                gasPrice: transaction?.gasPrice as string | undefined,
+                                                maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
+                                                maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as
+                                                    | string
+                                                    | undefined,
+                                            },
+                                        })
+                                    }}>
                                     <TuneIcon fontSize="small" />
                                 </IconButton>
                             </div>
