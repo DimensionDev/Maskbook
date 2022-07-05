@@ -18,7 +18,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { SelectTokenChip, useSelectAdvancedSettings } from '@masknet/shared'
-import { ChevronUpIcon, DropIcon, RefreshIcon } from '@masknet/icons'
+import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
@@ -26,7 +26,6 @@ import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { ArrowDownward } from '@mui/icons-material'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
@@ -43,8 +42,11 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: '28px 16px 16px',
+            padding: '0px 16px 16px',
+            marginTop: 28,
             flex: 1,
+            maxHeight: 448,
+            overflow: 'auto',
         },
         reverseIcon: {
             cursor: 'pointer',
@@ -432,19 +434,19 @@ export const TradeForm = memo<AllTradeFormProps>(
                         SelectTokenChip={{
                             ChipProps: {
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
+                                onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
                                     <DropIcon
                                         className={classes.dropIcon}
                                         style={{ fill: !inputToken ? '#ffffff' : undefined }}
                                     />
                                 ),
-                                onDelete: noop,
                             },
                         }}
                     />
                     <Box className={classes.reverseWrapper}>
                         <Box className={classes.reverse}>
-                            <ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
+                            <ArrowDownwardIcon className={classes.reverseIcon} onClick={onSwitch} />
                         </Box>
                     </Box>
                     <Box className={classes.section} marginBottom={2.5}>
@@ -460,13 +462,13 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 token={outputToken}
                                 ChipProps={{
                                     onClick: () => onTokenChipClick(TokenPanelType.Output),
+                                    onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
                                         <DropIcon
                                             className={classes.dropIcon}
                                             style={{ fill: !outputToken ? '#ffffff' : undefined }}
                                         />
                                     ),
-                                    onDelete: noop,
                                 }}
                             />
 

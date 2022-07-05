@@ -22,7 +22,8 @@ const useStyles = makeStyles()((theme) => {
             position: 'absolute',
         },
         trade: {
-            padding: theme.spacing(0, 2),
+            padding: `${theme.spacing(0, 2)}!important`,
+            margin: '0 !important',
         },
     }
 })

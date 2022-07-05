@@ -75,7 +75,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     best: {
         position: 'absolute',
         top: -12,
-        right: 12,
+        right: 22,
     },
 }))
 

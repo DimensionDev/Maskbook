@@ -137,6 +137,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     actions: {
         padding: 0,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     accept: {
         backgroundColor: isDashboard
