@@ -20,7 +20,7 @@ import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -131,7 +131,10 @@ export function PluginWalletStatusBar({
     const providerDescriptor = useProviderDescriptor(expectedPluginID, expectedProviderType)
 
     const providerType = useProviderType(expectedPluginID)
-    const networkDescriptor = useNetworkDescriptor(currentPluginId)
+    const networkDescriptor = useNetworkDescriptor(
+        onlyNetworkIcon ? NetworkPluginID.PLUGIN_EVM : currentPluginId,
+        onlyNetworkIcon ? ChainId.Mainnet : chainId,
+    )
     const { value: domain } = useReverseAddress(currentPluginId, account)
     const { Others } = useWeb3State<'all'>(currentPluginId)
 

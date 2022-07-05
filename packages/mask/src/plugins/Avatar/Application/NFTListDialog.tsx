@@ -330,7 +330,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     selectedWallet={selectedAccount}
                     wallet={x.identity}
                     nextIDWallets={wallets}
-                    chainId={chainId as ChainId}
+                    chainId={ChainId.Mainnet}
                     onSelectedWallet={onChangeWallet}
                 />
                 <Divider className={classes.divider} />

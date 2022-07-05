@@ -1,5 +1,4 @@
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -52,14 +51,14 @@ interface WalletUIProps {
     address: string
     verify?: boolean
     isETH?: boolean
+    chainId?: ChainId
 }
 
 export function WalletUI(props: WalletUIProps) {
-    const { isETH, address, verify = false, name } = props
+    const { isETH, address, verify = false, name, chainId = ChainId.Mainnet } = props
 
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
     const { value: domain } = useReverseAddress(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, address)
     const { Others } = useWeb3State<'all'>(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
