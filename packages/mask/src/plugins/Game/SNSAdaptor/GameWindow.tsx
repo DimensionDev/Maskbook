@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { styled } from '@mui/material/styles'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconClose, IconFull, IconShare } from '../constants'
-import { getTwitterId } from '../../../social-network-adaptor/twitter.com/utils/user'
+import { getCurrentIdentifier } from '../../../social-network-adaptor/utils'
 import { useLocation } from 'react-use'
 import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import type { GameInfo, GameNFT } from '../types'
@@ -13,10 +13,7 @@ import urlcat from 'urlcat'
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         zIndex: 9999,
     },
@@ -109,26 +106,33 @@ const GameWindow = (props: Props) => {
 
     const windowStyle = useMemo(() => {
         return {
-            width: `${gameInfo?.width ?? 700}px`,
-            height: `${gameInfo?.height ?? 400}px`,
+            width: gameInfo?.width ?? 700,
+            height: gameInfo?.height ?? 400,
         }
     }, [gameInfo?.width, gameInfo?.height])
 
     const location = useLocation()
-    const twitterId = useMemo(() => {
-        return getTwitterId()
-    }, [location])
+    const profile = useMemo(() => getCurrentIdentifier(), [location])
     const chainId = useChainId()
     const gameUrl = useMemo(() => {
         return urlcat(gameInfo?.url ?? '', {
             dom: 'nff',
-            twitterId,
+            sns: profile?.identifier.network ?? '',
+            id: profile?.identifier.userId ?? '',
             contract: tokenProps?.contract ?? '',
             tokenId: tokenProps?.tokenId ?? '',
             chainId,
             account,
         })
-    }, [gameInfo, tokenProps, account, chainId])
+    }, [
+        gameInfo,
+        profile?.identifier.network,
+        profile?.identifier.userId,
+        tokenProps?.contract,
+        tokenProps?.tokenId,
+        account,
+        chainId,
+    ])
 
     return isShow ? (
         <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>

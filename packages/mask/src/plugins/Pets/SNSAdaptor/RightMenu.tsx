@@ -118,26 +118,19 @@ function RightMenu(props: Props) {
     const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
     const { setDialog: openGameDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
 
-    function addEvents() {
-        document.body.addEventListener('click', props.onClose, false)
-        document.body.addEventListener('scroll', props.onClose, false)
-    }
-
-    function removeEvents() {
-        document.body.removeEventListener('click', props.onClose, false)
-        document.body.removeEventListener('scroll', props.onClose, false)
-    }
     useEffect(() => {
         if (props.isShow) {
             setIsLeft(props.mousePosition.x > window.innerWidth / 2)
             setIsTop(props.mousePosition.y > window.innerHeight / 2)
-            addEvents()
-        } else {
-            removeEvents()
+            document.body.addEventListener('click', props.onClose, false)
+            document.body.addEventListener('scroll', props.onClose, false)
         }
 
-        return () => removeEvents()
-    }, [props.isShow, props.dragPosition.x, props.dragPosition.y])
+        return () => {
+            document.body.removeEventListener('click', props.onClose, false)
+            document.body.removeEventListener('scroll', props.onClose, false)
+        }
+    }, [props.isShow, props.onClose, props.dragPosition.x, props.dragPosition.y])
 
     useEffect(() => {
         props.onClose()

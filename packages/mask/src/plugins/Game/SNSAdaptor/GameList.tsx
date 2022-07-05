@@ -13,7 +13,7 @@ import classNames from 'classnames'
 const useStyles = makeStyles()(() => ({
     statusBar: {
         position: 'absolute',
-        width: 'calc(100% - 64px)',
+        width: 'calc(100% - 80px)',
         bottom: 0,
     },
     title: {
