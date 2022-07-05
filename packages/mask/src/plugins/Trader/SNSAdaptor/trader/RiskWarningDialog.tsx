@@ -16,7 +16,6 @@ const useStyles = makeStyles()((theme) => ({
                 theme.palette.mode === 'light'
                     ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
                     : undefined,
-            borderBottom: `1px solid ${theme.palette.divider}`,
             marginBottom: 24,
             display: 'grid !important',
             gridTemplateColumns: 'repeat(3, 1fr)',
