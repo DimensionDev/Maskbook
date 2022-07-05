@@ -1,9 +1,9 @@
-import { SelectedIcon } from '@masknet/icons'
+import { MaskAvatarIcon, SelectedIcon } from '@masknet/icons'
 import { useImageChecker } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Box, Skeleton, useTheme } from '@mui/material'
+import { Box, Skeleton } from '@mui/material'
 import classNames from 'classnames'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
@@ -73,6 +73,12 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         marginLeft: 'auto',
         marginRight: 'auto',
     },
+    defaultImage: {
+        background: theme.palette.maskColor.modelTitleBg,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     image: {
         width: 126,
         height: 126,
@@ -84,6 +90,9 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         borderRadius: 12,
+    },
+    maskIcon: {
+        fontSize: 30,
     },
 }))
 
@@ -104,10 +113,6 @@ export function NFTImageCollectibleAvatar({
 }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles({ networkPluginID: pluginId })
     const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
-    const theme = useTheme()
-
-    const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
-    const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import.meta.url)
 
     if (loading)
         return (
@@ -132,15 +137,9 @@ export function NFTImageCollectibleAvatar({
         />
     ) : (
         <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
-            <img
-                className={classes.image}
-                style={{ width: size, height: size }}
-                src={
-                    theme.palette.mode === 'dark'
-                        ? assetPlayerFallbackImageDark.toString()
-                        : assetPlayerFallbackImageLight.toString()
-                }
-            />
+            <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
+                <MaskAvatarIcon className={classes.maskIcon} />
+            </Box>
         </ShadowRootTooltip>
     )
 }
