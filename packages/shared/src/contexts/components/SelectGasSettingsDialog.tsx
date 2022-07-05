@@ -17,8 +17,11 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
+    root: {
+        width: compact ? 552 : 600,
+        minHeight: 620,
+    },
     content: {
-        ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(3, 2),
         paddingTop: 0,
     },
@@ -88,6 +91,9 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
 
     return (
         <InjectedDialog
+            classes={{
+                paper: classes.root,
+            }}
             open={open}
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             onClose={() => {

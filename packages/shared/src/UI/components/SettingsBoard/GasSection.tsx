@@ -119,7 +119,7 @@ export function GasSection(props: GasSectionProps) {
                             setTransactionOptions(transactionOptions)
                         }}
                     />
-                ) : transaction && gasOptions ? (
+                ) : gasOptions ? (
                     <GasForm
                         chainId={chainId as ChainId}
                         transaction={

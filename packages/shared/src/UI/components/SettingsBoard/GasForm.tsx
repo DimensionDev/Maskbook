@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         unit: {
             color: theme.palette.maskColor.third,
+            fontSize: 14,
         },
         textfield: {
             '& input[type=number]': {

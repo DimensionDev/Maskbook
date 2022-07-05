@@ -365,7 +365,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                         transaction: {
                                             from: account,
                                             to: account,
-                                            gas: '300000',
                                             value: '1',
                                         },
                                     })
