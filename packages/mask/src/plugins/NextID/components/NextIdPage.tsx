@@ -86,6 +86,10 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         height: '196px',
     },
+    walletIcon: {
+        fontSize: 18,
+        marginRight: 8,
+    },
 }))
 
 interface NextIdPageProps {
@@ -175,7 +179,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                 style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
                 variant="contained"
                 onClick={() => toggleBindDialog(true)}>
-                <WalletUnderTabsIcon />
+                <WalletUnderTabsIcon className={classes.walletIcon} />
                 {t.verify_wallet_button()}
             </Button>
         )
