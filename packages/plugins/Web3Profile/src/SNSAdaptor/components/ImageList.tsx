@@ -41,8 +41,9 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: 0,
         },
         content: {
-            padding: 0,
+            width: 600,
             height: 492,
+            padding: 0,
             maxHeight: 492,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
@@ -226,9 +227,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             padding: 2,
                         }}>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
-                        <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
+                        {/* <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
                             {t.add_collectible()}
-                        </Button>
+                        </Button> */}
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
                         {listedCollections && listedCollections?.length > 0 ? (
