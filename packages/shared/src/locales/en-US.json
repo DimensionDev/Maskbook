@@ -40,7 +40,7 @@
     "gas_settings_gas_option_type_slow": "Medium",
     "gas_settings_gas_option_type_normal": "High",
     "gas_settings_gas_option_type_fast": "Instant",
-    "gas_settings_gas_option_estimate_seconds": "{{seconds}} sec",
+    "gas_settings_gas_option_estimate_distance": "~ {{distance}}",
     "gas_settings_gas_option_amount_in_gwei": "up to {{amount}} Gwei",
     "gas_settings_section_title_gas_price": "Gas Price",
     "gas_settings_section_title_slippage_tolerance": "Slippage Tolerance",

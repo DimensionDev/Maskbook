@@ -30,7 +30,6 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             color: theme.palette.text.secondary,
             fontWeight: 400,
-            fontSize: 14,
         },
         amount: {
             fontWeight: 700,
@@ -66,10 +65,11 @@ export function GasOption(props: GasOptionProps) {
             {checked ? <CheckCircle color="inherit" /> : <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
             <Typography className={classes.estimate}>
-                &lt;{' '}
-                {formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
-                    addSuffix: true,
-                    locale: getLocale(lang),
+                {t.gas_settings_gas_option_estimate_distance({
+                    distance: formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
+                        addSuffix: true,
+                        locale: getLocale(lang),
+                    }),
                 })}
             </Typography>
             <Typography className={classes.amount}>
