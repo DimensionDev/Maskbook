@@ -130,7 +130,7 @@ export function Snapshot() {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
-                    renderInTimeline
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                 />
             </Box>
         </>

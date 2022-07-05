@@ -13,9 +13,12 @@
     "@masknet/shared-base": "workspace:*",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^8.3.4",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "use-subscription": "1.6.0",
     "uuid": "^8.3.2"
+  },
+  "peerDependencies": {
+    "react-i18next": "^11.15.3"
   },
   "sideEffect": false
 }

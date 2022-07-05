@@ -11,12 +11,13 @@
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/plugin-infra": "workspace:*",
+    "@masknet/public-api": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
-    "@masknet/web3-shared-flow":"workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
     "@types/socket.io-client": "^1.4.36",
     "bignumber.js": "9.0.2",
@@ -25,16 +26,18 @@
     "json-stable-stringify": "^1.0.1",
     "lodash-unified": "1.0.2",
     "lru-cache": "^7.10.1",
-    "react-use": "^17.3.2",
+    "react-use": "^17.4.0",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "urlcat": "^2.0.4",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.3",
-    "web3-eth": "1.7.3"
+    "web3": "1.7.4",
+    "web3-core": "1.7.4",
+    "web3-eth": "1.7.4"
   },
   "devDependencies": {
+    "@types/json-stable-stringify": "^1.0.34",
     "@types/lru-cache": "^7.10.10"
   }
 }

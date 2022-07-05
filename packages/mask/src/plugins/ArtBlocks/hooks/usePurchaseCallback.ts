@@ -1,6 +1,6 @@
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, encodeTransaction, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
 import { useArtBlocksContract } from './useArtBlocksContract'
@@ -14,15 +14,13 @@ export function usePurchaseCallback(chainId: ChainId, projectId: string, amount:
     return useAsyncFn(async () => {
         if (!genArt721MinterContract) return
 
-        const value = new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed()
-        const config = {
-            from: account,
-            value,
-        }
-        const tx = await encodeTransaction(
+        const tx = await encodeContractTransaction(
             genArt721MinterContract,
             genArt721MinterContract.methods.purchase(projectId),
-            config,
+            {
+                from: account,
+                value: new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed(),
+            },
         )
         return connection.sendTransaction(tx)
     }, [account, amount, chainId, genArt721MinterContract, connection])

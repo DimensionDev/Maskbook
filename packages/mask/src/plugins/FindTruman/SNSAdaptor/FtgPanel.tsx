@@ -103,8 +103,7 @@ export default function FtgPanel(props: FtgPanelProps) {
                         href="https://findtruman.io/#/buy"
                         target="_blank"
                         sx={{ mt: 1, width: '150px' }}
-                        color="primary"
-                        variant="contained">
+                        color="primary">
                         {t('plugin_find_truman_dialog_buy_ftg')}
                     </Button>
                 </Box>

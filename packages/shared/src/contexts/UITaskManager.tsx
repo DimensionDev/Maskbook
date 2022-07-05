@@ -1,26 +1,22 @@
+import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import type { InjectedDialogProps } from './components'
 
-interface ContextOptions<T, R> {
-    show(options: T, signal?: AbortSignal): Promise<R>
+export interface ContextOptions<T, R> {
+    show(options?: Omit<T, 'open'>, signal?: AbortSignal): Promise<R>
 }
 
-interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
-    onSubmit?(result: T): void
+export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
+    onSubmit?(result: T | null): void
 }
 
 /**
  * Create a manager of small UI task sessions,
- * which provide both a Context and a Provider.
+ * which provides both a Context and a Provider.
  */
-export const createUITaskManager = <
-    TaskOptions extends { onSubmit?(result: Result | null): void },
-    Result,
-    Props extends BaseDialogProps<Result>,
->(
-    Component: ComponentType<Props>,
+export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>, Result>(
+    Component: ComponentType<TaskOptions>,
 ) => {
     const TaskManagerContext = createContext<ContextOptions<TaskOptions, Result | null>>(null!)
     let id = 0
@@ -31,7 +27,7 @@ export const createUITaskManager = <
         promise: Promise<Result | null>
         resolve: TaskDeferTuple[1]
         reject: TaskDeferTuple[2]
-        options: TaskOptions
+        options?: Omit<TaskOptions, 'open'>
     }
 
     const TaskManagerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -43,7 +39,7 @@ export const createUITaskManager = <
             }
 
             return {
-                show(options: TaskOptions, signal?: AbortSignal) {
+                show(options?: Omit<TaskOptions, 'open'>, signal?: AbortSignal) {
                     const [promise, resolve, reject] = defer<Result | null>()
                     id += 1
                     signal?.addEventListener('abort', function abortHandler() {
@@ -67,17 +63,17 @@ export const createUITaskManager = <
                     return createElement(
                         Component,
                         {
+                            ...task.options,
                             key: task.id,
                             open: true,
-                            ...task.options,
                             onSubmit: (result: Result | null) => {
-                                task.options.onSubmit?.(result)
+                                task.options?.onSubmit?.(result)
                                 task.resolve(result)
                             },
                             onClose: () => {
                                 task.resolve(null)
                             },
-                        } as unknown as Props,
+                        } as unknown as TaskOptions,
                         children,
                     )
                 })}

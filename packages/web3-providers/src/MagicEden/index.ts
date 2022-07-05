@@ -117,7 +117,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 chainId: ChainId.Mainnet,
                 type: TokenType.NonFungible,
                 schema: SchemaType.NonFungible,
-                tokenId: token?.title?.match(/#\d+/)?.[0]?.replace('#', '') ?? '',
+                tokenId: token.mintAddress,
                 address: token.mintAddress,
                 metadata: {
                     chainId: ChainId.Mainnet,
@@ -220,7 +220,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return createNFTCollection(collection)
     }
 
-    async getHistory(address: string, tokenId: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {
+    async getEvents(address: string, tokenId: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
                 mint_address: tokenId,

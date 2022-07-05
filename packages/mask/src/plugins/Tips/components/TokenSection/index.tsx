@@ -1,6 +1,6 @@
 import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
-import { usePickToken } from '@masknet/shared'
+import { useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
@@ -52,9 +52,9 @@ export const TokenSection: FC = () => {
         }
     }, [isNativeToken, gasConfig, gasPrice, chainId])
 
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken()
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
@@ -62,7 +62,7 @@ export const TokenSection: FC = () => {
         if (picked) {
             setToken(picked)
         }
-    }, [pickToken, token?.address, pluginId, chainId])
+    }, [selectFungibleToken, token?.address, pluginId, chainId])
     // #endregion
     return (
         <TokenAmountPanel

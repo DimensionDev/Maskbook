@@ -1,4 +1,5 @@
 import { memoizePromise } from '@dimensiondev/kit'
+import { CoinGecko } from '@masknet/web3-providers'
 import {
     createPageable,
     CurrencyType,
@@ -19,14 +20,11 @@ import {
     SPL_TOKEN_PROGRAM_ID,
 } from './shared'
 
-const COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
-const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=solana&vs_currencies=usd`
 export async function getSolAsset(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
-    const priceData = await fetch(requestPath).then(
-        (r) => r.json() as Promise<Record<string, Record<CurrencyType, number>>>,
-    )
-    const price = priceData.solana[CurrencyType.USD]
+
+    const priceData = await CoinGecko.getTokensPrice(['solana'])
+    const price = priceData.solana
 
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
         method: 'getAccountInfo',

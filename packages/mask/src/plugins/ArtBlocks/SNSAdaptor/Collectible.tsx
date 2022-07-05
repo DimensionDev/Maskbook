@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => {
             borderTop: `solid 1px ${theme.palette.divider}`,
             justifyContent: 'space-between',
         },
-        footnote: {
+        sourceNote: {
             fontSize: 10,
             marginRight: theme.spacing(1),
         },
@@ -134,7 +134,10 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </Card>
             <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <ActionBar chainId={chainId} project={project} />
                 </ChainBoundary>
             </Box>

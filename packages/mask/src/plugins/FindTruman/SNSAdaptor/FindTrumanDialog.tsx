@@ -1,22 +1,34 @@
-import { Box, DialogContent } from '@mui/material'
+import { Box, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { InjectedDialog } from '@masknet/shared'
-import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
 import AssetsPanel from './AssetsPanel'
 import ParticipatePanel from './ParticipatePanel'
 import { useContext } from 'react'
 import type { FindTrumanI18nFunction } from '../types'
 import { FindTrumanContext } from '../context'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
+import { PluginWalletStatusBar } from '../../../utils'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
         paddingBottom: '0 !important',
-        paddingTop: '0 !important',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
     walletStatusBox: {
         width: 535,
@@ -27,7 +39,6 @@ const useStyles = makeStyles()((theme, props) => ({
         top: 0,
         width: '100%',
         zIndex: 2,
-        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
         backgroundColor: theme.palette.background.paper,
     },
@@ -40,6 +51,24 @@ const useStyles = makeStyles()((theme, props) => ({
         margin: '0 auto',
         padding: 0,
     },
+    power: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        padding: 16,
+    },
+    icon: {
+        width: 22,
+        height: 22,
+        paddingLeft: 12,
+    },
+    actions: {
+        padding: 0,
+        display: 'block',
+    },
+    statusBar: {
+        margin: 0,
+    },
 }))
 
 interface FindTrumanDialogProps {
@@ -48,9 +77,11 @@ interface FindTrumanDialogProps {
 }
 
 export function FindTrumanDialog(props: FindTrumanDialogProps) {
+    const i18N = useI18N()
     const { open, onClose } = props
     const { classes } = useStyles()
     const account = useAccount()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { consts, t } = useConst()
 
     const [currentTab, onChange, tabs] = useTabs(
@@ -66,16 +97,14 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                 const: consts,
                 t,
             }}>
-            <InjectedDialog open={open} onClose={onClose} title="FindTruman">
-                <DialogContent className={classes.wrapper}>
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
-                    {consts && (
-                        <TabContext value={currentTab}>
-                            <div className={classes.abstractTabWrapper}>
-                                <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
-                            </div>
+            <TabContext value={currentTab}>
+                <InjectedDialog
+                    open={open}
+                    onClose={onClose}
+                    title="FindTruman"
+                    titleTabs={<FindTrumanDialogTabs tabs={tabs} onChange={onChange} />}>
+                    <DialogContent className={classes.wrapper}>
+                        {consts && (
                             <Box className={classes.tabPaneWrapper}>
                                 <TabPanel className={classes.tabPane} value={FindTrumanDialogTab.Introduction}>
                                     <IntroductionPanel />
@@ -87,10 +116,32 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                     <ParticipatePanel storyId={consts.storyId} />
                                 </TabPanel>
                             </Box>
-                        </TabContext>
-                    )}
-                </DialogContent>
-            </InjectedDialog>
+                        )}
+                    </DialogContent>
+                    <DialogActions className={classes.actions}>
+                        <Box className={classes.power}>
+                            <Typography
+                                sx={{ marginRight: 1 }}
+                                variant="body1"
+                                color="textSecondary"
+                                fontSize={14}
+                                fontWeight={700}>
+                                {i18N.powered_by()}
+                            </Typography>
+                            <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
+                                FindTruman
+                            </Typography>
+                            <img
+                                className={classes.icon}
+                                src={new URL('../assets/findtruman.png', import.meta.url).toString()}
+                            />
+                        </Box>
+                        <PluginWalletStatusBar className={classes.statusBar}>
+                            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} />
+                        </PluginWalletStatusBar>
+                    </DialogActions>
+                </InjectedDialog>
+            </TabContext>
         </FindTrumanContext.Provider>
     )
 }
@@ -145,8 +196,8 @@ const FindTrumanDialogTabValues = [
 
 interface FindTrumanDialogTabsProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    currentTab: FindTrumanDialogTab
-    setTab(tab: FindTrumanDialogTab): void
+    tabs: Record<FindTrumanDialogTab, FindTrumanDialogTab>
+    onChange: (event: unknown, value: string) => void
 }
 
 function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanDialogTab) {
@@ -163,23 +214,19 @@ function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanD
 function FindTrumanDialogTabs(props: FindTrumanDialogTabsProps) {
     const classes = useStylesExtends(useTabsStyles({ columns: 'repeat(3, 33.33%)' }), props)
     const { t } = useContext(FindTrumanContext)
-    const { currentTab, setTab } = props
-    const createTabItem = (type: FindTrumanDialogTab) => ({
-        label: <span>{getFindTrumanDialogTabName(t, type)}</span>,
-        sx: { p: 0 },
-        cb: () => setTab(type),
-    })
+    const { onChange, tabs } = props
 
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            createTabItem(FindTrumanDialogTab.Introduction),
-            createTabItem(FindTrumanDialogTab.Assets),
-            createTabItem(FindTrumanDialogTab.Participate),
-        ],
-        index: FindTrumanDialogTabValues.indexOf(currentTab),
-        classes,
-        hasOnlyOneChild: true,
-    }
-
-    return <AbstractTab {...tabProps} />
+    return (
+        <MaskTabList variant="base" onChange={onChange} aria-label="FindTrumanTabs">
+            <Tab
+                label={<span>{getFindTrumanDialogTabName(t, FindTrumanDialogTab.Introduction)}</span>}
+                value={tabs.introduction}
+            />
+            <Tab label={<span>{getFindTrumanDialogTabName(t, FindTrumanDialogTab.Assets)}</span>} value={tabs.assets} />
+            <Tab
+                label={<span>{getFindTrumanDialogTabName(t, FindTrumanDialogTab.Participate)}</span>}
+                value={tabs.participate}
+            />
+        </MaskTabList>
+    )
 }

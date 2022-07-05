@@ -27,7 +27,6 @@ export class LoadingFailCard extends Component<
                             marginBottom: 4,
                             marginTop: 32,
                         }}
-                        variant="contained"
                         onClick={() => {
                             this.setState({ error: null })
                             this.props.retry()
@@ -40,7 +39,6 @@ export class LoadingFailCard extends Component<
                     <Typography color="textPrimary">Loading fails due to Snapshot API service breakdown.</Typography>
                     <Button
                         style={{ width: 100, marginTop: 16 }}
-                        variant="contained"
                         onClick={() => {
                             this.setState({ error: null })
                             this.props.retry()

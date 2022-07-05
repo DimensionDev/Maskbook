@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
-import { encodeTransaction } from '@masknet/web3-shared-evm'
+import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
@@ -17,7 +17,7 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
             from: account,
             value: toFixed(priceInWei),
         }
-        const tx = await encodeTransaction(
+        const tx = await encodeContractTransaction(
             knownOriginDigitalAssetV2_contract,
             knownOriginDigitalAssetV2_contract.methods.purchase(editionNumber),
             config,

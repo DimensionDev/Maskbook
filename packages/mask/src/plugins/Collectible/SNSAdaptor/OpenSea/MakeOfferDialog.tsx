@@ -6,16 +6,16 @@ import {
     Checkbox,
     Card,
     CardContent,
-    CardActions,
     FormControlLabel,
     Typography,
     Link,
+    DialogActions,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { UnreviewedWarning } from '.././UnreviewedWarning'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => {
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
+            padding: 0,
         },
         panel: {
             marginTop: theme.spacing(2),
@@ -54,11 +54,12 @@ const useStyles = makeStyles()((theme) => {
         label: {},
         buttons: {
             width: '100%',
-            margin: `0 ${theme.spacing(-0.5)}`,
+            margin: 0,
         },
         button: {
             flex: 1,
-            margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
+            height: 40,
+            margin: 0,
         },
     }
 })
@@ -78,7 +79,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const desktopOrder = first(asset?.orders)
     const leastPrice = desktopOrder ? new BigNumber(desktopOrder.price?.[CurrencyType.USD] ?? '0') : ZERO
 
-    const paymentTokens = asset?.payment_tokens
+    const paymentTokens = asset?.paymentTokens
 
     const selectedPaymentToken = first(paymentTokens)
 
@@ -241,41 +242,42 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             />
                         )}
                     </CardContent>
-                    <CardActions className={classes.footer}>
-                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                            <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
-                                <ActionButtonPromise
-                                    className={classes.button}
-                                    variant="contained"
-                                    disabled={!!validationMessage}
-                                    size="large"
-                                    init={
-                                        validationMessage ||
-                                        t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer')
-                                    }
-                                    waiting={t(
-                                        isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
-                                    )}
-                                    complete={t('plugin_collectible_done')}
-                                    failed={t('plugin_collectible_retry')}
-                                    executor={onMakeOffer}
-                                    completeOnClick={onClose}
-                                    failedOnClick="use executor"
-                                />
-                                {insufficientBalance ? (
-                                    <ActionButton
-                                        className={classes.button}
-                                        variant="contained"
-                                        size="large"
-                                        onClick={onConvertClick}>
-                                        {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
-                                    </ActionButton>
-                                ) : null}
-                            </Box>
-                        </ChainBoundary>
-                    </CardActions>
                 </Card>
             </DialogContent>
+            <DialogActions style={{ padding: 0 }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
+                            <ActionButtonPromise
+                                className={classes.button}
+                                disabled={!!validationMessage}
+                                size="large"
+                                init={
+                                    validationMessage ||
+                                    t(isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer')
+                                }
+                                waiting={t(
+                                    isAuction ? 'plugin_collectible_place_bid' : 'plugin_collectible_make_offer',
+                                )}
+                                complete={t('plugin_collectible_done')}
+                                failed={t('plugin_collectible_retry')}
+                                executor={onMakeOffer}
+                                completeOnClick={onClose}
+                                failedOnClick="use executor"
+                            />
+                            {insufficientBalance ? (
+                                <ActionButton
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="large"
+                                    onClick={onConvertClick}>
+                                    {t('plugin_collectible_get_more_token', { token: token.value?.symbol })}
+                                </ActionButton>
+                            ) : null}
+                        </Box>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
+            </DialogActions>
         </InjectedDialog>
     )
 }

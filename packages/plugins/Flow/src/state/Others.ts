@@ -18,7 +18,7 @@ import {
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultAddress: '',
+            defaultAddress: '0x1654653399040a61',
             defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,

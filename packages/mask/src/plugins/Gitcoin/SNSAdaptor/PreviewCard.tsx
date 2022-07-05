@@ -74,11 +74,6 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        backgroundColor: theme.palette.maskColor?.dark,
-        color: 'white',
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor?.dark,
-        },
         width: '100%',
     },
 }))
@@ -118,16 +113,7 @@ export function PreviewCard(props: PreviewCardProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
                 <Typography color="textPrimary">{tr('go_wrong')}</Typography>
-                <Button
-                    sx={{
-                        backgroundColor: theme.palette.maskColor?.dark,
-                        '&:hover': {
-                            backgroundColor: theme.palette.maskColor?.dark,
-                        },
-                        width: 254,
-                        color: 'white',
-                    }}
-                    onClick={retry}>
+                <Button variant="roundedDark" onClick={retry}>
                     {tr('retry')}
                 </Button>
             </Box>
@@ -177,6 +163,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <Button
                         fullWidth
+                        variant="roundedDark"
                         className={classes.button}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -192,18 +179,8 @@ export function PreviewCard(props: PreviewCardProps) {
                             pluginID === NetworkPluginID.PLUGIN_EVM &&
                             [ChainId.Mainnet, ChainId.Matic].includes(chainId)
                         }
-                        renderInTimeline>
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            sx={{
-                                backgroundColor: theme.palette.maskColor?.dark,
-                                '&:hover': {
-                                    backgroundColor: theme.palette.maskColor?.dark,
-                                },
-                                color: 'white',
-                            }}
-                            onClick={onDonate}>
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                        <Button fullWidth variant="roundedDark" onClick={onDonate}>
                             {t.donate()}
                         </Button>
                     </ChainBoundary>

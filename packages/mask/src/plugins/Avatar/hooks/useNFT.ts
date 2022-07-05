@@ -22,9 +22,9 @@ export function useNFT(
             chainId,
         })
         return {
-            amount: asset?.price?.[CurrencyType.NATIVE] ?? '0',
+            amount: asset?.price?.[CurrencyType.USD] ?? '0',
             name: asset?.contract?.name ?? '',
-            symbol: asset?.contract?.symbol ?? 'ETH',
+            symbol: asset?.paymentTokens?.[0].symbol ?? 'ETH',
             image: asset?.metadata?.imageURL ?? '',
             owner: asset?.owner?.address ?? asset?.ownerId ?? '',
             slug: asset?.collection?.slug ?? '',

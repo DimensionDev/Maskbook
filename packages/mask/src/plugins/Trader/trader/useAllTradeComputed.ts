@@ -25,7 +25,7 @@ import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTr
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { TradeComputed } from '../types'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 

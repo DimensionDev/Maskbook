@@ -1,4 +1,4 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, Plugin, PluginId } from '@masknet/plugin-infra'
 import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
@@ -12,7 +12,9 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: {
             type: 'opt-out',
-            networks: {},
+            networks: {
+                [CurrentSNSNetwork.Facebook]: false,
+            },
         },
         target: 'stable',
     },

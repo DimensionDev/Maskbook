@@ -14,6 +14,8 @@ import type {
     NonFungibleAsset,
     RecentTransaction,
     HubIndicator,
+    FungibleTokenSecurity,
+    NonFungibleTokenSecurity,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
@@ -206,8 +208,7 @@ export declare namespace Web3Helper {
     export type Web3HubAll = Hub<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],
-        Definition[NetworkPluginID]['GasOption'],
-        Definition[NetworkPluginID]['Transaction']
+        Definition[NetworkPluginID]['GasOption']
     >
 
     export type Web3StateAll = Web3Plugin.ObjectCapabilities.Capabilities<
@@ -267,6 +268,14 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = NonFungibleToken<ChainIdScope<S, T>, SchemaTypeScope<S, T>>
+    export type FungibleTokenSecurityScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = FungibleTokenSecurity
+    export type NonFungibleTokenSecurityScope<
+        S extends 'all' | void = void,
+        T extends NetworkPluginID = NetworkPluginID,
+    > = NonFungibleTokenSecurity
     export type FungibleAssetScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,

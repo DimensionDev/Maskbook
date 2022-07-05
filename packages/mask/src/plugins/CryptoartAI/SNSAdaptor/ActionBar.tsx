@@ -12,14 +12,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             flex: 1,
-        },
-        button: {
-            flex: 1,
-            backgroundColor: theme.palette.maskColor?.dark,
-            color: 'white',
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor?.dark,
-            },
+            gap: 8,
         },
     }
 })
@@ -52,10 +45,8 @@ export function ActionBar(props: ActionBarProps) {
             assetSource?.is24Auction &&
             new Date(assetSource?.latestBidVo?.auctionEndTime ?? 0).getTime() > Date.now() ? (
                 <ActionButton
-                    className={classes.button}
-                    color="primary"
+                    variant="roundedDark"
                     fullWidth
-                    variant="contained"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -65,11 +56,9 @@ export function ActionBar(props: ActionBarProps) {
             {!assetSource?.isSoldOut &&
             !assetSource?.is24Auction &&
             (!assetSource?.trade?.latestBid || assetSource?.trade?.latestBid < assetSource?.priceInEth) &&
-            assetSource?.trade?.isCanAuction ? (
+            assetSource?.trade?.is_auction ? (
                 <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
+                    variant="roundedDark"
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -81,11 +70,7 @@ export function ActionBar(props: ActionBarProps) {
             !assetSource?.is24Auction &&
             assetSource?.priceInEth < 100000 &&
             assetSource?.trade?.isCanBuy ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
+                <ActionButton variant="roundedDark" onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}

@@ -36,6 +36,8 @@ const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
+const exclusionDetectLocked = [PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
+
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -87,7 +89,7 @@ export default function Wallet() {
     }, [location.search, location.pathname, chainId])
 
     useEffect(() => {
-        if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
+        if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
         navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
     }, [isLocked, location.pathname, getLockStatusLoading])
 

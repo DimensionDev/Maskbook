@@ -14,6 +14,7 @@ import {
     DecryptSuccess,
     DecryptIntermediateProgress,
     DecryptIntermediateProgressKind,
+    DecryptStaticECDH_PostKey,
 } from './DecryptionTypes'
 import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
 export * from './DecryptionTypes'
@@ -127,7 +128,6 @@ async function* v37ECDHE(
         if (encryption.ownersAESKeyEncrypted.ok) {
             const key: DecryptEphemeralECDH_PostKey = {
                 encryptedPostKey: encryption.ownersAESKeyEncrypted.val,
-                postKeyIV: iv,
             }
             yield key
         }
@@ -178,7 +178,7 @@ type EphemeralECDH = {
 async function* decryptByECDH(
     version: Version,
     io: DecryptIO,
-    possiblePostKeyIterator: AsyncIterableIterator<DecryptEphemeralECDH_PostKey>,
+    possiblePostKeyIterator: AsyncIterableIterator<DecryptEphemeralECDH_PostKey | DecryptStaticECDH_PostKey>,
     ecdhProvider: StaticV38OrOlderECDH | EphemeralECDH,
     postKeyDecoder: (raw: Uint8Array) => Promise<Result<AESCryptoKey, unknown>>,
     iv: Uint8Array,
@@ -187,13 +187,16 @@ async function* decryptByECDH(
 ) {
     const { derive, type } = ecdhProvider
     for await (const _ of possiblePostKeyIterator) {
-        const { encryptedPostKey, postKeyIV, ephemeralPublicKey } = _
+        const { encryptedPostKey } = _
         // TODO: how to deal with signature?
         // TODO: what to do if provider throws?
         const derivedKeys =
             type === 'static-v38-or-older'
-                ? await derive(postKeyIV || iv)
-                : await derive(ephemeralPublicKey).then((aesArr) => aesArr.map((aes) => [aes, iv] as const))
+                ? await derive((_ as DecryptStaticECDH_PostKey).postKeyIV || iv)
+                : await derive((_ as DecryptEphemeralECDH_PostKey).ephemeralPublicKey).then((aesArr) =>
+                      // TODO: we reuse iv in ephemeral mode, is that safe?
+                      aesArr.map((aes) => [aes, iv] as const),
+                  )
         for (const [derivedKey, derivedKeyNewIV] of derivedKeys) {
             const possiblePostKey = await andThenAsync(
                 decryptWithAES(derivedKey, derivedKeyNewIV, encryptedPostKey),

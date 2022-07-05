@@ -13,17 +13,9 @@ import { makeStyles } from '@masknet/theme'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
-        padding: '1px !important',
+        padding: '0px !important',
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
+            display: 'none',
         },
     },
 }))
@@ -80,6 +72,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     ? t.application_edit_profile_dialog_title()
                     : t.application_dialog_title()
             }
+            isOnBack={step !== CreateNFTAvatarStep.Persona}
             open={props.open}
             onClose={onBack}>
             <DialogContent className={classes.root}>

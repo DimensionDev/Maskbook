@@ -94,7 +94,7 @@ export function RedPacket(props: RedPacketProps) {
             hash = await refundCallback()
         }
         revalidateAvailability()
-        if (typeof hash !== 'string') return
+        if (typeof hash !== 'string' || canRefund) return
         openShareTxDialog({
             hash,
             onShare() {
@@ -181,7 +181,7 @@ export function RedPacket(props: RedPacketProps) {
             </Card>
             {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
-                    chainId={chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
+                    chainId={payload.token?.chainId ?? chainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming}

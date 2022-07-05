@@ -7,6 +7,7 @@ import {
     NextIDAction,
     NextIDBindings,
     NextIDPayload,
+    NextIDPersonaBindings,
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
@@ -81,8 +82,10 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
 
         // Should delete cache when proof status changed
         const cacheKeyOfQueryPersona = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
+        const cacheKeyOfQueryPlatform = getPersonaQueryURL(platform, identity)
         const cacheKeyOfExistedBinding = getExistedBindingQueryURL(platform, identity, personaPublicKey)
         deleteCache(cacheKeyOfQueryPersona)
+        deleteCache(cacheKeyOfQueryPlatform)
         deleteCache(cacheKeyOfExistedBinding)
 
         return result
@@ -98,10 +101,25 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
         if (!platform && !identity) return []
 
-        const response = await fetchJSON<NextIDBindings>(urlcat(BASE_URL, '/v1/proof', { platform, identity }))
+        const response = await fetchJSON<NextIDBindings>(
+            urlcat(BASE_URL, '/v1/proof', { platform, identity, page }),
+            undefined,
+            true,
+        )
 
         // TODO: merge Pagination into this
         return response.unwrap().ids
+    }
+    async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
+        const nextIDPersonaBindings: NextIDPersonaBindings[] = []
+        let page = 0
+        do {
+            const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
+            if (personaBindings.length === 0) return nextIDPersonaBindings
+            nextIDPersonaBindings.push(...personaBindings)
+            page += 1
+        } while (page > 0)
+        return []
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {

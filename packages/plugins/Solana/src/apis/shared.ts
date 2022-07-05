@@ -72,6 +72,7 @@ export interface ProgramAccount {
 export type GetProgramAccountsResponse = RpcResponse<ProgramAccount[]>
 
 let id = 0
+
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
     const endpoint = NETWORK_ENDPOINTS[chainId]
     id += 1

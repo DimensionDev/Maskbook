@@ -10,7 +10,6 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (
         <Button
-            variant="contained"
             size="small"
             sx={{ float: 'right' }}
             onClick={() => {

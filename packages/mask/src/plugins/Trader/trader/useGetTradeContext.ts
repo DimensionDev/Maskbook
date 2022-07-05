@@ -37,7 +37,7 @@ import {
     ZIPSWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
-import { TargetChainIdContext } from './useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()

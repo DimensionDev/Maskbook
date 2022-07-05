@@ -8,7 +8,7 @@ import {
 import type { EC_Public_CryptoKey, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH, queryPublicKey } from '../../database/persona/helper'
 import { updatePostDB, queryPostDB } from '../../database/post'
-import { publishPostAESKey_version39Or38 } from '../../network/gun/encryption/queryPostKey'
+import { publishPostAESKey_version37, publishPostAESKey_version39Or38 } from '../../network/gun/encryption/queryPostKey'
 import { getPostKeyCache } from './decryption'
 
 export async function appendShareTarget(
@@ -30,7 +30,7 @@ export async function appendShareTarget(
             target,
             iv: post.toIV(),
             postAESKey: key,
-            version: -38,
+            version,
         },
         {
             async deriveAESKey(pub) {
@@ -45,7 +45,11 @@ export async function appendShareTarget(
         },
     )
 
-    publishPostAESKey_version39Or38(-38, post.toIV(), network, e2e)
+    if (version === -38) {
+        publishPostAESKey_version39Or38(-38, post.toIV(), network, e2e)
+    } else {
+        publishPostAESKey_version37(post.toIV(), network, e2e)
+    }
 
     updatePostDB(
         {

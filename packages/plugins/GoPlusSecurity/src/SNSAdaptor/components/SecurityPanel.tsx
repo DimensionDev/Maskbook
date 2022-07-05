@@ -1,6 +1,5 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
-import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
@@ -10,6 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
+import { LinkOutIcon } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -87,7 +87,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
                         </Link>
                     </Stack>
                 </Stack>
