@@ -9,7 +9,7 @@ const useStyles = makeStyles()(() => {
         recommendFeatureAppListWrapper: {
             display: 'flex',
             overflowX: 'scroll',
-            margin: '0 2px 4px 2px',
+            margin: '0 2px 5px 2px',
             padding: '8px 2px 0 2px',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -22,7 +22,7 @@ const useStyles = makeStyles()(() => {
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
-                padding: '8px 0 0',
+                padding: '8px 4px 0',
                 height: 270,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
@@ -37,17 +37,18 @@ const useStyles = makeStyles()(() => {
 interface Props {
     recommendFeatureAppList: Application[]
     RenderEntryComponent: (props: { application: Application }) => JSX.Element
+    isCarouselReady: () => boolean | null
 }
 
 export function ApplicationRecommendArea(props: Props) {
-    const { recommendFeatureAppList, RenderEntryComponent } = props
+    const { recommendFeatureAppList, RenderEntryComponent, isCarouselReady } = props
     const { classes, cx } = useStyles()
     const [isPlaying, setIsPlaying] = useState(true)
 
     return (
         <>
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            {recommendFeatureAppList.length > 2 ? (
+            {recommendFeatureAppList.length > 2 && isCarouselReady() ? (
                 <CarouselProvider
                     naturalSlideWidth={290}
                     naturalSlideHeight={117}

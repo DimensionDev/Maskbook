@@ -61,7 +61,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             width: 220,
             minWidth: 220,
             height: 97,
-            marginRight: 12,
+            marginRight: 9,
             cursor: 'pointer',
             display: 'inline-flex',
             flexDirection: 'row',
