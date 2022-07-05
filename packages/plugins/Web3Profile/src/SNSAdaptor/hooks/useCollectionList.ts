@@ -1,6 +1,7 @@
 import { formatEthereumAddress, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import { getDonations, getFootprints, getNFTs, getPolygonNFTs } from '../api'
 import type { Collection } from '../types'
+
 export const getDonationList = async (walletList: string[]) => {
     const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {

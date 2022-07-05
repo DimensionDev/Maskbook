@@ -129,10 +129,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                                             type: TokenType.NonFungible,
                                             contract: {
                                                 chainId: ChainId.Mainnet,
-                                                name:
-                                                    type === 'NFTs'
-                                                        ? `${collection?.name}#${collection?.tokenId}`
-                                                        : collection?.name ?? '',
+                                                name: collection?.name ?? '',
                                                 symbol: '',
                                                 address: collection.address,
                                                 schema: SchemaType.ERC721,

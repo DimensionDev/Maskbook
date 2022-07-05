@@ -214,7 +214,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                             type: TokenType.NonFungible,
                                             contract: {
                                                 chainId: ChainId.Mainnet,
-                                                name: '',
+                                                name: collection?.name ?? '',
                                                 symbol: '',
                                                 address: collection.address,
                                                 schema: SchemaType.ERC721,

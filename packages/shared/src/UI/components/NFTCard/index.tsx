@@ -1,6 +1,6 @@
 import { SelectedIcon } from '@masknet/icons'
 import { useImageChecker } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, useTheme } from '@mui/material'
@@ -131,15 +131,17 @@ export function NFTImageCollectibleAvatar({
             onChange={onChange}
         />
     ) : (
-        <img
-            className={classes.image}
-            style={{ width: size, height: size }}
-            src={
-                theme.palette.mode === 'dark'
-                    ? assetPlayerFallbackImageDark.toString()
-                    : assetPlayerFallbackImageLight.toString()
-            }
-        />
+        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+            <img
+                className={classes.image}
+                style={{ width: size, height: size }}
+                src={
+                    theme.palette.mode === 'dark'
+                        ? assetPlayerFallbackImageDark.toString()
+                        : assetPlayerFallbackImageLight.toString()
+                }
+            />
+        </ShadowRootTooltip>
     )
 }
 
@@ -170,19 +172,21 @@ export function NFTImage(props: NFTImageProps) {
     const { classes } = useStyles({ networkPluginID: pluginId })
 
     return (
-        <Box className={classes.itemRoot}>
-            <img
-                onClick={() => onChange?.(token)}
-                src={token.metadata?.imageURL}
-                style={{ width: size, height: size }}
-                className={classNames(
-                    classes.itemImage,
-                    isSameNFT(pluginId, token, selectedToken) ? classes.itemSelected : '',
-                )}
-            />
-            {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
-                <SelectedIcon className={classes.itemIcon} />
-            ) : null}
-        </Box>
+        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+            <Box className={classes.itemRoot}>
+                <img
+                    onClick={() => onChange?.(token)}
+                    src={token.metadata?.imageURL}
+                    style={{ width: size, height: size }}
+                    className={classNames(
+                        classes.itemImage,
+                        isSameNFT(pluginId, token, selectedToken) ? classes.itemSelected : '',
+                    )}
+                />
+                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                    <SelectedIcon className={classes.itemIcon} />
+                ) : null}
+            </Box>
+        </ShadowRootTooltip>
     )
 }
