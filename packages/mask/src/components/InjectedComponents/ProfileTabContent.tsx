@@ -74,7 +74,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         personaList.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId?.toLowerCase() ?? '')),
     )
 
-    const isOwn = currentIdentity?.identifier === identity?.identifier
+    const isOwn = currentIdentity?.identifier?.userId?.toLowerCase() === identity?.identifier?.userId?.toLowerCase()
 
     const personaPublicKey = isOwn
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
