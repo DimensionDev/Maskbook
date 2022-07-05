@@ -20,6 +20,7 @@ import { Children, cloneElement, useCallback } from 'react'
 import { useSharedI18N } from '../../locales'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
+import classnames from 'classnames'
 
 interface StyleProps {
     clean: boolean
@@ -36,8 +37,19 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         justifyContent: 'center',
         alignItems: 'flex-end',
     },
+    dialogTitleWithTabs: {
+        paddingBottom: '0 !important',
+        gridTemplateRows: '1fr 1fr',
+        gridTemplateAreas: `
+            ". . ."
+            "tabs tabs tabs"
+        `,
+    },
     dialogContent: {
         overscrollBehavior: 'contain',
+    },
+    dialogTitleTabs: {
+        gridArea: 'tabs',
     },
     dialogTitleTypography: {
         flex: 1,
@@ -74,6 +86,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     titleTail?: React.ReactChild | null
+    titleTabs?: React.ReactChild | null
     disableBackdropClick?: boolean
     disableTitleBorder?: boolean
     isOpenFromApplicationBoard?: boolean
@@ -92,6 +105,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogContent,
         dialogTitle,
         dialogTitleEndingContent,
+        dialogTitleTabs,
+        dialogTitleWithTabs,
         dialogTitleTypography,
         dialogBackdropRoot,
         container,
@@ -109,6 +124,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         onClose,
         title,
         titleTail = null,
+        titleTabs = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
         ...rest
@@ -138,7 +154,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 disableEnforceFocus
                 onClose={(event, reason) => {
                     if (reason === 'backdropClick' && disableBackdropClick) return
-                    onClose?.()
+                    !props.isOnBack ? closeBothCompositionDialog() : onClose?.()
                 }}
                 onBackdropClick={disableBackdropClick ? void 0 : onClose}
                 BackdropProps={{
@@ -151,7 +167,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 <ErrorBoundary>
                     {title ? (
                         <DialogTitle
-                            className="dashboard-dialog-title-hook"
+                            className={classnames('dashboard-dialog-title-hook', titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}
                             style={{
                                 border: isDashboard || disableTitleBorder ? 'none' : undefined,
@@ -175,6 +191,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {title}
                             </Typography>
                             <Stack className={dialogTitleEndingContent}>{titleTail}</Stack>
+                            {titleTabs && <Stack className={dialogTitleTabs}>{titleTabs}</Stack>}
                         </DialogTitle>
                     ) : null}
 

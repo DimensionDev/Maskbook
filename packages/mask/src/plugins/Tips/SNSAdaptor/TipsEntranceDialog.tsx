@@ -10,8 +10,7 @@ import {
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { LoadingButton } from '@mui/lab'
-import { Button, ButtonProps, DialogContent } from '@mui/material'
+import { Button, ButtonProps, DialogActions, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
@@ -43,17 +42,15 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: '20px',
     },
     actions: {
-        position: 'absolute',
-        bottom: 16,
-        width: 'calc( 100% - 32px)',
+        position: 'sticky',
+        bottom: 0,
+        padding: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: theme.spacing(1.5),
     },
     dialogContent: {
-        minHeight: 600,
-        height: 600,
         position: 'relative',
         boxSizing: 'border-box',
     },
@@ -307,28 +304,18 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     {bodyViewStep === BodyViewStep.AddWallet && (
                         <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona!} />
                     )}
-
-                    {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (
-                        <div className={classes.actions}>
-                            <ActionButton
-                                fullWidth
-                                variant="roundedOutlined"
-                                color="secondary"
-                                disabled={!hasChanged}
-                                onClick={onCancel}>
-                                {t.cancel()}
-                            </ActionButton>
-                            <LoadingButton
-                                variant="roundedContained"
-                                loading={kvFetchState.loading}
-                                fullWidth
-                                disabled={!hasChanged}
-                                onClick={onConfirm}>
-                                {t.confirm()}
-                            </LoadingButton>
-                        </div>
-                    )}
                 </DialogContent>
+            )}
+
+            {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (
+                <DialogActions className={classes.actions}>
+                    <ActionButton fullWidth variant="outlined" disabled={!hasChanged} onClick={onCancel}>
+                        {t.cancel()}
+                    </ActionButton>
+                    <ActionButton loading={kvFetchState.loading} fullWidth disabled={!hasChanged} onClick={onConfirm}>
+                        {t.confirm()}
+                    </ActionButton>
+                </DialogActions>
             )}
         </InjectedDialog>
     )

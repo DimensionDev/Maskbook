@@ -5,7 +5,7 @@ import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
 const PersonaHome = memo(() => {
-    const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas } =
+    const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
         PersonaContext.useContainer()
 
     const wallets = useMemo(() => {
@@ -39,7 +39,7 @@ const PersonaHome = memo(() => {
             avatar={avatar}
             fingerprint={currentPersona?.identifier.rawPublicKey}
             nickname={currentPersona?.nickname}
-            accountsCount={currentPersona?.linkedProfiles.length ?? 0}
+            accountsCount={accounts.length ?? 0}
             walletsCount={wallets.length}
             onEdit={onEdit}
             fetchProofsLoading={fetchProofsLoading}

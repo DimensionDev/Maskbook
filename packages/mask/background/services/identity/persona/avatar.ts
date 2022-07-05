@@ -2,8 +2,8 @@ import type { PersonaIdentifier } from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { queryAvatarsDataURL, storeAvatar } from '../../../database/avatar-cache/avatar'
 
-export async function getPersonaAvatar(identifier: PersonaIdentifier | null | undefined) {
-    if (!identifier) return null
+export async function getPersonaAvatar(identifier: PersonaIdentifier | null | undefined): Promise<string | undefined> {
+    if (!identifier) return undefined
     return queryAvatarsDataURL([identifier]).then((x) => x.get(identifier))
 }
 

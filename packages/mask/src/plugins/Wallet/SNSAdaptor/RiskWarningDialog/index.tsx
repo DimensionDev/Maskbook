@@ -127,15 +127,13 @@ export function WalletRiskWarningDialog() {
                 <Button
                     className={classnames(classes.button, classes.cancel, 'dashboard-style')}
                     fullWidth
-                    onClick={onClose}
-                    size="large">
+                    onClick={onClose}>
                     {t('cancel')}
                 </Button>
                 <ActionButtonPromise
                     className={classes.button}
                     fullWidth
                     disabled={!account}
-                    size="large"
                     init={t('confirm')}
                     waiting={t('wallet_risk_confirm_confirming')}
                     failed={t('wallet_risk_confirm_failed')}

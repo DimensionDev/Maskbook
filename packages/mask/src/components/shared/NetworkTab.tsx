@@ -5,6 +5,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
+import { useUpdateEffect } from 'react-use'
 
 interface StyleProps {
     chainLength: number
@@ -51,16 +52,24 @@ interface NetworkTabProps<T extends NetworkPluginID>
     chains: Array<Web3Helper.Definition[T]['ChainId']>
     setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     chainId: Web3Helper.Definition[T]['ChainId']
+    networkId?: NetworkPluginID
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const isDashboard = isDashboardPage()
-    const { chainId, setChainId, chains } = props
+    const { chainId, setChainId, chains, networkId } = props
 
-    const networks = useNetworkDescriptors()
+    const networks = useNetworkDescriptors(networkId)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
+
+    useUpdateEffect(() => {
+        setTab((prev) => {
+            if (prev !== chainId.toString()) return chainId.toString()
+            return prev
+        })
+    }, [chainId])
 
     return (
         <TabContext value={currentTab}>

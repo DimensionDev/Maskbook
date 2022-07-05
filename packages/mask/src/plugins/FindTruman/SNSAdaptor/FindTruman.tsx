@@ -272,10 +272,14 @@ export function FindTruman(props: FindTrumanProps) {
             </Card>
 
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
                         classes={{ button: classes.button }}
                         startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                        ActionButtonProps={{ variant: 'roundedDark' }}
                     />
                 </ChainBoundary>
             </Box>
