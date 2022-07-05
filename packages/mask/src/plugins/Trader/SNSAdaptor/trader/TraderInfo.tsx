@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { createNativeToken, formatPercentage, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { resolveTradeProviderName } from '../../pipes'
-import { multipliedBy, NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
+import { multipliedBy, NetworkPluginID, formatBalance, ZERO } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
@@ -37,7 +37,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     }, [trade.gas?.value, gasPrice])
 
     const gasFeeValueUSD = useMemo(() => {
-        if (!gasFee) return '0'
+        if (!gasFee) return ZERO.toString()
         return formatUSD(formatWeiToEther(gasFee).times(tokenPrice))
     }, [gasFee, tokenPrice])
 
@@ -47,7 +47,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
     return (
         <TraderInfoUI
-            loading={trade.loading}
+            loading={trade.loading || trade.gas.loading}
             providerName={resolveTradeProviderName(trade.provider)}
             onClick={onClick}
             balance={formatBalance(trade.value?.outputAmount ?? 0, trade.value?.outputToken?.decimals, 2)}
