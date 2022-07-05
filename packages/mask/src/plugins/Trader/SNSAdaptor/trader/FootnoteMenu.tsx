@@ -1,8 +1,7 @@
-import { Typography, MenuItem, Link, Stack } from '@mui/material'
+import { Typography, MenuItem, Link, Stack, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenu } from '../../../../utils'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
-import { useTheme } from '@mui/system'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { CheckCircleIcon } from '@masknet/icons'
 
@@ -16,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         fontSize: 10,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.dark,
     },
 }))
 
@@ -45,7 +44,9 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
         options.map((x, i) => (
             <MenuItem disabled={x.disabled} key={x.value} onClick={() => onSelect(x)}>
                 <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
-                    <Stack flexGrow={1}>{x.name}</Stack>
+                    <Stack flexGrow={1} color={theme.palette.maskColor.main}>
+                        {x.name}
+                    </Stack>
                     {selectedIndex === i ? (
                         <CheckCircleIcon
                             style={{
@@ -72,6 +73,9 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 vertical: 'bottom',
                 horizontal: 'left',
             },
+            paperProps: {
+                style: { background: theme.palette.maskColor.bottom },
+            },
         },
     )
 
@@ -80,7 +84,9 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon style={{ fontSize: 16, color: theme.palette.text.primary, cursor: 'pointer' }} />
+                    <ArrowDropDownIcon
+                        style={{ fontSize: 16, color: theme.palette.maskColor.dark, cursor: 'pointer' }}
+                    />
                 </Typography>
                 {children}
             </Link>
