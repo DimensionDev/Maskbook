@@ -12,9 +12,9 @@ const useStyles = makeStyles()((theme) => {
     console.log({ theme })
     return {
         wrapper: {
-            border: `1px solid ${theme.palette.divider}`,
             padding: '16px',
             marginTop: '12px',
+            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
         divider: {
             color: theme.palette.divider,

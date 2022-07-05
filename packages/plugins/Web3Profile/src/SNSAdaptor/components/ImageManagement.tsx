@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 'calc(100% - 32px)',
     },
     content: {
-        width: 564,
+        width: 568,
         height: 564,
         padding: '0 16px',
         backgroundColor: theme.palette.background.paper,

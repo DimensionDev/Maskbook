@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: 0,
         },
         content: {
-            width: 564,
+            width: 568,
             padding: '0 16px',
             height: 492,
             maxHeight: 492,
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
                 borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
                 backgroundClip: 'padding-box',
             },
         },
@@ -64,6 +64,7 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.background.paper,
             boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
             height: '72px',
+            zIndex: 1,
             padding: '0 !important',
         },
         buttonWrapper: {
@@ -77,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
             width: '48%',
             borderRadius: '8px',
             backgroundColor: theme.palette.maskColor.thirdMain,
-            color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
+            color: theme.palette.maskColor.thirdMain,
             '&:hover': {
                 backgroundColor: theme.palette.background.paper,
             },
@@ -114,7 +115,7 @@ const useStyles = makeStyles()((theme) => {
                 borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
                 backgroundClip: 'padding-box',
             },
         },

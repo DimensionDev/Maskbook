@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         wrapper: {
             width: '100%',
-            marginBottom: '16px',
+            marginTop: '16px',
         },
 
         walletInfo: {
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
         editIcon: {
             height: 20,
             width: 20,
-            fill: theme.palette.text.primary,
+            fill: theme.palette.maskColor.second,
             cursor: 'pointer',
         },
         loadingFailImage: {

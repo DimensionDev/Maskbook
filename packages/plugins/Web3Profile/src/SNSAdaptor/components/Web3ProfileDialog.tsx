@@ -18,7 +18,7 @@ import { PersonaAction } from './PersonaAction'
 import { useChainId } from '@masknet/plugin-infra/web3'
 const useStyles = makeStyles()((theme) => ({
     content: {
-        width: 564,
+        width: 568,
         height: 494,
         padding: '0px 16px',
         backgroundColor: theme.palette.background.paper,

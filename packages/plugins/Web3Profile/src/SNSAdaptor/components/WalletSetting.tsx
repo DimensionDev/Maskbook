@@ -10,13 +10,13 @@ import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
-import { InfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
+import { SettingInfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import { Empty } from './Empty'
 const useStyles = makeStyles()((theme) => ({
     content: {
-        width: 564,
-        height: 430,
+        width: 568,
+        height: 428,
         position: 'relative',
         padding: '16px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,
@@ -27,6 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         backgroundColor: theme.palette.background.paper,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        zIndex: 1,
         height: '72px',
         padding: '0px !important',
     },
@@ -87,7 +88,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     infoIcon: {
-        color: theme.palette.maskColor.main,
+        width: 20,
+        height: 20,
     },
     bottomButton: {
         width: '100%',
@@ -213,30 +215,9 @@ const WalletSetting = memo(
                     titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Web3ProfileWalletSetting">
-                            <Tab
-                                label={
-                                    <Typography component="div" className={classes.labelWrapper}>
-                                        <span className={classes.tabItem}>NFTs</span>
-                                    </Typography>
-                                }
-                                value={tabs.NFTs}
-                            />
-                            <Tab
-                                label={
-                                    <Typography component="div" className={classes.labelWrapper}>
-                                        <span className={classes.tabItem}>Footprints</span>
-                                    </Typography>
-                                }
-                                value={tabs.Footprints}
-                            />
-                            <Tab
-                                label={
-                                    <Typography component="div" className={classes.labelWrapper}>
-                                        <span className={classes.tabItem}>Donations</span>
-                                    </Typography>
-                                }
-                                value={tabs.Donations}
-                            />
+                            <Tab label="NFTs" value={tabs.NFTs} />
+                            <Tab label="Footprints" value={tabs.Footprints} />
+                            <Tab label="Donations" value={tabs.Donations} />
                         </MaskTabList>
                     }
                     onClose={onClose}>
@@ -246,7 +227,7 @@ const WalletSetting = memo(
                                 {visible && (
                                     <Box className={classes.messageBox}>
                                         <Box display="flex" flexDirection="row" gap={1} alignItems="center">
-                                            <InfoIcon fontSize="small" className={classes.infoIcon} />
+                                            <SettingInfoIcon className={classes.infoIcon} />
                                             <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                                 {t.wallet_setting_hint()}
                                             </Typography>
