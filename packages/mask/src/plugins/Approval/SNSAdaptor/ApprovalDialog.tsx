@@ -23,11 +23,16 @@ export interface ApprovalDialogProps {
     onClose?: () => void
 }
 
+enum Tabs {
+    tokens = 'Tokens',
+    collectibles = 'Collectibles',
+}
+
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    const [currentTab, onChange] = useTabs(t.tokens(), t.collectibles())
+    const [currentTab, onChange] = useTabs<Tabs>(Tabs.tokens, Tabs.collectibles)
 
     return (
         <TabContext value={currentTab}>
@@ -51,7 +56,7 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
 }
 
 interface ApprovalWrapperProps {
-    tab: string
+    tab: Tabs
 }
 
 function ApprovalWrapper(props: ApprovalWrapperProps) {
@@ -79,7 +84,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
                 />
             </div>
             <section className={classes.contentWrapper}>
-                {tab === t.tokens() ? (
+                {tab === Tabs.tokens ? (
                     <ApprovalTokenContent chainId={networkTabChainId} />
                 ) : (
                     <ApprovalNFTContent chainId={networkTabChainId} />

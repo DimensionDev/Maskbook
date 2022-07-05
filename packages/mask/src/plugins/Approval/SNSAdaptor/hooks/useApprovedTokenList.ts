@@ -2,8 +2,9 @@ import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
-import { queryNetworkMappings } from '../constants'
+import { resolveNetworkOnRabby } from '../pipes'
 import type { TokenSpender, RawTokenInfo } from '../types'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAllMaskDappContractInfo } from './useAllMaskDappContractInfo'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
@@ -13,8 +14,8 @@ export function useApprovedTokenList(account: string, chainId: ChainId) {
     const maskDappContractInfoList = useAllMaskDappContractInfo(chainId, 'token')
     return useAsyncRetry(async () => {
         const networkType = chainResolver.chainNetworkType(chainId)
-        if (!networkType || !account) return []
-        const response = await fetch(urlcat(API_URL, { id: account, chain_id: queryNetworkMappings[networkType] }))
+        if (!networkType || !account) return EMPTY_LIST
+        const response = await fetch(urlcat(API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }))
         const rawData: RawTokenInfo[] = await response.json()
 
         return rawData
@@ -49,11 +50,10 @@ export function useApprovedTokenList(account: string, chainId: ChainId) {
                     }),
                 )
             }, [])
-            .sort((a, b) => b.exposure_usd - a.exposure_usd)
             .sort((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
-                return 0
+                return b.exposure_usd - a.exposure_usd
             })
     }, [account, chainId])
 }

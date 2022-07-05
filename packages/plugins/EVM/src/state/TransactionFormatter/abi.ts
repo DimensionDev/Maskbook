@@ -23,8 +23,8 @@ class ABI {
         this.construct(NftRedPacket as AbiItem[])
         this.construct(HappyRedPacketV4 as AbiItem[])
         this.construct(MaskBox as AbiItem[])
-        this.construct(ERC20 as AbiItem[])
         this.construct(ERC721 as AbiItem[])
+        this.construct(ERC20 as AbiItem[])
         this.construct(RouterV2ABI as AbiItem[]) // uniswap V2 like
         this.construct(SwapRouter as AbiItem[]) // uniswap V3 like
     }

@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             />
                             {open ? (
                                 <TargetChainIdContext.Provider>
-                                    <ApprovalDialog open={open} onClose={() => setOpen(false)} />{' '}
+                                    <ApprovalDialog open onClose={() => setOpen(false)} />
                                 </TargetChainIdContext.Provider>
                             ) : null}
                         </>

@@ -49,19 +49,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         tabPaper: {
             backgroundColor: 'inherit',
         },
-        tabs: {
-            width: 535,
-            height: 36,
-            minHeight: 36,
-            padding: 0,
-            maxWidth: '100%',
-            margin: '0 auto',
-            borderRadius: 4,
-            '& .Mui-selected': {
-                color: '#ffffff',
-                backgroundColor: `${theme.palette.primary.main}!important`,
-            },
-        },
         indicator: {
             display: 'none',
         },

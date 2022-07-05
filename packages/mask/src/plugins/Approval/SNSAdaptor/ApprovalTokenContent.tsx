@@ -1,13 +1,12 @@
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
-import BigNumber from 'bignumber.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useState } from 'react'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { LinkOutIcon } from '@masknet/icons'
-import { NetworkPluginID, NetworkDescriptor } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, isGreaterThan } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
 import { useApprovedTokenList } from './hooks/useApprovedTokenList'
@@ -91,9 +90,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
                         <Typography className={classes.primaryText}>
-                            {new BigNumber('1e+10').isLessThan(new BigNumber(spender.value))
-                                ? t.infinite()
-                                : spender.value}
+                            {isGreaterThan(spender.value, '1e+10') ? t.infinite() : spender.value}
                         </Typography>
                     </div>
                 </div>

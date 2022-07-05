@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import { queryNetworkMappings } from '../constants'
+import { resolveNetworkOnRabby } from '../pipes'
 import type { NFTInfo } from '../types'
 import { useAllMaskDappContractInfo } from './useAllMaskDappContractInfo'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -13,7 +13,7 @@ export function useApprovedNFTList(account: string, chainId: ChainId) {
     return useAsyncRetry(async () => {
         const networkType = chainResolver.chainNetworkType(chainId)
         if (!networkType || !account) return []
-        const response = await fetch(urlcat(API_URL, { id: account, chain_id: queryNetworkMappings[networkType] }))
+        const response = await fetch(urlcat(API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }))
         const rawData: { contracts: NFTInfo[] } = await response.json()
         return rawData.contracts
             .filter((x) => x.amount !== '0' && x.is_erc721)
@@ -36,11 +36,10 @@ export function useApprovedNFTList(account: string, chainId: ChainId) {
 
                 return { ...x, isMaskDapp: false }
             })
-            .sort((a, b) => Number(b.amount) - Number(a.amount))
             .sort((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
-                return 0
+                return Number(b.amount) - Number(a.amount)
             }) as NFTInfo[]
     }, [account, chainId])
 }

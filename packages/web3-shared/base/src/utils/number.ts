@@ -11,7 +11,7 @@ export function toZero(n: BigNumber.Value, m = 1e-6) {
 
 /** n === 0 */
 export function isZero(n: BigNumber.Value) {
-    return n === 0 || n === '0' || new BigNumber(n).isZero()
+    return n === 0 || n === '0' || n === '0x0' || new BigNumber(n).isZero()
 }
 
 /** n === 1 */

@@ -25,7 +25,7 @@ export const MaskColors = {
             bottom: '#FFFFFF',
             secondaryBottom: 'rgba(255, 255, 255, 0.8)',
             input: '#F2F6FA',
-            modelTitleBg:
+            modalTitleBg:
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
             highlight: '#1C68F3',
             line: '#F2F5F6',
@@ -75,7 +75,7 @@ export const MaskColors = {
             bottom: '#101010',
             secondaryBottom: 'rgba(0, 0, 0, 0.8)',
             input: '#26292C',
-            modelTitleBg: 'linear-gradient(180deg, #202020 0%, #181818 100%)',
+            modalTitleBg: 'linear-gradient(180deg, #202020 0%, #181818 100%)',
             highlight: '#FFFFFF',
             line: '#2F2F2F',
             secondaryLine: '#6F6F6F',

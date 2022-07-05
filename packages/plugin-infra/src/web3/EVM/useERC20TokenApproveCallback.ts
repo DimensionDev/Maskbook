@@ -1,5 +1,5 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
 import { once } from 'lodash-unified'
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -51,7 +51,7 @@ export function useERC20TokenApproveCallback(
         if (!amount || !spender) return ApproveStateType.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
-        return isLessThan(allowance, amount) || (allowance === amount && amount === '0')
+        return isLessThan(allowance, amount) || (allowance === amount && isZero(amount))
             ? ApproveStateType.NOT_APPROVED
             : ApproveStateType.APPROVED
     }, [amount, spender, balance, allowance, errorBalance, errorAllowance, loadingAllowance, loadingBalance])

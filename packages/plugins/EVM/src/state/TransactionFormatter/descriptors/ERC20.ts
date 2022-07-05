@@ -1,4 +1,4 @@
-import type { TransactionContext } from '@masknet/web3-shared-base'
+import { TransactionContext, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
@@ -13,7 +13,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
         })
         switch (context.name) {
             case 'approve':
-                if (Number(context.value) === 0) {
+                if (isZero(context.value)) {
                     return {
                         chainId: context.chainId,
                         title: 'Revoke',
