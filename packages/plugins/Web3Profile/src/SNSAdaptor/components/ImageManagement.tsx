@@ -44,6 +44,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
+        fontSize: 16,
+    },
+    emptyItem: {
+        marginTop: 'calc(50% - 104px)',
     },
 }))
 
@@ -114,7 +118,9 @@ export function ImageManagement(props: ImageManagementProps) {
                             />
                         ))
                     ) : (
-                        <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
+                        <Box className={classes.emptyItem}>
+                            <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
+                        </Box>
                     )}
                     {!hasConnectedWallets && (
                         <Box className={classes.bottomButton}>
@@ -147,7 +153,6 @@ export function ImageManagement(props: ImageManagementProps) {
                     retryData={getWalletHiddenRetry}
                 />{' '}
             </DialogContent>
-            {/* <DialogActions className={classes.noneAction} /> */}
         </InjectedDialog>
     )
 }

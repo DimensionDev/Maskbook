@@ -18,6 +18,7 @@
     "done": "Done",
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "save": "Save",
     "add_wallet": "No connected wallet, pleae add wallet.",
     "open_wallet": "You’ve switched off all wallets. Please go to settings to active.",
     "tip_persona_sign_success": "Persona signed successfully.",
@@ -41,5 +42,6 @@
     "nft_add_dialog_title": "Add Collectible",
     "no_collection_item": "No items to preview. Please go to setting.",
     "no_unlisted_collection": " Click to show your {{collection}} on Web3 profile.",
-    "wallet_setting_hint": "Toggle the button to manage wallet display settings."
+    "wallet_setting_hint": "Toggle the button to manage wallet display settings.",
+    "no_authenticated_wallet": "That hasn't been authenticated yet."
 }

@@ -12,6 +12,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { InfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
+import { Empty } from './Empty'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 564,
@@ -85,6 +86,19 @@ const useStyles = makeStyles()((theme) => ({
     infoIcon: {
         color: theme.palette.maskColor.main,
     },
+    bottomButton: {
+        width: '100%',
+        padding: 16,
+
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+    },
+    walletIcon: {
+        marginRight: '8px',
+        fontSize: 16,
+    },
 }))
 
 interface WalletSettingProp {
@@ -113,6 +127,8 @@ const WalletSetting = memo(
         const [NFTs, setNFTs] = useState<WalletTypes[]>()
         const [footprints, setFootprints] = useState<WalletTypes[]>()
         const [donations, setDonations] = useState<WalletTypes[]>()
+
+        const hasWallet = wallets && wallets?.length > 0
 
         useEffect(() => {
             setNFTs(
@@ -222,92 +238,106 @@ const WalletSetting = memo(
                     }
                     onClose={onClose}>
                     <DialogContent className={classes.content}>
-                        <>
-                            {visible && (
-                                <Box className={classes.messageBox}>
-                                    <Box display="flex" flexDirection="row" gap={1} alignItems="center">
-                                        <InfoIcon fontSize="small" className={classes.infoIcon} />
-                                        <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
-                                            {t.wallet_setting_hint()}
-                                        </Typography>
+                        {hasWallet ? (
+                            <>
+                                {visible && (
+                                    <Box className={classes.messageBox}>
+                                        <Box display="flex" flexDirection="row" gap={1} alignItems="center">
+                                            <InfoIcon fontSize="small" className={classes.infoIcon} />
+                                            <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
+                                                {t.wallet_setting_hint()}
+                                            </Typography>
+                                        </Box>
+                                        <CloseIcon onClick={onCloseHint} className={classes.closeIcon} />
                                     </Box>
-                                    <CloseIcon onClick={onCloseHint} className={classes.closeIcon} />
-                                </Box>
-                            )}
-                            <TabPanel value={tabs.NFTs} style={{ padding: 0 }}>
-                                <div className={classes.walletSwitchBox}>
-                                    {wallets?.map((x) => {
-                                        return (
-                                            <div key={x.address} className={classes.switchContainer}>
-                                                <WalletSwitch
-                                                    hiddenItems={NFTs}
-                                                    type={0}
-                                                    address={x}
-                                                    isPublic={
-                                                        accountList?.walletList?.NFTs?.findIndex(
-                                                            (account) => account.address === x?.address,
-                                                        ) !== -1
-                                                    }
-                                                    setHiddenItems={setNFTs}
-                                                />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </TabPanel>
-                            <TabPanel value={tabs.Footprints} style={{ padding: 0 }}>
-                                <div className={classes.walletSwitchBox}>
-                                    {wallets?.map((x) => {
-                                        return (
-                                            <div key={x.address} className={classes.switchContainer}>
-                                                <WalletSwitch
-                                                    hiddenItems={footprints}
-                                                    type={0}
-                                                    address={x}
-                                                    isPublic={
-                                                        accountList?.walletList?.footprints?.findIndex(
-                                                            (account) => account.address === x?.address,
-                                                        ) !== -1
-                                                    }
-                                                    setHiddenItems={setFootprints}
-                                                />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </TabPanel>
-                            <TabPanel value={tabs.Donations} style={{ padding: 0 }}>
-                                <div className={classes.walletSwitchBox}>
-                                    {wallets?.map((x) => {
-                                        return (
-                                            <div key={x.address} className={classes.switchContainer}>
-                                                <WalletSwitch
-                                                    hiddenItems={donations}
-                                                    type={0}
-                                                    address={x}
-                                                    isPublic={
-                                                        accountList?.walletList?.donations?.findIndex(
-                                                            (account) => account.address === x?.address,
-                                                        ) !== -1
-                                                    }
-                                                    setHiddenItems={setDonations}
-                                                />
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </TabPanel>
-                        </>
+                                )}
+                                <TabPanel value={tabs.NFTs} style={{ padding: 0 }}>
+                                    <div className={classes.walletSwitchBox}>
+                                        {wallets?.map((x) => {
+                                            return (
+                                                <div key={x.address} className={classes.switchContainer}>
+                                                    <WalletSwitch
+                                                        hiddenItems={NFTs}
+                                                        type={0}
+                                                        address={x}
+                                                        isPublic={
+                                                            accountList?.walletList?.NFTs?.findIndex(
+                                                                (account) => account.address === x?.address,
+                                                            ) !== -1
+                                                        }
+                                                        setHiddenItems={setNFTs}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </TabPanel>
+                                <TabPanel value={tabs.Footprints} style={{ padding: 0 }}>
+                                    <div className={classes.walletSwitchBox}>
+                                        {wallets?.map((x) => {
+                                            return (
+                                                <div key={x.address} className={classes.switchContainer}>
+                                                    <WalletSwitch
+                                                        hiddenItems={footprints}
+                                                        type={0}
+                                                        address={x}
+                                                        isPublic={
+                                                            accountList?.walletList?.footprints?.findIndex(
+                                                                (account) => account.address === x?.address,
+                                                            ) !== -1
+                                                        }
+                                                        setHiddenItems={setFootprints}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </TabPanel>
+                                <TabPanel value={tabs.Donations} style={{ padding: 0 }}>
+                                    <div className={classes.walletSwitchBox}>
+                                        {wallets?.map((x) => {
+                                            return (
+                                                <div key={x.address} className={classes.switchContainer}>
+                                                    <WalletSwitch
+                                                        hiddenItems={donations}
+                                                        type={0}
+                                                        address={x}
+                                                        isPublic={
+                                                            accountList?.walletList?.donations?.findIndex(
+                                                                (account) => account.address === x?.address,
+                                                            ) !== -1
+                                                        }
+                                                        setHiddenItems={setDonations}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </TabPanel>
+                            </>
+                        ) : (
+                            <Empty content={t.no_authenticated_wallet()} />
+                        )}
                     </DialogContent>
                     <DialogActions className={classes.actions}>
-                        <div className={classes.buttonWrapper}>
-                            <Button className={classes.cancelButton} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
-                                Save
-                            </Button>
-                        </div>
+                        {hasWallet ? (
+                            <div className={classes.buttonWrapper}>
+                                <Button className={classes.cancelButton} onClick={onClose}>
+                                    {t.cancel()}
+                                </Button>
+                                <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
+                                    {t.save()}
+                                </Button>
+                            </div>
+                        ) : (
+                            <Box className={classes.bottomButton}>
+                                {' '}
+                                <Button onClick={openPopupsWindow} fullWidth>
+                                    <WalletUnderTabsIcon className={classes.walletIcon} />
+                                    Add Wallet
+                                </Button>
+                            </Box>
+                        )}
                     </DialogActions>
                 </InjectedDialog>
             </TabContext>
