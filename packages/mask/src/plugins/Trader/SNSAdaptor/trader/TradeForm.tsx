@@ -11,7 +11,6 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
-    formatPercentage,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -20,7 +19,7 @@ import { first, noop } from 'lodash-unified'
 import { SelectTokenChip, useSelectAdvancedSettings } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
 import classnames from 'classnames'
-import { isNativeTokenWrapper, toBips } from '../../helpers'
+import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
@@ -516,10 +515,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             <Box className={classes.section}>
                                 <div className={classes.status}>
                                     <Typography className={classes.label} color="textSecondary" variant="body2">
-                                        {t('plugin_trader_slippage_tolerance')}{' '}
-                                    </Typography>
-                                    <Typography className={classes.slippageValue}>
-                                        {formatPercentage(toBips(currentSlippageSettings.value))}
+                                        {t('plugin_trader_slippage_tolerance')}
                                     </Typography>
                                     <IconButton
                                         className={classes.icon}

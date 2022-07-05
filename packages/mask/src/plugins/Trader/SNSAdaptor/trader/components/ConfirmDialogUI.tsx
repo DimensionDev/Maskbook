@@ -131,12 +131,15 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     content: {
         padding: 16,
+        minHeight: 564,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
     },
     actions: {
         padding: 0,
+        position: 'sticky',
+        bottom: 0,
         boxShadow:
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'

@@ -27,7 +27,6 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { TradeForm } from './TradeForm'
-import { PriceImpactDialog } from './PriceImpactDialog'
 
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
@@ -223,7 +222,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [isTrading])
 
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
-    const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const shareText = useMemo(() => {
         const isOnTwitter = isTwitter(activatedSocialNetworkUI)
@@ -244,7 +242,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const openShareTxDialog = useOpenShareTxDialog()
     const onConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
-        setPriceImpactDialogOpen(false)
         await delay(100)
         const hash = await tradeCallback()
 
@@ -266,11 +263,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
-    }, [])
-
-    const onPriceImpactDialogClose = useCallback(() => {
-        setPriceImpactDialogOpen(false)
-        setTemporarySlippage(undefined)
     }, [])
     // #endregion
 
@@ -383,16 +375,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                         outputToken={outputToken}
                         onConfirm={onConfirm}
                         onClose={onConfirmDialogClose}
-                        openPriceImpact={() => {
-                            setPriceImpactDialogOpen(true)
-                            setOpenConfirmDialog(false)
-                        }}
-                    />
-                    <PriceImpactDialog
-                        open={priceImpactDialogOpen}
-                        onClose={onPriceImpactDialogClose}
-                        trade={focusedTrade.value}
-                        onConfirm={onConfirm}
                     />
                 </>
             ) : null}

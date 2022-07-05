@@ -1,8 +1,8 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
 import { createNativeToken, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useMemo } from 'react'
-import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useCallback, useMemo, useState } from 'react'
+import { formatBalance, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -10,6 +10,9 @@ import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting
 import { PluginTraderMessages } from '../../messages'
 import { ConfirmDialogUI } from './components/ConfirmDialogUI'
 import { useSelectAdvancedSettings } from '@masknet/shared'
+import { PriceImpactDialogUI } from './components/PriceImpactDialogUI'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import BigNumber from 'bignumber.js'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -20,12 +23,15 @@ export interface ConfirmDialogProps {
     gas?: number
     gasPrice?: string
     onConfirm: () => void
-    openPriceImpact: () => void
 }
+const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { inputToken, outputToken, gas, gasPrice, trade, openPriceImpact, onConfirm } = props
+    const { inputToken, outputToken, gas, gasPrice, trade, onConfirm } = props
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
+
+    const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const currentSlippage = useValueRef(currentSlippageSettings)
     const nativeToken = createNativeToken(chainId)
@@ -49,31 +55,66 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
+    // #region price impact dialog
+    const lostToken = formatBalance(
+        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(),
+        trade.inputToken?.decimals ?? 0,
+    )
+
+    const lostValue = multipliedBy(inputTokenPrice ?? 0, lostToken).toFixed(2)
+
+    const handleOpenPriceImpactDialog = useCallback(() => {
+        setPriceImpactDialogOpen(true)
+        props.onClose()
+    }, [props.onClose])
+
+    const handlePriceImpactDialogConfirm = useCallback(() => {
+        if (!trade.priceImpact) return
+        setTemporarySlippage(new BigNumber(trade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
+        onConfirm()
+        setPriceImpactDialogOpen(false)
+    }, [trade])
+
+    const onPriceImpactDialogClose = useCallback(() => {
+        setPriceImpactDialogOpen(false)
+    }, [])
+    // #endregion
+
     return (
-        <ConfirmDialogUI
-            {...props}
-            currentSlippage={currentSlippage}
-            gasFee={gasFee}
-            gasFeeUSD={gasFeeUSD}
-            nativeToken={nativeToken}
-            inputTokenPrice={inputTokenPrice}
-            outputTokenPrice={outputTokenPrice}
-            openSettingDialog={async () => {
-                const { slippageTolerance, transaction } = await selectAdvancedSettings()
+        <>
+            <ConfirmDialogUI
+                {...props}
+                currentSlippage={currentSlippage}
+                gasFee={gasFee}
+                gasFeeUSD={gasFeeUSD}
+                nativeToken={nativeToken}
+                inputTokenPrice={inputTokenPrice}
+                outputTokenPrice={outputTokenPrice}
+                openSettingDialog={async () => {
+                    const { slippageTolerance, transaction } = await selectAdvancedSettings()
 
-                if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+                    if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
-                PluginTraderMessages.swapSettingsUpdated.sendToAll({
-                    open: false,
-                    gasConfig: {
-                        gasPrice: transaction?.gasPrice as string | undefined,
-                        maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
-                        maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
-                    },
-                })
-            }}
-            isGreatThanSlippageSetting={isGreatThanSlippageSetting}
-            onConfirm={isGreatThanSlippageSetting ? openPriceImpact : onConfirm}
-        />
+                    PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                        open: false,
+                        gasConfig: {
+                            gasPrice: transaction?.gasPrice as string | undefined,
+                            maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
+                            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+                        },
+                    })
+                }}
+                isGreatThanSlippageSetting={isGreatThanSlippageSetting}
+                onConfirm={isGreatThanSlippageSetting ? handleOpenPriceImpactDialog : onConfirm}
+            />
+            <PriceImpactDialogUI
+                open={priceImpactDialogOpen}
+                onClose={onPriceImpactDialogClose}
+                onConfirm={handlePriceImpactDialogConfirm}
+                lostToken={lostToken}
+                lostValue={lostValue}
+                priceImpact={trade.priceImpact}
+            />
+        </>
     )
 }

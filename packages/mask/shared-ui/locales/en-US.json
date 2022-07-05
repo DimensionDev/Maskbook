@@ -422,7 +422,7 @@
     "plugin_trader_error_insufficient_balance": "Insufficient {{symbol}} balance",
     "plugin_trader_error_insufficient_lp": "Insufficient liquidity for this trade",
     "plugin_trade_error_input_amount_less_minimum_amount": "Input amount is below the minimum amount",
-    "plugin_trader_slippage_tolerance": "Slippage Tolerance:",
+    "plugin_trader_slippage_tolerance": "Advanced Settings:",
     "plugin_trader_gas_fee": "Gas fee",
     "plugin_trader_unlock_symbol": "Unlock {{symbol}}",
     "plugin_trader_unlock_tips": "You must give the {{provider}} Smart contracts permission to use your {{symbol}}.You only have to do this once per token.",

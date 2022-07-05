@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            padding: theme.spacing(2, 0),
+            paddingTop: theme.spacing(2),
             position: 'relative',
             boxSizing: 'border-box',
         },
