@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         position: 'sticky',
         bottom: 0,
-
+        padding: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

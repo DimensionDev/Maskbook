@@ -124,7 +124,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
     return {
         ...createNFTToken(chainId, asset),
         link: asset.opensea_link ?? asset.permalink,
-        payment_tokens: orderTokens.concat(offerTokens),
+        paymentTokens: orderTokens.concat(offerTokens),
         auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now())
             ? {
                   endAt: getUnixTime(new Date(asset.endTime)),

@@ -5,6 +5,7 @@ declare global {
             roundedContained: true
             roundedOutlined: true
             roundedText: true
+            roundedDark: true
         }
         interface ButtonPropsColorOverrides {
             warning: true

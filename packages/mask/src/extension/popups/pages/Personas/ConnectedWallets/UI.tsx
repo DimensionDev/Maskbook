@@ -20,7 +20,7 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
         backgroundColor: '#F7F9FA',
         overflow: 'auto',
-        maxHeight: 448,
+        maxHeight: 'calc(100vh - 108px)',
     },
     loading: {
         flex: 1,

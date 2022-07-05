@@ -19,14 +19,6 @@ const useStyles = makeStyles()((theme) => {
             width: 'calc(100% - 24px)',
             gap: 8,
         },
-        button: {
-            flex: 1,
-            backgroundColor: theme.palette.maskColor.dark,
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
-            },
-            color: 'white',
-        },
     }
 })
 
@@ -55,25 +47,28 @@ export function ActionBar(props: ActionBarProps) {
     const isOwner = isSameAddress(asset.value.owner?.address, account)
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
-            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Mainnet}>
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={ChainId.Mainnet}
+                ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 {!isOwner && asset.value.auction ? (
-                    <ActionButton className={classes.button} color="primary" onClick={onOpenCheckoutDialog}>
+                    <ActionButton fullWidth variant="roundedDark" onClick={onOpenCheckoutDialog}>
                         {t('plugin_collectible_buy_now')}
                     </ActionButton>
                 ) : null}
                 {!isOwner && asset.value.auction ? (
-                    <ActionButton className={classes.button} color="primary" fullWidth onClick={onOpenOfferDialog}>
+                    <ActionButton fullWidth variant="roundedDark" onClick={onOpenOfferDialog}>
                         {t('plugin_collectible_place_bid')}
                     </ActionButton>
                 ) : null}
 
                 {!isOwner && !asset.value.auction ? (
-                    <ActionButton className={classes.button} color="primary" onClick={onOpenOfferDialog}>
+                    <ActionButton fullWidth variant="roundedDark" onClick={onOpenOfferDialog}>
                         {t('plugin_collectible_make_offer')}
                     </ActionButton>
                 ) : null}
                 {isOwner ? (
-                    <ActionButton className={classes.button} color="primary" onClick={onOpenListingDialog}>
+                    <ActionButton fullWidth variant="roundedDark" onClick={onOpenListingDialog}>
                         {t('plugin_collectible_sell')}
                     </ActionButton>
                 ) : null}

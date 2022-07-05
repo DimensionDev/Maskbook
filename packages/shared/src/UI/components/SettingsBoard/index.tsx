@@ -41,7 +41,7 @@ export function SettingsBoard(props: SettingsBoardProps) {
                 }
                 onClick={() =>
                     onSubmit?.({
-                        slippageTolerance,
+                        slippageTolerance: slippageTolerance * 100, // convert to bips
                         transaction,
                     })
                 }>
