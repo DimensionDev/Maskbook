@@ -28,7 +28,6 @@ const useStyles = makeStyles()(() => ({
         width: '90px',
         height: '90px',
         borderRadius: '8px',
-        backgroundColor: '#f7f7f7',
     },
     info: {
         flex: 'auto',
@@ -82,15 +81,10 @@ const useStyles = makeStyles()(() => ({
         fontSize: '12px',
     },
     playBtn: {
-        backgroundColor: '#E8F0FD',
-        color: '#1B68F5',
         flex: 'none',
         alignSelf: 'center',
         minWidth: '80px',
         marginLeft: '4px',
-        '&:hover': {
-            backgroundColor: '#f7f7f7',
-        },
     },
 }))
 
@@ -145,7 +139,10 @@ const GameList = (props: Props) => {
                                       {t('plugin_game_list_rank')} {game.rank}
                                   </Typography>
                               </div>
-                              <Button className={classes.playBtn} onClick={() => props.onPlay(game)}>
+                              <Button
+                                  variant="roundedContained"
+                                  className={classes.playBtn}
+                                  onClick={() => props.onPlay(game)}>
                                   {t('plugin_game_list_play')}
                               </Button>
                           </li>

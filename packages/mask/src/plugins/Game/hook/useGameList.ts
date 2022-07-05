@@ -1,5 +1,4 @@
 import { useAsync } from 'react-use'
-import { map } from 'lodash-unified'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginGameRPC } from '../messages'
@@ -11,7 +10,6 @@ export function useGameList() {
     const { GAME_CONFIG_ADDRESS = '' } = useGameConstants()
     return useAsync(async () => {
         const config = (await PluginGameRPC.getConfigGameListFromRSS(connection, GAME_CONFIG_ADDRESS)) ?? {}
-        const list = map(Object.values(config), (v: GameInfo) => v)
-        return list
-    }, []).value
+        return Object.values(config) as GameInfo[]
+    }, [GAME_CONFIG_ADDRESS]).value
 }

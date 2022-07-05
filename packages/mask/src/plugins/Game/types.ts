@@ -1,4 +1,5 @@
 import type { Constant } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface GameDialogEvent {
     open: boolean
@@ -27,5 +28,5 @@ export interface GameInfo {
 export interface GameNFT {
     tokenId?: string
     contract?: string
-    chainId?: number
+    chainId?: ChainId
 }

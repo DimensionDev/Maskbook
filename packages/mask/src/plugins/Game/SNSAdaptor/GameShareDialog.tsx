@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 99999,
     },
     shareNotice: {
-        color: MaskColorVar.normalText,
+        color: theme.palette.maskColor.main,
         fontSize: '16px',
         fontFamily: 'TwitterChirp',
         lineHeight: '16px',
@@ -33,7 +33,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.twitterId} on my Twitter profile. Install the Mask Network Extension mask.io  and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
+    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.twitterId} on my Twitter profile. Install the Mask Network Extension mask.io and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
 
     const onShareClick = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)

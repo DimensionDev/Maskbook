@@ -27,7 +27,7 @@ export function PetDialog() {
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
         setConfigNFTs(await PluginPetRPC.getConfigNFTsFromRSS(connection, NFTS_BLOCK_ADDRESS))
-    }, [])
+    }, [NFTS_BLOCK_ADDRESS])
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)
 

@@ -128,7 +128,7 @@ const GameWindow = (props: Props) => {
             chainId,
             account,
         })
-    }, [props, account])
+    }, [gameInfo, tokenProps, account, chainId])
 
     return isShow ? (
         <div className={classNames(classes.root, { [classes.shadow]: props.isShadow })}>

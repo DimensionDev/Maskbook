@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import DialogContent from '@mui/material/DialogContent'
-import { useCustomSnackbar } from '@masknet/theme'
+import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
@@ -30,8 +30,15 @@ export const ConnectContext = createContainer(() => {
     }
 })
 
+const useStyles = makeStyles()(() => ({
+    shareDialog: {
+        minHeight: 200,
+    },
+}))
+
 const WalletConnectDialog = () => {
     const { t } = useI18N()
+    const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentPluginId = useCurrentWeb3NetworkPluginID()
@@ -89,7 +96,11 @@ const WalletConnectDialog = () => {
                 onClose={handleGameClose}
                 onShare={handleGameShare}
             />
-            <InjectedDialog onClose={closeGameShare} open={isShareShow} title={t('plugin_game_share_title')}>
+            <InjectedDialog
+                classes={{ paper: classes.shareDialog }}
+                onClose={closeGameShare}
+                open={isShareShow}
+                title={t('plugin_game_share_title')}>
                 <DialogContent>
                     <GameShareDialog gameInfo={gameInfo} onClose={closeGameShare} />
                 </DialogContent>
