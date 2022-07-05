@@ -443,7 +443,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     className={classes.icon}
                                     size="small"
                                     onClick={async () => {
-                                        const { slippageTolerance, transaction } = await selectAdvancedSettings()
+                                        const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                                            transaction: {
+                                                gas: focusedTrade?.gas.value ?? 150000,
+                                            },
+                                        })
 
                                         if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
