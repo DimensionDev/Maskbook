@@ -16,8 +16,7 @@ import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
-import DoneIcon from '@mui/icons-material/Done'
-import { CircleLoadingIcon, RiskIcon } from '@masknet/icons'
+import { CircleLoadingIcon, RiskIcon, SuccessForSnackBarIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 
@@ -36,35 +35,41 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
 to {
   transform: rotate(360deg)
 }`
-
     const title = {
         color: MaskColorVar.textPrimary,
-        fontWeight: 400,
+        fontWeight: 700,
         fontSize: 14,
         lineHeight: '20px',
     } as const
     const message = {
-        color: MaskColorVar.textSecondary,
+        color: MaskColorVar.textPrimary,
         fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
-        fontSize: 12,
+        fontSize: 14,
+        '& > a': {
+            display: 'flex',
+            alignItems: 'center',
+        },
     } as const
     const defaultVariant = {
         background: isDark ? '#17191D' : '#F7F9FA',
         color: isDark ? '#D9D9D9' : '#0F1419',
         [`& .${refs.title}`]: {
-            color: isDark ? '#D9D9D9' : palette.grey['800'],
+            color: isDark ? '#D9D9D9' : MaskColorVar.textPrimary,
         },
     }
     const success = {
-        backgroundColor: '#60DFAB',
+        backgroundColor: MaskColorVar.greenMain,
         color: '#ffffff',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: MaskColorVar.normalTextLight,
+            '& svg': {
+                color: MaskColorVar.white,
+            },
         },
     } as const
 
@@ -141,6 +146,10 @@ to {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            '& > svg': {
+                width: 24,
+                height: 24,
+            },
         },
         spinning: {
             display: 'flex',
@@ -151,16 +160,13 @@ to {
         },
         closeButton: {
             color: 'inherit',
+            transform: 'translateY(-10px)',
         },
         texts: {
-            marginLeft: theme.spacing(2),
+            marginLeft: theme.spacing(1.5),
         },
         title,
         message,
-        link: {
-            display: 'flex',
-            marginLeft: theme.spacing(0.5),
-        },
     }
 })
 
@@ -177,7 +183,7 @@ export interface CustomSnackbarContentProps {
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
-    success: <DoneIcon color="inherit" />,
+    success: <SuccessForSnackBarIcon />,
     error: <RiskIcon />,
     warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
