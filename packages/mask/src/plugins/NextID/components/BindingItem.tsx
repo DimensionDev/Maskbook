@@ -92,6 +92,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                     {tipable ? (
                         <TipButton
                             addresses={addressConfigs}
+                            recipient={identity}
                             receiver={visitingPersona.identifier}
                             className={classes.tipButton}>
                             <span className={classes.tipButtonLabel}>{t.tips()}</span>

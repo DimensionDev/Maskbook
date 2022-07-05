@@ -17,7 +17,7 @@ interface Props {
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
-    const [recipient, setRecipient] = useState('')
+    const [recipient, setRecipient] = useState(task.recipient ?? '')
     const recipients = useAddNameService(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')

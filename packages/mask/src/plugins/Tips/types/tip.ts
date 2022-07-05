@@ -9,7 +9,7 @@ export interface AddressConfig {
     verified?: boolean
 }
 export interface TipTask {
-    to?: string
+    recipient?: string
     recipientSnsId?: string
     addresses: AddressConfig[]
 }

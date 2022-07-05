@@ -21,6 +21,7 @@ import type { AddressConfig } from '../types'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: AddressConfig[]
+    recipient?: AddressConfig['address']
     receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
@@ -64,6 +65,7 @@ export const TipButton: FC<Props> = ({
     className,
     receiver,
     addresses = EMPTY_LIST,
+    recipient,
     children,
     tooltipProps,
     ...rest
@@ -135,19 +137,21 @@ export const TipButton: FC<Props> = ({
             if (disabled) return
             if (!allAddresses.length || !receiverUserId) return
             PluginNextIDMessages.tipTask.sendToLocal({
+                recipient,
                 recipientSnsId: receiverUserId,
                 addresses: allAddresses,
             })
         },
-        [disabled, allAddresses, receiverUserId],
+        [disabled, recipient, allAddresses, receiverUserId],
     )
 
     useEffect(() => {
         PluginNextIDMessages.tipTaskUpdate.sendToLocal({
+            recipient,
             recipientSnsId: receiverUserId,
             addresses: allAddresses,
         })
-    }, [receiverUserId, allAddresses])
+    }, [recipient, receiverUserId, allAddresses])
 
     const dom = (
         <div
