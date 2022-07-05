@@ -41,8 +41,7 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: 0,
         },
         content: {
-            width: 568,
-            padding: '0 16px',
+            padding: 0,
             height: 492,
             maxHeight: 492,
             position: 'relative',
@@ -81,7 +80,7 @@ const useStyles = makeStyles()((theme) => {
             gridColumnGap: 20,
             display: 'grid',
             gridTemplateColumns: 'repeat(7, 1fr)',
-            paddingBottom: '16px',
+            padding: '0 16px',
         },
         AddCollectiblesButton: {
             fontWeight: 600,
@@ -223,7 +222,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            padding: '16px 0 0',
+                            padding: 2,
                         }}>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
                         <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
@@ -267,7 +266,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         </List>
                     </Box>
                     <Box>
-                        <Typography sx={{ fontSize: '16px', fontWeight: 700, marginTop: '12px' }}>Unlisted</Typography>
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>Unlisted</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
                         {unListedCollections?.length > 0 ? (
