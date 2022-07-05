@@ -107,7 +107,7 @@ const WalletSetting = memo(
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
         const [visible, setVisible] = useState(false)
 
-        const [currentTab, onChange, tabs] = useTabs('NFTs', 'Footprints', 'Donations')
+        const [currentTab, onChange, tabs] = useTabs(title, 'NFTs', 'Footprints', 'Donations')
 
         const chainId = useChainId()
         const [NFTs, setNFTs] = useState<WalletTypes[]>()
