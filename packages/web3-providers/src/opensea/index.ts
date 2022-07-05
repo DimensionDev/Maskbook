@@ -29,7 +29,7 @@ import type {
     OpenSeaCustomAccount,
     OpenSeaResponse,
 } from './types'
-import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
+import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
@@ -149,10 +149,10 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             value: x.value,
         })),
         price: {
-            [CurrencyType.USD]: getOrderUnitPrice(
+            [CurrencyType.USD]: getOrderUSDPrice(
                 asset.last_sale?.total_price,
+                asset.last_sale?.payment_token.usd_price,
                 asset.last_sale?.payment_token.decimals,
-                asset.last_sale?.quantity ?? '1',
             )?.toString(),
         },
         orders: asset.orders
@@ -298,7 +298,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-
         if (!response) return
         return createNFTAsset(chainId, response)
     }

@@ -254,7 +254,7 @@ export function Collectible(props: CollectibleProps) {
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: _asset?.price[CurrencyType.USD],
+                                                price: _asset.price[CurrencyType.USD],
                                                 symbol: CurrencyType.USD,
                                             }}
                                         />
