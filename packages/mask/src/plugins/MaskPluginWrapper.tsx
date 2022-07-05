@@ -1,8 +1,8 @@
-import { Typography, SnackbarContent, Link, ThemeProvider } from '@mui/material'
+import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskIcon } from '../resources/MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useClassicMaskSNSPluginTheme, useI18N } from '../utils'
+import { useI18N } from '../utils'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
@@ -152,7 +152,6 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
-        const theme = useClassicMaskSNSPluginTheme()
         const refItem = useMemo((): PluginWrapperMethods => {
             return {
                 setWidth,
@@ -164,17 +163,15 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         useImperativeHandle(ref, () => refItem, [refItem])
 
         return (
-            <ThemeProvider theme={theme}>
-                <MaskPostExtraInfoWrapper
-                    wrapperProps={wrapperProps}
-                    open={open}
-                    title={title || t(ID, name)}
-                    width={width}
-                    publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
-                    publisherLink={publisher?.link}
-                    children={props.children}
-                />
-            </ThemeProvider>
+            <MaskPostExtraInfoWrapper
+                wrapperProps={wrapperProps}
+                open={open}
+                title={title || t(ID, name)}
+                width={width}
+                publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
+                publisherLink={publisher?.link}
+                children={props.children}
+            />
         )
     },
 )
