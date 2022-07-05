@@ -323,6 +323,7 @@
     {
         "chainId": 10,
         "name": "Optimism",
+        "type": "Optimism",
         "chain": "Optimism",
         "network": "mainnet",
         "features": [],
@@ -330,14 +331,15 @@
             "chainId": 10,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://logo.chainbit.xyz/eth"
         },
-        "infoURL": "https://Optimistic.etherscan.io/",
+        "infoURL": "https://optimistic.etherscan.io/",
         "shortName": "op",
         "explorers": [
             {
                 "name": "optimisc",
-                "url": "https://Optimistic.etherscan.io/"
+                "url": "https://optimistic.etherscan.io/"
             }
         ]
     },
