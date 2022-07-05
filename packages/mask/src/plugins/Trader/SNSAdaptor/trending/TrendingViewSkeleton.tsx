@@ -2,7 +2,8 @@ import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginHeader } from './PluginHeader'
 import { ProvidedBy } from '@masknet/shared'
-import { CardContent, Stack } from '@mui/material'
+import { CardContent, Stack, Typography } from '@mui/material'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,6 +27,7 @@ export interface TrendingViewSkeletonProps extends withClasses<'content' | 'foot
 export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     const { TrendingCardProps } = props
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -35,7 +37,10 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                 </PluginHeader>
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
-                        <LoadingBase />
+                        <LoadingBase fontSize="large" />
+                        <Typography fontSize="14px" mt={1.5}>
+                            {t('loading')}
+                        </Typography>
                     </Stack>
                 </CardContent>
             </Stack>
