@@ -57,6 +57,7 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(({ ...rest }) =
             ref={ref}
             maxSnack={1}
             disableWindowBlurListener
+            autoHideDuration={2000}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             classes={{
                 containerRoot: classes.container,
@@ -92,7 +93,7 @@ export function usePopupCustomSnackbar() {
             text: SnackbarMessage,
             options: ShowSnackbarOptions = {
                 variant: 'success',
-                autoHideDuration: 1000,
+                autoHideDuration: 2000,
             },
         ) => {
             const { processing, message, variant, ...rest } = options
@@ -101,6 +102,7 @@ export function usePopupCustomSnackbar() {
                 content: (key, title) => {
                     return <PopupSnackbarContent id={key} title={title} variant={variant} />
                 },
+                autoHideDuration: 2000,
                 ...rest,
             })
         },
