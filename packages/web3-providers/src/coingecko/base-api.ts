@@ -1,12 +1,11 @@
+import { fetchJSON, getTraderAllAPICachedFlag } from '..'
 import { COINGECKO_URL_BASE } from './constants'
-import { getTraderAllAPICachedFlag } from '../helpers'
 
 // #region get currency
 export async function getAllCurrencies() {
-    const response = await fetch(`${COINGECKO_URL_BASE}/simple/supported_vs_currencies`, {
+    return fetchJSON<string[]>(`${COINGECKO_URL_BASE}/simple/supported_vs_currencies`, {
         cache: 'force-cache',
     })
-    return response.json() as Promise<string[]>
 }
 // #endregion
 
@@ -18,8 +17,7 @@ export interface Coin {
 }
 
 export async function getAllCoins() {
-    const response = await fetch(`${COINGECKO_URL_BASE}/coins/list`, { cache: 'force-cache' })
-    return response.json() as Promise<Coin[]>
+    return fetchJSON<Coin[]>(`${COINGECKO_URL_BASE}/coins/list`, { cache: 'force-cache' })
 }
 // #endregion
 
@@ -111,11 +109,10 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(coinId: string) {
-    const response = await fetch(
+    return fetchJSON<CoinInfo>(
         `${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
         { cache: getTraderAllAPICachedFlag() },
     )
-    return response.json() as Promise<CoinInfo>
 }
 // #endregion
 
@@ -127,13 +124,12 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     params.append('vs_currency', currencyId)
     params.append('days', String(days))
 
-    const response = await fetch(`${COINGECKO_URL_BASE}/coins/${coinId}/market_chart?${params.toString()}`, {
-        cache: getTraderAllAPICachedFlag(),
-    })
-    return response.json() as Promise<{
+    return fetchJSON<{
         market_caps: Stat[]
         prices: Stat[]
         total_volumes: Stat[]
-    }>
+    }>(`${COINGECKO_URL_BASE}/coins/${coinId}/market_chart?${params.toString()}`, {
+        cache: getTraderAllAPICachedFlag(),
+    })
 }
 // #endregion

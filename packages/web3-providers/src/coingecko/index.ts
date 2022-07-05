@@ -1,14 +1,13 @@
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import type { PriceAPI, TrendingAPI } from '..'
+import { fetchJSON, PriceAPI, TrendingAPI } from '..'
 import { uniq } from 'lodash-unified'
 import { DataProvider } from '@masknet/public-api'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
 import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
 import { COINGECKO_URL_BASE } from './constants'
 import { resolveChain } from './helper'
-import { fetchJSON } from '..'
 import type { Platform } from './type'
 
 export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<ChainId> {
