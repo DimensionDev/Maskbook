@@ -53,10 +53,14 @@ to {
         },
     } as const
     const defaultVariant = {
-        background: isDark ? '#17191D' : '#F7F9FA',
-        color: isDark ? '#D9D9D9' : '#0F1419',
+        background: '#F7F9FA',
+        color: '#0F1419',
         [`& .${refs.title}`]: {
-            color: isDark ? '#D9D9D9' : MaskColorVar.textPrimary,
+            color: 'inherit',
+        },
+
+        [`& .${refs.message}`]: {
+            color: 'inherit',
         },
     }
     const success = {
