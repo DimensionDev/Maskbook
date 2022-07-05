@@ -27,3 +27,9 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
         balance: '0',
     }))
 }
+
+export function getTraderAllAPICachedFlag(): RequestCache {
+    // TODO: handle flags
+    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    return 'default'
+}

@@ -279,7 +279,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         clearContract()
     }, [chainId])
 
-    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
+    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()

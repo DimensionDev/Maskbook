@@ -8,6 +8,8 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            marginBottom: theme.spacing(1.5),
         },
     }
 })

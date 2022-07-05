@@ -29,6 +29,7 @@ import {
     attemptUntil,
     createPredicate,
     createIndicator,
+    FungibleTokenSecurity,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -65,6 +66,32 @@ class Hub implements EVM_Hub {
             ...initial,
             ...overrides,
         }
+    }
+
+    async getFungibleTokenSecurity(
+        chainId: ChainId,
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<FungibleTokenSecurity> {
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+
+        console.log(options)
+        throw new Error('Method not implemented.')
+    }
+
+    async getNonFungibleTokenSecurity(
+        chainId: ChainId,
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<FungibleTokenSecurity> {
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+
+        console.log(options)
+        throw new Error('Method not implemented.')
     }
 
     async getFungibleTokensFromTokenList(

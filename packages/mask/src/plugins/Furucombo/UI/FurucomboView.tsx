@@ -94,7 +94,11 @@ export function FurucomboView(props: PoolViewProps) {
                 </Typography>
 
                 <Box sx={{ padding: 1.5 }}>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={props.chainId}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}
+                    />
                 </Box>
             </>
         )

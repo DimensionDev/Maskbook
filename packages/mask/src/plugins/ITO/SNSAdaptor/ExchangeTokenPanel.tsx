@@ -95,6 +95,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     }, [
         isSell,
         dataIndex,
+        chainId,
         exchangeToken?.address,
         excludeTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),
         selectedTokensAddress.sort((a, b) => a.localeCompare(b, 'en-US')).join(),

@@ -3,7 +3,6 @@ import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { SelectProviderDialog } from './SelectProviderDialog'
 import { WalletStatusDialog } from './WalletStatusDialog'
-import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
@@ -19,7 +18,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
-                <TransactionDialog />
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />

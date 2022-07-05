@@ -1,8 +1,6 @@
-import classNames from 'classnames'
-import { useColorStyles } from '../../../../utils/theme'
 import { makeStyles } from '@masknet/theme'
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { Stack, Typography, useTheme } from '@mui/material'
+import { ArrowDropIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     root: {
@@ -17,7 +15,9 @@ const useStyles = makeStyles()({
         verticalAlign: 'middle',
     },
     value: {
-        marginLeft: 20,
+        fontSize: 12,
+        lineHeight: '16px',
+        fontWeight: 700,
     },
 })
 
@@ -26,14 +26,16 @@ export interface PriceChangedProps {
 }
 
 export function PriceChanged(props: PriceChangedProps) {
-    const { classes: color } = useColorStyles()
     const { classes } = useStyles()
+    const colors = useTheme().palette.maskColor
     if (props.amount === 0) return null
     return (
-        <span className={classNames(classes.root, props.amount > 0 ? color.success : color.error)}>
-            {props.amount > 0 ? <ArrowDropUpIcon className={classes.icon} /> : null}
-            {props.amount < 0 ? <ArrowDropDownIcon className={classes.icon} /> : null}
-            <span className={classes.value}>{props.amount.toFixed(2)}%</span>
-        </span>
+        <Stack alignItems="center" direction="row">
+            {props.amount > 0 ? <ArrowDropIcon style={{ transform: 'rotate(180deg)' }} /> : null}
+            {props.amount < 0 ? <ArrowDropIcon /> : null}
+            <Typography className={classes.value} color={props.amount > 0 ? colors?.success : colors?.danger}>
+                {props.amount.toFixed(2)}%
+            </Typography>
+        </Stack>
     )
 }

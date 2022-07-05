@@ -1053,7 +1053,7 @@ importers:
       '@masknet/typed-message': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      '@scamsniffer/detector': 0.0.10
+      '@scamsniffer/detector': 0.0.13
       react-use: ^17.3.2
       ts-results: ^3.3.0
       urlcat: 2.0.4
@@ -1066,7 +1066,7 @@ importers:
       '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      '@scamsniffer/detector': 0.0.10
+      '@scamsniffer/detector': 0.0.13
       react-use: 17.4.0
       ts-results: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
       urlcat: 2.0.4
@@ -1487,6 +1487,7 @@ importers:
     specifiers:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@masknet/plugin-infra': workspace:*
+      '@masknet/public-api': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -1494,6 +1495,7 @@ importers:
       '@masknet/web3-shared-evm': workspace:*
       '@masknet/web3-shared-flow': workspace:*
       '@masknet/web3-shared-solana': workspace:*
+      '@types/json-stable-stringify': ^1.0.34
       '@types/lru-cache': ^7.10.10
       '@types/socket.io-client': ^1.4.36
       bignumber.js: 9.0.2
@@ -1514,6 +1516,7 @@ importers:
     dependencies:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/public-api': link:../public-api
       '@masknet/shared-base': link:../shared-base
       '@masknet/web3-constants': link:../web3-constants
       '@masknet/web3-contracts': link:../web3-contracts
@@ -1538,6 +1541,7 @@ importers:
       web3-core: 1.7.4
       web3-eth: 1.7.4
     devDependencies:
+      '@types/json-stable-stringify': 1.0.34
       '@types/lru-cache': 7.10.10
 
   packages/web3-shared/base:
@@ -7004,8 +7008,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@scamsniffer/detector/0.0.10:
-    resolution: {integrity: sha512-/ReTaF3LpW5Tu3S8xwhKf8vbiF6EWpsMrx7+95p5XzdwdCxeug5KQagTIWmeZSAp1xZtLDdu0vZwSS6MIvwXeQ==}
+  /@scamsniffer/detector/0.0.13:
+    resolution: {integrity: sha512-zBFmitMWJ3rSGBmwtejmXH3f65uke6zzit22v2M+sJ8rXeW/3kQjKagJOAbV/ZcGfqfzX7rL9exG4TeYfpfe7g==}
     engines: {node: '>=16.6'}
     dependencies:
       '@types/isomorphic-fetch': 0.0.36
@@ -9890,7 +9894,6 @@ packages:
 
   /@types/json-stable-stringify/1.0.34:
     resolution: {integrity: sha512-s2cfwagOQAS8o06TcwKfr9Wx11dNGbH2E9vJz1cqV+a/LOyhWNLUNd6JSRYNzvB4d29UuJX2M0Dj9vE1T8fRXw==}
-    dev: false
 
   /@types/json2csv/5.0.3:
     resolution: {integrity: sha512-ZJEv6SzhPhgpBpxZU4n/TZekbZqI4EcyXXRwms1lAITG2kIAtj85PfNYafUOY1zy8bWs5ujaub0GU4copaA0sw==}
