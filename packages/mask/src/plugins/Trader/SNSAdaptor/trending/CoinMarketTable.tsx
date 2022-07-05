@@ -2,7 +2,7 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { ethFormatter, formatCurrency, formatSupply } from '@masknet/web3-shared-base'
+import { ethFormatter, formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
 
@@ -35,7 +35,10 @@ export interface CoinMarketTableProps {
 }
 
 export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const { trending, dataProvider } = props
+    const {
+        trending: { market },
+        dataProvider,
+    } = props
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -57,10 +60,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    <FormattedCurrency
-                                        value={trending.market?.market_cap ?? 0}
-                                        formatter={formatCurrency}
-                                    />
+                                    <FormattedCurrency value={market?.market_cap ?? 0} formatter={formatCurrency} />
                                 </TableCell>
                             </TableRow>
                         ) : null}
@@ -72,9 +72,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    {trending.market?.circulating_supply
-                                        ? formatSupply(trending.market.circulating_supply)
-                                        : '--'}
+                                    {formatSupply(market?.circulating_supply, '--')}
                                 </TableCell>
                             </TableRow>
                         ) : null}
@@ -85,10 +83,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                <FormattedCurrency
-                                    value={trending.market?.total_volume ?? 0}
-                                    formatter={formatCurrency}
-                                />
+                                <FormattedCurrency value={market?.total_volume ?? 0} formatter={formatCurrency} />
                             </TableCell>
                         </TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
@@ -99,7 +94,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    {trending.market?.total_supply ? formatSupply(trending.market.total_supply) : '--'}
+                                    {formatSupply(market?.total_supply, '--')}
                                 </TableCell>
                             </TableRow>
                         ) : null}
@@ -111,7 +106,9 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const { trending } = props
+    const {
+        trending: { market },
+    } = props
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -133,7 +130,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             </TableCell>
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
-                                    value={trending.market?.floor_price ?? 0}
+                                    value={market?.floor_price ?? 0}
                                     sign="&#x039E;"
                                     formatter={ethFormatter}
                                 />
@@ -147,7 +144,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             </TableCell>
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
-                                    value={trending.market?.total_24h ?? 0}
+                                    value={market?.total_24h ?? 0}
                                     sign="&#x039E;"
                                     formatter={ethFormatter}
                                 />
@@ -159,7 +156,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     {t('plugin_trader_owners_count')}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>{trending.market?.owners_count ?? '--'}</TableCell>
+                            <TableCell className={classes.cell}>{formatInteger(market?.owners_count, '--')}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell className={classes.head}>
@@ -167,9 +164,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     {t('plugin_trader_total_assets')}
                                 </Typography>
                             </TableCell>
-                            <TableCell className={classes.cell}>
-                                {trending.market?.total_supply ? formatSupply(trending.market?.total_supply) : '--'}
-                            </TableCell>
+                            <TableCell className={classes.cell}>{formatSupply(market?.total_supply, '--')}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

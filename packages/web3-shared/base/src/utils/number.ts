@@ -92,3 +92,8 @@ export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     const n = new BigNumber(value)
     return decimalPlaces ? n.toFixed(decimalPlaces) : n.toFixed()
 }
+
+export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {
+    if (value === undefined || value === null) return fallback
+    return new BigNumber(value).toFormat(0)
+}
