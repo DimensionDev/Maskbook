@@ -27,16 +27,32 @@ export function useGasSchema(chainId: ChainId, transaction: Transaction, gasOpti
                     .min(1, t.gas_settings_error_gas_limit_absence())
                     .refine(
                         (gasLimit) => isGreaterThanOrEqualTo(gasLimit, transaction.gas as string),
-                        t.gas_settings_error_min_gas_limit_tips({ limit: transaction.gas as string }),
+                        t.gas_settings_error_min_gas_limit_tips(),
                     ),
-                gasPrice: zod.string().min(isEIP1559 ? 0 : 1, t.gas_settings_error_gas_price_absence()),
+                gasPrice: zod
+                    .string()
+                    .min(1, t.gas_settings_error_gas_price_absence())
+                    .refine(isPositive, t.gas_settings_error_gas_price_positive())
+                    .refine(
+                        (value) => isGreaterThanOrEqualTo(value, gasOptions.slow?.suggestedMaxFeePerGas ?? 0),
+                        t.gas_settings_error_gas_price_too_low(),
+                    )
+                    .refine(
+                        (value) =>
+                            isLessThan(
+                                value,
+                                multipliedBy(gasOptions.fast?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
+                            ),
+                        t.gas_settings_error_gas_price_too_high(),
+                    ),
                 maxPriorityFeePerGas: zod
                     .string()
                     .min(1, t.gas_settings_error_max_priority_fee_absence())
                     .refine(isPositive, t.gas_settings_error_max_priority_gas_fee_positive())
-                    .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, gasOptions.slow?.suggestedMaxPriorityFeePerGas ?? 0)
-                    }, t.gas_settings_error_max_priority_gas_fee_too_low())
+                    .refine(
+                        (value) => isGreaterThanOrEqualTo(value, gasOptions.slow?.suggestedMaxPriorityFeePerGas ?? 0),
+                        t.gas_settings_error_max_priority_gas_fee_too_low(),
+                    )
                     .refine(
                         (value) =>
                             isLessThan(

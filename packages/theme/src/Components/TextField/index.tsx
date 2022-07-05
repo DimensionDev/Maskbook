@@ -26,6 +26,9 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: 12,
             lineHeight: '16px',
         },
+        '& input::-webkit-input-placeholder': {
+            color: theme.palette.maskColor.second,
+        },
     },
     input: {
         padding: theme.spacing(1),

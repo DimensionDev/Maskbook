@@ -45,7 +45,6 @@ export function useSettingsContext(initial?: {
 
     useSingleBlockBeatRetry(pluginID, async () => {
         if (initial?.disableGasPrice) return
-        console.log('DEBUG: updating...')
         await gasOptionRetry()
     })
 
@@ -59,10 +58,7 @@ export function useSettingsContext(initial?: {
 
         pluginID,
         chainId,
-        transaction: {
-            ...initial?.transaction,
-            ...transactionOptions,
-        },
+        transaction: initial?.transaction,
 
         transactionOptions,
         setTransactionOptions,

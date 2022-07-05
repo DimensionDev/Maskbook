@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import BigNumber from 'bignumber.js'
 import { makeStyles, MaskTabList } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, GasOptionType, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { GasOptionSelector } from './GasOptionSelector'
 import { SettingsContext } from './Context'
 import { Section } from './Section'
@@ -57,9 +57,29 @@ export function GasSection(props: GasSectionProps) {
         gasOptionType,
         GAS_OPTION_NAMES,
     } = SettingsContext.useContainer()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     // EVM only
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
+
+    const isEIP1559 = Others?.chainResolver.isSupport(chainId as ChainId, 'EIP1559')
+    const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas as
+        | string
+        | undefined
+    const maxFeePerGas = (transactionOptions as Transaction | undefined)?.maxFeePerGas as string | undefined
+    const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice as string | undefined
+    const customPrice = formatBalance(
+        scale10(
+            activeTab === GasSettingsType.Basic
+                ? suggestedMaxFeePerGas ?? 0
+                : formatWeiToGwei(
+                      isEIP1559 ? maxFeePerGas ?? suggestedMaxFeePerGas ?? 0 : gasPrice ?? suggestedMaxFeePerGas ?? 0,
+                  ),
+            2,
+        ),
+        2,
+        2,
+    )
 
     return (
         <div className={classes.root}>
@@ -73,27 +93,11 @@ export function GasSection(props: GasSectionProps) {
                                     ? GAS_OPTION_NAMES[gasOptionType]
                                     : t.gas_settings_custom()}
                             </span>
-                            {activeTab === GasSettingsType.Basic ? (
-                                <span className={classes.price}>
-                                    {' '}
-                                    {new BigNumber(
-                                        (gasOptions?.[gasOptionType].suggestedMaxFeePerGas as string | undefined) ?? 0,
-                                    ).toFixed(2)}
-                                    {' Gwei'}
-                                </span>
-                            ) : (
-                                <span className={classes.price}>
-                                    {' '}
-                                    {transactionOptions
-                                        ? formatWeiToGwei(
-                                              ((transactionOptions as Transaction).maxFeePerGas as
-                                                  | string
-                                                  | undefined) ?? 0,
-                                          ).toFixed(2)
-                                        : 0}
-                                    {' Gwei'}
-                                </span>
-                            )}
+                            <span className={classes.price}>
+                                {' '}
+                                {customPrice}
+                                {' Gwei'}
+                            </span>
                         </Typography>
                     ) : null
                 }>
@@ -118,7 +122,12 @@ export function GasSection(props: GasSectionProps) {
                 ) : transaction && gasOptions ? (
                     <GasForm
                         chainId={chainId as ChainId}
-                        transaction={transaction as Transaction}
+                        transaction={
+                            {
+                                ...transaction,
+                                ...transactionOptions,
+                            } as Transaction
+                        }
                         gasOptions={gasOptions}
                         onChange={(transactionOptions) => {
                             setTransactionOptions(transactionOptions ?? null)

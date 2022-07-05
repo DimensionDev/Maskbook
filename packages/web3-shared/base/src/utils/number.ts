@@ -19,6 +19,11 @@ export function isOne(n: BigNumber.Value) {
     return n === 1 || n === '1' || new BigNumber(n).isEqualTo(ONE)
 }
 
+/** n === m */
+export function isEqual(n: BigNumber.Value, m: BigNumber.Value) {
+    return new BigNumber(n).isEqualTo(m)
+}
+
 /** a > b */
 export function isGreaterThan(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isGreaterThan(b)

@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => {
         },
         textfield: {
             flex: 1,
+            paddingLeft: 9,
             paddingRight: 9,
             '& input::-webkit-input-placeholder': {
                 fontWeight: 700,
@@ -28,6 +29,7 @@ const useStyles = makeStyles()((theme) => {
             '& input[type=number]': {
                 fontSize: 16,
                 fontWeight: 700,
+                height: 24,
                 padding: 0,
                 textAlign: 'center',
                 '-moz-appearance': 'textfield',

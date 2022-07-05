@@ -1,10 +1,5 @@
-import { FC, useMemo } from 'react'
-import {
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useDoubleBlockBeatRetry,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { FC, useMemo, useState } from 'react'
+import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useSharedI18N } from '@masknet/shared'
 import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -72,10 +67,13 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
 }) => {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
-    const compact = networkIdentifier === EnhanceableSite.Minds
+    const { classes } = useStyles({ compact: networkIdentifier === EnhanceableSite.Minds })
     const pluginID_ = useCurrentWeb3NetworkPluginID(pluginID)
     const chainId_ = useChainId(pluginID_, chainId)
-    const { classes } = useStyles({ compact })
+    const [settings, setSettings] = useState<{
+        slippageTolerance?: number
+        transaction?: Web3Helper.TransactionAll
+    } | null>(null)
 
     const initialState = useMemo(
         () => ({
@@ -93,7 +91,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
             open={open}
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             onClose={() => {
-                onSubmit?.(null)
+                onSubmit?.(settings)
                 onClose?.()
             }}
             title={title ?? t.gas_settings_title()}>
@@ -102,7 +100,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
                     <SettingsBoard
                         disableGasPrice={disableGasPrice}
                         disableSlippageTolerance={disableSlippageTolerance}
-                        onSubmit={onSubmit}
+                        onChange={setSettings}
                     />
                 </SettingsContext.Provider>
             </DialogContent>
