@@ -1,18 +1,20 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Web3ProfileIcon } from '@masknet/icons'
-import { useState } from 'react'
 import { base } from '../base'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog'
 import { setupContext } from './context'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { PLUGIN_ID } from '../constants'
 import { Trans } from 'react-i18next'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+    },
+    GlobalInjection: function Component() {
+        return <Web3ProfileDialog />
     },
     ApplicationEntries: [
         (() => {
@@ -24,7 +26,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const [open, setOpen] = useState(false)
                     return (
                         <>
                             <ApplicationEntry
@@ -32,9 +33,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 recommendFeature={recommendFeature}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={() =>
+                                    CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({ open: true })
+                                }
                             />
-                            <Web3ProfileDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },
@@ -52,18 +54,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             }
         })(),
-    ],
-    ProfileTabs: [
-        {
-            ID: `${PLUGIN_ID}_web3_profile`,
-            label: 'Web3Profile',
-            priority: 3,
-            UI: {
-                TabContent: ({ open = false, setOpen }) => {
-                    return <Web3ProfileDialog open={open} onClose={() => setOpen(false)} />
-                },
-            },
-        },
     ],
 }
 

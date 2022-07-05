@@ -110,8 +110,6 @@ export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>,
     selectedId?: T
     onChange?(id: T): void
     tail?: ReactNode
-    openDialog?: () => void
-    isOwn?: boolean
 }
 
 export function ConcealableTabs<T extends number | string>({
@@ -120,8 +118,6 @@ export function ConcealableTabs<T extends number | string>({
     selectedId,
     tail,
     onChange,
-    openDialog,
-    isOwn,
     ...rest
 }: ConcealableTabsProps<T>) {
     const { classes } = useStyles()

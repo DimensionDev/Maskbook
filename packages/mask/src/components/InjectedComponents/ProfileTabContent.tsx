@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -142,7 +142,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
             return a.priority - z.priority
         })
-        .filter((z) => z.pluginID !== PluginId.NextID && z.pluginID !== PluginId.Web3Profile)
+        .filter((z) => z.pluginID !== PluginId.NextID)
         .map((x) => ({
             id: x.ID,
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
@@ -168,8 +168,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     })
 
     const handleOpenDialog = () => {
-        setSelectedTab(`${PluginId.Web3Profile}_web3_profile`)
-        setProfileOpen(true)
+        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+            open: true,
+        })
     }
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
@@ -180,8 +181,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 identity={identity}
                 persona={personaPublicKey}
                 socialAddressList={addressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
-                open={profileOpen}
-                setOpen={setProfileOpen}
             />
         )
     }, [
@@ -235,8 +234,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        openDialog={handleOpenDialog}
-                        isOwn={isOwn}
                         tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
                 ) : (

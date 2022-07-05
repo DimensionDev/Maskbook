@@ -5,7 +5,13 @@ import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useAllPersona, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
-import { NextIDPersonaBindings, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+    PersonaInformation,
+    PopupRoutes,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
@@ -52,19 +58,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps {
-    open: boolean
-    onClose(): void
-}
-
-export function Web3ProfileDialog(props: BuyTokenDialogProps) {
+export function Web3ProfileDialog() {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { open, onClose } = props
     const [title, setTitle] = useState('Web3 Profile')
     const [imageManageOpen, setImageManageOpen] = useState(false)
     const [accountId, setAccountId] = useState<string>()
     const [flashFlag, toggleFlash] = useState(false)
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        CrossIsolationMessages.events.requestWeb3ProfileDialog.on(({ open }) => {
+            setOpen(open)
+        })
+    }, [])
 
     const [bindings, setBindings] = useState<NextIDPersonaBindings>()
 
@@ -165,8 +172,9 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
             title={title}
             fullWidth={false}
             open={open}
+            isOnBack
             titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
-            onClose={onClose}>
+            onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main
                     openImageSetting={(str: string, accountId: string) => {
