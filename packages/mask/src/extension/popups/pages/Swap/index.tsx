@@ -6,6 +6,7 @@ import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
+import { NetworkSelector } from '../../components/NetworkSelector'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -38,12 +39,12 @@ const useStyles = makeStyles()((theme) => {
             width: 598,
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             padding: '22px 16px',
         },
         title: {
             fontSize: 32,
-            marginTop: 16,
             fontWeight: 'bold',
             color: theme.palette.grey['900'],
         },
@@ -73,6 +74,7 @@ export default function SwapPage() {
                             <Typography variant="h1" className={classes.title}>
                                 {t('plugin_trader_swap')}
                             </Typography>
+                            <NetworkSelector />
                         </header>
                         <main className={classes.main}>
                             <TargetChainIdContext.Provider>
