@@ -44,8 +44,8 @@ const useStyles = makeStyles()((theme) => {
             width: 598,
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: '22px 0',
+            justifyContent: 'space-between',
+            padding: '22px 16px',
         },
         title: {
             fontSize: 32,
@@ -86,6 +86,9 @@ export default function SwapPage() {
                 <div className={classes.page}>
                     <div className={classes.container}>
                         <header className={classes.header}>
+                            <Typography variant="h1" className={classes.title}>
+                                {t('plugin_trader_swap')}
+                            </Typography>
                             <WalletStateBarUI
                                 className={classes.walletStateBar}
                                 isPending={pendingTransactions.length > 0}
@@ -96,9 +99,6 @@ export default function SwapPage() {
                             />
                         </header>
                         <main className={classes.main}>
-                            <Typography variant="h1" className={classes.title}>
-                                {t('plugin_trader_swap')}
-                            </Typography>
                             <TargetChainIdContext.Provider>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />

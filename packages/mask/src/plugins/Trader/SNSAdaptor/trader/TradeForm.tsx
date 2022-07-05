@@ -28,12 +28,13 @@ import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
+import Services from '../../../../extension/service'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -422,6 +423,14 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [selectAdvancedSettings])
         // #endregion
 
+        // #region if `isPopup` be true, click the plugin status bar need to  open popup window
+        const openSelectWalletPopup = useCallback(() => {
+            Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
+                chainId,
+            })
+        }, [chainId])
+
+        // #endregion
         return (
             <>
                 <Box className={classes.root}>
@@ -532,7 +541,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 ) : null}
                 <Box className={classes.stateBar}>
-                    <PluginWalletStatusBar>
+                    <PluginWalletStatusBar onClick={isPopup ? openSelectWalletPopup : undefined}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
