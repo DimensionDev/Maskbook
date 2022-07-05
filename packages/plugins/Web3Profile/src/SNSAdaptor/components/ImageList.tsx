@@ -112,6 +112,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexWrap: 'wrap',
             height: 232,
+            justifyContent: 'center',
         },
         unlistedBox: {
             display: 'flex',
@@ -230,46 +231,50 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         </Button>
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
-                        <List className={classes.list}>
-                            {listedCollections?.map((collection, i) => (
-                                <ListItem
-                                    className={classes.collectionWrap}
-                                    onClick={() => unList(collection.key)}
-                                    key={collection.key}>
-                                    <NFTImageCollectibleAvatar
-                                        pluginId={NetworkPluginID.PLUGIN_EVM}
-                                        size={64}
-                                        token={{
-                                            ...collection,
-                                            tokenId: collection.tokenId ?? '',
-                                            id: collection.address,
-                                            chainId: ChainId.Mainnet,
-                                            schema: SchemaType.ERC721,
-                                            type: TokenType.NonFungible,
-                                            contract: {
+                        {listedCollections && listedCollections?.length > 0 ? (
+                            <List className={classes.list}>
+                                {listedCollections?.map((collection, i) => (
+                                    <ListItem
+                                        className={classes.collectionWrap}
+                                        onClick={() => unList(collection.key)}
+                                        key={collection.key}>
+                                        <NFTImageCollectibleAvatar
+                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            size={64}
+                                            token={{
+                                                ...collection,
+                                                tokenId: collection.tokenId ?? '',
+                                                id: collection.address,
                                                 chainId: ChainId.Mainnet,
-                                                name: collection?.name ?? '',
-                                                symbol: '',
-                                                address: collection.address,
                                                 schema: SchemaType.ERC721,
-                                            },
-                                            metadata: {
-                                                imageURL: collection.iconURL,
-                                                chainId: ChainId.Mainnet,
-                                                name: '',
-                                                symbol: '',
-                                            },
-                                        }}
-                                    />
-                                </ListItem>
-                            ))}
-                        </List>
+                                                type: TokenType.NonFungible,
+                                                contract: {
+                                                    chainId: ChainId.Mainnet,
+                                                    name: collection?.name ?? '',
+                                                    symbol: '',
+                                                    address: collection.address,
+                                                    schema: SchemaType.ERC721,
+                                                },
+                                                metadata: {
+                                                    imageURL: collection.iconURL,
+                                                    chainId: ChainId.Mainnet,
+                                                    name: '',
+                                                    symbol: '',
+                                                },
+                                            }}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                            <Typography className={classes.unListedEmpty}>{t.no_items_found()}</Typography>
+                        )}
                     </Box>
                     <Box>
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>Unlisted</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
-                        {unListedCollections?.length > 0 ? (
+                        {unListedCollections && unListedCollections?.length > 0 ? (
                             <List className={classes.list}>
                                 {unListedCollections?.map((collection, i) => (
                                     <ListItem
@@ -288,7 +293,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                                 type: TokenType.NonFungible,
                                                 contract: {
                                                     chainId: ChainId.Mainnet,
-                                                    name: '',
+                                                    name: collection?.name ?? '',
                                                     symbol: '',
                                                     address: collection.address,
                                                     schema: SchemaType.ERC721,
@@ -306,7 +311,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             </List>
                         ) : (
                             <Typography className={classes.unListedEmpty}>
-                                {t.no_unlisted_collection({ collection: title })}
+                                {listedCollections && listedCollections?.length > 0
+                                    ? t.no_unlisted_collection({ collection: title })
+                                    : t.no_items_found()}
                             </Typography>
                         )}
                     </Box>

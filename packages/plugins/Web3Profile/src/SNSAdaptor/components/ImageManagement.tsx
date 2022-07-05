@@ -31,8 +31,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         width: 568,
-        height: 564,
-        padding: '0 16px',
+        height: 548,
+        padding: '0 16px 16px 16px',
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
         position: 'relative',
