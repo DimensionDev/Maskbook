@@ -1,3 +1,4 @@
+export * from './Alert'
 export * from './Dialogs'
 export * from './ButtonGroupTab'
 export * from './FolderTabs'

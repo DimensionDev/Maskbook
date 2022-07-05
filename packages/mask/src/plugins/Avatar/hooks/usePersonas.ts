@@ -15,9 +15,9 @@ export function usePersonas(userId?: string) {
     const identifier = useSubscription(context.lastRecognizedProfile)
     return useAsyncRetry(async () => {
         if (!identifier?.identifier?.userId) return
-        const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
+        const personaBindings = await NextIDProof.queryAllExistedBindingsByPlatform(
             platform,
-            userId?.toLowerCase() ?? identifier.identifier.userId.toLowerCase(),
+            userId ?? identifier.identifier.userId,
         )
 
         const currentPersonaBinding = first(
@@ -25,6 +25,7 @@ export function usePersonas(userId?: string) {
                 sortPersonaBindings(a, b, userId?.toLowerCase() ?? identifier.identifier?.userId.toLowerCase() ?? ''),
             ),
         )
+
         if (!currentPersonaBinding) return
 
         const isOwner = userId

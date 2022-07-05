@@ -292,6 +292,9 @@ export enum NonFungibleAssetProvider {
     ZORA = 'Zora',
 }
 
+/**
+ * @deprecated
+ */
 export type TransactionState =
     | {
           type: TransactionStateType.UNKNOWN
@@ -299,7 +302,9 @@ export type TransactionState =
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
 
-          // @deprecated don't depend on this property will be removed in the future
+          /**
+           * @deprecated Don't depend on this property will be removed in the future
+           */
           hash?: string
       }
     | {

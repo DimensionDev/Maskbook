@@ -1,41 +1,45 @@
-import { makeStyles } from '@masknet/theme'
-import { CoinMarketCapIcon } from '../../../../resources/CoinMarketCapIcon'
-import { CoinGeckoIcon } from '../../../../resources/CoinGeckoIcon'
-import { UniswapIcon } from '../../../../resources/UniswapIcon'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { unreachable } from '@dimensiondev/kit'
 import { DataProvider } from '@masknet/public-api'
+import { CoinGeckoIcon, CoinMarketCapIcon, UniswapIcon } from '@masknet/icons'
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    size: number
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { size }) => ({
     cmc: {
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
         verticalAlign: 'bottom',
     },
     coin_gecko: {
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
         verticalAlign: 'bottom',
     },
     uniswap: {
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
         verticalAlign: 'bottom',
     },
-})
+}))
 
 export interface DataProviderIconProps {
     provider: DataProvider
+    size?: number
 }
 
 export function DataProviderIcon(props: DataProviderIconProps) {
-    const { classes } = useStyles()
+    const { size = 16 } = props
+    const classes = useStylesExtends(useStyles({ size }), {})
     switch (props.provider) {
         case DataProvider.COIN_GECKO:
-            return <CoinGeckoIcon classes={{ root: classes.coin_gecko }} viewBox="0 0 16 16" />
+            return <CoinGeckoIcon style={{ width: size, height: size }} />
         case DataProvider.COIN_MARKET_CAP:
-            return <CoinMarketCapIcon classes={{ root: classes.cmc }} viewBox="0 0 16 16" />
+            return <CoinMarketCapIcon style={{ width: size, height: size }} />
         case DataProvider.UNISWAP_INFO:
-            return <UniswapIcon classes={{ root: classes.uniswap }} viewBox="0 0 16 16" />
+            return <UniswapIcon style={{ width: size, height: size }} />
         default:
             unreachable(props.provider)
     }

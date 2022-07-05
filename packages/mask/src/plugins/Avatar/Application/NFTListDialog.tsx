@@ -1,20 +1,45 @@
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Button, DialogActions, DialogContent, Skeleton, Stack, Typography } from '@mui/material'
+import {
+    Box,
+    Button,
+    DialogActions,
+    DialogContent,
+    Divider,
+    ListItemIcon,
+    MenuItem,
+    Stack,
+    Typography,
+    useTheme,
+} from '@mui/material'
 import { useCallback, useState, useEffect } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
-import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
-import { range, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
-import { AddressNames } from './WalletList'
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useNonFungibleAssets,
+    useWallet,
+} from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { NFTList } from './NFTList'
+import { useSubscription } from 'use-subscription'
+import { context } from '../context'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { useAsync } from 'react-use'
+import { WalletMessages, WalletRPC } from '../../Wallet/messages'
+import { PluginWalletStatusBar, useMenu } from '../../../utils'
+import { WalletItem } from './WalletList'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import Services from '../../../extension/service'
+import { WalletSettingIcon } from '../assets/setting'
+import { Verify2Icon } from '../assets/Verify2'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -32,12 +57,17 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1D9BF0',
     },
     actions: {
-        padding: theme.spacing(2),
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         position: 'absolute',
         left: 0,
         bottom: 0,
-        width: 'calc(100% - 32px)',
+        width: '100%',
+        padding: 0,
+        display: 'block',
+        margin: 0,
+        '&>:not(:first-of-type)': {
+            margin: 0,
+        },
     },
     content: {
         height: 612,
@@ -45,15 +75,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         marginBottom: 72,
         '::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 20,
-        },
-        '::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-            backgroundClip: 'padding-box',
+            display: 'none',
         },
     },
     error: {
@@ -85,6 +107,45 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
+
+    abstractTabWrapper: {
+        width: '100%',
+        flex: 1,
+        flexShrink: 0,
+        position: 'absolute',
+    },
+    tableTabWrapper: {
+        padding: theme.spacing(2),
+    },
+    tab: {
+        height: 36,
+        minHeight: 36,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
+    },
+    tabs: {
+        height: 36,
+        minHeight: 36,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderRadius: 4,
+        '& .Mui-selected': {
+            color: '#ffffff',
+            backgroundColor: `${theme.palette.primary.main}!important`,
+        },
+    },
+    indicator: {
+        display: 'none',
+    },
+    tabPanel: {
+        marginTop: theme.spacing(3),
+    },
+    divider: {
+        borderColor: theme.palette.mode === 'dark' ? '#2F3336' : '#F2F5F6',
+        marginLeft: 16,
+        marginRight: 16,
+    },
 }))
 
 function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNonFungibleToken) {
@@ -99,10 +160,11 @@ interface NFTListDialogProps {
 }
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const { onNext, wallets, onSelected, tokenInfo } = props
+    const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo } = props
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount(currentPluginId)
+    const wallet = useWallet(currentPluginId)
     const currentChainId = useChainId(currentPluginId)
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
     const [open_, setOpen_] = useState(false)
@@ -112,6 +174,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
+    const lastRecognizedProfile = useSubscription(context.lastRecognizedProfile)
+
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
+        const networks = await WalletRPC.getSupportedNetworks()
+        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
+    }, [])
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -215,14 +283,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         </Box>
     )
 
-    const LoadStatus = (
-        <div className={classes.gallery}>
-            {range(8).map((i) => (
-                <Skeleton key={i} animation="wave" variant="rectangular" className={classes.skeleton} />
-            ))}
-        </div>
-    )
-
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t.no_collectible_found()}</Typography>
@@ -240,9 +300,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     ).filter((x) => x.chainId === chainId)
 
     const NoNFTList = () => {
-        if (!collectibles.length && !loadFinish && !loadError) {
-            return LoadStatus
-        }
         if (chainId === ChainId.Matic && tokensInList.length) return
         if (tokensInList.length === 0) return AddCollectible
         if (loadError && !loadFinish && !collectibles.length) {
@@ -250,6 +307,95 @@ export function NFTListDialog(props: NFTListDialogProps) {
         }
         return
     }
+
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    const openPopupsWindow = useCallback(() => {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            chainId,
+            internal: true,
+        })
+    }, [chainId])
+
+    const theme = useTheme()
+    const [menu, openMenu] = useMenu(
+        [
+            account ? (
+                <>
+                    <WalletItem
+                        walletName={wallet?.name ?? ''}
+                        selectedWallet={selectedAccount}
+                        wallet={account}
+                        nextIDWallets={wallets}
+                        chainId={chainId as ChainId}
+                        onConnectWallet={openSelectProviderDialog}
+                        onSelectedWallet={onChangeWallet}
+                        haveChangeWallet={Boolean(account)}
+                    />
+                    <Divider className={classes.divider} />
+                </>
+            ) : (
+                <>
+                    <MenuItem key="Connect Wallet">
+                        <Button
+                            fullWidth
+                            onClick={openSelectProviderDialog}
+                            sx={{ width: 311, padding: 1, borderRadius: 9999 }}>
+                            {t.connect_your_wallet()}
+                        </Button>
+                    </MenuItem>
+                    <Divider className={classes.divider} />
+                </>
+            ),
+            <>
+                {wallets
+                    .sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+                    .filter((x) => !isSameAddress(x.identity, account))
+                    .map((x, i) => (
+                        <div key={i}>
+                            <WalletItem
+                                selectedWallet={selectedAccount}
+                                wallet={x.identity}
+                                nextIDWallets={wallets}
+                                chainId={chainId as ChainId}
+                                onSelectedWallet={onChangeWallet}
+                            />
+                            <Divider className={classes.divider} />
+                        </div>
+                    ))}
+            </>,
+            <MenuItem
+                key="Wallet Setting"
+                onClick={() => {
+                    openPopupsWindow()
+                }}>
+                <ListItemIcon>
+                    <WalletSettingIcon style={{ fontSize: 24 }} />
+                </ListItemIcon>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t.wallet_settings()}
+                </Typography>
+                <Verify2Icon style={{ marginLeft: 24 }} />
+            </MenuItem>,
+        ],
+        false,
+        {
+            paperProps: {
+                style: {
+                    background: theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
+                },
+            },
+        },
+    )
+    const onOpenMenu = useCallback(
+        (ev: React.MouseEvent<HTMLDivElement>) => {
+            ev.preventDefault()
+            openMenu(ev)
+        },
+        [openMenu],
+    )
 
     if (!wallets?.length && !account)
         return (
@@ -261,14 +407,19 @@ export function NFTListDialog(props: NFTListDialogProps) {
     return (
         <>
             <DialogContent className={classes.content}>
-                <AddressNames
-                    account={account!}
-                    wallets={wallets ?? []}
-                    classes={{ root: classes.AddressNames }}
-                    onChange={onChangeWallet}
-                />
-                {(account || Boolean(wallets?.length)) &&
-                    (selectedPluginId !== NetworkPluginID.PLUGIN_EVM ? (
+                {account || Boolean(wallets?.length) ? (
+                    <>
+                        {currentPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    chains={chains.filter(Boolean) as ChainId[]}
+                                    chainId={chainId}
+                                    setChainId={setChainId}
+                                    classes={classes}
+                                />
+                            </div>
+                        ) : null}
+
                         <NFTListPage
                             pluginId={selectedPluginId}
                             tokens={tokensInList}
@@ -279,47 +430,31 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             loadError={!!loadError}
                             loadFinish={loadFinish}
                         />
-                    ) : (
-                        <NFTList
-                            chainId={chainId}
-                            onSelect={onChangeToken}
-                            tokens={tokensInList}
-                            tokenInfo={selectedToken}
-                            children={NoNFTList()}
-                            onChangeChain={onChangeChain}
-                            nextPage={nextPage}
-                            loadError={!!loadError}
-                            loadFinish={loadFinish}
-                        />
-                    ))}
+                    </>
+                ) : null}
             </DialogContent>
+
             <DialogActions className={classes.actions}>
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', paddingLeft: 2 }}>
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', padding: '8px 16px' }}>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"
-                            sx={{ cursor: 'pointer', paddingLeft: 0.5 }}
+                            sx={{ cursor: 'pointer' }}
+                            fontWeight={700}
+                            fontSize={14}
+                            lineHeight="18px"
                             onClick={onClick}>
                             {t.add_collectible()}
                         </Typography>
                     </Stack>
                 ) : null}
-
-                <ActionButtonPromise
-                    className={classes.button}
-                    disabled={disabled}
-                    init={!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                    waiting={t.downloading_image()}
-                    executor={onSave}
-                    completeIcon={null}
-                    failIcon={null}
-                    failed={t.set_avatar_title()}
-                    failedOnClick="use executor"
-                    data-testid="confirm_button"
-                    complete={t.set_avatar_title()}>
-                    {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
-                </ActionButtonPromise>
+                <PluginWalletStatusBar onClick={(e) => onOpenMenu(e)}>
+                    <Button onClick={onSave} disabled={disabled} fullWidth>
+                        {!selectedToken ? t.set_PFP_title() : t.set_avatar_title()}
+                    </Button>
+                </PluginWalletStatusBar>
+                {menu}
             </DialogActions>
             <AddNFT
                 account={selectedAccount}

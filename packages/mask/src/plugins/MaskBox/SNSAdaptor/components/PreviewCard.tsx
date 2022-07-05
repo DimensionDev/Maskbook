@@ -215,22 +215,18 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={targetChainId}>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={targetChainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
-                        ActionButtonProps={{ size: 'medium' }}
+                        ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
                         classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
+                            variant="roundedDark"
                             fullWidth
-                            sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
-                                color: 'white',
-                                width: '100%',
-                                '&:hover': {
-                                    background: theme.palette.maskColor.dark,
-                                },
-                            }}
                             disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>
                             {(() => {

@@ -9,6 +9,7 @@ export interface PersonaInformation {
     nickname?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
+    avatar?: string
 }
 export interface ProfileInformation {
     /** The nickname of the profile. Should be used in prior. */

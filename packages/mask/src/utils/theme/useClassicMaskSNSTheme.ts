@@ -9,10 +9,8 @@ import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { languageSettings } from '../../settings/settings'
-import { cloneDeep, merge } from 'lodash-unified'
-import twitterColorSchema from '../../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
 import produce, { setAutoFreeze } from 'immer'
-import { parseColor } from '@masknet/theme'
+import { MaskColors, parseColor } from '@masknet/theme'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))
 const defaultUseTheme = (t: Theme) => t
@@ -23,12 +21,23 @@ export function useClassicMaskSNSTheme() {
     const provider = useRef(activatedSocialNetworkUI.customization.paletteMode?.current || staticRef).current
     const usePostTheme = useRef(activatedSocialNetworkUI.customization.useTheme || defaultUseTheme).current
     const palette = useSubscription(provider)
+
     const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
     setAutoFreeze(false)
     const maskTheme = produce(baseTheme, (theme) => {
-        const colorSchema = twitterColorSchema[theme.palette.mode]
+        const colorSchema = MaskColors[theme.palette.mode]
+
+        const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
+
+        colors.forEach((color) => {
+            if (typeof theme.palette[color] === 'object') {
+                Object.assign(theme.palette[color] ?? {}, colorSchema[color])
+            }
+        })
         theme.palette.maskColor = colorSchema.maskColor
+        theme.palette.divider = colorSchema.divider
+        theme.palette.secondaryDivider = colorSchema.secondaryDivider
         theme.components = theme.components || {}
         theme.components.MuiButton = {
             defaultProps: {
@@ -75,9 +84,9 @@ export function useClassicMaskSNSTheme() {
                         variant: 'contained',
                     },
                     style: {
-                        backgroundColor: theme.palette.text.primary,
+                        backgroundColor: theme.palette.maskColor.main,
                         ['&:hover']: {
-                            backgroundColor: theme.palette.text.primary,
+                            backgroundColor: theme.palette.maskColor.main,
                             boxShadow:
                                 theme.palette.mode === 'dark'
                                     ? '0 8px 25px rgba(255, 255, 255, 0.2)'
@@ -97,15 +106,10 @@ export function useClassicMaskSNSTheme() {
                     style: {
                         backgroundColor: theme.palette.maskColor.thirdMain,
                         color: theme.palette.maskColor.main,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
-                            background:
-                                theme.palette.mode === 'dark'
-                                    ? parseColor(theme.palette.maskColor.primary).setAlpha(0.3).toRgbString()
-                                    : theme.palette.maskColor.white,
-                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.primary)
-                                .setAlpha(0.1)
-                                .toRgbString()}`,
+                            background: theme.palette.maskColor.bottom,
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             color: theme.palette.maskColor.main,
@@ -119,7 +123,7 @@ export function useClassicMaskSNSTheme() {
                         variant: 'text',
                     },
                     style: {
-                        color: theme.palette.text.primary,
+                        color: theme.palette.maskColor.main,
                         ['&:hover']: {
                             background: theme.palette.maskColor.thirdMain,
                         },
@@ -157,7 +161,7 @@ export function useClassicMaskSNSTheme() {
                     style: {
                         backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.primary,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -220,7 +224,7 @@ export function useClassicMaskSNSTheme() {
                     style: {
                         backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -386,18 +390,37 @@ export function useClassicMaskSNSTheme() {
                         variant: 'roundedContained',
                     },
                     style: {
-                        backgroundColor: theme.palette.text.primary,
+                        backgroundColor: theme.palette.maskColor.main,
                         borderRadius: 99,
                         ['&:hover']: {
-                            backgroundColor: theme.palette.text.primary,
-                            boxShadow: `0 8px 25px ${parseColor(theme.palette.text.primary)
-                                .setAlpha(0.3)
+                            backgroundColor: theme.palette.maskColor.main,
+                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.main)
+                                .setAlpha(0.2)
                                 .toRgbString()}`,
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             background: theme.palette.maskColor.primaryMain,
                             opacity: 0.6,
-                            color: theme.palette.background.paper,
+                            color: theme.palette.maskColor.bottom,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedDark',
+                    },
+                    style: {
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: theme.palette.maskColor.white,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            backgroundColor: theme.palette.maskColor.dark,
+                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: theme.palette.maskColor.secondaryDark,
+                            opacity: 0.6,
+                            color: theme.palette.maskColor.white,
                         },
                     },
                 },
@@ -409,17 +432,16 @@ export function useClassicMaskSNSTheme() {
                         borderRadius: 99,
                         backgroundColor: theme.palette.maskColor.thirdMain,
                         color: theme.palette.maskColor.main,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
-                            backgroundColor: theme.palette.background.paper,
-                            boxShadow:
-                                theme.palette.mode === 'dark'
-                                    ? '0 8px 25px rgba(255, 255, 255, 0.1)'
-                                    : '0 8px 25px rgba(0, 0, 0, 0.1)',
+                            background: theme.palette.maskColor.bottom,
+                            boxShadow: `0 8px 25px ${parseColor(theme.palette.maskColor.bottom)
+                                .setAlpha(0.1)
+                                .toRgbString()}`,
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             opacity: 0.4,
-                            color: theme.palette.text.primary,
+                            color: theme.palette.maskColor.main,
                         },
                     },
                 },
@@ -428,7 +450,7 @@ export function useClassicMaskSNSTheme() {
                         variant: 'roundedText',
                     },
                     style: {
-                        color: theme.palette.text.primary,
+                        color: theme.palette.maskColor.main,
                         borderRadius: 99,
                         ['&:hover']: {
                             background: theme.palette.maskColor.thirdMain,
@@ -468,7 +490,7 @@ export function useClassicMaskSNSTheme() {
                         backgroundColor: parseColor(theme.palette.maskColor.primary).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.primary,
                         borderRadius: 99,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -533,7 +555,7 @@ export function useClassicMaskSNSTheme() {
                         borderRadius: 99,
                         backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -600,7 +622,7 @@ export function useClassicMaskSNSTheme() {
                         borderRadius: 99,
                         background: parseColor(theme.palette.maskColor.success).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.warn,
-                        border: 'none',
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -666,6 +688,7 @@ export function useClassicMaskSNSTheme() {
                         borderRadius: 99,
                         backgroundColor: parseColor(theme.palette.maskColor.danger).setAlpha(0.1).toRgbString(),
                         color: theme.palette.maskColor.danger,
+                        border: 'none!important',
                         ['&:hover']: {
                             background:
                                 theme.palette.mode === 'dark'
@@ -709,23 +732,10 @@ export function useClassicMaskSNSTheme() {
             },
         }
     })
+    setAutoFreeze(true)
     // TODO: support RTL?
+
     const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
     const theme = unstable_createMuiStrictModeTheme(maskTheme, localization)
     return usePostTheme(theme)
-}
-
-export function useClassicMaskSNSPluginTheme() {
-    const theme = useClassicMaskSNSTheme()
-    return unstable_createMuiStrictModeTheme(
-        merge(cloneDeep(theme), {
-            components: {
-                MuiButton: {
-                    defaultProps: {
-                        variant: 'roundedContained',
-                    },
-                },
-            },
-        }),
-    )
 }

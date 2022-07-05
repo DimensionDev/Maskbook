@@ -53,7 +53,7 @@
     "create_account_connect_social_media": "Connect to {{type}}",
     "create_account_persona_title": "Welcome to Mask Network",
     "create_account_persona_subtitle": "You can create personas and connect social accounts",
-    "create_account_persona_successfully": "Create persona successfully",
+    "create_account_persona_successfully": "Persona created successfully.",
     "create_account_connect_social_media_title": "Connect Social Media",
     "create_account_failed": "Create Account Failed",
     "sign_in_account_identity_title": "Recover your persona",

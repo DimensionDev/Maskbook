@@ -1,9 +1,8 @@
+import type { FC, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
-import type { FC } from 'react'
 import { useSharedI18N } from '../../../locales'
 import { InjectedDialog, InjectedDialogProps } from '../../components'
-import type { ConfirmOptions } from './types'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -20,7 +19,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends ConfirmOptions, Omit<InjectedDialogProps, 'title' | 'onSubmit'> {}
+export interface ConfirmDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit'> {
+    title?: string
+    content: ReactNode | string
+    confirmLabel?: string
+    onSubmit?(result: boolean | null): void
+}
 
 export const ConfirmDialog: FC<ConfirmDialogProps> = ({ title, confirmLabel, content, onSubmit, ...rest }) => {
     const t = useSharedI18N()
