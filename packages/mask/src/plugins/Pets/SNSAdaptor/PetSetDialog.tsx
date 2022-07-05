@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
         justifyContent: 'flex-end',
-        margin: theme.spacing(2, 0),
+        margin: theme.spacing(1, 0),
         alignItems: 'center',
     },
     poweredBy: {
@@ -348,8 +348,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     predicate={(actualPluginID) => actualPluginID === NetworkPluginID.PLUGIN_EVM}
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
-                        size: 'large',
                         fullWidth: true,
+                        sx: {
+                            height: 40,
+                            padding: 0,
+                            margin: 0,
+                        },
                     }}>
                     <ActionButton
                         loading={loading}

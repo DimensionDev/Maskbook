@@ -51,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     abstractTabWrapper: {
         width: '100%',
-        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
         flexShrink: 0,
     },

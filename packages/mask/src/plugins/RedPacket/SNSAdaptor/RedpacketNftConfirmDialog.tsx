@@ -1,11 +1,10 @@
-import { useMemo, useCallback, useEffect, useState } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
     explorerResolver,
     ChainId,
     SchemaType,
-    TransactionStateType,
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
@@ -188,7 +187,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         linkedPersona?.nickname ??
         'Unknown User'
     const tokenIdList = tokenList.map((value) => value.tokenId)
-    const [createState, createCallback, resetCallback] = useCreateNftRedpacketCallback(
+    const [{ loading: isSending }, createCallback] = useCreateNftRedpacketCallback(
         duration,
         message,
         senderName,
@@ -199,14 +198,29 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         WalletMessages.events.ApplicationDialogUpdated,
     )
 
-    const isSending = [TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(createState.type)
-    const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
-    const [txid, setTxid] = useState('')
+    const [transactionId, setTransactionId] = useState('')
+
+    const onSendTx = useCallback(async () => {
+        const result = await createCallback(publicKey)
+
+        const { hash, receipt, events } = result ?? {}
+        if (typeof hash !== 'string') return
+        if (typeof receipt?.transactionHash !== 'string') return
+        setTransactionId(receipt.transactionHash)
+        RedPacketRPC.addRedPacketNft({ id: receipt.transactionHash, password: privateKey, contract_version: 1 })
+        const { id } = (events?.CreationSuccess.returnValues ?? {}) as {
+            id?: string
+        }
+        if (!id) return
+        onSendPost(id)
+        onClose()
+    }, [publicKey])
+
     const onSendPost = useCallback(
         (id: string) => {
             attachMetadata(RedPacketNftMetaKey, {
                 id,
-                txid,
+                transactionId,
                 duration,
                 message,
                 senderName,
@@ -219,30 +233,8 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
             })
             closeApplicationBoardDialog()
         },
-        [duration, message, senderName, contract, privateKey, txid],
+        [duration, message, senderName, contract, privateKey, transactionId],
     )
-    useEffect(() => {
-        if (createState.type === TransactionStateType.HASH && createState.hash) {
-            setTxid(createState.hash)
-            RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
-        }
-
-        if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(createState.type)) {
-            return
-        }
-
-        if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
-            const { receipt } = createState
-
-            const { id } = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
-                id: string
-            }
-            onSendPost(id)
-            onClose()
-        }
-
-        resetCallback()
-    }, [createState, onSendPost])
 
     return (
         <InjectedDialog open={open} onClose={onBack} title={i18n('confirm')} maxWidth="xs">

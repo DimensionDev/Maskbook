@@ -160,17 +160,7 @@ export function Collectible(props: CollectibleProps) {
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
-                        <Button
-                            fullWidth
-                            onClick={() => asset.retry()}
-                            sx={{
-                                marginTop: 1,
-                                backgroundColor: MaskColorVar.textPluginColor,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: MaskColorVar.textPluginColor,
-                                },
-                            }}>
+                        <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
                             Refresh
                         </Button>
                     </Box>

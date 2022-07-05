@@ -75,6 +75,8 @@ export function WalletUI(props: WalletUIProps) {
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {providerType === ProviderType.MaskWallet
                             ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
+                            : isETH
+                            ? domain ?? 'EVM Wallet'
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}

@@ -65,6 +65,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'block',
         margin: 0,
+        '&>:not(:first-of-type)': {
+            margin: 0,
+        },
     },
     content: {
         height: 612,
@@ -433,7 +436,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
             <DialogActions className={classes.actions}>
                 {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
-                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', padding: 2 }}>
+                    <Stack sx={{ display: 'flex', flex: 1, flexDirection: 'row', padding: '8px 16px' }}>
                         <Typography
                             variant="body1"
                             color="#1D9BF0"

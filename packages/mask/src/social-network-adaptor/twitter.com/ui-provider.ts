@@ -98,6 +98,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogActions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',
