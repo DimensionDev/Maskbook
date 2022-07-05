@@ -7,7 +7,6 @@ import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '@masknet/shared'
 import { PluginGameMessages } from '../messages'
-import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import GameList from './GameList'
 import GameWindow from './GameWindow'
 import GameShareDialog from './GameShareDialog'
@@ -84,7 +83,6 @@ const WalletConnectDialog = () => {
         <>
             <InjectedDialog onClose={closeDialog} open={open} title={t('plugin_game_name')}>
                 <DialogContent>
-                    <WalletStatusBox />
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
             </InjectedDialog>

@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useGameList } from '../hook'
 import type { GameInfo } from '../types'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()(() => ({
-    walletBar: {},
+    statusBar: {
+        position: 'absolute',
+        width: 'calc(100% - 64px)',
+        bottom: 0,
+    },
     title: {
         fontSize: '20px',
         fontWeight: '500',
@@ -96,6 +103,7 @@ const GameList = (props: Props) => {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const gameList = useGameList()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const [descTypes, setDescTypes] = useState<boolean[]>([])
     useEffect(() => {
@@ -112,44 +120,49 @@ const GameList = (props: Props) => {
     }
 
     return (
-        <List className={classes.walletBar}>
-            <Typography className={classes.title}>{t('plugin_game_list_title')}</Typography>
-            <ul className={classes.gameList}>
-                {gameList
-                    ? gameList.map((game: any, index: number) => (
-                          <li className={classes.gameBar} key={game.id}>
-                              <img className={classes.logo} src={game.image} alt="" />
-                              <div className={classes.info}>
-                                  <Typography className={classes.infoTitle}>{game.name}</Typography>
-                                  <div className={classes.introductionRow}>
-                                      <Typography
-                                          className={classNames(classes.introduction, {
-                                              [classes.isOpen]: descTypes[index],
-                                          })}>
-                                          {game.description}
+        <>
+            <List className={classes.walletBar}>
+                <Typography className={classes.title}>{t('plugin_game_list_title')}</Typography>
+                <ul className={classes.gameList}>
+                    {gameList
+                        ? gameList.map((game: any, index: number) => (
+                              <li className={classes.gameBar} key={game.id}>
+                                  <img className={classes.logo} src={game.image} alt="" />
+                                  <div className={classes.info}>
+                                      <Typography className={classes.infoTitle}>{game.name}</Typography>
+                                      <div className={classes.introductionRow}>
+                                          <Typography
+                                              className={classNames(classes.introduction, {
+                                                  [classes.isOpen]: descTypes[index],
+                                              })}>
+                                              {game.description}
+                                          </Typography>
+                                          <ArrowDropDownIcon
+                                              className={classNames(classes.arrowBtn, {
+                                                  [classes.isTurn]: descTypes[index],
+                                              })}
+                                              onClick={() => toggleDescType(index)}
+                                          />
+                                      </div>
+                                      <Typography className={classes.rank}>
+                                          {t('plugin_game_list_rank')} {game.rank}
                                       </Typography>
-                                      <ArrowDropDownIcon
-                                          className={classNames(classes.arrowBtn, {
-                                              [classes.isTurn]: descTypes[index],
-                                          })}
-                                          onClick={() => toggleDescType(index)}
-                                      />
                                   </div>
-                                  <Typography className={classes.rank}>
-                                      {t('plugin_game_list_rank')} {game.rank}
-                                  </Typography>
-                              </div>
-                              <Button
-                                  variant="roundedContained"
-                                  className={classes.playBtn}
-                                  onClick={() => props.onPlay(game)}>
-                                  {t('plugin_game_list_play')}
-                              </Button>
-                          </li>
-                      ))
-                    : null}
-            </ul>
-        </List>
+                                  <Button
+                                      variant="roundedContained"
+                                      className={classes.playBtn}
+                                      onClick={() => props.onPlay(game)}>
+                                      {t('plugin_game_list_play')}
+                                  </Button>
+                              </li>
+                          ))
+                        : null}
+                </ul>
+            </List>
+            <PluginWalletStatusBar className={classes.statusBar}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} />
+            </PluginWalletStatusBar>
+        </>
     )
 }
 
