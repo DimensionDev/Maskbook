@@ -11,7 +11,7 @@ export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     return listA?.map((item, index) => {
         return {
             ...item,
-            collections: [...(item?.collections ?? []), ...(listB[index].collections ?? [])],
+            collections: [...(item?.collections ?? []), ...(listB?.[index]?.collections ?? [])],
         }
     })
 }

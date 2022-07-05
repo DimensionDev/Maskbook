@@ -151,6 +151,8 @@ export function Web3ProfileDialog(props: BuyTokenDialogProps) {
         footprintList,
         donationList,
         NFTList,
+        MainnetNFTList,
+        PolygonNFTList,
         wallets,
         currentVisitingProfile,
     })
