@@ -96,6 +96,7 @@ const useStyles = makeStyles()((theme) => {
         AddCollectiblesButton: {
             fontWeight: 600,
             color: '#1D9BF0',
+            display: 'none',
         },
         unListedEmpty: {
             color: theme.palette.maskColor.third,
