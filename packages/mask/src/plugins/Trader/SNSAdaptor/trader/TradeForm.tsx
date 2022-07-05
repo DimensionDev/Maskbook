@@ -47,6 +47,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             flex: 1,
             maxHeight: 448,
             overflow: 'auto',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         reverseIcon: {
             cursor: 'pointer',

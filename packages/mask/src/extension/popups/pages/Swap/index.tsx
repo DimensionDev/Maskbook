@@ -1,15 +1,9 @@
-import { useCallback } from 'react'
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ThemeProvider, Typography } from '@mui/material'
 import { SharedContextProvider } from '@masknet/shared'
-import { TransactionStatusType, NetworkPluginID } from '@masknet/web3-shared-base'
-import Services from '../../../service'
-import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
-import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
-import { useChainId, useReverseAddress, useRecentTransactions, useWallet } from '@masknet/plugin-infra/web3'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -44,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
             width: 598,
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'flex-start',
             padding: '22px 16px',
         },
         title: {
@@ -66,17 +60,7 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const theme = useSwapPageTheme()
-    const pendingTransactions = useRecentTransactions(NetworkPluginID.PLUGIN_EVM, TransactionStatusType.NOT_DEPEND)
-    const openPopupsWindow = useCallback(() => {
-        Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
-            chainId,
-        })
-    }, [chainId])
-
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.address)
 
     applyMaskColorVars(document.body, Appearance.light)
 
@@ -89,14 +73,6 @@ export default function SwapPage() {
                             <Typography variant="h1" className={classes.title}>
                                 {t('plugin_trader_swap')}
                             </Typography>
-                            <WalletStateBarUI
-                                className={classes.walletStateBar}
-                                isPending={pendingTransactions.length > 0}
-                                openConnectWalletDialog={openPopupsWindow}
-                                walletName={wallet?.name}
-                                domain={domain}
-                                walletAddress={wallet?.address}
-                            />
                         </header>
                         <main className={classes.main}>
                             <TargetChainIdContext.Provider>

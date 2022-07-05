@@ -22,7 +22,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
     },
     content: {
-        minHeight: 564,
+        minHeight: 278,
         padding: '38px 16px 120px 16px',
         display: 'flex',
         flexDirection: 'column',
