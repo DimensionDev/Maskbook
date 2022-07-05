@@ -1,11 +1,11 @@
 import { Stack, Card, Typography, Divider } from '@mui/material'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
 import type { accountType } from '../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { ArrowIcon } from '../assets/arrow'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
@@ -103,7 +103,7 @@ export function PlatformCard(props: PlatformCardProps) {
                             {t.NFTs()}
                         </Typography>
                     </div>
-                    <ArrowForwardIosIcon className={classes.arrowIcon} />
+                    <ArrowIcon className={classes.arrowIcon} />
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('Footprints')}>
                     <div>
@@ -122,7 +122,7 @@ export function PlatformCard(props: PlatformCardProps) {
                             {t.footprints()}
                         </Typography>
                     </div>
-                    <ArrowForwardIosIcon className={classes.arrowIcon} />
+                    <ArrowIcon className={classes.arrowIcon} />
                 </div>
                 <div className={classes.flexItem} onClick={() => openImageSetting('Donations')}>
                     <div>
@@ -141,7 +141,7 @@ export function PlatformCard(props: PlatformCardProps) {
                             {t.donations()}
                         </Typography>
                     </div>
-                    <ArrowForwardIosIcon className={classes.arrowIcon} />
+                    <ArrowIcon className={classes.arrowIcon} />
                 </div>
             </Stack>
         </Card>
