@@ -1,4 +1,7 @@
 export * from './ETH'
+export * from './GitHub'
+export * from './YouTube'
+export * from './Medium'
 export * from './Mask'
 export * from './MetaMask'
 export * from './PolkaDot'

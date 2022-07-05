@@ -270,7 +270,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const nfts = await this.searchNftPlatformName(keyword)
 
         const coins = await Promise.all(
-            nfts.map(async (nft) => {
+            nfts.map(async (nft): Promise<TrendingAPI.Coin> => {
                 const symbol = await getContractSymbol(nft.address, chainId)
                 return {
                     id: nft.address,
@@ -279,6 +279,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     type: TrendingCoinType.NonFungible,
                     address: nft.address,
                     contract_address: nft.address,
+                    image_url: nft.image,
                 }
             }),
         )
@@ -349,18 +350,45 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 description: platformInfo.description,
                 image_url: platformInfo.image,
                 home_urls: compact([platformInfo.website]),
-                community_urls: (
-                    [
-                        {
-                            type: 'twitter',
-                            link: platformInfo.twitter && `https://twitter.com/${platformInfo.twitter}`,
-                        },
-                        {
-                            type: 'discord',
-                            link: platformInfo.discord,
-                        },
-                    ] as const
-                ).filter((x) => x.link),
+                community_urls: [
+                    {
+                        type: 'twitter',
+                        link: platformInfo.twitter && `https://twitter.com/${platformInfo.twitter}`,
+                    },
+                    {
+                        type: 'facebook',
+                        // TODO format of facebook url is unknown
+                        link: null,
+                    },
+                    {
+                        type: 'discord',
+                        link: platformInfo.discord,
+                    },
+                    {
+                        type: 'instagram',
+                        link: platformInfo.instagram && `https://www.instagram.com/${platformInfo.instagram}`,
+                    },
+                    {
+                        type: 'medium',
+                        link: platformInfo.medium && `https://medium.com/@${platformInfo.medium}`,
+                    },
+                    {
+                        type: 'reddit',
+                        link: platformInfo.reddit,
+                    },
+                    {
+                        type: 'telegram',
+                        link: platformInfo.reddit,
+                    },
+                    {
+                        type: 'youtube',
+                        link: platformInfo.youtube,
+                    },
+                    {
+                        type: 'github',
+                        link: platformInfo.github,
+                    },
+                ].filter((x) => x.link) as TrendingAPI.CommunityUrls,
             },
             market: {
                 total_supply: platformInfo.total,

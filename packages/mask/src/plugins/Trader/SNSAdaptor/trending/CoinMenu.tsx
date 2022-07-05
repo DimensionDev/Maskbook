@@ -36,6 +36,20 @@ interface TokenMenuListProps {
     onSelect(type: TrendingCoinType, value: CoinMenuOption['value']): void
 }
 
+interface CoinIconProps {
+    type: TrendingCoinType
+    address?: string
+    logoUrl?: string
+    name?: string
+}
+const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name }) => {
+    if (address && type === TrendingCoinType.Fungible)
+        return <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address={address} name={name} />
+    if (type === TrendingCoinType.NonFungible)
+        return <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address="" logoURL={logoUrl} name={name} />
+    return null
+}
+
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect }) => {
     const { classes } = useStyles()
     const theme = useTheme()
@@ -48,11 +62,12 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         selected={selected}
                         key={`${x.coin.type}/${x.value}`}
                         onClick={() => onSelect(x.coin.type, x.value)}>
-                        {x.coin.address ? (
-                            <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address={x.coin.address} />
-                        ) : x.coin.image_url ? (
-                            <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address="" logoURL={x.coin.image_url} />
-                        ) : null}
+                        <CoinIcon
+                            type={x.coin.type}
+                            address={x.coin.address}
+                            name={x.coin.name}
+                            logoUrl={x.coin.image_url}
+                        />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Typography className={classes.symbol}>({x.coin.symbol})</Typography>
                         <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">

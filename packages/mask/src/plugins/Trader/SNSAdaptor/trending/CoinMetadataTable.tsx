@@ -19,6 +19,9 @@ import type { CommunityType } from '../../types'
 import {
     DiscordRoundIcon,
     FacebookRoundIcon,
+    GitHubIcon,
+    InstagramRoundIcon,
+    MediumIcon,
     RedditRoundIcon,
     TelegramRoundIcon,
     TwitterRoundIcon,
@@ -71,11 +74,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
-    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
     discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
+    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
+    github: <GitHubIcon sx={{ fontSize: 16 }} />,
+    instagram: <InstagramRoundIcon sx={{ fontSize: 16 }} />,
+    medium: <MediumIcon sx={{ fontSize: 16 }} />,
     reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
+    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
+    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
+    youtube: null,
     other: null,
 }
 
@@ -89,7 +96,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const contracts = trending.contracts ?? []
 
     const [menu, openMenu] = useMenu(
-        contracts.map((x, i) => (
+        contracts.map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>

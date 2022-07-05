@@ -636,7 +636,17 @@ export namespace TrendingAPI {
         symbol: string
     }
 
-    export type CommunityType = 'twitter' | 'facebook' | 'telegram' | 'reddit' | 'other' | 'discord'
+    export type CommunityType =
+        | 'discord'
+        | 'facebook'
+        | 'instagram'
+        | 'medium'
+        | 'reddit'
+        | 'telegram'
+        | 'github'
+        | 'youtube'
+        | 'twitter'
+        | 'other'
     export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
 
     export interface Coin {

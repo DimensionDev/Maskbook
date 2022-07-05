@@ -53,11 +53,13 @@ export interface NFTPlatformInfo {
     banner: string
     authFlag: false
     /** url */
-    discord: string
-    instagram: string
-    facebook: string
-    reddit: string
-    telegram: string
+    discord?: string
+    instagram?: string
+    medium?: string
+    facebook?: string
+    reddit?: string
+    telegram?: string
+    youtube?: string
     trendingTotal_24h: number
     name: string
     contractCreator: string
