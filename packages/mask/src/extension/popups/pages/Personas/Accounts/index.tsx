@@ -3,13 +3,13 @@ import { useTitle } from '../../../hook/useTitle'
 import { AccountsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useI18N } from '../../../../../utils'
-import { compact } from 'lodash-unified'
-import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { compact, isEqual, unionWith } from 'lodash-unified'
+import { EMPTY_LIST, EnhanceableSite, PopupRoutes, ProfileIdentifier } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import type { Account } from '../type'
 import { useNavigate } from 'react-router-dom'
-import { SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
+import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
 import { getEnumAsArray } from '@dimensiondev/kit'
 
 const Accounts = memo(() => {
@@ -19,25 +19,28 @@ const Accounts = memo(() => {
     const { proofs, currentPersona, setSelectedAccount } = PersonaContext.useContainer()
 
     const accounts = useMemo(() => {
-        if (!currentPersona) return []
-        if (!proofs) return currentPersona.linkedProfiles
+        if (!currentPersona) return EMPTY_LIST
 
-        return currentPersona.linkedProfiles.map((profile) => {
-            const target = proofs.find(
-                (x) =>
-                    profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
-                    profile.identifier.network.replace('.com', '') === x.platform,
-            )
+        const localProfiles = currentPersona.linkedProfiles.map<Account>((profile) => ({
+            ...profile,
+            identity: profile.identifier.userId,
+        }))
 
-            return {
-                ...profile,
-                platform: target?.platform,
-                identity: target?.identity,
-                is_valid: SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(profile.identifier.network as EnhanceableSite)
-                    ? target?.is_valid
-                    : true,
-            }
-        })
+        if (!proofs) return localProfiles
+
+        const remoteProfiles = proofs
+            .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
+            .map<Account>((x) => {
+                return {
+                    ...x,
+                    identifier: ProfileIdentifier.of(
+                        NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform],
+                        x.identity,
+                    ).unwrap(),
+                }
+            })
+
+        return unionWith(localProfiles, remoteProfiles, (a, b) => isEqual(a.identity, b.identity))
     }, [proofs, currentPersona])
 
     const definedSocialNetworks = compact(
