@@ -14,7 +14,7 @@ import {
     isZero,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { Alert, Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { Alert, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { CircleWarningIcon, InfoIcon, RetweetIcon, WarningTriangleIcon } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
@@ -119,7 +119,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         backgroundColor: isDashboard
             ? MaskColorVar.redMain
             : parseColor(theme.palette.maskColor?.danger).setAlpha(0.1).toRgbString(),
-        color: isDashboard ? theme.palette.error.main : theme.palette.maskColor?.danger,
+        color: isDashboard ? theme.palette.common.white : theme.palette.maskColor?.danger,
     },
     action: {
         marginRight: 0,
@@ -165,6 +165,15 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     alertIcon: {
         padding: 0,
+    },
+    dialog: {
+        [`.${dialogTitleClasses.root}`]: {
+            // 'row !important' is not assignable to FlexDirection
+            flexDirection: 'row !important' as 'row',
+            '& > p': {
+                justifyContent: 'center !important',
+            },
+        },
     },
 }))
 
@@ -278,7 +287,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
             else if (!priceUpdated && !cacheTrade.outputAmount.isEqualTo(trade.outputAmount)) {
                 setPriceUpdated(true)
             }
-        }, [open, trade, cacheTrade])
+        }, [open, trade, cacheTrade, priceUpdated])
         // #endregion
 
         if (!cacheTrade) return null
@@ -286,7 +295,11 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
         const { inputAmount, outputAmount } = cacheTrade
 
         return (
-            <InjectedDialog open={open} onClose={onClose} title={t('plugin_trader_confirm_swap')}>
+            <InjectedDialog
+                open={open}
+                onClose={onClose}
+                title={t('plugin_trader_confirm_swap')}
+                className={classes.dialog}>
                 <DialogContent className={classes.content}>
                     <Box className={classes.card}>
                         <Box>

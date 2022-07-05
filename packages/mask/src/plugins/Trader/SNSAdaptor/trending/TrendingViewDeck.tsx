@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
+            ['&:last-child']: {
+                padding: 0,
+            },
         },
         cardHeader: {
             padding: theme.spacing(2),

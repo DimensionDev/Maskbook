@@ -8,9 +8,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            maxWidth: 450,
-            margin: '0 auto',
-            padding: theme.spacing(2.5, 3),
+            padding: theme.spacing(2, 0),
             position: 'relative',
             boxSizing: 'border-box',
         },
@@ -22,6 +20,9 @@ const useStyles = makeStyles()((theme) => {
             bottom: 0,
             left: theme.spacing(3),
             position: 'absolute',
+        },
+        trade: {
+            padding: theme.spacing(0, 2),
         },
     }
 })
@@ -37,7 +38,7 @@ export function TradeView(props: TradeViewProps) {
     return (
         <div className={classes.root}>
             <AllProviderTradeContext.Provider>
-                <Trader {...TraderProps} chainId={chainId} />
+                <Trader {...TraderProps} chainId={chainId} classes={{ root: classes.trade }} settings />
             </AllProviderTradeContext.Provider>
         </div>
     )

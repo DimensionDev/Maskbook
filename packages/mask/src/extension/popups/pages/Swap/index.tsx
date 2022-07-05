@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => {
             padding: '32px 0',
         },
         header: {
-            width: 520,
+            width: 598,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'flex-end',
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.grey['900'],
         },
         main: {
-            width: 520,
+            width: 598,
             overflowY: 'scroll',
             '&::-webkit-scrollbar': {
                 display: 'none',

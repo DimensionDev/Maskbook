@@ -3,7 +3,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { DialogContent, IconButton } from '@mui/material'
+import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
@@ -51,6 +51,15 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         fill: theme.palette.text.primary,
         cursor: 'pointer',
+    },
+    dialog: {
+        [`.${dialogTitleClasses.root}`]: {
+            // 'row !important' is not assignable to FlexDirection
+            flexDirection: 'row !important' as 'row',
+            '& > p': {
+                justifyContent: 'center !important',
+            },
+        },
     },
 }))
 
@@ -126,7 +135,8 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 <GearIcon className={classes.icon} />
                             </IconButton>
                         </div>
-                    }>
+                    }
+                    className={classes.dialog}>
                     <DialogContent className={classes.content}>
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab

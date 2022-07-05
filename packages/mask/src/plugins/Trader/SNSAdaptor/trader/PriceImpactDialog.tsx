@@ -3,7 +3,7 @@ import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { memo, useCallback } from 'react'
 import type { TradeComputed } from '../../types'
 import { useI18N, Translate } from '../../locales'
-import { Button, DialogActions, dialogClasses, DialogContent, Typography } from '@mui/material'
+import { Button, DialogActions, dialogClasses, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { CircleWarningIcon } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -16,6 +16,13 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     dialog: {
         [`.${dialogClasses.paper}`]: {
             width: '420px!important',
+        },
+        [`.${dialogTitleClasses.root}`]: {
+            // 'row !important' is not assignable to FlexDirection
+            flexDirection: 'row !important' as 'row',
+            '& > p': {
+                justifyContent: 'center !important',
+            },
         },
     },
     content: {
@@ -55,6 +62,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             theme.palette.mode === 'dark'
                 ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
                 : ' 0px 0px 20px rgba(0, 0, 0, 0.05)',
+        '& > *': {
+            margin: '0px !important',
+        },
     },
 }))
 

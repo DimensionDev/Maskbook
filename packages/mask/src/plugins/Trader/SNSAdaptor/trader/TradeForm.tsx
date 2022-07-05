@@ -1,8 +1,8 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -11,14 +11,16 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
+    formatPercentage,
 } from '@masknet/web3-shared-base'
+import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { SelectTokenChip } from '@masknet/shared'
-import { ChevronUpIcon, DropIcon } from '@masknet/icons'
+import { SelectTokenChip, useSelectAdvancedSettings } from '@masknet/shared'
+import { ChevronUpIcon, DropIcon, RefreshIcon } from '@masknet/icons'
 import classnames from 'classnames'
-import { isNativeTokenWrapper } from '../../helpers'
+import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
@@ -32,6 +34,8 @@ import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { currentSlippageSettings } from '../../settings'
+import { PluginTraderMessages } from '../../messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -99,6 +103,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         icon: {
             marginLeft: theme.spacing(0.5),
+            width: 20,
+            height: 20,
+            fontSize: 20,
         },
         section: {
             width: '100%',
@@ -201,8 +208,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
 
 const MIN_GAS_LIMIT = 150000
 
-export interface AllTradeFormProps {
-    account?: string | null
+export interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType>
     outputToken?: FungibleToken<ChainId, SchemaType>
@@ -216,11 +222,11 @@ export interface AllTradeFormProps {
     onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
     onSwitch: () => void
+    settings?: boolean
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
-        account,
         trades,
         inputAmount,
         inputToken,
@@ -233,15 +239,17 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwap,
         gasPrice,
         onSwitch,
+        settings,
+        ...props
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
         const userSelected = useRef(false)
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
         const { t } = useI18N()
-        const { classes } = useStyles({ isDashboard, isPopup })
+        const classes = useStylesExtends(useStyles({ isDashboard, isPopup }), props)
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-        const { isSwapping } = AllProviderTradeContext.useContainer()
+        const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
         // #region approve token
@@ -393,6 +401,24 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [inputToken, outputToken])
         // #endregion
 
+        // #region gas settings
+        const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+        const openSwapSettingDialog = useCallback(async () => {
+            const { slippageTolerance, transaction } = await selectAdvancedSettings()
+
+            if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
+
+            PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                open: false,
+                gasConfig: {
+                    gasPrice: transaction?.gasPrice as string | undefined,
+                    maxFeePerGas: transaction?.maxFeePerGas as string | undefined,
+                    maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
+                },
+            })
+        }, [selectAdvancedSettings])
+        // #endregion
+
         return (
             <>
                 <Box className={classes.root}>
@@ -444,26 +470,28 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                             />
 
-                            {trades.filter((item) => !!item.value).length >= 1 ? (
-                                <>
-                                    <Box marginTop="12px">
-                                        {firstTraderInfo}
-                                        <Collapse in={isExpand}>
-                                            {trades.slice(1).map((trade) => (
-                                                <TraderInfo
-                                                    key={trade.provider}
-                                                    trade={trade}
-                                                    onClick={() => {
-                                                        if (!userSelected.current) userSelected.current = true
-                                                        onFocusedTradeChange(trade)
-                                                        setExpand(false)
-                                                    }}
-                                                    isFocus={trade.provider === focusedTrade?.provider}
-                                                    gasPrice={gasPrice}
-                                                />
-                                            ))}
-                                        </Collapse>
-                                    </Box>
+                            <Box marginTop="12px">
+                                {trades.filter((item) => !!item.value).length > 0 ? (
+                                    firstTraderInfo
+                                ) : (
+                                    <DefaultTraderPlaceholder />
+                                )}
+                                <Collapse in={isExpand}>
+                                    {trades.slice(1).map((trade) => (
+                                        <TraderInfo
+                                            key={trade.provider}
+                                            trade={trade}
+                                            onClick={() => {
+                                                if (!userSelected.current) userSelected.current = true
+                                                onFocusedTradeChange(trade)
+                                                setExpand(false)
+                                            }}
+                                            isFocus={trade.provider === focusedTrade?.provider}
+                                            gasPrice={gasPrice}
+                                        />
+                                    ))}
+                                </Collapse>
+                                {trades.filter((x) => !!x.value).length > 1 ? (
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
                                         <ChevronUpIcon
                                             className={classnames(
@@ -473,15 +501,36 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             onClick={() => setExpand(!isExpand)}
                                         />
                                     </Box>
-                                </>
-                            ) : (
-                                <Box mt={1.5}>
-                                    <DefaultTraderPlaceholder />
-                                </Box>
-                            )}
+                                ) : null}
+                            </Box>
                         </Box>
                     </Box>
                 </Box>
+                {settings ? (
+                    <Box className={classes.section}>
+                        <Box className={classes.controller}>
+                            <Box className={classes.section}>
+                                <div className={classes.status}>
+                                    <Typography className={classes.label} color="textSecondary" variant="body2">
+                                        {t('plugin_trader_slippage_tolerance')}{' '}
+                                    </Typography>
+                                    <Typography className={classes.slippageValue}>
+                                        {formatPercentage(toBips(currentSlippageSettings.value))}
+                                    </Typography>
+                                    <IconButton
+                                        className={classes.icon}
+                                        size="small"
+                                        onClick={() => allTradeComputed.forEach((x) => x.retry())}>
+                                        <RefreshIcon />
+                                    </IconButton>
+                                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                                        <TuneIcon fontSize="small" />
+                                    </IconButton>
+                                </div>
+                            </Box>
+                        </Box>
+                    </Box>
+                ) : null}
                 <Box className={classes.stateBar}>
                     <PluginWalletStatusBar>
                         <ChainBoundary

@@ -2,7 +2,6 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useM
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -13,7 +12,7 @@ import {
     UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
+import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -30,16 +29,13 @@ import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { TradeForm } from './TradeForm'
 import { PriceImpactDialog } from './PriceImpactDialog'
 
-const useStyles = makeStyles()(() => {
-    return {}
-})
-
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     defaultInputCoin?: Coin
     defaultOutputCoin?: Coin
     tokenDetailed?: FungibleToken<ChainId, SchemaType>
     chainId?: ChainId
+    settings?: boolean
 }
 
 export interface TraderRef {
@@ -47,15 +43,12 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
-    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
+    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
@@ -364,7 +357,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     return (
         <>
             <TradeForm
-                account={account}
+                settings={settings}
+                classes={props.classes}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
