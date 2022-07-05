@@ -94,7 +94,7 @@ export function RedPacket(props: RedPacketProps) {
             hash = await refundCallback()
         }
         revalidateAvailability()
-        if (typeof hash !== 'string') return
+        if (typeof hash !== 'string' || canRefund) return
         openShareTxDialog({
             hash,
             onShare() {
