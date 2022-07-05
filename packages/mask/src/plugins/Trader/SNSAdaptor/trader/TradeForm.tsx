@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, parseColor, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
@@ -162,7 +162,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary
+                    isDashboard
+                        ? theme.palette.primary.main
+                        : parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {

@@ -1,4 +1,4 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
@@ -42,6 +42,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         marginLeft: 8,
         height: 20,
         backgroundColor: !isDashboard ? theme.palette.maskColor?.primary : undefined,
+        '&:hover': {
+            backgroundColor: !isDashboard
+                ? parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
+                : undefined,
+        },
     },
     chipLabel: {
         fontSize: 12,
@@ -107,7 +112,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         borderRadius: '18px !important',
         backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary} !important`,
         ['&:hover']: {
-            backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary}!important`,
+            backgroundColor: `${
+                isDashboard
+                    ? theme.palette.primary.main
+                    : parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
+            }!important`,
         },
         [`& .${chipClasses.label}`]: {
             color: theme.palette.common.white,
