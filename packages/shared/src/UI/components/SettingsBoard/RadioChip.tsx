@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             flex: 1,
+            fontSize: 16,
             '& span': {
                 display: 'none',
             },

@@ -1,5 +1,10 @@
-import type { FC } from 'react'
-import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { FC, useMemo } from 'react'
+import {
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useDoubleBlockBeatRetry,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { useSharedI18N } from '@masknet/shared'
 import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -72,22 +77,28 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     const chainId_ = useChainId(pluginID_, chainId)
     const { classes } = useStyles({ compact })
 
+    const initialState = useMemo(
+        () => ({
+            pluginID: pluginID_,
+            chainId: chainId_,
+            transaction,
+        }),
+        [pluginID_, chainId_, transaction],
+    )
+
+    if (!open) return null
+
     return (
         <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
+            titleBarIconStyle={isDashboard ? 'close' : 'back'}
             onClose={() => {
                 onSubmit?.(null)
                 onClose?.()
             }}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
-                <SettingsContext.Provider
-                    initialState={{
-                        pluginID: pluginID_,
-                        chainId: chainId_,
-                        transaction,
-                    }}>
+                <SettingsContext.Provider initialState={initialState}>
                     <SettingsBoard
                         disableGasPrice={disableGasPrice}
                         disableSlippageTolerance={disableSlippageTolerance}

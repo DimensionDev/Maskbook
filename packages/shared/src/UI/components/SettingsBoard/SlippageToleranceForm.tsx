@@ -26,6 +26,9 @@ const useStyles = makeStyles()((theme) => {
                 fontWeight: 700,
             },
             '& input[type=number]': {
+                fontSize: 16,
+                fontWeight: 700,
+                padding: 0,
                 textAlign: 'center',
                 '-moz-appearance': 'textfield',
             },

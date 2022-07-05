@@ -25,15 +25,18 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             color: theme.palette.text.primary,
             margin: theme.spacing(0, 0.5, 0, 1),
+            fontSize: 16,
         },
         estimate: {
             flex: 1,
             color: theme.palette.text.secondary,
             fontWeight: 400,
+            fontSize: 16,
         },
         amount: {
             fontWeight: 700,
             color: theme.palette.text.primary,
+            fontSize: 16,
         },
     }
 })
