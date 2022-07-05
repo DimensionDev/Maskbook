@@ -129,6 +129,7 @@ export const DarkColor: typeof LightColor = {
 
     secondaryInfoText: '#AFC3E1',
     normalText: 'rgba(255, 255, 255, 0.8)',
+    normalTextLight: 'rgba(255, 255, 255, 0.8)',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     success: '#60DFAB',
