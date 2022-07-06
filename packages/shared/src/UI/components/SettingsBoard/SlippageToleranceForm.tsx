@@ -56,7 +56,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
     const { classes } = useStyles()
 
     const schema = useSlippageToleranceSchema()
-    const [tolerance, setTolerance] = useState(1)
+    const [tolerance, setTolerance] = useState(0.5)
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
