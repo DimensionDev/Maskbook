@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Link, List, ListItem } from '@mui/material'
+import { List, ListItem } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
@@ -64,7 +64,7 @@ export function DonationPage({ donations = [], loading, addressLabel }: Donation
         <List className={classes.list}>
             {donations.map((donation) => (
                 <ListItem key={donation.id} className={classes.listItem}>
-                    <Link
+                    {/* <Link
                         className={classes.link}
                         href={getDonationLink(addressLabel, donation)}
                         target="_blank"
@@ -76,7 +76,14 @@ export function DonationPage({ donations = [], loading, addressLabel }: Donation
                             contribCount={donation.info.total_contribs || 0}
                             contribDetails={donation.info.token_contribs || []}
                         />
-                    </Link>
+                    </Link> */}
+                    <DonationCard
+                        className={classes.donationCard}
+                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                        name={donation.info.title || t.inactive_project()}
+                        contribCount={donation.info.total_contribs || 0}
+                        contribDetails={donation.info.token_contribs || []}
+                    />
                 </ListItem>
             ))}
         </List>

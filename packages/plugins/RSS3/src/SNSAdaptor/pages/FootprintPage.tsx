@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { Link } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
@@ -46,22 +45,32 @@ export function FootprintPage({ footprints = [], address, loading, addressLabel 
     return (
         <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
             {footprints.map((footprint) => (
-                <Link
-                    className={classes.link}
-                    href={getFootprintLink(addressLabel, footprint)}
+                // <Link
+                //     className={classes.link}
+                //     href={getFootprintLink(addressLabel, footprint)}
+                //     key={footprint.id}
+                //     target="_blank"
+                //     rel="noopener noreferrer">
+                //     <FootprintCard
+                //         imageUrl={footprint.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                //         startDate={footprint.info.start_date}
+                //         endDate={footprint.info.end_date}
+                //         city={footprint.info.country}
+                //         country={footprint.info.city}
+                //         username={username ?? ''}
+                //         activity={footprint.info.title || ''}
+                //     />
+                // </Link>
+                <FootprintCard
                     key={footprint.id}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <FootprintCard
-                        imageUrl={footprint.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                        startDate={footprint.info.start_date}
-                        endDate={footprint.info.end_date}
-                        city={footprint.info.country}
-                        country={footprint.info.city}
-                        username={username ?? ''}
-                        activity={footprint.info.title || ''}
-                    />
-                </Link>
+                    imageUrl={footprint.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                    startDate={footprint.info.start_date}
+                    endDate={footprint.info.end_date}
+                    city={footprint.info.country}
+                    country={footprint.info.city}
+                    username={username ?? ''}
+                    activity={footprint.info.title || ''}
+                />
             ))}
         </section>
     )
