@@ -116,7 +116,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         this.connection.reject(error || new Error('User rejected'))
     }
 
-    private async login(chainId?: ChainId) {
+    private async login(expectedChainId?: ChainId) {
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
 
@@ -128,22 +128,22 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         }
 
         if (this.connector.connected) {
-            const { chainId, accounts } = this.connector
+            const { chainId: actualChainId, accounts } = this.connector
             const account = first(accounts)
-            if (chainId !== 0 && account && isValidAddress(account)) {
+            if (actualChainId !== 0 && actualChainId === expectedChainId && account && isValidAddress(account)) {
                 this.connection.resolve({
-                    chainId,
+                    chainId: actualChainId,
                     account,
                 })
             } else {
                 await this.connector.killSession()
                 await this.connector.createSession({
-                    chainId,
+                    chainId: expectedChainId,
                 })
             }
         } else {
             await this.connector.createSession({
-                chainId,
+                chainId: expectedChainId,
             })
         }
 
