@@ -25,6 +25,7 @@ import {
     RedditRoundIcon,
     TelegramRoundIcon,
     TwitterRoundIcon,
+    YouTubeIcon,
 } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
@@ -82,7 +83,7 @@ const brands: Record<CommunityType, React.ReactNode> = {
     reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
     telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
     twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    youtube: null,
+    youtube: <YouTubeIcon sx={{ fontSize: 16 }} />,
     other: null,
 }
 

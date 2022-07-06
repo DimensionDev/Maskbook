@@ -108,6 +108,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
+    keyword: string
     stats: Stat[]
     coins: Coin[]
     currency: Currency
@@ -121,6 +122,7 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
+        keyword,
         coins,
         trending,
         dataProvider,
@@ -175,10 +177,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
             const coin = coins.find((x) => x.id === value && x.type === type)
             if (!coin) return
-            settings[coin.symbol.toLowerCase()] = value
+            settings[keyword] = value
             getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
         },
-        [dataProvider, coins, currentPreferredCoinIdSettings],
+        [dataProvider, keyword, coins, currentPreferredCoinIdSettings],
     )
     // #endregion
 

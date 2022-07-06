@@ -287,6 +287,7 @@ export function TraderView(props: TraderViewProps) {
                 content: classes.content,
                 cardHeader: classes.cardHeader,
             }}
+            keyword={name}
             stats={stats}
             coins={coins}
             currency={currency}
