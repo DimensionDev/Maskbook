@@ -150,7 +150,7 @@ export function useLineChart(
                         .attr('x', 0)
                         .attr('y', (d, i) => `${i * 1.2}em`)
                         .style('font-weight', (_, i) => (i ? null : 'bold'))
-                        .attr('fill', '#ffffff')
+                        .attr('fill', theme.palette.maskColor.bottom)
                         .text((d) => d),
                 )
 

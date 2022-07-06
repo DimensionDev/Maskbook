@@ -14,19 +14,17 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
         },
         sourceNote: {
-            color: theme.palette.text.secondary,
+            color: theme.palette.maskColor.secondaryDark,
             fontSize: 14,
             fontWeight: 700,
         },
         sourceMenu: {
-            color: theme.palette.text.secondary,
             fontSize: 14,
             fontWeight: 'bolder',
         },
         sourceName: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.text.primary,
         },
     }
 })

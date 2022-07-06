@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
@@ -133,6 +133,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
 
     const { t } = useI18N()
+    const theme = useTheme()
     const classes = useStylesExtends(useStyles(), props)
 
     // #region buy
@@ -258,7 +259,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </Stack>
                     <Stack>
                         {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button startIcon={<BuyIcon />} variant="contained" onClick={onBuyButtonClicked}>
+                            <Button
+                                style={{
+                                    background: theme.palette.maskColor.dark,
+                                    color: theme.palette.maskColor.white,
+                                }}
+                                startIcon={<BuyIcon />}
+                                variant="contained"
+                                onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
                             </Button>
                         ) : null}

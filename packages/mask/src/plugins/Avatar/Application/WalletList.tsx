@@ -92,14 +92,12 @@ export function WalletItem(props: WalletItemProps) {
             }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <>
-                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
-                    </>
+                    <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
-            <WalletUI name={walletName} address={wallet} verify={verify} isETH={isETH} />
+            <WalletUI chainId={chainId} name={walletName} address={wallet} verify={verify} isETH={isETH} />
             {haveChangeWallet && (
                 <Button size="small" className={classes.change} onClick={onConnectWallet}>
                     {t.change()}
