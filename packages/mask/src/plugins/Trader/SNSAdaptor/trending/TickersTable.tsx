@@ -77,10 +77,10 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
         const volume = isNFT ? ticker.volume_24h : ticker.volume
         const formatter = isNFT ? coinFormatter : formatCurrency
         const marketplaceOrExchange = (
-            <TableCell className={classes.cell} colSpan={1}>
+            <>
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
                 <Typography component="span">{ticker.market_name}</Typography>
-            </TableCell>
+            </>
         )
         const cellMap: Record<Cells, ReactNode> = {
             marketplace: marketplaceOrExchange,

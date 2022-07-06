@@ -292,12 +292,6 @@ export enum NonFungibleAssetProvider {
     ZORA = 'Zora',
 }
 
-export enum NonFungibleMarketplace {
-    OpenSea = 'OpenSea',
-    LooksRare = 'LooksRare',
-    X2Y2 = 'X2Y2',
-}
-
 /**
  * @deprecated
  */

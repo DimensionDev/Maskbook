@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { FC, PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import { groupBy, toPairs } from 'lodash-unified'
 import type { Coin } from '../../types'
 
@@ -77,7 +77,6 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                             logoUrl={x.coin.image_url}
                         />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
-                        <Typography className={classes.symbol}>({x.coin.symbol})</Typography>
                         <Stack
                             direction="row"
                             flexGrow={1}
@@ -110,10 +109,13 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
 }
 
 export interface CoinMenuProps {
+    open: boolean
+    anchorEl: HTMLElement | null
     options: CoinMenuOption[]
     type?: TrendingCoinType
     value?: CoinMenuOption['value']
     onChange?: (type: TrendingCoinType, value: CoinMenuOption['value']) => void
+    onClose?: () => void
 }
 
 const menuGroupNameMap: Record<TrendingCoinType, string> = {
@@ -121,17 +123,22 @@ const menuGroupNameMap: Record<TrendingCoinType, string> = {
     [TrendingCoinType.NonFungible]: 'NFT',
 }
 
-export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({ options, type, value, children, onChange }) => {
+export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
+    open,
+    options,
+    anchorEl,
+    type,
+    value,
+    onChange,
+    onClose,
+}) => {
     const { classes } = useStyles()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const onOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
-    const onClose = useCallback(() => setAnchorEl(null), [])
     const onSelect = useCallback(
         (type: TrendingCoinType, value: CoinMenuOption['value']) => {
             onChange?.(type, value)
-            onClose()
+            onClose?.()
         },
-        [onChange],
+        [onChange, onClose],
     )
 
     const menuItems = useMemo(() => {
@@ -152,15 +159,12 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({ options, type, 
     }, [type, value, onSelect])
 
     return (
-        <>
-            <div onClick={onOpen}>{children}</div>
-            <ShadowRootMenu
-                open={!!anchorEl}
-                onClose={onClose}
-                anchorEl={anchorEl}
-                PaperProps={{ style: { maxHeight: 600, maxWidth: 400 } }}>
-                {menuItems}
-            </ShadowRootMenu>
-        </>
+        <ShadowRootMenu
+            open={open}
+            onClose={onClose}
+            anchorEl={anchorEl}
+            PaperProps={{ style: { maxHeight: 600, maxWidth: 400 } }}>
+            {menuItems}
+        </ShadowRootMenu>
     )
 }

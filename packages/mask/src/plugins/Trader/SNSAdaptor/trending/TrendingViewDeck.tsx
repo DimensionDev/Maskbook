@@ -13,7 +13,7 @@ import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useT
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { useCallback } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { PluginTransakMessages } from '../../../Transak/messages'
@@ -182,6 +182,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         [dataProvider, keyword, coins, currentPreferredCoinIdSettings],
     )
     // #endregion
+    const titleRef = useRef<HTMLElement>(null)
+    const [coinMenuOpen, setCoinMenuOpen] = useState(false)
 
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -205,7 +207,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             <Box flex={1} />
                         </Stack>
                         <Stack>
-                            <Stack flexDirection="row" alignItems="center" gap={0.5}>
+                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
                                 <Linking href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         {trending.coin.contract_address ? (
@@ -227,18 +229,26 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </Typography>
                                 </Typography>
                                 {coins.length > 1 ? (
-                                    <CoinMenu
-                                        options={coins.map((coin) => ({
-                                            coin,
-                                            value: coin.id,
-                                        }))}
-                                        value={coins.find((x) => x.id === coin.id)?.id}
-                                        type={coin.type}
-                                        onChange={onCoinMenuChange}>
-                                        <IconButton sx={{ padding: 0 }} size="small">
+                                    <>
+                                        <IconButton
+                                            sx={{ padding: 0 }}
+                                            size="small"
+                                            onClick={() => setCoinMenuOpen((v) => !v)}>
                                             <ArrowDropIcon />
                                         </IconButton>
-                                    </CoinMenu>
+                                        <CoinMenu
+                                            open={coinMenuOpen}
+                                            anchorEl={titleRef.current}
+                                            options={coins.map((coin) => ({
+                                                coin,
+                                                value: coin.id,
+                                            }))}
+                                            value={coins.find((x) => x.id === coin.id)?.id}
+                                            type={coin.type}
+                                            onChange={onCoinMenuChange}
+                                            onClose={() => setCoinMenuOpen(false)}
+                                        />
+                                    </>
                                 ) : null}
                             </Stack>
                             <Stack direction="row" justifyContent="space-between">
