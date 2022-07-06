@@ -146,7 +146,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
-        (coin?.chainId as unknown as ChainId) ?? ChainId.Mainnet,
+        coin?.chainId ?? ChainId.Mainnet,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )
