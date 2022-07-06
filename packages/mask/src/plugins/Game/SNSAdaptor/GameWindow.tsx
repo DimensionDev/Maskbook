@@ -9,6 +9,7 @@ import { useChainId, useAccount } from '@masknet/plugin-infra/web3'
 import type { GameInfo, GameNFT } from '../types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -145,7 +146,7 @@ const GameWindow = (props: Props) => {
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
-                    {profile?.identifier.network === 'twitter.com' ? (
+                    {profile?.identifier.network === EnhanceableSite.Twitter ? (
                         <img src={IconShare} onClick={props.onShare} alt="fullscreen" />
                     ) : null}
                 </div>

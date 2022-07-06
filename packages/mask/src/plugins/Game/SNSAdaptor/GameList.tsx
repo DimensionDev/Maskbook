@@ -125,7 +125,7 @@ const GameList = (props: Props) => {
                 <Typography className={classes.title}>{t('plugin_game_list_title')}</Typography>
                 <ul className={classes.gameList}>
                     {gameList
-                        ? gameList.map((game: any, index: number) => (
+                        ? gameList.map((game, index: number) => (
                               <li className={classes.gameBar} key={game.id}>
                                   <img className={classes.logo} src={game.image} alt="" />
                                   <div className={classes.info}>
