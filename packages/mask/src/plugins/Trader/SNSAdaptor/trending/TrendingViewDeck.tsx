@@ -12,7 +12,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
+import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
+            '&:last-child': {
+                padding: 0,
+            },
         },
         cardHeader: {
             padding: theme.spacing(2),

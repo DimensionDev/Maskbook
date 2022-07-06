@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.common.white,
         borderRadius: 4,
         padding: 10,
+        maxWidth: 260,
     },
 }))
 

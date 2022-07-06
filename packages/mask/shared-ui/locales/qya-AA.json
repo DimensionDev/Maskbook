@@ -415,8 +415,6 @@
     "plugin_trader_error_insufficient_lp": "crwdns4919:0crwdne4919:0",
     "plugin_trade_error_input_amount_less_minimum_amount": "crwdns4923:0crwdne4923:0",
     "plugin_trader_slippage_tolerance": "crwdns7917:0crwdne7917:0",
-    "plugin_trader_swap_from": "crwdns10441:0crwdne10441:0",
-    "plugin_trader_swap_to": "crwdns10443:0crwdne10443:0",
     "plugin_trader_gas_fee": "crwdns10445:0crwdne10445:0",
     "plugin_trader_unlock_symbol": "crwdns10447:0{{symbol}}crwdne10447:0",
     "plugin_trader_unlock_tips": "crwdns10449:0{{provider}}crwdnd10449:0{{symbol}}crwdne10449:0",
