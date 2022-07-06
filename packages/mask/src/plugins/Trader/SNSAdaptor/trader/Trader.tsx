@@ -365,18 +365,16 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 onSwitch={onSwitchToken}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
-                <>
-                    <ConfirmDialog
-                        open={openConfirmDialog}
-                        trade={focusedTrade.value}
-                        gas={focusedTrade.gas.value}
-                        gasPrice={gasPrice}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                        onConfirm={onConfirm}
-                        onClose={onConfirmDialogClose}
-                    />
-                </>
+                <ConfirmDialog
+                    open={openConfirmDialog}
+                    trade={focusedTrade.value}
+                    gas={focusedTrade.gas.value}
+                    gasPrice={gasPrice}
+                    inputToken={inputToken}
+                    outputToken={outputToken}
+                    onConfirm={onConfirm}
+                    onClose={onConfirmDialogClose}
+                />
             ) : null}
         </>
     )
