@@ -293,7 +293,12 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
-        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+        retry()
+        nextIDConnectStatus.reset()
+        return MaskMessages.events.currentPersonaIdentifier.on(() => {
+            retry()
+            nextIDConnectStatus.reset()
+        })
     }, [])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
