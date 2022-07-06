@@ -132,10 +132,6 @@ function RightMenu(props: Props) {
         }
     }, [props.isShow, props.onClose, props.dragPosition.x, props.dragPosition.y])
 
-    useEffect(() => {
-        props.onClose()
-    }, [props.dragPosition.x, props.dragPosition.y])
-
     function onClickMenu(type: MenuType) {
         switch (type) {
             case MenuType.Setting:

@@ -17,7 +17,7 @@ export interface GameInfo {
     name: string
     image: string
     description: string
-    twitterId: string
+    snsId: string
     url: string
     wallet: boolean
     rank: number

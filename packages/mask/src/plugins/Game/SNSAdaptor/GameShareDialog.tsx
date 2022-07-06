@@ -33,7 +33,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.twitterId} on my Twitter profile. Install the Mask Network Extension mask.io and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
+    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.snsId} on my Twitter profile. Install the Mask Network Extension mask.io and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
 
     const onShareClick = useCallback(() => {
         activatedSocialNetworkUI.utils.share?.(shareText)

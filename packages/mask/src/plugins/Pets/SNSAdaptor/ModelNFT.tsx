@@ -59,6 +59,7 @@ export function ModelNFT(props: ModelNFTProps) {
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
+        setMenuShow(false)
     }
 
     const [isMenuShow, setMenuShow] = useState(false)

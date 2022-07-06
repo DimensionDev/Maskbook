@@ -145,7 +145,9 @@ const GameWindow = (props: Props) => {
                 <div className={classNames(classes.control, { [classes.fullControl]: isFullScreen })}>
                     <img src={IconClose} onClick={handleClose} alt="close" />
                     <img src={IconFull} onClick={toggleFullscreen} alt="fullscreen" />
-                    <img src={IconShare} onClick={props.onShare} alt="fullscreen" />
+                    {profile?.identifier.network === 'twitter.com' ? (
+                        <img src={IconShare} onClick={props.onShare} alt="fullscreen" />
+                    ) : null}
                 </div>
             </div>
         </div>

@@ -12,7 +12,15 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: '' }, link: 'https://github.com/etouyang/' },
     enableRequirement: {
         architecture: { app: false, web: true },
-        networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
+        networks: {
+            type: 'opt-in',
+            networks: {
+                [CurrentSNSNetwork.Twitter]: true,
+                [CurrentSNSNetwork.Facebook]: true,
+                [CurrentSNSNetwork.Instagram]: true,
+                [CurrentSNSNetwork.Minds]: true,
+            },
+        },
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet],
