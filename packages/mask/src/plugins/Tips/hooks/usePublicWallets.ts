@@ -1,15 +1,16 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { MaskMessages } from '../../../utils'
-import type { AddressConfig } from '../types'
+import type { TipAccount } from '../types'
 import { useKvGet } from './useKv'
 
-export function usePublicWallets(personaPubkey: string | undefined): AddressConfig[] {
-    const [{ value: nextIdWallets }, queryWallets] = useAsyncFn(async (): Promise<AddressConfig[]> => {
+export function usePublicWallets(personaPubkey: string | undefined): TipAccount[] {
+    const [{ value: nextIdWallets }, queryWallets] = useAsyncFn(async (): Promise<TipAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
         const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
@@ -23,7 +24,7 @@ export function usePublicWallets(personaPubkey: string | undefined): AddressConf
     useAsync(queryWallets, [queryWallets])
 
     const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(personaPubkey)
-    const walletsFromCloud = useMemo((): AddressConfig[] | null => {
+    const walletsFromCloud = useMemo((): TipAccount[] | null => {
         if (!kv?.ok) return null
         const { proofs } = kv.val
         if (!proofs.length) return null
@@ -38,7 +39,7 @@ export function usePublicWallets(personaPubkey: string | undefined): AddressConf
             .filter((x) => {
                 if (nextIdWallets) {
                     // Sometimes, the wallet might get deleted from next.id
-                    return x.isPublic && nextIdWallets.find((y) => y.address === x.identity)
+                    return x.isPublic && nextIdWallets.find((y) => isSameAddress(y.address, x.identity))
                 } else {
                     return x.isPublic
                 }

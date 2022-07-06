@@ -17,11 +17,11 @@ import { useProfilePublicKey } from '../hooks/useProfilePublicKey'
 import { usePublicWallets } from '../hooks/usePublicWallets'
 import { useI18N } from '../locales'
 import { PluginNextIDMessages } from '../messages'
-import type { AddressConfig } from '../types'
+import type { TipAccount } from '../types'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: AddressConfig[]
-    recipient?: AddressConfig['address']
+    addresses?: TipAccount[]
+    recipient?: TipAccount['address']
     receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
