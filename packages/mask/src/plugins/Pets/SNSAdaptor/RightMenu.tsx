@@ -173,16 +173,16 @@ function RightMenu(props: Props) {
                 transform: `translate(${isLeft ? '-100%' : 0}, ${isTop ? '-100%' : 0})`,
             }}>
             <div onClick={() => onClickMenu(MenuType.Setting)}>
-                <Typography>{t('plugin_pets_dialog_menu_change')}</Typography>
+                <Typography>{t('plugin_game_dialog_menu_change')}</Typography>
             </div>
             {visitor.userId === whoAmI?.identifier?.userId ? (
                 <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <Typography>{t('plugin_pets_dialog_menu_ski')}</Typography>
+                    <Typography>{t('plugin_game_dialog_menu_ski')}</Typography>
                 </div>
             ) : null}
 
             <div onClick={() => onClickMenu(MenuType.About)}>
-                <Typography>{t('plugin_pets_dialog_menu_about')}</Typography>
+                <Typography>{t('plugin_game_dialog_menu_about')}</Typography>
             </div>
         </div>
     )

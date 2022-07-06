@@ -256,7 +256,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                             {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                             <Typography>
-                                {blacklist.includes(option.contract) ? t('plugin_pets_dialog_unverified') : ''}
+                                {blacklist.includes(option.contract) ? t('plugin_game_dialog_unverified') : ''}
                             </Typography>
                         </Box>
                     </MenuItem>
