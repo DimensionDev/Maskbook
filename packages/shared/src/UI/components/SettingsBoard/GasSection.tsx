@@ -122,12 +122,8 @@ export function GasSection(props: GasSectionProps) {
                 ) : gasOptions ? (
                     <GasForm
                         chainId={chainId as ChainId}
-                        transaction={
-                            {
-                                ...transaction,
-                                ...transactionOptions,
-                            } as Transaction
-                        }
+                        transaction={transaction as Transaction}
+                        transactionOptions={transactionOptions as Partial<Transaction>}
                         gasOptions={gasOptions}
                         onChange={(transactionOptions) => {
                             setTransactionOptions(transactionOptions ?? null)

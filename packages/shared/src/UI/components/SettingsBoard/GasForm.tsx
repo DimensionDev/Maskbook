@@ -41,12 +41,13 @@ const useStyles = makeStyles()((theme) => {
 export interface GasFormProps {
     chainId: ChainId
     transaction: Transaction
+    transactionOptions: Partial<Transaction>
     gasOptions: Record<GasOptionType, GasOption>
     onChange?: (transactionOptions?: Partial<Transaction>) => void
 }
 
 export function GasForm(props: GasFormProps) {
-    const { chainId, transaction, gasOptions, onChange } = props
+    const { chainId, transaction, transactionOptions, gasOptions, onChange } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -55,21 +56,25 @@ export function GasForm(props: GasFormProps) {
     const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)
+    const transactionComputed: Transaction = {
+        ...transaction,
+        ...transactionOptions,
+    }
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            gasLimit: (transaction.gas as string | undefined) ?? '21000',
-            gasPrice: transaction.gasPrice
-                ? formatWeiToGwei(transaction.gasPrice as string).toString()
+            gasLimit: (transactionComputed.gas as string | undefined)?.toString() ?? '21000',
+            gasPrice: transactionComputed.gasPrice
+                ? formatWeiToGwei(transactionComputed.gasPrice as string).toString()
                 : gasOptions.normal.suggestedMaxFeePerGas,
-            maxPriorityFeePerGas: transaction.maxPriorityFeePerGas
-                ? formatWeiToGwei(transaction.maxPriorityFeePerGas as string).toString()
+            maxPriorityFeePerGas: transactionComputed.maxPriorityFeePerGas
+                ? formatWeiToGwei(transactionComputed.maxPriorityFeePerGas as string).toString()
                 : gasOptions.normal.suggestedMaxPriorityFeePerGas,
-            maxFeePerGas: transaction.maxFeePerGas
-                ? formatWeiToGwei(transaction.maxFeePerGas as string).toString()
+            maxFeePerGas: transactionComputed.maxFeePerGas
+                ? formatWeiToGwei(transactionComputed.maxFeePerGas as string).toString()
                 : gasOptions.normal.suggestedMaxFeePerGas,
         },
     })

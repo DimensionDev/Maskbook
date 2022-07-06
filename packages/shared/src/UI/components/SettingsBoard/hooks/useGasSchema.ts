@@ -26,8 +26,9 @@ export function useGasSchema(chainId: ChainId, transaction: Transaction, gasOpti
                     .string()
                     .min(1, t.gas_settings_error_gas_limit_absence())
                     .refine(
-                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, transaction.gas as string),
-                        t.gas_settings_error_min_gas_limit_tips(),
+                        (gasLimit) =>
+                            isGreaterThanOrEqualTo(gasLimit, (transaction.gas as string | undefined) ?? 21000),
+                        t.gas_settings_error_gas_limit_too_low(),
                     ),
                 gasPrice: zod
                     .string()
