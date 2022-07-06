@@ -57,6 +57,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
@@ -177,7 +178,12 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         alignItems="center"
                                         gap={1.5}>
                                         {trending.coin.community_urls.map((x) => (
-                                            <Linking key={x.link} href={x.link} LinkProps={{ className: classes.link }}>
+                                            <Linking
+                                                key={x.link}
+                                                href={x.link}
+                                                LinkProps={{
+                                                    className: classes.link,
+                                                }}>
                                                 {brands[x.type]}
                                                 {upperFirst(x.type)}
                                             </Linking>

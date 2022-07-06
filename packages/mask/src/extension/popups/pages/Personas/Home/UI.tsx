@@ -71,7 +71,6 @@ const useStyles = makeStyles()({
         fontWeight: 700,
         fontSize: 14,
         width: '100%',
-
         '& > svg': {
             marginLeft: 4,
             fontSize: 18,
@@ -143,7 +142,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             <Link className={classes.item} to={PopupRoutes.SocialAccounts}>
                                 <Typography>{t('popups_social_account')}</Typography>
                                 <Typography className={classes.content}>
-                                    {accountsCount}
+                                    {!fetchProofsLoading ? accountsCount : '...'}
                                     <ArrowRightIosIcon className={classes.arrow} />
                                 </Typography>
                             </Link>
