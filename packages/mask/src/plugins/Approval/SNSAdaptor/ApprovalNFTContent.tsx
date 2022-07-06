@@ -57,6 +57,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
         nft.spender.id,
         false,
         () => setCancelled(true),
+        chainId,
     )
 
     const { value: contractDetailed } = useNonFungibleTokenContract(

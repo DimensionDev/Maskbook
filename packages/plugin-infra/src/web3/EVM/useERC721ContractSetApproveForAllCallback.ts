@@ -1,6 +1,6 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { TransactionEventType } from '@masknet/web3-shared-evm'
+import { TransactionEventType, ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { useChainId } from '../../entry-web3'
 import { useAccount } from '../useAccount'
@@ -16,9 +16,10 @@ export function useERC721ContractSetApproveForAllCallback(
     operator: string | undefined,
     approved: boolean,
     callback?: () => void,
+    _chainId?: ChainId,
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
     const erc721TokenContract = useERC721TokenContract(chainId, contractAddress)
 
     return useAsyncFn(async () => {

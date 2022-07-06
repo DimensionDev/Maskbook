@@ -197,7 +197,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
-            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
             position: 'sticky',
             bottom: 0,
         },
