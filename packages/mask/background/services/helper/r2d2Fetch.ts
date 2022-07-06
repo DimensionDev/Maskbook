@@ -70,9 +70,9 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
             const alchemyType = alchemyMatchers.find((x) => u.origin === x[0])?.[1]
 
             return globalThis.fetch(
-                `https://${r2deWorkerType}.${r2d2URL}/${alchemyType}/v2/APIKEY/${u.pathname.replace('/v2/', '')}${
-                    u.search
-                }`,
+                `https://${r2deWorkerType}.${r2d2URL}/${alchemyType}${
+                    alchemyType === AlchemyProxies.eth ? '/nft' : ''
+                }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
                 init,
             )
         }
