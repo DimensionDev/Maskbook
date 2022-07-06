@@ -17,8 +17,15 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 'bold',
         padding: theme.spacing(0, 2),
     },
+    menuItem: {
+        overflow: 'hidden',
+    },
     divider: {
         margin: theme.spacing(1, 0),
+    },
+    name: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     symbol: {
         marginLeft: theme.spacing(0.5),
@@ -59,6 +66,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                 const selected = value === x.value && type === x.coin.type
                 return (
                     <MenuItem
+                        className={classes.menuItem}
                         selected={selected}
                         key={`${x.coin.type}/${x.value}`}
                         onClick={() => onSelect(x.coin.type, x.value)}>
@@ -70,9 +78,20 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Typography className={classes.symbol}>({x.coin.symbol})</Typography>
-                        <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
-                            <Typography fontSize={14} fontWeight={700} flexGrow={1}>
-                                <span>{x.coin.name}</span>
+                        <Stack
+                            direction="row"
+                            flexGrow={1}
+                            justifyContent="space-around"
+                            gap={1}
+                            alignItems="center"
+                            overflow="hidden">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={700}
+                                flexGrow={1}
+                                overflow="hidden"
+                                textOverflow="ellipsis">
+                                <span className={classes.name}>{x.coin.name}</span>
                                 <span className={classes.symbol}>({x.coin.symbol})</span>
                             </Typography>
                             {selected ? (
@@ -135,7 +154,11 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({ options, type, 
     return (
         <>
             <div onClick={onOpen}>{children}</div>
-            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
+            <ShadowRootMenu
+                open={!!anchorEl}
+                onClose={onClose}
+                anchorEl={anchorEl}
+                PaperProps={{ style: { maxHeight: 600, maxWidth: 400 } }}>
                 {menuItems}
             </ShadowRootMenu>
         </>
