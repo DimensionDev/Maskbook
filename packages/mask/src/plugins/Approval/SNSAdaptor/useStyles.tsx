@@ -155,7 +155,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             borderRadius: 999,
             width: 18,
             height: 18,
-            marginRight: 4,
+            marginRight: '4px !important',
         },
         spenderLogoIcon: {
             width: 16,

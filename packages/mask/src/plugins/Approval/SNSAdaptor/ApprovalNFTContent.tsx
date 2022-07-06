@@ -1,6 +1,7 @@
-import { ListItem, List, Typography, Avatar, Link } from '@mui/material'
+import { ListItem, List, Typography, Link } from '@mui/material'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
+import { TokenIcon } from '@masknet/shared'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
@@ -74,7 +75,14 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
-                        <Avatar className={classes.logoIcon} src={contractDetailed?.iconURL} />
+                        <TokenIcon
+                            address={nft.contract_id}
+                            name={nft.contract_name}
+                            logoURL={contractDetailed?.iconURL}
+                            classes={{ icon: classes.logoIcon }}
+                            isERC721
+                        />
+
                         {contractDetailed ? (
                             <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
                         ) : null}

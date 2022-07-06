@@ -22,11 +22,12 @@ export interface TokenIconProps extends withClasses<'icon'> {
     address: string
     name?: string
     logoURL?: string
+    isERC721?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes } = props
+    const { address, logoURL, name, AvatarProps, classes, isERC721 } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -41,7 +42,7 @@ export function TokenIcon(props: TokenIconProps) {
     const { urls = EMPTY_LIST, key } = value ?? {}
     const base64 = useImageBase64(key, first(urls))
 
-    return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
+    return <TokenIconUI logoURL={isERC721 ? logoURL : base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {
@@ -56,8 +57,9 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
     // add background color to no-img token icon
     const defaultBackgroundColorNumber = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
     const defaultBackgroundColor = defaultBackgroundColorNumber
-        ? NO_IMAGE_COLOR?.[defaultBackgroundColorNumber % 5]
+        ? NO_IMAGE_COLOR[defaultBackgroundColorNumber % 5]
         : undefined
+
     const classes = useStylesExtends(useStyles(), props)
 
     return (
