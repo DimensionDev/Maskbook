@@ -1,6 +1,7 @@
 import { NewLinkOutIcon, PluginIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import type { NextIDPlatform } from '@masknet/shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import { NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
@@ -29,10 +30,9 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
     },
     title: {
-        fontWeight: 700,
-        fontSize: '16px',
-        color: '#07101B',
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     longBar: {
         width: '103px',
@@ -90,6 +90,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         marginRight: 8,
     },
+    web3Icon: {
+        marginRight: 6,
+        marginTop: 2,
+    },
 }))
 
 interface NextIdPageProps {
@@ -103,6 +107,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
+    const chainId = useChainId()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -148,6 +153,13 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         await Services.Settings.setPluginMinimalModeEnabled(PluginId.Web3Profile, false)
     }
 
+    const handleAddWallets = () => {
+        Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+            chainId,
+            internal: true,
+        })
+    }
+
     const getButton = () => {
         if (isWeb3ProfileDisable) {
             return (
@@ -178,9 +190,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Button
                 style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
                 variant="contained"
-                onClick={() => toggleBindDialog(true)}>
+                onClick={handleAddWallets}>
                 <WalletUnderTabsIcon className={classes.walletIcon} />
-                {t.verify_wallet_button()}
+                {t.add_wallet_button()}
             </Button>
         )
     }
@@ -219,10 +231,10 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Box className={classes.container}>
                 <Box className={classes.header}>
                     <div className={classes.title}>
-                        <div style={{ marginRight: '6px' }}>
-                            <Web3ProfileIcon />
-                        </div>
-                        {t.web3_profile()}
+                        <Web3ProfileIcon className={classes.web3Icon} />
+                        <Typography fontSize={16} fontWeight={700}>
+                            {t.web3_profile()}
+                        </Typography>
                     </div>
                     <div style={{ display: 'flex' }}>
                         <Typography sx={{ color: '#536471', fontSize: '14', fontWeight: 400 }}>Provided by</Typography>
