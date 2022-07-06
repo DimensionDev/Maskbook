@@ -31,11 +31,16 @@ import type {
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
-    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
+    if (
+        !getEnumAsArray(ChainId)
+            .map((x) => x.value)
+            .includes(chainId)
+    )
+        return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-
     const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
     if (response.ok) {
         return (await response.json()) as T
@@ -298,6 +303,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
+        console.log(response, 'response')
         if (!response) return
         return createNFTAsset(chainId, response)
     }
