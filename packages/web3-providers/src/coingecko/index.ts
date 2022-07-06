@@ -102,6 +102,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
                 telegram_url,
                 contract_address:
                     resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
+                    info.contract_address ??
                     info.platforms[
                         Object.keys(info.platforms).find(
                             (x) => resolveChainId(x, DataProvider.COIN_GECKO) === chainId,
