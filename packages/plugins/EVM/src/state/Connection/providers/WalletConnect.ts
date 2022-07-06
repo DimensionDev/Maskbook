@@ -136,7 +136,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
                     account,
                 })
             } else {
-                await this.connector.killSession()
+                await this.logoutClientSide()
                 await this.connector.createSession({
                     chainId: expectedChainId,
                 })
@@ -153,7 +153,27 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
     }
 
     private async logout() {
-        await this.connector.killSession()
+        await this.logoutClientSide(true)
+    }
+
+    private async logoutClientSide(force = false) {
+        try {
+            await this.connector.killSession()
+        } catch {
+            window.localStorage.removeItem('walletconnect')
+
+            // force to clean client state
+            if (force) {
+                this.onDisconnect(new Error('disconnect'), {
+                    event: 'disconnect',
+                    params: [
+                        {
+                            message: 'disconnect',
+                        },
+                    ],
+                })
+            }
+        }
     }
 
     override request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
