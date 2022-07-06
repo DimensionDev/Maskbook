@@ -3,13 +3,13 @@ import { makeStyles, parseColor } from '@masknet/theme'
 export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
         dialogRoot: {
-            background: theme.palette.background.paper,
             width: 600,
             height: 620,
             overflowX: 'hidden',
         },
         dialogContent: {
             width: 600,
+            background: theme.palette.maskColor.bottom,
             padding: '12px 0px 0px',
             margin: 'auto',
             overflowX: 'hidden',
@@ -197,6 +197,10 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
+            boxShadow:
+                theme.palette.mode === 'dark'
+                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
             position: 'sticky',
             bottom: 0,
         },

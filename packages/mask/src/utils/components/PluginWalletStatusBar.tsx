@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     description: {
-        marginLeft: 4,
+        marginLeft: 11,
     },
     walletName: {
         display: 'flex',
