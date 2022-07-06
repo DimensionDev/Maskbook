@@ -2,12 +2,12 @@ import { IdentityResolved, PluginId } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { proof } from '../types'
+import type { proof, COLLECTION_TYPE } from '../types'
 
 export const useCollectionFilter = (
     hiddenInfo: proof[],
     collections: Array<Web3Helper.NonFungibleTokenScope<void, NetworkPluginID>>,
-    type: 'Donations' | 'Footprints' | 'NFTs',
+    type: COLLECTION_TYPE,
     currentVisitingProfile?: IdentityResolved,
     address?: string,
 ) => {

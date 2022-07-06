@@ -1,7 +1,7 @@
 import { NewLinkOutIcon, PluginIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
@@ -20,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
     tip: {
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
-        // backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
         color: theme.palette.text.primary,
@@ -93,6 +92,17 @@ const useStyles = makeStyles()((theme) => ({
     web3Icon: {
         marginRight: 6,
         marginTop: 2,
+    },
+    item1: {
+        color: theme.palette.maskColor.second,
+        fontSize: '14',
+        fontWeight: 400,
+    },
+    item2: {
+        color: theme.palette.maskColor.main,
+        fontSize: '14',
+        fontWeight: 500,
+        marginLeft: '2px',
     },
 }))
 
@@ -237,10 +247,8 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                         </Typography>
                     </div>
                     <div style={{ display: 'flex' }}>
-                        <Typography sx={{ color: '#536471', fontSize: '14', fontWeight: 400 }}>Provided by</Typography>
-                        <Typography sx={{ color: '#07101B', fontSize: '14', fontWeight: 500, marginLeft: '2px' }}>
-                            {t.mask_network()}
-                        </Typography>
+                        <Typography className={classes.item1}>Provided by</Typography>
+                        <Typography className={classes.item2}>{t.mask_network()}</Typography>
                         <Link
                             underline="none"
                             target="_blank"
@@ -268,7 +276,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
-                    bounds={bindings?.proofs ?? []}
+                    bounds={bindings?.proofs ?? EMPTY_LIST}
                     onBound={retryQueryBinding}
                 />
             )}

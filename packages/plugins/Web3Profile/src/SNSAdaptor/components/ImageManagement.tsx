@@ -72,7 +72,6 @@ export interface ImageManagementProps {
     accountId?: string
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
-    getBindingsRetry: () => void
 }
 const getAddressesByTitle = (title: string, accountList: accountType) => {
     if (title === 'Donations') return accountList?.walletList?.donations
@@ -93,7 +92,6 @@ export function ImageManagement(props: ImageManagementProps) {
         currentVisitingProfile,
         accountList,
         getWalletHiddenRetry,
-        getBindingsRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)

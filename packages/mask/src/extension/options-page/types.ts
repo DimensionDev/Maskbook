@@ -1,5 +1,10 @@
 import type { NextIDPlatform } from '@masknet/shared-base'
 
+export enum COLLECTION_TYPE {
+    NFTs = 'NFTs',
+    Donations = 'Donations',
+    Footprints = 'Footprints',
+}
 export interface patch {
     unListedCollections: Record<
         string,

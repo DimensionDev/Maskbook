@@ -5,13 +5,7 @@ import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useAllPersona, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
-import {
-    CrossIsolationMessages,
-    NextIDPersonaBindings,
-    NextIDPlatform,
-    PersonaInformation,
-    PopupRoutes,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
@@ -64,7 +58,6 @@ export function Web3ProfileDialog() {
     const [title, setTitle] = useState('Web3 Profile')
     const [imageManageOpen, setImageManageOpen] = useState(false)
     const [accountId, setAccountId] = useState<string>()
-    const [flashFlag, toggleFlash] = useState(false)
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -73,8 +66,6 @@ export function Web3ProfileDialog() {
         })
     }, [])
 
-    const [bindings, setBindings] = useState<NextIDPersonaBindings>()
-
     const persona = useCurrentPersona()
     const currentVisitingProfile = useLastRecognizedProfile()
     const allPersona = useAllPersona()
@@ -82,28 +73,19 @@ export function Web3ProfileDialog() {
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )
 
-    useEffect(() => {
+    const {
+        value: bindings,
+        loading,
+        retry: retryQueryBinding,
+    } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        ;(async () => {
-            const res = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
-            setBindings(res)
-        })()
-    }, [currentPersona, flashFlag])
-
-    // const {
-    //     value: bindings,
-    //     loading,
-    //     retry: retryQueryBinding,
-    // } = useAsyncRetry(async () => {
-    //     if (!currentPersona) return
-    //     return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
-    // }, [currentPersona])
+        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
+    }, [currentPersona])
     useEffect(() => {
         return context?.MaskMessages.events.ownProofChanged.on(() => {
-            console.log('listened')
-            toggleFlash((pre) => !pre)
+            retryQueryBinding()
         })
-    }, [])
+    }, [retryQueryBinding])
 
     const wallets =
         bindings?.proofs
@@ -199,7 +181,6 @@ export function Web3ProfileDialog() {
                     currentVisitingProfile={currentVisitingProfile}
                     allWallets={wallets}
                     getWalletHiddenRetry={retryGetWalletHiddenList}
-                    getBindingsRetry={() => toggleFlash((pre) => !pre)}
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>

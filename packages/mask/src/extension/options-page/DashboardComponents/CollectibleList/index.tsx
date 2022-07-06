@@ -24,6 +24,7 @@ import { useAsyncRetry } from 'react-use'
 import { getKV } from '../../hooks/useKV'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
 import type { kvType } from '../../types'
+import { COLLECTION_TYPE } from '../../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const CollectibleContext = createContext<{
@@ -263,12 +264,10 @@ export function CollectionList({
     const unHiddenCollectibles = useCollectionFilter(
         (kvValue as kvType)?.proofs,
         collectibles,
-        'NFTs',
+        COLLECTION_TYPE.NFTs,
         visitingProfile,
         account?.toLowerCase(),
     )
-
-    console.log({ persona, kvValue, unHiddenCollectibles })
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),

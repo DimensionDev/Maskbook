@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useUpdateEffect, useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
 import {
     createInjectHooksRenderer,
@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -55,9 +55,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
     const [addressList, setAddressList] = useState<Array<SocialAddress<NetworkPluginID>>>([])
-    const [profileOpen, setProfileOpen] = useState(false)
-    const [personaProof, setPersonaProof] = useState<NextIDPersonaBindings>()
-    const [flashFlag, toggleFlash] = useState<number>()
+    // const [personaProof, setPersonaProof] = useState<NextIDPersonaBindings>()
+    // const [flashFlag, toggleFlash] = useState<number>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -67,7 +66,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         useSocialAddressListAll(identity)
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined,
-        identity.identifier?.userId,
+        identity.identifier?.userId?.toLowerCase(),
     )
 
     const currentPersonaBinding = first(
@@ -80,22 +79,24 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
         : currentPersonaBinding?.persona
 
-    useEffect(() => {
-        console.log('hook', personaPublicKey)
+    const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
-        ;(async () => {
-            const res = await NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-            console.log('new bindings', res)
-            setPersonaProof(res)
-        })()
-    }, [personaPublicKey, flashFlag])
+        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
+    }, [personaPublicKey])
+
+    // useEffect(() => {
+    //     if (!personaPublicKey) return
+    //     ;(async () => {
+    //         const res = await NextIDProof.queryExistedBindingByPersona(personaPublicKey)
+    //         setPersonaProof(res)
+    //     })()
+    // }, [personaPublicKey, flashFlag])
 
     useEffect(() => {
         MaskMessages.events.ownProofChanged.on(() => {
-            console.log('profile listened')
-            toggleFlash(Math.random())
+            retryProof()
         })
-    }, [])
+    }, [retryProof])
 
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
     useEffect(() => {
@@ -156,7 +157,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     console.log({
         componentTabId,
-        flashFlag,
+        currentIdentity,
         addressList,
         currentConnectedPersona,
         personaList,
@@ -184,7 +185,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             />
         )
     }, [
-        profileOpen,
         componentTabId,
         displayPlugins.map((x) => x.ID).join(),
         personaList.join(),
