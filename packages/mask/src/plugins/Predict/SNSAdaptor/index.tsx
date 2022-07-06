@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { useState } from 'react'
 import { base } from '../base'
-import { ApplicationEntry } from '@masknet/shared'
 import { Trans } from 'react-i18next'
 import { AzuroIcon } from '../Azuro/icons/AzuroIcon'
+import { ApplicationEntry } from '@masknet/shared'
 import { PredictDialog } from './PredictDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -14,6 +14,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <AzuroIcon />
             const name = <Trans i18nKey="plugin_predict" />
             return {
+                ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     return (
@@ -29,9 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         </>
                     )
                 },
-                ApplicationEntryID: base.ID,
                 appBoardSortingDefaultPriority: 14,
-                marketListSortingPriority: 20,
                 icon,
                 name,
             }

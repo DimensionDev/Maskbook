@@ -14,14 +14,14 @@ const useStyles = makeStyles()((theme) => ({
         border: `solid 1px ${theme.palette.divider}`,
         padding: 0,
     },
-    contentEmpty: {
-        padding: theme.spacing(2),
-    },
     container: {
         height: 295,
         overflowY: 'scroll',
         '& > div': {
             marginBottom: theme.spacing(1.5),
+        },
+        '& > div:last-child': {
+            marginBottom: theme.spacing(0),
         },
     },
     filters: { marginBottom: theme.spacing(1.5) },

@@ -17,6 +17,7 @@ import { Sport } from '../types'
 import { DEFAULT_LABEL } from '../../constants'
 import { useI18N } from '../../locales'
 import { useI18N as useBaseI18N } from '../../../../utils'
+import { RefreshIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -54,13 +55,9 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         width: 100,
     },
-    retryButton: {
-        position: 'absolute',
-        left: '50%',
-        bottom: '1%',
-        transform: 'translateX(-50%)',
-        borderRadius: '5px',
-        width: 100,
+    refreshButton: {
+        borderRadius: '15px',
+        border: `solid 1px ${theme.palette.divider}`,
     },
 }))
 
@@ -175,20 +172,18 @@ export function EventsView(): JSX.Element {
                     <InputLabel id="sort">{t.plugin_sort()}</InputLabel>
                     {sortSelect}
                 </FormControl>
+                <Button
+                    className={classes.refreshButton}
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => retry()}>
+                    <RefreshIcon />
+                </Button>
             </Grid>
             <div>
                 <Events games={value?.gamesFiltered} retry={retry} loading={loading} />
             </div>
-            {value?.games && value.games.length > 0 ? (
-                <Button
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    className={classes.retryButton}
-                    onClick={() => retry()}>
-                    {tr('refresh')}
-                </Button>
-            ) : null}
         </div>
     )
 }

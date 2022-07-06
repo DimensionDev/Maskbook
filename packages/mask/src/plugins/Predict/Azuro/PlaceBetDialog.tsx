@@ -126,6 +126,8 @@ export function PlaceBetDialog() {
         })
     }, [placeBetCallback, openShareTxDialog])
 
+    if (!open) return null
+
     return (
         <Card className={classes.root}>
             <CardContent className={classes.content}>

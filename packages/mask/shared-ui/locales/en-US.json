@@ -1082,5 +1082,6 @@
     "popups_wallet_unsupported_network": "Unsupported network type",
     "plugin_default_title": "Default",
     "plugin_provider_by": "Provided by",
-    "plugin_enables": "Enable plugins"
+    "plugin_enables": "Enable plugins",
+    "plugin_predict": "Predict"
 }
