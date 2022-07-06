@@ -135,7 +135,8 @@
     "web3-utils": "1.7.4",
     "webextension-polyfill": "^0.9.0",
     "z-schema": "^5.0.3",
-    "zod": "3.16.0"
+    "zod": "3.16.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
@@ -157,5 +158,10 @@
   },
   "peerDependencies": {
     "tss-react": "*"
-  }
+  },
+  "scripts": {
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true
 }
