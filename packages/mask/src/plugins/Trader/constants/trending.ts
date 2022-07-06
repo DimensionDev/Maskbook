@@ -4,9 +4,6 @@ import { PluginId } from '@masknet/plugin-infra'
 export const PLUGIN_ID = PluginId.Trader
 // #endregion
 
-// #region apis
-export const COIN_GECKO_BASE_URL = 'https://api.coingecko.com/api/v3'
-
 // proxy: https://web-api.coinmarketcap.com/v1
 export const CMC_V1_BASE_URL = 'https://coinmarketcap-agent.r2d2.to/v1'
 

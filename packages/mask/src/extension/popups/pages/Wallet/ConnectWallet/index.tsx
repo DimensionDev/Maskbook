@@ -13,6 +13,7 @@ import {
     useWeb3State,
     useWeb3UI,
     Web3Helper,
+    useWallets,
 } from '@masknet/plugin-infra/web3'
 import { useTitle } from '../../../hook/useTitle'
 import { useI18N } from '../../../../../utils'
@@ -64,6 +65,7 @@ const ConnectWalletPage = memo(() => {
     const navigate = useNavigate()
 
     const { setSigned } = PopupContext.useContainer()
+    const wallets = useWallets()
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
     // connect to ethereum mainnet
     const network = getRegisteredWeb3Networks().find(
@@ -86,6 +88,9 @@ const ConnectWalletPage = memo(() => {
                     navigate(urlcat(PopupRoutes.Unlock, { from: PopupRoutes.SelectWallet, goBack: true, popup: true }))
                     return
                 }
+
+                if (!wallets.length) navigate(PopupRoutes.Wallet, { replace: true })
+
                 navigate(
                     urlcat(PopupRoutes.SelectWallet, {
                         popup: true,
@@ -108,7 +113,7 @@ const ConnectWalletPage = memo(() => {
                 },
             })
         },
-        [isLocked, getLockStatusLoading],
+        [isLocked, getLockStatusLoading, wallets.length],
     )
     useTitle(t('plugin_wallet_on_connect'))
 

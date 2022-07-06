@@ -42,19 +42,19 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 
         const allSettled = await Promise.allSettled([
             fetchJSON<AlchemyResponse_EVM_Metadata>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata`, {
+                urlcat(`${chainInfo?.baseURL}/getNFTMetadata`, {
                     contractAddress: address,
                     tokenId,
                     tokenType: 'ERC721',
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Contact_Metadata>(
-                urlcat(`${chainInfo?.contractMetadataURL}${chainInfo?.API_KEY}/getContractMetadata`, {
+                urlcat(`${chainInfo?.contractMetadataURL}/getContractMetadata`, {
                     contractAddress: address,
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Owners>(
-                urlcat(`${chainInfo?.tokenOwnerURL}${chainInfo?.API_KEY}/getOwnersForToken`, {
+                urlcat(`${chainInfo?.tokenOwnerURL}/getOwnersForToken`, {
                     contractAddress: address,
                     tokenId,
                 }),
@@ -78,7 +78,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
@@ -107,7 +107,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const metaDataResponse = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: ownerAddress,
                 contractName,
                 contractAddress: address,
@@ -122,7 +122,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
     getAssets = async (from: string, { chainId, indicator }: HubOptions<ChainId_FLOW> = {}) => {
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
         const res = await fetchJSON<AlchemyResponse_FLOW>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),

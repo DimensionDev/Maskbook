@@ -20,7 +20,7 @@ export function useClaimAll(swapperAddress: string, chainId: ChainId) {
         const results = await chain.getClaimAllPools(chainId, blockNumber, swapperAddress, connection)
         allPoolsRef.current = results
         return allPoolsRef.current
-    }, [swapperAddress, chainId])
+    }, [swapperAddress, chainId, connection])
 
     return {
         ...asyncResult,

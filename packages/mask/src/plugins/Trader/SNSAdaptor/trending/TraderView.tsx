@@ -63,13 +63,9 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
             : {
                   border: 'none',
               },
-        tradeViewRoot: props.isPopper
-            ? {
-                  maxWidth: 380,
-              }
-            : {
-                  maxWidth: '100% !important',
-              },
+        tradeViewRoot: {
+            maxWidth: '100% !important',
+        },
         priceChartRoot: props.isPopper
             ? {
                   flex: 1,

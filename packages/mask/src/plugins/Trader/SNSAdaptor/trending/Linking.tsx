@@ -12,7 +12,12 @@ export function Linking(props: LinkingProps) {
     try {
         const { hostname } = new URL(href ?? '')
         return (
-            <Link color="primary" target="_blank" rel="noopener noreferrer" href={props.href} {...LinkProps}>
+            <Link
+                color={(theme) => theme.palette.maskColor.main}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={props.href}
+                {...LinkProps}>
                 {children ? (
                     children
                 ) : (
