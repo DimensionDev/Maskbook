@@ -2,11 +2,11 @@ import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import { FormattedCurrency, Linking, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import type { TrendingAPI, TrendingCoinType } from '@masknet/web3-providers'
+import { TrendingAPI, TrendingCoinType } from '@masknet/web3-providers'
 import { ethFormatter, formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
@@ -24,7 +24,6 @@ import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { CoinMenu } from './CoinMenu'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { Linking } from './Linking'
 import { PluginHeader } from './PluginHeader'
 import { PriceChanged } from './PriceChanged'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
@@ -163,7 +162,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, trending?.coin?.symbol])
     // #endregion
 
-    const isNFT = dataProvider === DataProvider.NFTSCAN
+    const isNFT = coin.type === TrendingCoinType.NonFungible
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         setStorage(option.value as DataProvider)

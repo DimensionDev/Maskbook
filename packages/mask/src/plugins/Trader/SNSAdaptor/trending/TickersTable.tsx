@@ -77,7 +77,7 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
         const marketplaceOrExchange = (
             <TableCell className={classes.cell} colSpan={1}>
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
-                <span>{ticker.market_name}</span>
+                <Typography component="span">{ticker.market_name}</Typography>
             </TableCell>
         )
         const cellMap: Record<Cells, ReactNode> = {
@@ -95,9 +95,11 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={ticker.trade_url}>
-                        <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
+                        <Typography component="span" title={formatted !== ticker.base_name ? ticker.base_name : ''}>
+                            {formatted}
+                        </Typography>
                         <span>/</span>
-                        <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
+                        <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
                     </Link>
                 )
             })(),

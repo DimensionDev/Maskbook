@@ -12,7 +12,6 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
-import { Linking } from './Linking'
 import { useI18N, useMenu } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
@@ -30,6 +29,7 @@ import {
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { Linking } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

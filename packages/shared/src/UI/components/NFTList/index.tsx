@@ -1,8 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
+import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio, Stack, Typography } from '@mui/material'
+import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -190,13 +190,9 @@ export const NFTList: FC<Props> = ({
                                 [classes.selected]: selected,
                                 [classes.inactive]: inactive,
                             })}>
-                            <Link
-                                className={classes.link}
-                                target={link ? '_blank' : 'self'}
-                                rel="noreferrer noopener"
-                                href={link}>
+                            <Linking LinkProps={{ className: classes.link }} href={link}>
                                 <NFTItem token={token} />
-                            </Link>
+                            </Linking>
                             {selectable ? (
                                 <SelectComponent
                                     size="small"
