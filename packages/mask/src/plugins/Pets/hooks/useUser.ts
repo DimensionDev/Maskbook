@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAsync, useLocation } from 'react-use'
+import { useAsync } from 'react-use'
 import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginPetRPC } from '../messages'
@@ -19,20 +19,23 @@ export function useUser() {
 
 export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const location = useLocation()
     const identity = useCurrentVisitingIdentity()
     useAsync(async () => {
-        let address = ''
+        const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
+            ? identity.identifier?.userId ?? ''
+            : ''
         try {
-            const response = await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')
-            if (response) address = response as string
-        } finally {
-            let userId = ''
-            if (identity.identifier?.userId && location.href?.endsWith(identity.identifier?.userId)) {
-                userId = identity.identifier?.userId
-            }
-            setUser({ userId, address })
+            const address = (await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')) ?? ''
+            setUser({
+                userId,
+                address,
+            })
+        } catch {
+            setUser({
+                userId,
+                address: '',
+            })
         }
-    }, [identity, flag, location])
+    }, [identity, flag, location.href])
     return user
 }

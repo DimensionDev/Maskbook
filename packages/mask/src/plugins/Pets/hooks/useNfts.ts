@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveIPFSLink, ChainId } from '@masknet/web3-shared-evm'
-import type { User, FilterContract, NonFungibleContract, OwnerERC721TokenInfo } from '../types'
+import type { User, NonFungibleContract, OwnerERC721TokenInfo } from '../types'
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useNFTs(user: User | undefined) {
-    const [nfts, setNfts] = useState<FilterContract[]>([])
     const { value: assets = EMPTY_LIST, loading: state } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-    useEffect(() => {
+    return useMemo(() => {
         const tempNFTs: Record<string, NonFungibleContract> = {}
         if (assets?.length) {
             for (const NFT of assets) {
@@ -30,9 +29,7 @@ export function useNFTs(user: User | undefined) {
                 }
             }
         }
-        const result = Object.values(tempNFTs).map((v) => ({ ...v, tokens: Object.values(v.tokens) }))
-        setNfts(result)
-        return () => {}
+        const nfts = Object.values(tempNFTs).map((v) => ({ ...v, tokens: Object.values(v.tokens) }))
+        return { nfts, state }
     }, [JSON.stringify(user), JSON.stringify(assets), state])
-    return { nfts, state }
 }
