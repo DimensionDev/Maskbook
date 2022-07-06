@@ -40,12 +40,28 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
     return (
         <RiskCardUI
             icon={DefineMapping[info.level].icon(14)}
-            title={t[info.titleKey]({ quantity: '', rate: info.i18nParams?.(tokenSecurity).rate ?? '', type: '' })}
+            title={t[info.titleKey]({
+                quantity: '',
+                rate: info.i18nParams?.(tokenSecurity).rate ?? '',
+                type: '',
+                seconds: '',
+                amount: '',
+                fee: '',
+                percentage: '',
+                symbol: '',
+                limit: '',
+            })}
             titleColor={DefineMapping[info.level].titleColor}
             description={t[info.messageKey]({
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
+                seconds: '',
+                amount: '',
+                fee: '',
+                percentage: '',
+                symbol: '',
+                limit: '',
             })}
         />
     )
