@@ -71,12 +71,16 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
     },
     assetPlayerIframe: {
-        height: 100,
-        width: 100,
+        height: 96,
+        width: 96,
+    },
+    wrapper: {
+        height: '96px !important',
+        width: '96px !important',
     },
     imgWrapper: {
-        height: '100px !important',
-        width: '100px !important',
+        height: '96px !important',
+        width: '96px !important',
         img: {
             height: '100%',
             width: '100%',
@@ -103,6 +107,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
             classes={{
                 loadingFailImage: classes.loadingFailImage,
                 iframe: classes.assetPlayerIframe,
+                wrapper: classes.wrapper,
                 imgWrapper: classes.imgWrapper,
             }}
         />

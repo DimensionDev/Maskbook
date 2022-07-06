@@ -26,7 +26,7 @@ const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
-            padding: theme.spacing(2),
+            padding: theme.spacing(2, 2, 0),
         },
         receiverRow: {
             display: 'flex',
