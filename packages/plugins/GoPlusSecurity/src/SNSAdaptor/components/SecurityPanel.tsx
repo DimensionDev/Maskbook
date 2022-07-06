@@ -12,7 +12,7 @@ import { getMessageList, TokenIcon } from '@masknet/shared'
 import type { TokenAPI } from '@masknet/web3-providers'
 import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -115,7 +115,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         <Typography className={classes.tokenName}>
                             {tokenSecurity?.token_name || t.unnamed()}
                         </Typography>
-                        <Typography className={classes.tokenPrice}> {price ? `$${price} USD` : '--'}</Typography>
+                        <Typography className={classes.tokenPrice}> {price ? formatCurrency(price) : '--'}</Typography>
                     </Stack>
                 </Stack>
                 <Stack>

@@ -33,7 +33,7 @@ export interface Coin {
     is_mirrored?: boolean
     platform_url?: string
     tags?: string[]
-    chainId?: string
+    chainId?: ChainId
     tech_docs_urls?: string[]
     message_board_urls?: string[]
     source_code_urls?: string[]

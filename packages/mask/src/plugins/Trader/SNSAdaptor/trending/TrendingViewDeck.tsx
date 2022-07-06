@@ -262,7 +262,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         }
                                     />
                                 </Stack>
-                                {/* <TrendingTokenSecurity /> */}
                                 {isTokenSecurityEnable && tokenSecurityInfo && !error && (
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
                                 )}

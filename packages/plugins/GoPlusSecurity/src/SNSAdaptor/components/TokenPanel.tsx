@@ -128,7 +128,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />{' '}
+                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
                             </Link>
                         )}
                     </Stack>
