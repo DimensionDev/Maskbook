@@ -133,7 +133,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
                 { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
                 t,
             )
-            await createProfileDB(profileRecord, t)
+            await createOrUpdateProfileDB(profileRecord, t)
             await attachProfileDB(
                 profileRecord.identifier,
                 item.linkedPersona!,
