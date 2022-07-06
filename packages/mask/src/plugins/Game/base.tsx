@@ -2,14 +2,15 @@ import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { GamePluginID } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: GamePluginID,
     name: { fallback: 'Game' },
     description: {
-        fallback: 'Game description',
+        fallback: 'Play game with your NFT.',
     },
-    publisher: { name: { fallback: '' }, link: 'https://github.com/etouyang/' },
+    publisher: { name: { fallback: '' }, link: 'https://github.com/HelloWeb3Team' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: {
@@ -28,4 +29,5 @@ export const base: Plugin.Shared.Definition = {
         },
         target: 'stable',
     },
+    i18n: languages,
 }

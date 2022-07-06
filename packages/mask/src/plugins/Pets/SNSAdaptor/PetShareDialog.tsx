@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { Share_Twitter_TXT } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,7 +27,7 @@ interface PetSetDialogProps {
 }
 
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
     const onShareClick = useCallback(() => {
@@ -37,9 +37,9 @@ export function PetShareDialog({ onClose }: PetSetDialogProps) {
 
     return (
         <Box className={classes.root}>
-            <Typography className={classes.shareNotice}>{t('plugin_pets_dialog_success')}</Typography>
+            <Typography className={classes.shareNotice}>{t.pets_dialog_success()}</Typography>
             <Button onClick={onShareClick} size="large" className={classes.shareButton}>
-                {t('plugin_pets_dialog_btn_share')}
+                {t.pets_dialog_btn_share()}
             </Button>
         </Box>
     )

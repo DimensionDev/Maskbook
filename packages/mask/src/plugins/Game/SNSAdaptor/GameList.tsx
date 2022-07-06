@@ -4,7 +4,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
+import { PluginWalletStatusBar } from '../../../utils'
+import { useI18N } from '../locales'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useGameList } from '../hook'
 import type { GameInfo } from '../types'
@@ -100,7 +101,7 @@ interface Props {
 }
 
 const GameList = (props: Props) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const gameList = useGameList()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -122,7 +123,7 @@ const GameList = (props: Props) => {
     return (
         <>
             <List className={classes.walletBar}>
-                <Typography className={classes.title}>{t('plugin_game_list_title')}</Typography>
+                <Typography className={classes.title}>{t.game_list_title()}</Typography>
                 <ul className={classes.gameList}>
                     {gameList
                         ? gameList.map((game, index: number) => (
@@ -145,14 +146,14 @@ const GameList = (props: Props) => {
                                           />
                                       </div>
                                       <Typography className={classes.rank}>
-                                          {t('plugin_game_list_rank')} {game.rank}
+                                          {t.game_list_rank()} {game.rank}
                                       </Typography>
                                   </div>
                                   <Button
                                       variant="roundedContained"
                                       className={classes.playBtn}
                                       onClick={() => props.onPlay(game)}>
-                                      {t('plugin_game_list_play')}
+                                      {t.game_list_play()}
                                   </Button>
                               </li>
                           ))

@@ -12,7 +12,7 @@ import GameWindow from './GameWindow'
 import GameShareDialog from './GameShareDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import type { GameInfo, GameNFT } from '../types'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 
 export const ConnectContext = createContainer(() => {
     const [isGameShow, setGameShow] = useState(false)
@@ -36,7 +36,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 const WalletConnectDialog = () => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -56,11 +56,11 @@ const WalletConnectDialog = () => {
 
     const handleGameOpen = (gameInfo: GameInfo) => {
         if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) {
-            showSnackbar(t('plugin_game_list_play_evm_error'), { variant: 'error' })
+            showSnackbar(t.game_list_play_evm_error(), { variant: 'error' })
             return
         }
         if (gameInfo.wallet && !account) {
-            showSnackbar(t('plugin_game_list_play_error'), { variant: 'error' })
+            showSnackbar(t.game_list_play_error(), { variant: 'error' })
             return
         }
         _closeDialog()
@@ -81,7 +81,7 @@ const WalletConnectDialog = () => {
 
     return (
         <>
-            <InjectedDialog onClose={closeDialog} open={open} title={t('plugin_game_name')}>
+            <InjectedDialog onClose={closeDialog} open={open} title={t.game_name()}>
                 <DialogContent>
                     <GameList onPlay={handleGameOpen} />
                 </DialogContent>
@@ -98,7 +98,7 @@ const WalletConnectDialog = () => {
                 classes={{ paper: classes.shareDialog }}
                 onClose={closeGameShare}
                 open={isShareShow}
-                title={t('plugin_game_share_title')}>
+                title={t.game_share_title()}>
                 <DialogContent>
                     <GameShareDialog gameInfo={gameInfo} onClose={closeGameShare} />
                 </DialogContent>

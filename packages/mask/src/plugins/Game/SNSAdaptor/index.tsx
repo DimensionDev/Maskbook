@@ -30,7 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 12,
                 icon,
-                description: 'Game description', // <Trans i18nKey="plugin_pets_description" />,
+                description: <Trans i18nKey="plugin_game_description" />,
                 name,
                 tutorialLink: 'https://twitter.com/NonFFriend',
                 category: 'dapp',

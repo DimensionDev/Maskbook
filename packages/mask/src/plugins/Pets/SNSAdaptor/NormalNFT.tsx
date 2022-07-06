@@ -9,11 +9,6 @@ import { CloseIcon } from '../constants'
 import RightMenu from './RightMenu'
 
 const useStyles = makeStyles()(() => ({
-    root: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-    },
     imgContent: {
         zIndex: 999,
         width: '100%',
@@ -49,14 +44,6 @@ const useStyles = makeStyles()(() => ({
     dragImg: {
         width: 15,
         height: 15,
-    },
-    fullBox: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 10,
     },
 }))
 
@@ -106,7 +93,7 @@ export function NormalNFT(props: NormalNFTProps) {
                     </Box>
                 </Box>
             ) : null}
-            <Box className={classes.imgContent}>
+            <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
                     <img
                         src={showMeta?.image}
@@ -123,7 +110,6 @@ export function NormalNFT(props: NormalNFTProps) {
             {infoShow ? (
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
             ) : null}
-            <div className={classes.fullBox} onContextMenu={handleMenuShow} />
             <RightMenu
                 showMeta={showMeta}
                 isShow={isMenuShow}

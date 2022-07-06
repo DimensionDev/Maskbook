@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import type { GameInfo } from '../types'
 import { Share_Twitter } from '../constants'
 
@@ -30,21 +30,25 @@ interface PetSetDialogProps {
 }
 
 export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
 
-    const shareText = `I'm playing ${gameInfo?.name} by @NonFFriend ${gameInfo?.snsId} on my Twitter profile. Install the Mask Network Extension mask.io and JOIN ME!\n #mask_io #NFF #NFTgame\n${Share_Twitter}`
-
     const onShareClick = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        activatedSocialNetworkUI.utils.share?.(
+            t.game_share_text({
+                name: gameInfo?.name ?? '',
+                snsId: gameInfo?.snsId ?? '',
+                share_Twitter: Share_Twitter,
+            }),
+        )
         onClose()
-    }, [shareText, onClose])
+    }, [gameInfo?.name, gameInfo?.snsId, onClose])
 
     return (
         <Box className={classes.root}>
-            <Typography className={classes.shareNotice}>{t('plugin_game_dialog_info')}</Typography>
+            <Typography className={classes.shareNotice}>{t.game_dialog_info()}</Typography>
             <Button onClick={onShareClick} variant="contained" size="large" className={classes.shareButton}>
-                {t('plugin_game_share_btn')}
+                {t.game_share_btn()}
             </Button>
         </Box>
     )

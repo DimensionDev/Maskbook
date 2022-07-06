@@ -11,5 +11,5 @@ export function useGameList() {
     return useAsync(async () => {
         const config = (await PluginGameRPC.getConfigGameListFromRSS(connection, GAME_CONFIG_ADDRESS)) ?? {}
         return Object.values(config) as GameInfo[]
-    }, [GAME_CONFIG_ADDRESS]).value
+    }, [connection, GAME_CONFIG_ADDRESS]).value
 }

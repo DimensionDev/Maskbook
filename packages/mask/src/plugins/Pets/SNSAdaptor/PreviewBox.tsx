@@ -1,7 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import type { OwnerERC721TokenInfo } from '../types'
 import { ImageLoader } from './ImageLoader'
 import ModelView from './ModelView'
@@ -129,7 +129,7 @@ interface Props {
 
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
-    const { t } = useI18N()
+    const t = useI18N()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
         if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {
@@ -167,7 +167,7 @@ export function PreviewBox(props: Props) {
                 ))}
             {!(props.message || props.mediaUrl) && (
                 <div className={classes.noData}>
-                    <Typography color="textPrimary">{t('plugin_pets_dialog_preview')}</Typography>
+                    <Typography color="textPrimary">{t.pets_dialog_preview()}</Typography>
                 </div>
             )}
         </div>

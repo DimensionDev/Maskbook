@@ -22,7 +22,8 @@ import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs } from '../hooks'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
+import { PluginWalletStatusBar } from '../../../utils'
+import { useI18N } from '../locales'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
@@ -122,7 +123,7 @@ interface PetSetDialogProps {
 }
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
-    const { t } = useI18N()
+    const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
@@ -178,7 +179,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             }
             closeDialogHandle()
         } catch {
-            showSnackbar(t('plugin_pets_dialog_fail'), { variant: 'error' })
+            showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
         } finally {
             setLoading(false)
         }
@@ -228,7 +229,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const mediaChose = useMemo(() => {
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.metadata?.mediaURL
-    }, [metaData.image, collection.tokens])
+    }, [metaData.tokenId, collection.tokens])
 
     const renderImg = (item: FilterContract) => {
         return <ImageLoader className={classes.thumbnail} src={item.icon} />
@@ -256,7 +257,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                             {renderImg(option)}
                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                             <Typography>
-                                {blacklist.includes(option.contract) ? t('plugin_pets_dialog_unverified') : ''}
+                                {blacklist.includes(option.contract) ? t.pets_dialog_unverified() : ''}
                             </Typography>
                         </Box>
                     </MenuItem>
@@ -264,7 +265,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label={t('plugin_pets_dialog_contract')}
+                        label={t.pets_dialog_contract()}
                         error={isCollectionsError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
@@ -307,7 +308,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 renderInput={(params) => (
                     <TextField
                         {...params}
-                        label={t('plugin_pets_dialog_token')}
+                        label={t.pets_dialog_token()}
                         error={isImageError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
@@ -336,7 +337,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         <TextField
                             className={classes.inputOption}
                             InputProps={{ classes: { root: classes.inputArea } }}
-                            label={holderChange ? t('plugin_pets_dialog_msg_optional') : t('plugin_pets_dialog_msg')}
+                            label={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
                             fullWidth
                             multiline
                             rows={3}
@@ -352,12 +353,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     control={
                         <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
                     }
-                    label={t('plugin_pets_dialog_check_title')}
+                    label={t.pets_dialog_check_title()}
                     sx={{ marginTop: '4px' }}
                 />
                 <Box className={classes.desBox}>
                     <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
-                        {t('powered_by')}
+                        {t.pets_powered_by()}
                     </Typography>
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
@@ -392,7 +393,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         className={classes.btn}
                         onClick={saveHandle}
                         disabled={!collection.name || !metaData.image}>
-                        {t('plugin_pets_dialog_btn')}
+                        {t.pets_dialog_btn()}
                     </ActionButton>
                 </ChainBoundary>
             </PluginWalletStatusBar>
@@ -400,7 +401,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipVisible}
-                message={t('plugin_pets_dialog_success')}
+                message={t.pets_dialog_success()}
             />
         </>
     )

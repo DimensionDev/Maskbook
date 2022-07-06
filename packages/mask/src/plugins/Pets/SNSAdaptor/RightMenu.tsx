@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
 import { PluginPetMessages } from '../messages'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { PluginGameMessages } from '../../Game/messages'
 import { NFF_TWITTER } from '../constants'
 import { ShowMeta, MenuType } from '../types'
@@ -106,7 +106,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function RightMenu(props: Props) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const refMenuDom = useRef<HTMLDivElement>(null)
     const visitor = useCurrentVisitingUser(0)
@@ -173,16 +173,16 @@ function RightMenu(props: Props) {
                 transform: `translate(${isLeft ? '-100%' : 0}, ${isTop ? '-100%' : 0})`,
             }}>
             <div onClick={() => onClickMenu(MenuType.Setting)}>
-                <Typography>{t('plugin_pets_dialog_menu_change')}</Typography>
+                <Typography>{t.pets_dialog_menu_change()}</Typography>
             </div>
             {visitor.userId === whoAmI?.identifier?.userId ? (
                 <div onClick={() => onClickMenu(MenuType.Game)}>
-                    <Typography>{t('plugin_pets_dialog_menu_ski')}</Typography>
+                    <Typography>{t.pets_dialog_menu_ski()}</Typography>
                 </div>
             ) : null}
 
             <div onClick={() => onClickMenu(MenuType.About)}>
-                <Typography>{t('plugin_pets_dialog_menu_about')}</Typography>
+                <Typography>{t.pets_dialog_menu_about()}</Typography>
             </div>
         </div>
     )
