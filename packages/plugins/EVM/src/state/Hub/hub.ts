@@ -6,6 +6,7 @@ import {
     EthereumWeb3,
     MetaSwap,
     OpenSea,
+    NFTScan,
     Rarible,
     TokenList,
     Zerion,
@@ -157,6 +158,7 @@ class Hub implements EVM_Hub {
         const providers = {
             [SourceType.OpenSea]: OpenSea,
             [SourceType.Rarible]: Rarible,
+            [SourceType.NFTScan]: NFTScan,
             [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
