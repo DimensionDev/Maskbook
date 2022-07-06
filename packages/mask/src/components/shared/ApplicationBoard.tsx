@@ -22,7 +22,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, 0.25),
+            padding: 8,
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 589 : 576,
+
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
@@ -75,9 +75,8 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         },
         recommendFeatureAppListWrapper: {
             display: 'flex',
-            overflowX: 'scroll',
-            margin: '0 2px 4px 2px',
-            padding: '8px 2px 0 2px',
+            paddingLeft: 16,
+            gap: 16,
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

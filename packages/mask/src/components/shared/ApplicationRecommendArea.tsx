@@ -8,9 +8,8 @@ const useStyles = makeStyles()(() => {
     return {
         recommendFeatureAppListWrapper: {
             display: 'flex',
-            overflowX: 'scroll',
             margin: '0 2px 4px 2px',
-            padding: '8px 2px 0 2px',
+            padding: '8px 2px 0 16px',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

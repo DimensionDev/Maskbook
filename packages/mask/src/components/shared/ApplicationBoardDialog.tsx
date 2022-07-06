@@ -13,7 +13,7 @@ import { GearIcon } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
-            padding: theme.spacing(1.5, 2, 2),
+            padding: '0 !important',
             height: 470,
             overflow: 'hidden',
         },
