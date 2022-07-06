@@ -150,10 +150,6 @@ const SelectWallet = memo(() => {
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
-        else if (!wallets.length)
-            navigate(PopupRoutes.Wallet, {
-                replace: true,
-            })
     }, [selected, wallets, location.state])
 
     return chainIdValid ? (

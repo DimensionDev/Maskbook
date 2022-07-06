@@ -5,8 +5,8 @@ import { Box, useTheme } from '@mui/system'
 import type { FC } from 'react'
 import { useI18N } from '../../../../utils'
 import { resolveDataProviderName } from '../../pipes'
-import { DataProviderIcon } from './DataProviderIcon'
-import { FootnoteMenu, FootnoteMenuOption } from './FootnoteMenu'
+import { DataProviderIconUI } from './components/DataProviderIconUI'
+import { FootnoteMenuUI, FootnoteMenuOption } from './components/FootnoteMenuUI'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -14,19 +14,17 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
         },
         sourceNote: {
-            color: theme.palette.text.secondary,
+            color: theme.palette.maskColor.secondaryDark,
             fontSize: 14,
             fontWeight: 700,
         },
         sourceMenu: {
-            color: theme.palette.text.secondary,
             fontSize: 14,
             fontWeight: 'bolder',
         },
         sourceName: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.text.primary,
         },
     }
 })
@@ -53,11 +51,11 @@ export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
                     alignItems="center"
                     gap={0.5}>
                     <Typography className={classes.sourceNote}>{t('plugin_trader_data_source')}</Typography>
-                    <FootnoteMenu
+                    <FootnoteMenuUI
                         options={dataProviders.map((x) => ({
                             name: (
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <DataProviderIcon provider={x} size={20} />
+                                    <DataProviderIconUI provider={x} size={20} />
                                     <Typography className={classes.sourceName}>{resolveDataProviderName(x)}</Typography>
                                 </Stack>
                             ),

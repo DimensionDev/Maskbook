@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
@@ -12,7 +12,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
+import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
+            '&:last-child': {
+                padding: 0,
+            },
         },
         cardHeader: {
             padding: theme.spacing(2),
@@ -130,6 +133,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
 
     const { t } = useI18N()
+    const theme = useTheme()
     const classes = useStylesExtends(useStyles(), props)
 
     // #region buy
@@ -255,7 +259,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     </Stack>
                     <Stack>
                         {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button startIcon={<BuyIcon />} variant="contained" onClick={onBuyButtonClicked}>
+                            <Button
+                                style={{
+                                    background: theme.palette.maskColor.dark,
+                                    color: theme.palette.maskColor.white,
+                                }}
+                                startIcon={<BuyIcon />}
+                                variant="contained"
+                                onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
                             </Button>
                         ) : null}

@@ -39,8 +39,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
-        margin: theme.spacing(1.5, 0, 0),
-        padding: 12,
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
 }))
 
@@ -164,7 +165,7 @@ export function InvestDialog() {
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
-                <DialogContent>
+                <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
