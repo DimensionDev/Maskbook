@@ -22,7 +22,7 @@ import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/c
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
-import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
@@ -138,13 +138,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
     const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
-        chainId,
+        (coin?.chainId as unknown as ChainId) ?? ChainId.Mainnet,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )

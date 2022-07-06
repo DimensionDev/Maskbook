@@ -80,6 +80,11 @@ export interface Ticker {
     updated: Date
 }
 
+export interface Contract {
+    chainId: string
+    address: string
+}
+
 export interface Trending {
     currency: Currency
     dataProvider: DataProvider
@@ -88,6 +93,7 @@ export interface Trending {
     market?: Market
     tickers: Ticker[]
     lastUpdated: string
+    contracts?: Contract[]
 }
 
 export type Stat = [number | string, number]

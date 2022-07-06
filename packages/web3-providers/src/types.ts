@@ -530,6 +530,7 @@ export namespace TrendingAPI {
 
     export interface Coin {
         id: string
+        chainId?: string
         name: string
         symbol: string
         decimals?: number
