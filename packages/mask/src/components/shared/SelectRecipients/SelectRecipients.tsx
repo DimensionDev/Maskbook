@@ -16,7 +16,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { cloneDeep, uniqBy } from 'lodash-unified'
 import Services from '../../../extension/service'
-import { batch } from 'async-call-rpc/base'
+import { batch } from 'async-call-rpc'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
