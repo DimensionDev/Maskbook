@@ -1,3 +1,5 @@
+/// <reference types="@masknet/global-types/firefox" />
+
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 const constructableStyleSheetEnabled = true
 
@@ -68,6 +70,7 @@ export class StyleSheet {
     private implementation!: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
 }
+
 class ConstructableStyleSheet {
     private sheet = new CSSStyleSheet()
     private globalSheet = new CSSStyleSheet()
@@ -75,7 +78,15 @@ class ConstructableStyleSheet {
     addContainer(container: ShadowRoot) {
         if (this.added.has(container)) return
         this.added.add(container)
-        container.adoptedStyleSheets = [this.globalSheet, ...(container.adoptedStyleSheets || []), this.sheet]
+
+        if (typeof XPCNativeWrapper === 'undefined') {
+            container.adoptedStyleSheets!.unshift(this.globalSheet)
+            container.adoptedStyleSheets!.push(this.sheet)
+        } else {
+            const unsafe = XPCNativeWrapper.unwrap(container.adoptedStyleSheets!)
+            Array.prototype.unshift.call(unsafe, XPCNativeWrapper.unwrap(this.globalSheet))
+            Array.prototype.push.call(unsafe, XPCNativeWrapper.unwrap(this.sheet))
+        }
     }
     insert(rule: string) {
         insertRuleSpeedy(this.sheet, rule)

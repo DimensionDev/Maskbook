@@ -1,3 +1,5 @@
+/// <reference types="@masknet/global-types/firefox" />
+
 import './communicate'
 import './locationChange'
 
