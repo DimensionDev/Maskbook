@@ -17,6 +17,7 @@ import {
     deleteProfileDB,
     detachProfileDB,
     LinkedProfileDetails,
+    PersonaRecord,
     ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
@@ -106,7 +107,7 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
 
 export async function attachNextIDPersonaToProfile(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
     if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
-    const personaRecord = {
+    const personaRecord: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
         identifier: item.linkedPersona,
@@ -118,7 +119,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         uninitialized: false,
     }
 
-    const profileRecord = {
+    const profileRecord: ProfileRecord = {
         identifier: item.identifier,
         nickname: item.nickname,
         linkedPersona: item.linkedPersona,

@@ -16,6 +16,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { cloneDeep, uniqBy } from 'lodash-unified'
 import Services from '../../../extension/service'
+import { batch } from 'async-call-rpc/base'
 
 export interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -63,17 +64,16 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         const whoAmI = await Services.Settings.getCurrentPersonaIdentifier()
 
         if (!item || !item.fromNextID || !item.linkedPersona || !whoAmI) return
-        await Promise.all(
-            item.linkedTwitterNames.map(async (x) => {
-                const newItem = {
-                    ...item,
-                    nickname: x,
-                    identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
-                }
-
-                await Services.Identity.attachNextIDPersonaToProfile(newItem, whoAmI)
-            }),
-        )
+        const [rpc, emit] = batch(Services.Identity)
+        item.linkedTwitterNames.forEach((x) => {
+            const newItem = {
+                ...item,
+                nickname: x,
+                identifier: ProfileIdentifier.of('twitter.com', x).unwrap(),
+            }
+            rpc.attachNextIDPersonaToProfile(newItem, whoAmI)
+        })
+        emit()
     }
 
     useEffect(() => void (open && items.request()), [open, items.request])
