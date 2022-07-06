@@ -9,18 +9,6 @@ import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
-    paperRoot: {
-        padding: '0px',
-        '&>h2': {
-            background:
-                theme.palette.mode === 'light'
-                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
-                    : undefined,
-            marginBottom: 24,
-            display: 'grid !important',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-        },
-    },
     content: {
         marginLeft: 12,
         marginRight: 12,
@@ -94,7 +82,7 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
             <InjectedDialog
                 open={open}
                 onClose={onClose}
-                classes={{ paper: classes.paperRoot }}
+                classes={{ dialogContent: classes.content }}
                 maxWidth="xs"
                 fullWidth
                 title={t('plugin_trader_swap_risk')}>
