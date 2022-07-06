@@ -55,7 +55,7 @@ export function PersonaAction(props: PersonaActionProps) {
         undefined,
         undefined,
         undefined,
-        'success',
+        t.copied(),
     )
 
     return (

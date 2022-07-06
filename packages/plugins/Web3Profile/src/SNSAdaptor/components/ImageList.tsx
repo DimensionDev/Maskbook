@@ -80,7 +80,8 @@ const useStyles = makeStyles()((theme) => {
             gridRowGap: 16,
             gridColumnGap: 20,
             display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
+            gridTemplateColumns: 'repeat(7, 64px)',
+            gridTemplateRows: 64,
             padding: '0 16px',
         },
         AddCollectiblesButton: {
