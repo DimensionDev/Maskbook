@@ -107,9 +107,10 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
 
 export async function attachNextIDPersonaToProfile(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
     if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
+    const now = new Date()
     const personaRecord: PersonaRecord = {
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         identifier: item.linkedPersona,
         linkedProfiles: new Map(),
         publicKey: await decompressSecp256k1Key(item.linkedPersona.rawPublicKey),
@@ -123,8 +124,8 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         identifier: item.identifier,
         nickname: item.nickname,
         linkedPersona: item.linkedPersona,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
     }
     try {
         await consistentPersonaDBWriteAccess(async (t) => {
