@@ -412,6 +412,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
         const openSwapSettingDialog = useCallback(async () => {
             const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                chainId,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
                 },
@@ -427,7 +428,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
                 },
             })
-        }, [focusedTrade?.gas.value, selectAdvancedSettings])
+        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings])
         // #endregion
 
         // #region if `isPopup` be true, click the plugin status bar need to  open popup window
