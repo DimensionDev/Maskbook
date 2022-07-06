@@ -14,7 +14,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
     async getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
         const price = await this.getTokenPrices(platform_id, [address], currencyType)
 
-        return Number(price[address][currencyType]) ?? 0
+        return Number(price[address.toLowerCase()][currencyType]) ?? 0
     }
 
     async getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
@@ -38,7 +38,9 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
         const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${listOfAddress}&vs_currencies=${currencyType}`
         const response = await fetchJSON<Record<string, Record<CurrencyType, number>>>(requestPath)
 
-        return Object.fromEntries(Object.keys(response).map((address) => [address, response[address][currencyType]]))
+        return Object.fromEntries(
+            Object.keys(response).map((address) => [address, response[address.toLowerCase()][currencyType]]),
+        )
     }
 
     async getSupportedPlatform() {

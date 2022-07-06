@@ -244,8 +244,6 @@
     "plugin_trader_error_insufficient_lp": "유동성 부족",
     "plugin_trade_error_input_amount_less_minimum_amount": "입력 금액은 최소 금액 이하입니다.",
     "plugin_trader_slippage_tolerance": "슬리피지 톨러런스:",
-    "plugin_trader_swap_from": "From",
-    "plugin_trader_swap_to": "To(estimated)",
     "plugin_trader_gas_fee": "기스비",
     "plugin_trader_unlock_symbol": "{{symbol}} 언락",
     "plugin_trader_unlock_tips": "{{provider}}에게 {{symbol}} 이용할 수 있는 스마트 컨트랙트 권한을 줘야 합니다. 토큰당 이 작업을 한번만 수행하면 됩니다.",

@@ -341,8 +341,6 @@
     "plugin_trader_error_insufficient_lp": "该交易的流动性不足",
     "plugin_trade_error_input_amount_less_minimum_amount": "提交兑换的数额低于最低数额",
     "plugin_trader_slippage_tolerance": "滑点容许值",
-    "plugin_trader_swap_from": "从",
-    "plugin_trader_swap_to": "至(预计)",
     "plugin_trader_gas_fee": "Gas 费用",
     "plugin_trader_unlock_symbol": "解锁 {{symbol}}",
     "plugin_trader_unlock_tips": "您必须授予 {{provider}} 智能合约使用您的 {{symbol}} 的权限。每个代币只需要授权一次。",
