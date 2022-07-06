@@ -14,7 +14,7 @@ import {
     isZero,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { Alert, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
+import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { CircleWarningIcon, InfoIcon, RetweetIcon, WarningTriangleIcon } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
@@ -140,10 +140,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: 0,
         position: 'sticky',
         bottom: 0,
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        boxShadow: `0px 0px 20px ${alpha(
+            theme.palette.maskColor.shadowBottom,
+            theme.palette.mode === 'dark' ? 0.12 : 0.05,
+        )}`,
     },
     accept: {
         backgroundColor: isDashboard

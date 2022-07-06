@@ -2,7 +2,15 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { memo } from 'react'
 import { useI18N, Translate } from '../../../locales'
-import { Button, DialogActions, dialogClasses, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
+import {
+    alpha,
+    Button,
+    DialogActions,
+    dialogClasses,
+    DialogContent,
+    dialogTitleClasses,
+    Typography,
+} from '@mui/material'
 import { CircleWarningIcon } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-evm'
@@ -57,10 +65,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: 16,
         position: 'sticky',
         bottom: 0,
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : ' 0px 0px 20px rgba(0, 0, 0, 0.05)',
+        boxShadow: `0px 0px 20px ${alpha(
+            theme.palette.maskColor.shadowBottom,
+            theme.palette.mode === 'dark' ? 0.12 : 0.05,
+        )}`,
+
         '& > *': {
             margin: '0px !important',
         },
