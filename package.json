@@ -86,7 +86,8 @@
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.34",
-      "@types/react": "18.0.9"
+      "@types/react": "18.0.9",
+      "cross-fetch": "3.1.5"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
@@ -113,7 +114,8 @@
       "@emotion/serialize@1.0.4": "patches/@emotion__serialize@1.0.4.patch",
       "@emotion/server@11.4.0": "patches/@emotion__server@11.4.0.patch",
       "@emotion/styled@11.9.3": "patches/@emotion__styled@11.9.3.patch",
-      "@emotion/utils@1.1.0": "patches/@emotion__utils@1.1.0.patch"
+      "@emotion/utils@1.1.0": "patches/@emotion__utils@1.1.0.patch",
+      "cross-fetch@3.1.5": "patches/cross-fetch@3.1.5.patch"
     }
   }
 }

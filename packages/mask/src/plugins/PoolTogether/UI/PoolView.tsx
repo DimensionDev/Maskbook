@@ -217,7 +217,12 @@ export function PoolView(props: PoolProps) {
     if (errorToken) {
         return (
             <div className={classes.root}>
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retryToken} />
+                <RefreshIcon
+                    className={classes.refresh}
+                    color="primary"
+                    style={{ fill: '#1C68F3' }}
+                    onClick={retryToken}
+                />
             </div>
         )
     }
