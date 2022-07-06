@@ -3,7 +3,7 @@ import { Avatar, Typography, Button, CardContent, IconButton, Paper, Stack } fro
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon, useTokenSecurity } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
@@ -23,7 +23,6 @@ import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { TrendingTokenSecurity } from './TrendingTokenSecurity'
 import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
@@ -189,7 +188,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     />
                 </PluginHeader>
                 <Stack className={classes.headline}>
-                    <Stack gap={2}>
+                    <Stack gap={2} flexGrow={1}>
                         <Stack flexDirection="row">
                             {typeof coin.market_cap_rank === 'number' ? (
                                 <Typography component="span" className={classes.rank} title="Index Cap Rank">
@@ -260,7 +259,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         }
                                     />
                                 </Stack>
-                                <TrendingTokenSecurity />
+                                {/* <TrendingTokenSecurity /> */}
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                )}
                             </Stack>
                         </Stack>
                     </Stack>

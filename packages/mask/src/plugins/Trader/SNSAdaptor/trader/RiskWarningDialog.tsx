@@ -78,68 +78,64 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
         t('copy_success_of_token_addr'),
     )
     return (
-        <>
-            <InjectedDialog
-                open={open}
-                onClose={onClose}
-                classes={{ dialogContent: classes.content }}
-                maxWidth="xs"
-                fullWidth
-                title={t('plugin_trader_swap_risk')}>
-                <DialogContent className={classes.content}>
-                    <Stack alignItems="center">
-                        <SecurityRiskIcon sx={{ fontSize: '68px' }} />
-                        <Typography className={classes.warningTitle}>
-                            {t('plugin_trader_risk_warning_short')}
+        <InjectedDialog
+            open={open}
+            onClose={onClose}
+            classes={{ dialogContent: classes.content }}
+            maxWidth="xs"
+            fullWidth
+            title={t('plugin_trader_swap_risk')}>
+            <DialogContent className={classes.content}>
+                <Stack alignItems="center">
+                    <SecurityRiskIcon sx={{ fontSize: '68px' }} />
+                    <Typography className={classes.warningTitle}>{t('plugin_trader_risk_warning_short')}</Typography>
+                </Stack>
+                <Stack marginTop="51px">
+                    <Typography color={(theme) => theme.palette.maskColor.danger}>
+                        {t('plugin_trader_dear_user')}
+                    </Typography>
+                    <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
+                        {t('plugin_trader_user_warning')}
+                    </Typography>
+                </Stack>
+                <Stack className={classes.tokenInfo}>
+                    <Typography>{tokenInfo?.token_name ?? '--'}</Typography>
+                    <Stack direction="row">
+                        <Typography>
+                            {tokenInfo.contract ? formatEthereumAddress(tokenInfo?.contract, 4) : '--'}
                         </Typography>
+                        <Link
+                            className={classes.link}
+                            underline="none"
+                            component="button"
+                            title={t('wallet_status_button_copy_address')}
+                            onClick={onCopy}>
+                            <Copy size={14} />
+                        </Link>
+                        <Link
+                            className={classes.link}
+                            href={
+                                explorerResolver.fungibleTokenLink?.(
+                                    tokenInfo?.chainId ?? 1,
+                                    tokenInfo?.contract ?? ZERO_ADDRESS,
+                                ) ?? ''
+                            }
+                            target="_blank"
+                            title={t('plugin_wallet_view_on_explorer')}
+                            rel="noopener noreferrer">
+                            <ExternalLink size={14} />
+                        </Link>
                     </Stack>
-                    <Stack marginTop="51px">
-                        <Typography color={(theme) => theme.palette.maskColor.danger}>
-                            {t('plugin_trader_dear_user')}
-                        </Typography>
-                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
-                            {t('plugin_trader_user_warning')}
-                        </Typography>
-                    </Stack>
-                    <Stack className={classes.tokenInfo}>
-                        <Typography>{tokenInfo?.token_name ?? '--'}</Typography>
-                        <Stack direction="row">
-                            <Typography>
-                                {tokenInfo.contract ? formatEthereumAddress(tokenInfo?.contract, 4) : '--'}
-                            </Typography>
-                            <Link
-                                className={classes.link}
-                                underline="none"
-                                component="button"
-                                title={t('wallet_status_button_copy_address')}
-                                onClick={onCopy}>
-                                <Copy size={14} />
-                            </Link>
-                            <Link
-                                className={classes.link}
-                                href={
-                                    explorerResolver.fungibleTokenLink?.(
-                                        tokenInfo?.chainId ?? 1,
-                                        tokenInfo?.contract ?? ZERO_ADDRESS,
-                                    ) ?? ''
-                                }
-                                target="_blank"
-                                title={t('plugin_wallet_view_on_explorer')}
-                                rel="noopener noreferrer">
-                                <ExternalLink size={14} />
-                            </Link>
-                        </Stack>
-                    </Stack>
-                </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <Button sx={{ width: '48%' }} onClick={onClose}>
-                        {t('cancel')}
-                    </Button>
-                    <Button className={classes.warningButton} onClick={onConfirm}>
-                        {t('plugin_trader_make_risk_trade')}
-                    </Button>
-                </DialogActions>
-            </InjectedDialog>
-        </>
+                </Stack>
+            </DialogContent>
+            <DialogActions className={classes.actions}>
+                <Button sx={{ width: '48%' }} onClick={onClose}>
+                    {t('cancel')}
+                </Button>
+                <Button className={classes.warningButton} onClick={onConfirm}>
+                    {t('plugin_trader_make_risk_trade')}
+                </Button>
+            </DialogActions>
+        </InjectedDialog>
     )
 }
