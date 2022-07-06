@@ -695,6 +695,29 @@ export interface Connection<
         signType?: string,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
+    /** Approve a recipient for using a fungible token. */
+    approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
+    /** Approve a recipient for using a non-fungible token. */
+    approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
+    /** Approve a recipient for using all non-fungible tokens. */
+    approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
     /** Transfer fungible token to */
     transferFungibleToken(
         address: string,
