@@ -251,6 +251,7 @@
     "wallet_status_pending_clear_all": "Clear All",
     "wallet_status_pending_clear": "Clear",
     "wallet_status_button_change": "Change",
+    "wallet_status_button_change_to_evm": "Change to EVM wallet",
     "wallet_status_button_copy_address": "Copy Address",
     "wallet_transfer_account": "Transfer Account",
     "wallet_transfer_receiving_account": "Receiving Account",
