@@ -177,10 +177,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                 }
             },
             style: {
-                background:
-                    child.props.value === firstId || (!firstId && selected)
-                        ? theme.palette.maskColor.input
-                        : 'transparent',
+                background: selected ? theme.palette.maskColor.input : 'transparent',
             },
         }
 
