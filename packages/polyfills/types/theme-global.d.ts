@@ -11,6 +11,7 @@ declare module '@mui/material/styles/createPalette.d' {
             bg: string
             bottom: string
             secondaryBottom: string
+            shadowBottom: string
             input: string
             modalTitleBg: string
             highlight: string

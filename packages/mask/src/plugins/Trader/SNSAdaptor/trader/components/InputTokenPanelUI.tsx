@@ -1,5 +1,5 @@
-import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
-import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha, Box, Chip, chipClasses, lighten, TextField, Typography } from '@mui/material'
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
@@ -43,9 +43,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         height: 20,
         backgroundColor: !isDashboard ? theme.palette.maskColor?.primary : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard
-                ? parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
-                : undefined,
+            backgroundColor: !isDashboard ? lighten(theme.palette.maskColor?.primary, 0.1) : undefined,
         },
     },
     chipLabel: {
@@ -97,11 +95,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         ['&:hover']: {
             backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
-            // TODO: replace to theme pop-shadow prop
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                    : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            boxShadow: `0px 4px 30px ${alpha(
+                theme.palette.maskColor.shadowBottom,
+                theme.palette.mode === 'dark' ? 0.15 : 0.1,
+            )}`,
         },
     },
     chipTokenIcon: {
@@ -113,9 +110,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         backgroundColor: `${isDashboard ? theme.palette.primary.main : theme.palette.maskColor?.primary} !important`,
         ['&:hover']: {
             backgroundColor: `${
-                isDashboard
-                    ? theme.palette.primary.main
-                    : parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
+                isDashboard ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {
