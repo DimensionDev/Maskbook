@@ -2,5 +2,6 @@
 
 import './communicate'
 import './locationChange'
+import './sceneChange'
 
 if (document.currentScript) document.currentScript.remove()
