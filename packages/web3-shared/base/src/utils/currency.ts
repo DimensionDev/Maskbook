@@ -64,6 +64,6 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
         .reduce((string, part) => string + part)
 }
 
-export const ethFormatter = (value: BigNumber.Value, sign = '\u039E') => {
+export const coinFormatter = (value: BigNumber.Value, sign = '\u039E') => {
     return `${new BigNumber(value).toFixed(2)} ${sign}`
 }

@@ -2,9 +2,10 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { ethFormatter, formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
+import { coinFormatter, formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
+import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -52,7 +53,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {DataProvider.UNISWAP_INFO === dataProvider ? (
+                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head}>
                                     <Typography color="textSecondary" variant="body2">
@@ -64,7 +65,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                             </TableRow>
                         ) : null}
-                        {DataProvider.UNISWAP_INFO === dataProvider ? (
+                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head}>
                                     <Typography color="textSecondary" variant="body2">
@@ -132,7 +133,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 <FormattedCurrency
                                     value={market?.floor_price ?? 0}
                                     sign="&#x039E;"
-                                    formatter={ethFormatter}
+                                    formatter={coinFormatter}
                                 />
                             </TableCell>
                         </TableRow>
@@ -146,7 +147,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 <FormattedCurrency
                                     value={market?.total_24h ?? 0}
                                     sign="&#x039E;"
-                                    formatter={ethFormatter}
+                                    formatter={coinFormatter}
                                 />
                             </TableCell>
                         </TableRow>
@@ -174,6 +175,6 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
-    const isNFT = props.dataProvider === DataProvider.NFTSCAN
+    const isNFT = props.trending.coin.type === TrendingCoinType.NonFungible
     return isNFT ? <NonFungibleCoinMarketTable {...props} /> : <FungibleCoinMarketTable {...props} />
 }

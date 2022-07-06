@@ -166,7 +166,7 @@ export function TraderView(props: TraderViewProps) {
     })
     // #endregion
 
-    const isNFT = dataProvider === DataProvider.NFTSCAN
+    const isNFT = trending?.coin.type === TrendingCoinType.NonFungible
     // #region if the coin is a native token or contract address exists
     const isSwappable = !isNFT && (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
     // #endregion
@@ -328,7 +328,7 @@ export function TraderView(props: TraderViewProps) {
                 ) : null}
                 {currentTab === ContentTabs.Exchange ? (
                     <Box p={2}>
-                        <TickersTable tickers={tickers} dataProvider={dataProvider} />
+                        <TickersTable tickers={tickers} coinType={coin.type} dataProvider={dataProvider} />
                     </Box>
                 ) : null}
                 {currentTab === ContentTabs.Swap && isSwappable ? (

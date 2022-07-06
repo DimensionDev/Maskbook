@@ -7,7 +7,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { TrendingAPI, TrendingCoinType } from '@masknet/web3-providers'
-import { ethFormatter, formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
+import { coinFormatter, formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -252,7 +252,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
-                                                formatter={isNFT ? ethFormatter : formatCurrency}
+                                                formatter={isNFT ? coinFormatter : formatCurrency}
                                             />
                                         </Typography>
                                     ) : (

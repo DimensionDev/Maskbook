@@ -8,16 +8,10 @@ import {
     CurrencyType,
     HubOptions,
     NonFungibleAsset,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    createContract,
-    formatWeiToEther,
-    getRPCConstants,
-    NonFungibleMarketplace,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createContract, formatWeiToEther, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import getUnixTime from 'date-fns/getUnixTime'
 import isBefore from 'date-fns/isBefore'
@@ -318,7 +312,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                       logo_url: 'https://etherscan.io/images/svg/brands/opensea.svg',
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${platformInfo.address}`,
-                      market_name: NonFungibleMarketplace.OpenSea,
+                      market_name: SourceType.OpenSea,
                       volume_24h: openseaStats.one_day_volume,
                       floor_price: openseaStats.floor_price,
                       sales_24: openseaStats.one_day_sales,
@@ -328,7 +322,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 ? {
                       logo_url: 'https://etherscan.io/images/svg/brands/looksrare-black.svg',
                       trade_url: `https://looksrare.org/collections/${platformInfo.address}`,
-                      market_name: NonFungibleMarketplace.LooksRare,
+                      market_name: SourceType.LooksRare,
                       volume_24h: formatWeiToEther(looksrareStats.volume24h).toNumber(),
                       floor_price: formatWeiToEther(looksrareStats.floorPrice).toNumber(),
                       sales_24: looksrareStats.count24h,

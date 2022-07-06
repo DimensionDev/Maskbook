@@ -2,13 +2,14 @@ import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { ethFormatter, formatCurrency } from '@masknet/web3-shared-base'
+import { coinFormatter, formatCurrency } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter'
 import { ReactNode, useMemo } from 'react'
 import { compact, pick } from 'lodash-unified'
+import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,16 +44,17 @@ const useStyles = makeStyles()((theme) => ({
 export interface TickersTableProps {
     dataProvider: DataProvider
     tickers: Ticker[]
+    coinType: TrendingCoinType
 }
 
 type FungibleTokenCells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 type NonFungibleTokenCells = 'marketplace' | 'volume' | 'floor_price' | 'sales'
 type Cells = FungibleTokenCells | NonFungibleTokenCells
 
-export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
+export function TickersTable({ dataProvider, tickers, coinType }: TickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isNFT = dataProvider === DataProvider.NFTSCAN
+    const isNFT = coinType === TrendingCoinType.NonFungible
     const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
 
     const headCellMap: Record<Cells, string> = {
@@ -73,7 +75,7 @@ export function TickersTable({ dataProvider, tickers }: TickersTableProps) {
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = isNFT ? ticker.volume_24h : ticker.volume
-        const formatter = isNFT ? ethFormatter : formatCurrency
+        const formatter = isNFT ? coinFormatter : formatCurrency
         const marketplaceOrExchange = (
             <TableCell className={classes.cell} colSpan={1}>
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}

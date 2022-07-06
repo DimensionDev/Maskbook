@@ -63,6 +63,7 @@ export enum SourceType {
     Zora = 'zora',
     OpenSea = 'opensea',
     Rarible = 'rarible',
+    LooksRare = 'looksrare',
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW'
