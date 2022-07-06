@@ -2,10 +2,7 @@ import { delay } from '@dimensiondev/kit'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Twitter } from '@masknet/web3-providers'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { first } from 'lodash-unified'
 import {
-    searchAvatarSelector,
-    searchAvatarMetaSelector,
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchSelfAvatarSelector,
@@ -13,9 +10,7 @@ import {
     selfInfoSelectors,
 } from '../utils/selector'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import Services from '../../../extension/service'
 import { twitterBase } from '../base'
-import { getAvatar, getBio, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { isMobileTwitter } from '../utils/isMobile'
 
 function recognizeDesktop() {
@@ -85,12 +80,11 @@ function resolveLastRecognizedIdentityInner(
                 },
                 cancel,
             )
-
-        window.addEventListener('locationchange', assign, { signal: cancel })
     }
 
     assign()
 
+    window.addEventListener('locationchange', assign, { signal: cancel })
     createWatcher(searchSelfHandleSelector())
     createWatcher(searchWatcherAvatarSelector())
 }
@@ -117,61 +111,31 @@ function resolveLastRecognizedIdentityMobileInner(
     window.addEventListener('locationchange', onLocationChange, { signal: cancel })
 }
 
-const getFirstSlug = () => {
-    const slugs = location.pathname.split('/').filter((x) => x)
-    return first(slugs)
-}
-
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const avatarSelector = searchAvatarSelector()
-    const avatarMetaSelector = searchAvatarMetaSelector()
-    let firstSlug = getFirstSlug()
-    const assign = async () => {
-        const newFirstSlug = getFirstSlug()
-        // reset to void wrong value
-        if (firstSlug !== newFirstSlug) {
-            ref.value = {}
-            firstSlug = newFirstSlug
-        }
-        await delay(2000)
-        const bio = getBio()
-        const nickname = getNickname()
-        const handle = getTwitterId()
-        const avatar = getAvatar()
-        const homepage = await Services.Helper.resolveTCOLink(getPersonalHomepage())
+    const update = async (event: WindowEventMap['scenechange']) => {
+        if (event.detail.scene !== 'profile' || !event.detail.value) return
+        const twitterId = event.detail.value
+        const user = await Twitter.getUserByScreenName(twitterId)
+        const bio = user.legacy.description
+
+        const nickname = user.legacy.name
+        const handle = user.legacy.screen_name
+        const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
+        const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
             nickname,
             avatar,
             bio,
-            homepage: homepage ?? '',
+            homepage,
         }
     }
-    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
-        new MutationObserverWatcher(selector)
-            .addListener('onAdd', () => assign())
-            .addListener('onChange', () => assign())
-            .startWatch(
-                {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['src', 'content'],
-                },
-                cancel,
-            )
 
-        window.addEventListener('locationchange', assign, { signal: cancel })
-    }
-
-    assign()
-
-    createWatcher(avatarSelector)
-    createWatcher(avatarMetaSelector)
+    window.addEventListener('scenechange', update, { signal: cancel })
 }
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
