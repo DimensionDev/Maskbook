@@ -86,5 +86,6 @@
     "risk_is_airdrop_scam_title": "Airdrop Scam",
     "risk_is_airdrop_scam_body": "You may lose your assets if giving approval to the website of this token.",
     "risk_not_is_airdrop_scam_title": "No Airdrop Scam",
-    "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops."
+    "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops.",
+    "contract_not_found": "Contract Not Found"
 }

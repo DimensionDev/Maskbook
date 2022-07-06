@@ -54,7 +54,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
             setChainId(chainId)
             let values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
             values ??= {}
-            if (isEmpty(values)) throw new Error('Contract Not Found')
+            if (isEmpty(values)) throw new Error(t.contract_not_found())
             const entity = first(Object.entries(values ?? {}))
             if (!entity) return
             return { ...entity[1], contract: entity[0], chainId }

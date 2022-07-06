@@ -492,22 +492,6 @@ export namespace MaskBaseAPI {
     export interface Provider {}
 }
 
-export namespace TokenPriceBaseAPI {
-    export interface PriceRecord {
-        [currency: string]: number
-    }
-
-    /** Base on response of coingecko's token price API */
-    export interface CryptoPrice {
-        [token: string]: PriceRecord
-    }
-
-    export interface Provider {
-        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
-        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
-    }
-}
-
 export namespace TokenAPI {
     export interface tokenInfo {
         id: string

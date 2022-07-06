@@ -11,7 +11,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const connection = useWeb3Connection(pluginID, options)
 
     return useAsyncRetry<Web3Helper.FungibleTokenScope<S, T> | undefined>(async () => {
-        if (!connection || !address) return
-        return connection?.getFungibleToken?.(address, options)
+        if (!connection) return
+        return connection?.getFungibleToken?.(address ?? '', options)
     }, [address, connection, JSON.stringify(options)])
 }
