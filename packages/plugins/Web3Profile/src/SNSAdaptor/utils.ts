@@ -9,9 +9,10 @@ export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.map((item, index) => {
+        const listBCollection = listB?.find((itemB) => itemB.address === item.address)?.collections
         return {
             ...item,
-            collections: [...(item?.collections ?? []), ...(listB?.[index]?.collections ?? [])],
+            collections: [...(item?.collections ?? []), ...(listBCollection ?? [])],
         }
     })
 }
