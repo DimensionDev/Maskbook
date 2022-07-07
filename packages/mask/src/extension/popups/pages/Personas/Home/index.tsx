@@ -3,6 +3,7 @@ import { PersonaHomeUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
+import Services from "../../../../service";
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
@@ -22,6 +23,10 @@ const PersonaHome = memo(() => {
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignUp}`),
         })
+        if (process.env.engine === 'firefox') {
+            window.close()
+        }
+        Services.Helper.removePopupWindow()
     }, [])
 
     const onRestore = useCallback(() => {
@@ -29,6 +34,10 @@ const PersonaHome = memo(() => {
             active: true,
             url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.SignIn}`),
         })
+        if (process.env.engine === 'firefox') {
+            window.close()
+        }
+        Services.Helper.removePopupWindow()
     }, [])
 
     useTitle('')
