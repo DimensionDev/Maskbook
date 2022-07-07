@@ -55,6 +55,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
 
     className?: string
+    switchChainWithoutPopup?: boolean
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     children?: React.ReactNode
@@ -68,6 +69,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedPluginID,
         expectedChainId,
         expectedChainIdSwitchedCallback,
+        switchChainWithoutPopup = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -112,9 +114,14 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             return 'init'
         }
         if (!isMatched) {
-            await expectedConnection?.connect({
-                chainId: expectedChainId,
-            })
+            if (switchChainWithoutPopup && actualProviderType === ProviderType.MaskWallet) {
+                await expectedConnection?.switchChain?.(expectedChainId)
+            } else {
+                await expectedConnection?.connect({
+                    chainId: expectedChainId,
+                })
+            }
+
             expectedChainIdSwitchedCallback?.()
         }
         return

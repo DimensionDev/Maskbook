@@ -96,6 +96,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                 </div>
                 <ChainBoundary
                     expectedChainId={chainId}
+                    switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     classes={{ switchButton: classes.button }}
                     expectedChainIdSwitchedCallback={() => approveCallback(true, true)}
