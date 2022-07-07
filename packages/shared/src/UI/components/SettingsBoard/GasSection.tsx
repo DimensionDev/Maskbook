@@ -96,9 +96,7 @@ export function GasSection(props: GasSectionProps) {
                                     : t.gas_settings_custom()}
                             </span>
                             <span className={classes.price}>
-                                {' '}
-                                {customPrice}
-                                {' Gwei'}
+                                {` ${customPrice} Gwei`}
                             </span>
                         </Typography>
                     ) : null
