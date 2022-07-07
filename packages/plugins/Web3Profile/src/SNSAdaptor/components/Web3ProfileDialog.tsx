@@ -14,11 +14,11 @@ import {
     getFootprintList,
     getNFTList,
     getNFTList_Polygon,
+    getWalletHiddenList,
     getWalletList,
     mergeList,
     placeFirst,
 } from '../utils'
-import { getWalletHiddenList } from '../hooks/useHiddenList'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
 import { PersonaAction } from './PersonaAction'

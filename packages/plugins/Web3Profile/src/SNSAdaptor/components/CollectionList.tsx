@@ -5,27 +5,7 @@ import { NFTImageCollectibleAvatar } from '@masknet/shared'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles()((theme) => ({
-    collectionWrap: {
-        position: 'relative',
-        cursor: 'pointer',
-        display: 'flex',
-        overflow: 'hidden',
-        padding: 0,
-        flexDirection: 'column',
-        borderRadius: 12,
-        userSelect: 'none',
-        lineHeight: 0,
-    },
-    list: {
-        gridRowGap: 16,
-        gridColumnGap: 20,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(7, 64px)',
-        gridTemplateRows: 64,
-        padding: '0 16px',
-    },
-}))
+const useStyles = makeStyles()((theme) => ({}))
 
 interface CollectionListProps extends withClasses<never | 'root' | 'list' | 'collectionWrap'> {
     collections: CollectionTypes[]

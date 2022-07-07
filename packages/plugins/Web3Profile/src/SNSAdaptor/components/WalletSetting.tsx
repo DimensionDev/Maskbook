@@ -4,16 +4,16 @@ import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
-import { WalletSwitch } from '../components/WalletSwitch'
 import type { AccountType, WalletTypes } from '../types'
-import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { TabContext, TabPanel } from '@mui/lab'
+import { TabContext } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { SettingInfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import { Empty } from './Empty'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { getKvPayload, setKvPatchData } from '../utils'
+import { WalletTab } from './WalletTab'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -237,69 +237,25 @@ const WalletSetting = memo(
                                         <CloseIcon onClick={onCloseHint} className={classes.closeIcon} />
                                     </Box>
                                 )}
-                                <TabPanel value={tabs.NFTs} style={{ padding: 0 }}>
-                                    <div className={classes.walletSwitchBox}>
-                                        {wallets?.map((x) => {
-                                            return (
-                                                <div key={x.address} className={classes.switchContainer}>
-                                                    <WalletSwitch
-                                                        hiddenItems={NFTs}
-                                                        type={0}
-                                                        address={x}
-                                                        isPublic={
-                                                            NFTs?.findIndex((account) =>
-                                                                isSameAddress(account.address, x?.address),
-                                                            ) === -1
-                                                        }
-                                                        setHiddenItems={setNFTs}
-                                                    />
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </TabPanel>
-                                <TabPanel value={tabs.Footprints} style={{ padding: 0 }}>
-                                    <div className={classes.walletSwitchBox}>
-                                        {wallets?.map((x) => {
-                                            return (
-                                                <div key={x.address} className={classes.switchContainer}>
-                                                    <WalletSwitch
-                                                        hiddenItems={footprints}
-                                                        type={0}
-                                                        address={x}
-                                                        isPublic={
-                                                            footprints?.findIndex((account) =>
-                                                                isSameAddress(account.address, x?.address),
-                                                            ) === -1
-                                                        }
-                                                        setHiddenItems={setFootprints}
-                                                    />
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </TabPanel>
-                                <TabPanel value={tabs.Donations} style={{ padding: 0 }}>
-                                    <div className={classes.walletSwitchBox}>
-                                        {wallets?.map((x) => {
-                                            return (
-                                                <div key={x.address} className={classes.switchContainer}>
-                                                    <WalletSwitch
-                                                        hiddenItems={donations}
-                                                        type={0}
-                                                        address={x}
-                                                        isPublic={
-                                                            donations?.findIndex((account) =>
-                                                                isSameAddress(account.address, x?.address),
-                                                            ) === -1
-                                                        }
-                                                        setHiddenItems={setDonations}
-                                                    />
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </TabPanel>
+
+                                <WalletTab
+                                    value={tabs.NFTs}
+                                    wallets={wallets}
+                                    hiddenItems={NFTs}
+                                    setHiddenItems={setNFTs}
+                                />
+                                <WalletTab
+                                    value={tabs.Footprints}
+                                    wallets={wallets}
+                                    hiddenItems={footprints}
+                                    setHiddenItems={setFootprints}
+                                />
+                                <WalletTab
+                                    value={tabs.Donations}
+                                    wallets={wallets}
+                                    hiddenItems={donations}
+                                    setHiddenItems={setDonations}
+                                />
                             </>
                         ) : (
                             <Empty content={t.no_authenticated_wallet()} />

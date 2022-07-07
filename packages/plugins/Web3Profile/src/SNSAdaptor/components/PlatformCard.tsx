@@ -5,7 +5,7 @@ import { PlatformAvatar } from './PlatformAvatar'
 import { useI18N } from '../../locales'
 import type { AccountType } from '../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { ArrowIcon } from '../assets/arrow'
+import { CollectionItem } from './CollectionItem'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
@@ -87,63 +87,42 @@ export function PlatformCard(props: PlatformCardProps) {
                         </div>
                     </div>
                 </div>
-                <div className={classes.flexItem} onClick={() => openImageSetting('NFTs')}>
-                    <div>
-                        <Typography style={{ fontWeight: '700' }}>{t.NFTs()}</Typography>
-                        <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.NFTs?.length ?? 0}</span>{' '}
-                            {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>
-                                {account?.walletList?.NFTs?.reduce(
-                                    (pre, cur) =>
-                                        pre +
-                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                                    0,
-                                ) ?? 0}
-                            </span>{' '}
-                            {t.NFTs()}
-                        </Typography>
-                    </div>
-                    <ArrowIcon className={classes.arrowIcon} />
-                </div>
-                <div className={classes.flexItem} onClick={() => openImageSetting('Footprints')}>
-                    <div>
-                        <Typography style={{ fontWeight: '700' }}>{t.footprints()}</Typography>
-                        <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.footprints?.length ?? 0}</span>{' '}
-                            {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>
-                                {account?.walletList?.footprints?.reduce(
-                                    (pre, cur) =>
-                                        pre +
-                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                                    0,
-                                ) ?? 0}
-                            </span>{' '}
-                            {t.footprints()}
-                        </Typography>
-                    </div>
-                    <ArrowIcon className={classes.arrowIcon} />
-                </div>
-                <div className={classes.flexItem} onClick={() => openImageSetting('Donations')}>
-                    <div>
-                        <Typography style={{ fontWeight: '700' }}>{t.donations()}</Typography>
-                        <Typography>
-                            <span style={{ fontWeight: '700' }}>{account?.walletList?.donations?.length ?? 0}</span>{' '}
-                            {t.wallets()}{' '}
-                            <span style={{ fontWeight: '700' }}>
-                                {account?.walletList?.donations?.reduce(
-                                    (pre, cur) =>
-                                        pre +
-                                        (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
-                                    0,
-                                ) ?? 0}
-                            </span>{' '}
-                            {t.donations()}
-                        </Typography>
-                    </div>
-                    <ArrowIcon className={classes.arrowIcon} />
-                </div>
+                <CollectionItem
+                    title={t.NFTs()}
+                    onClick={() => openImageSetting('NFTs')}
+                    walletsNum={account?.walletList?.NFTs?.length ?? 0}
+                    collectionNum={
+                        account?.walletList?.NFTs?.reduce(
+                            (pre, cur) =>
+                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
+                            0,
+                        ) ?? 0
+                    }
+                />
+                <CollectionItem
+                    title={t.footprints()}
+                    onClick={() => openImageSetting('Footprints')}
+                    walletsNum={account?.walletList?.footprints?.length ?? 0}
+                    collectionNum={
+                        account?.walletList?.footprints?.reduce(
+                            (pre, cur) =>
+                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
+                            0,
+                        ) ?? 0
+                    }
+                />
+                <CollectionItem
+                    title={t.donations()}
+                    onClick={() => openImageSetting('Donations')}
+                    walletsNum={account?.walletList?.donations?.length ?? 0}
+                    collectionNum={
+                        account?.walletList?.donations?.reduce(
+                            (pre, cur) =>
+                                pre + (cur?.collections?.filter((collection) => !collection?.hidden)?.length ?? 0),
+                            0,
+                        ) ?? 0
+                    }
+                />
             </Stack>
         </Card>
     )

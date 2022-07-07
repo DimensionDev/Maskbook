@@ -1,8 +1,17 @@
-import { BindingProof, NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import { Alchemy_EVM, RSS3 } from '@masknet/web3-providers'
+import {
+    BindingProof,
+    fromHex,
+    NextIDPlatform,
+    NextIDStoragePayload,
+    PersonaInformation,
+    ProfileInformation,
+    toBase64,
+} from '@masknet/shared-base'
+import { Alchemy_EVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils'
-import type { AccountType, Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
+import { PLUGIN_ID } from '../constants'
+import type { AccountType, Collection, CollectionTypes, PersonaKV, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -232,4 +241,70 @@ export const getNFTList_Polygon = async (walletList: string[]) => {
     })
     await Promise.all(promises)
     return resNodeIdParams
+}
+
+export const getWalletHiddenList = async (publicKey: string) => {
+    if (!publicKey) return
+    const res = await NextIDStorage.get<PersonaKV>(publicKey)
+    const hiddenObj:
+        | {
+              hiddenWallets: Record<string, WalletsCollection>
+              hiddenCollections: Record<
+                  string,
+                  Record<
+                      string,
+                      {
+                          Donations: string[]
+                          Footprints: string[]
+                          NFTs: string[]
+                      }
+                  >
+              >
+          }
+        | undefined = { hiddenWallets: {}, hiddenCollections: {} }
+    if (res) {
+        ;(res?.val as PersonaKV)?.proofs
+            ?.filter((x) => x.platform === NextIDPlatform.Twitter)
+            ?.forEach((y) => {
+                hiddenObj.hiddenWallets[y.identity] = y?.content?.[PLUGIN_ID]?.hiddenAddresses!
+                hiddenObj.hiddenCollections[y.identity] = y?.content?.[PLUGIN_ID]?.unListedCollections!
+            })
+        return hiddenObj
+    }
+    return
+}
+
+export const getKvPayload = async (patchData: unknown, publicHexKey: string, accountId: string) => {
+    try {
+        const data = JSON.parse(JSON.stringify(patchData))
+        const payload = await NextIDStorage.getPayload(publicHexKey, NextIDPlatform.Twitter, accountId, data, PLUGIN_ID)
+        return payload
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+
+export const setKvPatchData = async (
+    payload: NextIDStoragePayload,
+    signature: string,
+    patchData: unknown,
+    publicHexKey: string,
+    accountId: string,
+) => {
+    try {
+        const base64Sig = toBase64(fromHex(signature))
+        await NextIDStorage.set(
+            payload?.uuid,
+            publicHexKey,
+            base64Sig,
+            NextIDPlatform.Twitter,
+            accountId,
+            payload?.createdAt,
+            patchData,
+            PLUGIN_ID,
+        )
+    } catch (error) {
+        console.error(error)
+    }
 }

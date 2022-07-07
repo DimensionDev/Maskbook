@@ -7,11 +7,11 @@ import { InjectedDialog } from '@masknet/shared'
 import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
 import type { CollectionTypes } from '../types'
 import { context } from '../context'
-import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
 import classNames from 'classnames'
 import { CollectionList } from './CollectionList'
+import { getKvPayload, setKvPatchData } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
