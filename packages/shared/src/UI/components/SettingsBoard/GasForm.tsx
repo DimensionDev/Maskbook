@@ -95,6 +95,7 @@ export function GasForm(props: GasFormProps) {
         },
     })
 
+    const { errors } = methods.formState
     const [gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas] = methods.watch([
         'gasLimit',
         'gasPrice',
@@ -106,22 +107,22 @@ export function GasForm(props: GasFormProps) {
     const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState<string>()
 
     const errorCenter = useMemo(() => {
-        return isEIP1559 ? methods.formState.errors.gasLimit?.message ?? '' : ''
-    }, [isEIP1559, methods.formState.errors.gasLimit?.message])
+        return isEIP1559 ? errors.gasLimit?.message ?? '' : ''
+    }, [isEIP1559, errors.gasLimit?.message])
     const errorBottom = useMemo(() => {
         return (
-            (isEIP1559 ? undefined : methods.formState.errors.gasPrice?.message) ??
-            (isEIP1559 ? undefined : methods.formState.errors.gasLimit?.message) ??
-            (isEIP1559 ? methods.formState.errors.maxFeePerGas?.message : undefined) ??
-            (isEIP1559 ? methods.formState.errors.maxPriorityFeePerGas?.message : undefined) ??
+            (isEIP1559 ? undefined : errors.gasPrice?.message) ??
+            (isEIP1559 ? undefined : errors.gasLimit?.message) ??
+            (isEIP1559 ? errors.maxFeePerGas?.message : undefined) ??
+            (isEIP1559 ? errors.maxPriorityFeePerGas?.message : undefined) ??
             ''
         )
     }, [
         isEIP1559,
-        methods.formState.errors.gasPrice?.message,
-        methods.formState.errors.gasLimit?.message,
-        methods.formState.errors.maxFeePerGas?.message,
-        methods.formState.errors.maxPriorityFeePerGas?.message,
+        errors.gasPrice?.message,
+        errors.gasLimit?.message,
+        errors.maxFeePerGas?.message,
+        errors.maxPriorityFeePerGas?.message,
     ])
 
     // #region set the default max priority gas fee and max fee
@@ -189,7 +190,7 @@ export function GasForm(props: GasFormProps) {
                                             {t.gas_settings_label_gas_price()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.gasPrice?.message}
+                                    error={!!errors.gasPrice?.message}
                                     onChange={(ev) => {
                                         setGasPriceByUser(ev.target.value)
                                         methods.setValue('gasPrice', ev.target.value)
@@ -220,7 +221,7 @@ export function GasForm(props: GasFormProps) {
                                         {t.gas_settings_label_gas_limit()}
                                     </Typography>
                                 }
-                                error={!!methods.formState.errors.gasLimit?.message}
+                                error={!!errors.gasLimit?.message}
                             />
                         )}
                         name="gasLimit"
@@ -257,7 +258,7 @@ export function GasForm(props: GasFormProps) {
                                             {t.gas_settings_label_max_priority_fee()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.maxPriorityFeePerGas?.message}
+                                    error={!!errors.maxPriorityFeePerGas?.message}
                                     onChange={(ev) => {
                                         setMaxPriorityFeePerGasByUser(ev.target.value)
                                         methods.setValue('maxPriorityFeePerGas', ev.target.value)
@@ -287,7 +288,7 @@ export function GasForm(props: GasFormProps) {
                                             {t.gas_settings_label_max_fee()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.maxFeePerGas?.message}
+                                    error={!!errors.maxFeePerGas?.message}
                                     onChange={(ev) => {
                                         setMaxFeePerGasByUser(ev.target.value)
                                         methods.setValue('maxFeePerGas', ev.target.value)
