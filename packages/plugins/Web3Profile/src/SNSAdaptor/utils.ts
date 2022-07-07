@@ -1,6 +1,6 @@
 import { BindingProof, NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
-import { formatEthereumAddress, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
-import { getDonations, getFootprints, getNFTs, getPolygonNFTs } from './api'
+import { Alchemy_EVM, RSS3 } from '@masknet/web3-providers'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { AccountType, Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
@@ -8,7 +8,7 @@ export const formatPublicKey = (publicKey?: string) => {
 }
 
 export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
-    if (!listA || listA?.length === 0) return
+    if (!listA || listA?.length === 0) return listB
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.map((item, index) => {
         const listBCollection = listB?.find((itemB) => itemB.address === item.address)?.collections
@@ -129,7 +129,7 @@ export const placeFirst = (userId?: string, accountList?: AccountType[]) => {
 export const getDonationList = async (walletList: string[]) => {
     const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
-        return getDonations(formatEthereumAddress(address)).then((result) => {
+        return RSS3.getDonations(formatEthereumAddress(address)).then((result) => {
             if (result) {
                 resNodeIdParams.push({
                     address,
@@ -155,7 +155,7 @@ export const getDonationList = async (walletList: string[]) => {
 export const getFootprintList = async (walletList: string[]) => {
     const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
-        return getFootprints(formatEthereumAddress(address)).then((result) => {
+        return RSS3.getFootprints(formatEthereumAddress(address)).then((result) => {
             if (result) {
                 resNodeIdParams.push({
                     address,
@@ -181,22 +181,17 @@ export const getFootprintList = async (walletList: string[]) => {
 export const getNFTList = async (walletList: string[]) => {
     const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
-        return getNFTs(formatEthereumAddress(address)).then((result) => {
+        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
             if (result) {
+                console.log({ result })
                 resNodeIdParams.push({
                     address,
-                    collections: result?.ownedNfts?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${Number.parseInt(asset.id?.tokenId, 16).toString()}`,
-                        address: asset?.contract?.address,
+                    collections: result?.data?.map((asset) => ({
+                        key: `${asset?.contract?.address}+${asset.tokenId}`,
+                        address: asset?.address,
                         platform: 'EVM',
-                        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
-                        iconURL: resolveIPFSLinkFromURL(
-                            asset?.metadata?.image ||
-                                asset?.metadata?.image_url ||
-                                asset?.media?.[0]?.gateway ||
-                                asset?.metadata?.animation_url ||
-                                '',
-                        ),
+                        tokenId: asset.tokenId,
+                        iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
                     })),
                 })
@@ -214,22 +209,17 @@ export const getNFTList = async (walletList: string[]) => {
 export const getNFTList_Polygon = async (walletList: string[]) => {
     const resNodeIdParams: Collection[] = []
     const promises = walletList.map((address) => {
-        return getPolygonNFTs(formatEthereumAddress(address)).then((result) => {
+        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
             if (result) {
                 resNodeIdParams.push({
                     address,
-                    collections: result?.ownedNfts?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${Number.parseInt(asset.id?.tokenId, 16).toString()}`,
-                        address: asset?.contract?.address,
+                    collections: result?.data?.map((asset) => ({
+                        key: `${asset?.contract?.address}+${asset.tokenId}`,
+                        address: asset?.address,
                         platform: 'EVM',
-                        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
-                        iconURL: resolveIPFSLinkFromURL(
-                            asset?.metadata?.image ||
-                                asset?.metadata?.image_url ||
-                                asset?.media?.[0]?.gateway ||
-                                asset?.metadata?.animation_url ||
-                                '',
-                        ),
+                        tokenId: asset.tokenId,
+                        iconURL: asset?.metadata?.imageURL,
+                        name: asset?.metadata?.name,
                     })),
                 })
             } else {

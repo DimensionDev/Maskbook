@@ -142,6 +142,7 @@ export function Web3ProfileDialog() {
             internal: true,
         })
     }
+
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
