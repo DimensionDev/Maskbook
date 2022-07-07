@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { makeStyles, MaskTabList } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
@@ -94,7 +93,11 @@ export function GasSection(props: GasSectionProps) {
                                     ? GAS_OPTION_NAMES[gasOptionType]
                                     : t.gas_settings_custom()}
                             </span>
-                            <span className={classes.price}>{` ${customPrice} Gwei`}</span>
+                            <span className={classes.price}>
+                                {' '}
+                                {customPrice}
+                                {' Gwei'}
+                            </span>
                         </Typography>
                     ) : null
                 }>
