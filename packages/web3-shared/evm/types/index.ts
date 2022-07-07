@@ -352,6 +352,7 @@ export type GasOption = {
     estimatedSeconds: number
     // eip1559 only
     estimatedBaseFee?: string
+    baseFeePerGas?: string
     // note: for prior 1559 it means gasPrice
     suggestedMaxFeePerGas: string
     suggestedMaxPriorityFeePerGas: string

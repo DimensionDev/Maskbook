@@ -1,6 +1,7 @@
 import { ONE } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 
+export const MIN_GAS_LIMIT = 150000
 export const MIN_SLIPPAGE = 50 // 0.5%
 export const MAX_SLIPPAGE = 500 // 5%
 

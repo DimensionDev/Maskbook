@@ -2,6 +2,7 @@
 i18n_generated.js
 i18n_generated.d.ts
 i18n_generated.d.ts.map
+.swc
 
 # VSCode personal settings
 .vscode/launch.json

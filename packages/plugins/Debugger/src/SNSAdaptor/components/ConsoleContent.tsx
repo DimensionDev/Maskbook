@@ -14,6 +14,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import {
+    ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
     SchemaType,
@@ -362,11 +363,16 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 size="small"
                                 onClick={async () => {
                                     const gasSettings = await onSelectGasSettings({
+                                        chainId: ChainId.Matic,
+                                        slippageTolerance: 1,
+                                        disableSlippageTolerance: true,
                                         transaction: {
                                             from: account,
                                             to: account,
-                                            gas: '300000',
                                             value: '1',
+                                            gas: 30000,
+                                            // this field could be overridden with the instant gas options
+                                            maxFeePerGas: 3800000000,
                                         },
                                     })
                                     console.log(gasSettings)

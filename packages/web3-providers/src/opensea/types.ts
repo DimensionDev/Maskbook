@@ -59,6 +59,8 @@ export interface AssetEvent {
     total_price: string
     payment_token: {
         decimals: number
+        symbol: string
+        usd_price: string
     }
     quantity: string
 }
