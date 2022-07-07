@@ -38,7 +38,8 @@ export function PetDialog() {
             onClose={handleClose}
             title={t(
                 step === PetFriendNFTStep.SetFriendNFT ? 'plugin_pets_dialog_title' : 'plugin_pets_dialog_title_share',
-            )}>
+            )}
+            titleBarIconStyle="back">
             <DialogContent style={{ padding: 0 }}>
                 {step === PetFriendNFTStep.SetFriendNFT ? (
                     <PetSetDialog onClose={handleSetDialogClose} configNFTs={configNFTs} />
