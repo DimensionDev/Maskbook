@@ -31,8 +31,12 @@ const RESERVED_SLUGS = [
     'your_twitter_data',
 ]
 
-const getFirstSlug = () => {
-    const slugs = location.pathname.split('/').filter((x) => x)
+const { split } = String.prototype
+const { filter, includes } = Array.prototype
+const { Boolean } = globalThis
+
+function getFirstSlug() {
+    const slugs: string[] = apply(filter, apply(split, location.pathname, ['/' as any]), [Boolean])
     return slugs[0]
 }
 
@@ -41,7 +45,7 @@ export function setupWatcherForTwitter() {
     window.addEventListener('locationchange', () => {
         const newFirstSlug = getFirstSlug()
         // reset to void wrong value
-        if (!firstSlug || RESERVED_SLUGS.includes(firstSlug)) {
+        if (!firstSlug || apply(includes, RESERVED_SLUGS, [firstSlug])) {
             const event = new no_xray_CustomEvent('scenechange', {
                 detail: { scene: 'unknown' },
             }) as WindowEventMap['scenechange']

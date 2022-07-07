@@ -11,12 +11,19 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
+    formatPercentage,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { SelectTokenChip, useSelectAdvancedSettings } from '@masknet/shared'
+import {
+    isHighRisk,
+    SelectTokenChip,
+    TokenSecurityBar,
+    useSelectAdvancedSettings,
+    useTokenSecurity,
+} from '@masknet/shared'
 import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
@@ -35,6 +42,9 @@ import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoun
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import Services from '../../../../extension/service'
+import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
+import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -255,6 +265,20 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
+        const [isWarningOpen, setIsWarningOpen] = useState(false)
+
+        const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+        const isDashboardClosed = useIsMinimalModeDashBoard(PluginId.GoPlusSecurity)
+        const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
+
+        const { value: tokenSecurityInfo, error } = useTokenSecurity(
+            chainId,
+            outputToken?.address.trim(),
+            isTokenSecurityEnable,
+        )
+
+        const isRisky = isHighRisk(tokenSecurityInfo)
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -481,6 +505,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     ),
                                 }}
                             />
+                            <Box marginTop="8px">
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                )}
+                            </Box>
 
                             <Box marginTop="12px">
                                 {trades.filter((item) => !!item.value).length > 0 ? (
@@ -576,25 +605,50 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         style: { borderRadius: 8 },
                                         size: 'medium',
                                     }}>
-                                    <ActionButton
-                                        fullWidth
-                                        loading={isSwapping}
-                                        variant="contained"
-                                        disabled={
-                                            focusedTrade?.loading ||
-                                            !focusedTrade?.value ||
-                                            !!validationMessage ||
-                                            isSwapping
-                                        }
-                                        classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                        color="primary"
-                                        onClick={onSwap}>
-                                        {validationMessage || nativeWrapMessage}
-                                    </ActionButton>
+                                    {isTokenSecurityEnable && isRisky ? (
+                                        <ActionButton
+                                            fullWidth
+                                            variant="contained"
+                                            color="error"
+                                            disabled={focusedTrade?.loading || !focusedTrade?.value}
+                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                            onClick={() => setIsWarningOpen(true)}>
+                                            {t('plugin_trader_risk_warning', {
+                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                            })}
+                                        </ActionButton>
+                                    ) : (
+                                        <ActionButton
+                                            fullWidth
+                                            loading={isSwapping}
+                                            variant="contained"
+                                            disabled={
+                                                focusedTrade?.loading ||
+                                                !focusedTrade?.value ||
+                                                !!validationMessage ||
+                                                isSwapping
+                                            }
+                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                            color="primary"
+                                            onClick={onSwap}>
+                                            {validationMessage || nativeWrapMessage}
+                                        </ActionButton>
+                                    )}
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
                     </PluginWalletStatusBar>
+                    {isTokenSecurityEnable && tokenSecurityInfo && (
+                        <RiskWarningDialog
+                            open={isWarningOpen}
+                            onClose={() => setIsWarningOpen(false)}
+                            onConfirm={() => {
+                                onSwap()
+                                setIsWarningOpen(false)
+                            }}
+                            tokenInfo={tokenSecurityInfo}
+                        />
+                    )}
                 </Box>
             </>
         )
