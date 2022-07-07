@@ -50,7 +50,7 @@ export function Bets(props: BetsProps) {
         )
     }
 
-    if (bets?.length === 0) {
+    if (!bets || bets.length === 0) {
         return <Placeholder />
     }
 
