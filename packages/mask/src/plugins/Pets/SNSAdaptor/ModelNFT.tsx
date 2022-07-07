@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import classNames from 'classnames'
@@ -7,6 +7,7 @@ import ModelView from './ModelView'
 import { useStyles as boxUseStyles } from './PreviewBox'
 import { DragIcon } from '../constants'
 import type { ShowMeta } from '../types'
+import RightMenu from './RightMenu'
 
 const useStyles = makeStyles()(() => ({
     dragContent: {
@@ -34,6 +35,15 @@ const useStyles = makeStyles()(() => ({
         overflow: 'hidden',
         width: '100%',
         height: '100%',
+        zIndex: 1,
+    },
+    fullBox: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
     },
 }))
 
@@ -49,8 +59,20 @@ export function ModelNFT(props: ModelNFTProps) {
     const [position, setPosition] = useState({ x: 50, y: 150 })
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
+        setMenuShow(false)
     }
 
+    const [isMenuShow, setMenuShow] = useState(false)
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+    const handleMenuShow = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        setMousePosition({ x: e.clientX, y: e.clientY })
+        setMenuShow(true)
+    }
+    const handleMenuClose = () => {
+        setMenuShow(false)
+    }
     return (
         <div>
             <div
@@ -65,6 +87,7 @@ export function ModelNFT(props: ModelNFTProps) {
                 <div className={classes.glbView}>
                     <ModelView className={classes.glbView} source={showMeta?.image ?? ''} />
                 </div>
+                <div className={classes.fullBox} onContextMenu={handleMenuShow} />
             </div>
             <Drag moveHandle={moveHandle} baseWidth={200} baseHeight={150}>
                 <div className={classes.dragContent}>
@@ -78,6 +101,13 @@ export function ModelNFT(props: ModelNFTProps) {
                     </Box>
                 ) : null}
             </Drag>
+            <RightMenu
+                isShow={isMenuShow}
+                showMeta={showMeta}
+                onClose={handleMenuClose}
+                mousePosition={mousePosition}
+                dragPosition={position}
+            />
         </div>
     )
 }

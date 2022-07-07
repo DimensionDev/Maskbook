@@ -21,16 +21,21 @@ export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
     useAsync(async () => {
-        let address = ''
+        const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
+            ? identity.identifier?.userId ?? ''
+            : ''
         try {
-            const response = await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')
-            if (response) address = response as string
-        } finally {
+            const address = (await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')) ?? ''
             setUser({
-                userId: identity.identifier?.userId ?? '',
+                userId,
                 address,
             })
+        } catch {
+            setUser({
+                userId,
+                address: '',
+            })
         }
-    }, [identity, flag])
+    }, [identity, flag, location.href])
     return user
 }
