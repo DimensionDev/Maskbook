@@ -13,11 +13,13 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
+const DEFAULT_SLIPPAGE_TOLERANCE = 0.5
 const DEFAULT_SLIPPAGE_TOLERANCES = [0.5, 1, 2, 5]
 
 export function useSettingsContext(initial?: {
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
+    slippageTolerance?: number
     transaction?: Web3Helper.TransactionAll
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
@@ -26,7 +28,7 @@ export function useSettingsContext(initial?: {
     const pluginID = useCurrentWeb3NetworkPluginID(initial?.pluginID)
     const chainId = useChainId(pluginID, initial?.chainId)
     const [transactionOptions, setTransactionOptions] = useState<Partial<Web3Helper.TransactionAll> | null>(null)
-    const [slippageTolerance, setSlippageTolerance] = useState(1)
+    const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
     const [gasOptionType, setGasOptionType] = useState<GasOptionType>()
 
     const {
@@ -34,7 +36,9 @@ export function useSettingsContext(initial?: {
         loading: gasOptionsLoading,
         error: gasOptionsError,
         retry: gasOptionRetry,
-    } = useGasOptions<'all'>()
+    } = useGasOptions<'all'>(pluginID, {
+        chainId,
+    })
 
     const onResetAll = useCallback(() => {
         setSlippageTolerance(1)
@@ -49,6 +53,7 @@ export function useSettingsContext(initial?: {
     })
 
     return {
+        DEFAULT_SLIPPAGE_TOLERANCE,
         DEFAULT_SLIPPAGE_TOLERANCES,
         GAS_OPTION_NAMES: {
             [GasOptionType.FAST]: t.gas_settings_gas_option_type_fast(),

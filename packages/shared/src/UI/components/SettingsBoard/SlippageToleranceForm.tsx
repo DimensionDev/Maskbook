@@ -46,17 +46,18 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SlippageToleranceFormProps {
+    slippageTolerance: number
     slippageTolerances: number[]
     onChange?: (data?: zod.infer<ReturnType<typeof useSlippageToleranceSchema>>) => void
 }
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
-    const { slippageTolerances, onChange } = props
+    const { slippageTolerance, slippageTolerances, onChange } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
 
     const schema = useSlippageToleranceSchema()
-    const [tolerance, setTolerance] = useState(0.5)
+    const [tolerance, setTolerance] = useState(slippageTolerance)
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,

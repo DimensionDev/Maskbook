@@ -47,6 +47,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    slippageTolerance?: number
     transaction?: Web3Helper.Definition[T]['Transaction']
     title?: string
     disableGasPrice?: boolean
@@ -61,6 +62,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     open,
     pluginID,
     chainId,
+    slippageTolerance,
     transaction,
     disableGasPrice,
     disableSlippageTolerance,
@@ -82,9 +84,10 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
         () => ({
             pluginID: pluginID_,
             chainId: chainId_,
+            slippageTolerance,
             transaction,
         }),
-        [pluginID_, chainId_, transaction],
+        [pluginID_, chainId_, slippageTolerance, transaction],
     )
 
     if (!open) return null

@@ -40,8 +40,8 @@ export class EthereumWeb3API implements GasOptionAPI.Provider<ChainId, GasOption
         const normal = avg(blocks.map((b) => b.priorityFeePerGas[1]))
         const fast = avg(blocks.map((b) => b.priorityFeePerGas[2]))
 
-        // get the base fee per gas from the pending block
-        const block = await web3.eth.getBlock('pending')
+        // get the base fee per gas from the latest block
+        const block = await web3.eth.getBlock('latest')
         const baseFeePerGas = block?.baseFeePerGas ?? 0
 
         return {
