@@ -271,18 +271,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Stack>
                     </Stack>
                     <Stack>
-                        {transakPluginEnabled &&
-                        !transakIsMinimalMode &&
-                        account &&
-                        trending.coin.symbol &&
-                        isAllowanceCoin ? (
+                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
                             <Button
                                 style={{
                                     background: theme.palette.maskColor.dark,
                                     color: theme.palette.maskColor.white,
                                 }}
                                 size="small"
-                                startIcon={<BuyIcon />}
+                                startIcon={<BuyIcon style={{ fontSize: 16 }} />}
                                 variant="contained"
                                 onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
