@@ -31,15 +31,9 @@ import type {
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
-    if (
-        !getEnumAsArray(ChainId)
-            .map((x) => x.value)
-            .includes(chainId)
-    )
-        return
+    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
     if (response.ok) {
