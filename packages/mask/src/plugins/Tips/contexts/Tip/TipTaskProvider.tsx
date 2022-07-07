@@ -7,7 +7,7 @@ import { getStorage } from '../../storage'
 import { TipTask, TipType } from '../../types'
 import { TargetRuntimeContext } from '../TargetRuntimeContext'
 import { ContextOptions, TipContext } from './TipContext'
-import { useAddNameService } from './useAddNameService'
+import { useTipAccountsCompletion } from './useTipAccountsCompletion'
 import { useNftTip } from './useNftTip'
 import { useTokenTip } from './useTokenTip'
 
@@ -18,7 +18,7 @@ interface Props {
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
     const [recipient, setRecipient] = useState(task.recipient ?? '')
-    const recipients = useAddNameService(task.addresses)
+    const recipients = useTipAccountsCompletion(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
