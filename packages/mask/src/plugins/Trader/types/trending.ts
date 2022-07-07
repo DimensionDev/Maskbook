@@ -1,4 +1,5 @@
 import type { DataProvider } from '@masknet/public-api'
+import type { ChainId } from '../../Referral/types'
 export interface Settings {
     currency: Currency
 }
@@ -32,6 +33,7 @@ export interface Coin {
     is_mirrored?: boolean
     platform_url?: string
     tags?: string[]
+    chainId?: ChainId
     tech_docs_urls?: string[]
     message_board_urls?: string[]
     source_code_urls?: string[]
@@ -80,6 +82,11 @@ export interface Ticker {
     updated: Date
 }
 
+export interface Contract {
+    chainId?: ChainId
+    address: string
+}
+
 export interface Trending {
     currency: Currency
     dataProvider: DataProvider
@@ -88,6 +95,7 @@ export interface Trending {
     market?: Market
     tickers: Ticker[]
     lastUpdated: string
+    contracts?: Contract[]
 }
 
 export type Stat = [number | string, number]

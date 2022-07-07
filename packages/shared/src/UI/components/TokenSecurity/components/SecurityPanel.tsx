@@ -1,17 +1,18 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useSharedI18N } from '../../../../locales'
+import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
+import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
-import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
-import { getMessageList, TokenIcon } from '@masknet/shared'
-import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
+import { TokenIcon } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import urlcat from 'urlcat'
+import type { TokenAPI } from '@masknet/web3-providers'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 
 interface TokenCardProps {
@@ -51,10 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.text.secondary,
     },
-    itemTitle: {
-        color: theme.palette.maskColor.second,
-        fontSize: 14,
-    },
 }))
 
 const LIST_HEIGHT = {
@@ -62,23 +59,29 @@ const LIST_HEIGHT = {
     max: 308,
 }
 
+function resolveGoLabLink(chainId: ChainId, address: string) {
+    return urlcat('https://gopluslabs.io/token-security/:chainId/:address', { chainId, address })
+}
+
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
-    const t = useI18N()
+    const t = useSharedI18N()
     const theme = useTheme()
-
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
-    const { riskyFactors, attentionFactors, makeMessageList } = useMemo(() => {
-        const makeMessageList = getMessageList(tokenSecurity)
+    const makeMessageList =
+        tokenSecurity?.trust_list === '1'
+            ? []
+            : SecurityMessages.filter(
+                  (x) =>
+                      x.condition(tokenSecurity) &&
+                      x.level !== SecurityMessageLevel.Safe &&
+                      !x.shouldHide(tokenSecurity),
+              ).sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
 
-        const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
-        const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-        return { riskyFactors, attentionFactors, makeMessageList }
-    }, [tokenSecurity])
-
-    const hasWarningFactor = riskyFactors !== 0 || attentionFactors !== 0
+    const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
+    const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
 
     const securityMessageLevel = useMemo(() => {
         if (riskyFactors) return SecurityMessageLevel.High
@@ -97,36 +100,32 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
                         : '0px 0px 20px rgba(255, 255, 255, 0.12);'
                 }
+                marginTop="8px"
                 padding="16px"
                 borderRadius="16px">
                 <Stack direction="row" spacing={0.8}>
-                    {tokenSecurity?.token_name ? (
-                        <TokenIcon
-                            classes={{ icon: classes.icon }}
-                            address={tokenSecurity?.contract ?? ''}
-                            name={tokenSecurity?.token_name}
-                            logoURL={tokenInfo?.logoURL}
-                            chainId={tokenSecurity?.chainId}
-                        />
-                    ) : (
-                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
-                    )}
+                    <TokenIcon
+                        classes={{ icon: classes.icon }}
+                        address={tokenSecurity?.contract}
+                        name={tokenSecurity?.token_name}
+                        logoURL={tokenInfo?.logoURL}
+                    />
                     <Stack>
                         <Typography className={classes.tokenName}>
                             {tokenSecurity?.token_name || t.unnamed()}
                         </Typography>
-                        <Typography className={classes.tokenPrice}> {price ? formatCurrency(price) : '--'}</Typography>
+                        <Typography className={classes.tokenPrice}>{price ? formatCurrency(price) : '--'}</Typography>
                     </Stack>
                 </Stack>
                 <Stack>
-                    {hasWarningFactor && (
+                    {(riskyFactors !== 0 || attentionFactors !== 0) && (
                         <div
                             style={{
                                 backgroundColor:
                                     DefineMapping[
                                         riskyFactors !== 0 ? SecurityMessageLevel.High : SecurityMessageLevel.Medium
                                     ].bgColor,
-                                padding: '16px 12px 16px 18px',
+                                padding: '14px 12px 14px 18px',
                                 borderRadius: '12px',
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -168,7 +167,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                            <ExternalLink color={theme.palette.text.strong} size={14} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -184,48 +183,38 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.High].icon(16)}
-                                <Typography component="span" className={classes.itemTitle}>
+                                {DefineMapping[SecurityMessageLevel.High].icon(14)}
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {riskyFactors > 1
-                                        ? t.risky_factors({ quantity: riskyFactors.toString() })
-                                        : t.risky_factor({ quantity: riskyFactors.toString() })}
+                                        ? t.risky_items({ quantity: riskyFactors.toString() })
+                                        : t.risky_item({ quantity: riskyFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
-                                <Typography component="span" className={classes.itemTitle}>
+                                {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
+                                <Typography component="span" color="#C4C7CD" fontSize={14}>
                                     {attentionFactors > 1
-                                        ? t.attention_factors({ quantity: attentionFactors.toString() })
-                                        : t.attention_factor({ quantity: attentionFactors.toString() })}
+                                        ? t.attention_items({ quantity: attentionFactors.toString() })
+                                        : t.attention_item({ quantity: attentionFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
                     </Stack>
                 </Stack>
-                <Collapse
-                    in={isCollapse}
-                    timeout={{
-                        enter: 1200,
-                        exit: 10,
-                    }}
-                    collapsedSize={LIST_HEIGHT.min}
-                    className={classes.detectionCollection}
-                    sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
-                    <Stack spacing={1}>
-                        {makeMessageList.map((x, i) => (
-                            <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
-                        ))}
-                        {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
-                            <RiskCardUI
-                                icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                                title={t.risk_safe_description()}
-                                titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
-                            />
-                        )}
-                    </Stack>
-                </Collapse>
+                <Stack className={classes.detectionCollection} sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
+                    {makeMessageList.map((x, i) => (
+                        <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
+                    ))}
+                    {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
+                        <RiskCardUI
+                            icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
+                            title={t.risk_safe_description()}
+                            titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
+                        />
+                    )}
+                </Stack>
             </Stack>
         </Stack>
     )

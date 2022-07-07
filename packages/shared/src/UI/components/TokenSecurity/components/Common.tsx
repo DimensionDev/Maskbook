@@ -2,7 +2,7 @@ import type { SecurityAPI } from '@masknet/web3-providers'
 import { SecurityRiskIcon, SecurityWarningIcon, SuccessIcon } from '@masknet/icons'
 import { memo, ReactNode } from 'react'
 import { Stack } from '@mui/material'
-import type { useI18N } from '../../locales'
+import type { useSharedI18N } from '../../../../locales'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TokenSecurity = SecurityAPI.ContractSecurity &
@@ -15,15 +15,15 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
-export const Center = memo(({ children }) => (
+export const Center = memo((props: { children: ReactNode }) => (
     <Stack height="100%" justifyContent="center" alignItems="center">
-        {children}
+        {props.children}
     </Stack>
 ))
 
 type DefineMapping = {
     [key in SecurityMessageLevel]: {
-        i18nKey: keyof ReturnType<typeof useI18N>
+        i18nKey: keyof ReturnType<typeof useSharedI18N>
         bgColor: string
         titleColor: string
         icon(size?: number): ReactNode
