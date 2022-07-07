@@ -38,6 +38,7 @@ export interface TraderProps extends withClasses<'root'> {
 }
 
 export interface TraderRef {
+    focusedTrade?: TradeInfo
     refresh: () => void
 }
 
@@ -63,11 +64,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useImperativeHandle(
         ref,
         () => ({
+            focusedTrade,
             refresh: () => {
                 allTradeComputed.map((x) => x.retry())
             },
         }),
-        [allTradeComputed],
+        [allTradeComputed, focusedTrade],
     )
 
     // #region gas config and gas price

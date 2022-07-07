@@ -52,6 +52,7 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     title?: string
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
+    disableGasLimit?: boolean
     onSubmit?(
         settings: { slippageTolerance?: number; transaction?: Web3Helper.Definition[T]['Transaction'] } | null,
     ): void
@@ -66,6 +67,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     transaction,
     disableGasPrice,
     disableSlippageTolerance,
+    disableGasLimit,
     onSubmit,
     onClose,
     title,
@@ -107,6 +109,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
             <DialogContent classes={{ root: classes.content }}>
                 <SettingsContext.Provider initialState={initialState}>
                     <SettingsBoard
+                        disableGasLimit={disableGasLimit}
                         disableGasPrice={disableGasPrice}
                         disableSlippageTolerance={disableSlippageTolerance}
                         onChange={setSettings}

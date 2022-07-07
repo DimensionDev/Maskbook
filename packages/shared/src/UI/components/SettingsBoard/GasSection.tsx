@@ -41,7 +41,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface GasSectionProps {}
+export interface GasSectionProps {
+    disableGasLimit?: boolean
+}
 
 export function GasSection(props: GasSectionProps) {
     const t = useSharedI18N()
@@ -121,6 +123,7 @@ export function GasSection(props: GasSectionProps) {
                     />
                 ) : gasOptions ? (
                     <GasForm
+                        disableGasLimit={props.disableGasLimit}
                         chainId={chainId as ChainId}
                         transaction={transaction as Transaction}
                         transactionOptions={transactionOptions as Partial<Transaction>}

@@ -17,11 +17,12 @@ const useStyles = makeStyles()((theme) => {
 export interface SettingsBoardProps {
     disableGasPrice?: boolean
     disableSlippageTolerance?: boolean
+    disableGasLimit?: boolean
     onChange?(settings: { slippageTolerance?: number; transaction?: Web3Helper.TransactionAll }): void
 }
 
 export function SettingsBoard(props: SettingsBoardProps) {
-    const { disableGasPrice = false, disableSlippageTolerance = false, onChange } = props
+    const { disableGasPrice = false, disableSlippageTolerance = false, onChange, disableGasLimit } = props
     const { classes } = useStyles()
     const { transaction, transactionOptions, slippageTolerance } = SettingsContext.useContainer()
 
@@ -39,7 +40,7 @@ export function SettingsBoard(props: SettingsBoardProps) {
 
     return (
         <div className={classes.root}>
-            {disableGasPrice ? null : <GasSection />}
+            {disableGasPrice ? null : <GasSection disableGasLimit={disableGasLimit} />}
             {disableSlippageTolerance ? null : <SlippageToleranceSection />}
         </div>
     )

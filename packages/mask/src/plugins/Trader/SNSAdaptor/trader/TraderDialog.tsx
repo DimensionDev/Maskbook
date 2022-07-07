@@ -17,6 +17,7 @@ import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { GearIcon, RefreshIcon } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
+import { MIN_GAS_LIMIT } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -120,7 +121,14 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             </IconButton>
                             <IconButton
                                 onClick={async () => {
-                                    const { slippageTolerance, transaction } = await selectAdvancedSettings()
+                                    const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                                        chainId,
+                                        disableGasLimit: true,
+                                        transaction: {
+                                            gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                                        },
+                                        slippageTolerance: currentSlippageSettings.value / 100,
+                                    })
 
                                     if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 

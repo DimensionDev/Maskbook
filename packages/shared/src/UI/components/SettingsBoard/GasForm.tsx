@@ -20,13 +20,13 @@ const useStyles = makeStyles()((theme) => {
         },
         textfield: {
             '& input[type=number]': {
-                '-moz-appearance': 'textfield',
+                MozAppearance: 'textfield',
             },
             '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
+                WebkitAppearance: 'none',
             },
             '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
+                WebkitAppearance: 'none',
             },
         },
         caption: {
@@ -56,6 +56,7 @@ const useStyles = makeStyles()((theme) => {
 export interface GasFormProps {
     chainId: ChainId
     transaction: Transaction
+    disableGasLimit?: boolean
     transactionOptions: Partial<Transaction>
     gasOptions: Record<GasOptionType, GasOption>
     onChange?: (transactionOptions?: Partial<Transaction>) => void
@@ -209,6 +210,7 @@ export function GasForm(props: GasFormProps) {
                                 InputProps={{
                                     type: 'number',
                                 }}
+                                disabled={props.disableGasLimit}
                                 inputProps={{
                                     pattern: '^[0-9]*[.,]?[0-9]*$',
                                 }}

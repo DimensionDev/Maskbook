@@ -21,7 +21,7 @@ import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@maskne
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
-import { MINIMUM_AMOUNT } from '../../constants'
+import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
@@ -209,8 +209,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
     }
 })
-
-const MIN_GAS_LIMIT = 150000
 
 export interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
@@ -410,6 +408,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const openSwapSettingDialog = useCallback(async () => {
             const { slippageTolerance, transaction } = await selectAdvancedSettings({
                 chainId,
+                disableGasLimit: true,
+                slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
                 },
