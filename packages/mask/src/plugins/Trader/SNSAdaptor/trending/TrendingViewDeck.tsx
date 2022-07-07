@@ -281,6 +281,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     background: theme.palette.maskColor.dark,
                                     color: theme.palette.maskColor.white,
                                 }}
+                                size="small"
                                 startIcon={<BuyIcon />}
                                 variant="contained"
                                 onClick={onBuyButtonClicked}>
