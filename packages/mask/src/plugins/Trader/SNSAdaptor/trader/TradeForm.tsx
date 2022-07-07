@@ -3,7 +3,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -225,6 +225,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwap: () => void
     onSwitch: () => void
     settings?: boolean
+    gasConfig?: GasOptionConfig
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -242,6 +243,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         gasPrice,
         onSwitch,
         settings,
+        gasConfig,
         ...props
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
@@ -318,14 +320,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 if (isNativeTokenWrapper(focusedTrade.value)) {
                     return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
                 }
-                return t('plugin_trader_swap_amount_symbol', {
-                    amount: formatBalance(
-                        focusedTrade?.value?.outputAmount ?? 0,
-                        focusedTrade?.value?.outputToken?.decimals,
-                        2,
-                    ),
-                    symbol: outputToken?.symbol,
-                })
+                return t('plugin_trader_swap_amount_symbol')
             } else {
                 return t('plugin_trader_no_trade')
             }
@@ -412,6 +407,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                    ...(gasConfig ?? {}),
                 },
             })
 
@@ -425,7 +421,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
                 },
             })
-        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings])
+        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
         // #endregion
 
         // #region if `isPopup` be true, click the plugin status bar need to  open popup window

@@ -1,6 +1,6 @@
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
-import { createNativeToken, formatUSD, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
 import { formatBalance, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
@@ -13,6 +13,7 @@ import { useSelectAdvancedSettings } from '@masknet/shared'
 import { PriceImpactDialogUI } from './components/PriceImpactDialogUI'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import BigNumber from 'bignumber.js'
+import { MIN_GAS_LIMIT } from '../../constants'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -22,12 +23,13 @@ export interface ConfirmDialogProps {
     outputToken: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     gas?: number
     gasPrice?: string
+    gasConfig?: GasOptionConfig
     onConfirm: () => void
 }
 const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
-    const { inputToken, outputToken, gas, gasPrice, trade, onConfirm } = props
+    const { inputToken, outputToken, gas, gasPrice, trade, onConfirm, gasConfig } = props
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
@@ -91,7 +93,15 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 inputTokenPrice={inputTokenPrice}
                 outputTokenPrice={outputTokenPrice}
                 openSettingDialog={async () => {
-                    const { slippageTolerance, transaction } = await selectAdvancedSettings()
+                    const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                        chainId,
+                        disableGasLimit: true,
+                        slippageTolerance: currentSlippageSettings.value / 100,
+                        transaction: {
+                            gas: gas ?? MIN_GAS_LIMIT,
+                            ...(gasConfig ?? {}),
+                        },
+                    })
 
                     if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 

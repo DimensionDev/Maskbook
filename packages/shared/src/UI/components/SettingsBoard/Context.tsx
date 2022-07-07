@@ -49,7 +49,7 @@ export function useSettingsContext(initial?: {
 
     useSingleBlockBeatRetry(pluginID, async () => {
         if (initial?.disableGasPrice) return
-        await gasOptionRetry()
+        gasOptionRetry()
     })
 
     return {
