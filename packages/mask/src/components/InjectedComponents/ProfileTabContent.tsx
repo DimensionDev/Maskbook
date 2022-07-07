@@ -109,9 +109,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const availablePlugins = useAvailablePlugins(activatedPlugins)
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
     const displayPlugins = useMemo(() => {
-        return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-        // .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
-    }, [identity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
+        return availablePlugins
+            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
+    }, [identity, availablePlugins.map((x) => x.ID).join(), addressList.map((x) => x.address).join()])
 
     const tabs = displayPlugins
         .sort((a, z) => {
@@ -144,19 +145,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
             : selectedTabId
-
-    console.log({
-        componentTabId,
-        currentIdentity,
-        addressList,
-        currentConnectedPersona,
-        personaList,
-        socialAddressList,
-        identity,
-        isWeb3ProfileDisable,
-        personaPublicKey,
-        personaProof,
-    })
 
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({

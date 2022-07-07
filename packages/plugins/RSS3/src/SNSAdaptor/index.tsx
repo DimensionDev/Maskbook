@@ -15,7 +15,7 @@ function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAdd
     return (
         addressNames?.some(
             (x) =>
-                x.type === (SocialAddressType.RSS3 || SocialAddressType.KV) &&
+                (x.type === SocialAddressType.RSS3 || x.type === SocialAddressType.KV) &&
                 x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
         ) ?? false
     )
