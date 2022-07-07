@@ -40,7 +40,8 @@ export function PetDialog() {
         <InjectedDialog
             open={open}
             onClose={handleClose}
-            title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}>
+            title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}
+            titleBarIconStyle="back">
             <DialogContent style={{ padding: 0 }}>
                 {step === PetFriendNFTStep.SetFriendNFT ? (
                     <PetSetDialog onClose={handleSetDialogClose} configNFTs={configNFTs} />

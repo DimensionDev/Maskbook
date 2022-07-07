@@ -18,6 +18,9 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { GearIcon, RefreshIcon } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
 import { MIN_GAS_LIMIT } from '../../constants'
+import { isDashboardPage } from '@masknet/shared-base'
+
+const isDashboard = isDashboardPage()
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -31,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
-        minHeight: 566,
+        minHeight: 560,
         display: 'flex',
         flexDirection: 'column',
         '&::-webkit-scrollbar': {
@@ -113,6 +116,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         closeDialog()
                     }}
                     title={t('plugin_trader_swap')}
+                    titleBarIconStyle={isDashboard ? 'close' : 'back'}
                     titleTail={
                         <div className={classes.tail}>
                             <IconButton onClick={() => tradeRef.current?.refresh()}>

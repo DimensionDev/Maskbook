@@ -241,7 +241,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             <Stack direction="row" justifyContent="space-between">
                                 <Stack direction="row" gap={1} alignItems="center">
                                     {market ? (
-                                        <Typography fontSize={18} fontWeight={500} lineHeight="24px">
+                                        <Typography
+                                            fontSize={18}
+                                            fontWeight={500}
+                                            lineHeight="24px"
+                                            color={theme.palette.maskColor.dark}>
                                             <FormattedCurrency
                                                 value={
                                                     (dataProvider === DataProvider.COIN_MARKET_CAP
