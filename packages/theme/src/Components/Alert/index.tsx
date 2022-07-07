@@ -7,7 +7,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
-        padding: 11.5,
+        padding: 11,
         borderRadius: 4,
     },
     message: {
@@ -16,6 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     icon: {
+        width: 22,
+        height: 22,
         padding: 0,
     },
     action: {
@@ -38,7 +40,12 @@ export const MaskAlert = forwardRef((props: MaskAlertProps) => {
     const { classes } = useStyles()
 
     return (
-        <Alert {...rest} classes={classes}>
+        <Alert
+            {...rest}
+            classes={{
+                ...classes,
+                ...rest.classes,
+            }}>
             {children}
         </Alert>
     )

@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
         },
         rectangle: {
-            borderRadius: 8,
+            borderRadius: 16,
         },
     }
 })

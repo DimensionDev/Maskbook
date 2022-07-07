@@ -35,6 +35,21 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
         },
+        alertIcon: {
+            color: `${theme.palette.maskColor.main} !important`,
+            width: 22,
+            height: 22,
+            padding: 0,
+        },
+        alertMessage: {
+            color: theme.palette.maskColor.main,
+            fontSize: 14,
+            fontWeight: 400,
+            padding: 0,
+        },
+        alertStandardSuccess: {
+            backgroundColor: theme.palette.maskColor.bg,
+        },
     }
 })
 
@@ -140,7 +155,13 @@ export function GasForm(props: GasFormProps) {
     return (
         <FormProvider {...methods}>
             {isEIP1559 && isPositive(baseFeePerGas) ? (
-                <MaskAlert icon={<InfoIcon />} severity="info">
+                <MaskAlert
+                    classes={{
+                        icon: classes.alertIcon,
+                        message: classes.alertMessage,
+                        standardSuccess: classes.alertStandardSuccess,
+                    }}
+                    icon={<InfoIcon />}>
                     {t.gas_settings_info_gas_fee({
                         fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
                     })}

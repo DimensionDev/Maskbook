@@ -363,7 +363,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 size="small"
                                 onClick={async () => {
                                     const gasSettings = await onSelectGasSettings({
-                                        chainId: ChainId.BSC,
+                                        chainId: ChainId.Matic,
                                         slippageTolerance: 1,
                                         transaction: {
                                             from: account,
