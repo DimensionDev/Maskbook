@@ -163,7 +163,7 @@ export function ReferralDialog({ open, onClose }: ReferralDialogProps) {
             open={open}
             isOnBack={currentPage.page !== PagesType.LANDING}
             onClose={onHandleClose}
-            titleBarIconStyle="close"
+            titleBarIconStyle="back"
             title={
                 propsData?.hideAttrLogo ? (
                     currentTitle

@@ -113,6 +113,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                         closeDialog()
                     }}
                     title={t('plugin_trader_swap')}
+                    titleBarIconStyle="back"
                     titleTail={
                         <div className={classes.tail}>
                             <IconButton onClick={() => tradeRef.current?.refresh()}>
