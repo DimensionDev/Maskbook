@@ -1,16 +1,17 @@
-import { Box, Button, DialogActions, DialogContent, List, ListItem, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
-import { InjectedDialog, NFTImageCollectibleAvatar } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
 import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
 import type { CollectionTypes } from '../types'
 import { context } from '../context'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
-import { NetworkPluginID, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
 import classNames from 'classnames'
+import { CollectionList } from './CollectionList'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -229,40 +230,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
                         {listedCollections && listedCollections.length > 0 ? (
-                            <List className={classes.list}>
-                                {listedCollections.map((collection, i) => (
-                                    <ListItem
-                                        className={classes.collectionWrap}
-                                        onClick={() => unList(collection.key)}
-                                        key={collection.key}>
-                                        <NFTImageCollectibleAvatar
-                                            pluginId={NetworkPluginID.PLUGIN_EVM}
-                                            size={64}
-                                            token={{
-                                                ...collection,
-                                                tokenId: collection.tokenId ?? '',
-                                                id: collection.address,
-                                                chainId: ChainId.Mainnet,
-                                                schema: SchemaType.ERC721,
-                                                type: TokenType.NonFungible,
-                                                contract: {
-                                                    chainId: ChainId.Mainnet,
-                                                    name: collection?.name ?? '',
-                                                    symbol: '',
-                                                    address: collection.address,
-                                                    schema: SchemaType.ERC721,
-                                                },
-                                                metadata: {
-                                                    imageURL: collection.iconURL,
-                                                    chainId: ChainId.Mainnet,
-                                                    name: '',
-                                                    symbol: '',
-                                                },
-                                            }}
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
+                            <CollectionList
+                                classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
+                                onList={unList}
+                                collections={listedCollections}
+                            />
                         ) : (
                             (!collectionList || collectionList?.length === 0) && (
                                 <Typography className={classes.unListedEmpty}>{t.no_items_found()}</Typography>
@@ -274,40 +246,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
                         {unListedCollections && unListedCollections.length > 0 ? (
-                            <List className={classes.list}>
-                                {unListedCollections.map((collection, i) => (
-                                    <ListItem
-                                        key={collection?.key}
-                                        className={classes.collectionWrap}
-                                        onClick={() => list(collection.key)}>
-                                        <NFTImageCollectibleAvatar
-                                            pluginId={NetworkPluginID.PLUGIN_EVM}
-                                            size={64}
-                                            token={{
-                                                ...collection,
-                                                tokenId: collection.tokenId ?? '',
-                                                id: collection.address,
-                                                chainId: ChainId.Mainnet,
-                                                schema: SchemaType.ERC721,
-                                                type: TokenType.NonFungible,
-                                                contract: {
-                                                    chainId: ChainId.Mainnet,
-                                                    name: collection?.name ?? '',
-                                                    symbol: '',
-                                                    address: collection.address,
-                                                    schema: SchemaType.ERC721,
-                                                },
-                                                metadata: {
-                                                    imageURL: collection.iconURL,
-                                                    chainId: ChainId.Mainnet,
-                                                    name: '',
-                                                    symbol: '',
-                                                },
-                                            }}
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
+                            <CollectionList
+                                classes={{ list: classes.list, collectionWrap: classes.collectionWrap }}
+                                onList={list}
+                                collections={unListedCollections}
+                            />
                         ) : (
                             <Typography className={classes.unListedEmpty}>
                                 {listedCollections && listedCollections?.length > 0

@@ -86,7 +86,7 @@ export function AddNFT(props: AddNFTProps) {
                 chainId: currentChainId,
             })
 
-            tokenDetailed = { ...(token ?? {}), ...(asset ?? {}) }
+            const tokenDetailed = { ...(token ?? {}), ...(asset ?? {}) }
 
             if (!tokenDetailed) {
                 setMessage(t.plugin_avatar_asset())

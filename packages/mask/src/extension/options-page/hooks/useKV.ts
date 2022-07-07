@@ -1,12 +1,11 @@
 import { NextIDStorage } from '@masknet/web3-providers'
-import type { kvType } from '../types'
+import { useAsyncRetry } from 'react-use'
+import type { KVType } from '../types'
 
-export const getKV = async (publicHexKey: string) => {
-    try {
-        const kv = await NextIDStorage.get<kvType>(publicHexKey)
-        return kv?.val
-    } catch (error) {
-        console.error(error)
-        return null
-    }
+export const useKV = (publicHexKey?: string) => {
+    return useAsyncRetry(async () => {
+        if (!publicHexKey) return
+        const res = await NextIDStorage.get<KVType>(publicHexKey)
+        return res?.val
+    }, [publicHexKey])
 }

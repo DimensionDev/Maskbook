@@ -1,6 +1,6 @@
 import { NextIDStorage } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
-import { AssetType, GeneralAsset, kvType, RSS3Profile } from '../types'
+import { AssetType, GeneralAsset, KVType, RSS3Profile } from '../types'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
     const res = await globalThis.fetch(url)
@@ -49,7 +49,7 @@ export async function getRSS3ProfileByAddress(address: string) {
 
 export const getKV = async (publicHexKey: string) => {
     try {
-        const kv = await NextIDStorage.get<kvType>(publicHexKey)
+        const kv = await NextIDStorage.get<KVType>(publicHexKey)
         return kv?.val
     } catch (error) {
         console.error(error)

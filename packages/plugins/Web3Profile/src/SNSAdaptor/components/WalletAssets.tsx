@@ -1,15 +1,15 @@
-import { Card, Typography, Link, List, ListItem, Box } from '@mui/material'
+import { Card, Typography, Link, Box } from '@mui/material'
 import { Edit2Icon, LinkOutIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
 import { useReverseAddress } from '@masknet/plugin-infra/web3'
 import type { CollectionTypes } from '../types'
-import { ChainId, explorerResolver, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
-import { NFTImageCollectibleAvatar } from '@masknet/shared'
+import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { formatAddress } from '../utils'
 import { Empty } from './Empty'
+import { CollectionList } from './CollectionList'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -116,7 +116,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
                 <Box className={classes.listBox}>
-                    <List className={classes.list}>
+                    {/* <List className={classes.list}>
                         {collectionList
                             ?.filter((collection) => !collection?.hidden)
                             ?.slice(0, 8)
@@ -149,7 +149,12 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                                     />
                                 </ListItem>
                             ))}
-                    </List>
+                    </List> */}
+                    <CollectionList
+                        classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
+                        size={126}
+                        collections={collectionList?.filter((collection) => !collection?.hidden)?.slice(0, 8)}
+                    />
                 </Box>
             ) : (
                 <Box>

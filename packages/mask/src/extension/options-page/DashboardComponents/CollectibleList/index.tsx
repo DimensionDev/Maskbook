@@ -20,9 +20,8 @@ import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useAsyncRetry } from 'react-use'
-import { getKV } from '../../hooks/useKV'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
+import { useKV } from '../../hooks/useKV'
 import type { KVType } from '../../types'
 import { COLLECTION_TYPE } from '../../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -257,10 +256,7 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
-    const { value: kvValue } = useAsyncRetry(async () => {
-        if (!persona) return
-        return getKV(persona)
-    }, [persona])
+    const { value: kvValue } = useKV(persona)
     const unHiddenCollectibles = useCollectionFilter(
         (kvValue as KVType)?.proofs,
         collectibles,

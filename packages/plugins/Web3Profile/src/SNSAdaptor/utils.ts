@@ -1,6 +1,7 @@
 import { BindingProof, NextIDPlatform, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { Alchemy_EVM, RSS3 } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '../../../../web3-shared/base/src/utils'
 import type { AccountType, Collection, CollectionTypes, WalletsCollection, WalletTypes } from './types'
 
 export const formatPublicKey = (publicKey?: string) => {
@@ -11,7 +12,7 @@ export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA || listA?.length === 0) return listB
     if (!listB || listB?.length === 0) return [...listA]
     return listA?.map((item, index) => {
-        const listBCollection = listB?.find((itemB) => itemB.address === item.address)?.collections
+        const listBCollection = listB?.find((itemB) => isSameAddress(itemB.address, item.address))?.collections
         return {
             ...item,
             collections: [...(item?.collections ?? []), ...(listBCollection ?? [])],
@@ -26,7 +27,7 @@ export const formatAddress = (address: string, size = 4) => {
 const deduplicateArray = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
     if (!listA || listA?.length === 0) return
     if (!listB || listB?.length === 0) return [...listA]
-    return listA?.filter((l2) => listB.findIndex((l1) => l2.address === l1.address) === -1)
+    return listA?.filter((l2) => listB.findIndex((l1) => isSameAddress(l2.address, l1.address)) === -1)
 }
 
 const addHiddenToArray = (listA?: CollectionTypes[], listB?: string[]) => {
@@ -94,14 +95,14 @@ export const getWalletList = (
             NFTs: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.NFTs)?.map((wallet) => ({
                 ...wallet,
                 collections: addHiddenToArray(
-                    NFTs?.find((NFT) => NFT?.address === wallet?.address)?.collections,
+                    NFTs?.find((NFT) => isSameAddress(NFT?.address, wallet?.address))?.collections,
                     hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.NFTs,
                 ),
             })),
             donations: deduplicateArray(wallets, hiddenObj?.hiddenWallets[key?.identity]?.donations)?.map((wallet) => ({
                 ...wallet,
                 collections: addHiddenToArray(
-                    donations?.find((donation) => donation?.address === wallet?.address)?.collections,
+                    donations?.find((donation) => isSameAddress(donation?.address, wallet?.address))?.collections,
                     hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Donations,
                 ),
             })),
@@ -109,7 +110,8 @@ export const getWalletList = (
                 (wallet) => ({
                     ...wallet,
                     collections: addHiddenToArray(
-                        footprints?.find((footprint) => footprint?.address === wallet?.address)?.collections,
+                        footprints?.find((footprint) => isSameAddress(footprint?.address, wallet?.address))
+                            ?.collections,
                         hiddenObj?.hiddenCollections?.[key?.identity]?.[wallet?.address]?.Footprints,
                     ),
                 }),
