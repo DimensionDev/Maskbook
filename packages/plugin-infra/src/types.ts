@@ -908,6 +908,7 @@ export enum PluginId {
     RedPacket = 'com.maskbook.red_packet',
     RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
+    Game = 'com.maskbook.game',
     Snapshot = 'org.snapshot',
     Savings = 'com.savings',
     ITO = 'com.maskbook.ito',
