@@ -18,12 +18,10 @@ const useStyles = makeStyles()(() => {
         carousel: {
             position: 'relative',
             zIndex: 100,
-            height: 270,
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
                 padding: '8px 4px 0',
-                height: 270,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
@@ -32,6 +30,12 @@ const useStyles = makeStyles()(() => {
             },
             overflow: 'hidden',
         },
+        isHoveringCarousel: {
+            height: 270,
+            '& .carousel__slider': {
+                height: 270,
+            },
+        },
     }
 })
 
@@ -39,10 +43,18 @@ interface Props {
     recommendFeatureAppList: Application[]
     RenderEntryComponent: (props: { application: Application }) => JSX.Element
     isCarouselReady: () => boolean | null
+    setIsHoveringCarousel: (hover: boolean) => void
+    isHoveringCarousel: boolean
 }
 
 export function ApplicationRecommendArea(props: Props) {
-    const { recommendFeatureAppList, RenderEntryComponent, isCarouselReady } = props
+    const {
+        recommendFeatureAppList,
+        RenderEntryComponent,
+        isCarouselReady,
+        isHoveringCarousel,
+        setIsHoveringCarousel,
+    } = props
     const { classes, cx } = useStyles()
     const [isPlaying, setIsPlaying] = useState(true)
 
@@ -57,11 +69,21 @@ export function ApplicationRecommendArea(props: Props) {
                     visibleSlides={2.25}
                     infinite={false}
                     interval={2500}
-                    className={classes.carousel}
+                    className={cx(classes.carousel, isHoveringCarousel ? classes.isHoveringCarousel : '')}
                     isPlaying={isPlaying}>
                     <Slider onScroll={(e) => setIsPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
                         {recommendFeatureAppList.map((application, i) => (
-                            <Slide index={i} key={application.entry.ApplicationEntryID}>
+                            <Slide
+                                index={i}
+                                key={application.entry.ApplicationEntryID}
+                                onMouseEnter={() => {
+                                    setIsHoveringCarousel(true)
+                                    setIsPlaying(false)
+                                }}
+                                onMouseLeave={() => {
+                                    setIsHoveringCarousel(false)
+                                    setIsPlaying(true)
+                                }}>
                                 <RenderEntryComponent application={application} />
                             </Slide>
                         ))}

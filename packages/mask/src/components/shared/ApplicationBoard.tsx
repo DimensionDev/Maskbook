@@ -1,4 +1,4 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { useState, useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, 0.25),
+            padding: theme.spacing(0, 0.25, 1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -54,7 +54,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
         applicationWrapperWithCarousel: {
             position: 'relative',
             zIndex: 50,
-            top: '-140px',
+            top: '-132px',
         },
         subTitle: {
             cursor: 'default',
@@ -156,7 +156,10 @@ function ApplicationBoardContent(props: Props) {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
+    // #region handle carousel ui
     const [isCarouselReady] = useTimeout(300)
+    const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
+    // #endregion
     const { classes, cx } = useStyles({ shouldScroll: listedAppList.length > 12 })
     return (
         <>
@@ -164,13 +167,15 @@ function ApplicationBoardContent(props: Props) {
                 recommendFeatureAppList={recommendFeatureAppList}
                 RenderEntryComponent={RenderEntryComponent}
                 isCarouselReady={isCarouselReady}
+                isHoveringCarousel={isHoveringCarousel}
+                setIsHoveringCarousel={(hover: boolean) => setIsHoveringCarousel(hover)}
             />
 
             {listedAppList.length > 0 ? (
                 <section
                     className={cx(
                         classes.applicationWrapper,
-                        recommendFeatureAppList.length > 2 && isCarouselReady()
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
                             ? classes.applicationWrapperWithCarousel
                             : '',
                     )}>
