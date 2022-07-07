@@ -3,11 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../locales'
-import { Share_Twitter_TXT } from '../constants'
+import type { GameInfo } from '../types'
+import { Share_Twitter } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(0, 2.5),
+        zIndex: 99999,
     },
     shareNotice: {
         color: theme.palette.maskColor.main,
@@ -24,22 +26,29 @@ const useStyles = makeStyles()((theme) => ({
 
 interface PetSetDialogProps {
     onClose: () => void
+    gameInfo: GameInfo | undefined
 }
 
-export function PetShareDialog({ onClose }: PetSetDialogProps) {
+export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
     const onShareClick = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(Share_Twitter_TXT)
+        activatedSocialNetworkUI.utils.share?.(
+            t.game_share_text({
+                name: gameInfo?.name ?? '',
+                snsId: gameInfo?.snsId ?? '',
+                share_Twitter: Share_Twitter,
+            }),
+        )
         onClose()
-    }, [onClose])
+    }, [gameInfo?.name, gameInfo?.snsId, onClose])
 
     return (
         <Box className={classes.root}>
-            <Typography className={classes.shareNotice}>{t.pets_dialog_success()}</Typography>
-            <Button onClick={onShareClick} size="large" className={classes.shareButton}>
-                {t.pets_dialog_btn_share()}
+            <Typography className={classes.shareNotice}>{t.game_dialog_info()}</Typography>
+            <Button onClick={onShareClick} variant="contained" size="large" className={classes.shareButton}>
+                {t.game_share_btn()}
             </Button>
         </Box>
     )

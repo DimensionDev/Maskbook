@@ -25,6 +25,8 @@ import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
+import Game from '@masknet/web3-constants/evm/game.json'
+import Pet from '@masknet/web3-constants/evm/pet.json'
 import { hookTransform, transform, transformFromJSON } from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
 
@@ -119,3 +121,9 @@ export const useAaveConstants = hookTransform(getAaveConstants)
 
 export const getLidoConstants = transform(ChainId, Lido)
 export const useLidoConstants = hookTransform(getLidoConstants)
+
+export const getGameConstants = transform(ChainId, Game)
+export const useGameConstants = hookTransform(getGameConstants)
+
+export const getPetConstants = transform(ChainId, Pet)
+export const usePetConstants = hookTransform(getPetConstants)

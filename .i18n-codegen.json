@@ -313,6 +313,30 @@
             }
         },
         {
+            "input": "./packages/mask/src/plugins/Game/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Game/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.game",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/mask/src/plugins/Pets/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Pets/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.pets",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/plugins/Web3Profile/src/locales/en-US.json",
             "output": "./packages/plugins/Web3Profile/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -320,7 +344,8 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "io.mask.web3-profile",
-                "trans": "Translate"
+                "trans": "Translate",
+                "sourceMap": "inline"
             }
         }
     ]
