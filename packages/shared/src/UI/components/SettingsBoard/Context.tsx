@@ -47,11 +47,11 @@ export function useSettingsContext(initial?: {
     const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
 
     const networkSignature = `${pluginID}_${chainId}`
-    const transactionSignaure = Others?.getTransactionSignature(chainId, transactionOptions ?? undefined) ?? ''
+    const transactionSignature = Others?.getTransactionSignature(chainId, transactionOptions ?? undefined) ?? ''
     const needToResetByNetwork =
         !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =
-        !!IN_MEMORY_CACHE?.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignaure
+        !!IN_MEMORY_CACHE?.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
     const [gasSettingsType, setGasSettingsType] = useState<GasSettingsType>(
         needToResetByNetwork || needToResetByTransaction
             ? GasSettingsType.Basic
@@ -95,10 +95,10 @@ export function useSettingsContext(initial?: {
     // sync in-memory cache
     useEffect(() => {
         IN_MEMORY_CACHE.lastNetworkSignature = networkSignature
-        IN_MEMORY_CACHE.lastTransactionSignature = transactionSignaure
+        IN_MEMORY_CACHE.lastTransactionSignature = transactionSignature
         IN_MEMORY_CACHE.lastSelectedGasOptionType = gasOptionType
         IN_MEMORY_CACHE.lastSelectedGasSettingsType = gasSettingsType
-    }, [gasOptionType, gasSettingsType, networkSignature, transactionSignaure])
+    }, [gasOptionType, gasSettingsType, networkSignature, transactionSignature])
 
     return {
         DEFAULT_SLIPPAGE_TOLERANCE,
