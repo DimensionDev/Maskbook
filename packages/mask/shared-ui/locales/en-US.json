@@ -437,7 +437,7 @@
     "plugin_trader_gas_fee": "Gas fee",
     "plugin_trader_unlock_symbol": "Unlock {{symbol}}",
     "plugin_trader_unlock_tips": "You must give the {{provider}} Smart contracts permission to use your {{symbol}}.You only have to do this once per token.",
-    "plugin_trader_swap_amount_symbol": "Swap {{amount}} {{symbol}} ",
+    "plugin_trader_swap_amount_symbol": "Swap",
     "plugin_trader_confirm_from": "From",
     "plugin_trader_confirm_to": "To",
     "plugin_trader_confirm_slippage_tolerance": "Slippage tolerance",

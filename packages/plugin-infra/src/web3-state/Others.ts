@@ -11,8 +11,8 @@ import {
 } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
-export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
-    implements Web3OthersState<ChainId, SchemaType, ProviderType, NetworkType>
+export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+    implements Web3OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
 {
     constructor(
         protected context: Plugin.Shared.SharedContext,
@@ -53,6 +53,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType>
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale * 1000
+    }
+    getTransactionSignature(chainId?: ChainId | undefined, transaction?: Transaction | undefined): string | undefined {
+        return
     }
 
     isSameAddress = isSameAddress

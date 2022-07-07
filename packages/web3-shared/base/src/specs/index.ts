@@ -1076,7 +1076,7 @@ export interface WalletState {
     removeWallet?: (id: string) => Promise<void>
     getAllWallets?: () => Promise<Wallet[]>
 }
-export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
     chainResolver: ReturnChainResolver<ChainId, SchemaType, NetworkType>
     explorerResolver: ReturnExplorerResolver<ChainId, SchemaType, NetworkType>
@@ -1104,6 +1104,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     getNativeTokenAddress(chainId?: ChainId): string
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
+    getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
     // #endregion
 }
 

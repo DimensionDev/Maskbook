@@ -7,6 +7,7 @@ import {
     ChainId,
     createERC20Token,
     createNativeToken,
+    GasOptionConfig,
     SchemaType,
     useTokenConstants,
     UST,
@@ -38,6 +39,8 @@ export interface TraderProps extends withClasses<'root'> {
 }
 
 export interface TraderRef {
+    gasConfig?: GasOptionConfig
+    focusedTrade?: TradeInfo
     refresh: () => void
 }
 
@@ -60,19 +63,21 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     } = AllProviderTradeContext.useContainer()
     // #endregion
 
+    // #region gas config and gas price
+    const { gasPrice, gasConfig, setGasConfig } = useGasConfig(chainId)
+    // #endregion
+
     useImperativeHandle(
         ref,
         () => ({
+            gasConfig,
+            focusedTrade,
             refresh: () => {
                 allTradeComputed.map((x) => x.retry())
             },
         }),
-        [allTradeComputed],
+        [allTradeComputed, focusedTrade, gasConfig],
     )
-
-    // #region gas config and gas price
-    const { gasPrice, gasConfig, setGasConfig } = useGasConfig(chainId)
-    // #endregion
 
     // #region if chain id be changed, update input token be native token
     useEffect(() => {
@@ -362,6 +367,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
                 gasPrice={gasPrice}
+                gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
@@ -370,6 +376,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                     trade={focusedTrade.value}
                     gas={focusedTrade.gas.value}
                     gasPrice={gasPrice}
+                    gasConfig={gasConfig}
                     inputToken={inputToken}
                     outputToken={outputToken}
                     onConfirm={onConfirm}
