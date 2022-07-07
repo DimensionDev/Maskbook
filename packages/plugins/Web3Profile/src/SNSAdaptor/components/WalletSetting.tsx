@@ -207,7 +207,6 @@ const WalletSetting = memo(
             localStorage.setItem('web3_profile_wallet_setting_hint_visible', 'no')
             setVisible(false)
         }
-        console.log({ accountList, wallets, NFTs })
         return (
             <TabContext value={currentTab}>
                 <InjectedDialog
@@ -318,7 +317,6 @@ const WalletSetting = memo(
                             </div>
                         ) : (
                             <Box className={classes.bottomButton}>
-                                {' '}
                                 <Button onClick={openPopupsWindow} fullWidth>
                                     <WalletUnderTabsIcon className={classes.walletIcon} />
                                     {t.add_wallet()}

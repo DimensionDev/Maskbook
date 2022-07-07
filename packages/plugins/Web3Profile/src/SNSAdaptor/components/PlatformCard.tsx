@@ -9,7 +9,6 @@ import { ArrowIcon } from '../assets/arrow'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
-    console.log({ theme })
     return {
         wrapper: {
             padding: '16px',

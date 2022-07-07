@@ -183,7 +183,6 @@ export const getNFTList = async (walletList: string[]) => {
     const promises = walletList.map((address) => {
         return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
             if (result) {
-                console.log({ result })
                 resNodeIdParams.push({
                     address,
                     collections: result?.data?.map((asset) => ({
