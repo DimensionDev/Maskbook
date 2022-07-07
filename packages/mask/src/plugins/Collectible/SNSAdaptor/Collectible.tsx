@@ -102,6 +102,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         footName: {
+            color: theme.palette.text.primary,
             marginLeft: theme.spacing(0.5),
         },
         countdown: {
@@ -244,7 +245,7 @@ export function Collectible(props: CollectibleProps) {
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: _asset?.price[CurrencyType.USD],
+                                                price: _asset.price[CurrencyType.USD],
                                                 symbol: CurrencyType.USD,
                                             }}
                                         />

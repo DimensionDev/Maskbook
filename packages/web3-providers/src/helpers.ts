@@ -10,8 +10,14 @@ export function isProxyENV() {
     }
 }
 
-export async function fetchJSON<T = unknown>(requestInfo: string, requestInit?: RequestInit): Promise<T> {
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+export async function fetchJSON<T = unknown>(
+    requestInfo: string,
+    requestInit?: RequestInit,
+    options?: {
+        fetch: typeof globalThis.fetch
+    },
+): Promise<T> {
+    const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
 }

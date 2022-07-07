@@ -69,7 +69,7 @@
     "gas_settings_error_insufficient_balance": "crwdns17640:0{{symbol}}crwdne17640:0",
     "gas_settings_error_gas_price_absence": "crwdns17642:0crwdne17642:0",
     "gas_settings_error_gas_limit_absence": "crwdns17644:0crwdne17644:0",
-    "gas_settings_error_min_gas_limit_tips": "crwdns17646:0{{limit}}crwdne17646:0",
+    "gas_settings_error_gas_limit_too_low": "crwdns17646:0{{limit}}crwdne17646:0",
     "gas_settings_error_max_fee_absence": "crwdns17648:0crwdne17648:0",
     "gas_settings_error_max_priority_fee_absence": "crwdns17650:0crwdne17650:0",
     "gas_settings_error_max_fee_too_low": "crwdns17652:0crwdne17652:0",

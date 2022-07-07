@@ -8,7 +8,7 @@ export function resolveIPFSLink(ipfs: string): string {
 }
 
 export function resolveIPFSLinkFromURL(url: string): string {
-    if (!url.startsWith('ipfs://')) return url
+    if (!url || url.match(/^https?:\/\//)) return url
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 

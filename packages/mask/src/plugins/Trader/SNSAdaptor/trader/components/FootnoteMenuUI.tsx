@@ -66,12 +66,12 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
         false,
         {
             anchorOrigin: {
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: 'bottom',
+                horizontal: 'right',
             },
             transformOrigin: {
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: 'top',
+                horizontal: 'right',
             },
             paperProps: {
                 style: { background: theme.palette.maskColor.bottom },

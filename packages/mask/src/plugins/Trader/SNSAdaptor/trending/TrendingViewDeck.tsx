@@ -18,7 +18,7 @@ import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginId, useIsMinimalMode, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
@@ -138,6 +138,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
+    const transakIsMinimalMode = useIsMinimalMode(PluginId.Transak)
+
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -273,13 +275,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Stack>
                     </Stack>
                     <Stack>
-                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
+                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
                             <Button
                                 style={{
                                     background: theme.palette.maskColor.dark,
                                     color: theme.palette.maskColor.white,
                                 }}
-                                startIcon={<BuyIcon />}
+                                size="small"
+                                startIcon={<BuyIcon style={{ fontSize: 16 }} />}
                                 variant="contained"
                                 onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
