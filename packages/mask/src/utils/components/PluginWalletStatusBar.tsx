@@ -205,7 +205,12 @@ export function PluginWalletStatusBar({
                             <LinkOutIcon className={classes.linkIcon} />
                         </Link>
                         {pendingTransactions.length ? (
-                            <span className={classes.pending}>
+                            <span
+                                className={classes.pending}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    openWalletStatusDialog()
+                                }}>
                                 {t('wallet_status_bar_pending')}
                                 <CircularProgress thickness={6} size={12} className={classes.progress} />
                             </span>
