@@ -14,8 +14,6 @@ import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        wrapper: {},
-
         walletInfo: {
             display: 'flex',
             alignItems: 'center',
@@ -207,7 +205,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
     }
 
     const onAddClick = (token: NonFungibleToken<ChainId, SchemaType>) => {
-        console.log({ token })
+        // # TODO
         // setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
     }
 
@@ -219,7 +217,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.content}>
-                <div className={classes.wrapper}>
+                <div>
                     <Box
                         sx={{
                             display: 'flex',
@@ -227,10 +225,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                             alignItems: 'center',
                             padding: 2,
                         }}>
-                        <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>Listed</Typography>
-                        {/* <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
-                            {t.add_collectible()}
-                        </Button> */}
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
                         {listedCollections && listedCollections?.length > 0 ? (
@@ -275,7 +270,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         )}
                     </Box>
                     <Box>
-                        <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>Unlisted</Typography>
+                        <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
                         {unListedCollections && unListedCollections?.length > 0 ? (
@@ -335,10 +330,10 @@ export function ImageListDialog(props: ImageListDialogProps) {
             <DialogActions className={classes.actions}>
                 <div className={classes.buttonWrapper}>
                     <Button className={classes.cancelButton} onClick={onClose}>
-                        Cancel
+                        {t.cancel()}
                     </Button>
                     <Button className={classes.button} onClick={onConfirm} disabled={confirmButtonDisabled}>
-                        Save
+                        {t.save()}
                     </Button>
                 </div>
             </DialogActions>

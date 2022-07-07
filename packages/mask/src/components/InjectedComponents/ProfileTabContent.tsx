@@ -55,8 +55,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
     const [addressList, setAddressList] = useState<Array<SocialAddress<NetworkPluginID>>>([])
-    // const [personaProof, setPersonaProof] = useState<NextIDPersonaBindings>()
-    // const [flashFlag, toggleFlash] = useState<number>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -83,14 +81,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         if (!personaPublicKey) return
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
     }, [personaPublicKey])
-
-    // useEffect(() => {
-    //     if (!personaPublicKey) return
-    //     ;(async () => {
-    //         const res = await NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    //         setPersonaProof(res)
-    //     })()
-    // }, [personaPublicKey, flashFlag])
 
     useEffect(() => {
         MaskMessages.events.ownProofChanged.on(() => {
@@ -120,7 +110,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
     const displayPlugins = useMemo(() => {
         return availablePlugins.flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-        // .filter((z) => z.Utils?.shouldDisplay?.(identity, socialAddressList) ?? true)
+        // .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
     }, [identity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
 
     const tabs = displayPlugins

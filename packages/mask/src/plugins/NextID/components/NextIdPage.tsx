@@ -138,7 +138,11 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
         if (!publicKeyAsHex) return
         if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(publicKeyAsHex, platform, visitingPersonaIdentifier.identifier.userId)
+        return NextIDProof.queryIsBound(
+            publicKeyAsHex,
+            platform,
+            visitingPersonaIdentifier.identifier.userId?.toLowerCase(),
+        )
     }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)

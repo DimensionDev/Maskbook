@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => {
             alignSelf: 'center',
             borderRadius: '8px',
             backgroundColor: 'rgba(28, 104, 243, 0.1)',
-            color: '#1c68f3',
+            color: theme.palette.maskColor.primary,
             padding: '0px 6px 2px 6px',
             marginLeft: '4px',
         },

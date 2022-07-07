@@ -133,10 +133,9 @@ export function ImageManagement(props: ImageManagementProps) {
                     )}
                     {!hasConnectedWallets && (
                         <Box className={classes.bottomButton}>
-                            {' '}
                             <Button onClick={openPopupsWindow} className={classes.button}>
                                 <WalletUnderTabsIcon className={classes.walletIcon} />
-                                Add Wallet
+                                {t.add_wallet()}
                             </Button>
                         </Box>
                     )}
@@ -160,7 +159,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     onClose={() => setWalletSettingOpen(false)}
                     currentPersona={currentPersona}
                     retryData={getWalletHiddenRetry}
-                />{' '}
+                />
             </DialogContent>
         </InjectedDialog>
     )

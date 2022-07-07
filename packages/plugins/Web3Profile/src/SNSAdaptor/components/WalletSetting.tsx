@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '48%',
         borderRadius: '8px',
         backgroundColor: theme.palette.maskColor.thirdMain,
-        color: theme.palette.mode === 'light' ? '#111418' : '#eff3f4',
+        color: theme.palette.maskColor.main,
         '&:hover': {
             backgroundColor: theme.palette.background.paper,
         },
@@ -215,9 +215,9 @@ const WalletSetting = memo(
                     titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Web3ProfileWalletSetting">
-                            <Tab label="NFTs" value={tabs.NFTs} />
-                            <Tab label="Footprints" value={tabs.Footprints} />
-                            <Tab label="Donations" value={tabs.Donations} />
+                            <Tab label={t.NFTs()} value={tabs.NFTs} />
+                            <Tab label={t.footprints()} value={tabs.Footprints} />
+                            <Tab label={t.donations()} value={tabs.Donations} />
                         </MaskTabList>
                     }
                     onClose={onClose}>
@@ -318,7 +318,7 @@ const WalletSetting = memo(
                                 {' '}
                                 <Button onClick={openPopupsWindow} fullWidth>
                                     <WalletUnderTabsIcon className={classes.walletIcon} />
-                                    Add Wallet
+                                    {t.add_wallet()}
                                 </Button>
                             </Box>
                         )}

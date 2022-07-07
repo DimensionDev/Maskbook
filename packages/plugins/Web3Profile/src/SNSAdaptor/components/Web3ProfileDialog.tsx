@@ -135,19 +135,6 @@ export function Web3ProfileDialog() {
             internal: true,
         })
     }
-    console.log({
-        accounts,
-        allPersona,
-        accountList,
-        hiddenObj,
-        footprintList,
-        donationList,
-        NFTList,
-        MainnetNFTList,
-        PolygonNFTList,
-        wallets,
-        currentVisitingProfile,
-    })
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
@@ -174,7 +161,7 @@ export function Web3ProfileDialog() {
                     title={title}
                     onClose={() => {
                         setImageManageOpen(false)
-                        setTitle('Web3 Profile')
+                        setTitle(t.web3_profile())
                     }}
                     open={imageManageOpen}
                     accountId={accountId}

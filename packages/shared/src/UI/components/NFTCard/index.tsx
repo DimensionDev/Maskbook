@@ -27,22 +27,11 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         height: 126,
         objectFit: 'cover',
         boxSizing: 'border-box',
-        // '&:hover': {
-        //     border: `1px solid ${theme.palette.primary.main}`,
-        // },
         borderRadius: 12,
     },
     itemSelected: {
         border: `1px solid ${theme.palette.primary.main}`,
         borderRadius: 12,
-    },
-    button: {
-        textAlign: 'center',
-        paddingTop: theme.spacing(1),
-        display: 'flex',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        color: '#1D9BF0',
     },
     list: {
         gridGap: 13,
@@ -84,9 +73,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         height: 126,
         objectFit: 'cover',
         boxSizing: 'border-box',
-        // '&:hover': {
-        //     border: `1px solid ${theme.palette.primary.main}`,
-        // },
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         borderRadius: 12,

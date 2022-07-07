@@ -12,7 +12,7 @@ import { DonationPage, FootprintPage } from './pages'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useCurrentVisitingProfile } from './hooks/useContext'
 import { useAsyncRetry } from 'react-use'
-import type { kvType } from '../types'
+import { CollectionType, kvType } from '../types'
 import { getKV } from './hooks/useKV'
 
 const useStyles = makeStyles()((theme) => ({
@@ -67,14 +67,14 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
     const unHiddenDonations = useCollectionFilter(
         (kvValue as kvType)?.proofs,
         donations,
-        'Donations',
+        CollectionType.Donations,
         currentVisitingProfile,
         selectedAddress,
     )
     const unHiddenFootprints = useCollectionFilter(
         (kvValue as kvType)?.proofs,
         footprints,
-        'Footprints',
+        CollectionType.Footprints,
         currentVisitingProfile,
         selectedAddress,
     )

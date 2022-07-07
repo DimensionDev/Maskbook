@@ -26,7 +26,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: '#6E767D',
+        color: theme.palette.maskColor.second,
+    },
+    personaKey: {
+        fontSize: '12px',
+        fontWeight: '400',
+        color: theme.palette.maskColor.third,
     },
 }))
 
@@ -66,8 +71,8 @@ export function PersonaAction(props: PersonaActionProps) {
                     {currentPersona?.nickname}
                 </Typography>
                 <Box sx={{ display: 'flex' }}>
-                    <Typography style={{ fontSize: '12px', fontWeight: '400', color: '#ACB4C1' }}>
-                        {formatPublicKey(currentPersona?.identifier?.rawPublicKey)}
+                    <Typography className={classes.personaKey}>
+                        {currentPersona?.identifier ? formatPublicKey(currentPersona?.identifier?.rawPublicKey) : '--'}
                     </Typography>
                     <Link
                         className={classes.link}

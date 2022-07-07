@@ -1,12 +1,12 @@
 import { IdentityResolved, PluginId } from '@masknet/plugin-infra'
 import { NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import type { GeneralAsset, proof } from '../../types'
+import type { CollectionType, GeneralAsset, proof } from '../../types'
 
 export const useCollectionFilter = (
     hiddenInfo: proof[],
     collections: GeneralAsset[],
-    type: 'Donations' | 'Footprints',
+    type: CollectionType,
     currentVisitingProfile?: IdentityResolved,
     address?: SocialAddress<NetworkPluginID>,
 ) => {

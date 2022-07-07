@@ -88,7 +88,6 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
-    // const { avatar, nickName = 'unknown', platformId = 'unknown', isCurrent = false, openImageSetting } = props
     const { networkIcon, address, onSetting, type, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)

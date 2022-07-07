@@ -26,7 +26,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         right: -2,
         bottom: -2,
     },
-    networkIcon: {},
 }))
 
 interface PlatformAvatarProps extends withClasses<'networkIcon' | 'providerIcon'> {

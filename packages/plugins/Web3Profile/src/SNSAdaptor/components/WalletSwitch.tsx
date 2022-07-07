@@ -112,7 +112,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
     const t = useI18N()
     const [checked, setChecked] = useState(!!isPublic)
     const getWalletName = () => {
-        return ['EVM wallet', 'Solana wallet', 'Flow wallet'][type]
+        return [t.EVM_wallet(), t.Solana_wallet(), t.Flow_wallet()][type]
     }
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
@@ -120,7 +120,6 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         if (!v) {
-            // hiddenItems.push(address)
             setHiddenItems([...hiddenItems, address])
         } else {
             const index = hiddenItems?.findIndex((item) => item?.address === address?.address)
