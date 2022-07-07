@@ -8,6 +8,7 @@ import type { WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import { ImageIcon } from './ImageIcon'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -122,11 +123,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
         if (!v) {
             setHiddenItems([...hiddenItems, address])
         } else {
-            const index = hiddenItems?.findIndex((item) => item?.address === address?.address)
-            if (index !== -1) {
-                hiddenItems.splice(index, 1)
-                setHiddenItems([...hiddenItems])
-            }
+            setHiddenItems(hiddenItems?.filter((item) => !isSameAddress(item?.address, address?.address)))
         }
         setChecked(v)
     }

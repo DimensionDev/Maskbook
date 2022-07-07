@@ -48,11 +48,9 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
     )
 
     // #region icon names
-    const names = [
-        classNames(classes.mainIcon, classes.networkIcon),
-        classNames(classes.badgeIcon, classes.providerIcon),
-    ]
-    if (inverse) names.reverse()
+    const names = inverse
+        ? [classNames(classes.badgeIcon, classes.providerIcon), classNames(classes.mainIcon, classes.networkIcon)]
+        : [classNames(classes.mainIcon, classes.networkIcon), classNames(classes.badgeIcon, classes.providerIcon)]
     // #endregion
 
     return (

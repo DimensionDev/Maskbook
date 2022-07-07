@@ -104,6 +104,11 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 500,
         marginLeft: '2px',
     },
+    button: {
+        borderRadius: '99px',
+        backgroundColor: theme.palette.maskColor.dark,
+        color: '#fff',
+    },
 }))
 
 interface NextIdPageProps {
@@ -177,10 +182,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const getButton = () => {
         if (isWeb3ProfileDisable) {
             return (
-                <Button
-                    style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
-                    variant="contained"
-                    onClick={onEnablePlugin}>
+                <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
                     <PluginIcon fontSize="small" />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
@@ -191,20 +193,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         }
         if (!isAccountVerified) {
             return (
-                <Button
-                    style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
-                    variant="contained"
-                    onClick={onVerify}>
+                <Button className={classes.button} variant="contained" onClick={onVerify}>
                     <VerifyIcon />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
         return (
-            <Button
-                style={{ borderRadius: '99px', backgroundColor: '#07101b', color: '#fff' }}
-                variant="contained"
-                onClick={handleAddWallets}>
+            <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
                 <WalletUnderTabsIcon className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
@@ -251,7 +247,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                         </Typography>
                     </div>
                     <div style={{ display: 'flex' }}>
-                        <Typography className={classes.item1}>Provided by</Typography>
+                        <Typography className={classes.item1}>{t.provided_by()}</Typography>
                         <Typography className={classes.item2}>{t.mask_network()}</Typography>
                         <Link
                             underline="none"

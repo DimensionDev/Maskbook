@@ -13,6 +13,7 @@ import { Close as CloseIcon } from '@mui/icons-material'
 import { SettingInfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import { Empty } from './Empty'
+import { isSameAddress } from '@masknet/web3-shared-base'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -124,37 +125,38 @@ const WalletSetting = memo(
         const t = useI18N()
 
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
-        const [visible, setVisible] = useState(false)
+        const [visible, setVisible] = useState(!localStorage.getItem('web3_profile_wallet_setting_hint_visible'))
 
-        const [currentTab, onChange, tabs] = useTabs(title, 'NFTs', 'Footprints', 'Donations')
+        const [currentTab, onChange, tabs] = useTabs(title, t.NFTs(), t.footprints(), t.donations)
 
         const chainId = useChainId()
         const [NFTs, setNFTs] = useState<WalletTypes[]>()
         const [footprints, setFootprints] = useState<WalletTypes[]>()
         const [donations, setDonations] = useState<WalletTypes[]>()
 
-        const hasWallet = wallets && wallets?.length > 0
+        const hasWallet = wallets && wallets.length > 0
 
         useEffect(() => {
             setNFTs(
-                wallets?.filter((x) => accountList?.walletList?.NFTs?.findIndex((y) => x.address === y.address) === -1),
+                wallets?.filter(
+                    (x) => accountList?.walletList?.NFTs?.findIndex((y) => isSameAddress(x.address, y.address)) === -1,
+                ),
             )
             setFootprints(
                 wallets?.filter(
-                    (x) => accountList?.walletList?.footprints?.findIndex((y) => x.address === y.address) === -1,
+                    (x) =>
+                        accountList?.walletList?.footprints?.findIndex((y) => isSameAddress(x.address, y.address)) ===
+                        -1,
                 ),
             )
             setDonations(
                 wallets?.filter(
-                    (x) => accountList?.walletList?.donations?.findIndex((y) => x.address === y.address) === -1,
+                    (x) =>
+                        accountList?.walletList?.donations?.findIndex((y) => isSameAddress(x.address, y.address)) ===
+                        -1,
                 ),
             )
         }, [open])
-
-        useEffect(() => {
-            const visible = localStorage.getItem('web3_profile_wallet_setting_hint_visible')
-            setVisible(visible !== 'no')
-        }, [])
 
         useEffect(() => {
             if (confirmButtonDisabled) setConfirmButtonDisabled(false)
@@ -181,7 +183,7 @@ const WalletSetting = memo(
                 )
 
                 await setKvPatchData(
-                    payload?.val,
+                    payload?.val as NextIDStoragePayload,
                     signature?.signature?.signature,
                     patch,
                     currentPersona.identifier.publicKeyAsHex,
@@ -228,7 +230,7 @@ const WalletSetting = memo(
                                     <Box className={classes.messageBox}>
                                         <Box display="flex" flexDirection="row" gap={1} alignItems="center">
                                             <SettingInfoIcon className={classes.infoIcon} />
-                                            <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
+                                            <Typography color="currentColor" fontSize={14}>
                                                 {t.wallet_setting_hint()}
                                             </Typography>
                                         </Box>
@@ -245,8 +247,8 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.NFTs?.findIndex(
-                                                                (account) => account.address === x?.address,
+                                                            accountList?.walletList?.NFTs?.findIndex((account) =>
+                                                                isSameAddress(account.address, x?.address),
                                                             ) !== -1
                                                         }
                                                         setHiddenItems={setNFTs}
@@ -266,8 +268,8 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.footprints?.findIndex(
-                                                                (account) => account.address === x?.address,
+                                                            accountList?.walletList?.footprints?.findIndex((account) =>
+                                                                isSameAddress(account.address, x?.address),
                                                             ) !== -1
                                                         }
                                                         setHiddenItems={setFootprints}
@@ -287,8 +289,8 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.donations?.findIndex(
-                                                                (account) => account.address === x?.address,
+                                                            accountList?.walletList?.donations?.findIndex((account) =>
+                                                                isSameAddress(account.address, x?.address),
                                                             ) !== -1
                                                         }
                                                         setHiddenItems={setDonations}

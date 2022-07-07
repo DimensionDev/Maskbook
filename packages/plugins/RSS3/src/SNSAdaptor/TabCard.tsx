@@ -13,7 +13,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useCurrentVisitingProfile } from './hooks/useContext'
 import { useAsyncRetry } from 'react-use'
 import { CollectionType, kvType } from '../types'
-import { getKV } from './hooks/useKV'
+import { getKV } from '../apis'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

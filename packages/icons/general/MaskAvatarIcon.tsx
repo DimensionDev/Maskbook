@@ -13,12 +13,12 @@ export const MaskAvatarIcon: typeof SvgIcon = createPaletteAwareIcon(
             fill="#fff"
         />
         <defs>
-            <linearGradient id="a" x1="0" y1="15.675" x2="30" y2="15.675" gradientUnits="userSpaceOnUse">
+            <linearGradient id="maskAvatar1" x1="0" y1="15.675" x2="30" y2="15.675" gradientUnits="userSpaceOnUse">
                 <stop offset=".01" stopColor="#6298EA" stopOpacity=".2" />
                 <stop offset=".01" stopColor="#6298EA" stopOpacity=".2" />
                 <stop offset="1" stopColor="#627EEA" stopOpacity=".2" />
             </linearGradient>
-            <linearGradient id="b" x1="15" y1=".675" x2="15" y2="30.675" gradientUnits="userSpaceOnUse">
+            <linearGradient id="maskAvatar2" x1="15" y1=".675" x2="15" y2="30.675" gradientUnits="userSpaceOnUse">
                 <stop stopColor="#fff" stopOpacity="0" />
                 <stop offset="1" stopColor="#fff" stopOpacity=".9" />
             </linearGradient>

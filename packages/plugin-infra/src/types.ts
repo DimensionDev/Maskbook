@@ -352,7 +352,7 @@ export namespace Plugin.SNSAdaptor {
     export interface SNSAdaptorContext extends Shared.SharedContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
-        allPersona?: Subscription<PersonaInformation[]>
+        allPersonas?: Subscription<PersonaInformation[]>
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         MaskMessages: WebExtensionMessage<MaskEvents>
