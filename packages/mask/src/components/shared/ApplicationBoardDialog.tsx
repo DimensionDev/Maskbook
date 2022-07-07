@@ -14,7 +14,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         content: {
             padding: '0 !important',
-            height: 470,
             overflow: 'hidden',
         },
         settingIcon: {
