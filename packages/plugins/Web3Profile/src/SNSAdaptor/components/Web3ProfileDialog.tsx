@@ -23,6 +23,7 @@ import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
 import { PersonaAction } from './PersonaAction'
 import { useChainId } from '@masknet/plugin-infra/web3'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -62,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
 export function Web3ProfileDialog() {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const [title, setTitle] = useState('Web3 Profile')
+    const [status, setStatus] = useState(CURRENT_STATUS.Main)
     const [imageManageOpen, setImageManageOpen] = useState(false)
     const [accountId, setAccountId] = useState<string>()
     const [open, setOpen] = useState(false)
@@ -146,7 +147,7 @@ export function Web3ProfileDialog() {
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
-            title={title}
+            title={CurrentStatusMap[status].title}
             fullWidth={false}
             open={open}
             isOnBack
@@ -154,8 +155,8 @@ export function Web3ProfileDialog() {
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main
-                    openImageSetting={(str: string, accountId: string) => {
-                        setTitle(str)
+                    openImageSetting={(status: CURRENT_STATUS, accountId: string) => {
+                        setStatus(status)
                         setImageManageOpen(true)
                         setAccountId(accountId)
                     }}
@@ -166,10 +167,10 @@ export function Web3ProfileDialog() {
                 <ImageManagement
                     currentPersona={currentPersona}
                     accountList={accountList?.find((x) => x?.identity === accountId)}
-                    title={title}
+                    status={status}
                     onClose={() => {
                         setImageManageOpen(false)
-                        setTitle(t.web3_profile())
+                        setStatus(CURRENT_STATUS.Main)
                     }}
                     open={imageManageOpen}
                     accountId={accountId}

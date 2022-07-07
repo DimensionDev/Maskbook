@@ -6,6 +6,7 @@ import { useI18N } from '../../locales'
 import type { AccountType } from '../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { CollectionItem } from './CollectionItem'
+import { CURRENT_STATUS } from '../../constants'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {
@@ -54,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface PlatformCardProps extends withClasses<never | 'root'> {
     account?: AccountType
-    openImageSetting: (str: string) => void
+    openImageSetting: (status: CURRENT_STATUS) => void
     isCurrent?: boolean
     currentPersona?: IdentityResolved
 }
@@ -89,7 +90,7 @@ export function PlatformCard(props: PlatformCardProps) {
                 </div>
                 <CollectionItem
                     title={t.NFTs()}
-                    onClick={() => openImageSetting('NFTs')}
+                    onClick={() => openImageSetting(CURRENT_STATUS.NFT_Setting)}
                     walletsNum={account?.walletList?.NFTs?.length ?? 0}
                     collectionNum={
                         account?.walletList?.NFTs?.reduce(
@@ -101,7 +102,7 @@ export function PlatformCard(props: PlatformCardProps) {
                 />
                 <CollectionItem
                     title={t.footprints()}
-                    onClick={() => openImageSetting('Footprints')}
+                    onClick={() => openImageSetting(CURRENT_STATUS.Footprints_setting)}
                     walletsNum={account?.walletList?.footprints?.length ?? 0}
                     collectionNum={
                         account?.walletList?.footprints?.reduce(
@@ -113,7 +114,7 @@ export function PlatformCard(props: PlatformCardProps) {
                 />
                 <CollectionItem
                     title={t.donations()}
-                    onClick={() => openImageSetting('Donations')}
+                    onClick={() => openImageSetting(CURRENT_STATUS.Donations_setting)}
                     walletsNum={account?.walletList?.donations?.length ?? 0}
                     collectionNum={
                         account?.walletList?.donations?.reduce(

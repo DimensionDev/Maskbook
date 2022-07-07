@@ -12,6 +12,7 @@ import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
 import { GearIcon, WalletUnderTabsIcon } from '@masknet/icons'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -62,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ImageManagementProps {
-    title: string
+    status: CURRENT_STATUS
     currentPersona?: PersonaInformation
     open: boolean
     onClose: () => void
@@ -72,9 +73,9 @@ export interface ImageManagementProps {
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
-const getAddressesByTitle = (title: string, accountList: AccountType) => {
-    if (title === 'Donations') return accountList?.walletList?.donations
-    if (title === 'Footprints') return accountList?.walletList?.footprints
+const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) => {
+    if (status === CURRENT_STATUS.Donations_setting) return accountList?.walletList?.donations
+    if (status === CURRENT_STATUS.Footprints_setting) return accountList?.walletList?.footprints
     return accountList?.walletList?.NFTs
 }
 export function ImageManagement(props: ImageManagementProps) {
@@ -82,20 +83,19 @@ export function ImageManagement(props: ImageManagementProps) {
 
     const { classes } = useStyles()
     const {
-        title,
+        status,
         currentPersona,
         open,
         onClose,
         accountId,
         allWallets = [],
-        currentVisitingProfile,
         accountList,
         getWalletHiddenRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<string>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
-    const addresses = getAddressesByTitle(title, accountList!)
+    const addresses = getAddressesByStatus(status, accountList!)
 
     const hasConnectedWallets = allWallets?.length > 0
 
@@ -104,7 +104,7 @@ export function ImageManagement(props: ImageManagementProps) {
     }
     return (
         <InjectedDialog
-            title={title}
+            title={CurrentStatusMap[status].title}
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
@@ -120,7 +120,6 @@ export function ImageManagement(props: ImageManagementProps) {
                                     setSettingAddress(address.address)
                                     setImageListOpen(true)
                                 }}
-                                type={title}
                                 collectionList={address?.collections}
                                 address={address.address}
                             />
@@ -141,7 +140,7 @@ export function ImageManagement(props: ImageManagementProps) {
                 </div>
                 <ImageListDialog
                     currentPersona={currentPersona}
-                    title={title}
+                    title={CurrentStatusMap[status].title}
                     address={settingAddress}
                     open={imageListOpen}
                     accountId={accountId}
@@ -153,7 +152,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     wallets={allWallets}
                     accountList={accountList}
                     open={walletSettingOpen}
-                    title={title}
+                    title={CurrentStatusMap[status].title}
                     accountId={accountId}
                     onClose={() => setWalletSettingOpen(false)}
                     currentPersona={currentPersona}

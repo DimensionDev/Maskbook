@@ -83,12 +83,11 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     networkIcon?: URL
     address: string
     onSetting: () => void
-    type: string
     collectionList?: CollectionTypes[]
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
-    const { networkIcon, address, onSetting, type, collectionList } = props
+    const { address, onSetting, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
@@ -116,40 +115,6 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
                 <Box className={classes.listBox}>
-                    {/* <List className={classes.list}>
-                        {collectionList
-                            ?.filter((collection) => !collection?.hidden)
-                            ?.slice(0, 8)
-                            ?.map((collection, i) => (
-                                <ListItem className={classes.imageIconWrapper} key={collection.key}>
-                                    <NFTImageCollectibleAvatar
-                                        pluginId={NetworkPluginID.PLUGIN_EVM}
-                                        key={i}
-                                        token={{
-                                            ...collection,
-                                            tokenId: collection.tokenId ?? '',
-                                            id: collection.address,
-                                            chainId: ChainId.Mainnet,
-                                            schema: SchemaType.ERC721,
-                                            type: TokenType.NonFungible,
-                                            contract: {
-                                                chainId: ChainId.Mainnet,
-                                                name: collection?.name ?? '',
-                                                symbol: '',
-                                                address: collection.address,
-                                                schema: SchemaType.ERC721,
-                                            },
-                                            metadata: {
-                                                imageURL: collection.iconURL,
-                                                chainId: ChainId.Mainnet,
-                                                name: '',
-                                                symbol: '',
-                                            },
-                                        }}
-                                    />
-                                </ListItem>
-                            ))}
-                    </List> */}
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
                         size={126}
