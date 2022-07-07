@@ -20,7 +20,7 @@ import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { GearIcon } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 
@@ -54,7 +54,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
-    const [addressList, setAddressList] = useState<Array<SocialAddress<NetworkPluginID>>>([])
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -83,26 +82,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [personaPublicKey])
 
     useEffect(() => {
-        MaskMessages.events.ownProofChanged.on(() => {
+        return MaskMessages.events.ownProofChanged.on(() => {
             retryProof()
         })
     }, [retryProof])
 
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
-    useEffect(() => {
+
+    const addressList = useMemo(() => {
         if (wallets?.length === 0 || !wallets || (!isOwn && socialAddressList?.length)) {
-            setAddressList(socialAddressList)
-        } else {
-            const addresses = wallets.map((proof) => {
-                return {
-                    networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                    type: SocialAddressType.KV,
-                    label: proof?.identity,
-                    address: proof?.identity,
-                }
-            })
-            setAddressList([...socialAddressList, ...addresses])
+            return socialAddressList
         }
+        const addresses = wallets.map((proof) => {
+            return {
+                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                type: SocialAddressType.KV,
+                label: proof?.identity,
+                address: proof?.identity,
+            }
+        })
+        return [...socialAddressList, ...addresses]
     }, [socialAddressList, wallets?.length, isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
