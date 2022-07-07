@@ -24,6 +24,7 @@
     "token_info_contract_creator": "crwdns14844:0crwdne14844:0",
     "token_info_contract_owner": "crwdns14846:0crwdne14846:0",
     "token_info_total_supply": "crwdns14848:0crwdne14848:0",
+    "token_market_cap": "crwdns17740:0crwdne17740:0",
     "default_placeholder": "crwdns14850:0crwdne14850:0",
     "not_found_tip_title": "crwdns14972:0crwdne14972:0",
     "not_found_tip_network_error": "crwdns14974:0crwdne14974:0",
@@ -85,5 +86,7 @@
     "risk_is_airdrop_scam_title": "crwdns15012:0crwdne15012:0",
     "risk_is_airdrop_scam_body": "crwdns15014:0crwdne15014:0",
     "risk_not_is_airdrop_scam_title": "crwdns15016:0crwdne15016:0",
-    "risk_not_is_airdrop_scam_body": "crwdns15018:0crwdne15018:0"
+    "risk_not_is_airdrop_scam_body": "crwdns15018:0crwdne15018:0",
+    "contract_not_found": "crwdns17742:0crwdne17742:0",
+    "unnamed": "crwdns17744:0crwdne17744:0"
 }
