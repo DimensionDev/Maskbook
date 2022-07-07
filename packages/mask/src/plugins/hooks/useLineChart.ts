@@ -103,7 +103,6 @@ export function useLineChart(
             )
 
         // create tooltip
-        const tooltip = graph.append('g')
         const tooltipLine = graph
             .append('line')
             .style('stroke', '#E0ECFF')
@@ -114,6 +113,7 @@ export function useLineChart(
             .attr('y1', -top)
             .attr('x2', 0)
             .attr('y2', height)
+        const tooltip = graph.append('g')
 
         const lineCallout = (g: d3.Selection<SVGLineElement, unknown, null, undefined>, value: any) => {
             if (!value) {

@@ -612,6 +612,10 @@ export enum TrendingCoinType {
     Fungible = 1,
     NonFungible = 2,
 }
+export enum NonFungibleMarketplace {
+    OpenSea = 'OpenSea',
+    LooksRare = 'LooksRare',
+}
 
 export namespace TrendingAPI {
     export interface Settings {

@@ -28,7 +28,7 @@ import {
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { Box } from '@mui/system'
+import { Box, useTheme } from '@mui/system'
 import { TabContext } from '@mui/lab'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NFTList } from '@masknet/shared'
@@ -92,9 +92,13 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
                   marginBottom: '-44px',
               },
         nftItems: {
-            height: 518,
+            height: 530,
+            padding: theme.spacing(2),
             boxSizing: 'border-box',
             overflow: 'auto',
+        },
+        nftList: {
+            gap: 12,
         },
     }
 })
@@ -120,6 +124,7 @@ export function TraderView(props: TraderViewProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
+    const theme = useTheme()
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
@@ -187,7 +192,7 @@ export function TraderView(props: TraderViewProps) {
             },
             {
                 key: ContentTabs.Price,
-                label: t('plugin_trader_tab_price'),
+                label: isNFT ? t('plugin_trader_floor_price') : t('plugin_trader_tab_price'),
             },
             {
                 key: ContentTabs.Exchange,
@@ -305,7 +310,7 @@ export function TraderView(props: TraderViewProps) {
                     {tabComponents}
                 </MaskTabList>
             </TabContext>
-            <Stack>
+            <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
                 {currentTab === ContentTabs.Market ? (
                     <CoinMarketPanel dataProvider={dataProvider} trending={trending} />
                 ) : null}
@@ -342,7 +347,14 @@ export function TraderView(props: TraderViewProps) {
                 ) : null}
                 {currentTab === ContentTabs.NFTItems && isNFT ? (
                     <Box className={classes.nftItems}>
-                        <NFTList tokens={fetchedTokens} onNextPage={next} finished={done} hasError={!!loadError} />
+                        <NFTList
+                            className={classes.nftList}
+                            tokens={fetchedTokens}
+                            onNextPage={next}
+                            finished={done}
+                            hasError={!!loadError}
+                            gap={16}
+                        />
                     </Box>
                 ) : null}
             </Stack>

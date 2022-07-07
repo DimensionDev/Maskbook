@@ -2,7 +2,7 @@ import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, Linking, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -27,6 +27,7 @@ import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PluginHeader } from './PluginHeader'
 import { PriceChanged } from './PriceChanged'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
+import { CoinIcon } from './components'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -137,6 +138,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const theme = useTheme()
     const classes = useStylesExtends(useStyles(), props)
 
+    const isNFT = coin.type === TrendingCoinType.NonFungible
+
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -144,7 +147,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin?.chainId ?? ChainId.Mainnet,
@@ -162,7 +165,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, trending?.coin?.symbol])
     // #endregion
 
-    const isNFT = coin.type === TrendingCoinType.NonFungible
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         setStorage(option.value as DataProvider)
@@ -210,12 +212,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                             <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
                                 <Linking href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
-                                        {trending.coin.contract_address ? (
-                                            <TokenIcon
-                                                classes={{ icon: classes.avatarFallback }}
-                                                address={trending.coin.contract_address}
-                                            />
-                                        ) : null}
+                                        <CoinIcon
+                                            type={trending.coin.type}
+                                            address={trending.coin.address}
+                                            name={trending.coin.name}
+                                            logoUrl={trending.coin.image_url}
+                                            size={20}
+                                        />
                                     </Avatar>
                                 </Linking>
                                 <Typography className={classes.title} variant="h6">

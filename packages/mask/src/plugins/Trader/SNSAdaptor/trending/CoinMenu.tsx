@@ -1,14 +1,13 @@
 import { CheckCircleIcon } from '@masknet/icons'
-import { TokenIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { TrendingCoinType } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import { groupBy, toPairs } from 'lodash-unified'
 import type { Coin } from '../../types'
+import { CoinIcon } from './components'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {
@@ -28,6 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         alignItems: 'stretch',
         paddingRight: 0,
+        height: 36,
     },
     itemText: {
         flexDirection: 'row',
@@ -66,20 +66,6 @@ interface TokenMenuListProps {
     onSelect(type: TrendingCoinType, value: CoinMenuOption['value']): void
 }
 
-interface CoinIconProps {
-    type: TrendingCoinType
-    address?: string
-    logoUrl?: string
-    name?: string
-}
-const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name }) => {
-    if (address && type === TrendingCoinType.Fungible)
-        return <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address={address} name={name} />
-    if (type === TrendingCoinType.NonFungible)
-        return <TokenIcon pluginID={NetworkPluginID.PLUGIN_EVM} address="" logoURL={logoUrl} name={name} />
-    return null
-}
-
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect }) => {
     const { classes } = useStyles()
     const theme = useTheme()
@@ -98,6 +84,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                             address={x.coin.address}
                             name={x.coin.name}
                             logoUrl={x.coin.image_url}
+                            size={20}
                         />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Stack className={classes.itemText}>

@@ -8,7 +8,6 @@ import {
     CurrencyType,
     HubOptions,
     NonFungibleAsset,
-    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, formatWeiToEther, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
@@ -21,7 +20,8 @@ import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { courier } from '../helpers'
 import { LooksRare, OpenSea } from '../index'
-import { NonFungibleTokenAPI, TrendingAPI, TrendingCoinType } from '../types'
+import { LooksRareLogo, OpenSeaLogo } from '../resources'
+import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI, TrendingCoinType } from '../types'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
 import type {
     NFTPlatformInfo,
@@ -309,10 +309,10 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
                 ? {
-                      logo_url: 'https://etherscan.io/images/svg/brands/opensea.svg',
+                      logo_url: OpenSeaLogo,
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${platformInfo.address}`,
-                      market_name: SourceType.OpenSea,
+                      market_name: NonFungibleMarketplace.OpenSea,
                       volume_24h: openseaStats.one_day_volume,
                       floor_price: openseaStats.floor_price,
                       sales_24: openseaStats.one_day_sales,
@@ -320,9 +320,9 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 : null,
             looksrareStats
                 ? {
-                      logo_url: 'https://etherscan.io/images/svg/brands/looksrare-black.svg',
+                      logo_url: LooksRareLogo,
                       trade_url: `https://looksrare.org/collections/${platformInfo.address}`,
-                      market_name: SourceType.LooksRare,
+                      market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: formatWeiToEther(looksrareStats.volume24h).toNumber(),
                       floor_price: formatWeiToEther(looksrareStats.floorPrice).toNumber(),
                       sales_24: looksrareStats.count24h,

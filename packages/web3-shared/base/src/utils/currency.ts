@@ -29,6 +29,11 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     const decimalValue = bgValue.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bgValue.isGreaterThanOrEqualTo(1)
     const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
+    const isCurrencySymbol = currency.match(/^[A-Za-z]+$/)
+    // ETH, BTC, SOL symbol
+    if (!isCurrencySymbol) {
+        return `${new BigNumber(value).toFixed(2)} ${currency}`
+    }
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
 
     if (bgValue.isZero()) return formatter.format(0)

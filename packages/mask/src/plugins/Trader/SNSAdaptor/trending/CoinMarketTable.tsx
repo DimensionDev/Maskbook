@@ -47,7 +47,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t('plugin_trader_market_statistic')}
+                    {t('plugin_trader_usdc_price_statistic')}
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -117,7 +117,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t('plugin_trader_usdc_price_statistic')}
+                    {t('plugin_trader_market_statistic')}
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>

@@ -1,4 +1,14 @@
-import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import {
+    Link,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -25,8 +35,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        background: theme.palette.background.paper,
+        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
+        '&:not(:first-child)': {
+            textAlign: 'center',
+        },
     },
     logo: {
         width: 18,
@@ -77,10 +90,10 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
         const volume = isNFT ? ticker.volume_24h : ticker.volume
         const formatter = isNFT ? coinFormatter : formatCurrency
         const marketplaceOrExchange = (
-            <>
+            <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
                 <Typography component="span">{ticker.market_name}</Typography>
-            </>
+            </Stack>
         )
         const cellMap: Record<Cells, ReactNode> = {
             marketplace: marketplaceOrExchange,
