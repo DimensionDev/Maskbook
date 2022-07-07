@@ -11,6 +11,13 @@ import { groupBy, toPairs } from 'lodash-unified'
 import type { Coin } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({
+    coinMenu: {
+        maxHeight: 600,
+        maxWidth: 400,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
     groupName: {
         height: 18,
         fontSize: 14,
@@ -18,6 +25,17 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0, 2),
     },
     menuItem: {
+        overflow: 'hidden',
+        alignItems: 'stretch',
+        paddingRight: 0,
+    },
+    itemText: {
+        flexDirection: 'row',
+        flexGrow: 1,
+        justifyContent: 'space-around',
+        gap: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        alignItems: 'center',
         overflow: 'hidden',
     },
     divider: {
@@ -29,6 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     symbol: {
         marginLeft: theme.spacing(0.5),
+    },
+    checkedIcon: {
+        filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
+        fontSize: 20,
+        color: theme.palette.maskColor.primary,
     },
 }))
 
@@ -77,13 +100,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                             logoUrl={x.coin.image_url}
                         />
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
-                        <Stack
-                            direction="row"
-                            flexGrow={1}
-                            justifyContent="space-around"
-                            gap={1}
-                            alignItems="center"
-                            overflow="hidden">
+                        <Stack className={classes.itemText}>
                             <Typography
                                 fontSize={14}
                                 fontWeight={700}
@@ -94,7 +111,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                                 <span className={classes.symbol}>({x.coin.symbol})</span>
                             </Typography>
                             {selected ? (
-                                <CheckCircleIcon style={{ fontSize: 20, color: theme.palette.maskColor.primary }} />
+                                <CheckCircleIcon className={classes.checkedIcon} />
                             ) : (
                                 <RadioButtonUncheckedIcon
                                     style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
@@ -159,11 +176,7 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
     }, [type, value, onSelect])
 
     return (
-        <ShadowRootMenu
-            open={open}
-            onClose={onClose}
-            anchorEl={anchorEl}
-            PaperProps={{ style: { maxHeight: 600, maxWidth: 400 } }}>
+        <ShadowRootMenu open={open} onClose={onClose} anchorEl={anchorEl} PaperProps={{ className: classes.coinMenu }}>
             {menuItems}
         </ShadowRootMenu>
     )

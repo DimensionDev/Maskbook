@@ -244,6 +244,7 @@ export async function getPriceStats(
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getPriceStats(chainId, id, currency, days)
         case DataProvider.NFTSCAN:
+            console.log('getPriceStats')
             return NFTScan.getPriceStats(chainId, id, currency, days)
         default:
             return []

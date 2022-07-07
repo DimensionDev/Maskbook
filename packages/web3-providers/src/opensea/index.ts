@@ -3,6 +3,7 @@ import { head, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import getUnixTime from 'date-fns/getUnixTime'
+import LRU, { Options as LRUOptions } from 'lru-cache'
 import {
     createPageable,
     CurrencyType,
@@ -33,14 +34,26 @@ import type {
 import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
-export async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
-    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+const cache = new LRU<string, any>({
+    max: 50,
+    ttl: 30_000,
+})
 
-    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+export async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
+    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
+    const cacheKey = `${chainId}/${url}`
+    let fetchingTask = cache.get(cacheKey)
+    if (!fetchingTask) {
+        const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+
+        fetchingTask = fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+        cache.set(cacheKey, fetchingTask, options)
+    }
+    const response = (await fetchingTask).clone()
     if (response.ok) {
         return (await response.json()) as T
     } else {
+        cache.delete(cacheKey)
         throw new Error('Fetch failed')
     }
 }
@@ -437,6 +450,9 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
+            {
+                ttl: 0,
+            },
         )
         const slug = assetContract?.collection.slug
         if (!slug) return

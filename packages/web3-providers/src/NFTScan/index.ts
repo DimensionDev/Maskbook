@@ -303,8 +303,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),
-            OpenSea.getCollectionStats(platformInfo.address),
-            LooksRare.getCollectionStats(platformInfo.address),
+            OpenSea.getCollectionStats(platformInfo.address).catch(() => null),
+            LooksRare.getCollectionStats(platformInfo.address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
