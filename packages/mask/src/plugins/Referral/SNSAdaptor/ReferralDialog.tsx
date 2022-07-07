@@ -61,6 +61,9 @@ const useStyles = makeStyles<{ hideBackBtn?: boolean }>()((theme, { hideBackBtn 
         lineHeight: '27px',
         fontWeight: 600,
         margin: 0,
+        ['& > p']: {
+            flex: 1,
+        },
     },
     dialog: {
         maxWidth: 600,
