@@ -25,6 +25,7 @@ import { setStorage } from '../../storage'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { Box } from '@mui/system'
 import { TabContext } from '@mui/lab'
+import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -72,13 +73,9 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
               }
             : {},
 
-        cardHeader: props.isPopper
-            ? {
-                  marginBottom: '-36px',
-              }
-            : {
-                  marginBottom: '-44px',
-              },
+        cardHeader: {
+            marginBottom: '-44px',
+        },
     }
 })
 
@@ -102,6 +99,7 @@ export function TraderView(props: TraderViewProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
+    const isMinimalMode = useIsMinimalMode(PluginId.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
@@ -149,7 +147,8 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
-    const isSwappable = (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
+    const isSwappable =
+        !isMinimalMode && (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
     // #endregion
 
     // #region tabs
@@ -262,11 +261,13 @@ export function TraderView(props: TraderViewProps) {
             showDataProviderIcon={tabIndex < 3}
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
-            <TabContext value={currentTab}>
-                <MaskTabList variant="base" onChange={(e, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
-                    {tabComponents}
-                </MaskTabList>
-            </TabContext>
+            <Stack px={2}>
+                <TabContext value={currentTab}>
+                    <MaskTabList variant="base" onChange={(e, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
+                        {tabComponents}
+                    </MaskTabList>
+                </TabContext>
+            </Stack>
             <Stack>
                 {currentTab === ContentTabs.Market ? (
                     <CoinMarketPanel dataProvider={dataProvider} trending={trending} />
