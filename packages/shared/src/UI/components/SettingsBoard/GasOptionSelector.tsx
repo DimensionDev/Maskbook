@@ -64,8 +64,8 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     )
 
     useEffect(() => {
-        if (!options || gasOptionType) return
-        onClick(GasOptionType.NORMAL, options[GasOptionType.NORMAL])
+        if (!options) return
+        onClick(gasOptionType, options[gasOptionType])
     }, [gasOptionType, options])
 
     if (!options)
