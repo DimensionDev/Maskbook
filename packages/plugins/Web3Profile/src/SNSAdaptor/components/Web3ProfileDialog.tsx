@@ -3,14 +3,21 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { useAllPersona, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
 import { CrossIsolationMessages, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { ImageManagement } from './ImageManagement'
-import { getDonationList, getFootprintList, getNFTList, getNFTList_Polygon } from '../hooks/useCollectionList'
-import { getWalletList, mergeList, placeFirst } from '../utils'
+import {
+    getDonationList,
+    getFootprintList,
+    getNFTList,
+    getNFTList_Polygon,
+    getWalletList,
+    mergeList,
+    placeFirst,
+} from '../utils'
 import { getWalletHiddenList } from '../hooks/useHiddenList'
 import { WalletUnderTabsIcon } from '@masknet/icons'
 import { context } from '../context'
@@ -61,14 +68,14 @@ export function Web3ProfileDialog() {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.on(({ open }) => {
+        return CrossIsolationMessages.events.requestWeb3ProfileDialog.on(({ open }) => {
             setOpen(open)
         })
     }, [])
 
     const persona = useCurrentPersona()
     const currentVisitingProfile = useLastRecognizedProfile()
-    const allPersona = useAllPersona()
+    const allPersona = useAllPersonas()
     const currentPersona = allPersona?.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )

@@ -13,6 +13,6 @@ export function useLastRecognizedProfile() {
     return useSubscription(context.lastRecognizedProfile)
 }
 
-export function useAllPersona() {
-    return useSubscription(context.allPersona!)
+export function useAllPersonas() {
+    return useSubscription(context.allPersonas!)
 }

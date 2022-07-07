@@ -10,7 +10,6 @@ import {
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
-    PersonaInformation,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -125,7 +124,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             )
             const allPersonaSub = createSubscriptionFromAsync(
                 () => Services.Identity.queryOwnedPersonaInformation(true),
-                undefined as unknown as PersonaInformation[],
+                [],
                 MaskMessages.events.currentPersonaIdentifier.on,
                 signal,
             )
@@ -133,7 +132,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 ...createSharedContext(pluginID, signal),
                 lastRecognizedProfile: lastRecognizedSub,
                 currentVisitingProfile: currentVisitingSub,
-                allPersona: allPersonaSub,
+                allPersonas: allPersonaSub,
                 privileged_silentSign: () => {
                     if (pluginID !== PluginId.Web3Profile)
                         throw new TypeError("current plugin doesn't support silent sign function")
