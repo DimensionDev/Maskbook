@@ -19,11 +19,11 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
 
-const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
+const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(0, 0.25, 1),
+            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -160,7 +160,10 @@ function ApplicationBoardContent(props: Props) {
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
     // #endregion
-    const { classes, cx } = useStyles({ shouldScroll: listedAppList.length > 12 })
+    const { classes, cx } = useStyles({
+        shouldScroll: listedAppList.length > 12,
+        isCarouselReady: Boolean(isCarouselReady()),
+    })
     return (
         <>
             <ApplicationRecommendArea
