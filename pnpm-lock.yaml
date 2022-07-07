@@ -1003,8 +1003,9 @@ importers:
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       react-feather: ^2.0.9
-      react-use: ^17.4.0
+      react-use: ^17.3.2
       urlcat: ^2.0.4
+      wallet.ts: 1.0.1
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -1018,6 +1019,7 @@ importers:
       react-feather: 2.0.9
       react-use: 17.4.0
       urlcat: 2.0.4
+      wallet.ts: 1.0.1
 
   packages/plugins/RSS3:
     specifiers:
@@ -20832,14 +20834,6 @@ packages:
     resolution: {integrity: sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==}
     dev: true
 
-  /keccak/3.0.1:
-    resolution: {integrity: sha512-epq90L9jlFWCW7+pQa6JOnKn2Xgl2mtI664seYR6MHskvI9agt7AnDqmAlp9TqU4/caMYbA08Hi5DMZAl5zdkA==}
-    engines: {node: '>=10.0.0'}
-    dependencies:
-      node-addon-api: 2.0.2
-      node-gyp-build: 4.3.0
-    dev: false
-
   /keccak/3.0.2:
     resolution: {integrity: sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==}
     engines: {node: '>=10.0.0'}
@@ -28318,7 +28312,7 @@ packages:
       bn.js: 5.2.0
       bs58: 4.0.1
       elliptic: 6.5.4
-      keccak: 3.0.1
+      keccak: 3.0.2
     dev: false
 
   /warning/4.0.3:

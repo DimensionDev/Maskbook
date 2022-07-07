@@ -315,6 +315,7 @@ export namespace SecurityAPI {
         is_whitelisted?: '0' | '1'
         is_in_dex?: '0' | '1'
         is_anti_whale?: '0' | '1'
+        trust_list?: '0' | '1'
     }
 
     export interface ContractSecurity {
@@ -570,6 +571,16 @@ export namespace MaskBaseAPI {
     export interface Provider {}
 }
 
+export namespace TokenAPI {
+    export interface TokenInfo {
+        id: string
+        market_cap: string
+        price: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<TokenInfo | undefined>
+    }
+}
 export namespace TrendingAPI {
     export interface Settings {
         currency: Currency
@@ -598,6 +609,7 @@ export namespace TrendingAPI {
 
     export interface Coin {
         id: string
+        chainId?: ChainId
         name: string
         symbol: string
         decimals?: number
