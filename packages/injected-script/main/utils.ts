@@ -116,8 +116,9 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
 }
 
 const { includes } = String.prototype
-
+const { URL } = globalThis
+const originGetter = Object.getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!
 export function isTwitter() {
     const url = new URL(window.location.href)
-    return apply(includes, url.origin, ['twitter.com'])
+    return apply(includes, originGetter.call(url), ['twitter.com'])
 }
