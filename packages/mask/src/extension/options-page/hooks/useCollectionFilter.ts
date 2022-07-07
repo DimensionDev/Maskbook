@@ -3,10 +3,10 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
-import type { proof, COLLECTION_TYPE } from '../types'
+import type { Proof, COLLECTION_TYPE } from '../types'
 
 export const useCollectionFilter = (
-    hiddenInfo: proof[],
+    hiddenInfo: Proof[],
     collections: Array<Web3Helper.NonFungibleTokenScope<void, NetworkPluginID>>,
     type: COLLECTION_TYPE,
     currentVisitingProfile?: IdentityResolved,

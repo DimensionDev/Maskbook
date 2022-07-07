@@ -57,22 +57,21 @@ export enum AssetType {
     POAP = 'POAP',
 }
 
-export interface patch {
-    unListedCollections: Record<
-        string,
-        {
-            NFTs: string[]
-            Donations: string[]
-            Footprints: string[]
-        }
-    >
+export interface CollectionKeys {
+    NFTs: string[]
+    Donations: string[]
+    Footprints: string[]
 }
-export interface kvType {
+
+export interface Patch {
+    unListedCollections: Record<string, CollectionKeys>
+}
+export interface KVType {
     persona: string
-    proofs: proof[]
+    proofs: Proof[]
 }
-export interface proof {
+export interface Proof {
     platform: NextIDPlatform
     identity: string
-    content?: Record<string, patch>
+    content?: Record<string, Patch>
 }

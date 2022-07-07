@@ -6,20 +6,20 @@ export enum COLLECTION_TYPE {
     Footprints = 'Footprints',
 }
 
-export interface collectionKeys {
+export interface CollectionKeys {
     NFTs: string[]
     Donations: string[]
     Footprints: string[]
 }
-export interface patch {
-    unListedCollections: Record<string, collectionKeys>
+export interface Patch {
+    unListedCollections: Record<string, CollectionKeys>
 }
-export interface kvType {
+export interface KVType {
     persona: string
-    proofs: proof[]
+    proofs: Proof[]
 }
-export interface proof {
+export interface Proof {
     platform: NextIDPlatform
     identity: string
-    content?: Record<string, patch>
+    content?: Record<string, Patch>
 }

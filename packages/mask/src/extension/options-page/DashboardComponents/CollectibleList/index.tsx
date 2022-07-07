@@ -23,7 +23,7 @@ import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@
 import { useAsyncRetry } from 'react-use'
 import { getKV } from '../../hooks/useKV'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
-import type { kvType } from '../../types'
+import type { KVType } from '../../types'
 import { COLLECTION_TYPE } from '../../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
@@ -262,7 +262,7 @@ export function CollectionList({
         return getKV(persona)
     }, [persona])
     const unHiddenCollectibles = useCollectionFilter(
-        (kvValue as kvType)?.proofs,
+        (kvValue as KVType)?.proofs,
         collectibles,
         COLLECTION_TYPE.NFTs,
         visitingProfile,

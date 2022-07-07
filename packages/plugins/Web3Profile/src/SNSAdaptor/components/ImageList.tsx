@@ -228,9 +228,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700 }}>{t.listed()}</Typography>
                     </Box>
                     <Box className={classNames(classes.listedBox, classes.scrollBar)}>
-                        {listedCollections && listedCollections?.length > 0 ? (
+                        {listedCollections && listedCollections.length > 0 ? (
                             <List className={classes.list}>
-                                {listedCollections?.map((collection, i) => (
+                                {listedCollections.map((collection, i) => (
                                     <ListItem
                                         className={classes.collectionWrap}
                                         onClick={() => unList(collection.key)}
@@ -273,9 +273,9 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         <Typography sx={{ fontSize: '16px', fontWeight: 700, padding: 2 }}>{t.unlisted()}</Typography>
                     </Box>
                     <Box className={classNames(classes.unlistedBox, classes.scrollBar)}>
-                        {unListedCollections && unListedCollections?.length > 0 ? (
+                        {unListedCollections && unListedCollections.length > 0 ? (
                             <List className={classes.list}>
-                                {unListedCollections?.map((collection, i) => (
+                                {unListedCollections.map((collection, i) => (
                                     <ListItem
                                         key={collection?.key}
                                         className={classes.collectionWrap}

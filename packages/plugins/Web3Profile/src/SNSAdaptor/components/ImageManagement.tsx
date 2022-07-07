@@ -112,8 +112,8 @@ export function ImageManagement(props: ImageManagementProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses && addresses?.length > 0 ? (
-                        addresses?.map((address) => (
+                    {addresses && addresses.length > 0 ? (
+                        addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
                                 onSetting={() => {
