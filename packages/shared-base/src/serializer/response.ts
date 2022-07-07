@@ -11,14 +11,7 @@ export const serializer = (x: Response) => {
 }
 
 export const deserializer = (x: { body: Uint8Array[]; init: ResponseInit }) => {
-    const body = new ReadableStream({
-        start(controller) {
-            for (const binary of x.body) {
-                controller.enqueue(binary)
-            }
-            controller.close()
-        },
-    })
+    const body = new Blob(x.body)
     return new Response(body, x.init)
 }
 
