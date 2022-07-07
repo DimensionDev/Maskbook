@@ -191,7 +191,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
                 (payload.val as NextIDStoragePayload)?.signPayload,
             )
             const res = await setKvPatchData(
-                payload.val,
+                payload.val as NextIDStoragePayload,
                 signature?.signature?.signature,
                 patch,
                 currentPersona.identifier.publicKeyAsHex?.replace(/^0x/, ''),

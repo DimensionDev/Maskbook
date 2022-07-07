@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
-// import { Copy } from 'react-feather'
 import { WalletAssetsCard } from './WalletAssets'
 import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
@@ -8,7 +7,7 @@ import { useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { accountType, WalletTypes } from '../types'
+import type { AccountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
@@ -68,12 +67,12 @@ export interface ImageManagementProps {
     open: boolean
     onClose: () => void
     currentVisitingProfile?: IdentityResolved
-    accountList?: accountType
+    accountList?: AccountType
     accountId?: string
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
-const getAddressesByTitle = (title: string, accountList: accountType) => {
+const getAddressesByTitle = (title: string, accountList: AccountType) => {
     if (title === 'Donations') return accountList?.walletList?.donations
     if (title === 'Footprints') return accountList?.walletList?.footprints
     return accountList?.walletList?.NFTs

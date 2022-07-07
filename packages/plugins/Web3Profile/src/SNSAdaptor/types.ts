@@ -24,6 +24,11 @@ export interface GeneralAsset {
     }
 }
 
+export interface kvPayload {
+    uuid?: string
+    createdAt?: string
+}
+
 export interface PersonaKV {
     persona: string
     proofs?: Proof[]
@@ -79,13 +84,13 @@ export interface WalletTypes {
     collections?: CollectionTypes[]
 }
 
-export interface accountType extends BindingProof {
+export interface AccountType extends BindingProof {
     walletList: WalletsCollection
     linkedProfile?: ProfileInformation
 }
 
 export interface personaInfo {
-    accountList: accountType[]
+    accountList: AccountType[]
 }
 
 export interface AlchemyResponse_EVM {

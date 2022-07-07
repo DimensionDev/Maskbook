@@ -5,15 +5,14 @@ export enum COLLECTION_TYPE {
     Donations = 'Donations',
     Footprints = 'Footprints',
 }
+
+export interface collectionKeys {
+    NFTs: string[]
+    Donations: string[]
+    Footprints: string[]
+}
 export interface patch {
-    unListedCollections: Record<
-        string,
-        {
-            NFTs: string[]
-            Donations: string[]
-            Footprints: string[]
-        }
-    >
+    unListedCollections: Record<string, collectionKeys>
 }
 export interface kvType {
     persona: string

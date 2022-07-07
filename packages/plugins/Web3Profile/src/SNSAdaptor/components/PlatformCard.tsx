@@ -3,7 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
-import type { accountType } from '../types'
+import type { AccountType } from '../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { ArrowIcon } from '../assets/arrow'
 const DEFAULT_PLACEHOLDER = '--'
@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PlatformCardProps extends withClasses<never | 'root'> {
-    account?: accountType
+    account?: AccountType
     openImageSetting: (str: string) => void
     isCurrent?: boolean
     currentPersona?: IdentityResolved

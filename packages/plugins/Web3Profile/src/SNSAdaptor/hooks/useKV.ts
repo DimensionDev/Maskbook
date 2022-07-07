@@ -1,4 +1,4 @@
-import { fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
+import { fromHex, NextIDPlatform, NextIDStoragePayload, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage } from '@masknet/web3-providers'
 import { PLUGIN_ID } from '../../constants'
 
@@ -15,7 +15,7 @@ export const getKvPayload = async (patchData: unknown, publicHexKey: string, acc
 
 export const setKvPatchData = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    payload: any,
+    payload: NextIDStoragePayload,
     signature: string,
     patchData: unknown,
     publicHexKey: string,
