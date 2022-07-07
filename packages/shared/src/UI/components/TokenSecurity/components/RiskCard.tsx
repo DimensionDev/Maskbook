@@ -44,24 +44,20 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
-                seconds: '',
                 amount: '',
                 fee: '',
                 percentage: '',
-                symbol: '',
-                limit: '',
+                distance: '',
             })}
             titleColor={DefineMapping[info.level].titleColor}
             description={t[info.messageKey]({
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
-                seconds: '',
                 amount: '',
                 fee: '',
                 percentage: '',
-                symbol: '',
-                limit: '',
+                distance: '',
             })}
         />
     )
