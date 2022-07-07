@@ -3,7 +3,7 @@ import { PersonaHomeUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
-import Services from "../../../../service";
+import Services from '../../../../service'
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =
