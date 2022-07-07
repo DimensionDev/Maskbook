@@ -17,8 +17,6 @@ describe('Supply format util test', () => {
         { give: 0.00000000001, expected: '0' },
         { give: 0, expected: '0' },
         { give: 99999.0151, expected: '99,999.02' },
-        { give: 99999.0151, currency: 'ETH', expected: '99,999.02 \u039E' },
-        { give: 99999.0151, currency: 'XXX', expected: 'XXX 99,999.02' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatSupply(give)).toBe(expected)
     })

@@ -1,39 +1,40 @@
-import { useState, useEffect, useMemo } from 'react'
-import { Link, Stack, Tab } from '@mui/material'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
-import type { TagType } from '../../types'
-import { DataProvider } from '@masknet/public-api'
-import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
-import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
-import { TickersTable } from './TickersTable'
-import { PriceChart } from './PriceChart'
-import { usePriceStats } from '../../trending/usePriceStats'
-import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl'
-import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
-import { TradeView } from '../trader/TradeView'
-import { CoinMarketPanel } from './CoinMarketPanel'
-import { TrendingViewError } from './TrendingViewError'
-import { TrendingViewSkeleton } from './TrendingViewSkeleton'
-import { TrendingViewDeck } from './TrendingViewDeck'
-import { useAvailableCoins } from '../../trending/useAvailableCoins'
-import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
+import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
     useChainIdValid,
     useFungibleToken,
     useNetworkType,
     useNonFungibleAssetsByCollection,
 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { setStorage } from '../../storage'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { Box, useTheme } from '@mui/system'
-import { TabContext } from '@mui/lab'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { TrendingCoinType } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
+import { TabContext } from '@mui/lab'
+import { Link, Stack, Tab } from '@mui/material'
+import { Box, useTheme } from '@mui/system'
 import { compact } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../../utils'
+import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes'
+import { setStorage } from '../../storage'
+import { useAvailableCoins } from '../../trending/useAvailableCoins'
+import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
+import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
+import { usePriceStats } from '../../trending/usePriceStats'
+import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
+import type { TagType } from '../../types'
+import { TradeView } from '../trader/TradeView'
+import { CoinMarketPanel } from './CoinMarketPanel'
+import { PriceChart } from './PriceChart'
+import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl'
+import { TickersTable } from './TickersTable'
+import { TrendingViewDeck } from './TrendingViewDeck'
+import { TrendingViewError } from './TrendingViewError'
+import { TrendingViewSkeleton } from './TrendingViewSkeleton'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -84,13 +85,9 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
               }
             : {},
 
-        cardHeader: props.isPopper
-            ? {
-                  marginBottom: '-36px',
-              }
-            : {
-                  marginBottom: '-44px',
-              },
+        cardHeader: {
+            marginBottom: '-44px',
+        },
         nftItems: {
             height: 530,
             padding: theme.spacing(2),
@@ -125,6 +122,7 @@ export function TraderView(props: TraderViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
     const theme = useTheme()
+    const isMinimalMode = useIsMinimalMode(PluginId.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
@@ -173,7 +171,11 @@ export function TraderView(props: TraderViewProps) {
 
     const isNFT = trending?.coin.type === TrendingCoinType.NonFungible
     // #region if the coin is a native token or contract address exists
-    const isSwappable = !isNFT && (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
+    const isSwappable =
+        !isMinimalMode &&
+        !isNFT &&
+        (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) &&
+        chainIdValid
     // #endregion
 
     // #region tabs
@@ -302,13 +304,15 @@ export function TraderView(props: TraderViewProps) {
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <TabContext value={currentTab}>
-                <MaskTabList
-                    variant="base"
-                    classes={{ root: classes.tabListRoot }}
-                    onChange={(_, v: ContentTabs) => setTab(v)}
-                    aria-label="Network Tabs">
-                    {tabComponents}
-                </MaskTabList>
+                <Stack px={2}>
+                    <MaskTabList
+                        variant="base"
+                        classes={{ root: classes.tabListRoot }}
+                        onChange={(_, v: ContentTabs) => setTab(v)}
+                        aria-label="Network Tabs">
+                        {tabComponents}
+                    </MaskTabList>
+                </Stack>
             </TabContext>
             <Stack sx={{ backgroundColor: theme.palette.maskColor.bottom }}>
                 {currentTab === ContentTabs.Market ? (

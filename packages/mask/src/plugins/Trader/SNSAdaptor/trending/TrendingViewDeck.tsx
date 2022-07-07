@@ -1,5 +1,5 @@
 import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
-import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginId, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
@@ -24,10 +24,10 @@ import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { CoinMenu } from './CoinMenu'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
+import { CoinIcon } from './components'
 import { PluginHeader } from './PluginHeader'
 import { PriceChanged } from './PriceChanged'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
-import { CoinIcon } from './components'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -142,6 +142,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
+    const transakIsMinimalMode = useIsMinimalMode(PluginId.Transak)
+
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -289,13 +291,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Stack>
                     </Stack>
                     <Stack>
-                        {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
+                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
                             <Button
                                 style={{
                                     background: theme.palette.maskColor.dark,
                                     color: theme.palette.maskColor.white,
                                 }}
-                                startIcon={<BuyIcon />}
+                                size="small"
+                                startIcon={<BuyIcon style={{ fontSize: 16 }} />}
                                 variant="contained"
                                 onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
