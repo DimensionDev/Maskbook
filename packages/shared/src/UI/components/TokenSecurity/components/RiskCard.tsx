@@ -44,6 +44,7 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
+                // @ts-ignore
                 seconds: '',
                 amount: '',
                 fee: '',
@@ -56,6 +57,7 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
+                // @ts-ignore
                 seconds: '',
                 amount: '',
                 fee: '',
