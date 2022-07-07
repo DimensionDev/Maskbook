@@ -62,6 +62,7 @@ const FlexibleButtonGroupPanel = styled(Box, {
         ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
         : 'none',
     backdropFilter: 'blur(20px)',
+    background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {

@@ -6,6 +6,7 @@ import {
     EthereumWeb3,
     MetaSwap,
     OpenSea,
+    NFTScan,
     Rarible,
     TokenList,
     Zerion,
@@ -29,6 +30,8 @@ import {
     createPredicate,
     createIndicator,
     FungibleTokenSecurity,
+    FungibleTokenAuthorization,
+    NonFungibleTokenAuthorization,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -155,6 +158,7 @@ class Hub implements EVM_Hub {
         const providers = {
             [SourceType.OpenSea]: OpenSea,
             [SourceType.Rarible]: Rarible,
+            [SourceType.NFTScan]: NFTScan,
             [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
@@ -243,6 +247,18 @@ class Hub implements EVM_Hub {
         tokenId?: string | undefined,
         initial?: HubOptions<ChainId>,
     ): Promise<string[]> {
+        throw new Error('Method not implemented.')
+    }
+    getApprovedFungibleTokens(
+        account: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
+    }
+    getApprovedNonFungibleTokens(
+        account: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
     async getTransactions(

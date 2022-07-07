@@ -1,8 +1,8 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar, parseColor, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import { Box, chipClasses, Collapse, IconButton, Typography } from '@mui/material'
+import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
@@ -140,11 +140,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             },
             ['&:hover']: {
                 backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.maskColor?.bottom}!important`,
-                // TODO: replace to theme pop-shadow prop
-                boxShadow:
-                    theme.palette.mode === 'dark'
-                        ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                        : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+                boxShadow: `0px 4px 30px ${alpha(
+                    theme.palette.maskColor.shadowBottom,
+                    theme.palette.mode === 'dark' ? 0.15 : 0.1,
+                )}`,
             },
         },
         chipTokenIcon: {
@@ -165,9 +164,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    isDashboard
-                        ? theme.palette.primary.main
-                        : parseColor(theme.palette.maskColor?.primary).brighten(10).toHexString()
+                    isDashboard ? theme.palette.primary.main : lighten(theme.palette.maskColor?.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -191,10 +188,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         stateBar: {
             position: 'sticky',
             bottom: 0,
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            boxShadow: `0px 0px 20px ${alpha(
+                theme.palette.maskColor.shadowBottom,
+                theme.palette.mode === 'dark' ? 0.12 : 0.05,
+            )}`,
         },
         unlockContainer: {
             margin: 0,
