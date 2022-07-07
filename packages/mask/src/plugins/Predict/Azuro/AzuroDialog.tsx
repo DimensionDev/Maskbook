@@ -46,8 +46,8 @@ export function AzuroDialog(props: AzuroDialogProps) {
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
-    const eventsLabel = 'Events'
-    const myBetsLabel = 'My bets'
+    const eventsLabel = t.plugin_events()
+    const myBetsLabel = t.plugin_bets()
 
     const [currentTab, onChange, tabs] = useTabs(eventsLabel, myBetsLabel)
 

@@ -74,7 +74,7 @@ export function EventsView(): JSX.Element {
     const { value, error, loading, retry } = useFetchGames(searchTerm, market, league, sort)
     const markets = useMarketList(value?.games)
     const leagues = useLeagueList(value?.games)
-    const sorts = [DEFAULT_LABEL, 'Start Date', 'Newest']
+    const sorts = [DEFAULT_LABEL, t.plugin_start_date(), t.plugin_newest()]
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const term = event.target.value
