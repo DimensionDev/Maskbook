@@ -12,7 +12,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { coinFormatter, formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
@@ -88,7 +88,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = isNFT ? ticker.volume_24h : ticker.volume
-        const formatter = isNFT ? coinFormatter : formatCurrency
+        const currency = isNFT ? 'ETH' : 'USD'
         const marketplaceOrExchange = (
             <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
@@ -97,8 +97,8 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
         )
         const cellMap: Record<Cells, ReactNode> = {
             marketplace: marketplaceOrExchange,
-            volume: volume ? <FormattedCurrency value={volume} formatter={formatter} /> : null,
-            floor_price: price ? <FormattedCurrency value={price} formatter={formatter} /> : null,
+            volume: volume ? <FormattedCurrency value={volume} sign={currency} formatter={formatCurrency} /> : null,
+            floor_price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
             updated: ticker.updated ? formatElapsed(ticker.updated.getTime()) : null,
             exchange: marketplaceOrExchange,
             pair: (() => {
@@ -118,7 +118,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
                     </Link>
                 )
             })(),
-            price: price ? <FormattedCurrency value={price} formatter={formatter} /> : null,
+            price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
             sales: ticker.sales_24 ?? null,
         }
 

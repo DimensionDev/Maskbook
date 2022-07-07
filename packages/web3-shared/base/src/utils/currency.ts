@@ -5,6 +5,20 @@ const boundaryValues = {
     mid: 0,
     min: 0.000001,
 }
+
+const DigitalCurrencyMap: Record<string, string> = {
+    BTC: '\u20BF',
+    ETH: '\u039E',
+    SOL: '\u25CE',
+}
+
+const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
+    const [currencyPart, literalPart, ...rest] = parts
+    const symbol = DigitalCurrencyMap[currencyPart.value]
+    if (symbol) return [...rest, literalPart, { ...currencyPart, value: symbol }]
+    return parts
+}
+
 /**
  * format token currency
  *
@@ -29,34 +43,32 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     const decimalValue = bgValue.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bgValue.isGreaterThanOrEqualTo(1)
     const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
-    const isCurrencySymbol = currency.match(/^[A-Za-z]+$/)
-    // ETH, BTC, SOL symbol
-    if (!isCurrencySymbol) {
-        return `${new BigNumber(value).toFixed(2)} ${currency}`
-    }
+
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
 
     if (bgValue.isZero()) return formatter.format(0)
 
-    if (isLessMinValue)
-        return `< ${formatter
-            .formatToParts(boundaryValues.min)
+    if (isLessMinValue) {
+        const value = digitalCurrencyModifier(formatter.formatToParts(boundaryValues.min))
             .map(({ type, value }) => {
                 switch (type) {
                     case 'currency':
-                        return value
+                        return DigitalCurrencyMap[value] || value
                     case 'fraction':
                         return boundaryValues.min.toString()
                     default:
                         return ''
                 }
             })
-            .reduce((string, part) => string + part)}`
+            .join('')
+        return `< ${value}`
+    }
 
-    return formatter
-        .formatToParts(bgValue.toNumber())
+    return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()))
         .map(({ type, value }) => {
             switch (type) {
+                case 'currency':
+                    return DigitalCurrencyMap[value] || value
                 case 'fraction':
                     const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
                     return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne
@@ -66,7 +78,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
                     return value
             }
         })
-        .reduce((string, part) => string + part)
+        .join('')
 }
 
 export const coinFormatter = (value: BigNumber.Value, sign = '\u039E') => {

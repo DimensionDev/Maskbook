@@ -2,7 +2,7 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { coinFormatter, formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
+import { formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TrendingCoinType } from '@masknet/web3-providers'
@@ -132,8 +132,8 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
                                     value={market?.floor_price ?? 0}
-                                    sign="&#x039E;"
-                                    formatter={coinFormatter}
+                                    sign="ETH"
+                                    formatter={formatCurrency}
                                 />
                             </TableCell>
                         </TableRow>
@@ -146,8 +146,8 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             <TableCell className={classes.cell}>
                                 <FormattedCurrency
                                     value={market?.total_24h ?? 0}
-                                    sign="&#x039E;"
-                                    formatter={coinFormatter}
+                                    sign="ETH"
+                                    formatter={formatCurrency}
                                 />
                             </TableCell>
                         </TableRow>
