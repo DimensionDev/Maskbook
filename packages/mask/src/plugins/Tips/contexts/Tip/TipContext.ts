@@ -3,7 +3,7 @@ import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipType } from '../../types'
+import { TipAccount, TipType } from '../../types'
 
 export interface ContextOptions {
     recipient: string
@@ -11,7 +11,7 @@ export interface ContextOptions {
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
-    recipients: string[]
+    recipients: TipAccount[]
     token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
     amount: string

@@ -1,23 +1,10 @@
-import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId as EVM_ChainId } from '@masknet/web3-shared-evm'
-import {
-    Box,
-    BoxProps,
-    Button,
-    FormControl,
-    FormControlLabel,
-    MenuItem,
-    Radio,
-    RadioGroup,
-    Select,
-    Typography,
-} from '@mui/material'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, BoxProps, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginWalletStatusBar } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
@@ -25,9 +12,10 @@ import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
 import { useI18N } from '../locales'
 import { TipType } from '../types'
 import { NFTSection } from './NFTSection'
+import { RecipientSelect } from './RecipientSelect'
 import { TokenSection } from './TokenSection'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
     return {
         root: {
             display: 'flex',
@@ -38,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
-            padding: theme.spacing(2),
+            padding: theme.spacing(2, 2, 0),
         },
         receiverRow: {
             display: 'flex',
@@ -53,6 +41,28 @@ const useStyles = makeStyles()((theme) => {
             height: 48,
             flexGrow: 1,
             marginLeft: theme.spacing(1),
+        },
+        select: {
+            display: 'flex',
+            alignItems: 'center',
+            [`& .${refs.icon}`]: {
+                display: 'none',
+            },
+        },
+        menuItem: {
+            height: 40,
+        },
+        icon: {},
+        link: {
+            display: 'inline-flex',
+            alignItems: 'center',
+        },
+        actionIcon: {
+            marginRight: theme.spacing(1),
+            color: theme.palette.text.secondary,
+        },
+        checkIcon: {
+            marginLeft: 'auto',
         },
         controls: {
             marginTop: theme.spacing(1),
@@ -78,23 +88,9 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
     const currentChainId = useChainId()
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { classes } = useStyles()
-    const {
-        recipient,
-        recipients: recipientAddresses,
-        setRecipient,
-        isSending,
-        sendTip,
-        tipType,
-        setTipType,
-    } = useTip()
+    const { classes } = useStyles({})
+    const { isSending, sendTip, tipType, setTipType } = useTip()
     const [isValid, validateMessage] = useTipValidate()
-    const { Others } = useWeb3State()
-    const selectRef = useRef(null)
-    const account = useAccount()
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     const [empty, setEmpty] = useState(false)
 
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
@@ -102,7 +98,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
         if (isSending) return false
         if (chainId !== currentChainId) return false
         if (pluginId === NetworkPluginID.PLUGIN_EVM) {
-            return [EVM_ChainId.Mainnet, EVM_ChainId.BSC, EVM_ChainId.Matic].includes(currentChainId as EVM_ChainId)
+            return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(currentChainId as ChainId)
         }
         return pluginId === NetworkPluginID.PLUGIN_SOLANA
     }, [chainId, currentChainId, pluginId])
@@ -119,31 +115,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
             <div className={classes.main}>
                 <FormControl fullWidth className={classes.receiverRow}>
                     <Typography className={classes.to}>{t.tip_to()}</Typography>
-                    <Select
-                        className={classes.address}
-                        ref={selectRef}
-                        value={recipient}
-                        disabled={isSending}
-                        onChange={(e) => {
-                            setRecipient(e.target.value)
-                        }}
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            },
-                            container: selectRef.current,
-                            anchorEl: selectRef.current,
-                            BackdropProps: {
-                                invisible: true,
-                            },
-                        }}>
-                        {recipientAddresses.map((address) => (
-                            <MenuItem key={address} value={address}>
-                                {Others?.formatDomainName?.(address) || address}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                    <RecipientSelect />
                 </FormControl>
                 <FormControl className={classes.controls}>
                     <RadioGroup row value={tipType} onChange={(e) => setTipType(e.target.value as TipType)}>
