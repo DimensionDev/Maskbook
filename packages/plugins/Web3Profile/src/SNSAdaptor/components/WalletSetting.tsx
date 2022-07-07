@@ -16,7 +16,7 @@ import { Empty } from './Empty'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
-        height: 428,
+        height: 440,
         position: 'relative',
         padding: '16px 16px 0 16px',
         backgroundColor: theme.palette.background.paper,

@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 sorter,
-                shouldDisplay,
+                // shouldDisplay,
             },
         },
         {
