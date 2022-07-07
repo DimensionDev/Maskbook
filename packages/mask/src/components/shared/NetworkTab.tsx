@@ -52,13 +52,14 @@ interface NetworkTabProps<T extends NetworkPluginID>
     chains: Array<Web3Helper.Definition[T]['ChainId']>
     setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     chainId: Web3Helper.Definition[T]['ChainId']
+    networkId?: NetworkPluginID
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
     const isDashboard = isDashboardPage()
-    const { chainId, setChainId, chains } = props
+    const { chainId, setChainId, chains, networkId } = props
 
-    const networks = useNetworkDescriptors()
+    const networks = useNetworkDescriptors(networkId)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)

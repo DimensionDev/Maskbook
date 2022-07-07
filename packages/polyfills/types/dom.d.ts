@@ -14,7 +14,7 @@ interface ImportMeta {
 
 // #region Web Components
 interface ShadowRoot {
-    adoptedStyleSheets?: readonly CSSStyleSheet[]
+    adoptedStyleSheets?: CSSStyleSheet[]
 }
 interface CSSStyleSheet {
     replace(text: string): Promise<void>

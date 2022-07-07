@@ -39,7 +39,6 @@ const useStyles = makeStyles()((theme, props) => ({
         top: 0,
         width: '100%',
         zIndex: 2,
-        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
         backgroundColor: theme.palette.background.paper,
     },

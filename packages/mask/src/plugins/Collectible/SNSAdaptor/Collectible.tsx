@@ -33,7 +33,7 @@ import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { FootnoteMenuUI, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { findIndex } from 'lodash-unified'
@@ -160,17 +160,7 @@ export function Collectible(props: CollectibleProps) {
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
-                        <Button
-                            fullWidth
-                            onClick={() => asset.retry()}
-                            sx={{
-                                marginTop: 1,
-                                backgroundColor: MaskColorVar.textPluginColor,
-                                color: 'white',
-                                '&:hover': {
-                                    backgroundColor: MaskColorVar.textPluginColor,
-                                },
-                            }}>
+                        <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
                             Refresh
                         </Button>
                     </Box>
@@ -285,7 +275,7 @@ export function Collectible(props: CollectibleProps) {
                     {/* flex to make foot menu right */}
                     <div />
                     <div className={classes.footMenu}>
-                        <FootnoteMenu
+                        <FootnoteMenuUI
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
                                     <Stack direction="row" alignItems="center" gap={1}>
