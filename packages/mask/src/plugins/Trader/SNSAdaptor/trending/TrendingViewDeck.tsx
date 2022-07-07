@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
@@ -12,7 +12,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
+import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
 import { TradeDataSource } from '../trader/TradeDataSource'
 import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
@@ -22,10 +22,10 @@ import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/c
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
 import { setStorage } from '../../storage'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
 import { PluginHeader } from './PluginHeader'
 import { Box } from '@mui/system'
-import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
-import { TrendingTokenSecurity } from './TrendingTokenSecurity'
 import type { TrendingAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => {
@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => {
         content: {
             paddingTop: 0,
             paddingBottom: '0 !important',
+            '&:last-child': {
+                padding: 0,
+            },
         },
         cardHeader: {
             padding: theme.spacing(2),
@@ -130,6 +133,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { coin, market } = trending
 
     const { t } = useI18N()
+    const theme = useTheme()
     const classes = useStylesExtends(useStyles(), props)
 
     // #region buy
@@ -137,6 +141,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+
+    const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const isTokenSecurityEnable = !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+
+    const { value: tokenSecurityInfo, error } = useTokenSecurity(
+        coin?.chainId ?? ChainId.Mainnet,
+        coin.contract_address?.trim(),
+        isTokenSecurityEnable,
+    )
 
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
@@ -178,7 +191,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     />
                 </PluginHeader>
                 <Stack className={classes.headline}>
-                    <Stack gap={2}>
+                    <Stack gap={2} flexGrow={1}>
                         <Stack flexDirection="row">
                             {typeof coin.market_cap_rank === 'number' ? (
                                 <Typography component="span" className={classes.rank} title="Index Cap Rank">
@@ -249,13 +262,22 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         }
                                     />
                                 </Stack>
-                                <TrendingTokenSecurity />
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error && (
+                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                )}
                             </Stack>
                         </Stack>
                     </Stack>
                     <Stack>
                         {transakPluginEnabled && account && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button startIcon={<BuyIcon />} variant="contained" onClick={onBuyButtonClicked}>
+                            <Button
+                                style={{
+                                    background: theme.palette.maskColor.dark,
+                                    color: theme.palette.maskColor.white,
+                                }}
+                                startIcon={<BuyIcon />}
+                                variant="contained"
+                                onClick={onBuyButtonClicked}>
                                 {t('buy_now')}
                             </Button>
                         ) : null}

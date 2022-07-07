@@ -371,6 +371,24 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
 }
 
 /**
+ * Authorization about a fungible token.
+ */
+export interface FungibleTokenAuthorization<ChainId, SchemaType> {
+    amount: string
+    recipient: string
+    token: FungibleToken<ChainId, SchemaType>
+}
+
+/**
+ * Authorization about a non-fungible token.
+ */
+ export interface NonFungibleTokenAuthorization<ChainId, SchemaType> {
+    all: boolean
+    recipient: string
+    tokens: NonFungibleToken<ChainId, SchemaType>
+}
+
+/**
  * The security diagnosis about a fungible token.
  */
 export interface FungibleTokenSecurity {
@@ -695,6 +713,29 @@ export interface Connection<
         signType?: string,
         initial?: Web3ConnectionOptions,
     ): Promise<boolean>
+    /** Approve a recipient for using a fungible token. */
+    approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
+    /** Approve a recipient for using a non-fungible token. */
+    approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
+    /** Approve a recipient for using all non-fungible tokens. */
+    approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions
+    ): Promise<string>
     /** Transfer fungible token to */
     transferFungibleToken(
         address: string,
@@ -810,6 +851,16 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
+    /** Get all approved fungible tokens of given account. */
+    getApprovedFungibleTokens?: (
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
+    /** Get all approved non-fungible tokens of given account. */
+    getApprovedNonFungibleTokens?: (
+        account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get price of an non-fungible token */

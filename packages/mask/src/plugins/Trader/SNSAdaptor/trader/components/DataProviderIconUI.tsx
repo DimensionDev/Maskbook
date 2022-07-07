@@ -30,7 +30,7 @@ export interface DataProviderIconProps {
     size?: number
 }
 
-export function DataProviderIcon(props: DataProviderIconProps) {
+export function DataProviderIconUI(props: DataProviderIconProps) {
     const { size = 16 } = props
     const classes = useStylesExtends(useStyles({ size }), {})
     switch (props.provider) {

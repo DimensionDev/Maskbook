@@ -315,6 +315,7 @@ export namespace SecurityAPI {
         is_whitelisted?: '0' | '1'
         is_in_dex?: '0' | '1'
         is_anti_whale?: '0' | '1'
+        trust_list?: '0' | '1'
     }
 
     export interface ContractSecurity {
@@ -392,6 +393,84 @@ export namespace TwitterBaseAPI {
             }>
         }
     }
+    type UserUrl = {
+        display_url: string
+        expanded_url: string
+        /** t.co url */
+        url: string
+        indices: [number, number]
+    }
+    export interface User {
+        __typename: 'User'
+        id: string
+        rest_id: string
+        affiliates_highlighted_label: {}
+        has_nft_avatar: boolean
+        legacy: {
+            blocked_by: boolean
+            blocking: boolean
+            can_dm: boolean
+            can_media_tag: boolean
+            /** ISODateTime */
+            created_at: string
+            default_profile: boolean
+            default_profile_image: boolean
+            description: string
+            entities: {
+                description: {
+                    urls: []
+                }
+                url: {
+                    urls: UserUrl[]
+                }
+            }
+            fast_followers_count: 0
+            favourites_count: 22
+            follow_request_sent: boolean
+            followed_by: boolean
+            followers_count: 35
+            following: boolean
+            friends_count: 76
+            has_custom_timelines: boolean
+            is_translator: boolean
+            listed_count: 4
+            location: string
+            media_count: 196
+            muting: boolean
+            name: string
+            normal_followers_count: 35
+            notifications: boolean
+            pinned_tweet_ids_str: []
+            possibly_sensitive: boolean
+            /** unused data, declare details when you need */
+            profile_banner_extensions: any
+            profile_banner_url: string
+            /** unused data, declare details when you need */
+            profile_image_extensions: any
+            profile_image_url_https: string
+            profile_interstitial_type: string
+            protected: boolean
+            screen_name: string
+            statuses_count: number
+            translator_type: string
+            /** t.co url */
+            url: string
+            verified: boolean
+            want_retweets: boolean
+            withheld_in_countries: []
+        }
+        smart_blocked_by: false
+        smart_blocking: false
+        super_follow_eligible: false
+        super_followed_by: false
+        super_following: false
+        legacy_extended_profile: {}
+        is_profile_translatable: boolean
+    }
+    export type Response<T> = {
+        data: T
+    }
+    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -426,6 +505,7 @@ export namespace TwitterBaseAPI {
         >
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
+        getUserByScreenName: (screenName: string) => Promise<User>
     }
 }
 
@@ -491,6 +571,16 @@ export namespace MaskBaseAPI {
     export interface Provider {}
 }
 
+export namespace TokenAPI {
+    export interface TokenInfo {
+        id: string
+        market_cap: string
+        price: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<TokenInfo | undefined>
+    }
+}
 export namespace TrendingAPI {
     export interface Settings {
         currency: Currency
@@ -519,6 +609,7 @@ export namespace TrendingAPI {
 
     export interface Coin {
         id: string
+        chainId?: ChainId
         name: string
         symbol: string
         decimals?: number

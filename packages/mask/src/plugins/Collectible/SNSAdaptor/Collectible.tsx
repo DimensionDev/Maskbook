@@ -33,7 +33,7 @@ import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { FootnoteMenuUI, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { findIndex } from 'lodash-unified'
@@ -102,6 +102,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         footName: {
+            color: theme.palette.text.primary,
             marginLeft: theme.spacing(0.5),
         },
         countdown: {
@@ -244,7 +245,7 @@ export function Collectible(props: CollectibleProps) {
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: _asset?.price[CurrencyType.USD],
+                                                price: _asset.price[CurrencyType.USD],
                                                 symbol: CurrencyType.USD,
                                             }}
                                         />
@@ -275,7 +276,7 @@ export function Collectible(props: CollectibleProps) {
                     {/* flex to make foot menu right */}
                     <div />
                     <div className={classes.footMenu}>
-                        <FootnoteMenu
+                        <FootnoteMenuUI
                             options={collectibleProviderOptions.map((x) => ({
                                 name: (
                                     <Stack direction="row" alignItems="center" gap={1}>

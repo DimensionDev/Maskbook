@@ -1,0 +1,26 @@
+{
+    "GAME_CONFIG_ADDRESS": {
+        "Mainnet": "0xf1A284Fd4aA2Cd7a684Ba08db73502C62b2b9dE2",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": "",
+        "Astar": ""
+    }
+}

@@ -14,12 +14,11 @@ const BaseTabWrap = styled(Button, {
         : 'none',
     background: activated ? theme.palette.maskColor.bottom : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
-    color: activated ? theme.palette.text.primary : theme.palette.text.secondary,
+    color: activated ? theme.palette.maskColor.main : theme.palette.maskColor.secondaryDark,
     fontSize: 16,
     fontWeight: 'bold',
 
     '&:hover': {
-        color: theme.palette.text.primary,
         boxShadow: activated ? '0 0 20px rgba(0, 0, 0, 0.05)' : 'none',
         background: activated ? theme.palette.maskColor.bottom : 'transparent',
     },
