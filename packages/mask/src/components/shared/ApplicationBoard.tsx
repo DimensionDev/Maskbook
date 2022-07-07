@@ -235,16 +235,15 @@ function RenderEntryComponent({ application }: { application: Application }) {
         ApplicationEntryStatus.personaNextIDReset?.()
     }, [])
 
-    const clickHandler = (() => {
+    const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
-            return (walletConnectedCallback?: () => void) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback })
+            return () => setSelectProviderDialog({ open: true })
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
             return createOrConnectPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
-    })()
+    }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
 
     // #endregion
 

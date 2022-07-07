@@ -82,6 +82,10 @@ export const WalletStartUp = memo(() => {
                 urlcat('/dashboard.html#/create-mask-wallet', { chainId: params.get('chainId') }),
             ),
         })
+        if (process.env.engine === 'firefox') {
+            window.close()
+        }
+
         await Services.Helper.removePopupWindow()
     }, [location.search])
 
