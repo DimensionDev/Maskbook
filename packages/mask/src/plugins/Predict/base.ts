@@ -17,7 +17,7 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-out',
             networks: {},
         },
-        target: 'beta',
+        target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Sokol, ChainId.xDai],
