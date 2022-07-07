@@ -73,13 +73,9 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
               }
             : {},
 
-        cardHeader: props.isPopper
-            ? {
-                  marginBottom: '-36px',
-              }
-            : {
-                  marginBottom: '-44px',
-              },
+        cardHeader: {
+            marginBottom: '-44px',
+        },
     }
 })
 
@@ -265,11 +261,13 @@ export function TraderView(props: TraderViewProps) {
             showDataProviderIcon={tabIndex < 3}
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
-            <TabContext value={currentTab}>
-                <MaskTabList variant="base" onChange={(e, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
-                    {tabComponents}
-                </MaskTabList>
-            </TabContext>
+            <Stack px={2}>
+                <TabContext value={currentTab}>
+                    <MaskTabList variant="base" onChange={(e, v: ContentTabs) => setTab(v)} aria-label="Network Tabs">
+                        {tabComponents}
+                    </MaskTabList>
+                </TabContext>
+            </Stack>
             <Stack>
                 {currentTab === ContentTabs.Market ? (
                     <CoinMarketPanel dataProvider={dataProvider} trending={trending} />
