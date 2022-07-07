@@ -123,6 +123,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                     const { slippageTolerance, transaction } = await selectAdvancedSettings({
                                         chainId,
                                         disableGasLimit: true,
+                                        disableSlippageTolerance: false,
                                         transaction: {
                                             gas: tradeRef.current?.focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
                                             ...(tradeRef.current?.gasConfig ?? {}),

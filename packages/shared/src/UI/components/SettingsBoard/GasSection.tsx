@@ -10,11 +10,7 @@ import { GasOptionSelector } from './GasOptionSelector'
 import { SettingsContext } from './Context'
 import { Section } from './Section'
 import { GasForm } from './GasForm'
-
-enum GasSettingsType {
-    Basic = 'Basic',
-    Advanced = 'Advanced',
-}
+import { GasSettingsType } from './types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,13 +38,16 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface GasSectionProps {
+    activeTab: GasSettingsType
+    setActiveTab: (type: GasSettingsType) => void
     disableGasLimit?: boolean
 }
 
 export function GasSection(props: GasSectionProps) {
+    const { activeTab, setActiveTab, disableGasLimit } = props
+
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const [activeTab, setActiveTab] = useState(GasSettingsType.Basic)
     const {
         pluginID,
         chainId,
@@ -95,9 +94,7 @@ export function GasSection(props: GasSectionProps) {
                                     ? GAS_OPTION_NAMES[gasOptionType]
                                     : t.gas_settings_custom()}
                             </span>
-                            <span className={classes.price}>
-                                {` ${customPrice} Gwei`}
-                            </span>
+                            <span className={classes.price}>{` ${customPrice} Gwei`}</span>
                         </Typography>
                     ) : null
                 }>
@@ -121,7 +118,7 @@ export function GasSection(props: GasSectionProps) {
                     />
                 ) : gasOptions ? (
                     <GasForm
-                        disableGasLimit={props.disableGasLimit}
+                        disableGasLimit={disableGasLimit}
                         chainId={chainId as ChainId}
                         transaction={transaction as Transaction}
                         transactionOptions={transactionOptions as Partial<Transaction>}

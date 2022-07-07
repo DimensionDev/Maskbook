@@ -365,13 +365,14 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const gasSettings = await onSelectGasSettings({
                                         chainId: ChainId.Matic,
                                         slippageTolerance: 1,
+                                        disableSlippageTolerance: true,
                                         transaction: {
                                             from: account,
                                             to: account,
                                             value: '1',
                                             gas: 30000,
                                             // this field could be overridden with the instant gas options
-                                            maxFeePerGas: 100,
+                                            maxFeePerGas: 3800000000,
                                         },
                                     })
                                     console.log(gasSettings)

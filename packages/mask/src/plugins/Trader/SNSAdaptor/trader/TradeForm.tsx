@@ -404,6 +404,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             const { slippageTolerance, transaction } = await selectAdvancedSettings({
                 chainId,
                 disableGasLimit: true,
+                disableSlippageTolerance: false,
                 slippageTolerance: currentSlippageSettings.value / 100,
                 transaction: {
                     gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,

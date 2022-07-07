@@ -1,11 +1,10 @@
 import { FC, useMemo, useState } from 'react'
 import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useSharedI18N } from '@masknet/shared'
-import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
-import { useBaseUIRuntime } from '../base'
 import { InjectedDialog } from '../components'
 import { SettingsBoard } from '../../UI/components/SettingsBoard'
 import { SettingsContext } from '../../UI/components/SettingsBoard/Context'
@@ -18,8 +17,8 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     root: {
-        width: compact ? 552 : 600,
-        minHeight: 620,
+        width: 600,
+        minHeight: compact ? 480 : 620,
     },
     content: {
         padding: theme.spacing(3, 2),
@@ -73,8 +72,7 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
     title,
 }) => {
     const t = useSharedI18N()
-    const { networkIdentifier } = useBaseUIRuntime()
-    const { classes } = useStyles({ compact: networkIdentifier === EnhanceableSite.Minds })
+    const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const pluginID_ = useCurrentWeb3NetworkPluginID(pluginID)
     const chainId_ = useChainId(pluginID_, chainId)
     const [settings, setSettings] = useState<{
@@ -102,6 +100,8 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
             open={open}
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             onClose={() => {
+                console.log('DEBUG: settings')
+                console.log(settings)
                 onSubmit?.(settings)
                 onClose?.()
             }}

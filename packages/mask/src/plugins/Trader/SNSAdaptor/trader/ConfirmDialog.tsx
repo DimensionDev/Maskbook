@@ -96,6 +96,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     const { slippageTolerance, transaction } = await selectAdvancedSettings({
                         chainId,
                         disableGasLimit: true,
+                        disableSlippageTolerance: false,
                         slippageTolerance: currentSlippageSettings.value / 100,
                         transaction: {
                             gas: gas ?? MIN_GAS_LIMIT,

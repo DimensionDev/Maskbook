@@ -16,15 +16,16 @@ const useStyles = makeStyles()((theme) => {
 
 export interface SettingsBoardProps {
     disableGasPrice?: boolean
-    disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
+    disableSlippageTolerance?: boolean
     onChange?(settings: { slippageTolerance?: number; transaction?: Web3Helper.TransactionAll }): void
 }
 
 export function SettingsBoard(props: SettingsBoardProps) {
     const { disableGasPrice = false, disableSlippageTolerance = false, onChange, disableGasLimit } = props
     const { classes } = useStyles()
-    const { transaction, transactionOptions, slippageTolerance } = SettingsContext.useContainer()
+    const { transaction, transactionOptions, slippageTolerance, gasSettingsType, setGasSettingsType } =
+        SettingsContext.useContainer()
 
     useEffect(() => {
         onChange?.({
@@ -40,7 +41,13 @@ export function SettingsBoard(props: SettingsBoardProps) {
 
     return (
         <div className={classes.root}>
-            {disableGasPrice ? null : <GasSection disableGasLimit={disableGasLimit} />}
+            {disableGasPrice ? null : (
+                <GasSection
+                    activeTab={gasSettingsType}
+                    setActiveTab={setGasSettingsType}
+                    disableGasLimit={disableGasLimit}
+                />
+            )}
             {disableSlippageTolerance ? null : <SlippageToleranceSection />}
         </div>
     )
