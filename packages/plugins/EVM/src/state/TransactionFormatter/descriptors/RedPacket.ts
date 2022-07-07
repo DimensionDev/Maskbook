@@ -7,11 +7,11 @@ import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-
 export class RedPacketDescriptor implements TransactionDescriptor {
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
-        if (context.name !== 'create_red_packet') return
-
         const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(context.chainId)
         const { RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(context.chainId)
+
+        const parameters = context.methods?.find((x) => x.name === 'create_red_packet')?.parameters
+        if (!parameters?._token_addr && parameters?._total_tokens) return
 
         if (isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4)) {
             const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -19,8 +19,8 @@ export class RedPacketDescriptor implements TransactionDescriptor {
                 account: context.from,
             })
 
-            const token = await connection?.getFungibleToken(context.parameters?._token_addr ?? '')
-            const amount = formatBalance(context.parameters?._total_tokens, token?.decimals)
+            const token = await connection?.getFungibleToken(parameters?._token_addr ?? '')
+            const amount = formatBalance(parameters?._total_tokens, token?.decimals)
 
             return {
                 chainId: context.chainId,
