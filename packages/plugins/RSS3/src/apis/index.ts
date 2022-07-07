@@ -1,6 +1,5 @@
-import { NextIDStorage } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
-import { AssetType, GeneralAsset, KVType, RSS3Profile } from '../types'
+import { AssetType, GeneralAsset, RSS3Profile } from '../types'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
     const res = await globalThis.fetch(url)
@@ -45,14 +44,4 @@ export async function getRSS3ProfileByAddress(address: string) {
     const url = urlcat('https://hub.pass3.me/:address', { address })
     const rsp = await fetchJSON<RSS3Info>(url)
     return rsp?.profile
-}
-
-export const getKV = async (publicHexKey: string) => {
-    try {
-        const kv = await NextIDStorage.get<KVType>(publicHexKey)
-        return kv?.val
-    } catch (error) {
-        console.error(error)
-        return null
-    }
 }

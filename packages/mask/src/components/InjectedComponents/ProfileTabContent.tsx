@@ -90,7 +90,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
 
     const addressList = useMemo(() => {
-        if (wallets?.length === 0 || !wallets || (!isOwn && socialAddressList?.length)) {
+        if (!wallets?.length || (!isOwn && socialAddressList?.length)) {
             return socialAddressList
         }
         const addresses = wallets.map((proof) => {
@@ -102,7 +102,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             }
         })
         return [...socialAddressList, ...addresses]
-    }, [socialAddressList, wallets?.length, isOwn])
+    }, [socialAddressList, wallets, isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)

@@ -100,6 +100,7 @@ const ConnectedWallets = memo(() => {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
+                // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
                 refreshProofs()

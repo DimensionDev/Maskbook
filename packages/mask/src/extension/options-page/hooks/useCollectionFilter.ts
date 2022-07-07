@@ -15,13 +15,13 @@ export const useCollectionFilter = (
     return useMemo(() => {
         if (!address || !currentVisitingProfile) return []
 
-        const proof = hiddenInfo?.find(
+        const proof = hiddenInfo.find(
             (proof) =>
                 proof?.platform === NextIDPlatform.Twitter &&
                 proof?.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase(),
         )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.toLowerCase()]?.[type] ?? []
-        return collections?.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
-    }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo?.length, collections?.length])
+        return collections.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
+    }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo, collections])
 }

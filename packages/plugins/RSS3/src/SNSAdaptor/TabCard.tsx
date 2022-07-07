@@ -11,9 +11,8 @@ import { useCollectionFilter, useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useCurrentVisitingProfile } from './hooks/useContext'
-import { useAsyncRetry } from 'react-use'
 import { CollectionType, KVType } from '../types'
-import { getKV } from '../apis'
+import { useKV } from './hooks/useKV'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -60,12 +59,9 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
         onClose()
     }
 
-    const { value: kvValue } = useAsyncRetry(async () => {
-        if (!persona) return
-        return getKV(persona)
-    }, [persona])
+    const { value: kvValue } = useKV(persona)
     const unHiddenDonations = useCollectionFilter(
-        (kvValue as KVType)?.proofs,
+        kvValue?.proofs ?? EMPTY_LIST,
         donations,
         CollectionType.Donations,
         currentVisitingProfile,

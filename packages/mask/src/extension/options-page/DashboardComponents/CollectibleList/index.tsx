@@ -22,7 +22,6 @@ import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
 import { useKV } from '../../hooks/useKV'
-import type { KVType } from '../../types'
 import { COLLECTION_TYPE } from '../../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
@@ -258,7 +257,7 @@ export function CollectionList({
 
     const { value: kvValue } = useKV(persona)
     const unHiddenCollectibles = useCollectionFilter(
-        (kvValue as KVType)?.proofs,
+        kvValue?.proofs ?? EMPTY_LIST,
         collectibles,
         COLLECTION_TYPE.NFTs,
         visitingProfile,

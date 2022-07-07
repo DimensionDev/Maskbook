@@ -123,6 +123,8 @@ const VerifyWallet = memo(() => {
                     signature,
                 },
             )
+
+            // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
