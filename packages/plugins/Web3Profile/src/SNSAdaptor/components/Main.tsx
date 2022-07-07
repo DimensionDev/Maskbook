@@ -1,12 +1,12 @@
 import { PlatformCard } from './PlatformCard'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { accountType } from '../types'
+import type { AccountType } from '../types'
 interface MainProps {
     persona?: PersonaInformation
     openImageSetting: (str: string, accountId: string) => void
     currentVisitingProfile?: IdentityResolved
-    accountList?: accountType[]
+    accountList?: AccountType[]
 }
 export function Main(props: MainProps) {
     const { openImageSetting, currentVisitingProfile, accountList } = props

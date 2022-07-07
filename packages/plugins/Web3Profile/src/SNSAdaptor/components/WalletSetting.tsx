@@ -5,7 +5,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { WalletSwitch } from '../components/WalletSwitch'
-import type { accountType, WalletTypes } from '../types'
+import type { AccountType, WalletTypes } from '../types'
 import { getKvPayload, setKvPatchData } from '../hooks/useKV'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -109,7 +109,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WalletSettingProp {
     wallets?: WalletTypes[]
-    accountList?: accountType
+    accountList?: AccountType
     title: string
     open: boolean
     onClose: () => void
@@ -127,7 +127,7 @@ const WalletSetting = memo(
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
         const [visible, setVisible] = useState(!localStorage.getItem('web3_profile_wallet_setting_hint_visible'))
 
-        const [currentTab, onChange, tabs] = useTabs(title, t.NFTs(), t.footprints(), t.donations)
+        const [currentTab, onChange, tabs] = useTabs(title, t.NFTs(), t.footprints(), t.donations())
 
         const chainId = useChainId()
         const [NFTs, setNFTs] = useState<WalletTypes[]>()
@@ -207,6 +207,7 @@ const WalletSetting = memo(
             localStorage.setItem('web3_profile_wallet_setting_hint_visible', 'no')
             setVisible(false)
         }
+        console.log({ accountList, wallets, NFTs })
         return (
             <TabContext value={currentTab}>
                 <InjectedDialog
@@ -247,9 +248,9 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.NFTs?.findIndex((account) =>
+                                                            NFTs?.findIndex((account) =>
                                                                 isSameAddress(account.address, x?.address),
-                                                            ) !== -1
+                                                            ) === -1
                                                         }
                                                         setHiddenItems={setNFTs}
                                                     />
@@ -268,9 +269,9 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.footprints?.findIndex((account) =>
+                                                            footprints?.findIndex((account) =>
                                                                 isSameAddress(account.address, x?.address),
-                                                            ) !== -1
+                                                            ) === -1
                                                         }
                                                         setHiddenItems={setFootprints}
                                                     />
@@ -289,9 +290,9 @@ const WalletSetting = memo(
                                                         type={0}
                                                         address={x}
                                                         isPublic={
-                                                            accountList?.walletList?.donations?.findIndex((account) =>
+                                                            donations?.findIndex((account) =>
                                                                 isSameAddress(account.address, x?.address),
-                                                            ) !== -1
+                                                            ) === -1
                                                         }
                                                         setHiddenItems={setDonations}
                                                     />

@@ -123,7 +123,8 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
         if (!v) {
             setHiddenItems([...hiddenItems, address])
         } else {
-            setHiddenItems(hiddenItems?.filter((item) => !isSameAddress(item?.address, address?.address)))
+            const preItems = [...hiddenItems]
+            setHiddenItems(preItems?.filter((item) => !isSameAddress(item?.address, address?.address)))
         }
         setChecked(v)
     }

@@ -14,7 +14,6 @@ export const getKvPayload = async (patchData: unknown, publicHexKey: string, acc
 }
 
 export const setKvPatchData = async (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     payload: NextIDStoragePayload,
     signature: string,
     patchData: unknown,
