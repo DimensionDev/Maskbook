@@ -84,7 +84,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const columns: Cells[] = useMemo(() => {
         if (isNFT) return ['marketplace', 'sales', 'volume', 'floor_price']
         return compact(['exchange', 'pair', isUniswap ? null : 'price', 'volume', 'updated'])
-    }, [t, isNFT, isUniswap])
+    }, [isNFT, isUniswap])
     const tickerRows = tickers.map((ticker, index) => {
         const price = ticker.price ?? ticker.floor_price
         const volume = isNFT ? ticker.volume_24h : ticker.volume

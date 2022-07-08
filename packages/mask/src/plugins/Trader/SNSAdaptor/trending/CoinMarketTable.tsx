@@ -14,6 +14,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         borderRadius: 0,
         boxSizing: 'border-box',
+        backgroundColor: 'transparent',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

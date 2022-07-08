@@ -152,15 +152,15 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
 
         if (groups.length > 1) {
             return groups.map(([type, groupOptions]) => (
-                <>
+                <React.Fragment key={type}>
                     <Typography className={classes.groupName}>{menuGroupNameMap[type]}</Typography>
                     <Divider className={classes.divider} />
                     <TokenMenuList options={groupOptions} type={type} value={value} onSelect={onSelect} />
-                </>
+                </React.Fragment>
             ))
         }
         return <TokenMenuList type={type} options={options} value={value} onSelect={onSelect} />
-    }, [type, value, onSelect])
+    }, [options, type, value, onSelect])
 
     return (
         <ShadowRootMenu open={open} onClose={onClose} anchorEl={anchorEl} PaperProps={{ className: classes.coinMenu }}>

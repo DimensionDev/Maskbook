@@ -59,11 +59,11 @@ describe('EUR Currency format util test', () => {
 
 describe('Digital currency format util test', () => {
     test.each([
+        { give: 0, currency: 'ETH', expected: '0.00 \u039E' },
         { give: 1.55, currency: 'ETH', expected: '1.55\u00a0\u039E' },
         { give: 1.55, currency: 'BTC', expected: '1.55\u00a0\u20BF' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
-        console.log('4', result.charCodeAt(4), ' '.charCodeAt(0))
 
         expect(result).toBe(expected)
     })

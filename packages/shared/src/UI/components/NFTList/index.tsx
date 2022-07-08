@@ -2,6 +2,7 @@ import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } f
 import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { formatTokenId } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -136,7 +137,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                     wrapper: classes.wrapper,
                 }}
             />
-            <Typography className={classes.caption}>#{token.tokenId}</Typography>
+            <Typography className={classes.caption}>{formatTokenId(token.tokenId)}</Typography>
         </div>
     )
 }

@@ -13,7 +13,7 @@ import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useT
 import { Box } from '@mui/system'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-unified'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { PluginTransakMessages } from '../../../Transak/messages'
@@ -180,13 +180,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
             const coin = coins.find((x) => x.id === value && x.type === type)
             if (!coin) return
-            settings[keyword] = value
+            settings[keyword.toLowerCase()] = value
             getCurrentPreferredCoinIdSettings(dataProvider).value = stringify(settings)
         },
         [dataProvider, keyword, coins, currentPreferredCoinIdSettings],
     )
     // #endregion
     const titleRef = useRef<HTMLElement>(null)
+    const coinOptions = useMemo(() => coins.map((coin) => ({ coin, value: coin.id })), [coins])
     const [coinMenuOpen, setCoinMenuOpen] = useState(false)
 
     return (
@@ -244,10 +245,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         <CoinMenu
                                             open={coinMenuOpen}
                                             anchorEl={titleRef.current}
-                                            options={coins.map((coin) => ({
-                                                coin,
-                                                value: coin.id,
-                                            }))}
+                                            options={coinOptions}
                                             value={coins.find((x) => x.id === coin.id)?.id}
                                             type={coin.type}
                                             onChange={onCoinMenuChange}

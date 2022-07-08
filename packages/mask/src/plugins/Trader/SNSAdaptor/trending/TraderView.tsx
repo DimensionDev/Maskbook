@@ -214,7 +214,7 @@ export function TraderView(props: TraderViewProps) {
                 : undefined,
         ]
         return compact(configs).map((x) => <Tab value={x.key} key={x!.key} label={x.label} />)
-    }, [isSwappable, isNFT])
+    }, [t, isSwappable, isNFT])
     // #endregion
 
     // // #region current data provider switcher

@@ -46,7 +46,10 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
 
-    if (bgValue.isZero()) return formatter.format(0)
+    if (bgValue.isZero()) {
+        const symbol = DigitalCurrencyMap[currency]
+        return symbol ? `0.00 ${symbol}` : formatter.format(0)
+    }
 
     if (isLessMinValue) {
         const value = digitalCurrencyModifier(formatter.formatToParts(boundaryValues.min))
@@ -79,8 +82,4 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             }
         })
         .join('')
-}
-
-export const coinFormatter = (value: BigNumber.Value, sign = '\u039E') => {
-    return `${new BigNumber(value).toFixed(2)} ${sign}`
 }
