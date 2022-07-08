@@ -11,7 +11,7 @@ import {
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -151,6 +151,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onSelectFungibleToken = useSelectFungibleToken()
     const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
 
     return (
         <section className={classes.container}>
@@ -485,6 +487,21 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     Query
                                 </Button>
                             </FormControl>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Test Snackbar</TableCell>
+                        <TableCell>
+                            <Button
+                                onClick={() => {
+                                    showSnackbar('test', {
+                                        variant: 'success',
+                                        message: 'test message',
+                                        autoHideDuration: 100000000,
+                                    })
+                                }}>
+                                show
+                            </Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>

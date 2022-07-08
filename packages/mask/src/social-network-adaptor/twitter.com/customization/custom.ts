@@ -8,7 +8,6 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme'
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
-import { parseColor } from '@masknet/theme'
 
 const themeColorRef = new ValueRef('rgb(29, 161, 242)')
 const textColorRef = new ValueRef('rgb(255, 255, 255)')
@@ -51,7 +50,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryContrastColor = useValueRef(textColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
     return useMemo(() => {
-        const primaryColorRGB = fromRGB(parseColor(baseTheme.palette.maskColor.primary).toRgbString())!
+        const primaryColorRGB = fromRGB(primaryColor)!
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
