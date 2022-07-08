@@ -43,7 +43,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         height: 20,
         backgroundColor: !isDashboard ? theme.palette.maskColor?.primary : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard ? lighten(theme.palette.maskColor?.primary, 0.1) : undefined,
+            backgroundColor: !isDashboard ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important` : undefined,
         },
     },
     chipLabel: {

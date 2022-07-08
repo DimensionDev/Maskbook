@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         // TODO: replace with theme color
-        fill: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
+        color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
         fontSize: 16,
         marginLeft: 10,
     },
