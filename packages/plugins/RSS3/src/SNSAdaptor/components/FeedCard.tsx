@@ -92,7 +92,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_an_NFT_to()}{' '}
+                        {`${t.sent_an_NFT_to()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
                             address={feed.metadata?.to ?? ZERO_ADDRESS}
@@ -106,7 +106,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.acquired_an_NFT_from()}{' '}
+                        {`${t.acquired_an_NFT_from()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
                             address={feed.metadata?.from ?? ZERO_ADDRESS}
@@ -119,7 +119,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_to()}{' '}
+                        {`${t.sent_to()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
                             address={feed.metadata?.to ?? ZERO_ADDRESS}
@@ -130,7 +130,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.received_from()}{' '}
+                        {`${t.received_from()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
                             address={feed.metadata?.from ?? ZERO_ADDRESS}
