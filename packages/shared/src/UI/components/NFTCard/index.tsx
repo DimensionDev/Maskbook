@@ -63,7 +63,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         marginRight: 'auto',
     },
     defaultImage: {
-        background: theme.palette.maskColor.modelTitleBg,
+        background: theme.palette.maskColor.modalTitleBg,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
