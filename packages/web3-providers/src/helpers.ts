@@ -17,7 +17,7 @@ export async function fetchJSON<T = unknown>(
         fetch: typeof globalThis.fetch
     },
 ): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.fetch
+    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
 }
